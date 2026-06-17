@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Zodiac.fm — Onboarding (tap through)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500;1,6..72,600&family=Inter:wght@400;500;600;700&display=swap');
+  :root{
+    --bg:#faf7f1; --ink:#1b1720; --ink2:#34302a; --muted:#615c63; --soft:#6d6862;
+    --line:#e6dfd2; --track:#e4ded0; --fill:#2a2622;
+    --violet:#6B2BE8; --violet-deep:#3B22D9; --violet-soft:#efe9fb; --violet-track:#ece6f7;
+    --good:#2f7a4a; --warn:#b3382f;
+    --core:#4a5296; --love:#b8546f; --vitality:#bd6b34; --abundance:#5f8f64;
+    --serif:'Newsreader',Georgia,'Times New Roman',serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    --sw:375px; --sh:812px; --sbh:54px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{background:radial-gradient(120% 80% at 50% -10%, #efe9fb 0%, #e9e5dd 45%, #e4e0d8 100%);
+    font-family:var(--sans); color:var(--ink); -webkit-font-smoothing:antialiased;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:18px 12px;}
+
+  #stage{transform-origin:center center;}
+  .phone{position:relative; width:calc(var(--sw) + 22px); border-radius:54px; background:#0b0b0d; padding:11px;
+    box-shadow:0 3px 8px rgba(0,0,0,.22), 0 44px 80px -34px rgba(0,0,0,.55), inset 0 0 0 2px #2a2a2e;}
+  .deck{position:relative; width:var(--sw); height:var(--sh);}
+  .screen{position:absolute; inset:0; width:var(--sw); height:var(--sh); border-radius:44px; overflow:hidden; background:var(--bg);
+    display:none; flex-direction:column;}
+  .screen.active{display:flex; animation:slide .34s cubic-bezier(.2,.7,.2,1);}
+  @keyframes slide{from{opacity:0; transform:translateX(14px);} to{opacity:1; transform:none;}}
+
+  .glow{position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:440px; height:440px; z-index:0;
+    background:radial-gradient(closest-side, rgba(107,43,232,.17), rgba(107,43,232,.04) 55%, rgba(107,43,232,0) 75%); pointer-events:none;}
+  .island{position:absolute; top:13px; left:50%; transform:translateX(-50%); width:116px; height:32px; background:#000; border-radius:18px; z-index:40;}
+  .statusbar{position:relative; z-index:30; height:var(--sbh); display:flex; align-items:flex-end; justify-content:space-between; padding:0 30px 8px; font-size:13px; font-weight:600; flex:0 0 auto;}
+  .top{position:relative; z-index:5; text-align:center; padding:4px 0 2px; flex:0 0 auto;}
+  .top .wm{font-family:var(--serif); font-size:18px; font-weight:500; letter-spacing:-.01em; color:var(--ink2);}
+  .back{position:absolute; top:52px; left:12px; z-index:42; width:38px; height:38px; border:none; background:transparent; color:var(--violet-deep);
+    font-size:26px; line-height:1; display:none; align-items:center; justify-content:center; cursor:pointer;}
+  .screen.has-back .back{display:flex;}
+
+  .body{position:relative; z-index:5; flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; padding:8px 32px 6px; min-height:0; overflow-y:auto;}
+  .kicker{font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--violet); margin-bottom:15px;}
+  h2.h{font-family:var(--serif); font-size:30px; font-weight:500; line-height:1.16; letter-spacing:-.018em; color:var(--ink);}
+  h2.h em{font-style:italic;}
+  .p{font-size:14.5px; line-height:1.62; color:var(--ink2); margin-top:16px;}
+  .p.sm{font-size:13px; color:var(--muted); margin-top:14px;}
+  .foot-note{font-size:12.5px; line-height:1.5; color:var(--soft); margin-top:18px; padding-top:14px; border-top:1px solid var(--line);}
+  .foot-note b{color:var(--ink2); font-weight:600;}
+
+  .foot{position:relative; z-index:5; flex:0 0 auto; padding:0 32px 30px;}
+  .dots{display:flex; gap:7px; justify-content:center; margin-bottom:18px;}
+  .dots i{width:7px; height:7px; border-radius:50%; background:#d8d0c2; transition:all .25s;}
+  .dots i.on{background:var(--violet); width:22px; border-radius:4px;}
+  .btn{display:block; width:100%; text-align:center; background:var(--violet); color:#fff; font-family:var(--sans);
+    font-size:15px; font-weight:600; letter-spacing:.01em; padding:15px; border-radius:16px; border:none; cursor:pointer;
+    box-shadow:0 8px 22px -10px rgba(107,43,232,.7); text-decoration:none;}
+  .btn:active{transform:translateY(1px);}
+  .btn.ghost{background:transparent; color:var(--violet); box-shadow:none; font-size:13.5px; padding:11px; margin-top:2px;}
+  .homebar{position:absolute; left:50%; bottom:8px; transform:translateX(-50%); width:126px; height:5px; border-radius:3px; background:#1c1a17; opacity:.85; z-index:31;}
+
+  .thermo{margin-top:22px;}
+  .ttrack{position:relative; height:13px; border-radius:7px; overflow:hidden; background:var(--violet-track);}
+  .tfill{position:absolute; left:0; top:0; bottom:0; border-radius:7px; background:linear-gradient(100deg, var(--violet), var(--violet-deep));}
+  .ttick{position:absolute; top:3px; bottom:3px; width:1.5px; transform:translateX(-50%); background:rgba(255,255,255,.75); border-radius:1px;}
+  .ttick.dark{background:rgba(59,34,217,.32);}
+  .tlabels{position:relative; height:40px; margin-top:13px;}
+  .tl{position:absolute; transform:translateX(-50%); text-align:center; width:92px;}
+  .tl b{font-family:var(--serif); font-size:14px; font-weight:600; color:var(--ink2); display:block;}
+  .tl span{font-size:10.5px; color:var(--soft); letter-spacing:.01em;}
+
+  .bal{margin-top:20px;}
+  .frow{margin-top:13px;}
+  .frow:first-child{margin-top:0;}
+  .frow .r{display:flex; align-items:center; gap:8px;}
+  .frow .dot{width:8px; height:8px; border-radius:50%; flex:0 0 auto;}
+  .frow .nm{font-size:13px; font-weight:600; color:var(--ink2);}
+  .frow .pct{font-family:var(--serif); font-size:14px; font-weight:600; margin-left:auto; color:var(--ink2);}
+  .frow .bar{position:relative; height:8px; border-radius:5px; background:var(--track); margin-top:7px;}
+  .frow .fg{position:absolute; left:0; top:0; bottom:0; border-radius:5px; background:var(--fill);}
+  .frow .th{position:absolute; left:15%; top:-5px; height:18px; width:2px; background:var(--ink2); opacity:.55; transform:translateX(-50%);}
+  .threshlab{font-size:10.5px; color:var(--soft); margin-top:9px; letter-spacing:.02em;}
+
+  .htlist{margin-top:20px; display:flex; flex-direction:column; gap:14px;}
+  .ht{display:flex; gap:13px; align-items:flex-start;}
+  .ht .ic{width:34px; height:34px; flex:0 0 auto; border-radius:11px; background:var(--violet-soft); color:var(--violet-deep); display:flex; align-items:center; justify-content:center;}
+  .ht .ic svg{width:18px; height:18px;}
+  .ht .tx{font-size:13.5px; line-height:1.45; color:var(--ink2); padding-top:2px;}
+  .ht .tx b{font-weight:600; color:var(--ink);}
+  .taps{display:inline-flex; align-items:baseline; gap:7px; font-size:13px; color:var(--muted); margin-top:14px;}
+  .taps b{font-family:var(--serif); font-size:15px; color:var(--violet-deep); font-weight:600;}
+
+  .callout{margin-top:20px; background:var(--violet-soft); border:1px solid #e2d8f7; border-radius:16px; padding:15px 16px;}
+  .callout .ct{font-size:13px; line-height:1.55; color:var(--ink2);}
+  .callout .ct b{font-weight:600; color:var(--violet-deep);}
+
+  .install{margin-top:22px; display:flex; flex-direction:column; gap:11px;}
+  .irow{display:flex; align-items:center; gap:11px; font-size:13px; color:var(--ink2);}
+  .irow .pf{font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--soft); width:64px; flex:0 0 auto;}
+  .irow svg{width:17px; height:17px; color:var(--violet-deep); flex:0 0 auto;}
+
+  .playmark{margin:24px auto 4px; width:78px; height:78px; border-radius:50%; background:var(--violet-soft); display:flex; align-items:center; justify-content:center;}
+  .playmark svg{width:30px; height:30px; color:var(--violet-deep); margin-left:4px;}
+
+  /* under-phone helper line */
+  .hint{margin-top:20px; display:flex; align-items:center; gap:14px; color:#6f6a62; font-size:13px; font-weight:500;}
+  .hint b{color:#3a352f; font-weight:600;}
+  .hint a{color:var(--violet-deep); text-decoration:none; font-weight:600;}
+  .hint .sep{opacity:.4;}
+</style>
+</head>
+<body>
+
+  <div id="stage">
+    <div class="phone">
+      <div class="deck" id="deck">
+
+        <!-- 1 -->
+        <div class="screen active">
+          <div class="glow"></div><div class="island"></div>
+          <button class="back" data-back aria-label="Back">&#8249;</button>
+          <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div>
+          <div class="top"><div class="wm">zodiac.fm</div></div>
+          <div class="body">
+            <div class="kicker">Welcome</div>
+            <h2 class="h">You don't study Zodiac. You <em>listen</em> to it.</h2>
+            <div class="playmark"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+            <div class="p">You already have your own signal, the real you underneath the noise. The app's whole job is to turn that signal back up. No reading, no homework. Press play and let it work in the background while you live your life.</div>
+          </div>
+          <div class="foot">
+            <div class="dots"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <button class="btn" data-adv>Got it</button>
+          </div>
+          <div class="homebar"></div>
+        </div>
+
+        <!-- 2 -->
+        <div class="screen">
+          <div class="glow"></div><div class="island"></div>
+          <button class="back" data-back aria-label="Back">&#8249;</button>
+          <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div>
+          <div class="top"><div class="wm">zodiac.fm</div></div>
+          <div class="body">
+            <div class="kicker">Setup</div>
+            <h2 class="h">Put it one tap away.</h2>
+            <div class="p">Add Zodiac to your home screen so it opens like a real app. The icon is what brings you back tomorrow, which is the whole game. That is the setup done.</div>
+            <div class="install">
+              <div class="irow"><span class="pf">iPhone</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M8 8l4-4 4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg>Share, then Add to Home Screen</div>
+              <div class="irow"><span class="pf">Android</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/></svg>Menu, then Add to Home Screen</div>
+            </div>
+            <div class="foot-note">We walk you through this step by step the first time, so you can't miss it.</div>
+          </div>
+          <div class="foot">
+            <div class="dots"><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <button class="btn" data-adv>Add to home screen</button>
+          </div>
+          <div class="homebar"></div>
+        </div>
+
+        <!-- 3 -->
+        <div class="screen">
+          <div class="glow"></div><div class="island"></div>
+          <button class="back" data-back aria-label="Back">&#8249;</button>
+          <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div>
+          <div class="top"><div class="wm">zodiac.fm</div></div>
+          <div class="body">
+            <div class="kicker">How to listen</div>
+            <h2 class="h">No headphones needed.</h2>
+            <div class="p">A decent speaker works just as well, a good Bluetooth speaker, your car, your AirPods. Just skip tinny phone and laptop speakers, they thin out the sound your frequencies ride on.</div>
+            <div class="p sm">Set the volume where it feels comfortable, then listen while you live: walking, working, cooking, driving, falling asleep.</div>
+            <div class="foot-note">The only thing that matters is <b>time with your frequencies playing.</b></div>
+          </div>
+          <div class="foot">
+            <div class="dots"><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i><i></i></div>
+            <button class="btn" data-adv>Next</button>
+          </div>
+          <div class="homebar"></div>
+        </div>
+
+        <!-- 4 -->
+        <div class="screen">
+          <div class="glow"></div><div class="island"></div>
+          <button class="back" data-back aria-label="Back">&#8249;</button>
+          <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div>
+          <div class="top"><div class="wm">zodiac.fm</div></div>
+          <div class="body">
+            <div class="kicker">Your goal</div>
+            <h2 class="h">About nine minutes a day.</h2>
+            <div class="p">Think of it across the week, about an hour in total, so missing a day here and there is fine. Nine minutes is the floor. From there, more time does more.</div>
+            <div class="thermo">
+              <div class="ttrack">
+                <div class="tfill" style="width:40%"></div>
+                <div class="ttick" style="left:20%"></div>
+                <div class="ttick" style="left:42%"></div>
+                <div class="ttick dark" style="left:88%"></div>
+              </div>
+              <div class="tlabels">
+                <div class="tl" style="left:20%"><b>9 min</b><span>the floor</span></div>
+                <div class="tl" style="left:50%"><b>20 min</b><span>stronger middle</span></div>
+                <div class="tl" style="left:86%"><b>45+ min</b><span>the deep end</span></div>
+              </div>
+            </div>
+            <div class="foot-note">Your weekly <b>Stats screen</b> keeps count, so you don't have to.</div>
+          </div>
+          <div class="foot">
+            <div class="dots"><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i><i></i></div>
+            <button class="btn" data-adv>Next</button>
+          </div>
+          <div class="homebar"></div>
+        </div>
+
+        <!-- 5 -->
+        <div class="screen">
+          <div class="glow"></div><div class="island"></div>
+          <button class="back" data-back aria-label="Back">&#8249;</button>
+          <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div>
+          <div class="top"><div class="wm">zodiac.fm</div></div>
+          <div class="body">
+            <div class="kicker">The habit that matters most</div>
+            <h2 class="h">Use all four of your frequencies.</h2>
+            <div class="p sm">Core, Love, Vitality, and Abundance, one for each part of your life. The real results come from feeding all four, not camping on your favorite. Give each at least 15%.</div>
+            <div class="bal">
+              <div class="frow"><div class="r"><span class="dot" style="background:var(--core)"></span><span class="nm">Core</span><span class="pct">26%</span></div><div class="bar"><div class="fg" style="width:26%"></div><div class="th"></div></div></div>
+              <div class="frow"><div class="r"><span class="dot" style="background:var(--love)"></span><span class="nm">Love</span><span class="pct">24%</span></div><div class="bar"><div class="fg" style="width:24%"></div><div class="th"></div></div></div>
+              <div class="frow"><div class="r"><span class="dot" style="background:var(--vitality)"></span><span class="nm">Vitality</span><span class="pct">23%</span></div><div class="bar"><div class="fg" style="width:23%"></div><div class="th"></div></div></div>
+              <div class="frow"><div class="r"><span class="dot" style="background:var(--abundance)"></span><span class="nm">Abundance</span><span class="pct">27%</span></div><div class="bar"><div class="fg" style="width:27%"></div><div class="th"></div></div></div>
+              <div class="threshlab">15% min each (about 60% spread evenly, 40% wherever you lean)</div>
+            </div>
+            <div class="foot-note">In our year-long beta, the people who got the big results did <b>exactly this.</b></div>
+          </div>
+          <div class="foot">
+            <div class="dots"><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i><i></i></div>
+            <button class="btn" data-adv>Next</button>
+          </div>
+          <div class="homebar"></div>
+        </div>
+
+        <!-- 6 -->
+        <div class="screen">
+          <div class="glow"></div><div class="island"></div>
+          <button class="back" data-back aria-label="Back">&#8249;</button>
+          <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div>
+          <div class="top"><div class="wm">zodiac.fm</div></div>
+          <div class="body">
+            <div class="kicker">Make it yours</div>
+            <h2 class="h">Build your own listening.</h2>
+            <div class="taps">It is <b>three taps</b> to play: pick a frequency, pick a soundscape, press play.</div>
+            <div class="htlist">
+              <div class="ht"><span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg></span><span class="tx"><b>Heart a song</b> to drop it into your Favorites.</span></div>
+              <div class="ht"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M5 21h14"/></svg></span><span class="tx"><b>Download</b> to save it for offline, so it plays with no signal.</span></div>
+              <div class="ht"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h11M8 12h11M8 18h11"/><path d="M3 6l1.5-1.5M3 12l1.5-1.5M3 18l1.5-1.5"/></svg></span><span class="tx"><b>Drag to reorder</b>, mixing across all four frequencies.</span></div>
+            </div>
+            <div class="foot-note">Soundscapes come in different lengths: a three-minute reset, longer immersions, an hour for sleep.</div>
+          </div>
+          <div class="foot">
+            <div class="dots"><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i><i></i></div>
+            <button class="btn" data-adv>Next</button>
+          </div>
+          <div class="homebar"></div>
+        </div>
+
+        <!-- 7 -->
+        <div class="screen">
+          <div class="glow"></div><div class="island"></div>
+          <button class="back" data-back aria-label="Back">&#8249;</button>
+          <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div>
+          <div class="top"><div class="wm">zodiac.fm</div></div>
+          <div class="body">
+            <div class="kicker">What to expect</div>
+            <h2 class="h">Give it a few weeks to land.</h2>
+            <div class="p">Many people feel nothing at first, and that is completely normal. Feeling it is not the test. Most notice a shift around one month, a bigger one by three. It is working whether you notice it or not.</div>
+            <div class="callout"><div class="ct"><b>If it ever feels uncomfortable</b> or stirs something up, that usually means it is working. Ease off, play the gentlest track for a few minutes a day, and build back up.</div></div>
+          </div>
+          <div class="foot">
+            <div class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i><i></i></div>
+            <button class="btn" data-adv>Next</button>
+          </div>
+          <div class="homebar"></div>
+        </div>
+
+        <!-- 8 -->
+        <div class="screen">
+          <div class="glow"></div><div class="island"></div>
+          <button class="back" data-back aria-label="Back">&#8249;</button>
+          <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div>
+          <div class="top"><div class="wm">zodiac.fm</div></div>
+          <div class="body">
+            <div class="kicker">That's the whole practice</div>
+            <h2 class="h">Press play and live your life.</h2>
+            <div class="p">About nine minutes a day, spread across all four of your frequencies, most days of the week. Give it a few weeks to land. That is the whole thing.</div>
+            <div class="foot-note">Two habits, one scoreboard. Your <b>Stats screen</b> shows both, every week.</div>
+          </div>
+          <div class="foot">
+            <div class="dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="on"></i></div>
+            <button class="btn" data-restart>Start listening</button>
+            <a class="btn ghost" href="stats.html">See how my week is tracking &#8250;</a>
+          </div>
+          <div class="homebar"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="hint">
+    <span><b id="stepn">1</b> <span class="sep">/</span> 8</span>
+    <span class="sep">·</span>
+    <span>tap <b>Next</b> to move through it</span>
+    <span class="sep">·</span>
+    <a href="#" id="restart">restart</a>
+  </div>
+
+  <script>
+    var screens = Array.prototype.slice.call(document.querySelectorAll('.screen'));
+    var idx = 0;
+    var stepn = document.getElementById('stepn');
+
+    function show(n){
+      idx = Math.max(0, Math.min(screens.length - 1, n));
+      screens.forEach(function(s, i){
+        s.classList.toggle('active', i === idx);
+        s.classList.toggle('has-back', i === idx && idx > 0);
+      });
+      stepn.textContent = idx + 1;
+      var d = screens[idx]; var b = d && d.querySelector('.body'); if (b) b.scrollTop = 0;
+    }
+    function next(){ show(idx + 1); }
+    function prev(){ show(idx - 1); }
+
+    document.addEventListener('click', function(e){
+      var adv = e.target.closest('[data-adv]');
+      var back = e.target.closest('[data-back]');
+      var restart = e.target.closest('[data-restart]') || (e.target.id === 'restart' ? e.target : null);
+      if (adv){ e.preventDefault(); next(); }
+      else if (back){ e.preventDefault(); prev(); }
+      else if (restart){ e.preventDefault(); show(0); }
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowRight') next();
+      else if (e.key === 'ArrowLeft') prev();
+    });
+
+    // scale the phone to fit the viewport (so it reads on a real phone too)
+    function fit(){
+      var PW = 397, PH = 834, pad = 24, hintH = 70;
+      var s = Math.min((window.innerWidth - pad) / PW, (window.innerHeight - hintH - pad) / PH, 1);
+      document.getElementById('stage').style.zoom = s;
+    }
+    window.addEventListener('resize', fit); fit();
+    show(0);
+  </script>
+</body>
+</html>
