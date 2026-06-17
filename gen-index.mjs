@@ -1,4 +1,17 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
+// Build step (runs on Vercel before deploy): regenerates index.html by scanning
+// the folder for .html pages, so a dropped-in page auto-appears on the index.
+// Same look as the dev server. Keeps the Vercel site zero-touch: drop file, push, live.
+import { readdir, writeFile } from 'fs/promises';
+import { basename } from 'path';
+
+const files = (await readdir('.')).filter(f => f.endsWith('.html') && f !== 'index.html').sort();
+const items = files.map(f => {
+  const slug = '/' + basename(f, '.html');
+  const name = basename(f, '.html').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  return `    <a class="page" href="${slug}">${name} <span>${slug}</span></a>`;
+}).join('\n');
+
+const html = `<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Zodiac — Preview</title>
 <style>
   :root{--ink:#15151b;--mut:#83868f;--line:#e7e8ec;--accent:#5b5bd6;--bg:#f4f5f7}
@@ -18,7 +31,9 @@
   <span class="tag">PREVIEW</span>
   <h1 style="margin-top:12px">Zodiac — Pages</h1>
   <p>Work-in-progress pages for feedback before they go live. Every page in the folder shows up here automatically.</p>
-  <div class="list">
-    <a class="page" href="/sample">Sample <span>/sample</span></a>
-  </div>
+${items ? `  <div class="list">\n${items}\n  </div>` : '  <div class="empty">No pages yet. Drop an HTML file in the repo and push.</div>'}
 </div></body></html>
+`;
+
+await writeFile('index.html', html);
+console.log(`Generated index.html with ${files.length} page(s): ${files.join(', ') || '(none)'}`);
