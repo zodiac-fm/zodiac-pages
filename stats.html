@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zodiac.fm — Stats (v7, hierarchy + violet system)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500;1,6..72,600&family=Inter:wght@400;500;600;700&display=swap');
+  :root{
+    --bg:#faf7f1; --ink:#1b1720; --ink2:#34302a; --muted:#615c63; --soft:#6d6862;
+    --line:#e6dfd2; --track:#e4ded0; --fill:#2a2622;
+    /* brand violet = the structure color */
+    --violet:#6B2BE8; --violet-deep:#3B22D9; --violet-soft:#efe9fb; --violet-track:#ece6f7;
+    --good:#2f7a4a; --good-soft:#e7f1ea; --warn:#b3382f; --warn-soft:#f7e9e7;
+    --core:#4a5296; --love:#b8546f; --vitality:#bd6b34; --abundance:#5f8f64;
+    --serif:'Newsreader',Georgia,'Times New Roman',serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    --sw:375px; --sh:812px; --navh:86px; --sbh:54px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{background:#dedbd4; font-family:var(--sans); color:var(--ink); -webkit-font-smoothing:antialiased;
+    display:flex; align-items:flex-start; justify-content:center; min-height:100%; padding:26px 12px;}
+  #stage{transform-origin:top center;}
+  .phone{position:relative; width:calc(var(--sw) + 24px); border-radius:56px; background:#0b0b0d; padding:12px;
+    box-shadow:0 3px 6px rgba(0,0,0,.2), 0 40px 80px -30px rgba(0,0,0,.5), inset 0 0 0 2px #2a2a2e;}
+  .screen{position:relative; width:var(--sw); height:var(--sh); border-radius:46px; overflow:hidden; background:var(--bg);}
+  body.full .screen{height:auto;}
+
+  /* violet wash carried down from the top */
+  .glow{position:absolute; top:-40px; left:50%; transform:translateX(-50%); width:420px; height:420px; z-index:0;
+    background:radial-gradient(closest-side, rgba(107,43,232,.16), rgba(107,43,232,.04) 55%, rgba(107,43,232,0) 75%); pointer-events:none;}
+  .island{position:absolute; top:13px; left:50%; transform:translateX(-50%); width:118px; height:33px; background:#000; border-radius:19px; z-index:40;}
+  .statusbar{position:absolute; top:0; left:0; right:0; height:var(--sbh); z-index:30; background:linear-gradient(#faf7f1, #faf7f1 70%, rgba(250,247,241,0));
+    display:flex; align-items:flex-end; justify-content:space-between; padding:0 30px 7px; font-size:13px; font-weight:600;}
+  body.full .statusbar{position:static; background:var(--bg);}
+
+  .scroll{position:absolute; left:0; right:0; top:var(--sbh); bottom:var(--navh); overflow-y:auto; z-index:1; padding-bottom:16px;}
+  body.full .scroll{position:static; overflow:visible;}
+
+  /* row 1: brand + menu */
+  .chrome{display:flex; align-items:center; justify-content:space-between; padding:8px 22px 0;}
+  .chrome .wm{font-family:var(--serif); font-size:22px; font-weight:500; letter-spacing:-.01em;}
+  .chrome .menu{width:44px; height:40px; display:flex; align-items:center; justify-content:center; color:var(--ink2); margin-right:-10px;}
+  .chrome .menu svg{width:22px; height:22px;}
+
+  /* row 2: week (purple) ... how levels work */
+  .util{display:flex; align-items:center; justify-content:space-between; padding:14px 24px 0;}
+  .util .wk{font-size:13px; font-weight:700; color:var(--violet); letter-spacing:.01em;}
+  .util .wk span{font-weight:500; color:var(--soft); letter-spacing:0;}
+  .util .qlink{display:inline-flex; align-items:center; gap:6px; min-height:30px; font-size:12.5px; color:var(--violet); font-weight:600;}
+  .util .qlink .q{width:17px; height:17px; border-radius:50%; border:1.4px solid var(--violet); display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-size:11px; font-style:italic;}
+
+  /* H1 summary — the one biggest thing on the page */
+  .summary{padding:11px 24px 0; font-size:13px; display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 9px;}
+  .summary h1{font-family:var(--serif); font-size:27px; font-weight:500; line-height:1.12; letter-spacing:-.015em; color:var(--ink);}
+  .summary h1 em{font-style:italic;}
+  .summary .streak{font-size:13.5px; font-weight:500; color:var(--muted); margin-top:7px;}
+  .summary .streak b{color:var(--ink); font-weight:600;}
+  .togo{margin-top:11px;}
+  .togo .lead{font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--soft); margin-bottom:6px;}
+  .togo .row{font-size:12.5px; color:var(--muted); line-height:1.85;}
+  .togo .row b{color:var(--ink); font-weight:600;}
+  .summary .lab{color:var(--soft); font-weight:500;}
+  .summary .val{color:var(--ink); font-weight:600;}
+  .summary .val.warn{color:var(--warn);}
+  .summary .sep{color:var(--line2);}
+  .lvl{font-size:11.5px; font-weight:600; color:var(--ink2); background:#efe9df; border-radius:20px; padding:3px 11px; white-space:nowrap;}
+  .wkrow .ws .lowflag{color:var(--warn); font-weight:500;}
+  .cols{display:flex; gap:16px; margin-top:20px; padding-top:15px; border-top:1px solid var(--line);}
+  .col{flex:1 1 0; min-width:0;}
+  .col .clead{font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--soft); margin-bottom:9px;}
+  .crow{display:flex; align-items:baseline; justify-content:space-between; gap:8px; font-size:12px; color:var(--muted); line-height:1.95;}
+  .crow span{white-space:nowrap;}
+  .crow b{color:var(--ink); font-weight:600; white-space:nowrap;}
+  .crow b.ok{color:var(--good); font-size:13px;}
+
+  /* sections: violet H2 anchor, big space + hairline, content always smaller than the header */
+  .sec{padding:24px 24px 0; margin-top:30px; border-top:1px solid var(--line);}
+  .shead{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;}
+  .shead h2{font-family:var(--serif); font-size:21px; font-weight:600; color:var(--violet); letter-spacing:-.005em;}
+  .chip{font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:4px; padding:3px 9px; border-radius:20px;}
+  .chip svg{width:12px; height:12px;}
+  .chip.good{color:var(--good); background:var(--good-soft);}
+
+  .bignum{display:flex; align-items:baseline; gap:8px;}
+  .bignum .n{font-family:var(--serif); font-size:19px; font-weight:600; color:var(--ink); letter-spacing:-.01em;}
+  .bignum .u{font-size:13px; color:var(--muted);}
+  .bignum .wk{font-size:12.5px; color:var(--soft); margin-left:auto; font-weight:500;}
+
+  /* time bar — brand violet, measured */
+  .thermo{margin-top:16px;}
+  .ttrack-wrap{position:relative;}
+  .ttrack{position:relative; height:14px; border-radius:7px; overflow:hidden; background:var(--violet-track);}
+  .ttrack::before{content:""; position:absolute; inset:0; z-index:0;
+    background:repeating-linear-gradient(90deg, transparent 0, transparent calc(6.25% - 1px), rgba(59,34,217,.14) calc(6.25% - 1px), rgba(59,34,217,.14) 6.25%);}
+  .tfill{position:absolute; left:0; top:0; bottom:0; border-radius:7px; z-index:1; background:linear-gradient(100deg, var(--violet), var(--violet-deep));}
+  .ttick{position:absolute; top:3px; bottom:3px; width:1.5px; transform:translateX(-50%); z-index:2; border-radius:1px;}
+  .ttick.light{background:rgba(255,255,255,.7);}
+  .ttick.dark{background:rgba(59,34,217,.35);}
+  .tmark{position:absolute; top:-5px; height:24px; width:3px; background:var(--violet-deep); transform:translateX(-50%); border-radius:2px; box-shadow:0 0 0 2.5px var(--bg); z-index:3;}
+  .tlabels{position:relative; height:34px; margin-top:13px;}
+  .tl{position:absolute; transform:translateX(-50%); text-align:center; width:84px;}
+  .tl b{font-family:var(--serif); font-size:14px; font-weight:600; color:var(--soft); display:block;}
+  .tl span{font-size:11px; color:var(--soft); letter-spacing:.02em;}
+  .tl.hit b{color:var(--ink);} .tl.hit span{color:var(--muted);}
+  .tl.now b{color:var(--violet-deep);}
+  .tl.now span{background:var(--violet-soft); color:var(--violet-deep); font-weight:700; padding:2px 8px; border-radius:10px; display:inline-block; margin-top:3px;}
+  .tl.warnnow b{color:var(--warn);}
+  .tl.warnnow span{background:var(--warn-soft); color:var(--warn); font-weight:700; padding:2px 8px; border-radius:10px; display:inline-block; margin-top:3px;}
+  .chip.warn{color:var(--warn); background:var(--warn-soft);}
+  .togo.week{margin-top:20px; padding-top:15px; border-top:1px solid var(--line);}
+  .togo .row.reached{color:var(--good); font-weight:500;}
+  .togo .row.reached::before{content:"\2713  "; font-weight:700;}
+
+  /* balance */
+  .cap{font-size:13px; color:var(--muted); margin:-4px 0 2px;}
+  .frow{margin-top:18px;}
+  .frow .top{display:flex; align-items:center; gap:9px;}
+  .frow .dot{width:9px; height:9px; border-radius:50%; flex:0 0 auto;}
+  .frow .nm{font-size:15px; font-weight:600; letter-spacing:-.01em; color:var(--ink);}
+  .frow .lowtag{font-size:10.5px; font-weight:600; letter-spacing:.04em; color:var(--warn); border:1px solid #e6c4c1; border-radius:20px; padding:2px 9px; background:var(--warn-soft);}
+  .frow .pct{font-family:var(--serif); font-size:17px; font-weight:600; margin-left:auto; color:var(--ink);}
+  .frow.low .pct{color:var(--warn);}
+  .frow .bar2{position:relative; height:9px; border-radius:5px; background:var(--track); margin-top:10px;}
+  .frow .fg2{position:absolute; left:0; top:0; bottom:0; border-radius:5px; background:var(--fill);}
+  .frow .thresh{position:absolute; left:15%; top:-7px; height:7px; width:2px; background:var(--ink2); transform:translateX(-50%);}
+  .frow .thresh::after{content:""; position:absolute; top:7px; left:0; width:2px; height:9px; background:var(--bg); opacity:.5;}
+  .threshlabel{position:relative; height:13px; margin-top:8px;}
+  .threshlabel span{position:absolute; left:15%; transform:translateX(-50%); font-size:10.5px; font-weight:600; letter-spacing:.04em; color:var(--soft);}
+
+  /* weeks */
+  .wkrow{display:flex; align-items:center; gap:12px; min-height:54px; padding:11px 2px; border-bottom:1px solid var(--line);}
+  .wkrow .wl{display:flex; flex-direction:column; gap:3px;}
+  .wkrow .wn{font-size:15px; font-weight:600; color:var(--ink); letter-spacing:-.01em;}
+  .wkrow .ws{font-size:12px; color:var(--soft);}
+  .wkrow .wr{margin-left:auto; display:flex; align-items:center; gap:11px;}
+  .wkrow .chev{color:#cfc6b6; font-size:20px; line-height:1;}
+  .wkrow.cur{margin:0 -12px; padding:11px 14px; background:var(--violet-soft); border-radius:14px; border-bottom:none;}
+  .wkrow.cur .wn{color:var(--violet-deep);}
+  .pill{font-size:11px; font-weight:600; display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px;}
+  .pill svg{width:12px; height:12px;}
+  .pill.good{color:var(--good); background:var(--good-soft);}
+  .pill.warn{color:var(--warn); background:var(--warn-soft);}
+  .pill.cur{color:var(--violet-deep); background:#fff; border:1px solid #ddd0f4;}
+
+  .nav{position:absolute; left:0; right:0; bottom:0; height:var(--navh); z-index:30; background:var(--bg);
+    display:flex; justify-content:space-around; align-items:flex-start; border-top:1px solid var(--line); padding-top:11px;}
+  body.full .nav{position:static; height:auto; padding-bottom:24px;}
+  .nav .item{display:flex; flex-direction:column; align-items:center; gap:5px; font-size:11px; letter-spacing:.02em; color:var(--soft); min-width:64px;}
+  .nav .item.active{color:var(--violet); font-weight:600;}
+  .homebar{position:absolute; left:50%; bottom:9px; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:#1c1a17; opacity:.85; z-index:31;}
+  body.full .homebar{display:none;}
+</style>
+</head>
+<body>
+  <div id="stage">
+    <div class="phone">
+      <div class="screen">
+        <div class="glow"></div>
+        <div class="island"></div>
+        <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div>
+
+        <div class="scroll">
+          <div class="chrome">
+            <div class="wm">zodiac.fm</div>
+            <div class="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></div>
+          </div>
+
+          <div class="util">
+            <div class="wk">Week 3 <span>· resets Monday</span></div>
+            <div class="qlink"><span class="q">?</span> How levels work</div>
+          </div>
+
+          <div class="summary">
+            <span class="lab">Time</span> <span class="val">Accelerated</span>
+            <span class="sep">·</span>
+            <span class="lab">Balance</span> <span class="val warn">Increase Vitality</span>
+          </div>
+
+          <div class="sec">
+            <div class="shead">
+              <h2>Time Under Frequency</h2>
+            </div>
+            <div class="bignum"><span class="n">24 min / day</span><span class="u">average</span><span class="wk">120 min this week</span></div>
+            <div class="thermo">
+              <div class="ttrack-wrap">
+                <div class="ttrack">
+                  <div class="tfill" style="width:44%"></div>
+                  <div class="ttick light" style="left:17%"></div>
+                  <div class="ttick light" style="left:38%"></div>
+                  <div class="ttick dark" style="left:86%"></div>
+                </div>
+                <div class="tmark" style="left:44%"></div>
+              </div>
+              <div class="tlabels">
+                <div class="tl hit" style="left:17%"><b>9</b><span>Minimum</span></div>
+                <div class="tl hit now" style="left:38%"><b>20</b><span>Accelerated</span></div>
+                <div class="tl" style="left:86%"><b>45+</b><span>Advanced</span></div>
+              </div>
+            </div>
+            <div class="cols">
+              <div class="col">
+                <div class="clead">Today</div>
+                <div class="crow"><span>Minimum</span><b>4m</b></div>
+                <div class="crow"><span>Accelerated</span><b>15m</b></div>
+                <div class="crow"><span>Advanced</span><b>40m</b></div>
+              </div>
+              <div class="col">
+                <div class="clead">This week</div>
+                <div class="crow"><span>Minimum</span><b class="ok">&#10003;</b></div>
+                <div class="crow"><span>Accelerated</span><b class="ok">&#10003;</b></div>
+                <div class="crow"><span>Advanced</span><b>1h 45m</b></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sec">
+            <div class="shead"><h2>Frequency Balance</h2></div>
+            <div class="cap">Each frequency needs 15% of your week.</div>
+            <div class="frow">
+              <div class="top"><span class="dot" style="background:var(--core)"></span><span class="nm">Core</span><span class="pct">28%</span></div>
+              <div class="bar2"><div class="fg2" style="width:28%"></div><div class="thresh"></div></div>
+              <div class="threshlabel"><span>15% min</span></div>
+            </div>
+            <div class="frow">
+              <div class="top"><span class="dot" style="background:var(--love)"></span><span class="nm">Love</span><span class="pct">22%</span></div>
+              <div class="bar2"><div class="fg2" style="width:22%"></div><div class="thresh"></div></div>
+            </div>
+            <div class="frow low">
+              <div class="top"><span class="dot" style="background:var(--vitality)"></span><span class="nm">Vitality</span><span class="lowtag">Low</span><span class="pct">11%</span></div>
+              <div class="bar2"><div class="fg2" style="width:11%"></div><div class="thresh"></div></div>
+            </div>
+            <div class="frow">
+              <div class="top"><span class="dot" style="background:var(--abundance)"></span><span class="nm">Abundance</span><span class="pct">39%</span></div>
+              <div class="bar2"><div class="fg2" style="width:39%"></div><div class="thresh"></div></div>
+            </div>
+          </div>
+
+          <div class="sec">
+            <div class="shead"><h2>Your weeks</h2></div>
+            <div class="wkrow cur">
+              <div class="wl"><span class="wn">Week 3</span><span class="ws">On pace for Accelerated</span></div>
+              <div class="wr"><span class="chev">›</span></div>
+            </div>
+            <div class="wkrow">
+              <div class="wl"><span class="wn">Week 2</span><span class="ws">All four balanced</span></div>
+              <div class="wr"><span class="lvl">Advanced</span><span class="chev">›</span></div>
+            </div>
+            <div class="wkrow">
+              <div class="wl"><span class="wn">Week 1</span><span class="ws"><span class="lowflag">Vitality low</span></span></div>
+              <div class="wr"><span class="lvl">Minimum</span><span class="chev">›</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav">
+          <div class="item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l11-2v13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><circle cx="20" cy="16" r="3"/></svg>
+            Immersions
+          </div>
+          <div class="item active">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 14v4M9 9v9M14 5v13M19 11v7" stroke-linecap="round"/></svg>
+            Stats
+          </div>
+          <div class="item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Favorites
+          </div>
+        </div>
+        <div class="homebar"></div>
+
+      </div>
+    </div>
+  </div>
+  <script>
+    if (location.hash === '#full') document.body.classList.add('full');
+    function fit(){ var PW=399; var s=Math.min((window.innerWidth-20)/PW,1); document.getElementById('stage').style.zoom=s; }
+    window.addEventListener('resize',fit); fit();
+  </script>
+</body>
+</html>
