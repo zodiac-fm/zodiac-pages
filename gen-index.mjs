@@ -31,8 +31,7 @@ for (const c of CATS) {
 }
 
 const html = `<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<base href="/zodiac-pages/"><title>Zodiac — Pages</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Zodiac — Pages</title>
 <style>
   :root{--ink:#15151b;--mut:#83868f;--line:#e7e8ec;--accent:#5b5bd6;--bg:#f4f5f7}
   *{box-sizing:border-box;margin:0;padding:0}
