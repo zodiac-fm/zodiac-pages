@@ -6,9 +6,9 @@ import { basename } from 'path';
 
 const files = (await readdir('.')).filter(f => f.endsWith('.html') && f !== 'index.html').sort();
 const items = files.map(f => {
-  const slug = '/' + basename(f, '.html');
+  // Relative href (GitHub Pages serves project sites under /<repo>/, so absolute /paths break).
   const name = basename(f, '.html').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-  return `    <a class="page" href="${slug}">${name} <span>${slug}</span></a>`;
+  return `    <a class="page" href="${f}">${name} <span>/${basename(f, '.html')}</span></a>`;
 }).join('\n');
 
 const html = `<!doctype html><html lang="en"><head><meta charset="utf-8">
