@@ -172,7 +172,9 @@
   var S=[
    /*1*/ {t:'lander'},
    /*1b*/ {t:'q',key:'gender',kick:'First, so we tune this right',q:'You are…',opts:[{label:'Female'},{label:'Male'},{label:'Prefer not to say'}]},
-   /*2*/ ST('10,000+','people already tuning in. 4.7 stars.','“The most significant breakthrough in birth chart technology in decades.” Astrology.tv','I’m listening'),
+   /*2*/ {t:'stat',n:'10,000+',l:'people already tuning in.',cue:'I’m listening',quotes:[
+     {q:'Zodiac is brilliant. The transformations I’ve witnessed are remarkable. Highly recommended.',by:'Dr. Pedram Shojai · Author, The Urban Monk'},
+     {q:'The most significant breakthrough in birth chart technology in decades.',by:'Astrology.tv'}]},
    /*3*/ {t:'q',domain:'tier',key:'tier',kick:'First, you',q:'How well do you know your chart?',opts:[{label:'Just my sign'},{label:'My big three'},{label:'I go deep: Human Design, Gene Keys, Vedic'},{label:'Honestly, just getting curious'}]},
    /*4*/ PN({cue:'That’s me',dyn:function(A){var t=A.tier;
      if(t==='I go deep: Human Design, Gene Keys, Vedic'||t==='My big three')
@@ -274,7 +276,7 @@
   var META=[
    ['One job: earn the tap. Structure: media preheader (tiny, top) → headline (the discovery) → throat-grab subhead (read for years vs HEAR it now) → the signature Hilary testimonial → promise CTA. The “Personal psychoacoustics” eyebrow was cut: insider jargon in the hottest pixels; the preheader does the credibility job in known words.','Click-through = the true hook metric.','A/B priority: headline first, then CTA text, then the testimonial slot. Alternates banked in the build report.'],
    ['Zero-think first tap builds momentum (every quiz giant opens on gender). Framed as tuning, not demographics.','Gender.','Already branches testimonial order (screens 6/79). Later: ad-audience match, creative split, LTV by segment.'],
-   ['First give after their first answer: you are joining something real. Two proof types stacked early (numbers + media).','None','Test a testimonial vs the stat in this slot.'],
+   ['First give after their first answer: a full proof wall. The big number + stars, then two credible quotes (a best-selling author + the category authority). Anchored high so the wow lands the instant the screen opens. This is where we prove they are joining something real, before we ask anything.','None','A/B the two quote slots: authority vs famous-customer vs raw number. Whichever wall converts best becomes the template for early-proof screens.'],
    ['Segmentation disguised as identity. Also a soft confession: I care about this stuff.','Believer tier (sign / big three / deep / curious).','Branches the next screen now. Later: copy depth per tier across the funnel; tier = ad targeting + email segmentation gold.'],
    ['The whole claim swings on their tier so it never argues with them. The funnel proves it listens on screen 5.','None','Drop-off here by tier shows which entry audience is coldest.'],
    ['First testimonial, gender-ordered: women get the astrologer authority first, men the embodied male voice. Both see both eventually.','None','Test which voice converts per gender; later match pool to tier too.'],
@@ -410,7 +412,11 @@
       (pk?'<div class="kick">'+pk+'</div>':'')+'<div class="big">'+pb+'</div><div class="sub">'+ps+'</div>'+
       (s.stack?'<div class="stack" style="margin-top:12px;text-align:left">Your 4 frequencies <b>$297</b><br>Your bands + Profile <b>$197</b><br>The full library, 28 tracks <b>$197</b><br>Founding price-lock <b>priceless</b></div>':'')+
       '</div></div>';btn=nextBtn(s.cue);}
-    else if(s.t==='stat'){h='<div class="view">'+brand+'<div class="orb"></div><div class="mid" style="text-align:center;align-items:center"><div class="stat">'+s.n+'</div><div class="statl">'+s.l+'</div><div class="src">'+s.src+'</div></div></div>';btn=nextBtn(s.cue);}
+    else if(s.t==='stat'){
+      if(s.quotes){var qh='<div style="margin:8px 0 16px"><span class="st2">★★★★★</span><span style="font-size:11px;color:#9a96a3;margin-left:8px;letter-spacing:.04em">4.7 average</span></div>';
+        for(var qi=0;qi<s.quotes.length;qi++){qh+='<div class="tcard" style="margin:0 0 10px;max-width:288px"><div class="tq">“'+s.quotes[qi].q+'”</div><div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:8px;text-align:left">'+s.quotes[qi].by+'</div></div>';}
+        h='<div class="view">'+brand+'<div class="orb"></div><div class="mid top" style="text-align:center;align-items:center;padding-top:14px"><div class="stat" style="font-size:44px">'+s.n+'</div><div class="statl">'+s.l+'</div>'+qh+'</div></div>';btn=nextBtn(s.cue);}
+      else{h='<div class="view">'+brand+'<div class="orb"></div><div class="mid" style="text-align:center;align-items:center"><div class="stat">'+s.n+'</div><div class="statl">'+s.l+'</div><div class="src">'+s.src+'</div></div></div>';btn=nextBtn(s.cue);}}
     else if(s.t==='proof'){var pq=s.q,pn=s.name,pr=s.role;
       if(s.gpair){var DEB=['This music tickled my soul and reminded me there’s a real connection between vibration, the stars, and sound.','Debra Silverman','Astrologer to Sting & Aaron Rodgers'];
         var TODD=['I can literally feel the shift in my body when I hit play. Like a sonic blueprint of who I am, on repeat.','Todd Shipman','Wellness leader'];
