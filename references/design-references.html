@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Zodiac · Design References</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF8F3; --ink:#191320; --muted:#6a6573; --faint:#9a96a3;
+    --violet:#6B2BE8; --violet-deep:#3B22D9; --hair:rgba(25,19,32,.10); --card:#fff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,sans-serif; color:var(--ink); line-height:1.6;
+    background:radial-gradient(120% 38% at 50% 0%, #FCFAF6 0%, #F4EFE6 50%, #ECE3D5 100%) fixed;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px}
+
+  /* sticky nav */
+  header.nav{position:sticky; top:0; z-index:50; backdrop-filter:saturate(1.2) blur(10px);
+    background:rgba(251,248,243,.82); border-bottom:1px solid var(--hair)}
+  .nav .row{max-width:1180px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; gap:18px}
+  .nav .brand{font-family:'Fraunces',serif; font-weight:600; font-size:18px; letter-spacing:-.3px}
+  .nav .brand .x{color:var(--violet)}
+  .nav .links{margin-left:auto; display:flex; gap:8px; flex-wrap:wrap}
+  .nav a{font-size:13.5px; font-weight:600; color:var(--muted); text-decoration:none; padding:8px 14px; border-radius:999px; border:1px solid transparent}
+  .nav a:hover{color:var(--violet); background:rgba(107,43,232,.07); border-color:rgba(107,43,232,.18)}
+
+  /* intro */
+  .intro{padding:64px 0 26px; text-align:center}
+  .kick{font-size:12.5px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--violet); margin-bottom:16px}
+  h1{font-family:'Fraunces',serif; font-weight:600; font-size:clamp(36px,6vw,62px); line-height:1.02; letter-spacing:-.8px}
+  h1 em{font-style:italic; color:var(--violet)}
+  .intro p{font-size:clamp(16px,2.1vw,19px); color:var(--muted); max-width:680px; margin:20px auto 0}
+  .lane{display:flex; gap:9px; flex-wrap:wrap; justify-content:center; margin:26px auto 0; max-width:760px}
+  .lane span{font-size:13px; font-weight:600; color:#2c2530; background:#fff; border:1px solid var(--hair); border-radius:999px; padding:7px 15px}
+  .lane span b{color:var(--violet)}
+  .note{font-size:13.5px; color:var(--faint); margin-top:26px}
+
+  /* section heads */
+  .shead{scroll-margin-top:80px; padding:70px 0 8px; border-top:1px solid var(--hair); margin-top:40px}
+  .shead .sk{font-size:12.5px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--violet); margin-bottom:12px}
+  .shead h2{font-family:'Fraunces',serif; font-weight:600; font-size:clamp(28px,4.4vw,40px); line-height:1.06; letter-spacing:-.5px}
+  .shead p{font-size:17px; color:var(--muted); max-width:720px; margin-top:14px}
+
+  /* landing entries: notes then BIG image */
+  .land{padding:46px 0; border-bottom:1px solid var(--hair)}
+  .ehead{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:6px}
+  .ehead .ix{font-family:'Fraunces',serif; font-style:italic; font-weight:500; font-size:22px; color:var(--violet)}
+  .ehead .nm{font-family:'Fraunces',serif; font-weight:600; font-size:clamp(24px,3.4vw,32px); letter-spacing:-.3px}
+  .ehead .url{font-size:14px; font-weight:500; color:var(--faint)}
+  .tag{display:inline-block; font-size:12.5px; font-weight:700; color:#2c2530; background:#f6f3ee; border:1px solid var(--hair); border-radius:999px; padding:6px 13px; margin-bottom:18px}
+  .notes{display:grid; grid-template-columns:1fr 1fr; gap:26px; max-width:920px; margin-bottom:26px}
+  .notes .b .l{font-size:11px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; color:var(--faint); margin-bottom:7px}
+  .notes .b.steal .l{color:var(--violet)}
+  .notes .b p{font-size:16px; line-height:1.55; color:#3a3543}
+  .notes .b p b{color:var(--ink); font-weight:600}
+  @media(max-width:720px){ .notes{grid-template-columns:1fr; gap:18px} }
+
+  .frame{border-radius:16px; overflow:hidden; border:1px solid var(--hair); box-shadow:0 22px 50px rgba(60,42,24,.13); background:#fff}
+  .fbar{display:flex; align-items:center; gap:7px; padding:11px 15px; background:#f1ece5; border-bottom:1px solid var(--hair)}
+  .fbar i{width:11px; height:11px; border-radius:50%; display:block}
+  .fbar .u{margin-left:12px; font-size:13px; color:var(--muted); font-weight:500}
+  .frame img{display:block; width:100%; height:auto}
+
+  /* story entries: sticky notes beside tall phone */
+  .story{padding:54px 0; border-bottom:1px solid var(--hair)}
+  .srow{display:grid; grid-template-columns:1fr 460px; gap:54px; align-items:start}
+  .snotes{position:sticky; top:84px}
+  .beats{list-style:none; display:flex; flex-direction:column; gap:14px; margin-top:20px}
+  .beats li{display:flex; gap:13px; align-items:flex-start}
+  .beats .n{flex:none; width:26px; height:26px; border-radius:50%; background:rgba(107,43,232,.1); color:var(--violet); font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:1px}
+  .beats .tx{font-size:16px; line-height:1.5; color:#3a3543}
+  .beats .tx b{color:var(--ink); font-weight:600}
+  .steal{margin-top:22px; padding:18px 20px; background:rgba(107,43,232,.06); border:1px solid rgba(107,43,232,.18); border-radius:14px}
+  .steal .l{font-size:11px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; color:var(--violet); margin-bottom:7px}
+  .steal p{font-size:15.5px; line-height:1.55; color:#2c2530}
+  .steal p b{color:var(--violet-deep); font-weight:600}
+  .device{background:#15101c; border-radius:40px; padding:13px 13px 16px; box-shadow:0 30px 64px rgba(40,25,60,.26)}
+  .device .notch{height:22px; display:flex; justify-content:center}
+  .device .notch i{width:120px; height:8px; border-radius:0 0 11px 11px; background:#000}
+  .device .scrn{border-radius:28px; overflow:hidden; background:#fff}
+  .device .scrn img{display:block; width:100%; height:auto}
+  .pcap{text-align:center; font-size:12.5px; color:var(--faint); margin-top:13px; font-weight:500}
+  .pcap b{color:var(--muted)}
+  @media(max-width:880px){ .srow{grid-template-columns:1fr; gap:30px} .snotes{position:static} .device{max-width:440px; margin:0 auto} }
+
+  /* synthesis */
+  .synth{scroll-margin-top:80px; margin:60px 0 30px; background:linear-gradient(165deg,#241b32,#15101c); color:#efeaf6; border-radius:26px; padding:clamp(30px,5vw,52px)}
+  .synth .sk{font-size:12.5px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:#b79bff; margin-bottom:14px}
+  .synth h2{font-family:'Fraunces',serif; font-weight:600; font-size:clamp(26px,3.6vw,34px); letter-spacing:-.4px; margin-bottom:10px}
+  .synth .lede{font-size:16.5px; line-height:1.6; color:#c9c2db; max-width:980px; margin-bottom:26px}
+  .flow{display:flex; flex-wrap:wrap; gap:9px; align-items:center; margin-bottom:30px}
+  .flow .b{font-size:14px; font-weight:600; color:#efeaf6; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14); border-radius:999px; padding:9px 15px}
+  .flow .ar{color:#8a7fb0; font-weight:700}
+  .laws{display:grid; grid-template-columns:repeat(3,1fr); gap:24px; border-top:1px solid rgba(255,255,255,.14); padding-top:26px}
+  .laws .h{font-family:'Fraunces',serif; font-size:19px; font-weight:600; color:#fff; margin-bottom:7px}
+  .laws p{font-size:14.5px; line-height:1.55; color:#c2bad6}
+  @media(max-width:760px){ .laws{grid-template-columns:1fr; gap:18px} }
+
+  footer{padding:40px 0 70px; text-align:center}
+  footer p{font-size:14.5px; color:var(--muted); max-width:760px; margin:0 auto; line-height:1.6}
+  footer b{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<header class="nav"><div class="row">
+  <div class="brand">zodia<span class="x">c</span>.fm · design references</div>
+  <div class="links">
+    <a href="#landing">Landing pages</a>
+    <a href="#storytelling">Mobile storytelling</a>
+    <a href="#skeleton">The skeleton</a>
+  </div>
+</div></header>
+
+<div class="wrap">
+
+  <section class="intro">
+    <div class="kick">Private swipe file · captured for study</div>
+    <h1>Pages worth stealing the <em>moves</em> from.</h1>
+    <p>Best-in-class pages in Zodiac's exact lane. For each one: what makes it work and the single move we'd borrow. We model the move, never the pixels.</p>
+    <div class="lane">
+      <span>Our lane:</span><span><b>Premium</b></span><span><b>Calm</b></span><span><b>Editorial</b></span><span>Spiritual, <b>without the woo</b></span><span>Serif + clean sans</span><span>One <b>violet</b> on warm paper</span>
+    </div>
+    <div class="note">Scroll down. Big images, two parts: the landing pages, then how they tell a story on a phone.</div>
+  </section>
+
+  <!-- ===================== LANDING PAGES ===================== -->
+  <div class="shead" id="landing">
+    <div class="sk">Part one</div>
+    <h2>Five landing pages worth stealing from.</h2>
+    <p>The craft of the first screen: one promise, a calm field, and the confidence to leave space.</p>
+  </div>
+
+  <section class="land">
+    <div class="ehead"><span class="ix">01</span><span class="nm">Endel</span><span class="url">endel.io</span></div>
+    <div class="tag">Functional sound, science-backed · our closest cousin</div>
+    <div class="notes">
+      <div class="b"><div class="l">What's great</div><p>One clear promise ("personalized soundscapes, backed by neuroscience"), then it <b>shows the product across every device</b> instead of explaining. Calm dark field, a single button, zero hype.</p></div>
+      <div class="b steal"><div class="l">Steal for Zodiac</div><p>Personal sound plus real science is almost our exact pitch. Borrow the quiet confidence, and the abstract "sound made visible" graphic, as a model for our <b>frequency reveal</b>.</p></div>
+    </div>
+    <div class="frame"><div class="fbar"><i style="background:#ec6a5e"></i><i style="background:#f4bf4f"></i><i style="background:#61c454"></i><span class="u">endel.io</span></div><img src="img/land-1-endel.jpg" alt="Endel" loading="lazy"></div>
+  </section>
+
+  <section class="land">
+    <div class="ehead"><span class="ix">02</span><span class="nm">Co&ndash;Star</span><span class="url">costarastrology.com</span></div>
+    <div class="tag">Astrology · editorial minimal</div>
+    <div class="notes">
+      <div class="b"><div class="l">What's great</div><p>A serif wordmark and one sentence carry the hero. Then <b>three phone screens do the showing.</b> Nothing competes, and the restraint reads as authority.</p></div>
+      <div class="b steal"><div class="l">Steal for Zodiac</div><p>We have a strong serif and real app screens now. Borrow the discipline: <b>one idea, lots of space, let the type and screens speak.</b> We run warmer, so keep the confidence and drop the cold.</p></div>
+    </div>
+    <div class="frame"><div class="fbar"><i style="background:#ec6a5e"></i><i style="background:#f4bf4f"></i><i style="background:#61c454"></i><span class="u">costarastrology.com</span></div><img src="img/land-2-costar.jpg" alt="Co-Star" loading="lazy"></div>
+  </section>
+
+  <section class="land">
+    <div class="ehead"><span class="ix">03</span><span class="nm">Aesop</span><span class="url">aesop.com</span></div>
+    <div class="tag">Premium retail · editorial</div>
+    <div class="notes">
+      <div class="b"><div class="l">What's great</div><p>The master of space and calm. <b>One product moment, given room,</b> in a serif voice that never raises its tone. Premium <b>because</b> it is quiet, not loud.</p></div>
+      <div class="b steal"><div class="l">Steal for Zodiac</div><p>This is the bar for "calm and premium," the words in our own design system. Borrow the air: <b>fewer elements, more space, one focal point per view.</b></p></div>
+    </div>
+    <div class="frame"><div class="fbar"><i style="background:#ec6a5e"></i><i style="background:#f4bf4f"></i><i style="background:#61c454"></i><span class="u">aesop.com</span></div><img src="img/land-3-aesop.jpg" alt="Aesop" loading="lazy"></div>
+  </section>
+
+  <section class="land">
+    <div class="ehead"><span class="ix">04</span><span class="nm">Maude</span><span class="url">getmaude.com</span></div>
+    <div class="tag">Modern wellness · warm</div>
+    <div class="notes">
+      <div class="b"><div class="l">What's great</div><p>Warm amber light, a <b>lowercase serif that feels intimate and sure of itself,</b> product photography that glows. Premium without a single cold edge.</p></div>
+      <div class="b steal"><div class="l">Steal for Zodiac</div><p>This is our warmth, proven out. <b>Our cream-paper world can feel this rich.</b> Borrow the warm light and the lowercase-serif intimacy for the hero and the testimonial cards.</p></div>
+    </div>
+    <div class="frame"><div class="fbar"><i style="background:#ec6a5e"></i><i style="background:#f4bf4f"></i><i style="background:#61c454"></i><span class="u">getmaude.com</span></div><img src="img/land-4-maude.jpg" alt="Maude" loading="lazy"></div>
+  </section>
+
+  <section class="land">
+    <div class="ehead"><span class="ix">05</span><span class="nm">Oura</span><span class="url">ouraring.com</span></div>
+    <div class="tag">Premium product · restrained</div>
+    <div class="notes">
+      <div class="b"><div class="l">What's great</div><p>A two-word headline ("Subtle. Power.") and <b>one hero shot on a quiet field,</b> with a single tiny accent (the ladybug) carrying all the color. Confidence through subtraction.</p></div>
+      <div class="b steal"><div class="l">Steal for Zodiac</div><p>The single-accent move <b>is</b> our violet rule, made visual. Borrow the two-word serif hero and the discipline of one color doing all the work.</p></div>
+    </div>
+    <div class="frame"><div class="fbar"><i style="background:#ec6a5e"></i><i style="background:#f4bf4f"></i><i style="background:#61c454"></i><span class="u">ouraring.com</span></div><img src="img/land-5-oura.jpg" alt="Oura" loading="lazy"></div>
+  </section>
+
+  <!-- ===================== STORYTELLING ===================== -->
+  <div class="shead" id="storytelling">
+    <div class="sk">Part two</div>
+    <h2>How great pages tell a story down a phone.</h2>
+    <p>Our pages are long and the quiz is 80 mobile screens, so the real craft is carrying a lot of copy down a phone and making it move. Full mobile scrolls below, with how each one does it. Scroll each phone.</p>
+  </div>
+
+  <section class="story">
+    <div class="srow">
+      <div class="snotes">
+        <div class="ehead"><span class="ix">01</span><span class="nm">Endel</span><span class="url">endel.io</span></div>
+        <div class="tag">Functional sound · our exact cousin</div>
+        <ul class="beats">
+          <li><span class="n">1</span><span class="tx"><b>Hero is the product:</b> one promise and a play button over an abstract sound visual.</span></li>
+          <li><span class="n">2</span><span class="tx"><b>Borrowed trust, instantly:</b> a row of press logos before any ask.</span></li>
+          <li><span class="n">3</span><span class="tx"><b>The proof beat:</b> "backed by neuroscience" plus a four-number stat block.</span></li>
+          <li><span class="n">4</span><span class="tx"><b>Repeating feature beats,</b> all the same shape: short headline, two lines, one graphic.</span></li>
+        </ul>
+        <div class="steal"><div class="l">Steal for Zodiac</div><p>Our category's template. Calm, dark, <b>one idea per beat.</b> Borrow the rhythm: promise → borrowed trust → the science → repeating feature beats.</p></div>
+      </div>
+      <div class="story-phone">
+        <div class="device"><div class="notch"><i></i></div><div class="scrn"><img src="img/story-endel.jpg" alt="Endel mobile scroll" loading="lazy"></div></div>
+        <div class="pcap"><b>endel.io</b> · scroll the page</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="srow">
+      <div class="snotes">
+        <div class="ehead"><span class="ix">02</span><span class="nm">brain.fm</span><span class="url">brain.fm</span></div>
+        <div class="tag">Functional sound · the same play, again</div>
+        <ul class="beats">
+          <li><span class="n">1</span><span class="tx"><b>Hero:</b> "Music made for Motivation," dark gradient, one button.</span></li>
+          <li><span class="n">2</span><span class="tx"><b>Trust, two ways:</b> "as seen on" logos, then a real customer post.</span></li>
+          <li><span class="n">3</span><span class="tx"><b>Mechanism, shown:</b> "achieve deep focus" over a brainwave graphic, then the science line.</span></li>
+          <li><span class="n">4</span><span class="tx"><b>The same skeleton:</b> a stat block, feature beats, social proof, one CTA.</span></li>
+        </ul>
+        <div class="steal"><div class="l">Steal for Zodiac</div><p>Proof it isn't a fluke. <b>Two leaders, the identical skeleton.</b> Follow it, win on craft and warmth instead.</p></div>
+      </div>
+      <div class="story-phone">
+        <div class="device"><div class="notch"><i></i></div><div class="scrn"><img src="img/story-brainfm.jpg" alt="brain.fm mobile scroll" loading="lazy"></div></div>
+        <div class="pcap"><b>brain.fm</b> · scroll the page</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="srow">
+      <div class="snotes">
+        <div class="ehead"><span class="ix">03</span><span class="nm">Waking Up</span><span class="url">wakingup.com</span></div>
+        <div class="tag">Meditation + philosophy · calm, light, no woo</div>
+        <ul class="beats">
+          <li><span class="n">1</span><span class="tx"><b>Airy hero:</b> "Your last meditation app," soft sky imagery, lots of space.</span></li>
+          <li><span class="n">2</span><span class="tx"><b>Quiet proof:</b> a "100,000+" reviews line, not shouted.</span></li>
+          <li><span class="n">3</span><span class="tx"><b>The depth, organized:</b> "Explore Topics" and "Traditions" as a calm grid.</span></li>
+          <li><span class="n">4</span><span class="tx"><b>Authority by face:</b> "100+ teachers" with a real portrait to close.</span></li>
+        </ul>
+        <div class="steal"><div class="l">Steal for Zodiac</div><p>The calm, light version, and the closest tone to where Zodiac lives. Borrow the <b>airy sectioning and the topic grid</b> for our depth content.</p></div>
+      </div>
+      <div class="story-phone">
+        <div class="device"><div class="notch"><i></i></div><div class="scrn"><img src="img/story-wakingup.jpg" alt="Waking Up mobile scroll" loading="lazy"></div></div>
+        <div class="pcap"><b>wakingup.com</b> · scroll the page</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="srow">
+      <div class="snotes">
+        <div class="ehead"><span class="ix">04</span><span class="nm">Headspace</span><span class="url">headspace.com</span></div>
+        <div class="tag">A lot of copy · borrow the structure, leave the color</div>
+        <ul class="beats">
+          <li><span class="n">1</span><span class="tx"><b>Answer first:</b> the hero drops straight into an FAQ accordion.</span></li>
+          <li><span class="n">2</span><span class="tx"><b>One job per section,</b> alternating background colors do the separating.</span></li>
+          <li><span class="n">3</span><span class="tx"><b>Stacked proof:</b> testimonial cards, then a "4,000+ organizations" stat.</span></li>
+          <li><span class="n">4</span><span class="tx"><b>Library, then one big CTA</b> to close.</span></li>
+        </ul>
+        <div class="steal"><div class="l">Steal for Zodiac</div><p>The discipline that keeps a copy-heavy page navigable: <b>one job per section, accordions for depth, stacked proof.</b> We keep our calm cream and one violet, not the loud blocks.</p></div>
+      </div>
+      <div class="story-phone">
+        <div class="device"><div class="notch"><i></i></div><div class="scrn"><img src="img/story-headspace.jpg" alt="Headspace mobile scroll" loading="lazy"></div></div>
+        <div class="pcap"><b>headspace.com</b> · scroll the page</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SYNTHESIS ===================== -->
+  <div class="synth" id="skeleton">
+    <div class="sk">The takeaway</div>
+    <h2>The skeleton they all share.</h2>
+    <p class="lede">Strip the pages down and the same spine appears. This is the proven shape for a long page in our world. Our job is to run it with our warmth and our restraint.</p>
+    <div class="flow">
+      <span class="b">One-promise hero</span><span class="ar">&rsaquo;</span>
+      <span class="b">Borrowed trust</span><span class="ar">&rsaquo;</span>
+      <span class="b">The mechanism, shown</span><span class="ar">&rsaquo;</span>
+      <span class="b">A proof stat block</span><span class="ar">&rsaquo;</span>
+      <span class="b">Repeating feature beats</span><span class="ar">&rsaquo;</span>
+      <span class="b">Faces &amp; quotes</span><span class="ar">&rsaquo;</span>
+      <span class="b">One clear CTA</span>
+    </div>
+    <div class="laws">
+      <div><div class="h">One job per beat</div><p>Each screen-height does a single thing. Type-heavy and image-heavy beats alternate so the scroll has a pulse.</p></div>
+      <div><div class="h">Show the mechanism</div><p>Nobody explains the science in a paragraph. They show one graphic (a waveform, a brainwave) and move on. Our frequencies want the same.</p></div>
+      <div><div class="h">Space marks the sections</div><p>On a phone the reader never gets lost because space (and on Headspace, color) signals a new idea. Our hierarchy law, proven on mobile.</p></div>
+    </div>
+  </div>
+
+  <footer>
+    <p><b>References inform; we never copy.</b> We model the move, then design our own in-brand. Apple, Calm, and Eight Sleep tell stories this way too, but block automated capture, so they're not shown here.</p>
+  </footer>
+
+</div>
+</body>
+</html>
