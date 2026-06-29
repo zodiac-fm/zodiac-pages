@@ -62,8 +62,12 @@ function frame(){
   rw.addColorStop(0,'rgba(123,95,203,'+(0.05+e6*0.07)+')'); rw.addColorStop(1,'rgba(0,0,0,0)');
   x.fillStyle=rw; x.fillRect(0,0,W,H);
 
-  const x0=W*0.06, x1=W*0.94, span=x1-x0;
+  const x0=W*0.15, x1=W*0.95, span=x1-x0;
   const px=x0+span*p; // playhead position
+  // static frequency axis: target range 250–950 Hz; the target sits at its OWN height (not auto-centred)
+  const FMIN=250, FMAX=950, FMID=(FMIN+FMAX)/2, FH=(FMAX-FMIN)/2, TARGET=600;
+  const yOf=(f)=> midY - halfMax*((f-FMID)/FH);
+  const lineY=yOf(TARGET);
   // beat -> decaying pink "flash" (pops on a hit, fades out)
   const bt=at(D.beat,p); flash = bt>flash ? bt : flash*0.89; const fl=Math.min(1,flash);
   if(fl>0.03){ let pw=x.createRadialGradient(px,midY,0,px,midY,W*0.5);
@@ -100,21 +104,29 @@ function frame(){
     x.shadowColor='rgba(255,118,222,0.95)'; x.shadowBlur=24*DPR*fl;
     x.beginPath(); x.moveTo(px,midY-aB); x.lineTo(px,midY+aB); x.stroke(); x.shadowBlur=0; }
 
-  // ---- 600 Hz: the line simply COMES IN as the music plays (drawn up to NOW, no sweep) ----
-  const ty=midY;
+  // ---- static frequency axis on the left (numbered range 250–950) ----
+  x.textBaseline='middle'; x.font=(8.5*DPR)+'px Georgia, serif'; x.lineCap='butt';
+  x.strokeStyle='rgba(180,165,210,0.12)'; x.lineWidth=1*DPR;
+  x.beginPath(); x.moveTo(x0, yOf(FMAX)); x.lineTo(x0, yOf(FMIN)); x.stroke();   // axis spine
+  const ticks=[300,400,500,600,700,800,900];
+  for(const f of ticks){ const yy=yOf(f), isT=(f===TARGET);
+    x.strokeStyle=isT?'rgba(255,248,233,0.55)':'rgba(180,165,210,0.16)'; x.lineWidth=(isT?1.4:1)*DPR;
+    x.beginPath(); x.moveTo(x0-7*DPR,yy); x.lineTo(x0,yy); x.stroke();
+    x.textAlign='right'; x.fillStyle=isT?'rgba(255,248,233,0.9)':'rgba(200,190,220,0.32)';
+    x.fillText(isT?(f+' Hz'):(''+f), x0-11*DPR, yy); }
+
+  // ---- the target-frequency line: starts at the target's height, comes in as it plays ----
+  const ty=lineY;
   x.lineCap='round';
   let lg=x.createLinearGradient(x0,0,px,0);
   lg.addColorStop(0,'rgba(240,231,214,0.06)'); lg.addColorStop(1,'rgba(240,231,214,'+(0.45+e6*0.3)+')');
   x.strokeStyle=lg; x.lineWidth=1.2*DPR;
   x.beginPath(); x.moveTo(x0,ty); x.lineTo(px,ty); x.stroke();
-  // soft warm glow at the leading point, where the line is arriving now
+  // origin dot at the target tick + soft glow at the leading point
+  x.fillStyle='rgba(255,248,233,0.8)'; x.beginPath(); x.arc(x0,ty,2.0*DPR,0,7); x.fill();
   const hg=x.createRadialGradient(px,ty,0,px,ty,22*DPR);
   hg.addColorStop(0,'rgba(255,248,233,'+(0.45+e6*0.4)+')'); hg.addColorStop(1,'rgba(255,248,233,0)');
   x.fillStyle=hg; x.beginPath(); x.arc(px,ty,22*DPR,0,7); x.fill();
-  // 600 Hz label pinned to the line (left), subtle
-  x.fillStyle='rgba(240,231,214,0.7)'; x.textBaseline='middle'; x.textAlign='left';
-  x.font=(11*DPR)+'px Georgia, serif';
-  x.save(); x.globalAlpha=.8; x.fillText('600 H Z', x0, ty-15*DPR); x.restore();
 
   // ---- playhead ----
   let ph=x.createLinearGradient(px,midY-halfMax,px,midY+halfMax);
