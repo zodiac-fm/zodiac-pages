@@ -50,7 +50,7 @@ makeGrain();
 function frame(){
   requestAnimationFrame(frame);
   const tt=clock(), p=tt/D.dur, T=performance.now()/1000;
-  const portrait=H>W; const cx=W/2, midY=H*(portrait?0.50:0.52), halfMax=H*(portrait?0.30:0.255);
+  const portrait=H>W; const cx=W/2, midY=H*0.5, halfMax=H*(portrait?0.20:0.34);
   const e6=at(D.e600,p), env=at(D.env,p), bs=at(D.bass,p), md=at(D.mid,p), tb=at(D.treb,p);
 
   // ---- background ----
@@ -67,66 +67,61 @@ function frame(){
   // beat -> gentle "flash" value (swells on a hit, eases out); shown subtly in the line + circle
   const bt=at(D.beat,p); flash = bt>flash ? flash+(bt-flash)*0.28 : flash*0.975; const fl=Math.min(1,flash);
 
-  // ---- one-minute window, on pace: PAST (left, solid) · NOW (center) · COMING UP (right, ghosted) ----
-  // music is drawn ABOVE and BELOW an open center channel; the channel holds the frequency line + the beat
+  // ---- one-minute window, on pace: PAST (left) · NOW (center, pink) · COMING UP (right, ghosted) ----
   const ne=D.env.length; const WIN=60, hw=WIN/2, tper=D.dur/(ne-1), tLeft=tt-hw;
   const tx=(ti)=> x0 + ((ti-tLeft)/WIN)*span;
-  const iLo=Math.max(0,Math.floor(tLeft/tper));
-  const iHi=Math.min(ne-1,Math.ceil((tLeft+WIN)/tper));
-  const iNow=Math.min(iHi,Math.max(iLo,Math.round(tt/tper)));
-  const gap=halfMax*0.10;                       // open channel kept clear in the middle
-  function ribbon(a0,b0,sign){ x.beginPath(); const base=midY+sign*gap;
-    for(let i=a0;i<=b0;i++){const xx=tx(i*tper), a=D.env[i]*(halfMax-gap)*0.92; i===a0?x.moveTo(xx,base+sign*a):x.lineTo(xx,base+sign*a);}
-    for(let i=b0;i>=a0;i--){ x.lineTo(tx(i*tper), base);} x.closePath(); }
-  function contour(a0,b0,sign,style,lw){ x.beginPath(); const base=midY+sign*gap;
-    for(let i=a0;i<=b0;i++){const xx=tx(i*tper), a=D.env[i]*(halfMax-gap)*0.92; i===a0?x.moveTo(xx,base+sign*a):x.lineTo(xx,base+sign*a);}
-    x.strokeStyle=style; x.lineWidth=lw; x.lineJoin='round'; x.stroke(); }
-  // COMING UP — ghosted (whisper fill + hairline contours)
-  if(iHi>iNow){ let gf=x.createLinearGradient(px,0,x1,0);
-    gf.addColorStop(0,'rgba(124,99,201,0.10)'); gf.addColorStop(1,'rgba(124,99,201,0.01)');
-    ribbon(iNow,iHi,-1); x.fillStyle=gf; x.fill(); ribbon(iNow,iHi,1); x.fill();
-    contour(iNow,iHi,-1,'rgba(168,150,222,0.12)',0.8*DPR); contour(iNow,iHi,1,'rgba(168,150,222,0.12)',0.8*DPR); }
-  // PAST — present, fading toward the older (left) edge
-  if(iNow>iLo){ let gp=x.createLinearGradient(x0,0,px,0);
-    gp.addColorStop(0,'rgba(124,99,201,0.04)'); gp.addColorStop(1,'rgba(124,99,201,0.30)');
-    ribbon(iLo,iNow,-1); x.fillStyle=gp; x.fill(); ribbon(iLo,iNow,1); x.fill();
-    contour(iLo,iNow,-1,'rgba(178,158,228,0.42)',1.0*DPR); contour(iLo,iNow,1,'rgba(178,158,228,0.42)',1.0*DPR); }
-  // subtle "not yet" dimming on the future half
-  x.fillStyle='rgba(8,6,14,0.08)'; x.fillRect(px,0,x1-px,H);
-  // quiet zone labels under the window
-  x.font=(9*DPR)+'px Georgia, serif'; x.textBaseline='alphabetic'; x.textAlign='center';
-  const ly=midY+halfMax+18*DPR;
-  x.fillStyle='rgba(236,228,214,0.22)'; x.fillText('P A S T', x0+span*0.20, ly);
-  x.fillStyle='rgba(236,228,214,0.22)'; x.fillText('C O M I N G   U P', x0+span*0.80, ly);
-  x.fillStyle='rgba(236,228,214,0.45)'; x.fillText('N O W', px, ly);
-
-  // ---- 600 Hz: a fine, quiet line led by a circle at NOW; the beat lives IN the line (past only) ----
   const ty=midY, tBack=Math.max(tLeft,0);
-  // the line: thin, flat, fading into the past, a touch brighter at NOW
+  // granular waveform as fine vertical bars — full height, ALL the way through the centre
+  const barStep=2.0*DPR, nbars=Math.floor(span/barStep);
+  for(let b=0;b<=nbars;b++){
+    const xx=x0+b*barStep, ti=tLeft+(b*barStep/span)*WIN;
+    if(ti<0||ti>D.dur) continue;
+    const ei=Math.round(ti/tper); if(ei<0||ei>=ne) continue;
+    const a=D.env[ei]*halfMax*0.97; if(a<0.5*DPR) continue;
+    let col;
+    if(ti<=tt){ const fade=1-Math.min(1,(tt-ti)/hw)*0.8; col='rgba(150,128,214,'+(0.55*fade)+')'; }
+    else { col='rgba(150,128,214,0.12)'; }
+    x.strokeStyle=col; x.lineWidth=1.1*DPR; x.lineCap='butt';
+    x.beginPath(); x.moveTo(xx,midY-a); x.lineTo(xx,midY+a); x.stroke();
+  }
+
+  // ---- 600 Hz: a fine thin line, trailing from NOW into the past on the song's time grid ----
   let lg=x.createLinearGradient(tx(tBack),0,px,0);
-  lg.addColorStop(0,'rgba(240,231,214,0.04)'); lg.addColorStop(1,'rgba(240,231,214,'+(0.28+e6*0.20)+')');
-  x.strokeStyle=lg; x.lineWidth=(0.8+0.5*fl)*DPR; x.lineCap='round';
+  lg.addColorStop(0,'rgba(245,238,224,0.05)'); lg.addColorStop(1,'rgba(245,238,224,'+(0.40+e6*0.22)+')');
+  x.strokeStyle=lg; x.lineWidth=(0.9+0.5*fl)*DPR; x.lineCap='round';
   x.beginPath(); x.moveTo(tx(tBack),ty); x.lineTo(px,ty); x.stroke();
-  // each beat leaves a soft glint on the line, drifting back into the past
+  // each beat = a soft glint on the line, drifting back into the past
   const nb2=D.beat.length, bper=D.dur/(nb2-1);
   const j0=Math.max(0,Math.floor(tBack/bper)), j1=Math.min(nb2-1,Math.floor(tt/bper));
   for(let j=j0;j<=j1;j++){ const bv=D.beat[j]; if(bv<0.55) continue;
     const bts=j*bper, gx=tx(bts), age=Math.min(1,(tt-bts)/hw);
     const gv=((bv-0.55)/0.85)*Math.pow(1-age,1.5); if(gv<=0.02) continue;
     const r=(2.5+5*gv)*DPR; const gg=x.createRadialGradient(gx,ty,0,gx,ty,r);
-    gg.addColorStop(0,'rgba(232,170,228,'+(0.5*gv)+')'); gg.addColorStop(1,'rgba(232,170,228,0)');
+    gg.addColorStop(0,'rgba(255,130,210,'+(0.45*gv)+')'); gg.addColorStop(1,'rgba(255,130,210,0)');
     x.fillStyle=gg; x.beginPath(); x.arc(gx,ty,r,0,7); x.fill(); }
-  // ---- the circle LEAD at NOW: a clean thin ring (hi-fi, restrained) ----
-  const cr=(4.5+e6*2.5)*DPR + fl*2.5*DPR;
-  let cg=x.createRadialGradient(px,ty,0,px,ty,cr*2.2);
-  cg.addColorStop(0,'rgba(255,248,233,'+(0.16+e6*0.18+fl*0.22)+')'); cg.addColorStop(1,'rgba(255,248,233,0)');
-  x.fillStyle=cg; x.beginPath(); x.arc(px,ty,cr*2.2,0,7); x.fill();
-  x.strokeStyle='rgba(255,248,233,'+(0.5+0.35*fl)+')'; x.lineWidth=1*DPR; x.beginPath(); x.arc(px,ty,cr,0,7); x.stroke();
-  x.fillStyle='rgba(255,248,233,0.9)'; x.beginPath(); x.arc(px,ty,1.1*DPR,0,7); x.fill();
-  // 600 Hz label, subtle, above the channel
-  x.fillStyle='rgba(240,231,214,0.42)'; x.textBaseline='middle'; x.textAlign='left';
+
+  // ---- NOW = PLAYING NOW, in pink: the live bar + a clean circle lead ----
+  const aN=env*halfMax*0.97;
+  let pn=x.createLinearGradient(0,midY-aN,0,midY+aN);
+  pn.addColorStop(0,'rgba(255,120,205,'+(0.55+0.4*fl)+')'); pn.addColorStop(0.5,'rgba(255,120,205,'+(0.22+0.3*fl)+')'); pn.addColorStop(1,'rgba(255,120,205,'+(0.55+0.4*fl)+')');
+  x.strokeStyle=pn; x.lineWidth=1.6*DPR; x.lineCap='round';
+  x.beginPath(); x.moveTo(px,midY-aN); x.lineTo(px,midY+aN); x.stroke();
+  const cr=(4.5+e6*2.5)*DPR + fl*3*DPR;
+  let cg=x.createRadialGradient(px,ty,0,px,ty,cr*2.4);
+  cg.addColorStop(0,'rgba(255,130,210,'+(0.30+0.35*fl)+')'); cg.addColorStop(1,'rgba(255,130,210,0)');
+  x.fillStyle=cg; x.beginPath(); x.arc(px,ty,cr*2.4,0,7); x.fill();
+  x.strokeStyle='rgba(255,214,240,'+(0.7+0.3*fl)+')'; x.lineWidth=1*DPR; x.beginPath(); x.arc(px,ty,cr,0,7); x.stroke();
+  x.fillStyle='rgba(255,236,248,0.95)'; x.beginPath(); x.arc(px,ty,1.2*DPR,0,7); x.fill();
+
+  // ---- labels ----
+  x.font=(9*DPR)+'px Georgia, serif'; x.textBaseline='alphabetic'; x.textAlign='center';
+  const ly=midY+halfMax+16*DPR;
+  x.fillStyle='rgba(236,228,214,0.22)'; x.fillText('P A S T', x0+span*0.20, ly);
+  x.fillStyle='rgba(236,228,214,0.22)'; x.fillText('C O M I N G   U P', x0+span*0.80, ly);
+  x.fillStyle='rgba(255,150,215,0.55)'; x.fillText('N O W', px, ly);
+  x.fillStyle='rgba(245,238,224,0.4)'; x.textBaseline='middle'; x.textAlign='left';
   x.font=(11*DPR)+'px Georgia, serif';
-  x.save(); x.globalAlpha=.8; x.fillText('600 H Z', x0, midY-gap-12*DPR); x.restore();
+  x.save(); x.globalAlpha=.8; x.fillText('600 H Z', x0, midY-halfMax-12*DPR); x.restore();
 
 
 
