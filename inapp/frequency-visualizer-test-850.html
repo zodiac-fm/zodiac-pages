@@ -65,7 +65,7 @@ function frame(){
   const x0=W*0.15, x1=W*0.95, span=x1-x0;
   const px=x0+span*p; // playhead position
   // static frequency axis: target range 250–950 Hz; the target sits at its OWN height (not auto-centred)
-  const FMIN=250, FMAX=950, FMID=(FMIN+FMAX)/2, FH=(FMAX-FMIN)/2, TARGET=600;
+  const FMIN=250, FMAX=950, FMID=(FMIN+FMAX)/2, FH=(FMAX-FMIN)/2, TARGET=850;
   const yOf=(f)=> midY - halfMax*((f-FMID)/FH);
   const lineY=yOf(TARGET);
   // beat -> decaying pink "flash" (pops on a hit, fades out)
