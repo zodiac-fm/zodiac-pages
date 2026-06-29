@@ -110,9 +110,9 @@ function frame(){
   x.beginPath(); x.moveTo(x0, yOf(FMAX)); x.lineTo(x0, yOf(FMIN)); x.stroke();   // axis spine
   const ticks=[300,400,500,600,700,800,900];
   for(const f of ticks){ const yy=yOf(f), isT=(f===TARGET);
-    x.strokeStyle=isT?'rgba(255,248,233,0.55)':'rgba(180,165,210,0.16)'; x.lineWidth=(isT?1.4:1)*DPR;
-    x.beginPath(); x.moveTo(x0-7*DPR,yy); x.lineTo(x0,yy); x.stroke();
-    x.textAlign='right'; x.fillStyle=isT?'rgba(255,248,233,0.9)':'rgba(200,190,220,0.32)';
+    x.strokeStyle=isT?'rgba(255,248,233,0.7)':'rgba(190,175,220,0.4)'; x.lineWidth=(isT?1.6:1)*DPR;
+    x.beginPath(); x.moveTo(x0-(isT?9:7)*DPR,yy); x.lineTo(x0,yy); x.stroke();
+    x.textAlign='right'; x.fillStyle=isT?'rgba(255,248,233,0.95)':'rgba(214,205,232,0.7)';
     x.fillText(isT?(f+' Hz'):(''+f), x0-11*DPR, yy); }
   if(!ticks.includes(TARGET)){ const tyT=yOf(TARGET);   // target off the round grid: mark it explicitly
     x.strokeStyle='rgba(255,248,233,0.55)'; x.lineWidth=1.4*DPR;
