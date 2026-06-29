@@ -70,83 +70,71 @@ function frame(){
     pw.addColorStop(0,'rgba(255,120,220,'+(0.12*fl)+')'); pw.addColorStop(1,'rgba(0,0,0,0)');
     x.fillStyle=pw; x.fillRect(0,0,W,H); }
 
-  // ---- one-minute window, on pace: PAST (left, solid) · NOW (center) · FUTURE (right, ghosted) ----
+  // ---- one-minute window, on pace: PAST (left, solid) · NOW (center) · COMING UP (right, ghosted) ----
+  // music is drawn ABOVE and BELOW an open center channel; the channel holds the frequency line + the beat
   const ne=D.env.length; const WIN=60, hw=WIN/2, tper=D.dur/(ne-1), tLeft=tt-hw;
   const tx=(ti)=> x0 + ((ti-tLeft)/WIN)*span;
   const iLo=Math.max(0,Math.floor(tLeft/tper));
   const iHi=Math.min(ne-1,Math.ceil((tLeft+WIN)/tper));
   const iNow=Math.min(iHi,Math.max(iLo,Math.round(tt/tper)));
-  function bandPath(a0,b0){ x.beginPath();
-    for(let i=a0;i<=b0;i++){const xx=tx(i*tper), a=D.env[i]*halfMax*0.92; i===a0?x.moveTo(xx,midY-a):x.lineTo(xx,midY-a);}
-    for(let i=b0;i>=a0;i--){const xx=tx(i*tper), a=D.env[i]*halfMax*0.92; x.lineTo(xx,midY+a);} x.closePath(); }
-  // FUTURE — what's coming up: ghosted outline, barely-there fill
-  if(iHi>iNow){ bandPath(iNow,iHi);
-    let gf=x.createLinearGradient(px,0,x1,0);
-    gf.addColorStop(0,'rgba(124,99,201,0.15)'); gf.addColorStop(1,'rgba(124,99,201,0.015)');
-    x.fillStyle=gf; x.fill();
-    x.lineWidth=1*DPR; x.strokeStyle='rgba(160,140,215,0.16)'; x.stroke(); }
-  // PAST — what's played: solid, gently fading toward the older (left) edge
-  if(iNow>iLo){ bandPath(iLo,iNow);
-    let gp=x.createLinearGradient(x0,0,px,0);
-    gp.addColorStop(0,'rgba(124,99,201,0.05)'); gp.addColorStop(1,'rgba(124,99,201,0.5)');
-    x.fillStyle=gp; x.fill();
-    x.lineWidth=1.2*DPR; x.strokeStyle='rgba(160,140,215,0.5)'; x.stroke(); }
+  const gap=halfMax*0.13;                       // open channel kept clear in the middle
+  function ribbon(a0,b0,sign){ x.beginPath(); const base=midY+sign*gap;
+    for(let i=a0;i<=b0;i++){const xx=tx(i*tper), a=D.env[i]*(halfMax-gap)*0.92; i===a0?x.moveTo(xx,base+sign*a):x.lineTo(xx,base+sign*a);}
+    for(let i=b0;i>=a0;i--){ x.lineTo(tx(i*tper), base);} x.closePath(); }
+  function contour(a0,b0,sign,style,lw){ x.beginPath(); const base=midY+sign*gap;
+    for(let i=a0;i<=b0;i++){const xx=tx(i*tper), a=D.env[i]*(halfMax-gap)*0.92; i===a0?x.moveTo(xx,base+sign*a):x.lineTo(xx,base+sign*a);}
+    x.strokeStyle=style; x.lineWidth=lw; x.lineJoin='round'; x.stroke(); }
+  // COMING UP — ghosted (faint fill + thin contour lines)
+  if(iHi>iNow){ let gf=x.createLinearGradient(px,0,x1,0);
+    gf.addColorStop(0,'rgba(124,99,201,0.13)'); gf.addColorStop(1,'rgba(124,99,201,0.012)');
+    ribbon(iNow,iHi,-1); x.fillStyle=gf; x.fill(); ribbon(iNow,iHi,1); x.fill();
+    contour(iNow,iHi,-1,'rgba(160,140,215,0.14)',1*DPR); contour(iNow,iHi,1,'rgba(160,140,215,0.14)',1*DPR); }
+  // PAST — solid, fading toward the older (left) edge
+  if(iNow>iLo){ let gp=x.createLinearGradient(x0,0,px,0);
+    gp.addColorStop(0,'rgba(124,99,201,0.05)'); gp.addColorStop(1,'rgba(124,99,201,0.42)');
+    ribbon(iLo,iNow,-1); x.fillStyle=gp; x.fill(); ribbon(iLo,iNow,1); x.fill();
+    contour(iLo,iNow,-1,'rgba(170,150,222,0.55)',1.1*DPR); contour(iLo,iNow,1,'rgba(170,150,222,0.55)',1.1*DPR); }
   // subtle "not yet" dimming on the future half
   x.fillStyle='rgba(8,6,14,0.10)'; x.fillRect(px,0,x1-px,H);
-  // the NOW divider: a quiet vertical seam through the window
-  let ng2=x.createLinearGradient(px,midY-halfMax,px,midY+halfMax);
-  ng2.addColorStop(0,'rgba(236,228,214,0)'); ng2.addColorStop(0.5,'rgba(236,228,214,0.22)'); ng2.addColorStop(1,'rgba(236,228,214,0)');
-  x.strokeStyle=ng2; x.lineWidth=1*DPR; x.beginPath(); x.moveTo(px,midY-halfMax); x.lineTo(px,midY+halfMax); x.stroke();
+  // pink-violet beat blush on the present music (top + bottom), on the beat
+  if(fl>0.03){ x.save(); x.beginPath(); x.rect(px-span*0.09,0,span*0.13,H); x.clip();
+    x.fillStyle='rgba(255,118,222,'+(0.7*fl)+')';
+    ribbon(iLo,iHi,-1); x.fill(); ribbon(iLo,iHi,1); x.fill(); x.restore(); }
   // quiet zone labels under the window
-  x.font=(9*DPR)+'px Georgia, serif'; x.textBaseline='alphabetic';
+  x.font=(9*DPR)+'px Georgia, serif'; x.textBaseline='alphabetic'; x.textAlign='center';
   const ly=midY+halfMax+18*DPR;
-  x.textAlign='center';
   x.fillStyle='rgba(236,228,214,0.22)'; x.fillText('P A S T', x0+span*0.20, ly);
   x.fillStyle='rgba(236,228,214,0.22)'; x.fillText('C O M I N G   U P', x0+span*0.80, ly);
   x.fillStyle='rgba(236,228,214,0.45)'; x.fillText('N O W', px, ly);
-  // pink-violet blush on the present music, on the beat
-  if(fl>0.03){ x.save(); x.beginPath(); x.rect(px-span*0.09,0,span*0.13,H); x.clip();
-    bandPath(iLo,iHi);
-    let pf=x.createLinearGradient(0,midY-halfMax,0,midY+halfMax);
-    pf.addColorStop(0,'rgba(255,118,222,'+(0.72*fl)+')'); pf.addColorStop(0.5,'rgba(255,118,222,0.06)'); pf.addColorStop(1,'rgba(255,118,222,'+(0.72*fl)+')');
-    x.fillStyle=pf; x.fill(); x.restore(); }
 
-  // ---- the "now" column: the music being born at the playhead, reacting live ----
-  const aNow=env*halfMax*0.94;
-  let nb=x.createLinearGradient(0,midY-aNow,0,midY+aNow);
-  nb.addColorStop(0,'rgba(214,201,255,0.9)'); nb.addColorStop(0.5,'rgba(150,123,220,0.22)'); nb.addColorStop(1,'rgba(214,201,255,0.9)');
-  x.strokeStyle=nb; x.lineWidth=2.2*DPR; x.lineCap='round';
-  x.shadowColor='rgba(150,123,220,0.9)'; x.shadowBlur=14*DPR;
-  x.beginPath(); x.moveTo(px,midY-aNow); x.lineTo(px,midY+aNow); x.stroke(); x.shadowBlur=0;
-  // pink-violet beat flare on the now-column
-  if(fl>0.03){ const aB=aNow*(1+0.20*fl);
-    x.strokeStyle='rgba(255,118,222,'+(0.95*fl)+')'; x.lineWidth=3.0*DPR; x.lineCap='round';
-    x.shadowColor='rgba(255,118,222,0.95)'; x.shadowBlur=24*DPR*fl;
-    x.beginPath(); x.moveTo(px,midY-aB); x.lineTo(px,midY+aB); x.stroke(); x.shadowBlur=0; }
-
-  // ---- 600 Hz: anchored to the song's own timeline; scrolls left ON PACE with the music, past only ----
-  const ty=midY;
-  const cps=1.6;                        // cycles per second, spaced on the same time grid as the song
-  const tBack=Math.max(tLeft,0);        // only as far back as the song actually goes
+  // ---- 600 Hz: anchored to the song's timeline, scrolling ON PACE in the open channel, past only ----
+  const ty=midY, cps=1.6, tBack=Math.max(tLeft,0);
   const SEG=220; let prevx=null, prevy=null;
   x.lineCap='round';
   for(let i=0;i<=SEG;i++){
-    const ti=tBack + (tt-tBack)*i/SEG;                       // a real moment in the song (past .. now)
+    const ti=tBack+(tt-tBack)*i/SEG;
     const xx=tx(ti);
-    const yy=ty+Math.sin(ti*2*Math.PI*cps)*(1.4+0.7*Math.sin(T*0.05))*DPR;  // peaks pinned to time -> scroll on pace
+    const yy=ty+Math.sin(ti*2*Math.PI*cps)*(gap*0.5)*(0.7+0.3*Math.sin(T*0.05));  // sits inside the channel
     if(prevx!==null){
-      const age=Math.min(1,(tt-ti)/hw);                      // 0 at NOW, 1 at the window's old edge
-      const vis=Math.pow(1-age,1.6);                         // bright at NOW, fades into the past
-      const a=(0.05 + 0.5*vis)*(0.55+e6*0.5);
+      const age=Math.min(1,(tt-ti)/hw); const vis=Math.pow(1-age,1.6);
+      const a=(0.06+0.5*vis)*(0.55+e6*0.5);
       x.beginPath(); x.moveTo(prevx,prevy); x.lineTo(xx,yy);
-      x.strokeStyle='rgba(240,231,214,'+a+')'; x.lineWidth=(0.7+1.5*vis)*DPR; x.stroke();
+      x.strokeStyle='rgba(240,231,214,'+a+')'; x.lineWidth=(0.7+1.4*vis)*DPR; x.stroke();
     }
     prevx=xx; prevy=yy;
   }
-  // 600 Hz label, subtle, in the past region
-  x.fillStyle='rgba(240,231,214,0.6)'; x.textBaseline='middle'; x.textAlign='left';
+  // ---- the target-frequency CIRCLE at NOW (the music scrolls into it; pulses on the beat) ----
+  const cr=(5.5+e6*5)*DPR + fl*4*DPR;
+  let cg=x.createRadialGradient(px,midY,0,px,midY,cr*2.6);
+  cg.addColorStop(0,'rgba(255,248,233,'+(0.45+e6*0.4)+')'); cg.addColorStop(1,'rgba(255,248,233,0)');
+  x.fillStyle=cg; x.beginPath(); x.arc(px,midY,cr*2.6,0,7); x.fill();
+  x.strokeStyle='rgba(255,248,233,0.78)'; x.lineWidth=1.4*DPR; x.beginPath(); x.arc(px,midY,cr,0,7); x.stroke();
+  if(fl>0.04){ x.strokeStyle='rgba(255,118,222,'+(0.85*fl)+')'; x.lineWidth=2*DPR;
+    x.beginPath(); x.arc(px,midY,cr+(3+7*fl)*DPR,0,7); x.stroke(); }
+  // 600 Hz label, subtle, above the channel
+  x.fillStyle='rgba(240,231,214,0.5)'; x.textBaseline='middle'; x.textAlign='left';
   x.font=(11*DPR)+'px Georgia, serif';
-  x.save(); x.globalAlpha=.8; x.fillText('600 H Z', x0, ty-15*DPR); x.restore();
+  x.save(); x.globalAlpha=.8; x.fillText('600 H Z', x0, midY-gap-12*DPR); x.restore();
 
 
 
