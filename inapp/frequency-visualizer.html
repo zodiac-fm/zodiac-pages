@@ -124,18 +124,20 @@ function frame(){
     x.shadowColor='rgba(255,118,222,0.95)'; x.shadowBlur=24*DPR*fl;
     x.beginPath(); x.moveTo(px,midY-aB); x.lineTo(px,midY+aB); x.stroke(); x.shadowBlur=0; }
 
-  // ---- 600 Hz: produced AT now, trailing back into the PAST only (never ahead of the song) ----
+  // ---- 600 Hz: anchored to the song's own timeline; scrolls left ON PACE with the music, past only ----
   const ty=midY;
-  const SEG=160; let prevx=px, prevy=ty;
+  const cps=1.6;                        // cycles per second, spaced on the same time grid as the song
+  const tBack=Math.max(tLeft,0);        // only as far back as the song actually goes
+  const SEG=220; let prevx=null, prevy=null;
   x.lineCap='round';
   for(let i=0;i<=SEG;i++){
-    const u=i/SEG;                       // 0 at NOW, 1 at the oldest visible edge
-    const xx=px-(px-x0)*u;
-    const yy=ty+Math.sin(u*Math.PI*2*18 + T*0.22)*(1.4+0.7*Math.sin(T*0.05))*DPR; // slow, slowly-evolving
-    if(i>0){
-      const vis=Math.pow(1-u,1.6);                                  // bright at NOW, fades into the past
-      const ripple=0.5+0.5*Math.sin(u*26 - T*1.4);                  // pulses emitted at NOW, rippling back
-      const a=(0.05 + 0.5*vis)*(0.55+e6*0.5)*(0.6+0.4*ripple);
+    const ti=tBack + (tt-tBack)*i/SEG;                       // a real moment in the song (past .. now)
+    const xx=tx(ti);
+    const yy=ty+Math.sin(ti*2*Math.PI*cps)*(1.4+0.7*Math.sin(T*0.05))*DPR;  // peaks pinned to time -> scroll on pace
+    if(prevx!==null){
+      const age=Math.min(1,(tt-ti)/hw);                      // 0 at NOW, 1 at the window's old edge
+      const vis=Math.pow(1-age,1.6);                         // bright at NOW, fades into the past
+      const a=(0.05 + 0.5*vis)*(0.55+e6*0.5);
       x.beginPath(); x.moveTo(prevx,prevy); x.lineTo(xx,yy);
       x.strokeStyle='rgba(240,231,214,'+a+')'; x.lineWidth=(0.7+1.5*vis)*DPR; x.stroke();
     }
