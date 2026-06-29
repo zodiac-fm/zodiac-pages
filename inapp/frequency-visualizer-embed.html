@@ -5,7 +5,7 @@
   :root{--bg0:#0c0913;--bg1:#171125;--ink:#ECE4D6;--violet:#7B5FCB;--vlt:#B7A2E8;--gold:#F2C879;--goldhot:#FFF1D6}
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%;background:var(--bg0);overflow:hidden;font-family:'Georgia','Times New Roman',serif;color:var(--ink);cursor:default}
-  #c{position:fixed;inset:0}
+  #c{position:fixed;top:0;left:0}
   .lbl{position:fixed;z-index:5;pointer-events:none;user-select:none}
   #title{top:34px;left:42px;font-size:13px;letter-spacing:6px;text-transform:uppercase;opacity:.92}
   #sub{top:60px;left:42px;font-size:11px;letter-spacing:3px;text-transform:uppercase;opacity:.4}
@@ -30,8 +30,8 @@ let D=null;
 const cv=document.getElementById('c'),x=cv.getContext('2d');
 const aud=document.getElementById('aud'),tc=document.getElementById('tc'),snd=document.getElementById('snd');
 let W,H,DPR;
-function rz(){DPR=Math.min(devicePixelRatio||1,2);W=cv.width=innerWidth*DPR;H=cv.height=innerHeight*DPR;}
-addEventListener('resize',rz);rz();
+function rz(){DPR=Math.min(devicePixelRatio||1,2);var vw=(window.visualViewport&&visualViewport.width)||innerWidth,vh=(window.visualViewport&&visualViewport.height)||innerHeight;W=cv.width=vw*DPR;H=cv.height=vh*DPR;cv.style.width=vw+'px';cv.style.height=vh+'px';}
+addEventListener('resize',rz);if(window.visualViewport){visualViewport.addEventListener('resize',rz);visualViewport.addEventListener('scroll',rz);}rz();
 
 // master clock (visuals autostart, no button). audio syncs if/when enabled.
 let t0=performance.now()/1000, sound=false, flash=0;
@@ -53,7 +53,7 @@ makeGrain();
 function frame(){
   requestAnimationFrame(frame);
   const tt=clock(), p=tt/D.dur, T=performance.now()/1000;
-  const portrait=H>W; const cx=W/2, midY=H*(portrait?0.50:0.52), halfMax=H*(portrait?0.30:0.255);
+  const portrait=H>W; const cx=W/2, midY=H*(portrait?0.46:0.52), halfMax=H*(portrait?0.26:0.255);
   const e6=at(D.e600,p), env=at(D.env,p), bs=at(D.bass,p), md=at(D.mid,p), tb=at(D.treb,p);
 
   // ---- background ----
