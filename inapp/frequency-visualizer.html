@@ -65,7 +65,7 @@ function frame(){
   const x0=W*0.06, x1=W*0.94, span=x1-x0;
   const px=x0+span*p; // playhead position
   // beat -> decaying pink "flash" (pops on a hit, fades out)
-  const bt=at(D.beat,p); flash = bt>flash ? bt : flash*0.89; const fl=Math.min(1,flash);
+  const bt=at(D.beat,p); flash = bt>flash ? flash+(bt-flash)*0.28 : flash*0.975; const fl=Math.min(1,flash);
   if(fl>0.03){ let pw=x.createRadialGradient(px,midY,0,px,midY,W*0.5);
     pw.addColorStop(0,'rgba(255,120,220,'+(0.12*fl)+')'); pw.addColorStop(1,'rgba(0,0,0,0)');
     x.fillStyle=pw; x.fillRect(0,0,W,H); }
@@ -102,13 +102,13 @@ function frame(){
 
   // ---- 600 Hz: a subtle warm oscillation, continuously RE-DRAWN by a sweep (never a static solid line) ----
   const ty=midY;
-  const sweep=(T*0.40)%1;              // draw-head travels across, over and over
+  const sweep=(T*0.045)%1;             // slow draw-head: ~22s to cross, over and over
   const headX=x0+span*sweep;
   const SEG=180; let prevx=x0, prevy=ty;
   x.lineCap='round';
   for(let i=0;i<=SEG;i++){
     const u=i/SEG, xx=x0+span*u;
-    const yy=ty+Math.sin(u*Math.PI*2*24 - T*2.6)*2.0*DPR;   // gentle stylized oscillation
+    const yy=ty+Math.sin(u*Math.PI*2*18 - T*0.22)*(1.4+0.7*Math.sin(T*0.05))*DPR; // slow, slowly-evolving oscillation
     if(i>0){
       let d=sweep-u; if(d<0)d+=1;                            // 0 = just drawn at head, 1 = oldest
       const vis=Math.pow(1-d,2.4);                            // bright near the head, fades behind
@@ -140,11 +140,11 @@ function frame(){
     x.beginPath(); x.arc(px,ty,(8+34*(1-fl))*DPR,0,7); x.stroke(); }
 
   // ---- motes ----
-  for(const m of motes){ const mx=((m.x+ (T*0.01*m.s))%1)*W, my=(m.y*0.8+0.1)*H + Math.sin(T*0.3+m.ph)*6*DPR;
-    x.fillStyle='rgba(183,162,232,'+(0.05+0.05*Math.sin(T*0.7+m.ph))+')'; x.beginPath(); x.arc(mx,my,m.s*1.6*DPR,0,7); x.fill(); }
+  for(const m of motes){ const mx=((m.x+ (T*0.01*m.s))%1)*W, my=(m.y*0.8+0.1)*H + Math.sin(T*0.14+m.ph)*6*DPR;
+    x.fillStyle='rgba(183,162,232,'+(0.05+0.05*Math.sin(T*0.30+m.ph))+')'; x.beginPath(); x.arc(mx,my,m.s*1.6*DPR,0,7); x.fill(); }
 
   // ---- grain + vignette ----
-  if(grain){x.save();x.globalAlpha=0.5;const p2=x.createPattern(grain,'repeat');x.fillStyle=p2;x.translate((T*7)%160,(T*5)%160);x.fillRect(-160,-160,W+320,H+320);x.restore();}
+  if(grain){x.save();x.globalAlpha=0.5;const p2=x.createPattern(grain,'repeat');x.fillStyle=p2;x.translate((T*1.4)%160,(T*1.0)%160);x.fillRect(-160,-160,W+320,H+320);x.restore();}
   let vg=x.createRadialGradient(cx,H*0.5,H*0.2,cx,H*0.5,H*0.8);
   vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,0.55)');
   x.fillStyle=vg; x.fillRect(0,0,W,H);
