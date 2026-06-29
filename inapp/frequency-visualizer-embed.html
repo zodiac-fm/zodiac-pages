@@ -44,7 +44,9 @@ snd.addEventListener('click',async()=>{
 });
 
 async function startSound(){ if(sound) return; try{ aud.currentTime=clock(); await aud.play(); sound=true; snd.innerHTML='&#9834; sound on'; }catch(e){} }
-addEventListener('load', startSound);
+addEventListener('load', startSound); startSound();
+aud.addEventListener('canplay', startSound);            // retry once the audio is decodable
+aud.addEventListener('loadeddata', startSound);
 ['pointerdown','touchstart','keydown','click'].forEach(ev=>addEventListener(ev,function once(){ startSound(); removeEventListener(ev,once); },{once:true,passive:true}));
 
 // faint drifting motes for depth
