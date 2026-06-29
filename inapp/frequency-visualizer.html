@@ -124,30 +124,29 @@ function frame(){
     x.shadowColor='rgba(255,118,222,0.95)'; x.shadowBlur=24*DPR*fl;
     x.beginPath(); x.moveTo(px,midY-aB); x.lineTo(px,midY+aB); x.stroke(); x.shadowBlur=0; }
 
-  // ---- 600 Hz: a subtle warm oscillation, continuously RE-DRAWN by a sweep (never a static solid line) ----
+  // ---- 600 Hz: produced AT now, trailing back into the PAST only (never ahead of the song) ----
   const ty=midY;
-  const sweep=(T*0.045)%1;             // slow draw-head: ~22s to cross, over and over
-  const headX=x0+span*sweep;
-  const SEG=180; let prevx=x0, prevy=ty;
+  const SEG=160; let prevx=px, prevy=ty;
   x.lineCap='round';
   for(let i=0;i<=SEG;i++){
-    const u=i/SEG, xx=x0+span*u;
-    const yy=ty+Math.sin(u*Math.PI*2*18 - T*0.22)*(1.4+0.7*Math.sin(T*0.05))*DPR; // slow, slowly-evolving oscillation
+    const u=i/SEG;                       // 0 at NOW, 1 at the oldest visible edge
+    const xx=px-(px-x0)*u;
+    const yy=ty+Math.sin(u*Math.PI*2*18 + T*0.22)*(1.4+0.7*Math.sin(T*0.05))*DPR; // slow, slowly-evolving
     if(i>0){
-      let d=sweep-u; if(d<0)d+=1;                            // 0 = just drawn at head, 1 = oldest
-      const vis=Math.pow(1-d,2.4);                            // bright near the head, fades behind
-      const a=(0.06 + 0.55*vis)*(0.6+e6*0.45);
+      const vis=Math.pow(1-u,1.6);                                  // bright at NOW, fades into the past
+      const ripple=0.5+0.5*Math.sin(u*26 - T*1.4);                  // pulses emitted at NOW, rippling back
+      const a=(0.05 + 0.5*vis)*(0.55+e6*0.5)*(0.6+0.4*ripple);
       x.beginPath(); x.moveTo(prevx,prevy); x.lineTo(xx,yy);
-      x.strokeStyle='rgba(240,231,214,'+a+')'; x.lineWidth=(0.8+1.4*vis)*DPR; x.stroke();
+      x.strokeStyle='rgba(240,231,214,'+a+')'; x.lineWidth=(0.7+1.5*vis)*DPR; x.stroke();
     }
     prevx=xx; prevy=yy;
   }
-  // soft warm glow at the moving draw-head
-  const hg=x.createRadialGradient(headX,ty,0,headX,ty,26*DPR);
-  hg.addColorStop(0,'rgba(255,248,233,'+(0.45+e6*0.4)+')'); hg.addColorStop(1,'rgba(255,248,233,0)');
-  x.fillStyle=hg; x.beginPath(); x.arc(headX,ty,26*DPR,0,7); x.fill();
-  // 600 Hz label pinned to the line (left), subtle
-  x.fillStyle='rgba(240,231,214,0.7)'; x.textBaseline='middle'; x.textAlign='left';
+  // soft warm source-glow at NOW (where the frequency is being produced)
+  const hg=x.createRadialGradient(px,ty,0,px,ty,24*DPR);
+  hg.addColorStop(0,'rgba(255,248,233,'+(0.5+e6*0.4)+')'); hg.addColorStop(1,'rgba(255,248,233,0)');
+  x.fillStyle=hg; x.beginPath(); x.arc(px,ty,24*DPR,0,7); x.fill();
+  // 600 Hz label, subtle, in the past region
+  x.fillStyle='rgba(240,231,214,0.6)'; x.textBaseline='middle'; x.textAlign='left';
   x.font=(11*DPR)+'px Georgia, serif';
   x.save(); x.globalAlpha=.8; x.fillText('600 H Z', x0, ty-15*DPR); x.restore();
 
