@@ -63,26 +63,50 @@ function frame(){
   x.fillStyle=rw; x.fillRect(0,0,W,H);
 
   const x0=W*0.06, x1=W*0.94, span=x1-x0;
-  const px=x0+span*p; // playhead position
-  // beat -> decaying pink "flash" (pops on a hit, fades out)
+  const px=x0+span*0.5; // NOW is fixed at center; the music scrolls past it
+  // beat -> gentle pink "flash" (swells on a hit, eases out)
   const bt=at(D.beat,p); flash = bt>flash ? flash+(bt-flash)*0.28 : flash*0.975; const fl=Math.min(1,flash);
   if(fl>0.03){ let pw=x.createRadialGradient(px,midY,0,px,midY,W*0.5);
     pw.addColorStop(0,'rgba(255,120,220,'+(0.12*fl)+')'); pw.addColorStop(1,'rgba(0,0,0,0)');
     x.fillStyle=pw; x.fillRect(0,0,W,H); }
 
-  // ---- full-track waveform (mirrored). ahead = faint, behind = filled ----
-  function wavePath(scale){ x.beginPath();
-    for(let i=0;i<D.n;i++){const xx=x0+span*i/(D.n-1); const a=D.env[i]*halfMax*scale; i?x.lineTo(xx,midY-a):x.moveTo(xx,midY-a);} 
-    for(let i=D.n-1;i>=0;i--){const xx=x0+span*i/(D.n-1); const a=D.env[i]*halfMax*scale; x.lineTo(xx,midY+a);} x.closePath(); }
-  // the music APPEARS only up to the playhead; ahead stays empty until it plays
-  x.save(); x.beginPath(); x.rect(0,0,px,H); x.clip();
-  wavePath(0.92);
-  let wf=x.createLinearGradient(0,midY-halfMax,0,midY+halfMax);
-  wf.addColorStop(0,'rgba(124,99,201,0.46)'); wf.addColorStop(0.5,'rgba(70,52,130,0.10)'); wf.addColorStop(1,'rgba(124,99,201,0.46)');
-  x.fillStyle=wf; x.fill(); x.lineWidth=1.2*DPR; x.strokeStyle='rgba(160,140,215,0.5)'; x.stroke(); x.restore();
-  // pink-violet blush on the freshest music, on the beat
-  if(fl>0.03){ x.save(); x.beginPath(); x.rect(Math.max(0,px-span*0.12),0,span*0.12,H); x.clip();
-    wavePath(0.92);
+  // ---- one-minute window, on pace: PAST (left, solid) · NOW (center) · FUTURE (right, ghosted) ----
+  const WIN=60, hw=WIN/2, tper=D.dur/(D.n-1), tLeft=tt-hw;
+  const tx=(ti)=> x0 + ((ti-tLeft)/WIN)*span;
+  const iLo=Math.max(0,Math.floor(tLeft/tper));
+  const iHi=Math.min(D.n-1,Math.ceil((tLeft+WIN)/tper));
+  const iNow=Math.min(iHi,Math.max(iLo,Math.round(tt/tper)));
+  function bandPath(a0,b0){ x.beginPath();
+    for(let i=a0;i<=b0;i++){const xx=tx(i*tper), a=D.env[i]*halfMax*0.92; i===a0?x.moveTo(xx,midY-a):x.lineTo(xx,midY-a);}
+    for(let i=b0;i>=a0;i--){const xx=tx(i*tper), a=D.env[i]*halfMax*0.92; x.lineTo(xx,midY+a);} x.closePath(); }
+  // FUTURE — what's coming up: ghosted outline, barely-there fill
+  if(iHi>iNow){ bandPath(iNow,iHi);
+    let gf=x.createLinearGradient(px,0,x1,0);
+    gf.addColorStop(0,'rgba(124,99,201,0.15)'); gf.addColorStop(1,'rgba(124,99,201,0.015)');
+    x.fillStyle=gf; x.fill();
+    x.lineWidth=1*DPR; x.strokeStyle='rgba(160,140,215,0.16)'; x.stroke(); }
+  // PAST — what's played: solid, gently fading toward the older (left) edge
+  if(iNow>iLo){ bandPath(iLo,iNow);
+    let gp=x.createLinearGradient(x0,0,px,0);
+    gp.addColorStop(0,'rgba(124,99,201,0.05)'); gp.addColorStop(1,'rgba(124,99,201,0.5)');
+    x.fillStyle=gp; x.fill();
+    x.lineWidth=1.2*DPR; x.strokeStyle='rgba(160,140,215,0.5)'; x.stroke(); }
+  // subtle "not yet" dimming on the future half
+  x.fillStyle='rgba(8,6,14,0.10)'; x.fillRect(px,0,x1-px,H);
+  // the NOW divider: a quiet vertical seam through the window
+  let ng2=x.createLinearGradient(px,midY-halfMax,px,midY+halfMax);
+  ng2.addColorStop(0,'rgba(236,228,214,0)'); ng2.addColorStop(0.5,'rgba(236,228,214,0.22)'); ng2.addColorStop(1,'rgba(236,228,214,0)');
+  x.strokeStyle=ng2; x.lineWidth=1*DPR; x.beginPath(); x.moveTo(px,midY-halfMax); x.lineTo(px,midY+halfMax); x.stroke();
+  // quiet zone labels under the window
+  x.font=(9*DPR)+'px Georgia, serif'; x.textBaseline='alphabetic';
+  const ly=midY+halfMax+18*DPR;
+  x.textAlign='center';
+  x.fillStyle='rgba(236,228,214,0.22)'; x.fillText('P A S T', x0+span*0.20, ly);
+  x.fillStyle='rgba(236,228,214,0.22)'; x.fillText('C O M I N G   U P', x0+span*0.80, ly);
+  x.fillStyle='rgba(236,228,214,0.45)'; x.fillText('N O W', px, ly);
+  // pink-violet blush on the present music, on the beat
+  if(fl>0.03){ x.save(); x.beginPath(); x.rect(px-span*0.09,0,span*0.13,H); x.clip();
+    bandPath(iLo,iHi);
     let pf=x.createLinearGradient(0,midY-halfMax,0,midY+halfMax);
     pf.addColorStop(0,'rgba(255,118,222,'+(0.72*fl)+')'); pf.addColorStop(0.5,'rgba(255,118,222,0.06)'); pf.addColorStop(1,'rgba(255,118,222,'+(0.72*fl)+')');
     x.fillStyle=pf; x.fill(); x.restore(); }
