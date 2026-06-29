@@ -68,7 +68,7 @@ function frame(){
   const bt=at(D.beat,p); flash = bt>flash ? flash+(bt-flash)*0.28 : flash*0.975; const fl=Math.min(1,flash);
 
   // ---- glow flow, on pace: PAST · NOW (pink bloom) · COMING UP; a smooth ribbon, calm ----
-  const WIN=60, hw=WIN/2, tLeft=tt-hw;
+  const WIN=10, hw=WIN/2, tLeft=tt-hw;
   const tx=(ti)=> x0 + ((ti-tLeft)/WIN)*span;
   const ty=midY, tBack=Math.max(tLeft,0);
   const ne=D.envS.length, tper=D.dur/(ne-1);
@@ -80,17 +80,17 @@ function frame(){
   // COMING UP — ghosted
   if(iHi>iNow){ ribbon(iNow,iHi);
     let gf=x.createLinearGradient(px,0,x1,0);
-    gf.addColorStop(0,'rgba(120,95,190,0.12)'); gf.addColorStop(1,'rgba(120,95,190,0.015)');
+    gf.addColorStop(0,'rgba(190,100,190,0.14)'); gf.addColorStop(1,'rgba(160,100,180,0.02)');
     x.fillStyle=gf; x.fill(); }
   // PAST — violet (older) brightening to magenta (NOW)
   if(iNow>iLo){ ribbon(iLo,iNow);
     let gp=x.createLinearGradient(x0,0,px,0);
-    gp.addColorStop(0,'rgba(108,80,180,0.08)'); gp.addColorStop(0.55,'rgba(140,84,202,0.30)'); gp.addColorStop(1,'rgba(222,92,200,'+(0.46+0.18*e6)+')');
+    gp.addColorStop(0,'rgba(150,80,180,0.12)'); gp.addColorStop(0.45,'rgba(214,90,194,0.40)'); gp.addColorStop(1,'rgba(255,98,196,'+(0.58+0.2*e6)+')');
     x.fillStyle=gp; x.fill(); }
   // luminous edge bloom on the recent ribbon
-  const rLo=Math.max(iLo,Math.floor((tt-16)/tper));
-  x.save(); x.shadowColor='rgba(210,110,210,0.8)'; x.shadowBlur=9*DPR; x.lineJoin='round';
-  x.strokeStyle='rgba(236,184,255,0.5)'; x.lineWidth=1.2*DPR;
+  const rLo=Math.max(iLo,Math.floor((tt-3)/tper));
+  x.save(); x.shadowColor='rgba(255,110,205,0.85)'; x.shadowBlur=9*DPR; x.lineJoin='round';
+  x.strokeStyle='rgba(255,180,232,0.55)'; x.lineWidth=1.2*DPR;
   x.beginPath(); for(let i=rLo;i<=iNow;i++){const xx=tx(i*tper), a=D.envS[i]*halfMax*0.96; i===rLo?x.moveTo(xx,midY-a):x.lineTo(xx,midY-a);} x.stroke();
   x.beginPath(); for(let i=rLo;i<=iNow;i++){const xx=tx(i*tper), a=D.envS[i]*halfMax*0.96; i===rLo?x.moveTo(xx,midY+a):x.lineTo(xx,midY+a);} x.stroke();
   x.restore();
