@@ -44,6 +44,12 @@ snd.addEventListener('click',async()=>{
   else { t0=performance.now()/1000 - aud.currentTime; aud.pause(); sound=false; snd.innerHTML='&#9834; sound off'; }  // keep visuals on the clock, no jump
 });
 
+// ---- auto-play: try on load; if the browser blocks it, start on the first interaction ----
+async function startSound(){ if(sound) return; try{ aud.currentTime=clock(); await aud.play(); sound=true; snd.innerHTML='&#9834; sound on'; }catch(e){} }
+addEventListener('load', startSound);
+['pointerdown','touchstart','keydown','click'].forEach(ev=>addEventListener(ev,function once(){ startSound(); removeEventListener(ev,once); },{once:true,passive:true}));
+
+
 // faint drifting motes for depth
 const motes=Array.from({length:18},(_,i)=>({x:Math.random(),y:Math.random(),s:0.2+Math.random()*0.6,ph:Math.random()*6}));
 let grain;
