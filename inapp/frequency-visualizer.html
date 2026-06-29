@@ -100,28 +100,17 @@ function frame(){
     x.shadowColor='rgba(255,118,222,0.95)'; x.shadowBlur=24*DPR*fl;
     x.beginPath(); x.moveTo(px,midY-aB); x.lineTo(px,midY+aB); x.stroke(); x.shadowBlur=0; }
 
-  // ---- 600 Hz: a subtle warm oscillation, continuously RE-DRAWN by a sweep (never a static solid line) ----
+  // ---- 600 Hz: the line simply COMES IN as the music plays (drawn up to NOW, no sweep) ----
   const ty=midY;
-  const sweep=(T*0.40)%1;              // draw-head travels across, over and over
-  const headX=x0+span*sweep;
-  const SEG=180; let prevx=x0, prevy=ty;
   x.lineCap='round';
-  for(let i=0;i<=SEG;i++){
-    const u=i/SEG, xx=x0+span*u;
-    const yy=ty+Math.sin(u*Math.PI*2*24 - T*2.6)*2.0*DPR;   // gentle stylized oscillation
-    if(i>0){
-      let d=sweep-u; if(d<0)d+=1;                            // 0 = just drawn at head, 1 = oldest
-      const vis=Math.pow(1-d,2.4);                            // bright near the head, fades behind
-      const a=(0.06 + 0.55*vis)*(0.6+e6*0.45);
-      x.beginPath(); x.moveTo(prevx,prevy); x.lineTo(xx,yy);
-      x.strokeStyle='rgba(240,231,214,'+a+')'; x.lineWidth=(0.8+1.4*vis)*DPR; x.stroke();
-    }
-    prevx=xx; prevy=yy;
-  }
-  // soft warm glow at the moving draw-head
-  const hg=x.createRadialGradient(headX,ty,0,headX,ty,26*DPR);
+  let lg=x.createLinearGradient(x0,0,px,0);
+  lg.addColorStop(0,'rgba(240,231,214,0.06)'); lg.addColorStop(1,'rgba(240,231,214,'+(0.45+e6*0.3)+')');
+  x.strokeStyle=lg; x.lineWidth=1.2*DPR;
+  x.beginPath(); x.moveTo(x0,ty); x.lineTo(px,ty); x.stroke();
+  // soft warm glow at the leading point, where the line is arriving now
+  const hg=x.createRadialGradient(px,ty,0,px,ty,22*DPR);
   hg.addColorStop(0,'rgba(255,248,233,'+(0.45+e6*0.4)+')'); hg.addColorStop(1,'rgba(255,248,233,0)');
-  x.fillStyle=hg; x.beginPath(); x.arc(headX,ty,26*DPR,0,7); x.fill();
+  x.fillStyle=hg; x.beginPath(); x.arc(px,ty,22*DPR,0,7); x.fill();
   // 600 Hz label pinned to the line (left), subtle
   x.fillStyle='rgba(240,231,214,0.7)'; x.textBaseline='middle'; x.textAlign='left';
   x.font=(11*DPR)+'px Georgia, serif';
