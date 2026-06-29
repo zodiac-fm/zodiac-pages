@@ -50,7 +50,7 @@ makeGrain();
 function frame(){
   requestAnimationFrame(frame);
   const tt=clock(), p=tt/D.dur, T=performance.now()/1000;
-  const portrait=H>W; const cx=W/2, midY=H*0.5, halfMax=H*(portrait?0.20:0.34);
+  const portrait=H>W; const cx=W/2, midY=H*0.5, halfMax=H*(portrait?0.27:0.34);
   const e6=at(D.e600,p), env=at(D.env,p), bs=at(D.bass,p), md=at(D.mid,p), tb=at(D.treb,p);
 
   // ---- background ----
