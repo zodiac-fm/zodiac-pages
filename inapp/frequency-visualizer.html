@@ -63,30 +63,40 @@ function frame(){
   x.fillStyle=rw; x.fillRect(0,0,W,H);
 
   const x0=W*0.15, x1=W*0.95, span=x1-x0;
-  const px=x0+span*p; // playhead position
   // static frequency axis: target range 250–950 Hz; the target sits at its OWN height (not auto-centred)
   const FMIN=250, FMAX=950, FMID=(FMIN+FMAX)/2, FH=(FMAX-FMIN)/2, TARGET=600;
   const yOf=(f)=> midY - halfMax*((f-FMID)/FH);
   const lineY=yOf(TARGET);
+  // ---- 3-minute scrolling window: PAST (solid) · NOW (moving right) · COMING (ghosted ahead) ----
+  const WIN=180, tper=D.dur/(D.n-1);
+  const winStart=Math.floor(tt/WIN)*WIN, winEnd=winStart+WIN;
+  const tx=(ti)=> x0 + span*((ti-winStart)/WIN);
+  const px=tx(tt);                                  // NOW, moving right across the window
+  const iLo=Math.max(0,Math.ceil(winStart/tper)), iHi=Math.min(D.n-1,Math.floor(Math.min(winEnd,D.dur)/tper));
+  const iNow=Math.min(iHi,Math.max(iLo,Math.round(tt/tper)));
   // beat -> decaying pink "flash" (pops on a hit, fades out)
   const bt=at(D.beat,p); flash = bt>flash ? bt : flash*0.89; const fl=Math.min(1,flash);
   if(fl>0.03){ let pw=x.createRadialGradient(px,midY,0,px,midY,W*0.5);
     pw.addColorStop(0,'rgba(255,120,220,'+(0.12*fl)+')'); pw.addColorStop(1,'rgba(0,0,0,0)');
     x.fillStyle=pw; x.fillRect(0,0,W,H); }
 
-  // ---- full-track waveform (mirrored). ahead = faint, behind = filled ----
-  function wavePath(scale){ x.beginPath();
-    for(let i=0;i<D.n;i++){const xx=x0+span*i/(D.n-1); const a=D.env[i]*halfMax*scale; i?x.lineTo(xx,midY-a):x.moveTo(xx,midY-a);} 
-    for(let i=D.n-1;i>=0;i--){const xx=x0+span*i/(D.n-1); const a=D.env[i]*halfMax*scale; x.lineTo(xx,midY+a);} x.closePath(); }
-  // the music APPEARS only up to the playhead; ahead stays empty until it plays
-  x.save(); x.beginPath(); x.rect(0,0,px,H); x.clip();
-  wavePath(0.92);
-  let wf=x.createLinearGradient(0,midY-halfMax,0,midY+halfMax);
-  wf.addColorStop(0,'rgba(124,99,201,0.46)'); wf.addColorStop(0.5,'rgba(70,52,130,0.10)'); wf.addColorStop(1,'rgba(124,99,201,0.46)');
-  x.fillStyle=wf; x.fill(); x.lineWidth=1.2*DPR; x.strokeStyle='rgba(160,140,215,0.5)'; x.stroke(); x.restore();
+  // ---- granular waveform across the window (keep the detail) ----
+  function wpr(a0,b0){ x.beginPath();
+    for(let i=a0;i<=b0;i++){const xx=tx(i*tper), a=D.env[i]*halfMax*0.92; i===a0?x.moveTo(xx,midY-a):x.lineTo(xx,midY-a);}
+    for(let i=b0;i>=a0;i--){const xx=tx(i*tper), a=D.env[i]*halfMax*0.92; x.lineTo(xx,midY+a);} x.closePath(); }
+  // COMING — the music ahead, ghosted
+  if(iHi>iNow){ wpr(iNow,iHi);
+    let gfu=x.createLinearGradient(0,midY-halfMax,0,midY+halfMax);
+    gfu.addColorStop(0,'rgba(124,99,201,0.12)'); gfu.addColorStop(0.5,'rgba(70,52,130,0.03)'); gfu.addColorStop(1,'rgba(124,99,201,0.12)');
+    x.fillStyle=gfu; x.fill(); x.lineWidth=1*DPR; x.strokeStyle='rgba(160,140,215,0.16)'; x.stroke(); }
+  // PAST + PRESENT — solid
+  if(iNow>iLo){ wpr(iLo,iNow);
+    let wf=x.createLinearGradient(0,midY-halfMax,0,midY+halfMax);
+    wf.addColorStop(0,'rgba(124,99,201,0.46)'); wf.addColorStop(0.5,'rgba(70,52,130,0.10)'); wf.addColorStop(1,'rgba(124,99,201,0.46)');
+    x.fillStyle=wf; x.fill(); x.lineWidth=1.2*DPR; x.strokeStyle='rgba(160,140,215,0.5)'; x.stroke(); }
   // pink-violet blush on the freshest music, on the beat
-  if(fl>0.03){ x.save(); x.beginPath(); x.rect(Math.max(0,px-span*0.12),0,span*0.12,H); x.clip();
-    wavePath(0.92);
+  if(fl>0.03 && iNow>iLo){ x.save(); x.beginPath(); x.rect(Math.max(0,px-span*0.05),0,span*0.05,H); x.clip();
+    wpr(iLo,iNow);
     let pf=x.createLinearGradient(0,midY-halfMax,0,midY+halfMax);
     pf.addColorStop(0,'rgba(255,118,222,'+(0.72*fl)+')'); pf.addColorStop(0.5,'rgba(255,118,222,0.06)'); pf.addColorStop(1,'rgba(255,118,222,'+(0.72*fl)+')');
     x.fillStyle=pf; x.fill(); x.restore(); }
