@@ -9,7 +9,7 @@
   .lbl{position:fixed;z-index:5;pointer-events:none;user-select:none}
   #title{top:34px;left:42px;font-size:13px;letter-spacing:6px;text-transform:uppercase;opacity:.92}
   #sub{top:60px;left:42px;font-size:11px;letter-spacing:3px;text-transform:uppercase;opacity:.4}
-  #tc{bottom:30px;right:42px;font-family:'SF Mono',ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:2px;opacity:.5}
+  #tc{bottom:24px;left:0;right:0;text-align:center;font-family:'SF Mono',ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:2px;opacity:.6}
   #snd{bottom:28px;left:42px;font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.34;cursor:pointer;pointer-events:auto;transition:opacity .3s}
   #snd:hover{opacity:.75}
   @media (max-width:600px){
@@ -68,8 +68,8 @@ function frame(){
   const yOf=(f)=> midY - halfMax*((f-FMID)/FH);
   const lineY=yOf(TARGET);
   // ---- 3-minute scrolling window: PAST (solid) · NOW (moving right) · COMING (ghosted ahead) ----
-  const WIN=180, tper=D.dur/(D.n-1);
-  const winStart=Math.floor(tt/WIN)*WIN, winEnd=winStart+WIN;
+  const WIN=180, STEP=60, tper=D.dur/(D.n-1);     // 3-min view, stepping forward every minute
+  const winStart=Math.max(0,(Math.floor(tt/STEP)-1)*STEP), winEnd=winStart+WIN;
   const tx=(ti)=> x0 + span*((ti-winStart)/WIN);
   const px=tx(tt);                                  // NOW, moving right across the window
   const iLo=Math.max(0,Math.ceil(winStart/tper)), iHi=Math.min(D.n-1,Math.floor(Math.min(winEnd,D.dur)/tper));
