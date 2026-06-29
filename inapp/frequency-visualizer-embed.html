@@ -13,17 +13,17 @@
   #snd{bottom:28px;left:42px;font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.34;cursor:pointer;pointer-events:auto;transition:opacity .3s}
   #snd:hover{opacity:.75}
   @media (max-width:600px){
-    #title{top:24px;left:0;right:0;text-align:center;font-size:12px;letter-spacing:4px}
-    #sub{top:46px;left:0;right:0;text-align:center;font-size:9px;letter-spacing:2px}
-    #tc{bottom:26px;left:0;right:0;text-align:center;font-size:11px}
-    #snd{bottom:24px;left:0;right:0;text-align:center}
+    #title{top:calc(env(safe-area-inset-top,0px) + 18px);left:0;right:0;text-align:center;font-size:12px;letter-spacing:4px}
+    #sub{top:calc(env(safe-area-inset-top,0px) + 40px);left:0;right:0;text-align:center;font-size:9px;letter-spacing:2px}
+    #tc{bottom:calc(env(safe-area-inset-bottom,0px) + 74px);left:0;right:0;text-align:center;font-size:12px}
+    #snd{bottom:calc(env(safe-area-inset-bottom,0px) + 38px);left:0;right:0;text-align:center;font-size:11px;opacity:.6;padding:6px}
   }
 </style></head><body>
 <canvas id="c"></canvas>
 <div class="lbl" id="title">Elysian Sky</div>
 <div class="lbl" id="sub">The Sound of You</div>
 <div class="lbl" id="tc">0:00 / 0:00</div>
-<div class="lbl" id="snd">&#9834; sound</div>
+<div class="lbl" id="snd">&#9834; sound off</div>
 <audio id="aud" crossorigin="anonymous"></audio>
 <script>
 let D=null;
@@ -38,7 +38,10 @@ let t0=performance.now()/1000, sound=false, flash=0;
 function clock(){ return sound&&!aud.paused ? aud.currentTime : ((performance.now()/1000 - t0) % D.dur); }
 function at(arr,p){ const f=p*(D.n-1), i=Math.floor(f), g=f-i; return arr[i]*(1-g)+(arr[Math.min(i+1,D.n-1)])*g; }
 
-snd.addEventListener('click',async()=>{ try{ aud.currentTime=clock(); await aud.play(); sound=true; snd.innerHTML='&#9834; sound on'; }catch(e){} });
+snd.addEventListener('click',async()=>{
+  if(!sound){ try{ aud.currentTime=clock(); await aud.play(); sound=true; snd.innerHTML='&#9834; sound on'; }catch(e){} }
+  else { t0=performance.now()/1000 - aud.currentTime; aud.pause(); sound=false; snd.innerHTML='&#9834; sound off'; }
+});
 
 // faint drifting motes for depth
 const motes=Array.from({length:18},(_,i)=>({x:Math.random(),y:Math.random(),s:0.2+Math.random()*0.6,ph:Math.random()*6}));
