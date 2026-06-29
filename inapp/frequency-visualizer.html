@@ -74,33 +74,28 @@ function frame(){
   const ne=D.envS.length, tper=D.dur/(ne-1);
   const iLo=Math.max(0,Math.floor(tLeft/tper)), iHi=Math.min(ne-1,Math.ceil((tLeft+WIN)/tper));
   const iNow=Math.min(iHi,Math.max(iLo,Math.round(tt/tper)));
-  // GRANULAR detail (real envelope, not smoothed) so it never reads as a blob
-  function ribbon(a0,b0){ x.beginPath();
-    for(let i=a0;i<=b0;i++){const xx=tx(i*tper), a=D.env[i]*halfMax*0.96; i===a0?x.moveTo(xx,midY-a):x.lineTo(xx,midY-a);}
-    for(let i=b0;i>=a0;i--){const xx=tx(i*tper), a=D.env[i]*halfMax*0.96; x.lineTo(xx,midY+a);} x.closePath(); }
-  function edge(a0,b0,sign){ x.beginPath();
-    for(let i=a0;i<=b0;i++){const xx=tx(i*tper), a=D.env[i]*halfMax*0.96; const yy=midY+sign*a; i===a0?x.moveTo(xx,yy):x.lineTo(xx,yy);} }
-  // COMING UP — ghosted granular
-  if(iHi>iNow){ ribbon(iNow,iHi);
-    let gf=x.createLinearGradient(px,0,x1,0);
-    gf.addColorStop(0,'rgba(190,100,190,0.09)'); gf.addColorStop(1,'rgba(160,100,180,0.012)');
-    x.fillStyle=gf; x.fill();
-    x.strokeStyle='rgba(214,140,210,0.13)'; x.lineWidth=0.9*DPR; x.lineJoin='round';
-    edge(iNow,iHi,-1); x.stroke(); edge(iNow,iHi,1); x.stroke(); }
-  // PAST — light pink fill + CRISP granular contour for definition
-  if(iNow>iLo){ ribbon(iLo,iNow);
-    let gp=x.createLinearGradient(x0,0,px,0);
-    gp.addColorStop(0,'rgba(150,80,180,0.06)'); gp.addColorStop(0.5,'rgba(214,90,194,0.16)'); gp.addColorStop(1,'rgba(255,98,196,'+(0.26+0.15*e6)+')');
-    x.fillStyle=gp; x.fill();
-    let gc=x.createLinearGradient(x0,0,px,0);
-    gc.addColorStop(0,'rgba(216,150,210,0.28)'); gc.addColorStop(1,'rgba(255,150,220,0.72)');
-    x.strokeStyle=gc; x.lineWidth=1.1*DPR; x.lineJoin='round';
-    edge(iLo,iNow,-1); x.stroke(); edge(iLo,iNow,1); x.stroke(); }
-  // soft bloom on the most recent edge
-  const rLo=Math.max(iLo,Math.floor((tt-2.0)/tper));
-  x.save(); x.shadowColor='rgba(255,110,205,0.9)'; x.shadowBlur=10*DPR; x.lineJoin='round';
-  x.strokeStyle='rgba(255,196,238,0.7)'; x.lineWidth=1.3*DPR;
-  edge(rLo,iNow,-1); x.stroke(); edge(rLo,iNow,1); x.stroke(); x.restore();
+  // ---- the music as distinct vertical LINES: shape (envelope) + rhythm (punch per beat) ----
+  const dt=0.16;                                  // a line every 0.16s -> spaced bars, not a fill
+  for(let k=Math.ceil((tt-hw)/dt); k*dt<=tt+hw; k++){
+    const tb=k*dt; if(tb<0||tb>D.dur) continue;
+    const xx=tx(tb);
+    const e0=Math.max(0,Math.floor((tb-dt/2)/tper)), e1=Math.min(ne-1,Math.floor((tb+dt/2)/tper));
+    let a=0; for(let i=e0;i<=e1;i++) if(D.env[i]>a) a=D.env[i];   // punch = max in the slot (rhythm)
+    a=a*halfMax*0.95; if(a<1.2*DPR) a=1.2*DPR;
+    const isPast=tb<=tt;
+    if(isPast){
+      const rec=1-Math.min(1,(tt-tb)/hw)*0.85;                    // 1 at NOW -> fades into the past
+      const r=Math.round(150+105*rec), g=Math.round(78+14*rec), b=Math.round(184+12*rec);
+      if(rec>0.72){ x.save(); x.shadowColor='rgba(255,110,205,0.85)'; x.shadowBlur=9*DPR*rec; }
+      x.strokeStyle='rgba('+r+','+g+','+b+','+(0.34+0.55*rec)+')';
+      x.lineWidth=2.4*DPR; x.lineCap='round';
+      x.beginPath(); x.moveTo(xx,midY-a); x.lineTo(xx,midY+a); x.stroke();
+      if(rec>0.72) x.restore();
+    } else {
+      x.strokeStyle='rgba(150,110,185,0.16)'; x.lineWidth=2.2*DPR; x.lineCap='round';
+      x.beginPath(); x.moveTo(xx,midY-a); x.lineTo(xx,midY+a); x.stroke();
+    }
+  }
   // ---- 600 Hz: a fine, quiet line trailing from NOW into the past ----
   let lg=x.createLinearGradient(tx(tBack),0,px,0);
   lg.addColorStop(0,'rgba(245,238,224,0.04)'); lg.addColorStop(1,'rgba(245,238,224,'+(0.26+e6*0.18)+')');
