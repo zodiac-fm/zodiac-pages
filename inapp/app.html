@@ -43,13 +43,13 @@
   .rowpp svg{width:14px;height:14px;fill:var(--love1)}
   .row.playing{border-color:var(--love1);box-shadow:0 0 0 1.5px var(--love1)}
   /* ---------- pinned player ---------- */
-  #mini{position:absolute;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 58px);background:#15101d;border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:11px;box-shadow:0 8px 30px rgba(0,0,0,.35);cursor:pointer;z-index:20}
-  #mini .mt{width:40px;height:40px;border-radius:9px;overflow:hidden;flex:0 0 auto;position:relative;background:#000}
+  #mini{position:absolute;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 60px);background:#FFFFFF;border:1px solid #ece3d3;border-radius:14px;padding:9px 12px;display:flex;align-items:center;gap:11px;box-shadow:0 10px 28px rgba(0,0,0,.12);cursor:pointer;z-index:20}
+  #mini .mt{width:42px;height:42px;border-radius:9px;overflow:hidden;flex:0 0 auto;position:relative;background:#FBF8F3}
   #mini .mt img{width:100%;height:100%;object-fit:cover}
   #mini .mi{flex:1;min-width:0}
-  #mini .mi b{font-size:13px;color:#fff;font-family:Georgia,serif;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  #mini .mi span{font-size:11px;color:#FF6F97}
-  #mini .pp{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(255,255,255,.85);color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto;background:transparent}
+  #mini .mi b{font-size:13.5px;color:#1a1620;font-family:Georgia,serif;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #mini .mi span{font-size:11px;color:var(--love1);font-weight:600}
+  #mini .pp{width:36px;height:36px;border-radius:50%;border:none;color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto;background:linear-gradient(135deg,var(--love1),var(--love2))}
   #mini .pp svg{width:16px;height:16px;fill:currentColor}
   /* ---------- bottom nav ---------- */
   #nav{position:absolute;left:0;right:0;bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center;z-index:15}
