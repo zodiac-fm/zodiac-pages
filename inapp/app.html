@@ -49,26 +49,30 @@
   #nav{position:absolute;left:0;right:0;bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center;z-index:15}
   #nav div{font-size:11px;text-align:center;color:#9a95a0}#nav div.on{color:var(--love1)}
   #nav .ic{font-size:16px;display:block;margin-bottom:2px}
-  /* ---------- SONG VIEW ---------- */
-  #song{background:#0b0712;color:#fff;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:40}
+  /* ---------- SONG VIEW (matches the app player) ---------- */
+  #song{background:#FFFFFF;color:#1a1620;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:40}
   #song.open{transform:translateY(0)}
-  .sv-top{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 12px) 18px 6px}
-  .sv-top .back{font-size:22px;color:#fff}
-  .sv-top .t{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#cdbfe0}
-  #viz{flex:1;position:relative}
+  .sv-top{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 16px) 22px 6px}
+  .sv-top .back{font-size:26px;color:#333;line-height:1}
+  .sv-head{text-align:center}.sv-head .sf{font-size:11px;color:#9a95a0}.sv-head .sl{font-size:14px;font-weight:600}
+  .sv-top .sq{font-size:17px;color:#333}
+  .sv-art{padding:20px 26px 0;display:flex;justify-content:center}
+  #viz{position:relative;width:100%;aspect-ratio:1/1;border-radius:18px;overflow:hidden;background:#0b0712;box-shadow:0 18px 44px rgba(0,0,0,.20)}
   #vc{position:absolute;inset:0;width:100%;height:100%}
-  .sv-info{text-align:center;padding:2px 20px}
-  .sv-info h2{font-family:Georgia,serif;font-size:22px}
-  .sv-info .f{font-size:12px;color:#FF6F97;letter-spacing:1px;margin-top:3px}
-  .player{padding:10px 24px calc(env(safe-area-inset-bottom,0px) + 26px)}
-  .scrub{height:4px;background:rgba(255,255,255,.16);border-radius:3px;position:relative;cursor:pointer;margin:8px 0 6px}
+  .sv-meta{display:flex;align-items:flex-start;justify-content:space-between;padding:24px 30px 2px}
+  .sv-meta h2{font-family:Georgia,serif;font-size:23px;font-weight:600}
+  .sv-meta .f{font-size:13px;color:var(--love1);font-weight:700;margin-top:3px}
+  .sv-meta .heart{font-size:23px;color:var(--love1)}
+  .player{padding:8px 30px calc(env(safe-area-inset-bottom,0px) + 24px)}
+  .scrub{height:4px;background:#e7e2ea;border-radius:3px;position:relative;cursor:pointer;margin:12px 0 6px}
   .scrub .fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:3px;background:linear-gradient(90deg,var(--love1),var(--love2))}
-  .scrub .knob{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);left:0}
+  .scrub .knob{position:absolute;top:50%;width:13px;height:13px;border-radius:50%;background:var(--love1);transform:translate(-50%,-50%);left:0;box-shadow:0 1px 4px rgba(0,0,0,.25)}
   .times{display:flex;justify-content:space-between;font-size:11px;color:#9a93a0;font-variant-numeric:tabular-nums}
-  .ctrls{display:flex;align-items:center;justify-content:center;gap:34px;margin-top:14px}
-  .ctrls .sk{font-size:24px;color:#cdbfe0}
-  .bigpp{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--love1),var(--love2));border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 34px rgba(234,17,99,.5);cursor:pointer}
-  .bigpp svg{width:30px;height:30px;fill:#fff}
+  .ctrls{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding:0 2px}
+  .ctrls .sk{font-size:21px;color:#a8a2ad}
+  .ctrls .skb{font-size:30px;color:#2a2530}
+  .bigpp{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,var(--love1),var(--love2));border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(234,17,99,.45);cursor:pointer}
+  .bigpp svg{width:27px;height:27px;fill:#fff}
 </style></head><body>
 <div id="app">
 
@@ -99,18 +103,27 @@
     <div><span class="ic">&#9825;</span>Favorites</div>
   </div>
 
-  <!-- ===================== SONG VIEW ===================== -->
+  <!-- ===================== SONG VIEW (app player layout) ===================== -->
   <section class="screen" id="song">
-    <div class="sv-top"><div class="back" id="svBack">&#8964;</div><div class="t">Now Playing</div><div style="width:22px"></div></div>
-    <div id="viz"><canvas id="vc"></canvas></div>
-    <div class="sv-info"><h2 class="serif" id="svName">—</h2><div class="f" id="svFreq">Love · 432 Hz</div></div>
+    <div class="sv-top">
+      <div class="back" id="svBack">&#8964;</div>
+      <div class="sv-head"><div class="sf">Playing from</div><div class="sl">Your Library</div></div>
+      <div class="sq">&#9776;</div>
+    </div>
+    <div class="sv-art"><div id="viz"><canvas id="vc"></canvas></div></div>
+    <div class="sv-meta">
+      <div><h2 class="serif" id="svName">&mdash;</h2><div class="f" id="svFreq">Love Infusion</div></div>
+      <div class="heart">&#9825;</div>
+    </div>
     <div class="player">
       <div class="scrub" id="scrub"><div class="fill" id="scrubFill"></div><div class="knob" id="scrubKnob"></div></div>
       <div class="times"><span id="tCur">0:00</span><span id="tTot">0:00</span></div>
       <div class="ctrls">
-        <div class="sk" id="prev">&#9198;</div>
+        <div class="sk" id="shuf">&#128256;</div>
+        <div class="skb" id="prev">&#9198;</div>
         <button class="bigpp" id="bigPP"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-        <div class="sk" id="next">&#9197;</div>
+        <div class="skb" id="next">&#9197;</div>
+        <div class="sk" id="rep">&#128257;</div>
       </div>
     </div>
   </section>
@@ -173,7 +186,7 @@ async function playSong(i){
   initGraph(); if(AC){try{await AC.resume();}catch(e){}}
   const s=SONGS[i];
   if(i!==cur){ cur=i; D=await analyze(s.audio,s.freq); started=true; synT=performance.now()/1000;
-    miniImg.src=s.thumb; miniName.textContent=s.name; svName.textContent=s.name; svFreq.textContent='Love · '+s.freq+' Hz';
+    miniImg.src=s.thumb; miniName.textContent=s.name; svName.textContent=s.name; svFreq.textContent='Love Infusion';
     if(s.audio){ aud.src=s.audio; aud.currentTime=0; try{await aud.play();}catch(e){} } else { aud.pause(); aud.removeAttribute('src'); }
   } else { if(s.audio){ if(aud.paused)aud.play();else aud.pause(); } }
   setIcons(); markAlive();
@@ -187,7 +200,7 @@ document.getElementById('prev').onclick=()=>playSong((cur-1+SONGS.length)%SONGS.
 
 // open / close song view
 const songEl=document.getElementById('song');
-document.getElementById('mini').onclick=()=>{ if(cur<0)playSong(1); songEl.classList.add('open'); };
+document.getElementById('mini').onclick=()=>{ if(cur<0)playSong(1); songEl.classList.add('open'); setTimeout(vrz,40); };
 document.getElementById('svBack').onclick=()=>songEl.classList.remove('open');
 
 // alive thumbnail glow (the playing row + mini) — light from centre to the beat
