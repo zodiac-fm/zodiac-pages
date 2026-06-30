@@ -243,18 +243,17 @@ function setIcons(){const p=started&&!aud.paused;miniPP.innerHTML=ppSVG(p);bigPP
 function loadBurst(src){burstImg=null;pulses.length=0;const im=new Image();im.onload=()=>{burstImg=im;};im.src=src;}
 async function playSong(ck,i){
   initGraph(); if(AC){try{await AC.resume();}catch(e){}}
-  const cat=CATS[ck], s=cat.songs[i];
-  if(s===curSong && ck===playCat){ if(s.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } setIcons(); markAlive(); return; }
-  const sameTrack=(s===curSong);   // same song, different frequency category
+  const cat=CATS[ck], s=cat.songs[i], prev=curSong;
   curSong=s; playCat=ck; gA=cat.gA; gB=cat.gB; playHz=parseInt(cat.hz,10)||432; started=true;
   document.getElementById('app').classList.add('playing');
   miniImg.src=tileSrc(ck,s); miniImg.style.filter='none'; loadBurst(tileSrc(ck,s));
   miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion';
   svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label;
-  if(!sameTrack){   // a different track: (re)load + analyze. Same track in a new frequency just re-themes + keeps playing.
-    D=await analyze(s.audio,playHz); synT=performance.now()/1000;
-    if(s.audio){ aud.src=s.audio; aud.currentTime=0; try{await aud.play();}catch(e){} } else { aud.pause(); aud.removeAttribute('src'); }
-  }
+  if(s!==prev||!D) D=await analyze(s.audio,playHz);   // re-analyze only when the track changes (snappy restart)
+  synT=performance.now()/1000;                        // restart the (synthetic) playhead at 0
+  // ALWAYS start from the beginning — a row press restarts even the same song, in the viewed frequency
+  if(s.audio){ if(aud.src&&aud.src.endsWith(s.audio)) aud.currentTime=0; else aud.src=s.audio; try{await aud.play();}catch(e){} }
+  else { aud.pause(); aud.removeAttribute('src'); }
   setIcons(); markAlive();
 }
 function togglePP(){ if(!curSong){playSong(catKey,1);return;} if(curSong.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } setIcons(); }
