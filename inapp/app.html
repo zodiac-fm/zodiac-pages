@@ -184,7 +184,7 @@ let gA='255,180,230', gB='234,17,99';   // glow colors of the PLAYING song's cat
 
 // ---- audio graph (live reactor) ----
 let AC=null,ana=null,td=null,react=0,lastAmp=0,liveBeat=0;
-let glowLevel=0,burstImg=null;   // smoothed intensity + the rays mask (no motion — motion is what blipped)
+let glowLevel=0,beatPulse=0,burstImg=null;   // base intensity + beat ignition + the rays mask
 function initGraph(){ if(AC)return; try{ AC=new (window.AudioContext||webkitAudioContext)(); ana=AC.createAnalyser(); ana.fftSize=1024; ana.smoothingTimeConstant=0.78; const s=AC.createMediaElementSource(aud); s.connect(ana); ana.connect(AC.destination); td=new Uint8Array(ana.fftSize);}catch(e){ana=null;} }
 // ---- analysis: env / target-presence / beat from the track (or synthetic for placeholders) ----
 async function analyze(url,target){
@@ -295,11 +295,12 @@ function drawViz(){
   // the track's own loudness + beat at the current position (synced), plus the live analyser
   let gAmp=react,gBeat=liveBeat;
   if(D&&started&&!aud.paused){const tt=clock(),p=D.dur?tt/D.dur:0;gAmp=Math.max(gAmp,at(D.env,p));gBeat=Math.max(gBeat,at(D.beat,p));}
-  const tgt=(started&&!aud.paused)?Math.min(1,gAmp*0.9+gBeat*0.45):0;
-  glowLevel+=(tgt-glowLevel)*(tgt>glowLevel?0.22:0.07);   // quick swell with the music, slow ease-off — feels it, never flickers
-  drawGlow(miniGlow,glowLevel,burstImg);
+  const playing=started&&!aud.paused;
+  glowLevel+=((playing?Math.min(1,gAmp):0)-glowLevel)*0.15;          // base "alive" level breathing with loudness
+  beatPulse=playing?Math.max(beatPulse*0.84,Math.min(1,gBeat)):0;    // beat ignition (rises on the beat, decays)
+  drawGlow(miniGlow,glowLevel,beatPulse,burstImg);
   const ri=(catKey===playCat)?rowSongs.indexOf(curSong):-1;
-  if(ri>=0){const cv=rows.querySelectorAll('.row')[ri].querySelector('canvas');drawGlow(cv.getContext('2d'),glowLevel,burstImg);}
+  if(ri>=0){const cv=rows.querySelectorAll('.row')[ri].querySelector('canvas');drawGlow(cv.getContext('2d'),glowLevel,beatPulse,burstImg);}
   if(!songEl.classList.contains('open')||!D){return;}
   if(!VW)vrz();
   const tt=clock(),p=D.dur?tt/D.dur:0,T=performance.now()/1000;
@@ -329,21 +330,27 @@ function drawViz(){
   const f=s=>{s=isFinite(s)?s:0;return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');};
   document.getElementById('tCur').textContent=f(cu);document.getElementById('tTot').textContent=f(to);
 }
-function drawGlow(ctx,level,img){
+function drawGlow(ctx,level,beat,img){
   const cw=ctx.canvas.width,chh=ctx.canvas.height,cx=cw/2,cy=chh/2;
   ctx.clearRect(0,0,cw,chh);
   if(!curSong||!(started&&!aud.paused)||!img||!img.complete||!img.naturalWidth)return;
-  level=Math.min(1,level||0);
+  level=Math.min(1,level||0);beat=Math.min(1,beat||0);
   ctx.save();ctx.globalCompositeOperation='lighter';
-  // STEADY glow from the centre out through the rays. NO moving parts — the whole thing just
-  // brightens and eases with the music, uniformly, so no single ray can ever blink/blip.
-  const R=cw*0.58, A=0.10+level*0.62;
-  const g=ctx.createRadialGradient(cx,cy,0,cx,cy,R);
-  g.addColorStop(0,'rgba('+gA+','+A+')');
-  g.addColorStop(0.40,'rgba('+gA+','+(A*0.5)+')');
-  g.addColorStop(1,'rgba('+gA+',0)');
-  ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.fill();
-  // MASK to the burst rays so the glow lives IN the frequency lines (asymmetric is fine)
+  // BASE — the rays are clearly lit from the centre, brightening with the music (always alive while playing)
+  const bR=cw*0.56,bA=0.22+level*0.48;
+  let bg=ctx.createRadialGradient(cx,cy,0,cx,cy,bR);
+  bg.addColorStop(0,'rgba('+gA+','+bA+')');bg.addColorStop(0.45,'rgba('+gA+','+(bA*0.5)+')');bg.addColorStop(1,'rgba('+gA+',0)');
+  ctx.fillStyle=bg;ctx.beginPath();ctx.arc(cx,cy,bR,0,7);ctx.fill();
+  // IGNITION — a white-hot burst from the centre ON THE BEAT, firing out through the rays, then fading
+  if(beat>0.03){
+    const iR=cw*(0.26+beat*0.36),ia=beat;
+    let ig=ctx.createRadialGradient(cx,cy,0,cx,cy,iR);
+    ig.addColorStop(0,'rgba(255,255,255,'+Math.min(1,ia*0.95)+')');
+    ig.addColorStop(0.5,'rgba('+gA+','+(ia*0.8)+')');
+    ig.addColorStop(1,'rgba('+gA+',0)');
+    ctx.fillStyle=ig;ctx.beginPath();ctx.arc(cx,cy,iR,0,7);ctx.fill();
+  }
+  // MASK to the rays — the light lives IN the frequency lines, from the centre out
   ctx.globalCompositeOperation='destination-in';
   ctx.drawImage(img,0,0,cw,chh);
   ctx.restore();
