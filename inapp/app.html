@@ -36,6 +36,12 @@
   .rt{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
   .heart{font-size:17px;color:var(--love1)}
   .dur{font-size:11px;color:#a8a2ad}
+  .freqline{display:flex;align-items:center;gap:9px}
+  .freqline .blob{width:22px;height:22px;box-shadow:0 0 12px rgba(234,17,99,.45)}
+  .hzsm{font-size:18px;font-weight:700}.hzsm small{font-size:11px;color:var(--mut);font-weight:600}
+  .rowpp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);z-index:3}
+  .rowpp svg{width:14px;height:14px;fill:var(--love1)}
+  .row.playing{border-color:var(--love1);box-shadow:0 0 0 1.5px var(--love1)}
   /* ---------- pinned player ---------- */
   #mini{position:absolute;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 58px);background:#15101d;border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:11px;box-shadow:0 8px 30px rgba(0,0,0,.35);cursor:pointer;z-index:20}
   #mini .mt{width:40px;height:40px;border-radius:9px;overflow:hidden;flex:0 0 auto;position:relative;background:#000}
@@ -82,10 +88,9 @@
     <div class="pills">
       <div class="pill">Core</div><div class="pill on">Love</div><div class="pill">Vitality</div><div class="pill">Abundance</div>
     </div>
-    <div class="freqcard"><div class="blob"></div><div class="hz">432<small>Hz</small></div></div>
     <div class="desc"><h2 class="serif">Love Vibrational Frequency</h2>
       <p>These tracks increase your authentic resonance in matters of love and relationships.</p></div>
-    <div class="barrow"><div></div><div class="qall">&#9776; Queue All</div></div>
+    <div class="barrow"><div class="freqline"><span class="blob"></span><span class="hzsm">432<small> Hz</small></span></div><div class="qall">&#9776; Queue All</div></div>
     <div class="rows" id="rows"></div>
   </section>
 
@@ -170,7 +175,7 @@ let synT=0;
 const rows=document.getElementById('rows');
 SONGS.forEach((s,i)=>{
   const r=document.createElement('div');r.className='row';r.innerHTML=
-   `<div class="thumb"><img src="${s.thumb}" alt=""><canvas width="148" height="148" style="display:none"></canvas></div>
+   `<div class="thumb"><img src="${s.thumb}" alt=""><canvas width="148" height="148"></canvas><div class="rowpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
     <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p><div class="lab">&#9679; Love</div></div>
     <div class="rt"><div class="heart">&#9825;</div><div class="dur">&#9201; ${s.dur}</div></div>`;
   r.onclick=()=>playSong(i);
@@ -181,7 +186,7 @@ SONGS.forEach((s,i)=>{
 const miniImg=document.getElementById('miniImg'),miniName=document.getElementById('miniName'),miniPP=document.getElementById('miniPP');
 const bigPP=document.getElementById('bigPP'),svName=document.getElementById('svName'),svFreq=document.getElementById('svFreq');
 function ppSVG(p){return p?'<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>':'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';}
-function setIcons(){const p=started&&!aud.paused;miniPP.innerHTML=ppSVG(p);bigPP.innerHTML=ppSVG(p);}
+function setIcons(){const p=started&&!aud.paused;miniPP.innerHTML=ppSVG(p);bigPP.innerHTML=ppSVG(p);markAlive();}
 async function playSong(i){
   initGraph(); if(AC){try{await AC.resume();}catch(e){}}
   const s=SONGS[i];
@@ -204,7 +209,7 @@ document.getElementById('mini').onclick=()=>{ if(cur<0)playSong(1); songEl.class
 document.getElementById('svBack').onclick=()=>songEl.classList.remove('open');
 
 // alive thumbnail glow (the playing row + mini) — light from centre to the beat
-function markAlive(){ rows.querySelectorAll('.row').forEach((r,i)=>{ const cv=r.querySelector('canvas'); cv.style.display=(i===cur)?'block':'none'; }); }
+function markAlive(){ rows.querySelectorAll('.row').forEach((r,i)=>{ const playing=(i===cur&&started&&!aud.paused); const b=r.querySelector('.rowpp'); if(b){b.innerHTML=ppSVG(playing); const sv=b.querySelector('svg'); if(sv)sv.style.marginLeft=playing?'0':'1px';} r.classList.toggle('playing', i===cur); const cv=r.querySelector('canvas'); if(i!==cur){cv.getContext('2d').clearRect(0,0,cv.width,cv.height);} }); }
 const miniGlow=document.getElementById('miniGlow').getContext('2d');
 
 // ---------- VISUALIZER (exact vercel style; no play/time baked) ----------
