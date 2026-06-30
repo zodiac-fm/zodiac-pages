@@ -1,6 +1,7 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Zodiac.fm · app</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root{--cream:#F6F1E8;--card:#FFFFFF;--ink:#1a1620;--mut:#7a7480;--c1:#B90044;--c2:#CF4090;--cink:#B90044;--cglow:rgba(185,0,68,.45);--cdeep:#6E0024;--ctint:#FFE8EA;}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -109,6 +110,11 @@
   .heart{color:#b8b3bd!important}
   .cardpp{width:23px!important;height:23px!important}
   .cardpp svg{width:9px!important;height:9px!important}
+  /* Hz readout instead of the frequency word: thin, cool font, paired with the play outline */
+  .lab{font-family:'Space Grotesk',sans-serif!important;font-weight:300!important;font-size:21px!important;letter-spacing:.5px!important;line-height:1!important;color:var(--cink)!important;display:flex!important;align-items:baseline!important;gap:3px!important}
+  .hzu{font-size:12px!important;opacity:.6!important;font-weight:400!important}
+  .botrow{align-items:center!important;padding-top:4px!important}
+  .cardpp{margin-right:0!important}
 </style></head><body>
 <div id="app">
 
@@ -244,7 +250,7 @@ function buildRows(){
     const r=document.createElement('div');r.className='row';r.innerHTML=
      `<div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas></div>
       <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p>
-        <div class="botrow"><div class="lab">&#9679; ${cat.label}</div><button class="cardpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
+        <div class="botrow"><div class="lab">${cat.hz}<span class="hzu"> Hz</span></div><button class="cardpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
       <div class="rt"><div class="rtic"><span class="dl">${DL}</span><div class="heart">&#9825;</div></div><div class="dur">&#9201; ${s.dur}</div></div>`;
     r.onclick=()=>playSong(catKey,i);
     rows.appendChild(r);
@@ -374,7 +380,7 @@ function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
   const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);
   r.innerHTML=`<div class="grip">${GRIP}</div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""></div>
    <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p>
-    <div class="botrow"><div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div>
+    <div class="botrow"><div class="lab" style="color:${cat.cink}">${cat.hz}<span class="hzu"> Hz</span></div>
      <button class="cardpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
    <div class="rt"><div class="rtic"><span class="dl">${DL}</span><div class="heart" style="color:${cat.cink}">&#9829;</div></div><div class="dur">&#9201; ${s.dur}</div></div>`;
   r.onclick=()=>playSong(ck,cat.songs.indexOf(s));
