@@ -98,8 +98,9 @@
   #mini .mi span{color:#6521C9!important}
   .cardpp{background:transparent!important;border:1.5px solid #868491!important;box-shadow:none!important}
   .cardpp svg{fill:#63616F!important}
-  .pill.on{background:var(--ctint)!important;color:var(--cink)!important;border:1px solid #eadfce!important;font-weight:700!important}
-  .desc h2{color:var(--cink)!important}
+  .pill.on{background:var(--ctint)!important;color:#2A2530!important;border:1px solid #eadfce!important;font-weight:700!important}
+  .pill.on::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--c2));margin-right:7px;vertical-align:middle}
+  .logo .d{color:#6521C9!important}
 </style></head><body>
 <div id="app">
 
@@ -188,7 +189,7 @@ const CATS={
    title:'Core Vibrational Frequency',desc:'These tracks deepen your authentic sense of who you are.',songs:SONGLIST},
  love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',cdeep:'#6E0024',ctint:'#FFE8EA',cglow:'rgba(185,0,68,.45)',hue:0,filt:'none',gA:'255,150,190',gB:'185,0,68',hz:'432',
    title:'Love Vibrational Frequency',desc:'These tracks increase your authentic resonance in matters of love and relationships.',songs:SONGLIST},
- vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#BC6700',cdeep:'#BC6700',ctint:'#FFEADA',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
+ vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#C25500',cdeep:'#BC6700',ctint:'#FFEADA',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
    title:'Vitality Vibrational Frequency',desc:'These tracks raise your energy, drive and aliveness.',songs:SONGLIST},
  abundance:{label:'Abundance',c1:'#00AFDC',c2:'#2ED7DD',cink:'#007B9C',cdeep:'#007B9C',ctint:'#D8F4FF',cglow:'rgba(0,175,220,.5)',hue:0,filt:'none',gA:'150,225,245',gB:'0,175,220',hz:'611',
    title:'Abundance Vibrational Frequency',desc:'These tracks open your sense of opportunity and flow.',songs:SONGLIST},
