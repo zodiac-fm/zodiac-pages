@@ -42,8 +42,9 @@
   .freqline{display:flex;align-items:center;gap:9px}
   .freqline .blob{width:22px;height:22px;box-shadow:0 0 12px var(--cglow)}
   .hzsm{font-size:18px;font-weight:700}.hzsm small{font-size:11px;color:var(--mut);font-weight:600}
-  .rowpp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);z-index:3}
-  .rowpp svg{width:14px;height:14px;fill:var(--cink)}
+  .rowpp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.86);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);z-index:3;opacity:0;transition:opacity .15s}
+  .row:hover .rowpp,.row.playing .rowpp{opacity:1}   /* burst shows at rest; play/pause on hover or when playing */
+  .rowpp svg{width:13px;height:13px;fill:var(--cink)}
   .row.playing{border-color:var(--cink);box-shadow:0 0 0 1.5px var(--cink)}
   /* ---------- pinned player ---------- */
   #mini{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 56px);background:#FFFFFF;border-top:1px solid #ece3d3;padding:9px 14px;display:none;align-items:center;gap:11px;box-shadow:0 -4px 18px rgba(0,0,0,.06);cursor:pointer;z-index:20}
