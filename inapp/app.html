@@ -243,13 +243,17 @@ function setIcons(){const p=started&&!aud.paused;miniPP.innerHTML=ppSVG(p);bigPP
 async function playSong(ck,i){
   initGraph(); if(AC){try{await AC.resume();}catch(e){}}
   const cat=CATS[ck], s=cat.songs[i];
-  if(s!==curSong){ curSong=s; playCat=ck; gA=cat.gA; gB=cat.gB; playHz=parseInt(cat.hz,10)||432; D=await analyze(s.audio,playHz); started=true; synT=performance.now()/1000;
-    document.getElementById('app').classList.add('playing');
-    miniImg.src=tileSrc(ck,s); miniImg.style.filter='none';
-    miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion';
-    svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label;
+  if(s===curSong && ck===playCat){ if(s.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } setIcons(); markAlive(); return; }
+  const sameTrack=(s===curSong);   // same song, different frequency category
+  curSong=s; playCat=ck; gA=cat.gA; gB=cat.gB; playHz=parseInt(cat.hz,10)||432; started=true;
+  document.getElementById('app').classList.add('playing');
+  miniImg.src=tileSrc(ck,s); miniImg.style.filter='none';
+  miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion';
+  svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label;
+  if(!sameTrack){   // a different track: (re)load + analyze. Same track in a new frequency just re-themes + keeps playing.
+    D=await analyze(s.audio,playHz); synT=performance.now()/1000;
     if(s.audio){ aud.src=s.audio; aud.currentTime=0; try{await aud.play();}catch(e){} } else { aud.pause(); aud.removeAttribute('src'); }
-  } else { if(s.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } }
+  }
   setIcons(); markAlive();
 }
 function togglePP(){ if(!curSong){playSong(catKey,1);return;} if(curSong.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } setIcons(); }
@@ -268,11 +272,11 @@ document.getElementById('mini').onclick=()=>{ if(!curSong)playSong(catKey,1); so
 document.getElementById('svBack').onclick=()=>songEl.classList.remove('open');
 
 // alive thumbnails (the playing row + mini) — light from centre to the beat
-function markAlive(){ const playing=started&&!aud.paused;
-  rows.querySelectorAll('.row').forEach((r,i)=>{ const isP=(rowSongs[i]===curSong&&playing); const b=r.querySelector('.rowpp');
+function markAlive(){ const playing=started&&!aud.paused, here=(catKey===playCat);
+  rows.querySelectorAll('.row').forEach((r,i)=>{ const isThis=here&&!!curSong&&rowSongs[i]===curSong, isP=isThis&&playing; const b=r.querySelector('.rowpp');
     if(b){b.innerHTML=ppSVG(isP);const sv=b.querySelector('svg');if(sv)sv.style.marginLeft=isP?'0':'1px';}
-    r.classList.toggle('playing', !!curSong&&rowSongs[i]===curSong);
-    const cv=r.querySelector('canvas'); if(rowSongs[i]!==curSong){cv.getContext('2d').clearRect(0,0,cv.width,cv.height);} }); }
+    r.classList.toggle('playing', isThis);
+    const cv=r.querySelector('canvas'); if(!isThis){cv.getContext('2d').clearRect(0,0,cv.width,cv.height);} }); }
 const miniGlow=document.getElementById('miniGlow').getContext('2d');
 
 // ---------- VISUALIZER (exact vercel style; no play/time baked) ----------
@@ -293,7 +297,7 @@ function drawViz(){
   glowLevel+=(targetLvl-glowLevel)*0.07;
   wavePhase=(wavePhase+0.0075+glowLevel*0.011)%1;   // rings travel outward, a touch faster when louder
   drawGlow(miniGlow,glowLevel,wavePhase);
-  const ri=rowSongs.indexOf(curSong);
+  const ri=(catKey===playCat)?rowSongs.indexOf(curSong):-1;
   if(ri>=0){const cv=rows.querySelectorAll('.row')[ri].querySelector('canvas');drawGlow(cv.getContext('2d'),glowLevel,wavePhase);}
   if(!songEl.classList.contains('open')||!D){return;}
   if(!VW)vrz();
