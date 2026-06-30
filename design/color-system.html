@@ -1,0 +1,134 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zodiac · Color logic</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;color:#1a1620;-webkit-font-smoothing:antialiased}
+  .serif{font-family:Georgia,'Times New Roman',serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:38px 22px 70px}
+  h1{font-size:30px;font-weight:600;letter-spacing:-.4px}
+  .sub{font-size:15px;color:#7a7480;margin-top:8px;line-height:1.55;max-width:760px}
+  .legend{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+  .lg{flex:1;min-width:200px;border:1px solid #eee;border-radius:12px;padding:11px 15px;display:flex;align-items:center;gap:12px}
+  .lg .bar{width:74px;height:16px;border-radius:8px;flex:0 0 auto}
+  .lg b{font-size:13px;display:block}.lg span{font-size:11.5px;color:#8a8590}
+  .toggle{display:inline-flex;background:#f1eee9;border-radius:30px;padding:5px;margin:26px 0 6px;gap:4px}
+  .toggle button{border:none;background:transparent;font:inherit;font-size:14px;font-weight:600;color:#7a7480;padding:9px 20px;border-radius:24px;cursor:pointer;transition:.2s}
+  .toggle button.on{background:#fff;color:#1a1620;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+  .toggle button.on.anc{color:#1D24C5}
+  .stage{display:flex;gap:18px;align-items:center;margin-top:14px;flex-wrap:wrap}
+  canvas{max-width:100%}
+  .caption{flex:1;min-width:260px}
+  .caption .ct{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:#b3261e}
+  .caption.anc .ct{color:#1D24C5}
+  .caption h2{font-size:21px;font-weight:600;font-family:Georgia,serif;margin:5px 0 9px}
+  .caption p{font-size:14px;color:#54505c;line-height:1.55}
+  .caption p b{color:#1a1620}
+  .foot{margin-top:30px;font-size:14.5px;color:#3a3540;background:#F4F6FF;border:1px solid #dfe4fb;border-radius:14px;padding:17px 20px;line-height:1.6}
+  .foot b{color:#1D24C5}
+  .hint{font-size:12px;color:#b3aeb6;margin-top:14px}
+</style></head><body>
+<div class="wrap">
+  <h1 class="serif">What we have, and what anchoring on Core does</h1>
+  <div class="sub">Every color is three dials at once. Flip the switch below to see what choosing Core as the anchor commits us to. No final colors yet, this is the logic.</div>
+
+  <div class="legend">
+    <div class="lg"><div class="bar" style="background:conic-gradient(red,#ff0,lime,cyan,blue,magenta,red)"></div><div><b>Hue</b><span>which color (around the wheel)</span></div></div>
+    <div class="lg"><div class="bar" style="background:linear-gradient(90deg,#111,#eee)"></div><div><b>Value</b><span>how light or dark (the ladder)</span></div></div>
+    <div class="lg"><div class="bar" style="background:linear-gradient(90deg,#8a8a8a,#2832E0)"></div><div><b>Chroma</b><span>dull or vivid (distance from center)</span></div></div>
+  </div>
+
+  <div class="toggle">
+    <button id="bToday" class="on" onclick="go(0)">What we've got</button>
+    <button id="bAnc" class="anc" onclick="go(1)">Anchored on Core</button>
+  </div>
+
+  <div class="stage">
+    <canvas id="cv" width="900" height="520" style="width:450px;height:260px"></canvas>
+    <div class="caption" id="cap"></div>
+  </div>
+  <div class="hint">Hover a dot to read its three dials. Tap the switch to morph between the two.</div>
+
+  <div class="foot"><b>The implication of choosing Core as the anchor:</b> we keep Core where it is, then we lose the freedom to pick the other three by eye. They must land on Core's vividness ring, each in its own brightness lane, with only their hue free to roam. That one rule turns four loud strangers into one family that still reads as four. The hollow circles are those three colors, waiting to be derived.</div>
+</div>
+<script>
+const cv=document.getElementById('cv'),x=cv.getContext('2d');
+const W=900,H=520,cx=240,cy=260,R=210, lx=720, lyTop=70, lH=380;
+// states: today + anchored target for each item
+const ITEMS=[
+ {name:'Core',     color:'#2832E0', t:{h:236.7,r:0.92,L:0.457}, a:{h:236.7,r:0.80,L:0.41,color:'#1D24C5',hollow:false}},
+ {name:'Love',     color:'#EA1163', t:{h:337.3,r:0.86,L:0.603}, a:{h:326.7,r:0.80,L:0.64,hollow:true}},
+ {name:'Vitality', color:'#E85A00', t:{h:24.1, r:0.70,L:0.645}, a:{h:56.7, r:0.80,L:0.74,hollow:true}},
+ {name:'Abundance',color:'#0A86D8', t:{h:203.1,r:0.58,L:0.603}, a:{h:146.7,r:0.80,L:0.54,hollow:true}},
+];
+let p=0,target=0,mouse=null;
+function lerp(a,b,t){return a+(b-a)*t}
+function angLerp(a,b,t){let d=((b-a+540)%360)-180;return a+d*t}
+function pol(h,r){const th=(h-90)*Math.PI/180;return[cx+r*Math.cos(th),cy+r*Math.sin(th)]}
+function draw(){
+ x.clearRect(0,0,W,H);
+ // hue ring
+ for(let a=0;a<360;a+=0.5){const t0=(a-90)*Math.PI/180,t1=(a+0.7-90)*Math.PI/180;
+  x.beginPath();x.moveTo(cx+(R-22)*Math.cos(t0),cy+(R-22)*Math.sin(t0));x.arc(cx,cy,R,t0,t1);
+  x.lineTo(cx+(R-22)*Math.cos(t1),cy+(R-22)*Math.sin(t1));x.closePath();x.fillStyle=`hsl(${a},80%,55%)`;x.fill();}
+ x.beginPath();x.arc(cx,cy,R-22,0,7);x.fillStyle='#fff';x.fill();
+ // chroma reference rings; highlight the locked ring when anchored
+ x.lineWidth=2;x.strokeStyle='#eee';[0.5,0.8].forEach(f=>{x.beginPath();x.arc(cx,cy,(R-30)*f,0,7);x.stroke();});
+ if(p>0.02){x.lineWidth=2+2*p;x.strokeStyle=`rgba(29,36,197,${0.16*p})`;x.beginPath();x.arc(cx,cy,(R-30)*0.8,0,7);x.stroke();}
+ x.beginPath();x.arc(cx,cy,4,0,7);x.fillStyle='#ccc';x.fill();
+ // value ladder
+ const grd=x.createLinearGradient(0,lyTop,0,lyTop+lH);grd.addColorStop(0,'#efece4');grd.addColorStop(.08,'#e7e2d8');grd.addColorStop(.92,'#2a2630');grd.addColorStop(1,'#16131c');
+ x.fillStyle=grd;roundRect(lx-26,lyTop,52,lH,26);x.fill();
+ x.fillStyle='#9a93a0';x.font='600 13px Inter';x.textAlign='center';x.fillText('brightness',lx,lyTop+lH+24);
+ x.fillText('light',lx,lyTop-12);x.fillText('dark',lx,lyTop+lH+44);
+ // items
+ ITEMS.forEach(it=>{
+  const h=angLerp(it.t.h,it.a.h,p), r=lerp(it.t.r,it.a.r,p), L=lerp(it.t.L,it.a.L,p);
+  const[px,py]=pol(h,(R-34)*r);
+  const ly=lyTop+(1-L)*lH;
+  const hollow=it.a.hollow, fa=hollow?(1-p):1; // fill alpha fades to hollow
+  // wheel dot
+  dot(px,py,it.color,fa,hollow&&p>0.5);
+  // ladder dot
+  dot(lx,ly,it.color,fa,hollow&&p>0.5);
+  // label
+  x.globalAlpha=1;x.fillStyle='#6a6570';x.font='700 14px Inter';x.textAlign='center';
+  const lblr=(R-34)*r+ (py<cy?-30:30);const[tlx,tly]=pol(h,(R-34)*r+30);
+  if(p<0.5||!hollow){x.fillText(it.name,tlx,tly+(py<cy?-2:6));}
+ });
+ x.globalAlpha=1;
+ // hover tooltip
+ if(mouse){
+  ITEMS.forEach(it=>{const h=angLerp(it.t.h,it.a.h,p),r=lerp(it.t.r,it.a.r,p),L=lerp(it.t.L,it.a.L,p);const[px,py]=pol(h,(R-34)*r);
+   if(Math.hypot(mouse.x-px,mouse.y-py)<22){
+    const lines=[it.name, 'hue '+Math.round(angLerp(it.t.h,it.a.h,p))+'°','value '+Math.round(L*100)+'%','vivid '+Math.round(r*100)+'%'];
+    tip(px,py,lines);
+   }});
+ }
+}
+function dot(px,py,color,fillAlpha,showQ){
+ x.save();
+ if(fillAlpha>0.01){x.globalAlpha=fillAlpha;x.beginPath();x.arc(px,py,20,0,7);x.fillStyle=color;x.fill();
+  x.lineWidth=4;x.strokeStyle='#fff';x.stroke();}
+ if(fillAlpha<0.99){x.globalAlpha=1-fillAlpha;x.beginPath();x.arc(px,py,20,0,7);x.fillStyle='#fff';x.fill();
+  x.lineWidth=3;x.setLineDash([6,6]);x.strokeStyle='#b8c0e8';x.stroke();x.setLineDash([]);
+  x.fillStyle='#8a93c8';x.font='800 19px Inter';x.textAlign='center';x.textBaseline='middle';x.fillText('?',px,py+1);x.textBaseline='alphabetic';}
+ x.restore();
+}
+function tip(px,py,lines){x.save();x.font='600 13px Inter';const w=110,h=lines.length*18+12;let tx=px+26,ty=py-h/2;
+ x.globalAlpha=.96;x.fillStyle='#1a1620';roundRect(tx,ty,w,h,8);x.fill();x.globalAlpha=1;x.fillStyle='#fff';x.textAlign='left';
+ lines.forEach((l,i)=>{x.font=i===0?'700 13px Inter':'500 12px Inter';x.fillStyle=i===0?'#fff':'#c9c4d0';x.fillText(l,tx+11,ty+20+i*18);});x.restore();}
+function roundRect(X,Y,w,h,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath();}
+const CAPS=[
+ {cls:'',tag:"What we've got",h:'Four colors, no anchor',p:'Different hues, different vividness, and three of them sit at almost the same <b>brightness</b>, so Love, Vitality and Abundance blur together. Nothing is held still, so nothing makes them a family.'},
+ {cls:'anc',tag:'What anchoring does',h:'Lock two dials, spin one',p:'Core draws <b>one vividness ring</b> (all four live on it) and takes the <b>deepest brightness lane</b>. Each other color gets its own lane, and only the <b>hue</b> is free to spread wide. Same family, four clearly different colors.'},
+];
+function setCap(){const c=CAPS[target];const el=document.getElementById('cap');el.className='caption '+c.cls;
+ el.innerHTML='<div class="ct">'+c.tag+'</div><h2 class="serif">'+c.h+'</h2><p>'+c.p+'</p>';}
+function go(t){target=t;document.getElementById('bToday').classList.toggle('on',t===0);
+ document.getElementById('bAnc').classList.toggle('on',t===1);setCap();}
+cv.addEventListener('mousemove',e=>{const rct=cv.getBoundingClientRect();mouse={x:(e.clientX-rct.left)*(W/rct.width),y:(e.clientY-rct.top)*(H/rct.height)};});
+cv.addEventListener('mouseleave',()=>mouse=null);
+function loop(){p+=(target-p)*0.12;if(Math.abs(target-p)<0.001)p=target;draw();requestAnimationFrame(loop);}
+setCap();loop();
+</script></body></html>
