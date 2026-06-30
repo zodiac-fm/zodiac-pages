@@ -41,6 +41,7 @@
   <div class="sub">This is the consequence of the anchor choice. The other three frequencies are not chosen by eye; they are computed off the purple, onto its vividness ring and into their own brightness lanes. Switch the anchor and the whole family recomputes. Real color math, in-gamut.</div>
 
   <div class="pick" id="pick"><span class="lab">Anchor</span></div>
+  <div class="pick" id="vit"><span class="lab">Vitality</span></div>
 
   <div class="stage">
     <canvas id="cv" width="900" height="520" style="width:460px;height:266px"></canvas>
@@ -72,16 +73,25 @@ const FAM=[
  {key:'Core',     role:'Identity',     dL:0,   dH:0,   letter:'C'},
  {key:'Love',     role:'Relationships',dL:.06, dH:65,  letter:'L'},
  {key:'Abundance',role:'Opportunity',  dL:.10, dH:217, letter:'A'},
- {key:'Vitality', role:'Energy',       dL:.15, dH:145, letter:'V'},
+ {key:'Vitality', role:'Energy',       dL:.20, dH:117, letter:'V'},
 ];
-let sel='Amethyst';
-function derive(){const a=ANCH[sel];return FAM.map(f=>{const L=a.L+f.dL,H=((a.H+f.dH)%360+360)%360,Cc=clampC(L,a.C,H);
+// two energy directions for Vitality
+const VIT={Orange:{dL:.20,dH:117},Gold:{dL:.35,dH:149}};
+let sel='Amethyst', vitMode='Orange';
+function derive(){const a=ANCH[sel];return FAM.map(f=>{let dL=f.dL,dH=f.dH;
+ if(f.key==='Vitality'){dL=VIT[vitMode].dL;dH=VIT[vitMode].dH;}
+ const L=a.L+dL,H=((a.H+dH)%360+360)%360,Cc=clampC(L,a.C,H);
  return{...f,L,C:Cc,H,hex:hx(L,a.C,H)};});}
 
 // ---------- picker ----------
 const pick=document.getElementById('pick');
 Object.entries(ANCH).forEach(([k,v])=>{const hex=hx(v.L,v.C,v.H);const d=document.createElement('div');d.className='pc';d.style.setProperty('--c',hex);
  d.innerHTML=`<span class="d" style="background:${hex}"></span><b>${k}</b>`;d.onclick=()=>{sel=k;render();};d.dataset.k=k;pick.appendChild(d);});
+// vitality direction toggle
+const vit=document.getElementById('vit');
+Object.keys(VIT).forEach(k=>{const a=ANCH[sel];const hex=hx(a.L+VIT[k].dL,a.C,((a.H+VIT[k].dH)%360+360)%360);
+ const d=document.createElement('div');d.className='pc';d.style.setProperty('--c',hex);
+ d.innerHTML=`<span class="d" style="background:${hex}"></span><b>${k}</b>`;d.onclick=()=>{vitMode=k;render();};d.dataset.vk=k;vit.appendChild(d);});
 
 // ---------- wheel + ladder ----------
 const cv=document.getElementById('cv'),x=cv.getContext('2d');
@@ -115,14 +125,19 @@ function drawWheel(items){
 const fam=document.getElementById('fam'),strip=document.getElementById('strip');
 function render(){
  [...pick.children].forEach(c=>{if(c.dataset)c.classList&&c.classList.toggle('sel',c.dataset.k===sel);});
+ // refresh + select the vitality swatches (they depend on the anchor)
+ [...vit.children].forEach(c=>{const k=c.dataset&&c.dataset.vk;if(!k)return;const a=ANCH[sel];
+  const hex=hx(a.L+VIT[k].dL,a.C,((a.H+VIT[k].dH)%360+360)%360);const dd=c.querySelector('.d');if(dd)dd.style.background=hex;
+  c.style.setProperty('--c',hex);c.classList.toggle('sel',k===vitMode);});
  const items=derive();
  drawWheel(items);
  // family cards (display order Core,Love,Vitality,Abundance)
  const order=['Core','Love','Vitality','Abundance'];
  fam.innerHTML='';strip.innerHTML='';
  order.forEach(k=>{const it=items.find(i=>i.key===k);
+  const tcol=it.L<0.64?'#fff':'#241a10';   // dark text on light swatches
   const c=document.createElement('div');c.className='fc';
-  c.innerHTML=`<div class="blk" style="background:${it.hex}"><div class="tri"></div><div class="aa">Aa</div></div>
+  c.innerHTML=`<div class="blk" style="background:${it.hex}"><div class="tri" style="border-left-color:${tcol}"></div><div class="aa" style="color:${tcol}">Aa</div></div>
    <div class="body"><div class="role">${it.role}</div><div class="nm">${it.key}</div><div class="hx">${it.hex.toUpperCase()} · L ${Math.round(it.L*100)} · H ${Math.round(it.H)}</div></div>`;
   fam.appendChild(c);
   const gs=document.createElement('div');gs.className='gs';gs.style.background=gray(it.L);gs.textContent=it.letter;strip.appendChild(gs);});
