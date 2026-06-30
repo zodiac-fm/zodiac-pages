@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Zodiac.fm · app</title>
 <style>
-  :root{--cream:#F6F1E8;--card:#FFFFFF;--ink:#1a1620;--mut:#7a7480;--love1:#EA1163;--love2:#FE4329;}
+  :root{--cream:#F6F1E8;--card:#FFFFFF;--ink:#1a1620;--mut:#7a7480;--c1:#EA1163;--c2:#FE4329;--cglow:rgba(234,17,99,.45);}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%;background:#e7e2d8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ink);overflow:hidden}
   body{display:flex;align-items:center;justify-content:center}
@@ -13,13 +13,13 @@
   /* ---------- LIST ---------- */
   #list{background:var(--cream)}
   .top{padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 6px;display:flex;align-items:center;justify-content:space-between}
-  .logo{font-size:21px;font-weight:700}.logo .d{color:var(--love1)}
+  .logo{font-size:21px;font-weight:700}.logo .d{color:var(--c1)}
   .ham{font-size:20px;color:#333}
   .pills{display:flex;gap:8px;padding:8px 18px 6px;overflow-x:auto}
   .pill{flex:0 0 auto;padding:7px 16px;border-radius:18px;background:#fff;border:1px solid #eadfce;font-size:13px;color:#555;cursor:pointer}
-  .pill.on{color:#fff;border:none;background:linear-gradient(90deg,var(--love1),var(--love2))}
+  .pill.on{color:#fff;border:none;background:linear-gradient(90deg,var(--c1),var(--c2))}
   .freqcard{margin:10px 18px;background:#fff;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 18px rgba(0,0,0,.04)}
-  .blob{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--love2),var(--love1));box-shadow:0 0 14px rgba(234,17,99,.5)}
+  .blob{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--c2),var(--c1));box-shadow:0 0 14px var(--cglow)}
   .hz{font-size:24px;font-weight:700}.hz small{font-size:13px;color:var(--mut);font-weight:600;margin-left:2px}
   .desc{padding:4px 22px 2px}
   .desc h2{font-size:22px;font-weight:700;letter-spacing:-.3px}
@@ -34,28 +34,28 @@
   .meta{flex:1;min-width:0}
   .meta h3{font-size:16px;font-weight:600;font-family:Georgia,serif}
   .meta p{font-size:12px;color:#8a8590;margin:3px 0 7px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  .meta .lab{font-size:11px;color:var(--love1);font-weight:700}
+  .meta .lab{font-size:11px;color:var(--c1);font-weight:700}
   .rt{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
-  .heart{font-size:17px;color:var(--love1)}
+  .heart{font-size:17px;color:var(--c1)}
   .dur{font-size:11px;color:#a8a2ad}
   .freqline{display:flex;align-items:center;gap:9px}
-  .freqline .blob{width:22px;height:22px;box-shadow:0 0 12px rgba(234,17,99,.45)}
+  .freqline .blob{width:22px;height:22px;box-shadow:0 0 12px var(--cglow)}
   .hzsm{font-size:18px;font-weight:700}.hzsm small{font-size:11px;color:var(--mut);font-weight:600}
   .rowpp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);z-index:3}
-  .rowpp svg{width:14px;height:14px;fill:var(--love1)}
-  .row.playing{border-color:var(--love1);box-shadow:0 0 0 1.5px var(--love1)}
+  .rowpp svg{width:14px;height:14px;fill:var(--c1)}
+  .row.playing{border-color:var(--c1);box-shadow:0 0 0 1.5px var(--c1)}
   /* ---------- pinned player ---------- */
   #mini{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 56px);background:#FFFFFF;border-top:1px solid #ece3d3;padding:9px 14px;display:flex;align-items:center;gap:11px;box-shadow:0 -4px 18px rgba(0,0,0,.06);cursor:pointer;z-index:20}
   #mini .mt{width:42px;height:42px;border-radius:9px;overflow:hidden;flex:0 0 auto;position:relative;background:#FBF8F3}
   #mini .mt img{width:100%;height:100%;object-fit:cover}
   #mini .mi{flex:1;min-width:0}
   #mini .mi b{font-size:13.5px;color:#1a1620;font-family:Georgia,serif;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  #mini .mi span{font-size:11px;color:var(--love1);font-weight:600}
-  #mini .pp{width:36px;height:36px;border-radius:50%;border:none;color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto;background:linear-gradient(135deg,var(--love1),var(--love2))}
+  #mini .mi span{font-size:11px;color:var(--c1);font-weight:600}
+  #mini .pp{width:36px;height:36px;border-radius:50%;border:none;color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto;background:linear-gradient(135deg,var(--c1),var(--c2))}
   #mini .pp svg{width:16px;height:16px;fill:currentColor}
   /* ---------- bottom nav ---------- */
   #nav{position:absolute;left:0;right:0;bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center;z-index:15}
-  #nav div{font-size:11px;text-align:center;color:#9a95a0}#nav div.on{color:var(--love1)}
+  #nav div{font-size:11px;text-align:center;color:#9a95a0}#nav div.on{color:var(--c1)}
   #nav .ic{font-size:16px;display:block;margin-bottom:2px}
   /* ---------- SONG VIEW (matches the app player) ---------- */
   #song{background:#FFFFFF;color:#1a1620;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:40}
@@ -71,17 +71,22 @@
   #vc{position:absolute;inset:0;width:100%;height:100%}
   .sv-meta{display:flex;align-items:flex-start;justify-content:space-between;padding:24px 30px 2px}
   .sv-meta h2{font-family:Georgia,serif;font-size:23px;font-weight:600}
-  .sv-meta .f{font-size:13px;color:var(--love1);font-weight:700;margin-top:3px}
-  .sv-meta .heart{font-size:23px;color:var(--love1)}
+  .sv-meta .f{font-size:13px;color:var(--c1);font-weight:700;margin-top:3px}
+  .svfreq{display:inline-flex;align-items:center;gap:7px;margin-top:9px;padding:5px 12px;border-radius:20px;background:color-mix(in srgb,var(--c1) 11%,#fff);border:1px solid color-mix(in srgb,var(--c1) 22%,#fff)}
+  .svfreq .fdot{width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--c2),var(--c1));box-shadow:0 0 9px var(--cglow)}
+  .svfreq b{font-size:15px;font-weight:700;color:var(--ink)}
+  .svfreq small{font-size:10.5px;color:var(--mut);font-weight:600;margin-left:-3px}
+  .svfreq span{font-size:11px;font-weight:700;color:var(--c1);margin-left:3px}
+  .sv-meta .heart{font-size:23px;color:var(--c1)}
   .player{padding:8px 30px calc(env(safe-area-inset-bottom,0px) + 24px)}
   .scrub{height:4px;background:#e7e2ea;border-radius:3px;position:relative;cursor:pointer;margin:12px 0 6px}
-  .scrub .fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:3px;background:linear-gradient(90deg,var(--love1),var(--love2))}
-  .scrub .knob{position:absolute;top:50%;width:13px;height:13px;border-radius:50%;background:var(--love1);transform:translate(-50%,-50%);left:0;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+  .scrub .fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:3px;background:linear-gradient(90deg,var(--c1),var(--c2))}
+  .scrub .knob{position:absolute;top:50%;width:13px;height:13px;border-radius:50%;background:var(--c1);transform:translate(-50%,-50%);left:0;box-shadow:0 1px 4px rgba(0,0,0,.25)}
   .times{display:flex;justify-content:space-between;font-size:11px;color:#9a93a0;font-variant-numeric:tabular-nums}
   .ctrls{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding:0 2px}
   .ctrls .sk{font-size:21px;color:#a8a2ad}
   .ctrls .skb{font-size:30px;color:#2a2530}
-  .bigpp{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,var(--love1),var(--love2));border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(234,17,99,.45);cursor:pointer}
+  .bigpp{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--c2));border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px var(--cglow);cursor:pointer}
   .bigpp svg{width:27px;height:27px;fill:#fff}
 </style></head><body>
 <div id="app">
@@ -89,12 +94,12 @@
   <!-- ===================== LIST ===================== -->
   <section class="screen" id="list">
     <div class="top"><div class="logo serif">zodiac<span class="d">.fm</span></div><div class="ham">&#9776;</div></div>
-    <div class="pills">
-      <div class="pill">Core</div><div class="pill on">Love</div><div class="pill">Vitality</div><div class="pill">Abundance</div>
+    <div class="pills" id="pills">
+      <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
     </div>
-    <div class="desc"><h2 class="serif">Love Vibrational Frequency</h2>
-      <p>These tracks increase your authentic resonance in matters of love and relationships.</p></div>
-    <div class="barrow"><div class="freqline"><span class="blob"></span><span class="hzsm">432<small> Hz</small></span></div><div class="qall">&#9776; Queue All</div></div>
+    <div class="desc"><h2 class="serif" id="catTitle">Love Vibrational Frequency</h2>
+      <p id="catDesc">These tracks increase your authentic resonance in matters of love and relationships.</p></div>
+    <div class="barrow"><div class="freqline"><span class="blob"></span><span class="hzsm" id="catHz">432<small> Hz</small></span></div><div class="qall">&#9776; Queue All</div></div>
     <div class="rows" id="rows"></div>
   </section>
 
@@ -121,7 +126,9 @@
     </div>
     <div class="sv-art"><div id="viz"><canvas id="vc"></canvas></div></div>
     <div class="sv-meta">
-      <div><h2 class="serif" id="svName">&mdash;</h2><div class="f" id="svFreq">Love Infusion</div></div>
+      <div><h2 class="serif" id="svName">&mdash;</h2>
+        <div class="svfreq"><span class="fdot"></span><b id="svHz">432</b><small>Hz</small><span id="svCat">Love</span></div>
+      </div>
       <div class="heart">&#9825;</div>
     </div>
     <div class="player">
@@ -140,20 +147,49 @@
 
 <audio id="aud" crossorigin="anonymous"></audio>
 <script>
-const LOVE1='#EA1163',LOVE2='#FE4329';
-const SONGS=[
- {name:"Quiet Success",freq:432,sub:"A quick tune-up to increase overall love resonance. A date night favorite!",dur:"3 min",thumb:"app-assets/sig-quiet-success.png",audio:null},
- {name:"Kindred Spirits",freq:425,sub:"Feel your sense of connection with others deepen with the beat.",dur:"5 min",thumb:"app-assets/sig-kindred-spirits.png",audio:"app-assets/kindred-spirits.mp3"},
- {name:"Elysian Surge",freq:600,sub:"Experience an intense connection with the world around you.",dur:"5 min",thumb:"app-assets/sig-elysian-surge.png",audio:"app-assets/elysian-surge.mp3"},
- {name:"Starseed",freq:528,sub:"Dive into your role in your relationships, from a deeper place.",dur:"9 min",thumb:"app-assets/sig-starseed.png",audio:null},
- {name:"Astrolith",freq:639,sub:"Open your sense of belonging and connection.",dur:"6 min",thumb:"app-assets/sig-astrolith.png",audio:null},
-];
+// ---------------- DATA: four frequency categories ----------------
+const SIG=n=>'app-assets/'+n+'.png';
+const LIVE1='app-assets/kindred-spirits.mp3', LIVE2='app-assets/elysian-surge.mp3';
+function mk(name,freq,sub,dur,thumb,audio){return {name,freq,sub,dur,thumb:SIG(thumb),audio:audio||null};}
+const CATS={
+ core:{label:'Core',c1:'#2832E0',c2:'#B402FF',cglow:'rgba(96,40,224,.5)',hue:-70,gA:'205,200,255',gB:'96,40,224',hz:'396',
+   title:'Core Vibrational Frequency',desc:'These tracks deepen your authentic sense of who you are.',
+   songs:[ mk('Inner Anchor',396,'Settle into a grounded, unshakable sense of self.','4 min','sig-quiet-success'),
+           mk('Kindred Spirits',396,'Feel your core identity steady and clarify with the beat.','5 min','sig-kindred-spirits',LIVE1),
+           mk('Elysian Surge',396,'Experience your truest self rising to the surface.','5 min','sig-elysian-surge',LIVE2),
+           mk('First Light',396,'Return to the self you were born as.','8 min','sig-starseed'),
+           mk('Bedrock',396,'Open a deep, quiet certainty in who you are.','6 min','sig-astrolith') ]},
+ love:{label:'Love',c1:'#EA1163',c2:'#FE4329',cglow:'rgba(234,17,99,.45)',hue:0,gA:'255,180,230',gB:'234,17,99',hz:'432',
+   title:'Love Vibrational Frequency',desc:'These tracks increase your authentic resonance in matters of love and relationships.',
+   songs:[ mk('Quiet Success',432,'A quick tune-up to increase overall love resonance. A date night favorite!','3 min','sig-quiet-success'),
+           mk('Kindred Spirits',432,'Feel your sense of connection with others deepen with the beat.','5 min','sig-kindred-spirits',LIVE1),
+           mk('Elysian Surge',432,'Experience an intense connection with the world around you.','5 min','sig-elysian-surge',LIVE2),
+           mk('Starseed',432,'Dive into your role in your relationships, from a deeper place.','9 min','sig-starseed'),
+           mk('Astrolith',432,'Open your sense of belonging and connection.','6 min','sig-astrolith') ]},
+ vitality:{label:'Vitality',c1:'#F96400',c2:'#F7D300',cglow:'rgba(249,100,0,.5)',hue:55,gA:'255,220,150',gB:'249,140,0',hz:'528',
+   title:'Vitality Vibrational Frequency',desc:'These tracks raise your energy, drive and aliveness.',
+   songs:[ mk('Ignition',528,'A fast lift for low-energy days.','4 min','sig-quiet-success'),
+           mk('Kindred Spirits',528,'Feel your energy build and circulate with the beat.','5 min','sig-kindred-spirits',LIVE1),
+           mk('Elysian Surge',528,'Ride a surge of clean, sustained energy.','5 min','sig-elysian-surge',LIVE2),
+           mk('Solar Run',528,'Charge your drive and momentum.','9 min','sig-starseed'),
+           mk('Wildfire',528,'Open a deep reserve of vitality.','6 min','sig-astrolith') ]},
+ abundance:{label:'Abundance',c1:'#B6CA1D',c2:'#009DFF',cglow:'rgba(0,157,255,.5)',hue:-150,gA:'180,235,255',gB:'0,157,255',hz:'639',
+   title:'Abundance Vibrational Frequency',desc:'These tracks open your sense of opportunity and flow.',
+   songs:[ mk('Open Doors',639,'Widen your sense of what is possible.','4 min','sig-quiet-success'),
+           mk('Kindred Spirits',639,'Feel opportunity move toward you with the beat.','5 min','sig-kindred-spirits',LIVE1),
+           mk('Elysian Surge',639,'Experience a surge of flow and possibility.','5 min','sig-elysian-surge',LIVE2),
+           mk('Goldstream',639,'Tune into steady, arriving abundance.','9 min','sig-starseed'),
+           mk('Harvest',639,'Open a deep sense of plenty.','6 min','sig-astrolith') ]},
+};
+let catKey='love';                 // currently-viewed category
 const aud=document.getElementById('aud');
-let cur=-1, D=null, started=false;
+let curSong=null, playCat=null, D=null, started=false;
+let gA='255,180,230', gB='234,17,99';   // glow colors of the PLAYING song's category
+
 // ---- audio graph (live reactor) ----
 let AC=null,ana=null,td=null,react=0,lastAmp=0,liveBeat=0;
 function initGraph(){ if(AC)return; try{ AC=new (window.AudioContext||webkitAudioContext)(); ana=AC.createAnalyser(); ana.fftSize=1024; ana.smoothingTimeConstant=0.78; const s=AC.createMediaElementSource(aud); s.connect(ana); ana.connect(AC.destination); td=new Uint8Array(ana.fftSize);}catch(e){ana=null;} }
-// ---- analysis: env / 600-presence / beat from the track (or synthetic for placeholders) ----
+// ---- analysis: env / target-presence / beat from the track (or synthetic for placeholders) ----
 async function analyze(url,target){
   if(!url){ const N=900,env=[],e6=[],bt=[]; let v=.4; for(let i=0;i<N;i++){v=Math.max(.05,Math.min(1,v+(Math.random()-.5)*.25)); env.push(v); e6.push(.45+.2*Math.sin(i/40)); bt.push(Math.random()<.04?Math.random():0);} return {dur:180,n:N,env,e600:e6,beat:bt,synthetic:true}; }
   const buf=await AC.decodeAudioData(await (await fetch(url)).arrayBuffer());
@@ -175,47 +211,71 @@ function at(arr,p){const L=arr.length,f=p*(L-1),i=Math.floor(f),g=f-i;return arr
 function clock(){ if(!started)return 0; return D&&D.synthetic ? ((performance.now()/1000-synT)%D.dur) : aud.currentTime; }
 let synT=0;
 
-// ---------- LIST ----------
+// ---------- LIST (rebuilds per category) ----------
 const rows=document.getElementById('rows');
-SONGS.forEach((s,i)=>{
-  const r=document.createElement('div');r.className='row';r.innerHTML=
-   `<div class="thumb"><img src="${s.thumb}" alt=""><canvas width="148" height="148"></canvas><div class="rowpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
-    <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p><div class="lab">&#9679; Love</div></div>
-    <div class="rt"><div class="heart">&#9825;</div><div class="dur">&#9201; ${s.dur}</div></div>`;
-  r.onclick=()=>playSong(i);
-  rows.appendChild(r);
-});
+let rowSongs=[];
+function buildRows(){
+  const cat=CATS[catKey]; rows.innerHTML=''; rowSongs=cat.songs;
+  cat.songs.forEach((s,i)=>{
+    const r=document.createElement('div');r.className='row';r.innerHTML=
+     `<div class="thumb"><img src="${s.thumb}" style="filter:hue-rotate(${cat.hue}deg)" alt=""><canvas width="148" height="148"></canvas><div class="rowpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p><div class="lab">&#9679; ${cat.label}</div></div>
+      <div class="rt"><div class="heart">&#9825;</div><div class="dur">&#9201; ${s.dur}</div></div>`;
+    r.onclick=()=>playSong(catKey,i);
+    rows.appendChild(r);
+  });
+  markAlive();
+}
+
+// ---------- theme / category switch ----------
+function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElementById('app').style;
+  st.setProperty('--c1',c.c1); st.setProperty('--c2',c.c2); st.setProperty('--cglow',c.cglow);
+  document.querySelectorAll('#pills .pill').forEach(p=>p.classList.toggle('on',p.dataset.cat===key));
+  document.getElementById('catTitle').textContent=c.title;
+  document.getElementById('catDesc').textContent=c.desc;
+  document.getElementById('catHz').innerHTML=c.hz+'<small> Hz</small>';
+  buildRows();
+}
+document.querySelectorAll('#pills .pill').forEach(p=>p.onclick=()=>setCat(p.dataset.cat));
 
 // ---------- play control ----------
 const miniImg=document.getElementById('miniImg'),miniName=document.getElementById('miniName'),miniPP=document.getElementById('miniPP');
-const bigPP=document.getElementById('bigPP'),svName=document.getElementById('svName'),svFreq=document.getElementById('svFreq');
+const bigPP=document.getElementById('bigPP'),svName=document.getElementById('svName');
 function ppSVG(p){return p?'<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>':'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';}
 function setIcons(){const p=started&&!aud.paused;miniPP.innerHTML=ppSVG(p);bigPP.innerHTML=ppSVG(p);markAlive();}
-async function playSong(i){
+async function playSong(ck,i){
   initGraph(); if(AC){try{await AC.resume();}catch(e){}}
-  const s=SONGS[i];
-  if(i!==cur){ cur=i; D=await analyze(s.audio,s.freq); started=true; synT=performance.now()/1000;
-    miniImg.src=s.thumb; miniName.textContent=s.name; svName.textContent=s.name; svFreq.textContent='Love Infusion';
+  const cat=CATS[ck], s=cat.songs[i];
+  if(s!==curSong){ curSong=s; playCat=ck; gA=cat.gA; gB=cat.gB; D=await analyze(s.audio,s.freq); started=true; synT=performance.now()/1000;
+    miniImg.src=s.thumb; miniImg.style.filter='hue-rotate('+cat.hue+'deg)';
+    miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion';
+    svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label;
     if(s.audio){ aud.src=s.audio; aud.currentTime=0; try{await aud.play();}catch(e){} } else { aud.pause(); aud.removeAttribute('src'); }
-  } else { if(s.audio){ if(aud.paused)aud.play();else aud.pause(); } }
+  } else { if(s.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } }
   setIcons(); markAlive();
 }
-function togglePP(){ const s=SONGS[cur]; if(cur<0){playSong(1);return;} if(s.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } setIcons(); }
+function togglePP(){ if(!curSong){playSong(catKey,1);return;} if(curSong.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } setIcons(); }
+function step(d){ const ck=playCat||catKey,c=CATS[ck]; let i=c.songs.indexOf(curSong); if(i<0)i=0; i=(i+d+c.songs.length)%c.songs.length; playSong(ck,i); }
 miniPP.onclick=(e)=>{e.stopPropagation();togglePP();};
 bigPP.onclick=togglePP;
 aud.addEventListener('play',setIcons);aud.addEventListener('pause',setIcons);
-document.getElementById('next').onclick=()=>playSong((cur+1)%SONGS.length);
-document.getElementById('prev').onclick=()=>playSong((cur-1+SONGS.length)%SONGS.length);
-// always show a song in the bar (paused) before anything is tapped
-(function seedBar(){const s=SONGS[1];miniImg.src=s.thumb;miniName.textContent=s.name;document.getElementById('miniSub').textContent='Love Infusion';})();
+document.getElementById('next').onclick=()=>step(1);
+document.getElementById('prev').onclick=()=>step(-1);
+
+// seed the bar with a paused song so it is never empty
+(function seed(){ const c=CATS['love'], s=c.songs[1]; miniImg.src=s.thumb; miniImg.style.filter='hue-rotate('+c.hue+'deg)'; miniName.textContent=s.name; document.getElementById('miniSub').textContent=c.label+' Infusion'; })();
 
 // open / close song view
 const songEl=document.getElementById('song');
-document.getElementById('mini').onclick=()=>{ if(cur<0)playSong(1); songEl.classList.add('open'); setTimeout(vrz,40); };
+document.getElementById('mini').onclick=()=>{ if(!curSong)playSong(catKey,1); songEl.classList.add('open'); setTimeout(vrz,40); };
 document.getElementById('svBack').onclick=()=>songEl.classList.remove('open');
 
-// alive thumbnail glow (the playing row + mini) — light from centre to the beat
-function markAlive(){ rows.querySelectorAll('.row').forEach((r,i)=>{ const playing=(i===cur&&started&&!aud.paused); const b=r.querySelector('.rowpp'); if(b){b.innerHTML=ppSVG(playing); const sv=b.querySelector('svg'); if(sv)sv.style.marginLeft=playing?'0':'1px';} r.classList.toggle('playing', i===cur); const cv=r.querySelector('canvas'); if(i!==cur){cv.getContext('2d').clearRect(0,0,cv.width,cv.height);} }); }
+// alive thumbnails (the playing row + mini) — light from centre to the beat
+function markAlive(){ const playing=started&&!aud.paused;
+  rows.querySelectorAll('.row').forEach((r,i)=>{ const isP=(rowSongs[i]===curSong&&playing); const b=r.querySelector('.rowpp');
+    if(b){b.innerHTML=ppSVG(isP);const sv=b.querySelector('svg');if(sv)sv.style.marginLeft=isP?'0':'1px';}
+    r.classList.toggle('playing', !!curSong&&rowSongs[i]===curSong);
+    const cv=r.querySelector('canvas'); if(rowSongs[i]!==curSong){cv.getContext('2d').clearRect(0,0,cv.width,cv.height);} }); }
 const miniGlow=document.getElementById('miniGlow').getContext('2d');
 
 // ---------- VISUALIZER (exact vercel style; no play/time baked) ----------
@@ -228,18 +288,17 @@ function liveRead(){ if(started&&ana&&!aud.paused){ana.getByteTimeDomainData(td)
 function drawViz(){
   requestAnimationFrame(drawViz);
   liveRead();
-  // mini glow (always, on the mini art) + list thumb glow
   drawGlow(miniGlow,40,40);
-  if(cur>=0){const cv=rows.querySelectorAll('.row')[cur].querySelector('canvas');drawGlow(cv.getContext('2d'),74,74);}
+  const ri=rowSongs.indexOf(curSong);
+  if(ri>=0){const cv=rows.querySelectorAll('.row')[ri].querySelector('canvas');drawGlow(cv.getContext('2d'),74,74);}
   if(!songEl.classList.contains('open')||!D){return;}
   if(!VW)vrz();
   const tt=clock(),p=D.dur?tt/D.dur:0,T=performance.now()/1000;
   const midY=VH*0.5,halfMax=VH*0.30,cx=VW/2;
   vx.clearRect(0,0,VW,VH);
-  // bg
   let bg=vx.createLinearGradient(0,0,0,VH);bg.addColorStop(0,'#0c0913');bg.addColorStop(1,'#0a0710');vx.fillStyle=bg;vx.fillRect(0,0,VW,VH);
   const x0=VW*0.15,x1=VW*0.96,span=x1-x0;
-  const FMIN=250,FMAX=950,FMID=600,FH=350,TARGET=SONGS[cur]?SONGS[cur].freq:600;
+  const FMIN=250,FMAX=950,FMID=600,FH=350,TARGET=curSong?curSong.freq:600;
   const yOf=f=>midY-halfMax*((f-FMID)/FH);const lineY=yOf(Math.max(FMIN,Math.min(FMAX,TARGET)));
   const WIN=180,STEP=60,tper=D.dur/(D.n-1),winStart=Math.max(0,(Math.floor(tt/STEP)-1)*STEP),winEnd=winStart+WIN;
   const tx=ti=>x0+span*((ti-winStart)/WIN),px=tx(tt);
@@ -248,26 +307,20 @@ function drawViz(){
   function wpr(a,b){vx.beginPath();for(let i=a;i<=b;i++){const xx=tx(i*tper),v=D.env[i]*halfMax*.92;i===a?vx.moveTo(xx,midY-v):vx.lineTo(xx,midY-v);}for(let i=b;i>=a;i--){const xx=tx(i*tper),v=D.env[i]*halfMax*.92;vx.lineTo(xx,midY+v);}vx.closePath();}
   if(iHi>iNow){wpr(iNow,iHi);vx.fillStyle='rgba(124,99,201,0.10)';vx.fill();vx.lineWidth=1*DPR;vx.strokeStyle='rgba(160,140,215,0.14)';vx.stroke();}
   if(iNow>iLo){wpr(iLo,iNow);let wf=vx.createLinearGradient(0,midY-halfMax,0,midY+halfMax);wf.addColorStop(0,'rgba(124,99,201,0.46)');wf.addColorStop(.5,'rgba(70,52,130,0.10)');wf.addColorStop(1,'rgba(124,99,201,0.46)');vx.fillStyle=wf;vx.fill();vx.lineWidth=1.2*DPR;vx.strokeStyle='rgba(160,140,215,0.5)';vx.stroke();}
-  // now column (live reactive)
   const aN=Math.min(1,env*.45+react*2.0)*halfMax*.96;
   let nb=vx.createLinearGradient(0,midY-aN,0,midY+aN);nb.addColorStop(0,'rgba(214,201,255,.9)');nb.addColorStop(.5,'rgba(150,123,220,.22)');nb.addColorStop(1,'rgba(214,201,255,.9)');
   vx.strokeStyle=nb;vx.lineWidth=2.2*DPR;vx.lineCap='round';vx.shadowColor='rgba(150,123,220,.9)';vx.shadowBlur=14*DPR;vx.beginPath();vx.moveTo(px,midY-aN);vx.lineTo(px,midY+aN);vx.stroke();vx.shadowBlur=0;
-  // reactive pulse — light through centre, out to the beat
   if(react>.01||fl>.03){const pr=(10+react*54+fl*40)*DPR;const rg=vx.createRadialGradient(px,lineY,0,px,lineY,pr);rg.addColorStop(0,'rgba(255,140,220,'+Math.min(.8,.2+react*1.6)+')');rg.addColorStop(1,'rgba(255,140,220,0)');vx.fillStyle=rg;vx.beginPath();vx.arc(px,lineY,pr,0,7);vx.fill();}
-  // axis
   vx.textBaseline='middle';vx.font=(8.5*DPR)+'px Georgia,serif';vx.lineCap='butt';
   vx.strokeStyle='rgba(180,165,210,.12)';vx.lineWidth=1*DPR;vx.beginPath();vx.moveTo(x0,yOf(FMAX));vx.lineTo(x0,yOf(FMIN));vx.stroke();
   [300,400,500,600,700,800,900].forEach(f=>{const yy=yOf(f),isT=Math.abs(f-TARGET)<25;vx.strokeStyle=isT?'rgba(255,248,233,.7)':'rgba(190,175,220,.4)';vx.lineWidth=(isT?1.6:1)*DPR;vx.beginPath();vx.moveTo(x0-(isT?9:7)*DPR,yy);vx.lineTo(x0,yy);vx.stroke();vx.textAlign='right';vx.fillStyle=isT?'rgba(255,248,233,.95)':'rgba(214,205,232,.7)';vx.fillText(isT?(f+' Hz'):(''+f),x0-11*DPR,yy);});
-  // target line + leading glow
   let lg=vx.createLinearGradient(x0,0,px,0);lg.addColorStop(0,'rgba(240,231,214,.06)');lg.addColorStop(1,'rgba(240,231,214,'+(.45+e6*.3)+')');vx.strokeStyle=lg;vx.lineWidth=1.2*DPR;vx.beginPath();vx.moveTo(x0,lineY);vx.lineTo(px,lineY);vx.stroke();
   const hg=vx.createRadialGradient(px,lineY,0,px,lineY,22*DPR);hg.addColorStop(0,'rgba(255,248,233,'+(.45+e6*.4)+')');hg.addColorStop(1,'rgba(255,248,233,0)');vx.fillStyle=hg;vx.beginPath();vx.arc(px,lineY,22*DPR,0,7);vx.fill();
-  // scrubber + times
   const cu=tt,to=D.dur;document.getElementById('scrubFill').style.width=(100*cu/to)+'%';document.getElementById('scrubKnob').style.left=(100*cu/to)+'%';
   const f=s=>{s=isFinite(s)?s:0;return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');};
   document.getElementById('tCur').textContent=f(cu);document.getElementById('tTot').textContent=f(to);
 }
-function drawGlow(ctx,w,h){ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);if(cur<0||!(started&&!aud.paused))return;const cw=ctx.canvas.width,chh=ctx.canvas.height;const r=(cw*0.18)+(react*cw*0.7)+(liveBeat*cw*0.5);const g=ctx.createRadialGradient(cw/2,chh/2,0,cw/2,chh/2,r);g.addColorStop(0,'rgba(255,180,230,'+Math.min(.85,.25+react*1.8)+')');g.addColorStop(.5,'rgba(234,17,99,'+Math.min(.5,react*1.2)+')');g.addColorStop(1,'rgba(234,17,99,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(cw/2,chh/2,r,0,7);ctx.fill();}
-// scrub seek
-document.getElementById('scrub').onclick=(e)=>{if(!D)return;const r=e.currentTarget.getBoundingClientRect();const fr=(e.clientX-r.left)/r.width;if(SONGS[cur]&&SONGS[cur].audio){aud.currentTime=fr*D.dur;}else{synT=performance.now()/1000-fr*D.dur;}};
-vrz();drawViz();setIcons();
+function drawGlow(ctx,w,h){ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);if(!curSong||!(started&&!aud.paused))return;const cw=ctx.canvas.width,chh=ctx.canvas.height;const r=(cw*0.18)+(react*cw*0.7)+(liveBeat*cw*0.5);const g=ctx.createRadialGradient(cw/2,chh/2,0,cw/2,chh/2,r);g.addColorStop(0,'rgba('+gA+','+Math.min(.85,.25+react*1.8)+')');g.addColorStop(.5,'rgba('+gB+','+Math.min(.5,react*1.2)+')');g.addColorStop(1,'rgba('+gB+',0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(cw/2,chh/2,r,0,7);ctx.fill();}
+document.getElementById('scrub').onclick=(e)=>{if(!D)return;const r=e.currentTarget.getBoundingClientRect();const fr=(e.clientX-r.left)/r.width;if(curSong&&curSong.audio){aud.currentTime=fr*D.dur;}else{synT=performance.now()/1000-fr*D.dur;}};
+buildRows();vrz();drawViz();setIcons();
 </script></body></html>
