@@ -358,7 +358,7 @@ function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
   r.innerHTML=`<div class="grip">${GRIP}</div><div class="thumb"><img src="${tileSrc(ck,s)}" alt=""></div>
    <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p>
     <div class="botrow"><div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div>
-     <button class="cardpp" style="background:linear-gradient(135deg,${cat.c1},${cat.c2});box-shadow:0 2px 8px ${cat.cglow}"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
+     <button class="cardpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
    <div class="rt"><div class="rtic"><span class="dl">${DL}</span><div class="heart" style="color:${cat.cink}">&#9829;</div></div><div class="dur">&#9201; ${s.dur}</div></div>`;
   r.onclick=()=>playSong(ck,cat.songs.indexOf(s));
   c.appendChild(r);});}
