@@ -152,18 +152,19 @@
 // ---------------- DATA: four frequency categories ----------------
 const SIG=n=>'app-assets/'+n+'.png';
 const LIVE1='app-assets/kindred-spirits.mp3', LIVE2='app-assets/elysian-surge.mp3';
-function mk(name,freq,sub,dur,thumb,audio){return {name,freq,sub,dur,thumb:SIG(thumb),audio:audio||null};}
+function mk(name,freq,sub,dur,slug,audio){return {name,freq,sub,dur,slug,audio:audio||null};}
+const tileSrc=(cat,s)=>'app-assets/sig-'+cat+'-'+s.slug+'.png';
 // One real song list (same names, order by length, and per-song tiles) shared across every category.
 // Only the frequency (Hz) and the colour change per category. Descriptions are the current Core copy
 // (the real set we have) — per-category wording can be swapped in when provided.
 const SONGLIST=[
- mk('Quiet Success',0,'An immediate energetic self reset, come back home now.','3 min','sig-quiet-success'),
- mk('Kindred Spirits',0,'Allow your authentic self to deepen with the beat.','5 min','sig-kindred-spirits',LIVE1),
- mk('Elysian Surge',0,'Feel your core energy build on this energetic ride.','5 min','sig-elysian-surge',LIVE2),
- mk('Starseed',0,'Let your authentic self interact with your deepest energetic levels.','9 min','sig-starseed'),
- mk('Astrolith',0,'Create resonance with your true self, develop authentic magnetism.','9 min','sig-astrolith'),
- mk('Cosmic Drift',0,'Access profound authentic energy through deep frequency work.','25 min','sig-cosmic-drift'),
- mk('Galactic Slumber',0,'Find your true self as deep sleep restores your inner resonance.','1 hour','sig-galactic-slumber'),
+ mk('Quiet Success',0,'An immediate energetic self reset, come back home now.','3 min','quiet-success'),
+ mk('Kindred Spirits',0,'Allow your authentic self to deepen with the beat.','5 min','kindred-spirits',LIVE1),
+ mk('Elysian Surge',0,'Feel your core energy build on this energetic ride.','5 min','elysian-surge',LIVE2),
+ mk('Starseed',0,'Let your authentic self interact with your deepest energetic levels.','9 min','starseed'),
+ mk('Astrolith',0,'Create resonance with your true self, develop authentic magnetism.','9 min','astrolith'),
+ mk('Cosmic Drift',0,'Access profound authentic energy through deep frequency work.','25 min','cosmic-drift'),
+ mk('Galactic Slumber',0,'Find your true self as deep sleep restores your inner resonance.','1 hour','galactic-slumber'),
 ];
 const CATS={
  core:{label:'Core',c1:'#2832E0',c2:'#B402FF',cink:'#2832E0',cglow:'rgba(96,40,224,.5)',hue:-70,filt:'hue-rotate(-74deg) saturate(1.4) brightness(1.05)',gA:'205,200,255',gB:'96,40,224',hz:'422',
@@ -212,7 +213,7 @@ function buildRows(){
   const cat=CATS[catKey]; rows.innerHTML=''; rowSongs=cat.songs;
   cat.songs.forEach((s,i)=>{
     const r=document.createElement('div');r.className='row';r.innerHTML=
-     `<div class="thumb"><img src="${s.thumb}" style="filter:${cat.filt}" alt=""><canvas width="148" height="148"></canvas><div class="rowpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+     `<div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas><div class="rowpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
       <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p><div class="lab">&#9679; ${cat.label}</div></div>
       <div class="rt"><div class="heart">&#9825;</div><div class="dur">&#9201; ${s.dur}</div></div>`;
     r.onclick=()=>playSong(catKey,i);
@@ -242,7 +243,7 @@ async function playSong(ck,i){
   const cat=CATS[ck], s=cat.songs[i];
   if(s!==curSong){ curSong=s; playCat=ck; gA=cat.gA; gB=cat.gB; playHz=parseInt(cat.hz,10)||432; D=await analyze(s.audio,playHz); started=true; synT=performance.now()/1000;
     document.getElementById('app').classList.add('playing');
-    miniImg.src=s.thumb; miniImg.style.filter=cat.filt;
+    miniImg.src=tileSrc(ck,s); miniImg.style.filter='none';
     miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion';
     svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label;
     if(s.audio){ aud.src=s.audio; aud.currentTime=0; try{await aud.play();}catch(e){} } else { aud.pause(); aud.removeAttribute('src'); }
