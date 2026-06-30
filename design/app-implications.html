@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zodiac · new colors in the app</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif;color:#1a1620;-webkit-font-smoothing:antialiased}
+  .serif{font-family:Georgia,serif}
+  .wrap{max-width:1060px;margin:0 auto;padding:38px 20px 80px}
+  h1{font-size:28px;font-weight:600;letter-spacing:-.4px}
+  .sub{font-size:14px;color:#7a7480;margin-top:7px;line-height:1.5;max-width:780px}
+  h2{font-size:12px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:#9a93a0;margin:40px 0 4px;border-bottom:1px solid #eee;padding-bottom:9px}
+  .h2note{font-size:13px;color:#7a7480;margin:8px 0 18px;line-height:1.45}
+  .row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+  /* phone */
+  .phone{width:228px;height:480px;border-radius:30px;background:#F6F1E8;overflow:hidden;position:relative;box-shadow:0 18px 44px rgba(0,0,0,.16);border:1px solid rgba(0,0,0,.06);flex:0 0 auto}
+  .phone.dark{background:#0e0a16}
+  .top{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 6px}
+  .logo{font-family:Georgia,serif;font-size:16px;font-weight:700}.logo i{font-style:normal}
+  .ham{font-size:15px;color:#888}
+  .pills{display:flex;gap:5px;padding:6px 14px;overflow:hidden}
+  .pill{font-size:9.5px;padding:5px 10px;border-radius:14px;background:#fff;border:1px solid #eadfce;color:#666;white-space:nowrap}
+  .pill.on{color:#fff;border:none}
+  .ttl{font-family:Georgia,serif;font-size:15.5px;font-weight:600;padding:8px 16px 0}
+  .frq{display:flex;align-items:center;gap:7px;padding:7px 16px 2px}
+  .blob{width:22px;height:22px;border-radius:50%}
+  .hz{font-size:15px;font-weight:700}.hz small{font-size:9px;color:#999;font-weight:600}
+  .tiles{padding:6px 12px;display:flex;flex-direction:column;gap:9px}
+  .tile{display:flex;gap:10px;align-items:center;background:#fff;border:1px solid #efe6d6;border-radius:12px;padding:8px}
+  .th{width:50px;height:50px;border-radius:9px;flex:0 0 auto;position:relative;overflow:hidden}
+  .th .wv{position:absolute;inset:0;opacity:.9}
+  .tmeta{flex:1;min-width:0}
+  .tmeta b{font-family:Georgia,serif;font-size:12px;font-weight:600;display:block}
+  .tmeta .lab{font-size:8.5px;font-weight:700;margin-top:3px;display:flex;align-items:center;gap:3px}
+  .pp{width:22px;height:22px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+  .pp::after{content:"";border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent #fff;margin-left:2px}
+  .mini{position:absolute;left:10px;right:10px;bottom:54px;background:#fff;border-radius:13px;padding:7px 9px;display:flex;align-items:center;gap:9px;box-shadow:0 -2px 16px rgba(0,0,0,.08)}
+  .mini .mt{width:32px;height:32px;border-radius:7px;flex:0 0 auto}
+  .mini .mn b{font-size:11px;font-family:Georgia,serif;display:block}.mini .mn span{font-size:9px;font-weight:600}
+  .nav{position:absolute;left:0;right:0;bottom:0;height:46px;background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center}
+  .nav div{font-size:8.5px;color:#aaa;text-align:center}
+  /* now playing */
+  .npaura{position:absolute;border-radius:50%;filter:blur(38px);opacity:.55;animation:beat 2.4s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1);opacity:.5}50%{transform:scale(1.12);opacity:.7}}
+  .npback{position:absolute;top:14px;left:14px;color:#fff;font-size:18px;opacity:.8}
+  .npart{position:absolute;top:74px;left:26px;right:26px;height:176px;border-radius:18px;background:#0b0712;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .npmeta{position:absolute;top:268px;left:26px;right:26px;color:#fff}
+  .npmeta b{font-family:Georgia,serif;font-size:19px;font-weight:600;display:block}
+  .npfreq{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:4px 10px;border-radius:16px;background:rgba(255,255,255,.08);font-size:10px;font-weight:700;color:#fff}
+  .npfreq .fd{width:11px;height:11px;border-radius:50%}
+  .scrub{position:absolute;left:26px;right:26px;top:332px;height:4px;border-radius:3px;background:rgba(255,255,255,.16)}
+  .scrub i{position:absolute;left:0;top:0;bottom:0;width:42%;border-radius:3px}
+  .ctrls{position:absolute;left:26px;right:26px;top:360px;display:flex;align-items:center;justify-content:center;gap:26px}
+  .ctrls .sk{color:rgba(255,255,255,.7);font-size:18px}
+  .bigpp{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .bigpp::after{content:"";border-style:solid;border-width:8px 0 8px 13px;border-color:transparent transparent transparent #fff;margin-left:3px}
+  .cap{text-align:center;font-size:11.5px;color:#7a7480;margin-top:9px;font-weight:600}
+  /* blob cards */
+  .blobcards{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+  .bcard{width:210px;height:150px;border-radius:16px;border:1px solid #eee;position:relative;overflow:hidden;background:#fff;display:flex;align-items:flex-end;padding:13px}
+  .bcard .ba{position:absolute;width:140px;height:140px;border-radius:50%;filter:blur(26px);opacity:.7;top:-30px;right:-26px;animation:beat 3s ease-in-out infinite}
+  .bcard b{font-family:Georgia,serif;font-size:14px;position:relative}
+  .bcard span{font-size:10.5px;color:#9a93a0;position:relative;display:block}
+  .foot{margin-top:30px;font-size:14px;color:#3a3540;background:#F7F4FF;border:1px solid #e6dffb;border-radius:14px;padding:15px 19px;line-height:1.6}
+  .foot b{color:#6F32D6}
+</style></head><body>
+<div class="wrap">
+  <h1 class="serif">The new family in the app</h1>
+  <div class="sub">Look-only mockups of how the anchored palette plays across the real surfaces: the app tinting to each frequency, the accent blob, and the now-playing wave pulsing on the beat. The working prototype is untouched.</div>
+
+  <h2>Each frequency tints the whole screen</h2>
+  <div class="h2note">Same layout, four frequencies. The active pill, the blob, the song tiles and the play buttons all carry that frequency's gradient. This is the immersion screen in each color.</div>
+  <div class="row" id="screens"></div>
+
+  <h2>Now playing — the wave on the beat</h2>
+  <div class="h2note">The dark stage holds the waveform in the frequency's own gradient, with a soft aura behind it that breathes with the music. (The aura and wave gently pulse here.)</div>
+  <div class="row" id="players"></div>
+
+  <h2>The accent blob</h2>
+  <div class="h2note">The little mesh blob used to warm up a page, now in each frequency. Soft, blurred, alive.</div>
+  <div class="blobcards" id="blobs"></div>
+
+  <div class="foot"><b>The implication:</b> the new family doesn't just sit in a swatch sheet, it gives every surface a clean, distinct gradient and a glow that reads on the dark stage and on cream. Purple grounds the brand, and each frequency lights its own screen, its own tiles, its own wave. Tell me where it feels right and where it doesn't, and I'll tune before we lock gradients.</div>
+</div>
+<script>
+const F={
+ Core:{p:'#6F32D6',e:'#B047D9',g:'125,69,232',hz:'432',ttl:'Core',sub:'Identity'},
+ Love:{p:'#D20074',e:'#EF3044',g:'228,37,131',hz:'528',ttl:'Love',sub:'Relationships'},
+ Vitality:{p:'#F67300',e:'#FFA912',g:'227,106,0',hz:'396',ttl:'Vitality',sub:'Energy'},
+ Abundance:{p:'#009A45',e:'#00C193',g:'0,172,78',hz:'639',ttl:'Abundance',sub:'Opportunity'},
+};
+const order=['Core','Love','Vitality','Abundance'];
+function grad(f,deg){deg=deg||135;return `linear-gradient(${deg}deg,${F[f].p},${F[f].e})`;}
+function wave(f,id){ // simple gradient waveform svg
+ return `<svg viewBox="0 0 100 50" preserveAspectRatio="none" width="100%" height="100%"><defs>
+  <linearGradient id="${id}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${F[f].p}"/><stop offset="1" stop-color="${F[f].e}"/></linearGradient></defs>
+  <path d="M0,25 ${Array.from({length:50},(_,i)=>{const x=i*2;const a=Math.sin(i*0.7)*Math.sin(i*0.27)*16;return `L${x},${25-Math.abs(a)} `}).join('')} L100,25 ${Array.from({length:50},(_,i)=>{const x=(49-i)*2;const a=Math.sin((49-i)*0.7)*Math.sin((49-i)*0.27)*16;return `L${x},${25+Math.abs(a)} `}).join('')} Z" fill="url(#${id})" opacity="0.92"/></svg>`;}
+
+// ---- list screens ----
+const sc=document.getElementById('screens');
+order.forEach(f=>{const c=F[f];const div=document.createElement('div');div.className='phone';
+ div.innerHTML=`
+  <div class="top"><div class="logo">zodiac<i style="color:${c.p}">.fm</i></div><div class="ham">&#9776;</div></div>
+  <div class="pills">${order.map(o=>`<div class="pill ${o===f?'on':''}" style="${o===f?`background:${grad(o,90)}`:''}">${o}</div>`).join('')}</div>
+  <div class="ttl">${c.ttl} Frequency</div>
+  <div class="frq"><div class="blob" style="background:${grad(f,140)};box-shadow:0 2px 10px rgba(${c.g},.5)"></div><div class="hz">${c.hz}<small> Hz</small></div></div>
+  <div class="tiles">
+   ${['Kindred Spirits','Elysian Surge','Starseed'].map((nm,i)=>`
+    <div class="tile"><div class="th" style="background:${grad(f,120+i*30)}"><div class="wv">${wave(f,'w'+f+i)}</div></div>
+     <div class="tmeta"><b>${nm}</b><div class="lab" style="color:${c.p}">&#9679; ${f}</div></div>
+     <div class="pp" style="background:${grad(f)};box-shadow:0 2px 7px rgba(${c.g},.5)"></div></div>`).join('')}
+  </div>
+  <div class="mini"><div class="mt" style="background:${grad(f,120)}"></div><div class="mn"><b>Kindred Spirits</b><span style="color:${c.p}">${f} Infusion</span></div>
+   <div class="pp" style="background:${grad(f)};margin-left:auto"></div></div>
+  <div class="nav"><div>&#9835;<br>Immersions</div><div>&#9776;<br>Results</div><div>&#9825;<br>Favorites</div></div>`;
+ sc.appendChild(div);});
+
+// ---- now playing (Love + Abundance) ----
+const pl=document.getElementById('players');
+['Love','Abundance'].forEach(f=>{const c=F[f];const wrap=document.createElement('div');
+ const div=document.createElement('div');div.className='phone dark';
+ div.innerHTML=`
+  <div class="npaura" style="background:rgba(${c.g},.9);width:170px;height:170px;top:40px;left:-30px"></div>
+  <div class="npaura" style="background:rgba(${c.g},.7);width:150px;height:150px;bottom:60px;right:-40px;animation-delay:.8s"></div>
+  <div class="npback">&#8249;</div>
+  <div class="npart"><div style="width:78%;height:60%">${wave(f,'np'+f)}</div></div>
+  <div class="npmeta"><b>Kindred Spirits</b>
+   <div class="npfreq"><span class="fd" style="background:${grad(f,140)}"></span>${c.hz} Hz · ${f}</div></div>
+  <div class="scrub"><i style="background:${grad(f,90)}"></i></div>
+  <div class="ctrls"><span class="sk">&#9198;</span><div class="bigpp" style="background:${grad(f)};box-shadow:0 8px 24px rgba(${c.g},.6)"></div><span class="sk">&#9197;</span></div>`;
+ wrap.appendChild(div);const cap=document.createElement('div');cap.className='cap';cap.textContent=f+' · now playing';wrap.appendChild(cap);
+ pl.appendChild(wrap);});
+
+// ---- blob cards ----
+const bl=document.getElementById('blobs');
+order.forEach(f=>{const c=F[f];const d=document.createElement('div');d.className='bcard';
+ d.innerHTML=`<div class="ba" style="background:${grad(f,140)}"></div><div><b>${f}</b><span>accent aura</span></div>`;bl.appendChild(d);});
+</script></body></html>
