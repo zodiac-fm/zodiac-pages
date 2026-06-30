@@ -9,19 +9,17 @@
   .lbl{position:fixed;z-index:5;pointer-events:none;user-select:none}
   #title{top:34px;left:42px;font-size:13px;letter-spacing:6px;text-transform:uppercase;opacity:.92}
   #sub{top:60px;left:42px;font-size:11px;letter-spacing:3px;text-transform:uppercase;opacity:.4}
-  #tc{bottom:24px;left:0;right:0;text-align:center;font-family:'SF Mono',ui-monospace,Menlo,monospace;font-size:12px;letter-spacing:2px;opacity:.6}
-  #pp{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);width:58px;height:58px;border-radius:50%;
+  #tc{display:none}
+  #pp{position:fixed;top:80%;left:50%;transform:translate(-50%,-50%);width:62px;height:62px;border-radius:50%;
       background:rgba(20,14,34,0.55);border:1.5px solid rgba(236,228,214,0.92);color:#ECE4D6;cursor:pointer;z-index:6;
       display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);
       box-shadow:0 6px 24px rgba(0,0,0,0.45);transition:transform .15s ease,background .2s}
-  #pp:hover{transform:translateX(-50%) scale(1.06);background:rgba(44,30,72,0.72)}
+  #pp:hover{transform:translate(-50%,-50%) scale(1.06);background:rgba(44,30,72,0.72)}
   #pp svg{width:25px;height:25px;fill:currentColor;pointer-events:none}
   @media (max-width:600px){
     #title{top:calc(env(safe-area-inset-top,0px) + 18px);left:0;right:0;text-align:center;font-size:12px;letter-spacing:4px}
     #sub{top:calc(env(safe-area-inset-top,0px) + 40px);left:0;right:0;text-align:center;font-size:9px;letter-spacing:2px}
     /* lift off the bottom edge so nothing gets cut off, and clear the home-bar safe area */
-    #tc{bottom:calc(env(safe-area-inset-bottom,0px) + 100px);left:0;right:0;text-align:center;font-size:12px}
-    #pp{bottom:calc(env(safe-area-inset-bottom,0px) + 32px)}
   }
 </style></head><body>
 <canvas id="c"></canvas>
@@ -39,26 +37,21 @@ function rz(){DPR=Math.min(devicePixelRatio||1,2);var vw=(window.visualViewport&
 addEventListener('resize',rz);if(window.visualViewport){visualViewport.addEventListener('resize',rz);visualViewport.addEventListener('scroll',rz);}rz();
 
 // master clock (visuals autostart, no button). audio syncs if/when enabled.
-let t0=performance.now()/1000, sound=false, flash=0;
-function clock(){ return sound&&!aud.paused ? aud.currentTime : ((performance.now()/1000 - t0) % D.dur); }
+let t0=performance.now()/1000, sound=false, flash=0, started=false;
+function clock(){ return started ? aud.currentTime : 0; }
 function at(arr,p){ const f=p*(D.n-1), i=Math.floor(f), g=f-i; return arr[i]*(1-g)+(arr[Math.min(i+1,D.n-1)])*g; }
 
 const PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 const PAUSE='<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
 function setIcon(){ const on=sound&&!aud.paused; pp.innerHTML=on?PAUSE:PLAY; pp.setAttribute('aria-label',on?'Pause':'Play'); }
 pp.addEventListener('click',async()=>{
-  if(!sound||aud.paused){ try{ initGraph(); if(AC) await AC.resume(); aud.currentTime=clock(); await aud.play(); sound=true; }catch(e){} }
-  else { t0=performance.now()/1000 - aud.currentTime; aud.pause(); sound=false; }
+  initGraph(); if(AC){ try{ await AC.resume(); }catch(e){} }
+  if(aud.paused){ if(!started){ started=true; aud.currentTime=0; } try{ await aud.play(); sound=true; }catch(e){} }
+  else { aud.pause(); sound=false; }
   setIcon();
 });
 aud.addEventListener('play',setIcon); aud.addEventListener('pause',setIcon);
 
-// ---- auto-play: try on load; if the browser blocks it, start on the first interaction ----
-async function startSound(){ if(sound) return; try{ initGraph(); if(AC) await AC.resume(); aud.currentTime=clock(); await aud.play(); sound=true; setIcon(); }catch(e){} }
-addEventListener('load', startSound); startSound();
-aud.addEventListener('canplay', startSound);            // retry once the audio is decodable
-aud.addEventListener('loadeddata', startSound);
-['pointerdown','touchstart','keydown','click'].forEach(ev=>addEventListener(ev,function once(){ startSound(); removeEventListener(ev,once); },{once:true,passive:true}));
 
 // ---- live audio reactor: makes NOW dance with the actual sound ----
 let AC=null, ana=null, td=null, react=0, lastAmp=0, liveBeat=0;
@@ -192,19 +185,22 @@ function frame(){
   if(fl>0.04){ x.strokeStyle='rgba(255,118,222,'+(0.68*fl)+')'; x.lineWidth=1.9*DPR;
     x.beginPath(); x.arc(px,ty,(8+34*(1-fl))*DPR,0,7); x.stroke(); }
 
-  // ---- motes ----
-  for(const m of motes){ const mx=((m.x+ (T*0.01*m.s))%1)*W, my=(m.y*0.8+0.1)*H + Math.sin(T*0.3+m.ph)*6*DPR;
-    x.fillStyle='rgba(183,162,232,'+(0.05+0.05*Math.sin(T*0.7+m.ph))+')'; x.beginPath(); x.arc(mx,my,m.s*1.6*DPR,0,7); x.fill(); }
-
-  // ---- grain + vignette ----
-  if(grain){x.save();x.globalAlpha=0.5;const p2=x.createPattern(grain,'repeat');x.fillStyle=p2;x.translate((T*7)%160,(T*5)%160);x.fillRect(-160,-160,W+320,H+320);x.restore();}
+  // ---- motes + grain (animate only once playing) ----
+  if(started){
+    for(const m of motes){ const mx=((m.x+ (T*0.01*m.s))%1)*W, my=(m.y*0.8+0.1)*H + Math.sin(T*0.3+m.ph)*6*DPR;
+      x.fillStyle='rgba(183,162,232,'+(0.05+0.05*Math.sin(T*0.7+m.ph))+')'; x.beginPath(); x.arc(mx,my,m.s*1.6*DPR,0,7); x.fill(); }
+    if(grain){x.save();x.globalAlpha=0.5;const p2=x.createPattern(grain,'repeat');x.fillStyle=p2;x.translate((T*7)%160,(T*5)%160);x.fillRect(-160,-160,W+320,H+320);x.restore();}
+  }
   let vg=x.createRadialGradient(cx,H*0.5,H*0.2,cx,H*0.5,H*0.8);
   vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,0.55)');
   x.fillStyle=vg; x.fillRect(0,0,W,H);
 
-  // timecode
+  // ---- time, right below the waves ----
   const f=s=>{s=isFinite(s)?s:0;return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');};
-  tc.textContent=f(tt)+'  /  '+f(D.dur);
+  x.fillStyle='rgba(236,228,214,0.82)'; x.textAlign='center'; x.textBaseline='top';
+  x.font=(12*DPR)+'px ui-monospace, Menlo, monospace';
+  x.fillText(f(tt)+'   /   '+f(D.dur), cx, midY+halfMax+16*DPR);
+  pp.style.top=(((midY+halfMax)/H)+0.12)*100+'%';   // play/pause sits just below the time
 }
 frame();
 </script></body></html>
