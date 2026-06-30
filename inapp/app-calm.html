@@ -92,6 +92,7 @@
   .bigpp{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--cdeep));border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px var(--cglow);cursor:pointer}
   .bigpp svg{width:27px;height:27px;fill:#fff}
 
+  .rtic{display:flex;align-items:center;gap:11px}.dl{display:flex;color:#a8a2ad}.grip{display:flex;align-items:center;color:#c2bdc7;flex:0 0 auto;padding-right:2px;cursor:grab}
   /* ---- CALM / RATIONED overrides: purple structure, frequency only as small accents ---- */
   #nav div.on{color:#6521C9!important}
   .row.playing{border-color:#6521C9!important;box-shadow:0 0 0 1.5px #6521C9!important}
@@ -159,8 +160,8 @@
 
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
-    <div class="top"><div class="logo serif">Favorites</div><div class="ham">&#9776;</div></div>
-    <div class="desc"><h2 class="serif">Your Favorites</h2><p>Saved tracks across every frequency.</p></div>
+    <div class="top"><div class="logo serif">zodiac<span class="d">.fm</span></div><div class="ham">&#9776;</div></div>
+    <div class="barrow"><div class="qall">&#9776; Queue All</div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
   </section>
 </div>
@@ -172,6 +173,8 @@ const SIG=n=>'app-assets/'+n+'.png';
 const LIVE1='app-assets/kindred-spirits.mp3', LIVE2='app-assets/elysian-surge.mp3';
 function mk(name,freq,sub,dur,slug,audio){return {name,freq,sub,dur,slug,audio:audio||null};}
 const tileSrc=(cat,s)=>'app-assets-new/sig-'+cat+'-'+s.slug+'.png';
+const DL='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+const GRIP='<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><circle cx="9" cy="5" r="1.6"/><circle cx="15" cy="5" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="19" r="1.6"/><circle cx="15" cy="19" r="1.6"/></svg>';
 // One real song list (same names, order by length, and per-song tiles) shared across every category.
 // Only the frequency (Hz) and the colour change per category. Descriptions are the current Core copy
 // (the real set we have) — per-category wording can be swapped in when provided.
@@ -235,7 +238,7 @@ function buildRows(){
      `<div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas></div>
       <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p>
         <div class="botrow"><div class="lab">&#9679; ${cat.label}</div><button class="cardpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
-      <div class="rt"><div class="heart">&#9825;</div><div class="dur">&#9201; ${s.dur}</div></div>`;
+      <div class="rt"><div class="rtic"><span class="dl">${DL}</span><div class="heart">&#9825;</div></div><div class="dur">&#9201; ${s.dur}</div></div>`;
     r.onclick=()=>playSong(catKey,i);
     rows.appendChild(r);
   });
@@ -362,11 +365,11 @@ const FAVS=[['core','starseed'],['love','kindred-spirits'],['vitality','astrolit
 function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
  FAVS.forEach(([ck,slug])=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
   const r=document.createElement('div');r.className='row';
-  r.innerHTML=`<div class="thumb"><img src="${tileSrc(ck,s)}" alt=""></div>
+  r.innerHTML=`<div class="grip">${GRIP}</div><div class="thumb"><img src="${tileSrc(ck,s)}" alt=""></div>
    <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p>
     <div class="botrow"><div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div>
      <button class="cardpp" style="background:linear-gradient(135deg,${cat.c1},${cat.c2});box-shadow:0 2px 8px ${cat.cglow}"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
-   <div class="rt"><div class="heart" style="color:${cat.cink}">&#9829;</div><div class="dur">&#9201; ${s.dur}</div></div>`;
+   <div class="rt"><div class="rtic"><span class="dl">${DL}</span><div class="heart" style="color:${cat.cink}">&#9829;</div></div><div class="dur">&#9201; ${s.dur}</div></div>`;
   r.onclick=()=>playSong(ck,cat.songs.indexOf(s));
   c.appendChild(r);});}
 const navItems=document.querySelectorAll('#nav div');
