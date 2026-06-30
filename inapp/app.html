@@ -19,7 +19,7 @@
   .pill{flex:0 0 auto;padding:7px 16px;border-radius:18px;background:#fff;border:1px solid #eadfce;font-size:13px;color:#555;cursor:pointer}
   .pill.on{color:#fff;border:none;background:linear-gradient(90deg,var(--c1),var(--c2))}
   .freqcard{margin:10px 18px;background:#fff;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 18px rgba(0,0,0,.04)}
-  .blob{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--c2),var(--c1));box-shadow:0 0 14px var(--cglow)}
+  .blob{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.6),rgba(255,255,255,0) 46%),linear-gradient(140deg,var(--c1),var(--c2));box-shadow:0 3px 12px var(--cglow)}
   .hz{font-size:24px;font-weight:700}.hz small{font-size:13px;color:var(--mut);font-weight:600;margin-left:2px}
   .desc{padding:4px 22px 2px}
   .desc h2{font-size:22px;font-weight:700;letter-spacing:-.3px}
@@ -75,7 +75,7 @@
   .sv-meta h2{font-family:Georgia,serif;font-size:23px;font-weight:600}
   .sv-meta .f{font-size:13px;color:var(--c1);font-weight:700;margin-top:3px}
   .svfreq{display:inline-flex;align-items:center;gap:7px;margin-top:9px;padding:5px 12px;border-radius:20px;background:color-mix(in srgb,var(--c1) 11%,#fff);border:1px solid color-mix(in srgb,var(--c1) 22%,#fff)}
-  .svfreq .fdot{width:13px;height:13px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--c2),var(--c1));box-shadow:0 0 9px var(--cglow)}
+  .svfreq .fdot{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.6),rgba(255,255,255,0) 46%),linear-gradient(140deg,var(--c1),var(--c2));box-shadow:0 2px 7px var(--cglow)}
   .svfreq b{font-size:15px;font-weight:700;color:var(--ink)}
   .svfreq small{font-size:10.5px;color:var(--mut);font-weight:600;margin-left:-3px}
   .svfreq span{font-size:11px;font-weight:700;color:var(--c1);margin-left:3px}
@@ -154,13 +154,15 @@ const SIG=n=>'app-assets/'+n+'.png';
 const LIVE1='app-assets/kindred-spirits.mp3', LIVE2='app-assets/elysian-surge.mp3';
 function mk(name,freq,sub,dur,thumb,audio){return {name,freq,sub,dur,thumb:SIG(thumb),audio:audio||null};}
 const CATS={
- core:{label:'Core',c1:'#2832E0',c2:'#B402FF',cglow:'rgba(96,40,224,.5)',hue:-70,filt:'hue-rotate(-74deg) saturate(1.35) brightness(1.06)',gA:'205,200,255',gB:'96,40,224',hz:'396',
+ core:{label:'Core',c1:'#2832E0',c2:'#B402FF',cglow:'rgba(96,40,224,.5)',hue:-70,filt:'hue-rotate(-74deg) saturate(1.35) brightness(1.06)',gA:'205,200,255',gB:'96,40,224',hz:'422',
    title:'Core Vibrational Frequency',desc:'These tracks deepen your authentic sense of who you are.',
-   songs:[ mk('Inner Anchor',396,'Settle into a grounded, unshakable sense of self.','4 min','sig-quiet-success'),
-           mk('Kindred Spirits',396,'Feel your core identity steady and clarify with the beat.','5 min','sig-kindred-spirits',LIVE1),
-           mk('Elysian Surge',396,'Experience your truest self rising to the surface.','5 min','sig-elysian-surge',LIVE2),
-           mk('First Light',396,'Return to the self you were born as.','8 min','sig-starseed'),
-           mk('Bedrock',396,'Open a deep, quiet certainty in who you are.','6 min','sig-astrolith') ]},
+   songs:[ mk('Quiet Success',422,'An immediate energetic self reset, come back home now.','3 min','sig-quiet-success'),
+           mk('Kindred Spirits',422,'Allow your authentic self to deepen with the beat.','5 min','sig-kindred-spirits',LIVE1),
+           mk('Elysian Surge',422,'Feel your core energy build on this energetic ride.','5 min','sig-elysian-surge',LIVE2),
+           mk('Starseed',422,'Let your authentic self interact with your deepest energetic levels.','9 min','sig-starseed'),
+           mk('Astrolith',422,'Create resonance with your true self, develop authentic magnetism.','9 min','sig-astrolith'),
+           mk('Cosmic Drift',422,'Access profound authentic energy through deep frequency work.','25 min','sig-cosmic-drift'),
+           mk('Galactic Slumber',422,'Find your true self as deep sleep restores your inner resonance.','1 hour','sig-galactic-slumber') ]},
  love:{label:'Love',c1:'#EA1163',c2:'#FE4329',cglow:'rgba(234,17,99,.45)',hue:0,filt:'saturate(1.18) brightness(1.04)',gA:'255,180,230',gB:'234,17,99',hz:'432',
    title:'Love Vibrational Frequency',desc:'These tracks increase your authentic resonance in matters of love and relationships.',
    songs:[ mk('Quiet Success',432,'A quick tune-up to increase overall love resonance. A date night favorite!','3 min','sig-quiet-success'),
@@ -168,14 +170,14 @@ const CATS={
            mk('Elysian Surge',432,'Experience an intense connection with the world around you.','5 min','sig-elysian-surge',LIVE2),
            mk('Starseed',432,'Dive into your role in your relationships, from a deeper place.','9 min','sig-starseed'),
            mk('Astrolith',432,'Open your sense of belonging and connection.','6 min','sig-astrolith') ]},
- vitality:{label:'Vitality',c1:'#F96400',c2:'#F7D300',cglow:'rgba(249,100,0,.5)',hue:55,filt:'hue-rotate(19deg) saturate(1.5) brightness(1.26)',gA:'255,220,150',gB:'249,140,0',hz:'528',
+ vitality:{label:'Vitality',c1:'#F96400',c2:'#F7D300',cglow:'rgba(249,100,0,.5)',hue:55,filt:'hue-rotate(19deg) saturate(1.5) brightness(1.26)',gA:'255,220,150',gB:'249,140,0',hz:'579',
    title:'Vitality Vibrational Frequency',desc:'These tracks raise your energy, drive and aliveness.',
    songs:[ mk('Ignition',528,'A fast lift for low-energy days.','4 min','sig-quiet-success'),
            mk('Kindred Spirits',528,'Feel your energy build and circulate with the beat.','5 min','sig-kindred-spirits',LIVE1),
            mk('Elysian Surge',528,'Ride a surge of clean, sustained energy.','5 min','sig-elysian-surge',LIVE2),
            mk('Solar Run',528,'Charge your drive and momentum.','9 min','sig-starseed'),
            mk('Wildfire',528,'Open a deep reserve of vitality.','6 min','sig-astrolith') ]},
- abundance:{label:'Abundance',c1:'#B6CA1D',c2:'#009DFF',cglow:'rgba(0,157,255,.5)',hue:-150,filt:'hue-rotate(-152deg) saturate(1.5) brightness(1.12)',gA:'180,235,255',gB:'0,157,255',hz:'639',
+ abundance:{label:'Abundance',c1:'#B6CA1D',c2:'#009DFF',cglow:'rgba(0,157,255,.5)',hue:-150,filt:'hue-rotate(-152deg) saturate(1.5) brightness(1.12)',gA:'180,235,255',gB:'0,157,255',hz:'611',
    title:'Abundance Vibrational Frequency',desc:'These tracks open your sense of opportunity and flow.',
    songs:[ mk('Open Doors',639,'Widen your sense of what is possible.','4 min','sig-quiet-success'),
            mk('Kindred Spirits',639,'Feel opportunity move toward you with the beat.','5 min','sig-kindred-spirits',LIVE1),
@@ -185,7 +187,7 @@ const CATS={
 };
 let catKey='love';                 // currently-viewed category
 const aud=document.getElementById('aud');
-let curSong=null, playCat=null, D=null, started=false;
+let curSong=null, playCat=null, D=null, started=false, playHz=432;
 let gA='255,180,230', gB='234,17,99';   // glow colors of the PLAYING song's category
 
 // ---- audio graph (live reactor) ----
@@ -248,7 +250,7 @@ function setIcons(){const p=started&&!aud.paused;miniPP.innerHTML=ppSVG(p);bigPP
 async function playSong(ck,i){
   initGraph(); if(AC){try{await AC.resume();}catch(e){}}
   const cat=CATS[ck], s=cat.songs[i];
-  if(s!==curSong){ curSong=s; playCat=ck; gA=cat.gA; gB=cat.gB; D=await analyze(s.audio,s.freq); started=true; synT=performance.now()/1000;
+  if(s!==curSong){ curSong=s; playCat=ck; gA=cat.gA; gB=cat.gB; playHz=parseInt(cat.hz,10)||432; D=await analyze(s.audio,playHz); started=true; synT=performance.now()/1000;
     document.getElementById('app').classList.add('playing');
     miniImg.src=s.thumb; miniImg.style.filter=cat.filt;
     miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion';
@@ -300,7 +302,7 @@ function drawViz(){
   vx.clearRect(0,0,VW,VH);
   let bg=vx.createLinearGradient(0,0,0,VH);bg.addColorStop(0,'#0c0913');bg.addColorStop(1,'#0a0710');vx.fillStyle=bg;vx.fillRect(0,0,VW,VH);
   const x0=VW*0.15,x1=VW*0.96,span=x1-x0;
-  const FMIN=250,FMAX=950,FMID=600,FH=350,TARGET=curSong?curSong.freq:600;
+  const FMIN=250,FMAX=950,FMID=600,FH=350,TARGET=playHz;
   const yOf=f=>midY-halfMax*((f-FMID)/FH);const lineY=yOf(Math.max(FMIN,Math.min(FMAX,TARGET)));const wmid=lineY;
   const WIN=180,STEP=60,tper=D.dur/(D.n-1),winStart=Math.max(0,(Math.floor(tt/STEP)-1)*STEP),winEnd=winStart+WIN;
   const tx=ti=>x0+span*((ti-winStart)/WIN),px=tx(tt);
