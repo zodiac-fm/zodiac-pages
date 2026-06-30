@@ -42,9 +42,9 @@
   .freqline{display:flex;align-items:center;gap:9px}
   .freqline .blob{width:22px;height:22px;box-shadow:0 0 12px var(--cglow)}
   .hzsm{font-size:18px;font-weight:700}.hzsm small{font-size:11px;color:var(--mut);font-weight:600}
-  .rowpp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.86);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);z-index:3;opacity:0;transition:opacity .15s}
-  .row:hover .rowpp,.row.playing .rowpp{opacity:1}   /* burst shows at rest; play/pause on hover or when playing */
-  .rowpp svg{width:13px;height:13px;fill:var(--cink)}
+  .botrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .cardpp{width:30px;height:30px;border-radius:50%;border:none;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 2px 8px var(--cglow);cursor:pointer}
+  .cardpp svg{width:13px;height:13px;fill:#fff}
   .row.playing{border-color:var(--cink);box-shadow:0 0 0 1.5px var(--cink)}
   /* ---------- pinned player ---------- */
   #mini{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 56px);background:#FFFFFF;border-top:1px solid #ece3d3;padding:9px 14px;display:none;align-items:center;gap:11px;box-shadow:0 -4px 18px rgba(0,0,0,.06);cursor:pointer;z-index:20}
@@ -215,8 +215,9 @@ function buildRows(){
   const cat=CATS[catKey]; rows.innerHTML=''; rowSongs=cat.songs;
   cat.songs.forEach((s,i)=>{
     const r=document.createElement('div');r.className='row';r.innerHTML=
-     `<div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas><div class="rowpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
-      <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p><div class="lab">&#9679; ${cat.label}</div></div>
+     `<div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas></div>
+      <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p>
+        <div class="botrow"><div class="lab">&#9679; ${cat.label}</div><button class="cardpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
       <div class="rt"><div class="heart">&#9825;</div><div class="dur">&#9201; ${s.dur}</div></div>`;
     r.onclick=()=>playSong(catKey,i);
     rows.appendChild(r);
@@ -275,7 +276,7 @@ document.getElementById('svBack').onclick=()=>songEl.classList.remove('open');
 
 // alive thumbnails (the playing row + mini) — light from centre to the beat
 function markAlive(){ const playing=started&&!aud.paused, here=(catKey===playCat);
-  rows.querySelectorAll('.row').forEach((r,i)=>{ const isThis=here&&!!curSong&&rowSongs[i]===curSong, isP=isThis&&playing; const b=r.querySelector('.rowpp');
+  rows.querySelectorAll('.row').forEach((r,i)=>{ const isThis=here&&!!curSong&&rowSongs[i]===curSong, isP=isThis&&playing; const b=r.querySelector('.cardpp');
     if(b){b.innerHTML=ppSVG(isP);const sv=b.querySelector('svg');if(sv)sv.style.marginLeft=isP?'0':'1px';}
     r.classList.toggle('playing', isThis);
     const cv=r.querySelector('canvas'); if(!isThis){cv.getContext('2d').clearRect(0,0,cv.width,cv.height);} }); }
