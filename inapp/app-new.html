@@ -146,6 +146,13 @@
       </div>
     </div>
   </section>
+
+  <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
+  <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
+    <div class="top"><div class="logo serif">Favorites</div><div class="ham">&#9776;</div></div>
+    <div class="desc"><h2 class="serif">Your Favorites</h2><p>Saved tracks across every frequency.</p></div>
+    <div class="rows" id="favRows" style="padding-top:8px"></div>
+  </section>
 </div>
 
 <audio id="aud" crossorigin="anonymous"></audio>
@@ -337,5 +344,28 @@ function drawViz(){
   document.getElementById('tCur').textContent=f(cu);document.getElementById('tTot').textContent=f(to);
 }
 document.getElementById('scrub').onclick=(e)=>{if(!D)return;const r=e.currentTarget.getBoundingClientRect();const fr=(e.clientX-r.left)/r.width;if(curSong&&curSong.audio){aud.currentTime=fr*D.dur;}else{synT=performance.now()/1000-fr*D.dur;}};
+
+// ---------- FAVORITES (saved songs from every frequency) ----------
+const FAVS=[['core','starseed'],['love','kindred-spirits'],['vitality','astrolith'],['abundance','cosmic-drift'],
+ ['core','galactic-slumber'],['love','starseed'],['vitality','elysian-surge'],['abundance','quiet-success'],
+ ['core','astrolith'],['love','galactic-slumber'],['vitality','kindred-spirits'],['abundance','cosmic-drift']];
+function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
+ FAVS.forEach(([ck,slug])=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
+  const r=document.createElement('div');r.className='row';
+  r.innerHTML=`<div class="thumb"><img src="${tileSrc(ck,s)}" alt=""></div>
+   <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p>
+    <div class="botrow"><div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div>
+     <button class="cardpp" style="background:linear-gradient(135deg,${cat.c1},${cat.c2});box-shadow:0 2px 8px ${cat.cglow}"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
+   <div class="rt"><div class="heart" style="color:${cat.cink}">&#9829;</div><div class="dur">&#9201; ${s.dur}</div></div>`;
+  r.onclick=()=>playSong(ck,cat.songs.indexOf(s));
+  c.appendChild(r);});}
+const navItems=document.querySelectorAll('#nav div');
+function showTab(t){document.getElementById('favs').style.display=(t==='favs')?'flex':'none';
+ navItems.forEach((n,i)=>n.classList.toggle('on',(t==='favs'&&i===2)||(t!=='favs'&&i===0)));
+ if(t==='favs')buildFavs();}
+navItems[0].onclick=()=>showTab('list');
+navItems[2].onclick=()=>showTab('favs');
+buildFavs();
+
 buildRows();vrz();drawViz();setIcons();
 </script></body></html>
