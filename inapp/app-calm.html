@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Zodiac.fm · app</title>
 <style>
-  :root{--cream:#F6F1E8;--card:#FFFFFF;--ink:#1a1620;--mut:#7a7480;--c1:#B90044;--c2:#CF4090;--cink:#B90044;--cglow:rgba(185,0,68,.45);}
+  :root{--cream:#F6F1E8;--card:#FFFFFF;--ink:#1a1620;--mut:#7a7480;--c1:#B90044;--c2:#CF4090;--cink:#B90044;--cglow:rgba(185,0,68,.45);--cdeep:#6E0024;}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%;background:#e7e2d8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ink);overflow:hidden}
   body{display:flex;align-items:center;justify-content:center}
@@ -43,7 +43,7 @@
   .freqline .blob{width:22px;height:22px;box-shadow:0 0 12px var(--cglow)}
   .hzsm{font-size:18px;font-weight:700}.hzsm small{font-size:11px;color:var(--mut);font-weight:600}
   .botrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .cardpp{width:26px;height:26px;margin-right:16px;border-radius:50%;border:none;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--c1),var(--c2));box-shadow:0 2px 8px var(--cglow);cursor:pointer}
+  .cardpp{width:26px;height:26px;margin-right:16px;border-radius:50%;border:none;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--c1),var(--cdeep));box-shadow:0 2px 8px var(--cglow);cursor:pointer}
   .cardpp svg{width:11px;height:11px;fill:#fff}
   .row.playing{border-color:var(--cink);box-shadow:0 0 0 1.5px var(--cink)}
   /* ---------- pinned player ---------- */
@@ -54,7 +54,7 @@
   #mini .mi{flex:1;min-width:0}
   #mini .mi b{font-size:13.5px;color:#1a1620;font-family:Georgia,serif;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   #mini .mi span{font-size:11px;color:var(--cink);font-weight:600}
-  #mini .pp{width:36px;height:36px;border-radius:50%;border:none;color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto;background:linear-gradient(135deg,var(--c1),var(--c2))}
+  #mini .pp{width:36px;height:36px;border-radius:50%;border:none;color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto;background:linear-gradient(135deg,var(--c1),var(--cdeep))}
   #mini .pp svg{width:16px;height:16px;fill:currentColor}
   /* ---------- bottom nav ---------- */
   #nav{position:absolute;left:0;right:0;bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center;z-index:15}
@@ -83,13 +83,13 @@
   .sv-meta .heart{font-size:23px;color:var(--cink)}
   .player{padding:8px 30px calc(env(safe-area-inset-bottom,0px) + 24px)}
   .scrub{height:4px;background:#e7e2ea;border-radius:3px;position:relative;cursor:pointer;margin:12px 0 6px}
-  .scrub .fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:3px;background:linear-gradient(90deg,var(--c1),var(--c2))}
+  .scrub .fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:3px;background:linear-gradient(90deg,var(--c1),var(--cdeep))}
   .scrub .knob{position:absolute;top:50%;width:13px;height:13px;border-radius:50%;background:var(--cink);transform:translate(-50%,-50%);left:0;box-shadow:0 1px 4px rgba(0,0,0,.25)}
   .times{display:flex;justify-content:space-between;font-size:11px;color:#9a93a0;font-variant-numeric:tabular-nums}
   .ctrls{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding:0 2px}
   .ctrls .sk{font-size:21px;color:#a8a2ad}
   .ctrls .skb{font-size:30px;color:#2a2530}
-  .bigpp{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--c2));border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px var(--cglow);cursor:pointer}
+  .bigpp{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--cdeep));border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px var(--cglow);cursor:pointer}
   .bigpp svg{width:27px;height:27px;fill:#fff}
 
   /* ---- CALM / RATIONED overrides: purple structure, frequency only as small accents ---- */
@@ -185,13 +185,13 @@ const SONGLIST=[
  mk('Galactic Slumber',0,'Find your true self as deep sleep restores your inner resonance.','1 hour','galactic-slumber'),
 ];
 const CATS={
- core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
+ core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
    title:'Core Vibrational Frequency',desc:'These tracks deepen your authentic sense of who you are.',songs:SONGLIST},
- love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',cglow:'rgba(185,0,68,.45)',hue:0,filt:'none',gA:'255,150,190',gB:'185,0,68',hz:'432',
+ love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',cdeep:'#6E0024',cglow:'rgba(185,0,68,.45)',hue:0,filt:'none',gA:'255,150,190',gB:'185,0,68',hz:'432',
    title:'Love Vibrational Frequency',desc:'These tracks increase your authentic resonance in matters of love and relationships.',songs:SONGLIST},
- vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#BC6700',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
+ vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#BC6700',cdeep:'#BC6700',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
    title:'Vitality Vibrational Frequency',desc:'These tracks raise your energy, drive and aliveness.',songs:SONGLIST},
- abundance:{label:'Abundance',c1:'#00AFDC',c2:'#2ED7DD',cink:'#007B9C',cglow:'rgba(0,175,220,.5)',hue:0,filt:'none',gA:'150,225,245',gB:'0,175,220',hz:'611',
+ abundance:{label:'Abundance',c1:'#00AFDC',c2:'#2ED7DD',cink:'#007B9C',cdeep:'#007B9C',cglow:'rgba(0,175,220,.5)',hue:0,filt:'none',gA:'150,225,245',gB:'0,175,220',hz:'611',
    title:'Abundance Vibrational Frequency',desc:'These tracks open your sense of opportunity and flow.',songs:SONGLIST},
 };
 let catKey='love';                 // currently-viewed category
@@ -244,7 +244,7 @@ function buildRows(){
 
 // ---------- theme / category switch ----------
 function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElementById('app').style;
-  st.setProperty('--c1',c.c1); st.setProperty('--c2',c.c2); st.setProperty('--cink',c.cink); st.setProperty('--cglow',c.cglow);
+  st.setProperty('--c1',c.c1); st.setProperty('--c2',c.c2); st.setProperty('--cink',c.cink); st.setProperty('--cglow',c.cglow); st.setProperty('--cdeep',c.cdeep);
   document.querySelectorAll('#pills .pill').forEach(p=>p.classList.toggle('on',p.dataset.cat===key));
   document.getElementById('catTitle').textContent=c.title;
   document.getElementById('catDesc').textContent=c.desc;
