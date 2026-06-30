@@ -47,11 +47,20 @@ snd.addEventListener('click',async()=>{
   else { t0=performance.now()/1000 - aud.currentTime; aud.pause(); sound=false; snd.innerHTML='&#9834; sound off'; }
 });
 
-async function startSound(){ if(sound) return; try{ aud.currentTime=clock(); await aud.play(); sound=true; setIcon(); }catch(e){} }
+async function startSound(){ if(sound) return; try{ initGraph(); if(AC) await AC.resume(); aud.currentTime=clock(); await aud.play(); sound=true; setIcon(); }catch(e){} }
 addEventListener('load', startSound); startSound();
 aud.addEventListener('canplay', startSound);            // retry once the audio is decodable
 aud.addEventListener('loadeddata', startSound);
 ['pointerdown','touchstart','keydown','click'].forEach(ev=>addEventListener(ev,function once(){ startSound(); removeEventListener(ev,once); },{once:true,passive:true}));
+
+// ---- live audio reactor: makes NOW dance with the actual sound ----
+let AC=null, ana=null, td=null, react=0, lastAmp=0, liveBeat=0;
+function initGraph(){ if(AC) return; try{
+  AC=new (window.AudioContext||window.webkitAudioContext)();
+  ana=AC.createAnalyser(); ana.fftSize=2048; ana.smoothingTimeConstant=0.75;
+  const srcN=AC.createMediaElementSource(aud); srcN.connect(ana); ana.connect(AC.destination);
+  td=new Uint8Array(ana.fftSize);
+}catch(e){ ana=null; } }
 
 // faint drifting motes for depth
 const motes=Array.from({length:18},(_,i)=>({x:Math.random(),y:Math.random(),s:0.2+Math.random()*0.6,ph:Math.random()*6}));
@@ -65,6 +74,7 @@ function frame(){
   const tt=clock(), p=tt/D.dur, T=performance.now()/1000;
   const portrait=H>W; const cx=W/2, midY=H*(portrait?0.46:0.52), halfMax=H*(portrait?0.26:0.255);
   const e6=at(D.e600,p), env=at(D.env,p), bs=at(D.bass,p), md=at(D.mid,p), tb=at(D.treb,p);
+  if(sound && ana){ ana.getByteTimeDomainData(td); let s2=0; for(let i=0;i<td.length;i++){const d=(td[i]-128)/128; s2+=d*d;} const amp=Math.sqrt(s2/td.length); react+=(amp-react)*0.45; liveBeat=Math.max(liveBeat*0.85, Math.max(0,amp-lastAmp)*4.0); lastAmp=amp; } else { react*=0.9; liveBeat*=0.85; }
 
   // ---- background ----
   let bg=x.createLinearGradient(0,0,0,H);
@@ -88,7 +98,7 @@ function frame(){
   const iLo=Math.max(0,Math.ceil(winStart/tper)), iHi=Math.min(D.n-1,Math.floor(Math.min(winEnd,D.dur)/tper));
   const iNow=Math.min(iHi,Math.max(iLo,Math.round(tt/tper)));
   // beat -> decaying pink "flash" (pops on a hit, fades out)
-  const bt=at(D.beat,p); flash = bt>flash ? bt : flash*0.89; const fl=Math.min(1,flash);
+  const bt=at(D.beat,p); flash = bt>flash ? bt : flash*0.89; flash=Math.max(flash,Math.min(1,liveBeat)); const fl=Math.min(1,flash);
   if(fl>0.03){ let pw=x.createRadialGradient(px,midY,0,px,midY,W*0.5);
     pw.addColorStop(0,'rgba(255,120,220,'+(0.12*fl)+')'); pw.addColorStop(1,'rgba(0,0,0,0)');
     x.fillStyle=pw; x.fillRect(0,0,W,H); }
@@ -115,7 +125,7 @@ function frame(){
     x.fillStyle=pf; x.fill(); x.restore(); }
 
   // ---- the "now" column: the music being born at the playhead, reacting live ----
-  const aNow=env*halfMax*0.94;
+  const aNow=Math.min(1.0, env*0.45 + react*2.0)*halfMax*0.96;   // live-reactive height
   let nb=x.createLinearGradient(0,midY-aNow,0,midY+aNow);
   nb.addColorStop(0,'rgba(214,201,255,0.9)'); nb.addColorStop(0.5,'rgba(150,123,220,0.22)'); nb.addColorStop(1,'rgba(214,201,255,0.9)');
   x.strokeStyle=nb; x.lineWidth=2.2*DPR; x.lineCap='round';
@@ -126,6 +136,12 @@ function frame(){
     x.strokeStyle='rgba(255,118,222,'+(0.95*fl)+')'; x.lineWidth=3.0*DPR; x.lineCap='round';
     x.shadowColor='rgba(255,118,222,0.95)'; x.shadowBlur=24*DPR*fl;
     x.beginPath(); x.moveTo(px,midY-aB); x.lineTo(px,midY+aB); x.stroke(); x.shadowBlur=0; }
+
+  // ---- live reactive pulse at NOW ----
+  if(react>0.01 || liveBeat>0.01){ const pr=(8+react*46+liveBeat*34)*DPR;
+    const rg=x.createRadialGradient(px,lineY,0,px,lineY,pr);
+    rg.addColorStop(0,'rgba(214,201,255,'+Math.min(0.85,0.18+react*1.6)+')'); rg.addColorStop(1,'rgba(214,201,255,0)');
+    x.fillStyle=rg; x.beginPath(); x.arc(px,lineY,pr,0,7); x.fill(); }
 
   // ---- static frequency axis on the left (numbered range 250–950) ----
   x.textBaseline='middle'; x.font=(8.5*DPR)+'px Georgia, serif'; x.lineCap='butt';
