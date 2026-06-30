@@ -1,0 +1,135 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zodiac · the implications</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif;color:#1a1620;-webkit-font-smoothing:antialiased}
+  .serif{font-family:Georgia,serif}
+  .wrap{max-width:1000px;margin:0 auto;padding:36px 22px 70px}
+  h1{font-size:28px;font-weight:600;letter-spacing:-.4px}
+  .sub{font-size:14px;color:#7a7480;margin-top:7px;line-height:1.5;max-width:780px}
+  .pick{display:flex;align-items:center;gap:10px;margin-top:20px;flex-wrap:wrap}
+  .pick .lab{font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:#9a93a0}
+  .pc{display:flex;align-items:center;gap:9px;border:2px solid #eee;border-radius:30px;padding:6px 15px 6px 7px;cursor:pointer;transition:.15s}
+  .pc .d{width:24px;height:24px;border-radius:50%}
+  .pc b{font-size:13.5px}
+  .pc.sel{border-color:var(--c)}
+  .stage{display:flex;gap:14px;align-items:center;margin-top:22px;flex-wrap:wrap}
+  canvas{max-width:100%}
+  .caption{flex:1;min-width:240px;font-size:13.5px;color:#54505c;line-height:1.55}
+  .caption b{color:#1a1620}
+  .fam{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+  .fc{border:1px solid #eee;border-radius:15px;overflow:hidden}
+  .fc .blk{height:120px;position:relative;display:flex;align-items:flex-end;padding:12px}
+  .fc .blk .aa{font-family:Georgia,serif;font-size:24px;color:#fff;font-weight:600}
+  .fc .blk .tri{position:absolute;top:13px;right:13px;width:0;height:0;border-style:solid;border-width:7px 0 7px 12px;border-color:transparent transparent transparent #fff;opacity:.92}
+  .fc .body{padding:11px 13px 13px}
+  .fc .role{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#9a93a0}
+  .fc .nm{font-size:16px;font-weight:700;font-family:Georgia,serif}
+  .fc .hx{font-size:11.5px;color:#7a7480;font-variant-numeric:tabular-nums;margin-top:3px}
+  .gray{display:flex;align-items:center;gap:12px;margin-top:18px;background:#FAFAF8;border:1px solid #eee;border-radius:12px;padding:12px 16px}
+  .gray .gl{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#9a93a0;flex:0 0 auto}
+  .gray .strip{display:flex;gap:8px;flex:1}
+  .gray .gs{flex:1;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800}
+  .gray .ok{font-size:12px;font-weight:700;color:#1c7a3e;flex:0 0 auto}
+  .foot{margin-top:24px;font-size:14px;color:#3a3540;background:#F7F4FF;border:1px solid #e6dffb;border-radius:14px;padding:15px 19px;line-height:1.6}
+  .foot b{color:#6F32D6}
+  @media(max-width:680px){.fam{grid-template-columns:repeat(2,1fr)}}
+</style></head><body>
+<div class="wrap">
+  <h1 class="serif">The implications — pick the purple, watch the family derive</h1>
+  <div class="sub">This is the consequence of the anchor choice. The other three frequencies are not chosen by eye; they are computed off the purple, onto its vividness ring and into their own brightness lanes. Switch the anchor and the whole family recomputes. Real color math, in-gamut.</div>
+
+  <div class="pick" id="pick"><span class="lab">Anchor</span></div>
+
+  <div class="stage">
+    <canvas id="cv" width="900" height="520" style="width:460px;height:266px"></canvas>
+    <div class="caption" id="cap"></div>
+  </div>
+
+  <div class="fam" id="fam"></div>
+
+  <div class="gray"><span class="gl">Grayscale test</span><div class="strip" id="strip"></div><span class="ok" id="okmsg"></span></div>
+
+  <div class="foot"><b>Read the implication.</b> Core (the purple) sits deepest and most saturated, the anchor. Love, Vitality and Abundance each land on the same vividness ring at a spread-out hue and their own brightness lane, so on the wheel they're clearly different colors, and in grayscale they no longer collapse. That is what the anchor buys you: four unmistakable frequencies that obviously belong together. Change the purple above and watch all three follow it.</div>
+</div>
+<script>
+// ---------- OKLCH <-> sRGB ----------
+function delin(c){return c<=0.0031308?12.92*c:1.055*Math.pow(c,1/2.4)-0.055}
+function oklrgb(L,C,H){const h=H*Math.PI/180,a=C*Math.cos(h),b=C*Math.sin(h);
+ const l_=L+0.3963377774*a+0.2158037573*b,m_=L-0.1055613458*a-0.0638541728*b,s_=L-0.0894841775*a-1.2914855480*b;
+ const l=l_**3,m=m_**3,s=s_**3;
+ const R=4.0767416621*l-3.3077115913*m+0.2309699292*s,G=-1.2684380046*l+2.6097574011*m-0.3413193965*s,B=-0.0041960863*l-0.7034186147*m+1.7076147010*s;
+ const inG=[R,G,B].every(x=>x>=-0.0015&&x<=1.0015);return[R,G,B,inG];}
+function clampC(L,C,H){if(oklrgb(L,C,H)[3])return C;let lo=0,hi=C;for(let i=0;i<22;i++){const c=(lo+hi)/2;if(oklrgb(L,c,H)[3])lo=c;else hi=c;}return lo;}
+function hx(L,C,H){const c=clampC(L,C,H);const[R,G,B]=oklrgb(L,c,H);const f=x=>('0'+Math.round(Math.max(0,Math.min(1,delin(Math.max(0,Math.min(1,x)))))*255).toString(16)).slice(-2);return'#'+f(R)+f(G)+f(B);}
+function gray(L){const v=delin(Math.max(0,Math.min(1,L*L*L)));const n=Math.round(v*255);return`rgb(${n},${n},${n})`;}
+
+// ---------- anchors + family rule ----------
+const ANCH={Iris:{L:.51,C:.205,H:284},Amethyst:{L:.50,C:.23,H:293},Royal:{L:.505,C:.25,H:302}};
+// each frequency: brightness lane offset + hue offset from the anchor
+const FAM=[
+ {key:'Core',     role:'Identity',     dL:0,   dH:0,   letter:'C'},
+ {key:'Love',     role:'Relationships',dL:.06, dH:65,  letter:'L'},
+ {key:'Abundance',role:'Opportunity',  dL:.10, dH:217, letter:'A'},
+ {key:'Vitality', role:'Energy',       dL:.15, dH:145, letter:'V'},
+];
+let sel='Amethyst';
+function derive(){const a=ANCH[sel];return FAM.map(f=>{const L=a.L+f.dL,H=((a.H+f.dH)%360+360)%360,Cc=clampC(L,a.C,H);
+ return{...f,L,C:Cc,H,hex:hx(L,a.C,H)};});}
+
+// ---------- picker ----------
+const pick=document.getElementById('pick');
+Object.entries(ANCH).forEach(([k,v])=>{const hex=hx(v.L,v.C,v.H);const d=document.createElement('div');d.className='pc';d.style.setProperty('--c',hex);
+ d.innerHTML=`<span class="d" style="background:${hex}"></span><b>${k}</b>`;d.onclick=()=>{sel=k;render();};d.dataset.k=k;pick.appendChild(d);});
+
+// ---------- wheel + ladder ----------
+const cv=document.getElementById('cv'),x=cv.getContext('2d');
+const W=900,H=520,cx=240,cy=260,R=205,lx=720,lyT=70,lH=380,MAXC=0.30;
+function pol(h,r){const t=(h-90)*Math.PI/180;return[cx+r*Math.cos(t),cy+r*Math.sin(t)];}
+function rr(X,Y,w,h,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+w,Y,X+w,Y+h,r);x.arcTo(X+w,Y+h,X,Y+h,r);x.arcTo(X,Y+h,X,Y,r);x.arcTo(X,Y,X+w,Y,r);x.closePath();}
+function drawWheel(items){
+ x.clearRect(0,0,W,H);
+ // OKLCH hue ring (so dots sit on their true color)
+ for(let a=0;a<360;a+=1){const t0=(a-90)*Math.PI/180,t1=(a+1.3-90)*Math.PI/180;
+  x.beginPath();x.moveTo(cx+(R-20)*Math.cos(t0),cy+(R-20)*Math.sin(t0));x.arc(cx,cy,R,t0,t1);
+  x.lineTo(cx+(R-20)*Math.cos(t1),cy+(R-20)*Math.sin(t1));x.closePath();x.fillStyle=hx(.66,.15,a);x.fill();}
+ x.beginPath();x.arc(cx,cy,R-20,0,7);x.fillStyle='#fff';x.fill();
+ // shared vividness ring (the anchor's chroma)
+ const a=ANCH[sel];const ringR=(R-30)*(a.C/MAXC);
+ x.lineWidth=3;x.strokeStyle='rgba(111,50,214,.22)';x.beginPath();x.arc(cx,cy,ringR,0,7);x.stroke();
+ x.beginPath();x.arc(cx,cy,4,0,7);x.fillStyle='#ccc';x.fill();
+ // ladder track
+ const g=x.createLinearGradient(0,lyT,0,lyT+lH);g.addColorStop(0,'#efece4');g.addColorStop(.08,'#e7e2d8');g.addColorStop(.92,'#2a2630');g.addColorStop(1,'#16131c');
+ x.fillStyle=g;rr(lx-26,lyT,52,lH,26);x.fill();
+ x.fillStyle='#9a93a0';x.font='600 13px Inter';x.textAlign='center';x.fillText('brightness',lx,lyT+lH+24);
+ // dots
+ items.forEach(it=>{const r=(R-30)*(Math.min(it.C,MAXC)/MAXC);const[px,py]=pol(it.H,r);
+  x.beginPath();x.arc(px,py,18,0,7);x.fillStyle=it.hex;x.fill();x.lineWidth=4;x.strokeStyle='#fff';x.stroke();
+  const[lpx]=[lx];const ly=lyT+(1-it.L)*lH;x.beginPath();x.arc(lx,ly,18,0,7);x.fillStyle=it.hex;x.fill();x.lineWidth=4;x.strokeStyle='#fff';x.stroke();
+  x.fillStyle='#fff';x.font='800 13px Inter';x.textAlign='center';x.textBaseline='middle';x.fillText(it.letter,lx,ly+1);x.textBaseline='alphabetic';
+  // name near wheel dot
+  x.fillStyle='#6a6570';x.font='700 13px Inter';const[tx,ty]=pol(it.H,r+34);x.fillText(it.key,tx,ty+(py<cy?-1:5));});
+}
+
+const fam=document.getElementById('fam'),strip=document.getElementById('strip');
+function render(){
+ [...pick.children].forEach(c=>{if(c.dataset)c.classList&&c.classList.toggle('sel',c.dataset.k===sel);});
+ const items=derive();
+ drawWheel(items);
+ // family cards (display order Core,Love,Vitality,Abundance)
+ const order=['Core','Love','Vitality','Abundance'];
+ fam.innerHTML='';strip.innerHTML='';
+ order.forEach(k=>{const it=items.find(i=>i.key===k);
+  const c=document.createElement('div');c.className='fc';
+  c.innerHTML=`<div class="blk" style="background:${it.hex}"><div class="tri"></div><div class="aa">Aa</div></div>
+   <div class="body"><div class="role">${it.role}</div><div class="nm">${it.key}</div><div class="hx">${it.hex.toUpperCase()} · L ${Math.round(it.L*100)} · H ${Math.round(it.H)}</div></div>`;
+  fam.appendChild(c);
+  const gs=document.createElement('div');gs.className='gs';gs.style.background=gray(it.L);gs.textContent=it.letter;strip.appendChild(gs);});
+ // distinctness
+ const Ls=items.map(i=>i.L).sort((a,b)=>a-b);let min=9;for(let i=1;i<Ls.length;i++)min=Math.min(min,Ls[i]-Ls[i-1]);
+ document.getElementById('okmsg').textContent=min>=.03?'all four separate ✓':'two are close';
+ document.getElementById('cap').innerHTML=`<b>${sel}</b> is the anchor. The three other frequencies are computed from it: same vividness ring, hues spread wide, each its own brightness lane. <b>Nothing here was picked by hand</b> except the purple, everything else follows from it. Notice Love and Vitality are no longer twins, and no color washes out.`;
+}
+render();
+</script></body></html>
