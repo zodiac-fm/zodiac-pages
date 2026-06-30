@@ -283,7 +283,7 @@ function liveRead(){ if(started&&ana&&!aud.paused){ana.getByteTimeDomainData(td)
 function drawViz(){
   requestAnimationFrame(drawViz);
   liveRead();
-  drawGlow(miniGlow,40,40);
+  miniGlow.clearRect(0,0,80,80);   // now-playing bar shows the clean signature (no glow burst)
   const ri=rowSongs.indexOf(curSong);
   if(ri>=0){const cv=rows.querySelectorAll('.row')[ri].querySelector('canvas');drawGlow(cv.getContext('2d'),74,74);}
   if(!songEl.classList.contains('open')||!D){return;}
