@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zodiac · favorites (all frequencies)</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#efeae0;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif;color:#1a1620;-webkit-font-smoothing:antialiased}
+  .serif{font-family:Georgia,serif}
+  .head{max-width:760px;margin:0 auto;padding:30px 20px 6px}
+  h1{font-size:24px;font-weight:600;letter-spacing:-.3px}
+  .sub{font-size:13.5px;color:#7a7480;margin-top:6px;line-height:1.5;max-width:560px}
+  .legend{display:flex;gap:14px;margin:14px 0 4px;flex-wrap:wrap}
+  .lk{display:flex;align-items:center;gap:6px;font-size:12px;color:#54505c;font-weight:600}
+  .lk .dot{width:11px;height:11px;border-radius:50%}
+  /* phone column */
+  .phone{max-width:392px;margin:18px auto 60px;background:#F6F1E8;border-radius:30px;overflow:hidden;box-shadow:0 22px 60px rgba(0,0,0,.18);border:1px solid rgba(0,0,0,.06)}
+  .top{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 8px}
+  .logo{font-family:Georgia,serif;font-size:21px;font-weight:700}.logo i{font-style:normal;color:#6F32D6}
+  .ham{font-size:19px;color:#555}
+  .qrow{display:flex;justify-content:flex-end;padding:2px 18px 8px}
+  .qall{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#444;background:#fff;border:1px solid #eadfce;border-radius:18px;padding:8px 15px;font-weight:600}
+  .rows{padding:4px 12px 22px}
+  .row{display:flex;gap:12px;align-items:center;background:transparent;padding:11px 6px;border-bottom:1px solid rgba(0,0,0,.05)}
+  .th{width:62px;height:62px;border-radius:13px;flex:0 0 auto;position:relative;overflow:hidden;background:#140f1c}
+  .th .ring{position:absolute;inset:0}
+  .th .play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+  .th .play::after{content:"";border-style:solid;border-width:6px 0 6px 10px;margin-left:2px}
+  .meta{flex:1;min-width:0}
+  .mtop{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+  .mtop b{font-family:Georgia,serif;font-size:16px;font-weight:600;line-height:1.1}
+  .icons{display:flex;align-items:center;gap:10px;flex:0 0 auto;padding-top:2px}
+  .icons .dl{color:#b3aeb6;font-size:14px}
+  .icons .ht{font-size:15px}
+  .desc{font-size:12px;color:#8a8590;line-height:1.32;margin:4px 0 7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .mbot{display:flex;align-items:center;justify-content:space-between}
+  .lab{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700}
+  .lab .d{width:8px;height:8px;border-radius:50%}
+  .dur{font-size:11px;color:#a8a2ad;display:flex;align-items:center;gap:4px}
+  .note{text-align:center;font-size:11px;color:#b3aeb6;margin:-44px auto 50px;max-width:392px}
+</style></head><body>
+  <div class="head">
+    <h1 class="serif">Favorites — all four frequencies together</h1>
+    <div class="sub">The one screen where every frequency color shares a scroll. The real question: do purple, magenta, orange and green coexist down a mixed list, or fight? New family, current layout.</div>
+    <div class="legend">
+      <div class="lk"><span class="dot" style="background:#6F32D6"></span>Core</div>
+      <div class="lk"><span class="dot" style="background:#D20074"></span>Love</div>
+      <div class="lk"><span class="dot" style="background:#F67300"></span>Vitality</div>
+      <div class="lk"><span class="dot" style="background:#009A45"></span>Abundance</div>
+    </div>
+  </div>
+
+  <div class="phone">
+    <div class="top"><div class="logo">zodiac<i>.fm</i></div><div class="ham">&#9776;</div></div>
+    <div class="qrow"><div class="qall">&#9776; Queue All</div></div>
+    <div class="rows" id="rows"></div>
+  </div>
+  <div class="note">Tiles shown as dark placeholders, the real per-song audio-DNA art stays as built; only the accent colors change here.</div>
+
+<script>
+const F={
+ Core:{c:'#6F32D6',g:'125,69,232'},Love:{c:'#D20074',g:'228,37,131'},
+ Vitality:{c:'#F67300',g:'227,106,0'},Abundance:{c:'#009A45',g:'0,172,78'},
+};
+const SONGS=[
+ ['Cosmic Drift','Abundance','Transform your relationship with abundance at the deepest level.','25 min'],
+ ['Elysian Surge','Core','Feel your core energy build on this energetic ride.','5 min'],
+ ['Starseed','Love','Dive into your role in your relationships, come from a deeper place.','9 min'],
+ ['Kindred Spirits','Vitality','Experience your energy expand with the beat.','5 min'],
+ ['Galactic Slumber','Core','Find your true self as deep sleep restores your inner resonance.','1 hour'],
+ ['Cosmic Drift','Love','Transform your relationship patterns at the deepest level.','25 min'],
+ ['Astrolith','Vitality','Enhance your physical performance and external vitality.','9 min'],
+ ['Starseed','Abundance','Cultivate a mindset of plenty, clarify your worldly ambitions.','9 min'],
+ ['Elysian Surge','Vitality','Reignite your inner fire as your vitality increases.','5 min'],
+ ['Astrolith','Core','Create resonance with your true self, develop authentic magnetism.','9 min'],
+ ['Galactic Slumber','Love','Heal heart patterns during sleep as your love energy expands.','1 hour'],
+ ['Starseed','Vitality','Restore your inner vitality while healing you from the inside.','9 min'],
+ ['Cosmic Drift','Core','Access profound authentic energy through deep frequency work.','25 min'],
+ ['Astrolith','Abundance','Open your sense of opportunity and let life flow toward you.','9 min'],
+];
+const rows=document.getElementById('rows');
+SONGS.forEach(([nm,fq,desc,dur])=>{const c=F[fq];const r=document.createElement('div');r.className='row';
+ r.innerHTML=`
+  <div class="th">
+    <div class="ring" style="background:radial-gradient(circle at 36% 30%, rgba(${c.g},.55), #140f1c 68%)"></div>
+    <div class="play"><span style="border-color:transparent transparent transparent ${c.c}"></span></div>
+  </div>
+  <div class="meta">
+    <div class="mtop"><b>${nm}</b>
+      <div class="icons"><span class="dl">&#8675;</span><span class="ht" style="color:${c.c}">&#9829;</span></div></div>
+    <div class="desc">${desc}</div>
+    <div class="mbot">
+      <div class="lab" style="color:${c.c}"><span class="d" style="background:${c.c}"></span>${fq}</div>
+      <div class="dur">&#9201; ${dur}</div></div>
+  </div>`;
+ // play triangle uses border trick
+ r.querySelector('.play span').style.cssText='border-style:solid;border-width:6px 0 6px 10px;margin-left:2px;border-color:transparent transparent transparent '+c.c;
+ rows.appendChild(r);});
+</script></body></html>
