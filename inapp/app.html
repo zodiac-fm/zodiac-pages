@@ -184,7 +184,7 @@ let gA='255,180,230', gB='234,17,99';   // glow colors of the PLAYING song's cat
 
 // ---- audio graph (live reactor) ----
 let AC=null,ana=null,td=null,react=0,lastAmp=0,liveBeat=0;
-let glowLevel=0,flowPhase=0,burstImg=null;   // smoothed intensity + a continuous outward-flow phase + the rays mask
+let glowLevel=0,burstImg=null;   // smoothed intensity + the rays mask (no motion — motion is what blipped)
 function initGraph(){ if(AC)return; try{ AC=new (window.AudioContext||webkitAudioContext)(); ana=AC.createAnalyser(); ana.fftSize=1024; ana.smoothingTimeConstant=0.78; const s=AC.createMediaElementSource(aud); s.connect(ana); ana.connect(AC.destination); td=new Uint8Array(ana.fftSize);}catch(e){ana=null;} }
 // ---- analysis: env / target-presence / beat from the track (or synthetic for placeholders) ----
 async function analyze(url,target){
@@ -295,12 +295,11 @@ function drawViz(){
   // the track's own loudness + beat at the current position (synced), plus the live analyser
   let gAmp=react,gBeat=liveBeat;
   if(D&&started&&!aud.paused){const tt=clock(),p=D.dur?tt/D.dur:0;gAmp=Math.max(gAmp,at(D.env,p));gBeat=Math.max(gBeat,at(D.beat,p));}
-  const tgt=(started&&!aud.paused)?Math.min(1,gAmp*0.85+gBeat*0.35):0;   // smoothed musical intensity — no instant flash
-  glowLevel+=(tgt-glowLevel)*0.10;
-  flowPhase=(flowPhase+0.009+glowLevel*0.020)%1;                          // light pushes outward continuously, faster when louder
-  drawGlow(miniGlow,glowLevel,flowPhase,burstImg);
+  const tgt=(started&&!aud.paused)?Math.min(1,gAmp*0.9+gBeat*0.45):0;
+  glowLevel+=(tgt-glowLevel)*(tgt>glowLevel?0.22:0.07);   // quick swell with the music, slow ease-off — feels it, never flickers
+  drawGlow(miniGlow,glowLevel,burstImg);
   const ri=(catKey===playCat)?rowSongs.indexOf(curSong):-1;
-  if(ri>=0){const cv=rows.querySelectorAll('.row')[ri].querySelector('canvas');drawGlow(cv.getContext('2d'),glowLevel,flowPhase,burstImg);}
+  if(ri>=0){const cv=rows.querySelectorAll('.row')[ri].querySelector('canvas');drawGlow(cv.getContext('2d'),glowLevel,burstImg);}
   if(!songEl.classList.contains('open')||!D){return;}
   if(!VW)vrz();
   const tt=clock(),p=D.dur?tt/D.dur:0,T=performance.now()/1000;
@@ -330,28 +329,21 @@ function drawViz(){
   const f=s=>{s=isFinite(s)?s:0;return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');};
   document.getElementById('tCur').textContent=f(cu);document.getElementById('tTot').textContent=f(to);
 }
-function drawGlow(ctx,level,phase,img){
+function drawGlow(ctx,level,img){
   const cw=ctx.canvas.width,chh=ctx.canvas.height,cx=cw/2,cy=chh/2;
   ctx.clearRect(0,0,cw,chh);
   if(!curSong||!(started&&!aud.paused)||!img||!img.complete||!img.naturalWidth)return;
   level=Math.min(1,level||0);
   ctx.save();ctx.globalCompositeOperation='lighter';
-  // CORE — the source. Always brightest at the very centre.
-  const cr=cw*(0.12+level*0.06),ca=0.22+level*0.45;
-  let cg=ctx.createRadialGradient(cx,cy,0,cx,cy,cr);
-  cg.addColorStop(0,'rgba('+gA+','+ca+')');cg.addColorStop(1,'rgba('+gA+',0)');
-  ctx.fillStyle=cg;ctx.beginPath();ctx.arc(cx,cy,cr,0,7);ctx.fill();
-  // FLOW — soft light rolling OUTWARD from the core, brightest near centre, fading toward the tips.
-  // Several staggered bands so the flow is continuous (no single ring, no flash, nothing pops).
-  const N=3;
-  for(let i=0;i<N;i++){
-    const p=(phase+i/N)%1, rr=cw*(0.08+p*0.56), w=cw*0.18;
-    const a=(1-p*0.7)*(0.10+level*0.5); if(a<0.012)continue;
-    const g=ctx.createRadialGradient(cx,cy,Math.max(0,rr-w),cx,cy,rr+w);
-    g.addColorStop(0,'rgba('+gA+',0)');g.addColorStop(.5,'rgba('+gA+','+a+')');g.addColorStop(1,'rgba('+gA+',0)');
-    ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,rr+w,0,7);ctx.fill();
-  }
-  // MASK to the rays so the light flows THROUGH the frequency lines (asymmetric is fine)
+  // STEADY glow from the centre out through the rays. NO moving parts — the whole thing just
+  // brightens and eases with the music, uniformly, so no single ray can ever blink/blip.
+  const R=cw*0.58, A=0.10+level*0.62;
+  const g=ctx.createRadialGradient(cx,cy,0,cx,cy,R);
+  g.addColorStop(0,'rgba('+gA+','+A+')');
+  g.addColorStop(0.40,'rgba('+gA+','+(A*0.5)+')');
+  g.addColorStop(1,'rgba('+gA+',0)');
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.fill();
+  // MASK to the burst rays so the glow lives IN the frequency lines (asymmetric is fine)
   ctx.globalCompositeOperation='destination-in';
   ctx.drawImage(img,0,0,cw,chh);
   ctx.restore();
