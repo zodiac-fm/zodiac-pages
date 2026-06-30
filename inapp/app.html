@@ -184,6 +184,7 @@ let gA='255,180,230', gB='234,17,99';   // glow colors of the PLAYING song's cat
 
 // ---- audio graph (live reactor) ----
 let AC=null,ana=null,td=null,react=0,lastAmp=0,liveBeat=0;
+let glowLevel=0,wavePhase=0;   // heavily smoothed energy + a continuous outward-ripple phase
 function initGraph(){ if(AC)return; try{ AC=new (window.AudioContext||webkitAudioContext)(); ana=AC.createAnalyser(); ana.fftSize=1024; ana.smoothingTimeConstant=0.78; const s=AC.createMediaElementSource(aud); s.connect(ana); ana.connect(AC.destination); td=new Uint8Array(ana.fftSize);}catch(e){ana=null;} }
 // ---- analysis: env / target-presence / beat from the track (or synthetic for placeholders) ----
 async function analyze(url,target){
@@ -286,10 +287,14 @@ function drawViz(){
   liveRead();
   // pulse = the track's own loudness/beat at the current position (synced) + the live analyser
   let gAmp=react,gBeat=liveBeat;
-  if(D&&started&&!aud.paused){const tt=clock(),p=D.dur?tt/D.dur:0;gAmp=Math.max(gAmp,at(D.env,p)*1.05);gBeat=Math.max(gBeat,at(D.beat,p)*1.2);}
-  drawGlow(miniGlow,gAmp,gBeat);   // now-playing thumbnail pulses with the music
+  if(D&&started&&!aud.paused){const tt=clock(),p=D.dur?tt/D.dur:0;gAmp=Math.max(gAmp,at(D.env,p));gBeat=Math.max(gBeat,at(D.beat,p));}
+  // smooth heavily so it breathes, never flickers; beats only nudge the level
+  const targetLvl=started&&!aud.paused?Math.min(1,gAmp*0.8+gBeat*0.25):0;
+  glowLevel+=(targetLvl-glowLevel)*0.07;
+  wavePhase=(wavePhase+0.0075+glowLevel*0.011)%1;   // rings travel outward, a touch faster when louder
+  drawGlow(miniGlow,glowLevel,wavePhase);
   const ri=rowSongs.indexOf(curSong);
-  if(ri>=0){const cv=rows.querySelectorAll('.row')[ri].querySelector('canvas');drawGlow(cv.getContext('2d'),gAmp,gBeat);}
+  if(ri>=0){const cv=rows.querySelectorAll('.row')[ri].querySelector('canvas');drawGlow(cv.getContext('2d'),glowLevel,wavePhase);}
   if(!songEl.classList.contains('open')||!D){return;}
   if(!VW)vrz();
   const tt=clock(),p=D.dur?tt/D.dur:0,T=performance.now()/1000;
@@ -306,10 +311,10 @@ function drawViz(){
   function wpr(a,b){vx.beginPath();for(let i=a;i<=b;i++){const xx=tx(i*tper),v=D.env[i]*halfMax*.92;i===a?vx.moveTo(xx,wmid-v):vx.lineTo(xx,wmid-v);}for(let i=b;i>=a;i--){const xx=tx(i*tper),v=D.env[i]*halfMax*.92;vx.lineTo(xx,wmid+v);}vx.closePath();}
   if(iHi>iNow){wpr(iNow,iHi);vx.fillStyle='rgba('+WV+',0.10)';vx.fill();vx.lineWidth=1*DPR;vx.strokeStyle='rgba('+WL+',0.16)';vx.stroke();}
   if(iNow>iLo){wpr(iLo,iNow);let wf=vx.createLinearGradient(0,wmid-halfMax,0,wmid+halfMax);wf.addColorStop(0,'rgba('+WV+',0.46)');wf.addColorStop(.5,'rgba('+WV+',0.10)');wf.addColorStop(1,'rgba('+WV+',0.46)');vx.fillStyle=wf;vx.fill();vx.lineWidth=1.2*DPR;vx.strokeStyle='rgba('+WL+',0.55)';vx.stroke();}
-  const aN=Math.min(1,env*.45+gAmp*1.7)*halfMax*.96;
+  const aN=Math.min(1,env*.5+glowLevel*1.0)*halfMax*.96;
   let nb=vx.createLinearGradient(0,wmid-aN,0,wmid+aN);nb.addColorStop(0,'rgba('+WL+',.95)');nb.addColorStop(.5,'rgba('+WV+',.25)');nb.addColorStop(1,'rgba('+WL+',.95)');
   vx.strokeStyle=nb;vx.lineWidth=2.2*DPR;vx.lineCap='round';vx.shadowColor='rgba('+WL+',.9)';vx.shadowBlur=14*DPR;vx.beginPath();vx.moveTo(px,wmid-aN);vx.lineTo(px,wmid+aN);vx.stroke();vx.shadowBlur=0;
-  if(gAmp>.01||fl>.03){const pr=(10+gAmp*48+fl*40)*DPR;const rg=vx.createRadialGradient(px,lineY,0,px,lineY,pr);rg.addColorStop(0,'rgba('+WL+','+Math.min(.8,.2+gAmp*1.6)+')');rg.addColorStop(1,'rgba('+WL+',0)');vx.fillStyle=rg;vx.beginPath();vx.arc(px,lineY,pr,0,7);vx.fill();}
+  if(glowLevel>.01){const pr=(12+glowLevel*40+fl*16)*DPR;const rg=vx.createRadialGradient(px,lineY,0,px,lineY,pr);rg.addColorStop(0,'rgba('+WL+','+Math.min(.7,.18+glowLevel*1.05)+')');rg.addColorStop(1,'rgba('+WL+',0)');vx.fillStyle=rg;vx.beginPath();vx.arc(px,lineY,pr,0,7);vx.fill();}
   vx.textBaseline='middle';vx.font=(8.5*DPR)+'px Georgia,serif';vx.lineCap='butt';
   vx.strokeStyle='rgba(180,165,210,.12)';vx.lineWidth=1*DPR;vx.beginPath();vx.moveTo(x0,yOf(FMAX));vx.lineTo(x0,yOf(FMIN));vx.stroke();
   [300,400,500,600,700,800,900].forEach(f=>{const yy=yOf(f),isT=Math.abs(f-TARGET)<25;vx.strokeStyle=isT?'rgba(255,248,233,.7)':'rgba(190,175,220,.4)';vx.lineWidth=(isT?1.6:1)*DPR;vx.beginPath();vx.moveTo(x0-(isT?9:7)*DPR,yy);vx.lineTo(x0,yy);vx.stroke();vx.textAlign='right';vx.fillStyle=isT?'rgba(255,248,233,.95)':'rgba(214,205,232,.7)';vx.fillText(isT?(f+' Hz'):(''+f),x0-11*DPR,yy);});
@@ -319,23 +324,26 @@ function drawViz(){
   const f=s=>{s=isFinite(s)?s:0;return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');};
   document.getElementById('tCur').textContent=f(cu);document.getElementById('tTot').textContent=f(to);
 }
-function drawGlow(ctx,amp,beat){
+function drawGlow(ctx,lvl,phase){
   const cw=ctx.canvas.width,chh=ctx.canvas.height,cx=cw/2,cy=chh/2;
   ctx.clearRect(0,0,cw,chh);
   if(!curSong||!(started&&!aud.paused))return;
-  amp=Math.min(1,amp||0);beat=Math.min(1,beat||0);
+  lvl=Math.min(1,lvl||0);
   ctx.save();ctx.globalCompositeOperation='lighter';   // ADD light to the burst (don't cover it)
-  // breathing core that flares out on each beat
-  const r=cw*(0.23+amp*0.42+beat*0.55);
-  const a=Math.min(.96,.24+amp*.86+beat*1.1);
-  const g=ctx.createRadialGradient(cx,cy,0,cx,cy,r);
-  g.addColorStop(0,'rgba('+gA+','+a+')');
-  g.addColorStop(.42,'rgba('+gB+','+(a*.55)+')');
-  g.addColorStop(1,'rgba('+gB+',0)');
-  ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,r,0,7);ctx.fill();
-  // a crisp beat ring so the pulse reads clearly
-  if(beat>.06){ctx.globalAlpha=Math.min(.8,beat*1.1);ctx.strokeStyle='rgba('+gA+',0.9)';ctx.lineWidth=cw*0.02;ctx.beginPath();ctx.arc(cx,cy,cw*(0.30+beat*0.42),0,7);ctx.stroke();}
-  ctx.restore();
+  // soft breathing CORE
+  const cr=cw*(0.15+lvl*0.10),ca=0.10+lvl*0.30;
+  let cg=ctx.createRadialGradient(cx,cy,0,cx,cy,cr);
+  cg.addColorStop(0,'rgba('+gA+','+ca+')');cg.addColorStop(1,'rgba('+gA+',0)');
+  ctx.fillStyle=cg;ctx.beginPath();ctx.arc(cx,cy,cr,0,7);ctx.fill();
+  // WAVES rolling out from the core — three staggered rings, bell-fade so each one visibly travels
+  for(let k=0;k<3;k++){
+    const ph=(phase+k/3)%1, rr=cw*(0.10+ph*0.50), env=Math.sin(ph*Math.PI);
+    const ra=env*(0.16+lvl*0.5); if(ra<0.012)continue;
+    ctx.strokeStyle='rgba('+gA+','+ra+')';ctx.lineWidth=cw*0.05;
+    ctx.shadowColor='rgba('+gB+','+ra+')';ctx.shadowBlur=cw*0.05;
+    ctx.beginPath();ctx.arc(cx,cy,rr,0,7);ctx.stroke();
+  }
+  ctx.shadowBlur=0;ctx.restore();
 }
 document.getElementById('scrub').onclick=(e)=>{if(!D)return;const r=e.currentTarget.getBoundingClientRect();const fr=(e.clientX-r.left)/r.width;if(curSong&&curSong.audio){aud.currentTime=fr*D.dur;}else{synT=performance.now()/1000-fr*D.dur;}};
 buildRows();vrz();drawViz();setIcons();
