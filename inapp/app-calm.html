@@ -97,8 +97,8 @@
   #nav div.on{color:#6521C9!important}
   .row.playing{border-color:#6521C9!important;box-shadow:0 0 0 1.5px #6521C9!important}
   #mini .mi span{color:#6521C9!important}
-  .cardpp{background:transparent!important;border:1.5px solid #868491!important;box-shadow:none!important}
-  .cardpp svg{fill:#63616F!important}
+  .cardpp{background:transparent!important;border:1.5px solid var(--cink)!important;box-shadow:none!important}
+  .cardpp svg{fill:var(--cink)!important}
   /* premium segmented control for the frequency toggle */
   .pills{background:#EAE4DA!important;border-radius:22px!important;padding:4px!important;gap:0!important;overflow:visible!important;margin:8px 18px 8px!important}
   .pill{flex:1!important;text-align:center!important;justify-content:center!important;border:none!important;background:transparent!important;color:#8a8590!important;border-radius:18px!important;padding:8px 2px!important;font-size:12px!important}
@@ -106,7 +106,6 @@
   /* .fm tints to the active frequency (logo no longer locked to purple) */
   #favs .logo .d{color:#1A1620!important}
   /* GREYSCALE-CARD experiment: only the tile carries colour */
-  .lab{color:#8a8590!important}
   .heart{color:#b8b3bd!important}
   .cardpp{width:23px!important;height:23px!important}
   .cardpp svg{width:9px!important;height:9px!important}
@@ -372,8 +371,8 @@ const FAVS=[['core','starseed'],['love','kindred-spirits'],['vitality','astrolit
  ['core','astrolith'],['love','galactic-slumber'],['vitality','kindred-spirits'],['abundance','cosmic-drift']];
 function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
  FAVS.forEach(([ck,slug])=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
-  const r=document.createElement('div');r.className='row';
-  r.innerHTML=`<div class="grip">${GRIP}</div><div class="thumb"><img src="${tileSrc(ck,s)}" alt=""></div>
+  const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);
+  r.innerHTML=`<div class="grip">${GRIP}</div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""></div>
    <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p>
     <div class="botrow"><div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div>
      <button class="cardpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
