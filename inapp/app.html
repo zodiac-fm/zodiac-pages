@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Zodiac.fm · app</title>
+<style>
+  :root{--cream:#F6F1E8;--card:#FFFFFF;--ink:#1a1620;--mut:#7a7480;--love1:#EA1163;--love2:#FE4329;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;background:var(--cream);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ink);overflow:hidden}
+  .serif{font-family:Georgia,'Times New Roman',serif}
+  #app{position:fixed;inset:0;max-width:430px;margin:0 auto;overflow:hidden}
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column}
+  /* ---------- LIST ---------- */
+  #list{background:var(--cream)}
+  .top{padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 6px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-size:21px;font-weight:700}.logo .d{color:var(--love1)}
+  .ham{font-size:20px;color:#333}
+  .pills{display:flex;gap:8px;padding:8px 18px 6px;overflow-x:auto}
+  .pill{flex:0 0 auto;padding:7px 16px;border-radius:18px;background:#fff;border:1px solid #eadfce;font-size:13px;color:#555;cursor:pointer}
+  .pill.on{color:#fff;border:none;background:linear-gradient(90deg,var(--love1),var(--love2))}
+  .freqcard{margin:10px 18px;background:#fff;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 18px rgba(0,0,0,.04)}
+  .blob{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--love2),var(--love1));box-shadow:0 0 14px rgba(234,17,99,.5)}
+  .hz{font-size:24px;font-weight:700}.hz small{font-size:13px;color:var(--mut);font-weight:600;margin-left:2px}
+  .desc{padding:4px 22px 2px}
+  .desc h2{font-size:22px;font-weight:700;letter-spacing:-.3px}
+  .desc p{font-size:13.5px;color:#555;margin-top:6px;line-height:1.45}
+  .barrow{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 8px}
+  .qall{display:flex;align-items:center;gap:6px;font-size:13px;color:#444;background:#fff;border:1px solid #eadfce;border-radius:16px;padding:7px 14px}
+  .rows{flex:1;overflow-y:auto;padding:2px 14px 150px}
+  .row{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid #efe6d6;border-radius:14px;padding:10px;margin-bottom:12px;cursor:pointer}
+  .thumb{position:relative;width:74px;height:74px;border-radius:12px;overflow:hidden;flex:0 0 auto;background:#FBF8F3}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb canvas{position:absolute;inset:0}
+  .meta{flex:1;min-width:0}
+  .meta h3{font-size:16px;font-weight:600;font-family:Georgia,serif}
+  .meta p{font-size:12px;color:#8a8590;margin:3px 0 7px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .meta .lab{font-size:11px;color:var(--love1);font-weight:700}
+  .rt{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+  .heart{font-size:17px;color:var(--love1)}
+  .dur{font-size:11px;color:#a8a2ad}
+  /* ---------- pinned player ---------- */
+  #mini{position:absolute;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 58px);background:#15101d;border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:11px;box-shadow:0 8px 30px rgba(0,0,0,.35);cursor:pointer;z-index:20}
+  #mini .mt{width:40px;height:40px;border-radius:9px;overflow:hidden;flex:0 0 auto;position:relative;background:#000}
+  #mini .mt img{width:100%;height:100%;object-fit:cover}
+  #mini .mi{flex:1;min-width:0}
+  #mini .mi b{font-size:13px;color:#fff;font-family:Georgia,serif;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #mini .mi span{font-size:11px;color:#FF6F97}
+  #mini .pp{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(255,255,255,.85);color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto;background:transparent}
+  #mini .pp svg{width:16px;height:16px;fill:currentColor}
+  /* ---------- bottom nav ---------- */
+  #nav{position:absolute;left:0;right:0;bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center;z-index:15}
+  #nav div{font-size:11px;text-align:center;color:#9a95a0}#nav div.on{color:var(--love1)}
+  #nav .ic{font-size:16px;display:block;margin-bottom:2px}
+  /* ---------- SONG VIEW ---------- */
+  #song{background:#0b0712;color:#fff;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:40}
+  #song.open{transform:translateY(0)}
+  .sv-top{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 12px) 18px 6px}
+  .sv-top .back{font-size:22px;color:#fff}
+  .sv-top .t{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#cdbfe0}
+  #viz{flex:1;position:relative}
+  #vc{position:absolute;inset:0;width:100%;height:100%}
+  .sv-info{text-align:center;padding:2px 20px}
+  .sv-info h2{font-family:Georgia,serif;font-size:22px}
+  .sv-info .f{font-size:12px;color:#FF6F97;letter-spacing:1px;margin-top:3px}
+  .player{padding:10px 24px calc(env(safe-area-inset-bottom,0px) + 26px)}
+  .scrub{height:4px;background:rgba(255,255,255,.16);border-radius:3px;position:relative;cursor:pointer;margin:8px 0 6px}
+  .scrub .fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:3px;background:linear-gradient(90deg,var(--love1),var(--love2))}
+  .scrub .knob{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);left:0}
+  .times{display:flex;justify-content:space-between;font-size:11px;color:#9a93a0;font-variant-numeric:tabular-nums}
+  .ctrls{display:flex;align-items:center;justify-content:center;gap:34px;margin-top:14px}
+  .ctrls .sk{font-size:24px;color:#cdbfe0}
+  .bigpp{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--love1),var(--love2));border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 34px rgba(234,17,99,.5);cursor:pointer}
+  .bigpp svg{width:30px;height:30px;fill:#fff}
+</style></head><body>
+<div id="app">
+
+  <!-- ===================== LIST ===================== -->
+  <section class="screen" id="list">
+    <div class="top"><div class="logo serif">zodiac<span class="d">.fm</span></div><div class="ham">&#9776;</div></div>
+    <div class="pills">
+      <div class="pill">Core</div><div class="pill on">Love</div><div class="pill">Vitality</div><div class="pill">Abundance</div>
+    </div>
+    <div class="freqcard"><div class="blob"></div><div class="hz">432<small>Hz</small></div></div>
+    <div class="desc"><h2 class="serif">Love Vibrational Frequency</h2>
+      <p>These tracks increase your authentic resonance in matters of love and relationships.</p></div>
+    <div class="barrow"><div></div><div class="qall">&#9776; Queue All</div></div>
+    <div class="rows" id="rows"></div>
+  </section>
+
+  <!-- pinned mini player -->
+  <div id="mini">
+    <div class="mt"><img id="miniImg" alt=""><canvas id="miniGlow" width="80" height="80" style="position:absolute;inset:0"></canvas></div>
+    <div class="mi"><b id="miniName">—</b><span id="miniSub">Love Infusion</span></div>
+    <div class="pp" id="miniPP"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+  </div>
+
+  <!-- bottom nav -->
+  <div id="nav">
+    <div class="on"><span class="ic">&#9835;</span>Immersions</div>
+    <div><span class="ic">&#9776;</span>Results</div>
+    <div><span class="ic">&#9825;</span>Favorites</div>
+  </div>
+
+  <!-- ===================== SONG VIEW ===================== -->
+  <section class="screen" id="song">
+    <div class="sv-top"><div class="back" id="svBack">&#8964;</div><div class="t">Now Playing</div><div style="width:22px"></div></div>
+    <div id="viz"><canvas id="vc"></canvas></div>
+    <div class="sv-info"><h2 class="serif" id="svName">—</h2><div class="f" id="svFreq">Love · 432 Hz</div></div>
+    <div class="player">
+      <div class="scrub" id="scrub"><div class="fill" id="scrubFill"></div><div class="knob" id="scrubKnob"></div></div>
+      <div class="times"><span id="tCur">0:00</span><span id="tTot">0:00</span></div>
+      <div class="ctrls">
+        <div class="sk" id="prev">&#9198;</div>
+        <button class="bigpp" id="bigPP"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+        <div class="sk" id="next">&#9197;</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<audio id="aud" crossorigin="anonymous"></audio>
+<script>
+const LOVE1='#EA1163',LOVE2='#FE4329';
+const SONGS=[
+ {name:"Quiet Success",freq:432,sub:"A quick tune-up to increase overall love resonance. A date night favorite!",dur:"3 min",thumb:"app-assets/sig-quiet-success.png",audio:null},
+ {name:"Kindred Spirits",freq:425,sub:"Feel your sense of connection with others deepen with the beat.",dur:"5 min",thumb:"app-assets/sig-kindred-spirits.png",audio:"app-assets/kindred-spirits.mp3"},
+ {name:"Elysian Surge",freq:600,sub:"Experience an intense connection with the world around you.",dur:"5 min",thumb:"app-assets/sig-elysian-surge.png",audio:"app-assets/elysian-surge.mp3"},
+ {name:"Starseed",freq:528,sub:"Dive into your role in your relationships, from a deeper place.",dur:"9 min",thumb:"app-assets/sig-starseed.png",audio:null},
+ {name:"Astrolith",freq:639,sub:"Open your sense of belonging and connection.",dur:"6 min",thumb:"app-assets/sig-astrolith.png",audio:null},
+];
+const aud=document.getElementById('aud');
+let cur=-1, D=null, started=false;
+// ---- audio graph (live reactor) ----
+let AC=null,ana=null,td=null,react=0,lastAmp=0,liveBeat=0;
+function initGraph(){ if(AC)return; try{ AC=new (window.AudioContext||webkitAudioContext)(); ana=AC.createAnalyser(); ana.fftSize=1024; ana.smoothingTimeConstant=0.78; const s=AC.createMediaElementSource(aud); s.connect(ana); ana.connect(AC.destination); td=new Uint8Array(ana.fftSize);}catch(e){ana=null;} }
+// ---- analysis: env / 600-presence / beat from the track (or synthetic for placeholders) ----
+async function analyze(url,target){
+  if(!url){ const N=900,env=[],e6=[],bt=[]; let v=.4; for(let i=0;i<N;i++){v=Math.max(.05,Math.min(1,v+(Math.random()-.5)*.25)); env.push(v); e6.push(.45+.2*Math.sin(i/40)); bt.push(Math.random()<.04?Math.random():0);} return {dur:180,n:N,env,e600:e6,beat:bt,synthetic:true}; }
+  const buf=await AC.decodeAudioData(await (await fetch(url)).arrayBuffer());
+  const sr=buf.sampleRate,dur=buf.duration; let ch=buf.getChannelData(0);
+  if(buf.numberOfChannels>1){const c2=buf.getChannelData(1),m=new Float32Array(ch.length);for(let i=0;i<ch.length;i++)m[i]=(ch[i]+c2[i])*.5;ch=m;}
+  const N=Math.max(8,Math.floor(dur*45)),win=Math.max(1,Math.floor(ch.length/N));
+  const env=new Float32Array(N),e6=new Float32Array(N),beat=new Float32Array(N);
+  const w=2*Math.PI*target/sr,cw=2*Math.cos(w);let prev=0;
+  for(let k=0;k<N;k++){const a=k*win,b=Math.min(ch.length,a+win),len=Math.max(1,b-a);let sum=0,s0=0,s1=0,s2=0;
+    for(let i=a;i<b;i++){const v=ch[i];sum+=v*v;s0=v+cw*s1-s2;s2=s1;s1=s0;}
+    const rms=Math.sqrt(sum/len);env[k]=rms;e6[k]=Math.sqrt(Math.max(0,s1*s1+s2*s2-cw*s1*s2))/len;beat[k]=Math.max(0,rms-prev);prev=rms;}
+  const pct=(a,q)=>{const s=Float32Array.from(a).sort();return s[Math.floor((s.length-1)*q)]||1;};
+  const ne=pct(env,.99),be=pct(beat,.95),ee=pct(e6,.97);let mx=0;
+  for(let i=0;i<N;i++){env[i]=Math.min(1.2,env[i]/ne);beat[i]=Math.min(1.6,beat[i]/be);e6[i]=Math.min(1.3,e6[i]/ee);if(e6[i]>mx)mx=e6[i];}
+  const pres=new Float32Array(N);for(let i=0;i<N;i++)pres[i]=Math.max(.18,Math.min(1,.32+.68*(e6[i]/(mx||1))));
+  return {dur,n:N,env:Array.from(env),e600:Array.from(pres),beat:Array.from(beat)};
+}
+function at(arr,p){const L=arr.length,f=p*(L-1),i=Math.floor(f),g=f-i;return arr[i]*(1-g)+arr[Math.min(i+1,L-1)]*g;}
+function clock(){ if(!started)return 0; return D&&D.synthetic ? ((performance.now()/1000-synT)%D.dur) : aud.currentTime; }
+let synT=0;
+
+// ---------- LIST ----------
+const rows=document.getElementById('rows');
+SONGS.forEach((s,i)=>{
+  const r=document.createElement('div');r.className='row';r.innerHTML=
+   `<div class="thumb"><img src="${s.thumb}" alt=""><canvas width="148" height="148" style="display:none"></canvas></div>
+    <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p><div class="lab">&#9679; Love</div></div>
+    <div class="rt"><div class="heart">&#9825;</div><div class="dur">&#9201; ${s.dur}</div></div>`;
+  r.onclick=()=>playSong(i);
+  rows.appendChild(r);
+});
+
+// ---------- play control ----------
+const miniImg=document.getElementById('miniImg'),miniName=document.getElementById('miniName'),miniPP=document.getElementById('miniPP');
+const bigPP=document.getElementById('bigPP'),svName=document.getElementById('svName'),svFreq=document.getElementById('svFreq');
+function ppSVG(p){return p?'<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>':'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';}
+function setIcons(){const p=started&&!aud.paused;miniPP.innerHTML=ppSVG(p);bigPP.innerHTML=ppSVG(p);}
+async function playSong(i){
+  initGraph(); if(AC){try{await AC.resume();}catch(e){}}
+  const s=SONGS[i];
+  if(i!==cur){ cur=i; D=await analyze(s.audio,s.freq); started=true; synT=performance.now()/1000;
+    miniImg.src=s.thumb; miniName.textContent=s.name; svName.textContent=s.name; svFreq.textContent='Love · '+s.freq+' Hz';
+    if(s.audio){ aud.src=s.audio; aud.currentTime=0; try{await aud.play();}catch(e){} } else { aud.pause(); aud.removeAttribute('src'); }
+  } else { if(s.audio){ if(aud.paused)aud.play();else aud.pause(); } }
+  setIcons(); markAlive();
+}
+function togglePP(){ const s=SONGS[cur]; if(cur<0){playSong(1);return;} if(s.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } setIcons(); }
+miniPP.onclick=(e)=>{e.stopPropagation();togglePP();};
+bigPP.onclick=togglePP;
+aud.addEventListener('play',setIcons);aud.addEventListener('pause',setIcons);
+document.getElementById('next').onclick=()=>playSong((cur+1)%SONGS.length);
+document.getElementById('prev').onclick=()=>playSong((cur-1+SONGS.length)%SONGS.length);
+
+// open / close song view
+const songEl=document.getElementById('song');
+document.getElementById('mini').onclick=()=>{ if(cur<0)playSong(1); songEl.classList.add('open'); };
+document.getElementById('svBack').onclick=()=>songEl.classList.remove('open');
+
+// alive thumbnail glow (the playing row + mini) — light from centre to the beat
+function markAlive(){ rows.querySelectorAll('.row').forEach((r,i)=>{ const cv=r.querySelector('canvas'); cv.style.display=(i===cur)?'block':'none'; }); }
+const miniGlow=document.getElementById('miniGlow').getContext('2d');
+
+// ---------- VISUALIZER (exact vercel style; no play/time baked) ----------
+const vc=document.getElementById('vc'),vx=vc.getContext('2d');let VW,VH,DPR;
+function vrz(){DPR=Math.min(devicePixelRatio||1,2);const r=document.getElementById('viz').getBoundingClientRect();VW=vc.width=r.width*DPR;VH=vc.height=r.height*DPR;}
+addEventListener('resize',vrz);
+
+function liveRead(){ if(started&&ana&&!aud.paused){ana.getByteTimeDomainData(td);let s=0;for(let i=0;i<td.length;i++){const d=(td[i]-128)/128;s+=d*d;}const amp=Math.sqrt(s/td.length);react+=(amp-react)*.45;liveBeat=Math.max(liveBeat*.85,Math.max(0,amp-lastAmp)*4);lastAmp=amp;}else{react*=.9;liveBeat*=.9;} }
+
+function drawViz(){
+  requestAnimationFrame(drawViz);
+  liveRead();
+  // mini glow (always, on the mini art) + list thumb glow
+  drawGlow(miniGlow,40,40);
+  if(cur>=0){const cv=rows.querySelectorAll('.row')[cur].querySelector('canvas');drawGlow(cv.getContext('2d'),74,74);}
+  if(!songEl.classList.contains('open')||!D){return;}
+  if(!VW)vrz();
+  const tt=clock(),p=D.dur?tt/D.dur:0,T=performance.now()/1000;
+  const midY=VH*0.5,halfMax=VH*0.30,cx=VW/2;
+  vx.clearRect(0,0,VW,VH);
+  // bg
+  let bg=vx.createLinearGradient(0,0,0,VH);bg.addColorStop(0,'#0c0913');bg.addColorStop(1,'#0a0710');vx.fillStyle=bg;vx.fillRect(0,0,VW,VH);
+  const x0=VW*0.15,x1=VW*0.96,span=x1-x0;
+  const FMIN=250,FMAX=950,FMID=600,FH=350,TARGET=SONGS[cur]?SONGS[cur].freq:600;
+  const yOf=f=>midY-halfMax*((f-FMID)/FH);const lineY=yOf(Math.max(FMIN,Math.min(FMAX,TARGET)));
+  const WIN=180,STEP=60,tper=D.dur/(D.n-1),winStart=Math.max(0,(Math.floor(tt/STEP)-1)*STEP),winEnd=winStart+WIN;
+  const tx=ti=>x0+span*((ti-winStart)/WIN),px=tx(tt);
+  const iLo=Math.max(0,Math.ceil(winStart/tper)),iHi=Math.min(D.n-1,Math.floor(Math.min(winEnd,D.dur)/tper)),iNow=Math.min(iHi,Math.max(iLo,Math.round(tt/tper)));
+  const e6=at(D.e600,p),env=at(D.env,p);let flash=at(D.beat,p);flash=Math.max(flash,Math.min(1,liveBeat));const fl=Math.min(1,flash);
+  function wpr(a,b){vx.beginPath();for(let i=a;i<=b;i++){const xx=tx(i*tper),v=D.env[i]*halfMax*.92;i===a?vx.moveTo(xx,midY-v):vx.lineTo(xx,midY-v);}for(let i=b;i>=a;i--){const xx=tx(i*tper),v=D.env[i]*halfMax*.92;vx.lineTo(xx,midY+v);}vx.closePath();}
+  if(iHi>iNow){wpr(iNow,iHi);vx.fillStyle='rgba(124,99,201,0.10)';vx.fill();vx.lineWidth=1*DPR;vx.strokeStyle='rgba(160,140,215,0.14)';vx.stroke();}
+  if(iNow>iLo){wpr(iLo,iNow);let wf=vx.createLinearGradient(0,midY-halfMax,0,midY+halfMax);wf.addColorStop(0,'rgba(124,99,201,0.46)');wf.addColorStop(.5,'rgba(70,52,130,0.10)');wf.addColorStop(1,'rgba(124,99,201,0.46)');vx.fillStyle=wf;vx.fill();vx.lineWidth=1.2*DPR;vx.strokeStyle='rgba(160,140,215,0.5)';vx.stroke();}
+  // now column (live reactive)
+  const aN=Math.min(1,env*.45+react*2.0)*halfMax*.96;
+  let nb=vx.createLinearGradient(0,midY-aN,0,midY+aN);nb.addColorStop(0,'rgba(214,201,255,.9)');nb.addColorStop(.5,'rgba(150,123,220,.22)');nb.addColorStop(1,'rgba(214,201,255,.9)');
+  vx.strokeStyle=nb;vx.lineWidth=2.2*DPR;vx.lineCap='round';vx.shadowColor='rgba(150,123,220,.9)';vx.shadowBlur=14*DPR;vx.beginPath();vx.moveTo(px,midY-aN);vx.lineTo(px,midY+aN);vx.stroke();vx.shadowBlur=0;
+  // reactive pulse — light through centre, out to the beat
+  if(react>.01||fl>.03){const pr=(10+react*54+fl*40)*DPR;const rg=vx.createRadialGradient(px,lineY,0,px,lineY,pr);rg.addColorStop(0,'rgba(255,140,220,'+Math.min(.8,.2+react*1.6)+')');rg.addColorStop(1,'rgba(255,140,220,0)');vx.fillStyle=rg;vx.beginPath();vx.arc(px,lineY,pr,0,7);vx.fill();}
+  // axis
+  vx.textBaseline='middle';vx.font=(8.5*DPR)+'px Georgia,serif';vx.lineCap='butt';
+  vx.strokeStyle='rgba(180,165,210,.12)';vx.lineWidth=1*DPR;vx.beginPath();vx.moveTo(x0,yOf(FMAX));vx.lineTo(x0,yOf(FMIN));vx.stroke();
+  [300,400,500,600,700,800,900].forEach(f=>{const yy=yOf(f),isT=Math.abs(f-TARGET)<25;vx.strokeStyle=isT?'rgba(255,248,233,.7)':'rgba(190,175,220,.4)';vx.lineWidth=(isT?1.6:1)*DPR;vx.beginPath();vx.moveTo(x0-(isT?9:7)*DPR,yy);vx.lineTo(x0,yy);vx.stroke();vx.textAlign='right';vx.fillStyle=isT?'rgba(255,248,233,.95)':'rgba(214,205,232,.7)';vx.fillText(isT?(f+' Hz'):(''+f),x0-11*DPR,yy);});
+  // target line + leading glow
+  let lg=vx.createLinearGradient(x0,0,px,0);lg.addColorStop(0,'rgba(240,231,214,.06)');lg.addColorStop(1,'rgba(240,231,214,'+(.45+e6*.3)+')');vx.strokeStyle=lg;vx.lineWidth=1.2*DPR;vx.beginPath();vx.moveTo(x0,lineY);vx.lineTo(px,lineY);vx.stroke();
+  const hg=vx.createRadialGradient(px,lineY,0,px,lineY,22*DPR);hg.addColorStop(0,'rgba(255,248,233,'+(.45+e6*.4)+')');hg.addColorStop(1,'rgba(255,248,233,0)');vx.fillStyle=hg;vx.beginPath();vx.arc(px,lineY,22*DPR,0,7);vx.fill();
+  // scrubber + times
+  const cu=tt,to=D.dur;document.getElementById('scrubFill').style.width=(100*cu/to)+'%';document.getElementById('scrubKnob').style.left=(100*cu/to)+'%';
+  const f=s=>{s=isFinite(s)?s:0;return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');};
+  document.getElementById('tCur').textContent=f(cu);document.getElementById('tTot').textContent=f(to);
+}
+function drawGlow(ctx,w,h){ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);if(cur<0||!(started&&!aud.paused))return;const cw=ctx.canvas.width,chh=ctx.canvas.height;const r=(cw*0.18)+(react*cw*0.7)+(liveBeat*cw*0.5);const g=ctx.createRadialGradient(cw/2,chh/2,0,cw/2,chh/2,r);g.addColorStop(0,'rgba(255,180,230,'+Math.min(.85,.25+react*1.8)+')');g.addColorStop(.5,'rgba(234,17,99,'+Math.min(.5,react*1.2)+')');g.addColorStop(1,'rgba(234,17,99,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(cw/2,chh/2,r,0,7);ctx.fill();}
+// scrub seek
+document.getElementById('scrub').onclick=(e)=>{if(!D)return;const r=e.currentTarget.getBoundingClientRect();const fr=(e.clientX-r.left)/r.width;if(SONGS[cur]&&SONGS[cur].audio){aud.currentTime=fr*D.dur;}else{synT=performance.now()/1000-fr*D.dur;}};
+vrz();drawViz();setIcons();
+</script></body></html>
