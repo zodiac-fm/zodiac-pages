@@ -152,28 +152,28 @@ const SIG=n=>'app-assets/'+n+'.png';
 const LIVE1='app-assets/kindred-spirits.mp3', LIVE2='app-assets/elysian-surge.mp3';
 function mk(name,freq,sub,dur,thumb,audio){return {name,freq,sub,dur,thumb:SIG(thumb),audio:audio||null};}
 const CATS={
- core:{label:'Core',c1:'#2832E0',c2:'#B402FF',cglow:'rgba(96,40,224,.5)',hue:-70,gA:'205,200,255',gB:'96,40,224',hz:'396',
+ core:{label:'Core',c1:'#2832E0',c2:'#B402FF',cglow:'rgba(96,40,224,.5)',hue:-70,filt:'hue-rotate(-74deg) saturate(1.35) brightness(1.06)',gA:'205,200,255',gB:'96,40,224',hz:'396',
    title:'Core Vibrational Frequency',desc:'These tracks deepen your authentic sense of who you are.',
    songs:[ mk('Inner Anchor',396,'Settle into a grounded, unshakable sense of self.','4 min','sig-quiet-success'),
            mk('Kindred Spirits',396,'Feel your core identity steady and clarify with the beat.','5 min','sig-kindred-spirits',LIVE1),
            mk('Elysian Surge',396,'Experience your truest self rising to the surface.','5 min','sig-elysian-surge',LIVE2),
            mk('First Light',396,'Return to the self you were born as.','8 min','sig-starseed'),
            mk('Bedrock',396,'Open a deep, quiet certainty in who you are.','6 min','sig-astrolith') ]},
- love:{label:'Love',c1:'#EA1163',c2:'#FE4329',cglow:'rgba(234,17,99,.45)',hue:0,gA:'255,180,230',gB:'234,17,99',hz:'432',
+ love:{label:'Love',c1:'#EA1163',c2:'#FE4329',cglow:'rgba(234,17,99,.45)',hue:0,filt:'saturate(1.18) brightness(1.04)',gA:'255,180,230',gB:'234,17,99',hz:'432',
    title:'Love Vibrational Frequency',desc:'These tracks increase your authentic resonance in matters of love and relationships.',
    songs:[ mk('Quiet Success',432,'A quick tune-up to increase overall love resonance. A date night favorite!','3 min','sig-quiet-success'),
            mk('Kindred Spirits',432,'Feel your sense of connection with others deepen with the beat.','5 min','sig-kindred-spirits',LIVE1),
            mk('Elysian Surge',432,'Experience an intense connection with the world around you.','5 min','sig-elysian-surge',LIVE2),
            mk('Starseed',432,'Dive into your role in your relationships, from a deeper place.','9 min','sig-starseed'),
            mk('Astrolith',432,'Open your sense of belonging and connection.','6 min','sig-astrolith') ]},
- vitality:{label:'Vitality',c1:'#F96400',c2:'#F7D300',cglow:'rgba(249,100,0,.5)',hue:55,gA:'255,220,150',gB:'249,140,0',hz:'528',
+ vitality:{label:'Vitality',c1:'#F96400',c2:'#F7D300',cglow:'rgba(249,100,0,.5)',hue:55,filt:'hue-rotate(19deg) saturate(1.5) brightness(1.26)',gA:'255,220,150',gB:'249,140,0',hz:'528',
    title:'Vitality Vibrational Frequency',desc:'These tracks raise your energy, drive and aliveness.',
    songs:[ mk('Ignition',528,'A fast lift for low-energy days.','4 min','sig-quiet-success'),
            mk('Kindred Spirits',528,'Feel your energy build and circulate with the beat.','5 min','sig-kindred-spirits',LIVE1),
            mk('Elysian Surge',528,'Ride a surge of clean, sustained energy.','5 min','sig-elysian-surge',LIVE2),
            mk('Solar Run',528,'Charge your drive and momentum.','9 min','sig-starseed'),
            mk('Wildfire',528,'Open a deep reserve of vitality.','6 min','sig-astrolith') ]},
- abundance:{label:'Abundance',c1:'#B6CA1D',c2:'#009DFF',cglow:'rgba(0,157,255,.5)',hue:-150,gA:'180,235,255',gB:'0,157,255',hz:'639',
+ abundance:{label:'Abundance',c1:'#B6CA1D',c2:'#009DFF',cglow:'rgba(0,157,255,.5)',hue:-150,filt:'hue-rotate(-152deg) saturate(1.5) brightness(1.12)',gA:'180,235,255',gB:'0,157,255',hz:'639',
    title:'Abundance Vibrational Frequency',desc:'These tracks open your sense of opportunity and flow.',
    songs:[ mk('Open Doors',639,'Widen your sense of what is possible.','4 min','sig-quiet-success'),
            mk('Kindred Spirits',639,'Feel opportunity move toward you with the beat.','5 min','sig-kindred-spirits',LIVE1),
@@ -218,7 +218,7 @@ function buildRows(){
   const cat=CATS[catKey]; rows.innerHTML=''; rowSongs=cat.songs;
   cat.songs.forEach((s,i)=>{
     const r=document.createElement('div');r.className='row';r.innerHTML=
-     `<div class="thumb"><img src="${s.thumb}" style="filter:hue-rotate(${cat.hue}deg)" alt=""><canvas width="148" height="148"></canvas><div class="rowpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+     `<div class="thumb"><img src="${s.thumb}" style="filter:${cat.filt}" alt=""><canvas width="148" height="148"></canvas><div class="rowpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
       <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p><div class="lab">&#9679; ${cat.label}</div></div>
       <div class="rt"><div class="heart">&#9825;</div><div class="dur">&#9201; ${s.dur}</div></div>`;
     r.onclick=()=>playSong(catKey,i);
@@ -247,7 +247,7 @@ async function playSong(ck,i){
   initGraph(); if(AC){try{await AC.resume();}catch(e){}}
   const cat=CATS[ck], s=cat.songs[i];
   if(s!==curSong){ curSong=s; playCat=ck; gA=cat.gA; gB=cat.gB; D=await analyze(s.audio,s.freq); started=true; synT=performance.now()/1000;
-    miniImg.src=s.thumb; miniImg.style.filter='hue-rotate('+cat.hue+'deg)';
+    miniImg.src=s.thumb; miniImg.style.filter=cat.filt;
     miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion';
     svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label;
     if(s.audio){ aud.src=s.audio; aud.currentTime=0; try{await aud.play();}catch(e){} } else { aud.pause(); aud.removeAttribute('src'); }
@@ -263,7 +263,7 @@ document.getElementById('next').onclick=()=>step(1);
 document.getElementById('prev').onclick=()=>step(-1);
 
 // seed the bar with a paused song so it is never empty
-(function seed(){ const c=CATS['love'], s=c.songs[1]; miniImg.src=s.thumb; miniImg.style.filter='hue-rotate('+c.hue+'deg)'; miniName.textContent=s.name; document.getElementById('miniSub').textContent=c.label+' Infusion'; })();
+(function seed(){ const c=CATS['love'], s=c.songs[1]; miniImg.src=s.thumb; miniImg.style.filter=c.filt; miniName.textContent=s.name; document.getElementById('miniSub').textContent=c.label+' Infusion'; })();
 
 // open / close song view
 const songEl=document.getElementById('song');
