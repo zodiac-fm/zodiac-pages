@@ -302,14 +302,14 @@ function drawViz(){
   const WIN=180,STEP=60,tper=D.dur/(D.n-1),winStart=Math.max(0,(Math.floor(tt/STEP)-1)*STEP),winEnd=winStart+WIN;
   const tx=ti=>x0+span*((ti-winStart)/WIN),px=tx(tt);
   const iLo=Math.max(0,Math.ceil(winStart/tper)),iHi=Math.min(D.n-1,Math.floor(Math.min(winEnd,D.dur)/tper)),iNow=Math.min(iHi,Math.max(iLo,Math.round(tt/tper)));
-  const e6=at(D.e600,p),env=at(D.env,p);let flash=at(D.beat,p);flash=Math.max(flash,Math.min(1,liveBeat));const fl=Math.min(1,flash);
+  const e6=at(D.e600,p),env=at(D.env,p);let flash=at(D.beat,p);flash=Math.max(flash,Math.min(1,gBeat));const fl=Math.min(1,flash);
   function wpr(a,b){vx.beginPath();for(let i=a;i<=b;i++){const xx=tx(i*tper),v=D.env[i]*halfMax*.92;i===a?vx.moveTo(xx,wmid-v):vx.lineTo(xx,wmid-v);}for(let i=b;i>=a;i--){const xx=tx(i*tper),v=D.env[i]*halfMax*.92;vx.lineTo(xx,wmid+v);}vx.closePath();}
   if(iHi>iNow){wpr(iNow,iHi);vx.fillStyle='rgba('+WV+',0.10)';vx.fill();vx.lineWidth=1*DPR;vx.strokeStyle='rgba('+WL+',0.16)';vx.stroke();}
   if(iNow>iLo){wpr(iLo,iNow);let wf=vx.createLinearGradient(0,wmid-halfMax,0,wmid+halfMax);wf.addColorStop(0,'rgba('+WV+',0.46)');wf.addColorStop(.5,'rgba('+WV+',0.10)');wf.addColorStop(1,'rgba('+WV+',0.46)');vx.fillStyle=wf;vx.fill();vx.lineWidth=1.2*DPR;vx.strokeStyle='rgba('+WL+',0.55)';vx.stroke();}
-  const aN=Math.min(1,env*.45+react*2.0)*halfMax*.96;
+  const aN=Math.min(1,env*.45+gAmp*1.7)*halfMax*.96;
   let nb=vx.createLinearGradient(0,wmid-aN,0,wmid+aN);nb.addColorStop(0,'rgba('+WL+',.95)');nb.addColorStop(.5,'rgba('+WV+',.25)');nb.addColorStop(1,'rgba('+WL+',.95)');
   vx.strokeStyle=nb;vx.lineWidth=2.2*DPR;vx.lineCap='round';vx.shadowColor='rgba('+WL+',.9)';vx.shadowBlur=14*DPR;vx.beginPath();vx.moveTo(px,wmid-aN);vx.lineTo(px,wmid+aN);vx.stroke();vx.shadowBlur=0;
-  if(react>.01||fl>.03){const pr=(10+react*54+fl*40)*DPR;const rg=vx.createRadialGradient(px,lineY,0,px,lineY,pr);rg.addColorStop(0,'rgba('+WL+','+Math.min(.8,.2+react*1.6)+')');rg.addColorStop(1,'rgba('+WL+',0)');vx.fillStyle=rg;vx.beginPath();vx.arc(px,lineY,pr,0,7);vx.fill();}
+  if(gAmp>.01||fl>.03){const pr=(10+gAmp*48+fl*40)*DPR;const rg=vx.createRadialGradient(px,lineY,0,px,lineY,pr);rg.addColorStop(0,'rgba('+WL+','+Math.min(.8,.2+gAmp*1.6)+')');rg.addColorStop(1,'rgba('+WL+',0)');vx.fillStyle=rg;vx.beginPath();vx.arc(px,lineY,pr,0,7);vx.fill();}
   vx.textBaseline='middle';vx.font=(8.5*DPR)+'px Georgia,serif';vx.lineCap='butt';
   vx.strokeStyle='rgba(180,165,210,.12)';vx.lineWidth=1*DPR;vx.beginPath();vx.moveTo(x0,yOf(FMAX));vx.lineTo(x0,yOf(FMIN));vx.stroke();
   [300,400,500,600,700,800,900].forEach(f=>{const yy=yOf(f),isT=Math.abs(f-TARGET)<25;vx.strokeStyle=isT?'rgba(255,248,233,.7)':'rgba(190,175,220,.4)';vx.lineWidth=(isT?1.6:1)*DPR;vx.beginPath();vx.moveTo(x0-(isT?9:7)*DPR,yy);vx.lineTo(x0,yy);vx.stroke();vx.textAlign='right';vx.fillStyle=isT?'rgba(255,248,233,.95)':'rgba(214,205,232,.7)';vx.fillText(isT?(f+' Hz'):(''+f),x0-11*DPR,yy);});
