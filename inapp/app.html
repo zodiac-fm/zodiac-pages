@@ -279,8 +279,10 @@ function markAlive(){ const playing=started&&!aud.paused, here=(catKey===playCat
   rows.querySelectorAll('.row').forEach((r,i)=>{ const isThis=here&&!!curSong&&rowSongs[i]===curSong, isP=isThis&&playing; const b=r.querySelector('.cardpp');
     if(b){b.innerHTML=ppSVG(isP);const sv=b.querySelector('svg');if(sv)sv.style.marginLeft=isP?'0':'1px';}
     r.classList.toggle('playing', isThis);
-    const cv=r.querySelector('canvas'); if(!isThis){cv.getContext('2d').clearRect(0,0,cv.width,cv.height);} }); }
+    const cv=r.querySelector('canvas'); const im=r.querySelector('img'); if(!isThis){cv.getContext('2d').clearRect(0,0,cv.width,cv.height); if(im){im.style.transform='';im.style.filter='';}} }); }
 const miniGlow=document.getElementById('miniGlow').getContext('2d');
+// drive the whole-tile motion: scale from centre + a touch of brightness on the beat
+function surgeImg(im,sc,br){ if(!im)return; im.style.transform=(sc>1.001?'scale('+sc.toFixed(3)+')':''); im.style.filter=(br>1.001?'brightness('+br.toFixed(3)+')':'none'); im.style.willChange='transform'; }
 
 // ---------- VISUALIZER (exact vercel style; no play/time baked) ----------
 const vc=document.getElementById('vc'),vx=vc.getContext('2d');let VW,VH,DPR;
@@ -298,9 +300,14 @@ function drawViz(){
   const playing=started&&!aud.paused;
   glowLevel+=((playing?Math.min(1,gAmp):0)-glowLevel)*0.15;          // base "alive" level breathing with loudness
   beatPulse=playing?Math.max(beatPulse*0.84,Math.min(1,gBeat)):0;    // beat ignition (rises on the beat, decays)
+  // WHOLE-THUMBNAIL surge: the tile breathes with loudness and pops on the beat from its centre,
+  // so the cymatic rays push outward on the beat. Colour-agnostic (works in every category theme).
+  const surge = playing ? 1 + glowLevel*0.045 + beatPulse*0.12 : 1;
+  const bright = playing ? 1 + beatPulse*0.26 : 1;
   drawGlow(miniGlow,glowLevel,beatPulse,burstImg);
+  surgeImg(miniImg,surge,bright);
   const ri=(catKey===playCat)?rowSongs.indexOf(curSong):-1;
-  if(ri>=0){const cv=rows.querySelectorAll('.row')[ri].querySelector('canvas');drawGlow(cv.getContext('2d'),glowLevel,beatPulse,burstImg);}
+  if(ri>=0){const row=rows.querySelectorAll('.row')[ri];drawGlow(row.querySelector('canvas').getContext('2d'),glowLevel,beatPulse,burstImg);surgeImg(row.querySelector('img'),surge,bright);}
   if(!songEl.classList.contains('open')||!D){return;}
   if(!VW)vrz();
   const tt=clock(),p=D.dur?tt/D.dur:0,T=performance.now()/1000;
