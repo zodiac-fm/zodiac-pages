@@ -243,7 +243,9 @@ function setIcons(){const p=started&&!aud.paused;miniPP.innerHTML=ppSVG(p);bigPP
 function loadBurst(src){burstImg=null;pulses.length=0;const im=new Image();im.onload=()=>{burstImg=im;};im.src=src;}
 async function playSong(ck,i){
   initGraph(); if(AC){try{await AC.resume();}catch(e){}}
-  const cat=CATS[ck], s=cat.songs[i], prev=curSong;
+  const cat=CATS[ck], s=cat.songs[i];
+  if(s===curSong && ck===playCat){ if(s.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } setIcons(); markAlive(); return; }   // same song + same frequency → just play/pause
+  const prev=curSong;
   curSong=s; playCat=ck; gA=cat.gA; gB=cat.gB; playHz=parseInt(cat.hz,10)||432; started=true;
   document.getElementById('app').classList.add('playing');
   miniImg.src=tileSrc(ck,s); miniImg.style.filter='none'; loadBurst(tileSrc(ck,s));
@@ -344,11 +346,11 @@ function drawGlow(ctx,lvl,pulses,img){
   // BEAT pulses — a FILLED shockwave from the centre: everything inside the wavefront lights up
   // (in every direction at once), brightest at the expanding edge, fading as it travels + decays.
   for(const ph of pulses){
-    const rr=cw*(0.05+ph*0.58),a=Math.pow(1-ph,1.25); if(a<0.03)continue;
+    const rr=cw*(0.08+ph*0.56),a=Math.pow(1-ph,1.1); if(a<0.03)continue;
     const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rr);
-    g.addColorStop(0,'rgba('+gA+','+(a*0.42)+')');
-    g.addColorStop(.80,'rgba('+gA+','+(a*0.60)+')');
-    g.addColorStop(1,'rgba('+gA+','+(a*0.98)+')');
+    g.addColorStop(0,'rgba('+gA+','+(a*0.98)+')');   // CENTRE brightest — energy bursts from the middle
+    g.addColorStop(.5,'rgba('+gA+','+(a*0.5)+')');
+    g.addColorStop(1,'rgba('+gA+',0)');               // fades outward to the wavefront
     ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,rr,0,7);ctx.fill();
   }
   // MASK the light to the burst rays, so it travels THROUGH the frequency waves, not over them
