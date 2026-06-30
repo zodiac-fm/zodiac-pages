@@ -153,37 +153,27 @@
 const SIG=n=>'app-assets/'+n+'.png';
 const LIVE1='app-assets/kindred-spirits.mp3', LIVE2='app-assets/elysian-surge.mp3';
 function mk(name,freq,sub,dur,thumb,audio){return {name,freq,sub,dur,thumb:SIG(thumb),audio:audio||null};}
+// One real song list (same names, order by length, and per-song tiles) shared across every category.
+// Only the frequency (Hz) and the colour change per category. Descriptions are the current Core copy
+// (the real set we have) — per-category wording can be swapped in when provided.
+const SONGLIST=[
+ mk('Quiet Success',0,'An immediate energetic self reset, come back home now.','3 min','sig-quiet-success'),
+ mk('Kindred Spirits',0,'Allow your authentic self to deepen with the beat.','5 min','sig-kindred-spirits',LIVE1),
+ mk('Elysian Surge',0,'Feel your core energy build on this energetic ride.','5 min','sig-elysian-surge',LIVE2),
+ mk('Starseed',0,'Let your authentic self interact with your deepest energetic levels.','9 min','sig-starseed'),
+ mk('Astrolith',0,'Create resonance with your true self, develop authentic magnetism.','9 min','sig-astrolith'),
+ mk('Cosmic Drift',0,'Access profound authentic energy through deep frequency work.','25 min','sig-cosmic-drift'),
+ mk('Galactic Slumber',0,'Find your true self as deep sleep restores your inner resonance.','1 hour','sig-galactic-slumber'),
+];
 const CATS={
  core:{label:'Core',c1:'#2832E0',c2:'#B402FF',cglow:'rgba(96,40,224,.5)',hue:-70,filt:'hue-rotate(-74deg) saturate(1.35) brightness(1.06)',gA:'205,200,255',gB:'96,40,224',hz:'422',
-   title:'Core Vibrational Frequency',desc:'These tracks deepen your authentic sense of who you are.',
-   songs:[ mk('Quiet Success',422,'An immediate energetic self reset, come back home now.','3 min','sig-quiet-success'),
-           mk('Kindred Spirits',422,'Allow your authentic self to deepen with the beat.','5 min','sig-kindred-spirits',LIVE1),
-           mk('Elysian Surge',422,'Feel your core energy build on this energetic ride.','5 min','sig-elysian-surge',LIVE2),
-           mk('Starseed',422,'Let your authentic self interact with your deepest energetic levels.','9 min','sig-starseed'),
-           mk('Astrolith',422,'Create resonance with your true self, develop authentic magnetism.','9 min','sig-astrolith'),
-           mk('Cosmic Drift',422,'Access profound authentic energy through deep frequency work.','25 min','sig-cosmic-drift'),
-           mk('Galactic Slumber',422,'Find your true self as deep sleep restores your inner resonance.','1 hour','sig-galactic-slumber') ]},
+   title:'Core Vibrational Frequency',desc:'These tracks deepen your authentic sense of who you are.',songs:SONGLIST},
  love:{label:'Love',c1:'#EA1163',c2:'#FE4329',cglow:'rgba(234,17,99,.45)',hue:0,filt:'saturate(1.18) brightness(1.04)',gA:'255,180,230',gB:'234,17,99',hz:'432',
-   title:'Love Vibrational Frequency',desc:'These tracks increase your authentic resonance in matters of love and relationships.',
-   songs:[ mk('Quiet Success',432,'A quick tune-up to increase overall love resonance. A date night favorite!','3 min','sig-quiet-success'),
-           mk('Kindred Spirits',432,'Feel your sense of connection with others deepen with the beat.','5 min','sig-kindred-spirits',LIVE1),
-           mk('Elysian Surge',432,'Experience an intense connection with the world around you.','5 min','sig-elysian-surge',LIVE2),
-           mk('Starseed',432,'Dive into your role in your relationships, from a deeper place.','9 min','sig-starseed'),
-           mk('Astrolith',432,'Open your sense of belonging and connection.','6 min','sig-astrolith') ]},
+   title:'Love Vibrational Frequency',desc:'These tracks increase your authentic resonance in matters of love and relationships.',songs:SONGLIST},
  vitality:{label:'Vitality',c1:'#F96400',c2:'#F7D300',cglow:'rgba(249,100,0,.5)',hue:55,filt:'hue-rotate(19deg) saturate(1.5) brightness(1.26)',gA:'255,220,150',gB:'249,140,0',hz:'579',
-   title:'Vitality Vibrational Frequency',desc:'These tracks raise your energy, drive and aliveness.',
-   songs:[ mk('Ignition',528,'A fast lift for low-energy days.','4 min','sig-quiet-success'),
-           mk('Kindred Spirits',528,'Feel your energy build and circulate with the beat.','5 min','sig-kindred-spirits',LIVE1),
-           mk('Elysian Surge',528,'Ride a surge of clean, sustained energy.','5 min','sig-elysian-surge',LIVE2),
-           mk('Solar Run',528,'Charge your drive and momentum.','9 min','sig-starseed'),
-           mk('Wildfire',528,'Open a deep reserve of vitality.','6 min','sig-astrolith') ]},
+   title:'Vitality Vibrational Frequency',desc:'These tracks raise your energy, drive and aliveness.',songs:SONGLIST},
  abundance:{label:'Abundance',c1:'#B6CA1D',c2:'#009DFF',cglow:'rgba(0,157,255,.5)',hue:-150,filt:'hue-rotate(-152deg) saturate(1.5) brightness(1.12)',gA:'180,235,255',gB:'0,157,255',hz:'611',
-   title:'Abundance Vibrational Frequency',desc:'These tracks open your sense of opportunity and flow.',
-   songs:[ mk('Open Doors',639,'Widen your sense of what is possible.','4 min','sig-quiet-success'),
-           mk('Kindred Spirits',639,'Feel opportunity move toward you with the beat.','5 min','sig-kindred-spirits',LIVE1),
-           mk('Elysian Surge',639,'Experience a surge of flow and possibility.','5 min','sig-elysian-surge',LIVE2),
-           mk('Goldstream',639,'Tune into steady, arriving abundance.','9 min','sig-starseed'),
-           mk('Harvest',639,'Open a deep sense of plenty.','6 min','sig-astrolith') ]},
+   title:'Abundance Vibrational Frequency',desc:'These tracks open your sense of opportunity and flow.',songs:SONGLIST},
 };
 let catKey='love';                 // currently-viewed category
 const aud=document.getElementById('aud');
