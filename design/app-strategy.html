@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zodiac · app colour strategy</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#ece7dd;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif;color:#1a1620;padding:30px 16px 70px}
+  .serif{font-family:Georgia,serif}
+  h1{font-size:23px;font-weight:600;text-align:center}
+  .sub{font-size:13px;color:#7a7480;text-align:center;margin:6px auto 20px;max-width:620px;line-height:1.5}
+  .grid{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:24px 28px;justify-items:center}
+  .cell{text-align:center}
+  .clabel{font-size:12px;font-weight:700;letter-spacing:.5px;margin-bottom:10px}
+  .clabel small{display:block;font-weight:500;color:#9a93a0;font-size:11px;letter-spacing:0}
+  /* phone */
+  .ph{width:248px;height:500px;border-radius:30px;overflow:hidden;position:relative;box-shadow:0 16px 40px rgba(0,0,0,.18);text-align:left}
+  .top{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px}
+  .logo{font-family:Georgia,serif;font-size:15px;font-weight:700}
+  .tabs{display:flex;gap:5px;padding:4px 14px 10px}
+  .tab{font-size:9.5px;padding:5px 9px;border-radius:13px;white-space:nowrap;position:relative}
+  .rows{padding:2px 12px;display:flex;flex-direction:column;gap:9px}
+  .row{display:flex;gap:9px;align-items:center;border-radius:12px;padding:8px}
+  .th{width:44px;height:44px;border-radius:9px;flex:0 0 auto;position:relative;display:flex;align-items:center;justify-content:center}
+  .pl{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .pl::after{content:"";border-style:solid;border-width:4px 0 4px 7px;margin-left:1px}
+  .meta{flex:1;min-width:0}
+  .meta b{font-size:12px;font-family:Georgia,serif;font-weight:600;display:block}
+  .badge{font-size:9px;font-weight:700;margin-top:3px;display:flex;align-items:center;gap:4px}
+  .dot{width:6px;height:6px;border-radius:50%}
+  .np{position:absolute;left:10px;right:10px;bottom:52px;border-radius:12px;padding:8px 10px;display:flex;align-items:center;gap:8px}
+  .np .nt{width:30px;height:30px;border-radius:7px;flex:0 0 auto}
+  .np .ni{flex:1}.np .ni b{font-size:11px;font-family:Georgia,serif;display:block}
+  .prog{height:3px;border-radius:2px;margin-top:4px;position:relative}
+  .prog i{position:absolute;left:0;top:0;bottom:0;width:45%;border-radius:2px}
+  .nav{position:absolute;left:0;right:0;bottom:0;height:44px;display:flex;justify-content:space-around;align-items:center;font-size:8.5px}
+</style></head><body>
+  <h1 class="serif">App colour strategy — pick one</h1>
+  <div class="sub">Same screen, Love frequency active. Left = colour rationed (Gemini's 60-30-10, purple structure + tiny accents). Right = immersive (the frequency floods). Top = light, bottom = dark.</div>
+  <div class="grid" id="grid"></div>
+<script>
+const C={purple:'#6521C9',purpleDeep:'#38007A',purpleTint:'#EFECFF',love:'#B90044',loveGrad:'#CF4090',loveTint:'#FFE8EA'};
+function theme(mode){return mode==='light'
+  ? {bg:'#F6F1E8',card:'#FFFFFF',cardLine:'#efe6d6',text:'#1A1620',mut:'#8a8590',navbg:'#fff',tile:'#EEE7DC'}
+  : {bg:'#0F0B16',card:'#1B1622',cardLine:'#2a2433',text:'#ECE7F2',mut:'#9a93a8',navbg:'#141019',tile:'#241D30'};}
+const TABS=['Core','Love','Vitality','Abundance'];
+function phone(strategy,mode){
+ const t=theme(mode); const rationed=strategy==='rationed';
+ const tabHtml=TABS.map(tn=>{const on=tn==='Love';
+   if(rationed){ // structure neutral; active = small love underline
+     return `<div class="tab" style="color:${on?t.text:t.mut};font-weight:${on?700:500}">${tn}${on?`<div style="position:absolute;left:9px;right:9px;bottom:-1px;height:2px;border-radius:2px;background:${C.love}"></div>`:''}</div>`;
+   } else { // immersive: active tab filled love
+     return `<div class="tab" style="background:${on?`linear-gradient(90deg,${C.love},${C.loveGrad})`:t.card};color:${on?'#fff':t.mut};border:${on?'none':'1px solid '+t.cardLine}">${tn}</div>`;
+   }}).join('');
+ const rowHtml=[['Kindred Spirits'],['Starseed'],['Cosmic Drift']].map(([nm])=>{
+   const tileBg = rationed ? t.tile : `linear-gradient(135deg,${C.love},${C.loveGrad})`;
+   const plBg = rationed ? C.purple : `linear-gradient(135deg,${C.love},${C.loveGrad})`;
+   const dotInner = rationed ? `<div class="dot" style="background:${C.love}"></div>` : '';
+   return `<div class="row" style="background:${t.card};border:1px solid ${t.cardLine}">
+     <div class="th" style="background:${tileBg}">${rationed?`<div class="dot" style="width:8px;height:8px;background:${C.love}"></div>`:''}</div>
+     <div class="meta"><b style="color:${t.text}">${nm}</b><div class="badge" style="color:${rationed?C.love:t.mut}">${dotInner}Love</div></div>
+     <div class="pl" style="background:${plBg}"><span style="border-color:transparent transparent transparent #fff"></span></div></div>`;
+ }).join('');
+ return `<div class="ph" style="background:${t.bg}">
+   <div class="top"><div class="logo" style="color:${t.text}">zodiac<span style="color:${C.purple}">.fm</span></div><div style="color:${t.mut}">&#9776;</div></div>
+   <div class="tabs">${tabHtml}</div>
+   <div class="rows">${rowHtml}</div>
+   <div class="np" style="background:${rationed?t.card:C.loveTint};border:1px solid ${t.cardLine}">
+     <div class="nt" style="background:linear-gradient(135deg,${C.love},${C.loveGrad})"></div>
+     <div class="ni"><b style="color:${t.text}">Kindred Spirits</b>
+       <div class="prog" style="background:${mode==='light'?'#e7e2d8':'#322b3d'}"><i style="background:${C.love}"></i></div></div>
+     <div class="pl" style="background:${rationed?C.purple:C.love}"><span style="border-color:transparent transparent transparent #fff"></span></div></div>
+   <div class="nav" style="background:${t.navbg};border-top:1px solid ${t.cardLine}">
+     <div style="color:${C.purple};font-weight:700">&#9835;<br>Immersions</div>
+     <div style="color:${t.mut}">&#9776;<br>Results</div>
+     <div style="color:${t.mut}">&#9825;<br>Favorites</div></div>
+ </div>`;
+}
+const cells=[
+ ['LIGHT · Rationed','purple structure, Love only on the active tab, badge dot &amp; progress','rationed','light'],
+ ['LIGHT · Immersive','the Love frequency floods the screen','immersive','light'],
+ ['DARK · Rationed','same, on the dark Stage canvas','rationed','dark'],
+ ['DARK · Immersive','frequency flood in dark mode','immersive','dark'],
+];
+document.getElementById('grid').innerHTML=cells.map(([lab,desc,s,m])=>
+ `<div class="cell"><div class="clabel">${lab}<small>${desc}</small></div>${phone(s,m)}</div>`).join('');
+// fix play triangles
+document.querySelectorAll('.pl span').forEach(sp=>{sp.style.cssText='border-style:solid;border-width:4px 0 4px 7px;margin-left:1px;'+sp.style.cssText;});
+</script></body></html>
