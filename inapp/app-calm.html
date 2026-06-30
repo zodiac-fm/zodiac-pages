@@ -93,11 +93,6 @@
   .bigpp svg{width:27px;height:27px;fill:#fff}
 
   /* ---- CALM / RATIONED overrides: purple structure, frequency only as small accents ---- */
-  .cardpp{background:linear-gradient(135deg,#6521C9,#38007A)!important;box-shadow:0 2px 8px rgba(101,33,201,.4)!important}
-  .bigpp{background:linear-gradient(135deg,#6521C9,#38007A)!important;box-shadow:0 10px 30px rgba(101,33,201,.4)!important}
-  #mini .pp{background:linear-gradient(135deg,#6521C9,#38007A)!important}
-  .scrub .fill{background:linear-gradient(90deg,#6521C9,#38007A)!important}
-  .scrub .knob{background:#6521C9!important}
   #nav div.on{color:#6521C9!important}
   .row.playing{border-color:#6521C9!important;box-shadow:0 0 0 1.5px #6521C9!important}
   #mini .mi span{color:#6521C9!important}
@@ -171,7 +166,7 @@
 const SIG=n=>'app-assets/'+n+'.png';
 const LIVE1='app-assets/kindred-spirits.mp3', LIVE2='app-assets/elysian-surge.mp3';
 function mk(name,freq,sub,dur,slug,audio){return {name,freq,sub,dur,slug,audio:audio||null};}
-const tileSrc=(cat,s)=>'app-assets-new/sig-core-'+s.slug+'.png';
+const tileSrc=(cat,s)=>'app-assets-new/sig-'+cat+'-'+s.slug+'.png';
 // One real song list (same names, order by length, and per-song tiles) shared across every category.
 // Only the frequency (Hz) and the colour change per category. Descriptions are the current Core copy
 // (the real set we have) — per-category wording can be swapped in when provided.
