@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zodiac · gradient system</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif;color:#1a1620;padding:34px 20px 70px}
+  .serif{font-family:Georgia,serif}
+  .wrap{max-width:900px;margin:0 auto}
+  h1{font-size:25px;font-weight:600}
+  .sub{font-size:13px;color:#8a8590;margin:6px 0 8px}
+  h2{font-size:15px;font-weight:700;margin:30px 0 3px}
+  .job{font-size:12.5px;color:#7a7480;margin-bottom:13px;line-height:1.5}
+  .row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .btn{height:54px;border-radius:13px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+  .bar{height:80px;border-radius:14px;display:flex;align-items:flex-end;padding:9px 12px;color:#fff;font-size:11px;font-weight:600}
+  .bar.dk{color:#241a10}
+  .halo{height:150px;border-radius:18px;display:flex;align-items:flex-end;padding:16px 20px;color:#fff;margin-bottom:12px}
+  .halo b{font-family:Georgia,serif;font-size:20px;font-weight:600}.halo span{font-size:11px;opacity:.9;display:block;margin-top:2px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .foot{margin-top:26px;font-size:12.5px;color:#7a7480;background:#FAFAF8;border:1px solid #eee;border-radius:12px;padding:13px 16px;line-height:1.6}
+  .foot b{color:#1a1620}
+</style></head><body>
+<div class="wrap">
+  <h1 class="serif">Zodiac — gradient system</h1>
+  <div class="sub">Three jobs, three gradient types. Verified clean (no mud), real colors.</div>
+
+  <h2>1 · Functional <span style="font-weight:400;color:#9a93a0">(Primary → its Deep, same hue)</span></h2>
+  <div class="job">Lighting and depth on buttons, cards, active states. ~90% of the UI. Subtle, premium, predictable.</div>
+  <div class="row" id="func"></div>
+
+  <h2>2 · Frequency identity <span style="font-weight:400;color:#9a93a0">(Primary → analogous neighbor)</span></h2>
+  <div class="job">Each frequency's own gradient. On tiles, the now-playing wave, the active frequency. This is how Love reads as Love.</div>
+  <div class="row" id="freq"></div>
+
+  <h2>3 · Brand halo <span style="font-weight:400;color:#9a93a0">(cross-frequency, expressive)</span></h2>
+  <div class="job">The high-impact Zodiac signature. Hero backgrounds, loading, app icon, marketing. Rare and deliberate, the visual bridge between brand pillars.</div>
+  <div id="halo"></div>
+
+  <div class="foot"><b>The rule:</b> Functional + Frequency gradients ground the app (used constantly). The Brand halo is the "wow" wrapper, used sparingly on the most important moments. Neutrals still bind everything underneath.</div>
+</div>
+<script>
+const P={Core:['#6521C9','#38007A','#A737C8'],Love:['#B90044','#6E0024','#CF4090'],Vitality:['#FF9112','#BC6700','#FFC251'],Abundance:['#00AFDC','#007B9C','#2ED7DD']};
+const dk={Vitality:1,Abundance:1};
+document.getElementById('func').innerHTML=Object.entries(P).map(([k,v])=>
+ `<div class="btn" style="background:linear-gradient(180deg,${v[0]},${v[1]})">${k}</div>`).join('');
+document.getElementById('freq').innerHTML=Object.entries(P).map(([k,v])=>
+ `<div class="bar ${dk[k]?'dk':''}" style="background:linear-gradient(120deg,${v[0]},${v[2]})">${v[0]} → ${v[2]}</div>`).join('');
+document.getElementById('halo').innerHTML=
+ `<div class="halo" style="background:linear-gradient(135deg,#6521C9,#00AFDC)"><div><b>The Sound of You</b><span>Core Purple → Abundance Sky-Blue · the signature</span></div></div>
+  <div class="two">
+   <div class="halo" style="height:90px;background:linear-gradient(135deg,#B90044,#FF9112)"><div><b>Love → Vitality</b><span>warm halo</span></div></div>
+   <div class="halo" style="height:90px;background:linear-gradient(135deg,#6521C9,#B90044)"><div><b>Core → Love</b><span>deep halo</span></div></div>
+  </div>`;
+</script></body></html>
