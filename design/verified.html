@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zodiac · verified family</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#fff;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif;color:#1a1620;padding:34px 20px 60px}
+  .serif{font-family:Georgia,serif}
+  h1{font-size:24px;font-weight:600;text-align:center}
+  .sub{font-size:13px;color:#8a8590;text-align:center;margin:6px 0 22px}
+  .grid{max-width:920px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .sw{border-radius:18px;padding:22px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between}
+  .sw .role{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;opacity:.8}
+  .sw .nm{font-family:Georgia,serif;font-size:26px;font-weight:600;margin-top:2px}
+  .sw .hx{font-size:13px;font-variant-numeric:tabular-nums;letter-spacing:.5px;opacity:.85}
+  .sw .badges{font-size:11.5px;font-weight:600;opacity:.9}
+  @media(max-width:560px){.grid{grid-template-columns:1fr}}
+</style></head><body>
+  <h1 class="serif">The verified family</h1>
+  <div class="sub">Checked by Google Material + Adobe Leonardo, not just me.</div>
+  <div class="grid" id="g"></div>
+<script>
+const F=[
+ ['Identity','Core','#6521C9','#fff','8.03'],
+ ['Relationships','Love','#B90044','#fff','6.67'],
+ ['Energy','Vitality','#FF9112','#241a10','2.26'],
+ ['Opportunity','Abundance','#00AFDC','#08222b','2.57'],
+];
+document.getElementById('g').innerHTML=F.map(([role,nm,hex,tc,ct])=>`
+ <div class="sw" style="background:${hex};color:${tc}">
+   <div><div class="role">${role}</div><div class="nm">${nm}</div></div>
+   <div><div class="hx">${hex}</div>
+   <div class="badges">✓ Google: liked &nbsp;·&nbsp; Adobe contrast ${ct}</div></div>
+ </div>`).join('');
+</script></body></html>
