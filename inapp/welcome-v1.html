@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zodiac.fm — Welcome (v1, on-token, matches Stats v15)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap');
+  /* COLORS from zodiac-pages/design/tokens.json (locked 2026-06-30), identical to Stats v15:
+     white ground, Core Purple #6521C9 = single structure accent (30%), Ink text,
+     frequency colour ONLY as small 10% gradient chips. Fraunces + Inter. */
+  :root{
+    --bg:#FFFFFF; --ink:#1A1620; --ink2:#2A2530; --muted:#63616F; --soft:#868491;
+    --line:#EEE9E0; --track:#EEE9E0;
+    --violet:#6521C9; --violet-deep:#38007A; --violet-soft:#EFECFF; --violet-track:#EDE6F7;
+    --serif:'Fraunces',Georgia,'Times New Roman',serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    --sw:375px; --sh:812px; --sbh:54px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{background:#dedbd4; font-family:var(--sans); color:var(--ink); -webkit-font-smoothing:antialiased;
+    display:flex; align-items:flex-start; justify-content:center; min-height:100%; padding:26px 12px;}
+  #stage{transform-origin:top center;}
+  .phone{position:relative; width:calc(var(--sw) + 24px); border-radius:56px; background:#0b0b0d; padding:12px;
+    box-shadow:0 3px 6px rgba(0,0,0,.2), 0 40px 80px -30px rgba(0,0,0,.5), inset 0 0 0 2px #2a2a2e;}
+  .screen{position:relative; width:var(--sw); height:var(--sh); border-radius:46px; overflow:hidden; background:var(--bg);
+    display:flex; flex-direction:column;}
+
+  .glow{position:absolute; top:-40px; left:50%; transform:translateX(-50%); width:460px; height:420px; z-index:0;
+    background:radial-gradient(closest-side, rgba(101,33,201,.10), rgba(101,33,201,.03) 56%, rgba(101,33,201,0) 76%); pointer-events:none;}
+  .island{position:absolute; top:13px; left:50%; transform:translateX(-50%); width:118px; height:33px; background:#000; border-radius:19px; z-index:40;}
+  .statusbar{position:relative; height:var(--sbh); z-index:30; flex:0 0 auto;
+    display:flex; align-items:flex-end; justify-content:space-between; padding:0 30px 7px; font-size:13px; font-weight:600;}
+
+  /* real logo asset (HARD RULE: never typed) — centered arrival moment */
+  .brand{position:relative; z-index:2; flex:0 0 auto; display:flex; justify-content:center; padding:10px 24px 0;}
+  .brand img{height:19px; width:auto; display:block;}
+
+  .body{position:relative; z-index:1; flex:1 1 auto; display:flex; flex-direction:column; padding:0 26px; overflow-y:auto;}
+  .spacer{flex:1 1 auto; min-height:24px;}
+
+  .ey{font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--soft); margin-bottom:14px;}
+  h1{font-family:var(--serif); font-weight:600; line-height:1.05; letter-spacing:-.02em; color:var(--ink);}
+  h1 em{font-style:italic; color:var(--violet-deep);}
+  .lead{font-size:15px; color:var(--muted); line-height:1.55; margin-top:16px;}
+  .lead b{color:var(--ink2); font-weight:600;}
+
+  /* Option B — the four frequencies preview */
+  .freqs{margin-top:26px; display:flex; flex-direction:column; gap:2px;}
+  .freqs .cap{font-size:10.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--soft); margin-bottom:12px;}
+  .frow{display:flex; align-items:center; gap:13px; padding:11px 0; border-top:1px solid var(--line);}
+  .frow:last-child{border-bottom:1px solid var(--line);}
+  .frow .chip{width:30px; height:8px; border-radius:5px; flex:0 0 auto;}
+  .frow .nm{font-size:15px; font-weight:600; color:var(--ink); letter-spacing:-.01em;}
+  .frow .role{font-size:13px; color:var(--muted); margin-left:auto;}
+  .chip.core{background:linear-gradient(100deg,#6521C9,#A737C8);}
+  .chip.love{background:linear-gradient(100deg,#B90044,#CF4090);}
+  .chip.vitality{background:linear-gradient(100deg,#FF9112,#FFC251);}
+  .chip.abundance{background:linear-gradient(100deg,#00AFDC,#2ED7DD);}
+
+  /* bottom-anchored action */
+  .foot{flex:0 0 auto; padding:20px 26px 30px; background:linear-gradient(rgba(255,255,255,0), #FFFFFF 26%);}
+  .cta{display:block; width:100%; text-align:center; font-family:var(--sans); font-size:16px; font-weight:600; color:#fff;
+    background:linear-gradient(100deg,var(--violet),var(--violet-deep)); border:none; border-radius:16px; padding:17px;
+    letter-spacing:.005em; cursor:pointer; box-shadow:0 10px 24px -12px rgba(56,0,122,.6);}
+  .ghost{display:block; width:100%; text-align:center; background:transparent; border:none; color:var(--violet);
+    font-family:var(--sans); font-size:14px; font-weight:600; padding:14px 0 2px; cursor:pointer;}
+  .fine{text-align:center; font-size:12px; color:var(--soft); margin-top:9px;}
+
+  .homebar{position:absolute; left:50%; bottom:9px; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:#1c1a17; opacity:.85; z-index:31;}
+
+  .toggle{display:flex; gap:6px; justify-content:center; margin-bottom:16px; font-family:var(--sans);}
+  body.full .toggle{display:none;} body.bare .toggle{display:none;}
+  .toggle button{font-size:13px; font-weight:600; color:var(--ink2); background:#fff; border:1px solid #d8d2c6; padding:9px 16px; border-radius:22px; cursor:pointer; -webkit-appearance:none;}
+  .toggle button.on{background:var(--violet); color:#fff; border-color:var(--violet);}
+
+  /* option switching */
+  .optA .b-only{display:none;}
+  .optB .a-only{display:none;}
+</style>
+</head>
+<body class="optA">
+  <div id="stage">
+    <div class="toggle">
+      <button id="btn-a" class="on" onclick="setOpt('A')">A · The sound of you</button>
+      <button id="btn-b" onclick="setOpt('B')">B · Your four frequencies</button>
+    </div>
+    <div class="phone">
+      <div class="screen">
+        <div class="glow"></div>
+        <div class="island"></div>
+        <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div>
+
+        <div class="brand"><img src="app-assets/logo-black.svg" alt="zodiac.fm"></div>
+
+        <div class="body">
+          <div class="spacer"></div>
+
+          <div class="ey">Welcome, Maya</div>
+
+          <!-- OPTION A -->
+          <h1 class="a-only" style="font-size:38px;">The sound of&nbsp;<em>you</em>.</h1>
+          <p class="lead a-only">You already have your own signal, the real you under the noise. Zodiac turns it up. <b>You don't study it.</b> Press play, live your day, and let it work in the background.</p>
+
+          <!-- OPTION B -->
+          <h1 class="b-only" style="font-size:34px;">Your signal,<br><em>turned up</em>.</h1>
+          <p class="lead b-only">You listen, you don't study it. Press play, live your day, and let it work in the background. Here's what you're tuning:</p>
+          <div class="freqs b-only">
+            <div class="frow"><span class="chip core"></span><span class="nm">Core</span><span class="role">Identity</span></div>
+            <div class="frow"><span class="chip love"></span><span class="nm">Love</span><span class="role">Relationships</span></div>
+            <div class="frow"><span class="chip vitality"></span><span class="nm">Vitality</span><span class="role">Energy</span></div>
+            <div class="frow"><span class="chip abundance"></span><span class="nm">Abundance</span><span class="role">Opportunity</span></div>
+          </div>
+
+          <div class="spacer"></div>
+        </div>
+
+        <div class="foot">
+          <button class="cta">Get started</button>
+          <button class="ghost">How Zodiac works</button>
+          <div class="fine">Takes about a minute</div>
+        </div>
+
+        <div class="homebar"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function setOpt(o){
+      document.body.classList.remove('optA','optB');
+      document.body.classList.add('opt'+o);
+      document.getElementById('btn-a').classList.toggle('on', o==='A');
+      document.getElementById('btn-b').classList.toggle('on', o==='B');
+    }
+    var h=location.hash;
+    if(h.indexOf('full')>=0) document.body.classList.add('full');
+    if(h.indexOf('bare')>=0) document.body.classList.add('bare');
+    if(h.indexOf('B')>=0) setOpt('B');
+    function fit(){ var PW=399; var s=Math.min((window.innerWidth-20)/PW,1); document.getElementById('stage').style.zoom=s; }
+    window.addEventListener('resize',fit); fit();
+  </script>
+</body>
+</html>
