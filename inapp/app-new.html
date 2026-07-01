@@ -322,7 +322,7 @@ async function playSong(ck,i){
   curSong=s; playCat=ck; gA=cat.gA; gB=cat.gB; playHz=parseInt(cat.hz,10)||432; started=true;
   document.getElementById('app').classList.add('playing');
   miniImg.src=tileSrc(ck,s); miniImg.style.filter='none'; loadBurst(tileSrc(ck,s));
-  miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion';
+  miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion'; document.getElementById('miniSub').style.color=cat.cink;
   svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label;
   if(s!==prev||!D) D=await analyze(s.audio,playHz);   // re-analyze only when the track changes (snappy restart)
   synT=performance.now()/1000;                        // restart the (synthetic) playhead at 0
