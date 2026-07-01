@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zodiac.fm · Welcome A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --canvas:#F6F1E8; --moondust:#FBF8F3; --card:#FFFFFF; --hairline:#EFE6D6; --mist:#EEE9E0;
+    --ink:#1A1620; --muted:#7A7480;
+    --purple:#6521C9; --purple-deep:#38007A; --tint:#EFECFF; --soft:#D2C8FF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--canvas);color:var(--ink)}
+  .frame{max-width:430px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;align-items:center;text-align:center;padding:28px 30px 30px;position:relative;overflow:hidden}
+
+  header{flex:none}
+  header img{width:118px;display:block}
+
+  .sp{flex:1}
+
+  /* the disc */
+  .discwrap{position:relative;flex:none;margin-bottom:34px}
+  .halo{position:absolute;left:50%;top:50%;width:340px;height:340px;transform:translate(-50%,-50%);border-radius:50%;
+    background:radial-gradient(closest-side, rgba(101,33,201,.10), rgba(101,33,201,.03) 55%, rgba(101,33,201,0) 74%);pointer-events:none}
+  .disc{position:relative;width:186px;height:186px;border-radius:50%;overflow:hidden;background:var(--moondust);
+    box-shadow:0 22px 48px rgba(56,0,122,.16), 0 3px 10px rgba(26,22,32,.08);}
+  .disc img{width:100%;height:100%;object-fit:cover;display:block}
+  .disc::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
+  .dcap{position:relative;margin-top:15px;font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:14.5px;letter-spacing:-.1px;color:var(--muted)}
+
+  .ey{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);margin-bottom:14px}
+  h1{font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:400;font-size:35px;line-height:1.14;letter-spacing:-.7px;max-width:15ch}
+  .lead{margin-top:16px;font-size:16px;line-height:1.6;color:var(--muted);max-width:30ch}
+  .lead b{color:var(--ink);font-weight:500}
+
+  footer{flex:none;width:100%;display:flex;flex-direction:column;align-items:center}
+  .rule{width:44px;height:1px;background:#DDD3C2;margin-bottom:18px}
+  .practice{font-size:13.5px;line-height:1.55;color:var(--muted);max-width:32ch}
+  .practice b{color:var(--ink);font-weight:600}
+  .cta{margin-top:20px;width:100%;max-width:330px;border:none;cursor:pointer;background:var(--purple);color:#fff;
+    font-family:'Inter',sans-serif;font-size:16.5px;font-weight:600;letter-spacing:-.1px;border-radius:999px;padding:17px 20px;
+    display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 10px 26px rgba(101,33,201,.28);transition:transform .12s}
+  .cta:active{transform:scale(.985)}
+  .cta svg{width:13px;height:13px;fill:#fff;display:block}
+
+  /* entrance */
+  .up{opacity:0;transform:translateY(12px);animation:up .7s cubic-bezier(.22,.61,.36,1) forwards}
+  @keyframes up{to{opacity:1;transform:translateY(0)}}
+  .d1{animation-delay:.05s}.d2{animation-delay:.2s}.d3{animation-delay:.35s}.d4{animation-delay:.5s}.d5{animation-delay:.68s}
+</style>
+</head>
+<body>
+<div class="frame">
+  <header class="up d1"><img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm"></header>
+
+  <div class="sp"></div>
+
+  <div class="discwrap up d2">
+    <div class="halo"></div>
+    <div class="disc"><img src="../inapp/app-assets-ring/sig-core-starseed.png" alt=""></div>
+    <div class="dcap">your Core frequency</div>
+  </div>
+
+  <div class="ey up d3">Welcome, Hilary</div>
+  <h1 class="up d3">You already have your own signal. Zodiac turns it up.</h1>
+  <p class="lead up d4">You do not study this, you listen to it. Press play, live your life, and let it work in the background.</p>
+
+  <div class="sp"></div>
+
+  <footer class="up d5">
+    <div class="rule"></div>
+    <p class="practice">The whole practice: about <b>nine minutes a day</b>, and let each of your four frequencies get a real turn.</p>
+    <button class="cta"><svg viewBox="0 0 12 12"><path d="M2.2.9v10.2L11 6z"/></svg>Press play</button>
+  </footer>
+</div>
+</body>
+</html>

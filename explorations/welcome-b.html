@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zodiac.fm · Welcome B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --canvas:#F6F1E8; --moondust:#FBF8F3; --card:#FFFFFF; --hairline:#EFE6D6; --mist:#EEE9E0;
+    --ink:#1A1620; --muted:#7A7480;
+    --purple:#6521C9; --purple-deep:#38007A; --tint:#EFECFF; --soft:#D2C8FF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--canvas);color:var(--ink)}
+  .frame{max-width:430px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;padding:28px 30px 30px;position:relative;cursor:pointer}
+
+  header{flex:none;display:flex;flex-direction:column;align-items:center;gap:22px}
+  header img{width:118px;display:block}
+  .ticks{display:flex;gap:6px;width:100%;max-width:200px}
+  .ticks i{flex:1;height:2px;background:rgba(26,22,32,.12);border-radius:2px;position:relative;overflow:hidden}
+  .ticks i::after{content:"";position:absolute;inset:0;background:var(--purple);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .6s cubic-bezier(.22,.61,.36,1)}
+  .ticks i.on::after{transform:scaleX(1)}
+
+  .stage{flex:1;position:relative;min-height:0}
+  .beat{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:left;
+    opacity:0;pointer-events:none;transform:translateY(14px);transition:opacity .5s ease,transform .5s cubic-bezier(.22,.61,.36,1)}
+  .beat.on{opacity:1;pointer-events:auto;transform:translateY(0);transition-delay:.15s}
+  .beat.gone{opacity:0;transform:translateY(-12px)}
+
+  .kick{font-size:11px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--purple);margin-bottom:18px}
+  .kick span{color:var(--muted)}
+  h2{font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:400;font-size:34px;line-height:1.15;letter-spacing:-.7px;max-width:14ch}
+  .body{margin-top:18px;font-size:16px;line-height:1.62;color:var(--muted);max-width:29ch}
+  .body b{color:var(--ink);font-weight:500}
+
+  /* beat 1: the play mark */
+  .playmark{width:74px;height:74px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--purple-deep));
+    box-shadow:0 14px 32px rgba(101,33,201,.30);display:flex;align-items:center;justify-content:center;margin-bottom:30px}
+  .playmark svg{width:24px;height:24px;fill:#fff;margin-left:4px}
+
+  /* beat 2: the nine */
+  .nine{margin-bottom:18px}
+  .nine .n{font-family:'Fraunces',serif;font-weight:500;font-size:124px;line-height:.9;letter-spacing:-4px;color:var(--purple-deep)}
+
+  /* beat 3: the four */
+  .four{display:flex;gap:10px;margin-bottom:32px}
+  .fq{flex:none;width:76px;display:flex;flex-direction:column;align-items:center;gap:9px}
+  .blob{width:34px;height:34px;border-radius:50%;
+    background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.6),rgba(255,255,255,0) 46%),linear-gradient(140deg,var(--c1),var(--c2));
+    box-shadow:0 4px 14px var(--cg)}
+  .fq.core{--c1:#6521C9;--c2:#A737C8;--cg:rgba(101,33,201,.35)}
+  .fq.love{--c1:#B90044;--c2:#CF4090;--cg:rgba(185,0,68,.32)}
+  .fq.vitality{--c1:#FF9112;--c2:#FFC251;--cg:rgba(255,145,18,.32)}
+  .fq.abundance{--c1:#00AFDC;--c2:#2ED7DD;--cg:rgba(0,175,220,.30)}
+  .fq span{font-size:11px;font-weight:600;color:var(--ink);letter-spacing:-.1px}
+
+  .cta{margin-top:34px;border:none;cursor:pointer;background:var(--purple);color:#fff;font-family:'Inter',sans-serif;
+    font-size:16.5px;font-weight:600;letter-spacing:-.1px;border-radius:999px;padding:17px 34px;
+    box-shadow:0 10px 26px rgba(101,33,201,.28);transition:transform .12s}
+  .cta:active{transform:scale(.985)}
+
+  footer{flex:none;height:24px;display:flex;align-items:center;justify-content:center}
+  .hint{font-size:12.5px;color:var(--muted);opacity:.85;transition:opacity .4s}
+  .hint.off{opacity:0}
+</style>
+</head>
+<body>
+<div class="frame" id="frame">
+  <header>
+    <img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
+    <div class="ticks"><i id="t1"></i><i id="t2"></i><i id="t3"></i></div>
+  </header>
+
+  <div class="stage">
+
+    <div class="beat" id="b1">
+      <div class="playmark"><svg viewBox="0 0 24 24"><path d="M5 2.5v19L21 12z"/></svg></div>
+      <div class="kick">Welcome, Hilary</div>
+      <h2>You do not study this. You listen to it.</h2>
+      <p class="body">You already have your own signal, the real you under the noise. Zodiac turns it up. <b>Press play, live your life,</b> and let it work in the background.</p>
+    </div>
+
+    <div class="beat" id="b2">
+      <div class="nine"><span class="n">9</span></div>
+      <div class="kick">Your goal</div>
+      <h2>About nine minutes a day.</h2>
+      <p class="body">Think of it across the week, roughly an hour total, so skipping a day is fine. Walking, working, cooking, falling asleep. <b>All that matters is time with the frequencies playing.</b></p>
+    </div>
+
+    <div class="beat" id="b3">
+      <div class="four">
+        <div class="fq core"><div class="blob"></div><span>Core</span></div>
+        <div class="fq love"><div class="blob"></div><span>Love</span></div>
+        <div class="fq vitality"><div class="blob"></div><span>Vitality</span></div>
+        <div class="fq abundance"><div class="blob"></div><span>Abundance</span></div>
+      </div>
+      <div class="kick">One habit</div>
+      <h2>Let all four get a real turn.</h2>
+      <p class="body">You have four frequencies, one for each part of your life. Across the week, give each one a turn. <b>Do not pour it all into one</b> and starve the rest.</p>
+      <button class="cta" onclick="event.stopPropagation()">Open your library</button>
+    </div>
+
+  </div>
+
+  <footer><span class="hint" id="hint">Tap to continue</span></footer>
+</div>
+
+<script>
+  let beat = Math.min(3, Math.max(1, parseInt(new URLSearchParams(location.search).get('beat')) || 1));
+  const beats = [document.getElementById('b1'), document.getElementById('b2'), document.getElementById('b3')];
+  const ticks = [document.getElementById('t1'), document.getElementById('t2'), document.getElementById('t3')];
+  const hint = document.getElementById('hint');
+
+  function show(n, instant){
+    beats.forEach((b,i)=>{
+      b.classList.remove('on','gone');
+      if(i+1 < n) b.classList.add('gone');
+      if(i+1 === n) b.classList.add('on');
+    });
+    ticks.forEach((t,i)=> t.classList.toggle('on', i+1 <= n));
+    hint.classList.toggle('off', n === 3);
+  }
+  show(beat);
+
+  document.getElementById('frame').addEventListener('click', ()=>{
+    if(beat < 3){ beat++; show(beat); }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email B — product-forward welcome</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#DDD5C6;
+    font-family:'Inter',sans-serif;
+    color:#1A1620;
+    padding:40px 16px 64px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .preview-label {
+    max-width:600px; margin:0 auto 14px;
+    font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+    color:#8A8272; text-align:center;
+  }
+  .email {
+    max-width:600px; margin:0 auto;
+    background:#FFFFFF;
+    border-radius:16px;
+    box-shadow:0 10px 40px rgba(26,22,32,.10);
+    overflow:hidden;
+  }
+  .inner { padding:44px 48px 0; }
+  @media (max-width:480px){ .inner { padding:36px 24px 0; } }
+
+  .masthead { text-align:center; padding-bottom:36px; }
+  .masthead img { width:122px; height:auto; }
+
+  h1 {
+    font-family:'Fraunces',serif; font-optical-sizing:auto;
+    font-weight:500; font-size:40px; letter-spacing:-.9px; line-height:1.1;
+    text-align:center; margin-bottom:16px;
+  }
+  .sub {
+    font-size:17px; line-height:1.6; color:#544E5A; text-align:center;
+    max-width:420px; margin:0 auto 34px;
+  }
+
+  .login {
+    background:#F6F1E8; border:1px solid #EFE6D6; border-radius:14px;
+    padding:22px 26px; margin:0 0 40px; text-align:center;
+  }
+  .login .lbl {
+    font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:#7A7480; margin-bottom:8px;
+  }
+  .login .url {
+    font-family:'Fraunces',serif; font-size:22px; font-weight:500; letter-spacing:-.3px;
+    color:#1A1620; margin-bottom:10px;
+  }
+  .login .cred { font-size:14px; color:#2A2430; line-height:1.7; }
+  .login .cred span { color:#7A7480; }
+
+  .phone-wrap { text-align:center; margin:0 0 40px; }
+  .phone {
+    display:inline-block; width:250px; padding:10px;
+    background:#1A1620; border-radius:34px;
+    box-shadow:0 18px 44px rgba(26,22,32,.22);
+  }
+  .phone img { display:block; width:100%; height:auto; border-radius:25px; }
+  .phone-cap {
+    font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:#7A7480; margin-top:18px;
+  }
+
+  .beat { display:flex; gap:18px; margin-bottom:30px; align-items:flex-start; }
+  .beat .n {
+    flex:0 0 34px; height:34px; border-radius:50%;
+    background:#EFECFF; color:#6521C9;
+    font-family:'Fraunces',serif; font-size:18px; font-weight:600;
+    display:flex; align-items:center; justify-content:center; margin-top:2px;
+  }
+  .beat h3 {
+    font-family:'Fraunces',serif; font-weight:500; font-size:20px;
+    letter-spacing:-.3px; margin-bottom:6px;
+  }
+  .beat p { font-size:15px; line-height:1.6; color:#544E5A; }
+  .beat p strong { color:#1A1620; font-weight:600; }
+
+  .discs {
+    background:#F6F1E8; border-radius:14px; border:1px solid #EFE6D6;
+    padding:28px 20px 24px; margin:40px 0; text-align:center;
+  }
+  .discs .lbl {
+    font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:#7A7480; margin-bottom:20px;
+  }
+  .discs table { width:100%; border-collapse:collapse; }
+  .discs td { width:25%; text-align:center; vertical-align:top; }
+  .discs img {
+    width:76px; height:76px; border-radius:50%;
+    box-shadow:0 5px 16px rgba(26,22,32,.14);
+  }
+  .discs .fname {
+    font-family:'Fraunces',serif; font-size:15px; letter-spacing:-.2px;
+    color:#1A1620; margin-top:12px;
+  }
+  .discs .note { font-size:13px; color:#7A7480; margin-top:20px; line-height:1.55; }
+
+  .cta-wrap { text-align:center; margin:8px 0 40px; }
+  .btn {
+    display:inline-block; background:#6521C9; color:#FFFFFF; text-decoration:none;
+    font-size:16px; font-weight:600; letter-spacing:.01em;
+    padding:16px 42px; border-radius:999px;
+  }
+  .cta-sub { font-size:13px; color:#7A7480; margin-top:14px; }
+
+  .quote {
+    border-top:1px solid #EFE6D6; padding:34px 8px 38px; text-align:center;
+  }
+  .quote blockquote {
+    font-family:'Fraunces',serif; font-size:19px; font-style:italic; font-weight:400;
+    letter-spacing:-.2px; line-height:1.5; color:#1A1620; max-width:420px; margin:0 auto;
+  }
+  .quote cite {
+    display:block; font-style:normal; font-size:12px; font-weight:600;
+    letter-spacing:.08em; text-transform:uppercase; color:#7A7480; margin-top:14px;
+  }
+
+  .guarantee {
+    background:#F6F1E8; border-top:1px solid #EFE6D6;
+    padding:22px 48px; text-align:center;
+  }
+  .guarantee p { font-size:13px; line-height:1.6; color:#544E5A; }
+  .guarantee strong { color:#1A1620; font-weight:600; }
+
+  .footer { background:#EEE9E0; padding:24px 48px 28px; text-align:center; }
+  .footer p { font-size:12px; line-height:1.7; color:#8A8490; margin-bottom:4px; }
+  .footer a { color:#8A8490; text-decoration:underline; }
+</style>
+</head>
+<body>
+
+<div class="preview-label">Option B · Product-forward · redesign of "Your Zodiac Log-In, and getting started"</div>
+
+<div class="email">
+  <div class="inner">
+
+    <div class="masthead">
+      <img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
+    </div>
+
+    <h1>you're in.</h1>
+    <p class="sub">Hi {{customer.first_name}}, welcome. Your four frequencies are calculated and live. Here is how to start listening tonight.</p>
+
+    <div class="login">
+      <div class="lbl">Your log-in</div>
+      <div class="url">app.zodiac.fm</div>
+      <div class="cred"><span>Username</span> &nbsp;{{customer.email}}<br><span>Password</span> &nbsp;{{customer.first_name}}5656</div>
+    </div>
+
+    <div class="phone-wrap">
+      <div class="phone"><img src="assets/app-immersions.png" alt="The Zodiac app, Immersions screen"></div>
+      <div class="phone-cap">This is where you'll live</div>
+    </div>
+
+    <div class="beat">
+      <div class="n">1</div>
+      <div>
+        <h3>Add Zodiac to your home screen</h3>
+        <p>Zodiac is a web app, so it lives on your home screen, not the app store. <strong>iPhone:</strong> open app.zodiac.fm in Safari, tap share, then "Add to Home Screen." <strong>Android:</strong> Chrome usually offers to add it; if not, tap the 3-dot menu, then "Add to home screen." Stuck? Reply to this email and we will help you out.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="n">2</div>
+      <div>
+        <h3>Press play on your first Immersion</h3>
+        <p>Open Immersions (the tab with the musical note), pick the frequency that feels right, choose a soundscape, and press play. Headphones or speakers, both work.</p>
+      </div>
+    </div>
+
+    <div class="beat">
+      <div class="n">3</div>
+      <div>
+        <h3>Try all four, there is no way to do it wrong</h3>
+        <p>Some people have a profound experience right away, some don't. Michael, our founder, did not "feel" anything for weeks. The frequencies compound over time, so just keep listening.</p>
+      </div>
+    </div>
+
+    <div class="discs">
+      <div class="lbl">Your four frequencies</div>
+      <table>
+        <tr>
+          <td><img src="../inapp/app-assets-ring/sig-core-starseed.png" alt="Core"><div class="fname">Core</div></td>
+          <td><img src="../inapp/app-assets-ring/sig-love-kindred-spirits.png" alt="Love"><div class="fname">Love</div></td>
+          <td><img src="../inapp/app-assets-ring/sig-vitality-elysian-surge.png" alt="Vitality"><div class="fname">Vitality</div></td>
+          <td><img src="../inapp/app-assets-ring/sig-abundance-quiet-success.png" alt="Abundance"><div class="fname">Abundance</div></td>
+        </tr>
+      </table>
+      <div class="note">Each one is calculated from your exact birth chart. Trust your gut and start with whatever feels right.</div>
+    </div>
+
+    <div class="cta-wrap">
+      <a class="btn" href="https://app.zodiac.fm">Start listening</a>
+      <div class="cta-sub">Tomorrow: offline downloads, and what actually happens when you press play.</div>
+    </div>
+
+  </div>
+
+  <div class="quote">
+    <blockquote>"I feel like ME. I feel like the person I've been trying to get back to for so long."</blockquote>
+    <cite>Amber Hedrick</cite>
+  </div>
+
+  <div class="guarantee">
+    <p><strong>You are fully covered.</strong> Money-back guarantee: 90 days on annual, 30 days on monthly. Questions? Just reply, a real person reads every email.</p>
+  </div>
+
+  <div class="footer">
+    <p>Zodiac.fm · {{ company_address }}</p>
+    <p>You are receiving this because you joined Zodiac.fm.<br><a href="#">{% unsubscribe %}</a> · <a href="#">Manage preferences</a></p>
+  </div>
+</div>
+
+</body>
+</html>

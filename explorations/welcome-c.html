@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zodiac.fm · Welcome C</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --canvas:#F6F1E8; --moondust:#FBF8F3; --card:#FFFFFF; --hairline:#EFE6D6; --mist:#EEE9E0;
+    --ink:#1A1620; --muted:#7A7480;
+    --purple:#6521C9; --purple-deep:#38007A; --tint:#EFECFF; --soft:#D2C8FF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--canvas);color:var(--ink)}
+  .frame{max-width:430px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:26px 24px 28px}
+
+  header{flex:none;display:flex;justify-content:center;margin-bottom:26px}
+  header img{width:114px;display:block}
+
+  .head{padding:0 4px}
+  .ey{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);margin-bottom:12px}
+  h1{font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:400;font-size:33px;line-height:1.14;letter-spacing:-.7px;max-width:14ch}
+  .sub{margin-top:12px;font-size:15px;line-height:1.6;color:var(--muted);max-width:32ch}
+
+  .gift{margin-top:24px;display:flex;flex-direction:column;gap:10px}
+  .frow{display:flex;align-items:center;gap:15px;background:var(--card);border:1px solid var(--hairline);border-radius:16px;
+    padding:12px 16px 12px 12px;box-shadow:0 4px 18px rgba(0,0,0,.04)}
+  .disc{position:relative;flex:none;width:64px;height:64px;border-radius:50%;overflow:hidden;background:var(--moondust);
+    box-shadow:0 6px 16px rgba(26,22,32,.10)}
+  .disc img{width:100%;height:100%;object-fit:cover;display:block}
+  .ft{flex:1;min-width:0}
+  .fname{display:flex;align-items:center;gap:8px}
+  .fname b{font-family:'Fraunces',serif;font-weight:500;font-size:18.5px;letter-spacing:-.2px;color:var(--ink)}
+  .chip{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--purple);background:var(--tint);border-radius:999px;padding:3px 9px}
+  .fdesc{margin-top:3px;font-size:13px;line-height:1.45;color:var(--muted)}
+  .frow.core{border-color:#DDD0F4;box-shadow:0 4px 18px rgba(101,33,201,.08)}
+
+  .sp{flex:1}
+
+  footer{flex:none;margin-top:24px;display:flex;flex-direction:column;align-items:center;text-align:center}
+  .practice{font-size:13.5px;line-height:1.55;color:var(--muted);max-width:34ch}
+  .practice b{color:var(--ink);font-weight:600}
+  .cta{margin-top:16px;width:100%;max-width:340px;border:none;cursor:pointer;background:var(--purple);color:#fff;
+    font-family:'Inter',sans-serif;font-size:16.5px;font-weight:600;letter-spacing:-.1px;border-radius:999px;padding:17px 20px;
+    box-shadow:0 10px 26px rgba(101,33,201,.28);transition:transform .12s}
+  .cta:active{transform:scale(.985)}
+
+  /* the gift opens: staggered entrance */
+  .up{opacity:0;transform:translateY(12px);animation:up .65s cubic-bezier(.22,.61,.36,1) forwards}
+  @keyframes up{to{opacity:1;transform:translateY(0)}}
+  .g0{animation-delay:.05s}.g1{animation-delay:.18s}
+  .g2{animation-delay:.34s}.g3{animation-delay:.46s}.g4{animation-delay:.58s}.g5{animation-delay:.70s}
+  .g6{animation-delay:.88s}
+</style>
+</head>
+<body>
+<div class="frame">
+  <header class="up g0"><img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm"></header>
+
+  <div class="head up g1">
+    <div class="ey">Made from your birth chart</div>
+    <h1>Hilary, these are yours.</h1>
+    <p class="sub">Your four frequencies, ready to play. You do not study them, you listen to them while you live your life.</p>
+  </div>
+
+  <div class="gift">
+    <div class="frow core up g2">
+      <div class="disc"><img src="../inapp/app-assets-ring/sig-core-starseed.png" alt=""></div>
+      <div class="ft">
+        <div class="fname"><b>Core</b><span class="chip">Start here</span></div>
+        <div class="fdesc">Your identity, your home base.</div>
+      </div>
+    </div>
+    <div class="frow love up g3">
+      <div class="disc"><img src="../inapp/app-assets-ring/sig-love-kindred-spirits.png" alt=""></div>
+      <div class="ft">
+        <div class="fname"><b>Love</b></div>
+        <div class="fdesc">Connection, with yourself and others.</div>
+      </div>
+    </div>
+    <div class="frow vitality up g4">
+      <div class="disc"><img src="../inapp/app-assets-ring/sig-vitality-elysian-surge.png" alt=""></div>
+      <div class="ft">
+        <div class="fname"><b>Vitality</b></div>
+        <div class="fdesc">Energy and recovery.</div>
+      </div>
+    </div>
+    <div class="frow abundance up g5">
+      <div class="disc"><img src="../inapp/app-assets-ring/sig-abundance-cosmic-drift.png" alt=""></div>
+      <div class="ft">
+        <div class="fname"><b>Abundance</b></div>
+        <div class="fdesc">Timing and opportunity.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sp"></div>
+
+  <footer class="up g6">
+    <p class="practice">The whole practice: about <b>nine minutes a day</b>, and across the week let each of the four get a real turn.</p>
+    <button class="cta">Start with Core</button>
+  </footer>
+</div>
+</body>
+</html>
