@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Zodiac — What good looks like (Design Kit gallery)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="zodiac.css">
+<style>
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;margin-top:32px}
+.g .z-card{padding:0;overflow:hidden}
+.g .im{height:420px;overflow:hidden;background:#fff}
+.g img{width:100%;display:block}
+.g .pad{padding:16px 18px}
+.g h3{font-family:var(--serif);font-size:17px;font-weight:600}
+.g p{font-size:13px;color:var(--mut);line-height:1.5;margin-top:5px}
+.g a{color:var(--purple);font-size:13px;font-weight:600;text-decoration:none}
+</style></head><body>
+<div class="z-wrap-wide z-beat-tight">
+  <img class="z-logo" src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
+  <span class="z-kicker" style="display:block;margin-top:24px">Design kit v0 · the taste anchor</span>
+  <h1 class="z-h2" style="margin-top:8px">What good looks like</h1>
+  <p class="z-mut" style="max-width:60ch;margin-top:10px;font-size:15px">The APPROVED work, side by side. Before calling any design done, put it next to these and ask: same family, same restraint, same warmth? If it would look loud, cheap, or generic here, it fails. (Approved = Michael said yes. The funnel explorations are options, not members of this wall yet.)</p>
+
+  <div class="g">
+    <div class="z-card"><div class="im"><img src="../explorations/assets/app-immersions.png" alt=""></div>
+      <div class="pad"><h3>The app: Immersions</h3><p>The anchor. Cream canvas, white cards, the cymatic tile art, one accent doing structure. Why it's right: the art is ownable, everything else stays quiet.</p><a href="../inapp/app-B.html">live</a></div></div>
+    <div class="z-card"><div class="im"><img src="../explorations/assets/app-stats.png" alt=""></div>
+      <div class="pad"><h3>Stats v15</h3><p>Data with no alarm colors: white ground, purple structure, neutral bars, serif verdict. Why it's right: hierarchy carries it, not color.</p><a href="../inapp/stats-v15.html">live</a></div></div>
+    <div class="z-card"><div class="im"><img src="../explorations/assets/app-onboarding.png" alt=""></div>
+      <div class="pad"><h3>First-run onboarding</h3><p>One idea per screen, serif headers, the frequency dots as the only color. Why it's right: it teaches without homework energy.</p><a href="../inapp/onboarding-flow.html">live</a></div></div>
+    <div class="z-card"><div class="im" style="display:flex;align-items:center;justify-content:center;background:var(--stage)">
+      <span class="z-disc z-disc-glow" style="width:200px"><img src="../inapp/app-assets-ring/sig-core-kindred-spirits.png" alt=""></span></div>
+      <div class="pad"><h3>The cymatic disc</h3><p>The most ownable visual we have: music-derived, per song, per frequency. Use the real art from inapp/app-assets-ring/; never a generic substitute.</p><a href="../inapp/app-assets-ring/">assets</a></div></div>
+  </div>
+
+  <p class="z-mut" style="font-size:13px;margin-top:40px;line-height:1.6">Kit files: <b>zodiac.css</b> (components; hexes restate tokens.json only) · <b>page-template.html</b> (marketing skeleton) · references: creatives/design-references-library (Endel, Co-Star, Aesop, Maude, Oura). Gates: colors diff vs tokens.json (code/check_app_against_tokens.py for app HTML) · UI verified on a real 390px render · copy via copy-grader. Kit status: v0 PROPOSED 2026-07-01, not canon until Michael approves.</p>
+</div>
+</body></html>
