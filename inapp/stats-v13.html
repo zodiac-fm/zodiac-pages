@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zodiac.fm — Stats (v13, clean verdict + Level 1/2/3)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500;1,6..72,600&family=Inter:wght@400;500;600;700&display=swap');
+  :root{
+    --bg:#faf7f1; --ink:#1b1720; --ink2:#34302a; --muted:#615c63; --soft:#6d6862;
+    --line:#e6dfd2; --track:#e4ded0; --fill:#2a2622;
+    --violet:#6B2BE8; --violet-deep:#3B22D9; --violet-soft:#efe9fb; --violet-track:#ece6f7;
+    --good:#2f7a4a; --good-soft:#e7f1ea; --warn:#b3382f; --warn-soft:#f7e9e7;
+    /* frequency identity dots = locked tokens.json (2026-06-30) */
+    --core:#6521C9; --love:#B90044; --vitality:#FF9112; --abundance:#00AFDC;
+    --serif:'Newsreader',Georgia,'Times New Roman',serif;
+    --sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    --sw:375px; --sh:812px; --navh:86px; --sbh:54px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{background:#dedbd4; font-family:var(--sans); color:var(--ink); -webkit-font-smoothing:antialiased;
+    display:flex; align-items:flex-start; justify-content:center; min-height:100%; padding:26px 12px;}
+  #stage{transform-origin:top center;}
+  .phone{position:relative; width:calc(var(--sw) + 24px); border-radius:56px; background:#0b0b0d; padding:12px;
+    box-shadow:0 3px 6px rgba(0,0,0,.2), 0 40px 80px -30px rgba(0,0,0,.5), inset 0 0 0 2px #2a2a2e;}
+  .screen{position:relative; width:var(--sw); height:var(--sh); border-radius:46px; overflow:hidden; background:var(--bg);}
+  body.full .screen{height:auto;}
+
+  .glow{position:absolute; top:-40px; left:50%; transform:translateX(-50%); width:420px; height:420px; z-index:0;
+    background:radial-gradient(closest-side, rgba(107,43,232,.16), rgba(107,43,232,.04) 55%, rgba(107,43,232,0) 75%); pointer-events:none;}
+  .island{position:absolute; top:13px; left:50%; transform:translateX(-50%); width:118px; height:33px; background:#000; border-radius:19px; z-index:40;}
+  .statusbar{position:absolute; top:0; left:0; right:0; height:var(--sbh); z-index:30; background:linear-gradient(#faf7f1, #faf7f1 70%, rgba(250,247,241,0));
+    display:flex; align-items:flex-end; justify-content:space-between; padding:0 30px 7px; font-size:13px; font-weight:600;}
+  body.full .statusbar{position:static; background:var(--bg);}
+
+  .scroll{position:absolute; left:0; right:0; top:var(--sbh); bottom:var(--navh); overflow-y:auto; z-index:1; padding-bottom:16px;}
+  body.full .scroll{position:static; overflow:visible;}
+
+  .chrome{display:flex; align-items:center; justify-content:space-between; padding:8px 22px 0;}
+  .chrome .wm{font-family:var(--serif); font-size:22px; font-weight:500; letter-spacing:-.01em;}
+  .chrome .menu{width:44px; height:40px; display:flex; align-items:center; justify-content:center; color:var(--ink2); margin-right:-10px;}
+  .chrome .menu svg{width:22px; height:22px;}
+
+  .util{display:flex; align-items:center; justify-content:space-between; padding:14px 24px 2px;}
+  .util .wk{font-size:13px; font-weight:700; color:var(--violet); letter-spacing:.01em;}
+  .util .wk span{font-weight:500; color:var(--soft); letter-spacing:0;}
+  .util .qlink{display:inline-flex; align-items:center; gap:6px; min-height:30px; font-size:12.5px; color:var(--violet); font-weight:600;}
+  .util .qlink .q{width:17px; height:17px; border-radius:50%; border:1.4px solid var(--violet); display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-size:11px; font-style:italic;}
+
+  /* ---- VERDICT CARD: the one glance, does the "need both gates" work ---- */
+  .verdict{margin:12px 16px 0; border-radius:20px; padding:18px 18px 16px; position:relative; z-index:2;
+    background:linear-gradient(180deg,#f4effc,#efe9fb); border:1px solid #e3d8f7;}
+  .verdict .ey{font-size:10.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--violet); opacity:.9;}
+  .verdict h1{font-family:var(--serif); font-size:27px; font-weight:600; line-height:1.08; letter-spacing:-.015em; color:var(--ink); margin-top:5px;}
+  body.low .verdict h1{color:var(--warn);}
+  .verdict h1 em{font-style:normal; color:var(--violet-deep);}
+  .gates{display:flex; gap:10px; margin-top:15px;}
+  .gate{flex:1 1 0; min-width:0; background:rgba(255,255,255,.62); border:1px solid #e6ddf6; border-radius:13px; padding:11px 12px;}
+  .gate .gt{display:flex; align-items:center; gap:7px;}
+  .gate .ic{width:19px; height:19px; border-radius:50%; flex:0 0 auto; display:flex; align-items:center; justify-content:center;}
+  .gate .ic svg{width:12px; height:12px;}
+  .gate .ic.ok{background:var(--good); color:#fff;}
+  .gate .ic.no{background:var(--warn); color:#fff;}
+  .gate .glab{font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--soft);}
+  .gate .gval{font-family:var(--serif); font-size:16.5px; font-weight:600; color:var(--ink); margin-top:9px; line-height:1.15;}
+  .gate.bad .gval{color:var(--warn);}
+  .gate .gsub{font-size:12px; color:var(--muted); margin-top:2px;}
+  .fixline{margin-top:14px; font-size:13px; line-height:1.5; color:var(--ink2);}
+  .fixline b{color:var(--warn); font-weight:600;}
+  body.ok .fixline b{color:var(--good);}
+
+  /* sections */
+  .sec{padding:24px 24px 0; margin-top:28px; border-top:1px solid var(--line);}
+  .shead{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;}
+  .shead h2{font-family:var(--serif); font-size:21px; font-weight:600; color:var(--violet); letter-spacing:-.005em;}
+
+  .bignum{display:flex; align-items:baseline; gap:8px;}
+  .bignum .n{font-family:var(--serif); font-size:19px; font-weight:600; color:var(--ink); letter-spacing:-.01em;}
+  .bignum .u{font-size:13px; color:var(--muted);}
+  .bignum .wk{font-size:12.5px; color:var(--soft); margin-left:auto; font-weight:500;}
+
+  /* time thermometer */
+  .thermo{margin-top:16px;}
+  .ttrack-wrap{position:relative;}
+  .ttrack{position:relative; height:14px; border-radius:7px; overflow:hidden; background:var(--violet-track);}
+  .tfill{position:absolute; left:0; top:0; bottom:0; border-radius:7px; z-index:1; background:linear-gradient(100deg, var(--violet), var(--violet-deep));}
+  .ttick{position:absolute; top:3px; bottom:3px; width:1.5px; transform:translateX(-50%); z-index:2; border-radius:1px;}
+  .ttick.light{background:rgba(255,255,255,.7);}
+  .ttick.dark{background:rgba(59,34,217,.35);}
+  .tmark{position:absolute; top:-5px; height:24px; width:3px; background:var(--violet-deep); transform:translateX(-50%); border-radius:2px; box-shadow:0 0 0 2.5px var(--bg); z-index:3;}
+  .tlabels{position:relative; height:36px; margin-top:13px;}
+  .tl{position:absolute; transform:translateX(-50%); text-align:center; width:84px;}
+  .tl b{font-family:var(--serif); font-size:14px; font-weight:600; color:var(--soft); display:block;}
+  .tl span{font-size:11px; color:var(--soft); letter-spacing:.02em;}
+  .tl.hit b{color:var(--ink);} .tl.hit span{color:var(--muted);}
+  .tl.now b{color:var(--violet-deep);}
+  .tl.now span{background:var(--violet-soft); color:var(--violet-deep); font-weight:700; padding:2px 8px; border-radius:10px; display:inline-block; margin-top:3px;}
+
+  /* ONE progress line (replaces the 6-cell grid) */
+  .nextlvl{margin-top:20px; padding-top:15px; border-top:1px solid var(--line);}
+  .nextlvl .pr{display:flex; align-items:baseline; justify-content:space-between; gap:10px; font-size:13px; color:var(--ink2);}
+  .nextlvl .pr b{font-weight:600;}
+  .nextlvl .pr .to{color:var(--muted); font-size:12.5px;}
+  .nextlvl .mini{height:6px; border-radius:4px; background:var(--violet-track); margin-top:10px; position:relative; overflow:hidden;}
+  .nextlvl .mini i{position:absolute; left:0; top:0; bottom:0; border-radius:4px; background:linear-gradient(100deg,var(--violet),var(--violet-deep));}
+
+  /* balance */
+  .rule{font-size:13.5px; color:var(--ink2); line-height:1.5; margin:-2px 0 4px;}
+  .rule b{color:var(--ink); font-weight:700;}
+  .frow{margin-top:17px;}
+  .frow .top{display:flex; align-items:center; gap:9px;}
+  .frow .dot{width:9px; height:9px; border-radius:50%; flex:0 0 auto;}
+  .frow .nm{font-size:15px; font-weight:600; letter-spacing:-.01em; color:var(--ink);}
+  .frow .lowtag{font-size:10px; font-weight:700; letter-spacing:.05em; color:#fff; background:var(--warn); border-radius:20px; padding:2px 8px;}
+  .frow .pct{font-family:var(--serif); font-size:17px; font-weight:600; margin-left:auto; color:var(--ink);}
+  .frow.low .pct{color:var(--warn);}
+  .frow .bar2{position:relative; height:9px; border-radius:5px; background:var(--track); margin-top:10px;}
+  .frow .fg2{position:absolute; left:0; top:0; bottom:0; border-radius:5px; background:var(--fill);}
+  .frow.low .fg2{background:var(--warn);}
+  .frow .thresh{position:absolute; left:15%; top:-6px; height:8px; width:2px; background:var(--ink2); transform:translateX(-50%); z-index:2;}
+  .frow.low .thresh{background:var(--warn);}
+  .frow .threshcap{position:absolute; left:15%; top:-20px; transform:translateX(-50%); font-size:9.5px; font-weight:700; letter-spacing:.03em; color:var(--soft); white-space:nowrap;}
+  .balfix{margin-top:16px; font-size:12.5px; color:var(--warn); line-height:1.5; display:flex; gap:7px;}
+  .balfix .b{flex:0 0 auto;}
+  body.ok .balfix{display:none;}
+  .balok{margin-top:16px; font-size:12.5px; color:var(--good); line-height:1.5; display:none;}
+  body.ok .balok{display:flex; gap:7px;}
+
+  /* weeks */
+  .wkrow{display:flex; align-items:center; gap:12px; min-height:54px; padding:11px 2px; border-bottom:1px solid var(--line);}
+  .wkrow .wl{display:flex; flex-direction:column; gap:3px;}
+  .wkrow .wn{font-size:15px; font-weight:600; color:var(--ink); letter-spacing:-.01em;}
+  .wkrow .ws{font-size:12px; color:var(--soft);}
+  .wkrow .ws .lowflag{color:var(--warn); font-weight:600;}
+  .wkrow .wr{margin-left:auto; display:flex; align-items:center; gap:11px;}
+  .wkrow .chev{color:#cfc6b6; font-size:20px; line-height:1;}
+  .wkrow.cur{margin:0 -12px; padding:11px 14px; background:var(--violet-soft); border-radius:14px; border-bottom:none;}
+  .wkrow.cur .wn{color:var(--violet-deep);}
+  .lvl{font-size:11.5px; font-weight:600; color:var(--ink2); background:#efe9df; border-radius:20px; padding:3px 11px; white-space:nowrap;}
+  .lvl.none{color:var(--warn); background:var(--warn-soft);}
+  .lvl.top{color:var(--violet-deep); background:#fff; border:1px solid #ddd0f4;}
+
+  .nav{position:absolute; left:0; right:0; bottom:0; height:var(--navh); z-index:30; background:var(--bg);
+    display:flex; justify-content:space-around; align-items:flex-start; border-top:1px solid var(--line); padding-top:11px;}
+  body.full .nav{position:static; height:auto; padding-bottom:24px;}
+  .nav .item{display:flex; flex-direction:column; align-items:center; gap:5px; font-size:11px; letter-spacing:.02em; color:var(--soft); min-width:64px;}
+  .nav .item.active{color:var(--violet); font-weight:600;}
+  .homebar{position:absolute; left:50%; bottom:9px; transform:translateX(-50%); width:128px; height:5px; border-radius:3px; background:#1c1a17; opacity:.85; z-index:31;}
+  body.full .homebar{display:none;}
+
+  /* live state toggle (interactive view only, hidden when rendering PNGs) */
+  .toggle{display:flex; gap:6px; justify-content:center; margin-bottom:16px; font-family:var(--sans);}
+  body.full .toggle{display:none;}
+  .toggle button{font-size:13px; font-weight:600; color:var(--ink2); background:#fff; border:1px solid #d8d2c6;
+    padding:9px 16px; border-radius:22px; cursor:pointer; -webkit-appearance:none;}
+  .toggle button.on{background:var(--violet); color:#fff; border-color:var(--violet);}
+
+  /* state toggles */
+  .low-only{display:none;} body.low .low-only{display:block;}
+  .ok-only{display:none;}  body.ok  .ok-only{display:block;}
+  body.low .gate.balance{}
+</style>
+</head>
+<body class="low">
+  <div id="stage">
+    <div class="toggle">
+      <button id="btn-low" class="on" onclick="setState('low')">One frequency low</button>
+      <button id="btn-ok" onclick="setState('ok')">On track</button>
+    </div>
+    <div class="phone">
+      <div class="screen">
+        <div class="glow"></div>
+        <div class="island"></div>
+        <div class="statusbar"><span>9:41</span><span>5G&nbsp;&nbsp;100%</span></div>
+
+        <div class="scroll">
+          <div class="chrome">
+            <div class="wm">zodiac.fm</div>
+            <div class="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></div>
+          </div>
+
+          <div class="util">
+            <div class="wk">Week 3 <span>· resets Monday</span></div>
+            <div class="qlink"><span class="q">?</span> How levels work</div>
+          </div>
+
+          <!-- VERDICT CARD -->
+          <div class="verdict">
+            <div class="ey">This week</div>
+            <h1 class="low-only">Almost there. One frequency is low.</h1>
+            <h1 class="ok-only">You're on <em>Level 2</em>.</h1>
+            <div class="gates">
+              <div class="gate">
+                <div class="gt"><span class="ic ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><span class="glab">Time</span></div>
+                <div class="gval">Level 2</div>
+                <div class="gsub">24 min / day</div>
+              </div>
+              <div class="gate balance low-only bad">
+                <div class="gt"><span class="ic no"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span><span class="glab">Balance</span></div>
+                <div class="gval">Vitality low</div>
+                <div class="gsub">needs all 4 &ge; 15%</div>
+              </div>
+              <div class="gate balance ok-only">
+                <div class="gt"><span class="ic ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span><span class="glab">Balance</span></div>
+                <div class="gval">All four &ge; 15%</div>
+                <div class="gsub">balanced week</div>
+              </div>
+            </div>
+            <div class="fixline low-only">Your time already clears Level 2. Bring <b>Vitality up to 15%</b> this week to reach your level, a level needs both.</div>
+            <div class="fixline ok-only">Time and balance are both on track. <b>21 min/day more</b> to reach Level 3.</div>
+          </div>
+
+          <!-- TIME -->
+          <div class="sec">
+            <div class="shead"><h2>Time Under Frequency</h2></div>
+            <div class="bignum"><span class="n">24 min / day</span><span class="u">average</span><span class="wk">168 min this week</span></div>
+            <div class="thermo">
+              <div class="ttrack-wrap">
+                <div class="ttrack">
+                  <div class="tfill" style="width:53%"></div>
+                  <div class="ttick light" style="left:20%"></div>
+                  <div class="ttick light" style="left:44%"></div>
+                  <div class="ttick dark" style="left:88%"></div>
+                </div>
+                <div class="tmark" style="left:53%"></div>
+              </div>
+              <div class="tlabels">
+                <div class="tl hit" style="left:20%"><b>9</b><span>Level 1</span></div>
+                <div class="tl hit now" style="left:44%"><b>20</b><span>Level 2</span></div>
+                <div class="tl" style="left:88%"><b>45+</b><span>Level 3</span></div>
+              </div>
+            </div>
+            <div class="nextlvl">
+              <div class="pr"><span><b>Level 2</b> reached</span><span class="to"><b>21 min/day</b> more for Level 3</span></div>
+              <div class="mini"><i style="width:53%"></i></div>
+            </div>
+          </div>
+
+          <!-- BALANCE -->
+          <div class="sec">
+            <div class="shead"><h2>Frequency Balance</h2></div>
+            <div class="rule">Each of your four frequencies needs at least <b>15% of your weekly listening</b>. The other 40% is yours.</div>
+            <div class="frow">
+              <div class="top"><span class="dot" style="background:var(--core)"></span><span class="nm">Core</span><span class="pct">28%</span></div>
+              <div class="bar2"><div class="thresh"></div><div class="threshcap">15% min</div><div class="fg2" style="width:28%"></div></div>
+            </div>
+            <div class="frow">
+              <div class="top"><span class="dot" style="background:var(--love)"></span><span class="nm">Love</span><span class="pct low-only">22%</span><span class="pct ok-only">24%</span></div>
+              <div class="bar2"><div class="thresh"></div><div class="fg2 low-only" style="width:22%"></div><div class="fg2 ok-only" style="width:24%"></div></div>
+            </div>
+            <!-- Vitality: LOW in low state, OK in ok state -->
+            <div class="frow low low-only">
+              <div class="top"><span class="dot" style="background:var(--vitality)"></span><span class="nm">Vitality</span><span class="lowtag">LOW</span><span class="pct">11%</span></div>
+              <div class="bar2"><div class="thresh"></div><div class="threshcap">15% min</div><div class="fg2" style="width:11%"></div></div>
+            </div>
+            <div class="frow ok-only">
+              <div class="top"><span class="dot" style="background:var(--vitality)"></span><span class="nm">Vitality</span><span class="pct">18%</span></div>
+              <div class="bar2"><div class="thresh"></div><div class="fg2" style="width:18%"></div></div>
+            </div>
+            <div class="frow">
+              <div class="top"><span class="dot" style="background:var(--abundance)"></span><span class="nm">Abundance</span><span class="pct low-only">39%</span><span class="pct ok-only">30%</span></div>
+              <div class="bar2"><div class="thresh"></div><div class="fg2 low-only" style="width:39%"></div><div class="fg2 ok-only" style="width:30%"></div></div>
+            </div>
+            <div class="balfix"><span class="b">&#9650;</span><span>Vitality is <b style="color:var(--warn)">4% short</b> of 15%. Play a little more Vitality this week and it counts toward your level.</span></div>
+            <div class="balok"><span class="b">&#10003;</span><span>All four frequencies are getting their share. Nothing to fix this week.</span></div>
+          </div>
+
+          <!-- HISTORY -->
+          <div class="sec">
+            <div class="shead"><h2>Your weeks</h2></div>
+            <div class="wkrow cur">
+              <div class="wl"><span class="wn">Week 3</span><span class="ws low-only">On pace for Level 3 · Vitality low</span><span class="ws ok-only">On pace for Level 3</span></div>
+              <div class="wr"><span class="lvl top">This week</span><span class="chev">&#8250;</span></div>
+            </div>
+            <div class="wkrow">
+              <div class="wl"><span class="wn">Week 2</span><span class="ws">All four balanced</span></div>
+              <div class="wr"><span class="lvl">Level 3</span><span class="chev">&#8250;</span></div>
+            </div>
+            <div class="wkrow">
+              <div class="wl"><span class="wn">Week 1</span><span class="ws"><span class="lowflag">Vitality under 15%</span></span></div>
+              <div class="wr"><span class="lvl none">Not leveled</span><span class="chev">&#8250;</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav">
+          <div class="item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18V5l11-2v13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><circle cx="20" cy="16" r="3"/></svg>
+            Immersions
+          </div>
+          <div class="item active">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 14v4M9 9v9M14 5v13M19 11v7" stroke-linecap="round"/></svg>
+            Stats
+          </div>
+          <div class="item">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Favorites
+          </div>
+        </div>
+        <div class="homebar"></div>
+
+      </div>
+    </div>
+  </div>
+  <script>
+    var h = location.hash;
+    if (h.indexOf('full') >= 0) document.body.classList.add('full');
+    if (h.indexOf('ok') >= 0){ document.body.classList.remove('low'); document.body.classList.add('ok'); }
+    function setState(s){
+      document.body.classList.remove('low','ok');
+      document.body.classList.add(s);
+      var bl=document.getElementById('btn-low'), bo=document.getElementById('btn-ok');
+      if(bl&&bo){ bl.classList.toggle('on', s==='low'); bo.classList.toggle('on', s==='ok'); }
+    }
+    function fit(){ var PW=399; var s=Math.min((window.innerWidth-20)/PW,1); document.getElementById('stage').style.zoom=s; }
+    window.addEventListener('resize',fit); fit();
+  </script>
+</body>
+</html>
