@@ -140,6 +140,7 @@
 
   .toggle{display:flex; gap:6px; justify-content:center; margin-bottom:16px; font-family:var(--sans);}
   body.full .toggle{display:none;}
+  body.bare .toggle{display:none;}
   .toggle button{font-size:13px; font-weight:600; color:var(--ink2); background:#fff; border:1px solid #d8d2c6; padding:9px 16px; border-radius:22px; cursor:pointer; -webkit-appearance:none;}
   .toggle button.on{background:var(--violet); color:#fff; border-color:var(--violet);}
 
@@ -281,6 +282,7 @@
   <script>
     var h = location.hash;
     if (h.indexOf('full') >= 0) document.body.classList.add('full');
+    if (h.indexOf('bare') >= 0) document.body.classList.add('bare');
     if (h.indexOf('ok') >= 0){ document.body.classList.remove('low'); document.body.classList.add('ok'); }
     function setState(s){
       document.body.classList.remove('low','ok'); document.body.classList.add(s);
