@@ -97,15 +97,16 @@
   /* BALANCE — four columns, one shared 15% line */
   .rule{font-size:13.5px; color:var(--ink2); line-height:1.5; margin-top:12px;}
   .rule b{color:var(--ink); font-weight:700;}
-  .plot{position:relative; height:150px; margin-top:30px;}
-  .cols{position:relative; height:118px; display:flex; align-items:flex-end; gap:16px; z-index:1;}
+  .plot{position:relative; height:132px; margin-top:42px;}
+  .floor{position:absolute; left:0; right:0; bottom:0; height:21.43%; background:rgba(27,23,32,.05); border-radius:3px; z-index:0;}
+  .cols{position:absolute; inset:0; display:flex; align-items:flex-end; gap:16px; z-index:1;}
   .col{flex:1 1 0; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative;}
-  .col .cpct{font-family:var(--serif); font-size:15px; font-weight:600; color:var(--ink2); margin-bottom:7px;}
+  .col .cpct{font-family:var(--serif); font-size:15px; font-weight:600; color:var(--ink2); margin-bottom:7px; white-space:nowrap;}
   .col.low .cpct{color:var(--warn);}
   .col .cbar{width:100%; max-width:44px; border-radius:6px 6px 0 0; background:var(--neutral);}
   .col.low .cbar{background:var(--warn);}
-  .thline{position:absolute; left:0; right:0; bottom:30%; height:0; border-top:2px dashed #9a9089; z-index:2;}
-  .thlab{position:absolute; right:0; bottom:calc(30% + 4px); font-size:10.5px; font-weight:700; letter-spacing:.03em; color:var(--soft); background:var(--bg); padding:0 5px; z-index:3;}
+  .thline{position:absolute; left:0; right:0; bottom:21.43%; height:0; border-top:2px dashed #9a9089; z-index:2;}
+  .thlab{position:absolute; right:0; bottom:calc(21.43% + 4px); font-size:10.5px; font-weight:700; letter-spacing:.03em; color:var(--soft); background:var(--bg); padding:0 5px; z-index:3;}
   .names{display:flex; gap:16px; margin-top:12px;}
   .name{flex:1 1 0; display:flex; flex-direction:column; align-items:center; gap:5px;}
   .name .dot{width:8px; height:8px; border-radius:50%;}
@@ -154,8 +155,10 @@
 <body class="low">
   <div id="stage">
     <div class="toggle">
-      <button id="btn-low" class="on" onclick="setState('low')">One frequency low</button>
       <button id="btn-ok" onclick="setState('ok')">On track</button>
+      <button id="btn-low1" class="on" onclick="setState('low1')">1 low</button>
+      <button id="btn-low2" onclick="setState('low2')">2 low</button>
+      <button id="btn-low3" onclick="setState('low3')">3 low</button>
     </div>
     <div class="phone">
       <div class="screen">
@@ -177,10 +180,8 @@
           <!-- HERO: the level, said once -->
           <div class="hero">
             <div class="ey">This week</div>
-            <h1 class="low-only">Almost at <em>Level&nbsp;2</em></h1>
-            <h1 class="ok-only">You're on <em>Level&nbsp;2</em></h1>
-            <div class="sub low-only">Your time's on track. <b>One frequency's still under 15%.</b> Bring it up to lock your level in.</div>
-            <div class="sub ok-only">Time and balance both on track. <b>21 min/day more</b> for Level&nbsp;3.</div>
+            <h1 id="hero-head"></h1>
+            <div class="sub" id="hero-sub"></div>
           </div>
 
           <!-- TIME -->
@@ -205,41 +206,17 @@
           <div class="sec">
             <div class="shead">
               <h2>Balance</h2>
-              <span class="status no lowblk"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>1 low</span>
-              <span class="status ok okblk"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>Balanced</span>
+              <span class="status" id="bal-status"></span>
             </div>
             <div class="rule">Every frequency needs at least <b>15% of your week</b>. The other 40% is yours.</div>
 
-            <!-- LOW state plot -->
-            <div class="plot lowblk">
-              <div class="cols">
-                <div class="col"><div class="cpct">28%</div><div class="cbar" style="height:56%"></div></div>
-                <div class="col"><div class="cpct">22%</div><div class="cbar" style="height:44%"></div></div>
-                <div class="col low"><div class="cpct">11%</div><div class="cbar" style="height:22%"></div></div>
-                <div class="col"><div class="cpct">39%</div><div class="cbar" style="height:78%"></div></div>
-              </div>
+            <div class="plot">
+              <div class="floor"></div>
+              <div class="cols" id="bal-cols"></div>
               <div class="thline"></div><div class="thlab">15% min</div>
             </div>
-            <!-- OK state plot -->
-            <div class="plot okblk">
-              <div class="cols">
-                <div class="col"><div class="cpct">28%</div><div class="cbar" style="height:56%"></div></div>
-                <div class="col"><div class="cpct">24%</div><div class="cbar" style="height:48%"></div></div>
-                <div class="col"><div class="cpct">18%</div><div class="cbar" style="height:36%"></div></div>
-                <div class="col"><div class="cpct">30%</div><div class="cbar" style="height:60%"></div></div>
-              </div>
-              <div class="thline"></div><div class="thlab">15% min</div>
-            </div>
-
-            <div class="names">
-              <div class="name"><span class="dot" style="background:var(--core)"></span><span class="t">Core</span></div>
-              <div class="name"><span class="dot" style="background:var(--love)"></span><span class="t">Love</span></div>
-              <div class="name low"><span class="dot" style="background:var(--vitality)"></span><span class="t">Vitality</span></div>
-              <div class="name"><span class="dot" style="background:var(--abundance)"></span><span class="t">Abundance</span></div>
-            </div>
-
-            <div class="balnote no"><span>&#9650;</span><span>Vitality is <b>4% short</b> of 15%. A little more this week will do it.</span></div>
-            <div class="balnote ok"><span>&#10003;</span><span>All four are clearing the line. Nothing to fix this week.</span></div>
+            <div class="names" id="bal-names"></div>
+            <div class="balnote" id="bal-note"></div>
           </div>
 
           <!-- HISTORY -->
@@ -280,15 +257,50 @@
     </div>
   </div>
   <script>
-    var h = location.hash;
-    if (h.indexOf('full') >= 0) document.body.classList.add('full');
-    if (h.indexOf('bare') >= 0) document.body.classList.add('bare');
-    if (h.indexOf('ok') >= 0){ document.body.classList.remove('low'); document.body.classList.add('ok'); }
-    function setState(s){
-      document.body.classList.remove('low','ok'); document.body.classList.add(s);
-      var bl=document.getElementById('btn-low'), bo=document.getElementById('btn-ok');
-      if(bl&&bo){ bl.classList.toggle('on', s==='low'); bo.classList.toggle('on', s==='ok'); }
+    var MIN=15, SCALE=70;
+    var NAMES=['Core','Love','Vitality','Abundance'];
+    var VARS=['--core','--love','--vitality','--abundance'];
+    var STATES={ ok:[28,24,18,30], low1:[28,22,11,39], low2:[36,42,13,9], low3:[61,14,13,12] };
+    var CHECK='<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>';
+    var CROSS='<span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span>';
+    function fmtList(a){ if(a.length===1)return a[0]; if(a.length===2)return a[0]+' and '+a[1]; return a.slice(0,-1).join(', ')+', and '+a[a.length-1]; }
+    function render(key){
+      var vals=STATES[key]||STATES.low1, lows=[];
+      vals.forEach(function(v,i){ if(v<MIN) lows.push(i); });
+      var ch=''; vals.forEach(function(v,i){ var h=Math.min(100,v/SCALE*100); ch+='<div class="col'+(v<MIN?' low':'')+'"><div class="cpct">'+v+'%</div><div class="cbar" style="height:'+h+'%"></div></div>'; });
+      document.getElementById('bal-cols').innerHTML=ch;
+      var nh=''; NAMES.forEach(function(n,i){ nh+='<div class="name'+(vals[i]<MIN?' low':'')+'"><span class="dot" style="background:var('+VARS[i]+')"></span><span class="t">'+n+'</span></div>'; });
+      document.getElementById('bal-names').innerHTML=nh;
+      var stat=document.getElementById('bal-status');
+      if(lows.length===0){ stat.className='status ok'; stat.innerHTML=CHECK+'Balanced'; }
+      else { stat.className='status no'; stat.innerHTML=CROSS+lows.length+' low'; }
+      var head=document.getElementById('hero-head'), sub=document.getElementById('hero-sub');
+      if(lows.length===0){
+        head.innerHTML="You're on <em>Level&nbsp;2</em>";
+        sub.innerHTML="Time and balance both on track. <b>21 min/day more</b> for Level&nbsp;3.";
+      } else {
+        var ln=lows.map(function(i){return NAMES[i];}), list=fmtList(ln);
+        head.innerHTML="Almost at <em>Level&nbsp;2</em>";
+        sub.innerHTML="Your time's on track. <b>"+list+(ln.length===1?" is":" are")+" under 15%.</b> Bring "+(ln.length===1?"it":"them")+" up to lock your level in.";
+      }
+      var note=document.getElementById('bal-note');
+      if(lows.length===0){ note.className='balnote ok'; note.innerHTML='<span>&#10003;</span><span>All four are clearing the line. Nothing to fix this week.</span>'; }
+      else if(lows.length===1){ var i=lows[0]; note.className='balnote no'; note.innerHTML='<span>&#9650;</span><span>'+NAMES[i]+' is <b>'+(MIN-vals[i])+'% short</b> of 15%. A little more this week will do it.</span>'; }
+      else { var ln2=lows.map(function(i){return NAMES[i];}); note.className='balnote no'; note.innerHTML='<span>&#9650;</span><span><b>'+fmtList(ln2)+'</b> are under 15%. Give each a bit more time this week to lock your level in.</span>'; }
+      document.body.classList.remove('low','ok'); document.body.classList.add(lows.length?'low':'ok');
     }
+    function setState(key){
+      render(key);
+      ['ok','low1','low2','low3'].forEach(function(k){ var b=document.getElementById('btn-'+k); if(b) b.classList.toggle('on', k===key); });
+    }
+    var h=location.hash, start='low1';
+    if(h.indexOf('full')>=0) document.body.classList.add('full');
+    if(h.indexOf('bare')>=0) document.body.classList.add('bare');
+    if(h.indexOf('ok')>=0) start='ok';
+    else if(h.indexOf('low3')>=0) start='low3';
+    else if(h.indexOf('low2')>=0) start='low2';
+    else start='low1';
+    setState(start);
     function fit(){ var PW=399; var s=Math.min((window.innerWidth-20)/PW,1); document.getElementById('stage').style.zoom=s; }
     window.addEventListener('resize',fit); fit();
   </script>

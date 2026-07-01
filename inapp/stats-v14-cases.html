@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zodiac.fm — Stats v14 (balance cases: 0 / 1 / 2 / 3 low)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600&family=Inter:wght@400;500;600;700&display=swap');
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:#dedbd4; font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh; padding:28px 16px 44px;}
+  h1.title{font-family:'Newsreader',Georgia,serif; font-size:22px; font-weight:600; color:#1b1720; text-align:center; margin-bottom:4px;}
+  p.note{text-align:center; color:#615c63; font-size:13px; margin-bottom:26px;}
+  .row{display:flex; flex-wrap:wrap; gap:24px; justify-content:center; align-items:flex-start;}
+  .one{display:flex; flex-direction:column; align-items:center; gap:11px;}
+  .cap{font-family:'Newsreader',Georgia,serif; font-size:16px; font-weight:600; color:#1b1720;}
+  .cap .k{display:inline-block; font-family:'Inter',sans-serif; font-size:10.5px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:3px 9px; border-radius:20px; margin-left:7px; vertical-align:middle;}
+  .k.ok{color:#2f7a4a; background:#e7f1ea;} .k.no{color:#b3382f; background:#f7e9e7;}
+  iframe{width:410px; height:1580px; border:0; background:transparent; display:block;}
+  @media(max-width:900px){ iframe{width:380px;} }
+</style>
+</head>
+<body>
+  <h1 class="title">Balance — every case</h1>
+  <p class="note">Same screen, four situations. Watch how the 15% line and the shaded floor read as more frequencies drop low.</p>
+  <div class="row">
+    <div class="one"><div class="cap">On track <span class="k ok">leveled</span></div><iframe src="stats-v14.html#full-bare-ok" scrolling="no"></iframe></div>
+    <div class="one"><div class="cap">1 low <span class="k no">below level</span></div><iframe src="stats-v14.html#full-bare-low1" scrolling="no"></iframe></div>
+    <div class="one"><div class="cap">2 low <span class="k no">below level</span></div><iframe src="stats-v14.html#full-bare-low2" scrolling="no"></iframe></div>
+    <div class="one"><div class="cap">3 low <span class="k no">below level</span></div><iframe src="stats-v14.html#full-bare-low3" scrolling="no"></iframe></div>
+  </div>
+</body>
+</html>
