@@ -107,14 +107,25 @@
   /* .fm tints to the active frequency (logo no longer locked to purple) */
   #favs .logo .d{color:#1A1620!important}
   /* GREYSCALE-CARD experiment: only the tile carries colour */
-  .heart{color:#b8b3bd!important}
+  #rows .heart{color:#c9c4cf!important}
   .cardpp{width:23px!important;height:23px!important}
   .cardpp svg{width:9px!important;height:9px!important}
   /* Hz readout instead of the frequency word: thin, cool font, paired with the play outline */
-  .lab{font-family:'Space Grotesk',sans-serif!important;font-weight:300!important;font-size:21px!important;letter-spacing:.5px!important;line-height:1!important;color:var(--cink)!important;display:flex!important;align-items:baseline!important;gap:3px!important}
+  .lab{font-family:'Space Grotesk',sans-serif!important;font-weight:300!important;font-size:16px!important;letter-spacing:.4px!important;line-height:1!important;color:var(--cink)!important;display:flex!important;align-items:baseline!important;gap:3px!important}
   .hzu{font-size:12px!important;opacity:.6!important;font-weight:400!important}
   .botrow{align-items:center!important;padding-top:4px!important}
   .cardpp{margin-right:0!important}
+  /* tap-anywhere play: subtle play triangle on the tile idle; equaliser + lift when playing */
+  .pov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 50%,rgba(0,0,0,.16),rgba(0,0,0,.05));transition:background .2s}
+  .pplay{width:0;height:0;border-style:solid;border-width:8px 0 8px 13px;border-color:transparent transparent transparent #fff;margin-left:3px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.55))}
+  .ppause{display:none;align-items:flex-end;gap:2.5px;height:15px}
+  .ppause i{width:3px;height:100%;background:#fff;border-radius:2px;transform-origin:bottom;animation:eq .9s ease-in-out infinite;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+  .ppause i:nth-child(1){animation-delay:0s}.ppause i:nth-child(2){animation-delay:.25s}.ppause i:nth-child(3){animation-delay:.5s}
+  @keyframes eq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+  .row.playing .pov{background:radial-gradient(circle at 50% 50%,rgba(0,0,0,.30),rgba(0,0,0,.12))}
+  .row.playing .pplay{display:none}.row.playing .ppause{display:flex}
+  .row.playing{box-shadow:0 0 0 2px var(--cink),0 8px 20px rgba(0,0,0,.08)!important;border-color:transparent!important}
+  .dur{font-size:12px!important}
 </style></head><body>
 <div id="app">
 
@@ -248,9 +259,9 @@ function buildRows(){
   const cat=CATS[catKey]; rows.innerHTML=''; rowSongs=cat.songs;
   cat.songs.forEach((s,i)=>{
     const r=document.createElement('div');r.className='row';r.innerHTML=
-     `<div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas></div>
+     `<div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas><div class="pov"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></div></div>
       <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p>
-        <div class="botrow"><div class="lab">${cat.hz}<span class="hzu"> Hz</span></div><button class="cardpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
+        <div class="botrow"><div class="lab">${cat.hz}<span class="hzu"> Hz</span></div></div></div>
       <div class="rt"><div class="rtic"><span class="dl">${DL}</span><div class="heart">&#9825;</div></div><div class="dur">&#9201; ${s.dur}</div></div>`;
     r.onclick=()=>playSong(catKey,i);
     rows.appendChild(r);
@@ -378,10 +389,9 @@ const FAVS=[['core','starseed'],['love','kindred-spirits'],['vitality','astrolit
 function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
  FAVS.forEach(([ck,slug])=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
   const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);
-  r.innerHTML=`<div class="grip">${GRIP}</div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""></div>
+  r.innerHTML=`<div class="grip">${GRIP}</div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></div></div>
    <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p>
-    <div class="botrow"><div class="lab" style="color:${cat.cink}">${cat.hz}<span class="hzu"> Hz</span></div>
-     <button class="cardpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
+    <div class="botrow"><div class="lab" style="color:${cat.cink}">${cat.hz}<span class="hzu"> Hz</span></div></div></div>
    <div class="rt"><div class="rtic"><span class="dl">${DL}</span><div class="heart" style="color:${cat.cink}">&#9829;</div></div><div class="dur">&#9201; ${s.dur}</div></div>`;
   r.onclick=()=>playSong(ck,cat.songs.indexOf(s));
   c.appendChild(r);});}
