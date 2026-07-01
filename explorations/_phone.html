@@ -1,0 +1,7 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="robots" content="noindex"><style>html,body{margin:0;background:#fff}iframe{display:block;border:0;width:390px}</style></head><body>
+<script>
+const p=new URLSearchParams(location.search);
+const f=document.createElement('iframe');
+f.src=p.get('src')||'';f.style.height=(p.get('h')||'6000')+'px';
+document.body.appendChild(f);
+</script></body></html>

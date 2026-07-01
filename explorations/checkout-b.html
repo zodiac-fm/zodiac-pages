@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zodiac.fm · Join</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6F1E8; --moondust:#FBF8F3; --white:#FFFFFF; --hairline:#EFE6D6;
+    --mist:#EEE9E0; --ink:#1A1620; --muted:#7A7480;
+    --purple:#6521C9; --purple-deep:#38007A; --purple-tint:#EFECFF; --purple-soft:#D2C8FF;
+    --stage:#0B0712; --cream-text:#FBF8F3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    background:var(--cream); color:var(--ink);
+    font-family:'Inter',sans-serif; font-size:17px; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .col{max-width:560px; margin:0 auto; padding-left:22px; padding-right:22px;}
+
+  /* ================= BEAT ONE : the reveal, kept (dark) ================= */
+  .beat1{background:var(--stage); padding:44px 0 76px; border-radius:0 0 28px 28px;}
+  .beat1 .logo{display:block; margin:0 auto 60px; width:124px;}
+  .beat1 .kicker{
+    font-size:11px; font-weight:600; letter-spacing:.09em; text-transform:uppercase;
+    color:rgba(251,248,243,.5); text-align:center; margin-bottom:14px;
+  }
+  .beat1 h1{
+    font-family:'Fraunces',serif; font-weight:500; color:var(--cream-text);
+    font-size:clamp(34px,9vw,46px); line-height:1.1; letter-spacing:-0.8px;
+    text-align:center; margin-bottom:16px;
+  }
+  .beat1 .lede{
+    color:rgba(251,248,243,.62); text-align:center; font-size:16.5px;
+    max-width:32ch; margin:0 auto 52px;
+  }
+  .freqs{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:44px;}
+  .freq{
+    background:rgba(251,248,243,.045); border:1px solid rgba(251,248,243,.09);
+    border-radius:16px; padding:22px 14px 18px; text-align:center;
+  }
+  .freq img{
+    width:92px; height:92px; border-radius:50%; display:block; margin:0 auto 14px;
+  }
+  .freq b{
+    display:block; color:var(--cream-text); font-weight:600; font-size:14.5px;
+    letter-spacing:.01em; margin-bottom:2px;
+  }
+  .freq span{display:block; color:rgba(251,248,243,.5); font-size:12.5px; line-height:1.45;}
+  .beat1 .keep-line{
+    color:rgba(251,248,243,.62); text-align:center; font-size:14.5px;
+    max-width:36ch; margin:0 auto;
+  }
+  .beat1 .quote{margin:56px auto 0; max-width:40ch; text-align:center;}
+  .beat1 .quote blockquote{
+    font-family:'Fraunces',serif; font-style:italic; font-weight:400;
+    color:var(--cream-text); font-size:22px; line-height:1.4; letter-spacing:-0.2px;
+  }
+  .beat1 .quote cite{
+    display:block; font-style:normal; font-size:12px; font-weight:600;
+    letter-spacing:.08em; text-transform:uppercase; color:rgba(251,248,243,.45);
+    margin-top:15px;
+  }
+
+  /* ================= BEAT TWO : the promise + the pay card ================= */
+  .beat2{padding:76px 0 72px;}
+  .beat2 .kicker{
+    font-size:11px; font-weight:600; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--muted); text-align:center; margin-bottom:14px;
+  }
+  .beat2 h2{
+    font-family:'Fraunces',serif; font-weight:500;
+    font-size:clamp(32px,8.5vw,42px); line-height:1.12; letter-spacing:-0.7px;
+    text-align:center; margin-bottom:18px;
+  }
+  .beat2 .promise-copy{
+    text-align:center; font-size:17px; max-width:40ch; margin:0 auto 10px;
+  }
+  .beat2 .promise-soft{
+    text-align:center; color:var(--muted); font-size:15px; max-width:42ch; margin:0 auto 56px;
+  }
+
+  .paycard{
+    background:var(--white); border:1px solid var(--hairline); border-radius:16px;
+    box-shadow:0 4px 18px rgba(0,0,0,.04); padding:26px 24px 28px;
+  }
+  .seg{
+    display:flex; background:var(--mist); border-radius:999px; padding:4px; margin-bottom:26px;
+  }
+  .seg button{
+    flex:1; border:none; background:transparent; cursor:pointer;
+    font-family:'Inter',sans-serif; font-size:14.5px; font-weight:600;
+    color:var(--muted); padding:10px 6px; border-radius:999px; transition:all .18s;
+  }
+  .seg button.on{background:var(--white); color:var(--ink); box-shadow:0 2px 8px rgba(0,0,0,.07);}
+  .price-block{text-align:center; margin-bottom:6px;}
+  .price-block .big{
+    font-family:'Fraunces',serif; font-weight:500; font-size:52px;
+    letter-spacing:-1px; line-height:1; font-variant-numeric:tabular-nums;
+  }
+  .price-block .big small{
+    font-family:'Inter',sans-serif; font-size:16px; font-weight:400;
+    color:var(--muted); letter-spacing:0;
+  }
+  .price-block .bill{font-size:14px; color:var(--muted); margin-top:8px;}
+  .save{
+    display:inline-block; font-size:10.5px; font-weight:600; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--purple-deep); background:var(--purple-tint);
+    border-radius:999px; padding:3px 10px; margin-top:12px;
+  }
+  .save.hide{visibility:hidden;}
+  .incl{
+    border-top:1px solid var(--hairline); margin-top:22px; padding-top:18px;
+    margin-bottom:24px;
+  }
+  .incl p{font-size:14.5px; color:var(--ink); padding:5px 0; display:flex; gap:10px; align-items:baseline;}
+  .incl p::before{
+    content:""; flex:0 0 7px; width:7px; height:7px; border-radius:50%;
+    background:radial-gradient(circle at 32% 26%, rgba(255,255,255,.85) 0%, rgba(255,255,255,0) 42%), linear-gradient(140deg, #6521C9, #A737C8);
+    position:relative; top:-1px;
+  }
+  .field{margin-bottom:12px;}
+  .field input{
+    width:100%; border:1px solid var(--hairline); border-radius:12px;
+    background:var(--moondust); padding:14px 15px; font-family:'Inter',sans-serif;
+    font-size:16px; color:var(--ink); outline:none; transition:border-color .18s;
+  }
+  .field input:focus{border-color:var(--purple-soft); background:var(--white);}
+  .field input::placeholder{color:#B4AEA3;}
+  .row2{display:flex; gap:12px;}
+  .row2 .field{flex:1;}
+  .cta{
+    display:block; width:100%; border:none; cursor:pointer;
+    background:var(--purple); color:#fff; font-family:'Inter',sans-serif;
+    font-size:16.5px; font-weight:600; border-radius:999px; padding:17px 20px;
+    margin-top:10px; transition:transform .12s, background .18s;
+  }
+  .cta:active{transform:scale(.985); background:var(--purple-deep);}
+  .guarantee-line{
+    text-align:center; font-size:13.5px; color:var(--muted); margin-top:14px;
+  }
+  .guarantee-line b{color:var(--ink); font-weight:600;}
+
+  .trust{
+    margin-top:64px; text-align:center;
+  }
+  .trust .stats{font-size:15px; font-weight:500; font-variant-numeric:tabular-nums; margin-bottom:6px;}
+  .trust .stats i{font-style:normal; color:var(--muted); padding:0 8px;}
+  .trust p{font-size:13.5px; color:var(--muted);}
+  @media (max-width:389px){
+    .freq img{width:80px;height:80px;}
+    .paycard{padding:22px 16px 24px;}
+    .price-block .big{font-size:46px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- BEAT ONE : keep the reveal -->
+<section class="beat1">
+  <div class="col">
+    <img class="logo" src="../inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+    <div class="kicker">Your reveal, kept</div>
+    <h1>This is the sound of&nbsp;you.</h1>
+    <p class="lede">Four frequencies, calculated from your exact birth. Here is what stays yours.</p>
+
+    <div class="freqs">
+      <div class="freq">
+        <img src="../inapp/app-assets-ring/sig-core-starseed.png" alt="Core frequency">
+        <b>Core</b><span>Identity</span>
+      </div>
+      <div class="freq">
+        <img src="../inapp/app-assets-ring/sig-love-kindred-spirits.png" alt="Love frequency">
+        <b>Love</b><span>Relationships</span>
+      </div>
+      <div class="freq">
+        <img src="../inapp/app-assets-ring/sig-vitality-elysian-surge.png" alt="Vitality frequency">
+        <b>Vitality</b><span>Energy</span>
+      </div>
+      <div class="freq">
+        <img src="../inapp/app-assets-ring/sig-abundance-quiet-success.png" alt="Abundance frequency">
+        <b>Abundance</b><span>Opportunity</span>
+      </div>
+    </div>
+    <p class="keep-line">Your 4 frequencies woven into over 23 personalized sound journeys. Instant access to all four.</p>
+
+    <div class="quote">
+      <blockquote>&ldquo;Feels like coming home to myself.&rdquo;</blockquote>
+      <cite>Katie Wells · Founder, Wellness Mama</cite>
+    </div>
+  </div>
+</section>
+
+<!-- BEAT TWO : the promise is the hero -->
+<section class="beat2">
+  <div class="col">
+    <div class="kicker">The promise</div>
+    <h2>Ninety days to live with&nbsp;it.</h2>
+    <p class="promise-copy">Choose yearly and you have 90 days with everything. Monthly gives you 30. If it doesn't land as you, write to us and we'll return every dollar. All you do is ask.</p>
+    <p class="promise-soft">You might not feel much at first. A lot of people don't. They just notice, a few weeks in, that things are landing differently.</p>
+
+    <div class="paycard">
+      <div class="seg">
+        <button id="seg-y" class="on" type="button">Yearly</button>
+        <button id="seg-m" type="button">Monthly</button>
+      </div>
+
+      <div class="price-block">
+        <div class="big" id="big-price">$9.17 <small>/ month</small></div>
+        <div class="bill" id="bill-line">$110 billed once per year</div>
+        <div class="save" id="save-tag">Best value · Save $100</div>
+      </div>
+
+      <div class="incl">
+        <p>All four frequencies, unlimited plays</p>
+        <p>Every personalized sound journey</p>
+        <p>Cancel anytime, no hassle</p>
+      </div>
+
+      <div class="field"><input type="email" placeholder="Email address" autocomplete="email"></div>
+      <div class="field"><input type="text" inputmode="numeric" placeholder="Card number" autocomplete="cc-number"></div>
+      <div class="row2">
+        <div class="field"><input type="text" inputmode="numeric" placeholder="MM / YY" autocomplete="cc-exp"></div>
+        <div class="field"><input type="text" inputmode="numeric" placeholder="CVC" autocomplete="cc-csc"></div>
+      </div>
+
+      <button class="cta">Start my membership</button>
+      <div class="guarantee-line" id="g-line"><b>90-day money-back guarantee.</b> Your information is never sold or shared.</div>
+    </div>
+
+    <div class="trust">
+      <div class="stats">10,000+ listeners <i>·</i> 4.7 stars</div>
+      <p>&copy; 2026 Zodiac.fm · Privacy · Terms</p>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var y = document.getElementById('seg-y');
+  var m = document.getElementById('seg-m');
+  var big = document.getElementById('big-price');
+  var bill = document.getElementById('bill-line');
+  var save = document.getElementById('save-tag');
+  var g = document.getElementById('g-line');
+  function set(yearly){
+    y.classList.toggle('on', yearly);
+    m.classList.toggle('on', !yearly);
+    if(yearly){
+      big.innerHTML = '$9.17 <small>/ month</small>';
+      bill.textContent = '$110 billed once per year';
+      save.classList.remove('hide');
+      g.innerHTML = '<b>90-day money-back guarantee.</b> Your information is never sold or shared.';
+    } else {
+      big.innerHTML = '$17.50 <small>/ month</small>';
+      bill.textContent = 'Billed monthly';
+      save.classList.add('hide');
+      g.innerHTML = '<b>30-day money-back guarantee.</b> Your information is never sold or shared.';
+    }
+  }
+  y.addEventListener('click', function(){ set(true); });
+  m.addEventListener('click', function(){ set(false); });
+})();
+</script>
+</body>
+</html>

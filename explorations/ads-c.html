@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ads-c — proof static</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { margin:0; }
+  .board {
+    width:1080px; height:1350px;
+    background:#F6F1E8;
+    position:relative;
+    overflow:hidden;
+    font-family:'Inter', sans-serif;
+  }
+  .logo { position:absolute; top:80px; left:88px; width:128px; }
+  .label {
+    position:absolute; top:238px; left:88px;
+    font-size:23px; font-weight:600;
+    letter-spacing:.14em; text-transform:uppercase;
+    color:#7A7480;
+    display:flex; align-items:center; gap:14px;
+  }
+  .label .dot {
+    width:16px; height:16px; border-radius:50%;
+    background:radial-gradient(circle at 32% 26%, rgba(255,255,255,.85) 0%, rgba(255,255,255,0) 42%), linear-gradient(140deg, #B90044, #CF4090);
+  }
+  .quote {
+    position:absolute; top:320px; left:88px;
+    width:640px;
+    font-family:'Fraunces', serif;
+    font-optical-sizing:auto;
+    font-weight:500;
+    font-size:66px;
+    line-height:1.22;
+    letter-spacing:-0.8px;
+    color:#1A1620;
+  }
+  .quote .mark { color:#B90044; }
+  .attr {
+    position:absolute; top:872px; left:88px;
+    font-size:27px; color:#1A1620; font-weight:600;
+  }
+  .attr span { display:block; margin-top:8px; font-weight:400; color:#7A7480; font-size:24px; }
+  .stats {
+    position:absolute; bottom:96px; left:88px;
+    font-size:24px; color:#7A7480; font-weight:500;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:.01em;
+  }
+  .stats b { color:#1A1620; font-weight:600; }
+  /* phone peeking from the right edge */
+  .phone {
+    position:absolute;
+    right:-150px; bottom:-210px;
+    width:470px;
+    transform:rotate(-7deg);
+    border-radius:44px;
+    background:#FFFFFF;
+    padding:16px;
+    box-shadow:0 24px 60px rgba(26,22,32,.18), 0 4px 18px rgba(0,0,0,.06);
+  }
+  .phone .screen {
+    border-radius:30px;
+    overflow:hidden;
+    height:920px;
+  }
+  .phone .screen img { width:100%; display:block; }
+</style>
+</head>
+<body>
+<div class="board">
+  <img class="logo" src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
+  <div class="label"><span class="dot"></span>From a listener</div>
+  <div class="quote"><span class="mark">&ldquo;</span>I feel like ME. I&nbsp;feel like the person I&rsquo;ve been trying to get back to for so&nbsp;long.<span class="mark">&rdquo;</span></div>
+  <div class="attr">Amber Hedrick<span>One week of listening</span></div>
+  <div class="stats"><b>10,000+</b> listeners &nbsp;&middot;&nbsp; <b>4.7</b> stars</div>
+  <div class="phone">
+    <div class="screen"><img src="assets/app-immersions.png" alt="Zodiac.fm app"></div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ads-b — brand static</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { margin:0; }
+  .board {
+    width:1080px; height:1350px;
+    background:#0B0712;
+    position:relative;
+    overflow:hidden;
+    display:flex; flex-direction:column; align-items:center;
+    font-family:'Inter', sans-serif;
+  }
+  /* subtle radial glow behind the disc */
+  .glow {
+    position:absolute; top:150px; left:50%; transform:translateX(-50%);
+    width:900px; height:900px; border-radius:50%;
+    background:radial-gradient(circle, rgba(101,33,201,.42) 0%, rgba(101,33,201,.14) 42%, rgba(11,7,18,0) 70%);
+    pointer-events:none;
+  }
+  .logo { margin-top:84px; width:132px; position:relative; }
+  .disc {
+    margin-top:66px;
+    width:560px; height:560px;
+    position:relative;
+  }
+  .disc img { width:100%; height:100%; display:block; }
+  .hook {
+    margin-top:78px;
+    font-family:'Fraunces', serif;
+    font-optical-sizing:auto;
+    font-weight:500;
+    font-size:92px;
+    line-height:1.12;
+    letter-spacing:-1px;
+    color:#FBF8F3;
+    text-align:center;
+    max-width:880px;
+    position:relative;
+  }
+  .hook em { font-style:italic; font-weight:400; }
+  .rule {
+    margin-top:64px;
+    width:120px; height:3px; border-radius:3px;
+    background:linear-gradient(140deg, #6521C9, #A737C8);
+    position:relative;
+  }
+  .tag {
+    margin-top:38px;
+    font-size:24px; font-weight:600;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:#D2C8FF;
+    position:relative;
+  }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="glow"></div>
+  <img class="logo" src="../inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+  <div class="disc"><img src="../inapp/app-assets-ring/sig-core-astrolith.png" alt=""></div>
+  <div class="hook">Your chart,<br><em>played,</em> not read.</div>
+  <div class="rule"></div>
+  <div class="tag">The Sound of You</div>
+</div>
+</body>
+</html>

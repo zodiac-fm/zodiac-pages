@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Zodiac.fm · Your chart, played, not read</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6F1E8; --moondust:#FBF8F3; --white:#FFFFFF; --hair:#EFE6D6; --mist:#EEE9E0;
+    --ink:#1A1620; --mut:#7A7480;
+    --purple:#6521C9; --purple-deep:#38007A; --tint:#EFECFF; --soft:#D2C8FF;
+    --stage:#0B0712;
+    --core1:#6521C9; --core2:#A737C8;
+    --love1:#B90044; --love2:#CF4090;
+    --vit1:#FF9112; --vit2:#FFC251; --vit-text:#C25500;
+    --ab1:#00AFDC; --ab2:#2ED7DD;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--cream);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .page{max-width:680px;margin:0 auto;padding:0 24px}
+  h1,h2,.serif{font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:500;letter-spacing:-.6px;line-height:1.14}
+  .label{font-family:'Inter',sans-serif;font-weight:600;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
+  a{color:var(--purple)}
+  .btn{display:inline-block;background:var(--purple);color:#fff;text-decoration:none;font-weight:600;font-size:16.5px;padding:17px 34px;border-radius:999px;letter-spacing:-.1px;transition:transform .08s ease, background .15s ease}
+  .btn:active{transform:scale(.985);background:var(--purple-deep)}
+  .micro{font-size:13.5px;color:var(--mut);margin-top:14px}
+
+  header{padding:26px 0 0;display:flex;justify-content:center}
+  header img{width:126px;display:block}
+
+  /* hero */
+  .hero{padding:78px 0 30px;text-align:left}
+  .hero .label{margin-bottom:18px}
+  .hero h1{font-size:clamp(38px,10.5vw,58px);letter-spacing:-1px}
+  .hero p.sub{margin-top:22px;font-size:18px;line-height:1.62;color:#3d3745;max-width:33em}
+  .hero .cta{margin-top:34px}
+
+  /* endorsed row */
+  .trust{padding:64px 0 0}
+  .trust .label{text-align:center;margin-bottom:18px}
+  .names{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;text-align:center}
+  .names span{font-family:'Fraunces',serif;font-size:16.5px;color:#4a4450;letter-spacing:-.2px;white-space:nowrap}
+  .trust .sub{margin-top:14px;text-align:center;font-size:13px;color:var(--mut)}
+
+  /* mechanism */
+  .mech{padding:96px 0 0;text-align:center}
+  .mech h2{font-size:clamp(28px,7.6vw,40px)}
+  .mech .art{margin:40px auto 0;width:min(310px,78vw)}
+  .mech .art img{width:100%;border-radius:50%;display:block;box-shadow:0 22px 60px rgba(56,0,122,.16)}
+  .mech figcaption{margin-top:18px;font-size:13.5px;color:var(--mut)}
+  .mech p.body{margin:30px auto 0;max-width:30em;text-align:center;font-size:17.5px;color:#3d3745}
+  .mech p.tune{margin:26px auto 0;max-width:26em;font-family:'Fraunces',serif;font-size:20px;line-height:1.5;letter-spacing:-.3px;color:var(--purple-deep)}
+
+  /* stats */
+  .stats{margin-top:96px;background:var(--white);border:1px solid var(--hair);border-radius:16px;padding:36px 28px 26px;box-shadow:0 4px 18px rgba(0,0,0,.04)}
+  .stats .grid{display:grid;grid-template-columns:1fr 1fr;gap:30px 18px}
+  .stat b{display:block;font-family:'Fraunces',serif;font-weight:500;font-size:34px;letter-spacing:-.5px;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .stat span{display:block;margin-top:4px;font-size:13.5px;color:var(--mut);line-height:1.45}
+  .stats .note{margin-top:26px;padding-top:16px;border-top:1px solid var(--hair);font-size:12.5px;color:var(--mut);line-height:1.5}
+
+  /* beats */
+  .beat{padding:104px 0 0}
+  .beat h2{font-size:clamp(27px,7.4vw,38px);max-width:14em}
+  .beat p.body{margin-top:18px;font-size:17.5px;color:#3d3745;max-width:33em}
+  .freqs{margin-top:36px;display:flex;flex-direction:column;gap:0}
+  .freq{display:flex;gap:16px;align-items:flex-start;padding:20px 0;border-top:1px solid var(--hair)}
+  .freq:last-child{border-bottom:1px solid var(--hair)}
+  .blob{width:26px;height:26px;border-radius:50%;flex:0 0 auto;margin-top:3px;background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.6),rgba(255,255,255,0) 46%),linear-gradient(140deg,var(--c1),var(--c2))}
+  .freq h3{font-family:'Fraunces',serif;font-weight:500;font-size:20px;letter-spacing:-.3px}
+  .freq p{margin-top:3px;font-size:15.5px;color:#55505c;line-height:1.55}
+
+  /* phone beat */
+  .phonewrap{margin:44px auto 0;width:min(300px,74vw)}
+  .phone{border-radius:30px;overflow:hidden;box-shadow:0 24px 70px rgba(26,22,32,.18);border:1px solid var(--hair);background:var(--moondust)}
+  .phone img{width:100%;display:block}
+  .library{margin-top:40px}
+  .lib{padding:18px 0;border-top:1px solid var(--hair)}
+  .lib:last-child{border-bottom:1px solid var(--hair)}
+  .lib b{font-family:'Fraunces',serif;font-weight:500;font-size:19px;letter-spacing:-.3px;display:block}
+  .lib span{font-size:15px;color:var(--mut)}
+
+  /* pull quote */
+  .pull{padding:110px 0 0;text-align:center}
+  .pull p{font-family:'Fraunces',serif;font-size:clamp(24px,6.6vw,34px);line-height:1.3;letter-spacing:-.5px;max-width:17em;margin:0 auto}
+  .pull cite{display:block;margin-top:20px;font-style:normal;font-size:14px;color:var(--mut)}
+
+  /* quotes */
+  .quotes{padding:104px 0 0}
+  .quotes h2{font-size:clamp(27px,7.4vw,38px)}
+  .qcards{margin-top:34px;display:flex;flex-direction:column;gap:16px}
+  .qcard{background:var(--white);border:1px solid var(--hair);border-radius:16px;padding:26px 26px 22px;box-shadow:0 4px 18px rgba(0,0,0,.04)}
+  .qcard p{font-size:16.5px;line-height:1.6;color:#332e3a}
+  .qcard cite{display:block;margin-top:14px;font-style:normal;font-size:13.5px;color:var(--mut)}
+  .qcard cite b{color:var(--ink);font-weight:600}
+
+  /* close */
+  .close{padding:116px 0 40px;text-align:center}
+  .close h2{font-size:clamp(32px,9vw,46px)}
+  .close p.body{margin:20px auto 0;max-width:27em;font-size:17.5px;color:#3d3745}
+  .close .cta{margin-top:32px}
+  .close .guarantee{margin-top:18px;font-size:13.5px;color:var(--mut)}
+
+  footer{padding:56px 0 44px;border-top:1px solid var(--hair);margin-top:70px;text-align:center}
+  footer img{width:96px;opacity:.75}
+  footer p{margin-top:12px;font-size:12.5px;color:var(--mut)}
+
+  @media(min-width:700px){
+    .stats .grid{grid-template-columns:repeat(4,1fr)}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <img src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm">
+  </header>
+
+  <section class="hero">
+    <div class="label">Personalized sound</div>
+    <h1>Your chart, played, not read.</h1>
+    <p class="sub">Zodiac turns your birth chart into four frequencies, embedded in real music. You know your chart. You&rsquo;ve just never heard it loud enough to live from it.</p>
+    <div class="cta">
+      <a class="btn" href="#begin">Reveal my frequencies</a>
+      <p class="micro">Results in less than five minutes.</p>
+    </div>
+  </section>
+
+  <section class="trust">
+    <div class="label">Endorsed by</div>
+    <div class="names">
+      <span>Dr. Jill Carnahan</span>
+      <span>Debra Silverman</span>
+      <span>Dr. Maya Shetreat</span>
+      <span>Barbara Ditlow</span>
+      <span>Rhonda Britten</span>
+      <span>Alex Kikel</span>
+    </div>
+    <p class="sub">Functional medicine, astrology, Human Design, and performance coaching.</p>
+  </section>
+
+  <section class="mech">
+    <h2>Your chart isn&rsquo;t only information. It&rsquo;s also a sound.</h2>
+    <figure class="art">
+      <img src="../inapp/app-assets-ring/sig-core-elysian-surge.png" alt="A Core frequency, made visible as a cymatic pattern">
+      <figcaption>A Core frequency, made visible. Every track&rsquo;s art is generated from its own audio.</figcaption>
+    </figure>
+    <p class="body">From your birth time and place, four frequencies emerge. We embed them in high-quality music, composed and produced around your exact pattern.</p>
+    <p class="tune">&ldquo;Like a tuning fork finding its note, your system recognizes its own signal. It clears. It resonates. Over time, it holds.&rdquo;</p>
+  </section>
+
+  <section class="stats">
+    <div class="grid">
+      <div class="stat"><b>10,000+</b><span>listeners</span></div>
+      <div class="stat"><b>4.7</b><span>average rating</span></div>
+      <div class="stat"><b>98.6%</b><span>would recommend it to a friend*</span></div>
+      <div class="stat"><b>84%</b><span>called it life-changing*</span></div>
+    </div>
+    <p class="note">*From our 12-month beta of 300 listeners, among those who used it as designed: at least nine minutes a day.</p>
+  </section>
+
+  <section class="beat">
+    <h2>Four frequencies. Four domains of your life.</h2>
+    <p class="body">Each one is calculated from your birth chart and carried by its own music.</p>
+    <div class="freqs">
+      <div class="freq" style="--c1:var(--core1);--c2:var(--core2)">
+        <div class="blob"></div>
+        <div><h3>Core</h3><p>Who you are and what is yours to do. Grounded, less internally conflicted.</p></div>
+      </div>
+      <div class="freq" style="--c1:var(--love1);--c2:var(--love2)">
+        <div class="blob"></div>
+        <div><h3>Love</h3><p>Connection within yourself and with others. You begin attracting who you&rsquo;re meant to attract.</p></div>
+      </div>
+      <div class="freq" style="--c1:var(--vit1);--c2:var(--vit2)">
+        <div class="blob"></div>
+        <div><h3>Vitality</h3><p>Energy, tension, and recovery. You intuitively know what energizes you and what drains you.</p></div>
+      </div>
+      <div class="freq" style="--c1:var(--ab1);--c2:var(--ab2)">
+        <div class="blob"></div>
+        <div><h3>Abundance</h3><p>Action, exchange, and material result. You start thinking bigger. Movement comes easier.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="beat">
+    <h2>Music you&rsquo;ll actually want on.</h2>
+    <p class="body">Real composers. Real production. Not generic meditation drones. Play it at home, in the car, at the desk. This isn&rsquo;t a practice you have to remember.</p>
+    <div class="phonewrap">
+      <div class="phone"><img src="assets/app-immersions.png" alt="The Zodiac.fm app: your immersions"></div>
+    </div>
+    <div class="library">
+      <div class="lib"><b>20 songs under 9 minutes</b><span>For the morning, the commute, the desk, the walk.</span></div>
+      <div class="lib"><b>4 meditations at 25 minutes</b><span>For the deeper sit, and to combine with other practices.</span></div>
+      <div class="lib"><b>4 sleep tracks at 60 minutes</b><span>For the wind-down at night, in all of your frequencies.</span></div>
+    </div>
+  </section>
+
+  <section class="beat">
+    <h2>You give up nothing.</h2>
+    <p class="body">Your readings, your Human Design, your meditation, they all land deeper when it&rsquo;s the real you doing them. They read the map. Zodiac plays the territory. One you study, one you live in.</p>
+  </section>
+
+  <section class="pull">
+    <p class="serif">&ldquo;oh there you are, Hilary. I found you.&rdquo;</p>
+    <cite>Hilary Wilson, one week in</cite>
+  </section>
+
+  <section class="quotes">
+    <h2>People who pressed play.</h2>
+    <div class="qcards">
+      <div class="qcard">
+        <p>&ldquo;I feel like ME. I feel like the person I&rsquo;ve been trying to get back to for so long.&rdquo;</p>
+        <cite><b>Amber Hedrick</b> · first week</cite>
+      </div>
+      <div class="qcard">
+        <p>&ldquo;I am seeing a huge difference in how much more loving I am. I&rsquo;m more affectionate, more grounded.&rdquo;</p>
+        <cite><b>Amy Wilcox</b></cite>
+      </div>
+      <div class="qcard">
+        <p>&ldquo;If you think this sounds hocus-pocus or slightly woo-woo: I get it. I thought so too. Still. It gives me something.&rdquo;</p>
+        <cite><b>Raf Stevens</b> · posted publicly on LinkedIn</cite>
+      </div>
+    </div>
+  </section>
+
+  <section class="close" id="begin">
+    <h2>Hear the sound of you.</h2>
+    <p class="body">Enter your birth details. See your four frequencies. Press play. Your chart&rsquo;s been waiting to be heard.</p>
+    <div class="cta">
+      <a class="btn" href="#">Reveal my frequencies</a>
+      <p class="guarantee">90-day guarantee on annual. 30-day on monthly. Cancel anytime.</p>
+    </div>
+  </section>
+
+  <footer>
+    <img src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm">
+    <p>The Sound of You · 2026 Zodiac.fm</p>
+  </footer>
+
+</div>
+</body>
+</html>

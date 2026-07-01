@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zodiac.fm · Quiz Option C</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --canvas:#F6F1E8; --moondust:#FBF8F3; --card:#FFFFFF; --hairline:#EFE6D6; --mist:#EEE9E0;
+    --ink:#1A1620; --muted:#7A7480;
+    --purple:#6521C9; --purple-deep:#38007A; --tint:#EFECFF; --soft:#D2C8FF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--canvas);color:var(--ink);-webkit-tap-highlight-color:transparent}
+  .frame{max-width:430px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:26px 22px 34px}
+
+  header{flex:none;display:flex;align-items:center;justify-content:space-between}
+  header img{width:112px;display:block}
+  .count{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .count b{color:var(--purple);font-weight:600}
+
+  .deckzone{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;padding:26px 0 8px;perspective:1100px}
+  .deck{position:relative;width:100%;max-width:372px}
+  /* the two sleeping cards behind */
+  .under{position:absolute;inset:0;border-radius:18px;background:var(--moondust);border:1px solid var(--hairline);box-shadow:0 4px 18px rgba(0,0,0,.04)}
+  .under.u1{transform:translateY(10px) rotate(1.6deg)}
+  .under.u2{transform:translateY(20px) rotate(-1.4deg);background:var(--mist)}
+
+  .cardbeat{position:relative;border-radius:18px;background:var(--card);border:1px solid var(--hairline);
+    box-shadow:0 2px 4px rgba(26,22,32,.04),0 18px 40px rgba(26,22,32,.09);
+    padding:30px 26px 28px;display:none;transform-origin:50% 90%}
+  .cardbeat.on{display:block;animation:deal .55s cubic-bezier(.22,.61,.36,1) both}
+  .cardbeat.fly{display:block;animation:fly .5s cubic-bezier(.5,.05,.75,.4) both;pointer-events:none}
+  @keyframes deal{from{opacity:0;transform:translateY(26px) rotate(2.2deg)}to{opacity:1;transform:translateY(0) rotate(0)}}
+  @keyframes fly{from{opacity:1;transform:translateY(0) rotate(0)}to{opacity:0;transform:translateY(-56px) translateX(-40px) rotate(-7deg)}}
+
+  .kick{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+  .kick b{color:var(--purple);font-weight:600}
+  .q{font-family:'Fraunces',serif;font-weight:500;font-size:26px;line-height:1.2;letter-spacing:-.5px;color:var(--ink);margin-bottom:22px}
+
+  .rows{display:flex;flex-direction:column;border-top:1px solid var(--hairline)}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:none;border:none;border-bottom:1px solid var(--hairline);
+    padding:16px 2px;font-size:16px;font-weight:500;color:var(--ink);text-align:left;cursor:pointer;font-family:'Inter',sans-serif;line-height:1.35;transition:background .15s,padding .15s,opacity .2s}
+  .row .go{flex:none;font-family:'Fraunces',serif;font-size:18px;color:var(--soft);transition:color .15s,transform .15s}
+  .row:active{background:var(--tint)}
+  .row.sel{color:var(--purple);font-weight:600}
+  .row.sel .go{color:var(--purple);transform:translateX(3px)}
+  .rows.locked .row:not(.sel){opacity:.4}
+
+  /* give card */
+  .cardbeat.givecard{background:var(--tint);border-color:#E3DBFF}
+  .mark{font-family:'Fraunces',serif;font-size:58px;line-height:.6;color:var(--purple);opacity:.35;height:26px;margin-bottom:10px}
+  .gq{font-family:'Fraunces',serif;font-style:italic;font-weight:500;font-size:25px;line-height:1.32;letter-spacing:-.3px;color:var(--ink)}
+  .gwho{margin-top:20px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .gwho b{color:var(--ink);font-weight:600}
+  .givecard .btn{margin-top:26px;width:100%}
+
+  /* reveal card */
+  .rtop{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+  .rdisc{flex:none;width:84px;height:84px;border-radius:50%;object-fit:cover;box-shadow:0 6px 20px rgba(101,33,201,.25)}
+  .rlab{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .rbadge{display:inline-flex;font-size:12px;font-weight:600;color:var(--purple);background:var(--tint);border-radius:999px;padding:6px 12px}
+  .rcmp{font-family:'Fraunces',serif;font-size:18px;line-height:1.42;letter-spacing:-.2px;color:var(--ink);margin-bottom:18px}
+  .rcmp b{font-weight:600;color:var(--purple)}
+  .hzline{display:flex;align-items:baseline;gap:12px;margin-bottom:18px}
+  .rhz{font-family:'Fraunces',serif;font-weight:600;font-size:56px;letter-spacing:-1.5px;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+  .rhz small{font-family:'Inter',sans-serif;font-size:14px;font-weight:600;color:var(--muted);margin-left:3px}
+  .rband{font-size:12px;font-weight:600;color:var(--purple-deep);background:var(--tint);border-radius:999px;padding:6px 12px}
+  .rdesc{font-size:15px;line-height:1.6;color:var(--ink);margin-bottom:10px}
+  .rnote{font-size:13px;line-height:1.6;color:var(--muted);margin-bottom:12px}
+  .rben{font-size:15px;line-height:1.6;font-weight:500;color:var(--ink);padding-top:14px;border-top:1px solid var(--hairline)}
+  .revealcard .btn{margin-top:24px;width:100%}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;background:var(--purple);color:#fff;font-family:'Inter',sans-serif;font-weight:600;font-size:16px;border:none;border-radius:14px;padding:16px 28px;cursor:pointer;box-shadow:0 6px 18px rgba(101,33,201,.22);transition:transform .12s}
+  .btn:active{transform:scale(.98)}
+
+  .foot{flex:none;text-align:center;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);opacity:.7;padding-top:22px}
+</style>
+</head>
+<body>
+<div class="frame">
+  <header>
+    <img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
+    <div class="count" id="count"><b>Your read</b> · 1 of 4</div>
+  </header>
+
+  <div class="deckzone">
+    <div class="deck">
+      <div class="under u2"></div>
+      <div class="under u1"></div>
+
+      <!-- BEAT 1 · question card -->
+      <section class="cardbeat on" id="b1">
+        <div class="q">When do you feel most like yourself?</div>
+        <div class="rows" id="rows">
+          <button class="row" data-band="Root">When I feel anchored and steady<span class="go">&rsaquo;</span></button>
+          <button class="row" data-band="Solar Plexus">When I&rsquo;m moving and deciding<span class="go">&rsaquo;</span></button>
+          <button class="row" data-band="Throat">When I can put it into words<span class="go">&rsaquo;</span></button>
+          <button class="row" data-band="Crown">When I can see the whole picture<span class="go">&rsaquo;</span></button>
+        </div>
+      </section>
+
+      <!-- BEAT 2 · the give card -->
+      <section class="cardbeat givecard" id="b2">
+        <div class="mark">&rdquo;</div>
+        <div class="gq">I could hear me more. I&rsquo;ve never heard me before.</div>
+        <div class="gwho"><b>Zehra Ashary</b> &nbsp;·&nbsp; Wellness leader</div>
+        <button class="btn" id="toReveal">Next</button>
+      </section>
+
+      <!-- BEAT 3 · the reveal card -->
+      <section class="cardbeat revealcard" id="b3">
+        <div class="rtop">
+          <img class="rdisc" src="../inapp/app-assets-ring/sig-core-elysian-surge.png" alt="">
+          <div>
+            <div class="rlab">Core · Identity</div>
+            <div class="rbadge">&#10003;&nbsp; You called this one</div>
+          </div>
+        </div>
+        <div class="rcmp">You guessed <b id="rg">Throat</b>, and your chart says the same.</div>
+        <div class="hzline">
+          <div class="rhz"><span id="hz">0</span><small>hz</small></div>
+          <div class="rband" id="rb">Throat band · 600-775 Hz</div>
+        </div>
+        <div class="rdesc" id="rd">You understand yourself by naming it. You know who you are the moment you can voice it.</div>
+        <div class="rnote">You already knew yourself here.</div>
+        <div class="rben">Amplified, who you are stops shifting with the room. You stop becoming whatever it requires.</div>
+        <button class="btn" id="again">And Love?</button>
+      </section>
+    </div>
+  </div>
+  <div class="foot">Design sample · 3 of 81 screens</div>
+</div>
+
+<script>
+(function(){
+  var HZ={'Root':402,'Solar Plexus':523,'Throat':668,'Crown':812};
+  var RANGE={'Root':'250-425','Solar Plexus':'425-600','Throat':'600-775','Crown':'775-950'};
+  var DESC={
+    'Root':'You know yourself when you feel grounded. Identity clears the moment you return to steady.',
+    'Solar Plexus':'You know who you are in motion. Your values get clear through the action you take.',
+    'Throat':'You understand yourself by naming it. You know who you are the moment you can voice it.',
+    'Crown':'You find yourself in the bigger pattern. Self-recognition comes from the view above.'};
+  var band='Throat';
+  var b1=document.getElementById('b1'),b2=document.getElementById('b2'),b3=document.getElementById('b3');
+  function swap(from,to,after){
+    from.classList.remove('on');from.classList.add('fly');
+    setTimeout(function(){from.classList.remove('fly');from.style.display='none';
+      to.style.display='';to.classList.add('on');if(after)after();},430);
+  }
+  document.querySelectorAll('.row').forEach(function(r){
+    r.addEventListener('click',function(){
+      var rows=document.getElementById('rows');
+      if(rows.classList.contains('locked'))return;
+      r.classList.add('sel');rows.classList.add('locked');
+      band=r.getAttribute('data-band');
+      setTimeout(function(){swap(b1,b2);},480);
+    });
+  });
+  document.getElementById('toReveal').addEventListener('click',function(){
+    document.getElementById('rg').textContent=band;
+    document.getElementById('rb').textContent=band+' band · '+RANGE[band]+' Hz';
+    document.getElementById('rd').textContent=DESC[band];
+    swap(b2,b3,function(){
+      var el=document.getElementById('hz'),t=HZ[band],t0=null;
+      function step(ts){if(t0===null)t0=ts;var p=Math.min(1,(ts-t0)/1300);var e=1-Math.pow(1-p,3);el.textContent=Math.round(t*e);if(p<1)requestAnimationFrame(step);}
+      requestAnimationFrame(step);
+    });
+  });
+  document.getElementById('again').addEventListener('click',function(){
+    var rows=document.getElementById('rows');
+    rows.classList.remove('locked');
+    document.querySelectorAll('.row').forEach(function(r){r.classList.remove('sel');});
+    swap(b3,b1);
+  });
+  /* preview hook: ?beat=2|3 jumps straight to a beat state for review renders */
+  var pv=new URLSearchParams(location.search).get('beat');
+  if(pv==='2'){b1.classList.remove('on');b1.style.display='none';b2.classList.add('on');}
+  else if(pv==='3'){b1.classList.remove('on');b1.style.display='none';b3.classList.add('on');document.getElementById('hz').textContent='668';}
+})();
+</script>
+</body>
+</html>

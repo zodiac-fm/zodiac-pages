@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Zodiac.fm — Funnel Design Options (review)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F6F1E8;--ink:#1A1620;--mut:#7A7480;--purple:#6521C9;--tint:#EFECFF;--line:#EFE6D6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--cream);color:var(--ink);font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:40px 20px 100px}
+header img{width:130px;display:block;margin-bottom:28px}
+h1{font-family:Fraunces,serif;font-size:clamp(30px,5vw,44px);font-weight:600;letter-spacing:-.5px;line-height:1.12}
+.sub{color:var(--mut);font-size:15px;line-height:1.6;margin-top:14px;max-width:640px}
+.sub b{color:var(--ink)}
+.kick{font-size:11.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--purple)}
+section{margin-top:72px}
+section>.kick{display:block;margin-bottom:6px}
+h2{font-family:Fraunces,serif;font-size:26px;font-weight:600;margin-bottom:4px}
+.note{font-size:13.5px;color:var(--mut);line-height:1.55;max-width:640px;margin-bottom:22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.04)}
+.shot{display:block;height:520px;overflow:hidden;position:relative;background:#fff}
+.shot img{width:100%;display:block}
+.shot::after{content:"";position:absolute;left:0;right:0;bottom:0;height:70px;background:linear-gradient(rgba(255,255,255,0),#fff)}
+.beats{display:flex;gap:6px;height:auto}
+.beats img{width:33.33%;display:block}
+.pad{padding:16px 18px 18px}
+.opt{font-family:Fraunces,serif;font-size:19px;font-weight:600}
+.pad p{font-size:13.5px;color:var(--mut);line-height:1.55;margin-top:6px}
+.pad p b{color:var(--ink);font-weight:600}
+.links{margin-top:12px;display:flex;gap:14px;flex-wrap:wrap}
+.links a{font-size:13px;font-weight:600;color:var(--purple);text-decoration:none;border-bottom:1px solid var(--tint)}
+.flag{display:inline-block;margin-top:10px;font-size:12px;color:#8a6d1f;background:#FBF3DC;border-radius:8px;padding:4px 9px;line-height:1.45}
+footer{margin-top:80px;font-size:13px;color:var(--mut);line-height:1.7;max-width:680px}
+</style></head><body><div class="wrap">
+<header>
+<img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
+<span class="kick">Design exploration · 2026-07-01 · options only, nothing is canon</span>
+<h1>The funnel, designed from the app you like.</h1>
+<p class="sub">Every option below is anchored on the in-app prototype look (the locked tokens, the cymatic art, Fraunces and Inter, the warm cream) and built with real copy from gold, real approved quotes, and real prices lifted from the live pages. <b>Tap "live page" on your phone to feel any of them.</b> Quiz and birth-chart options are tap-throughs. React to anything: pick one, mix pieces, or kill a direction.</p>
+</header>
+
+<section>
+<span class="kick">1 · Cold-traffic lander</span><h2>reveal-your-frequencies</h2>
+<p class="note">Three macro-structures. Same promise, three ways in.</p>
+<div class="grid">
+<div class="card"><a class="shot" href="shots/lander-a.png"><img src="shots/lander-a.png" loading="lazy"></a><div class="pad"><div class="opt">A · The proven skeleton, run warm</div><p>The Endel/brain.fm mobile skeleton with our warmth: promise, endorsers, mechanism shown, stats, domains, app, quotes. <b>Look first:</b> the endorsed-by row under the hero.</p><div class="links"><a href="lander-a.html">live page</a><a href="shots/lander-a.png">full image</a></div></div></div>
+<div class="card"><a class="shot" href="shots/lander-b.png"><img src="shots/lander-b.png" loading="lazy"></a><div class="pad"><div class="opt">B · Editorial minimal</div><p>Type is the design, Co-Star discipline: a serif argument with the real app doing the showing. <b>Look first:</b> the hero line "You've read your chart for years. You've never actually heard it."</p><div class="links"><a href="lander-b.html">live page</a><a href="shots/lander-b.png">full image</a></div></div></div>
+<div class="card"><a class="shot" href="shots/lander-c.png"><img src="shots/lander-c.png" loading="lazy"></a><div class="pad"><div class="opt">C · Sound first</div><p>Opens dark with a real play button: "This is what a birth chart sounds like," then warms into cream editorial. <b>Look first:</b> press play in the hero.</p><div class="links"><a href="lander-c.html">live page</a><a href="shots/lander-c.png">full image</a></div></div></div>
+</div></section>
+
+<section>
+<span class="kick">2 · Birth chart entry</span><h2>begin</h2>
+<p class="note">The form as a ritual worth your birth data. Fields and the unknown-time handling are lifted from the live begin page.</p>
+<div class="grid">
+<div class="card"><a class="shot" href="shots/begin-a.png"><img src="shots/begin-a.png" loading="lazy"></a><div class="pad"><div class="opt">A · The ritual</div><p>One question per screen, a forming cymatic disc that sharpens as each answer lands. <b>Look first:</b> the disc and the four dots reacting between steps (it's a tap-through).</p><div class="links"><a href="begin-a.html">live page</a><a href="shots/begin-a-s4.png">step 4 image</a></div></div></div>
+<div class="card"><a class="shot" href="shots/begin-b.png"><img src="shots/begin-b.png" loading="lazy"></a><div class="pad"><div class="opt">B · The sheet</div><p>Everything on one calm editorial page: underline fields, small-caps labels, reassurance behind quiet links. <b>Look first:</b> the hero with the cymatic seal.</p><div class="links"><a href="begin-b.html">live page</a><a href="shots/begin-b.png">full image</a></div></div></div>
+</div></section>
+
+<section>
+<span class="kick">3 · Results — the money moment</span><h2>core-results</h2>
+<p class="note">All three finally include the missing trust beat: a real playable sample with an app-style play button. Demo person throughout: born March 14, 1988, 7:42am, Denver.</p>
+<div class="grid">
+<div class="card"><a class="shot" href="shots/results-a.png"><img src="shots/results-a.png" loading="lazy"></a><div class="pad"><div class="opt">A · The personal report</div><p>An elegant editorial document, the four discs as chapter openers, the offer as a quiet rate card. <b>Look first:</b> Chapter One "Core," then "Now hear it."</p><div class="links"><a href="results-a.html">live page</a><a href="shots/results-a.png">full image</a></div></div></div>
+<div class="card"><a class="shot" href="shots/results-b.png"><img src="shots/results-b.png" loading="lazy"></a><div class="pad"><div class="opt">B · The moment</div><p>Opens dark: the glowing disc, the play button, "There you are." Sound before explanation. <b>Look first:</b> the first screen is the whole thesis.</p><div class="links"><a href="results-b.html">live page</a><a href="shots/results-b.png">full image</a></div></div></div>
+<div class="card"><a class="shot" href="shots/results-c.png"><img src="shots/results-c.png" loading="lazy"></a><div class="pad"><div class="opt">C · Already in the player</div><p>"Your frequencies are ready. They're already loaded." Real app screenshots sell it; shortest path to "this exists for me." <b>Look first:</b> the hero phone with the real library.</p><div class="links"><a href="results-c.html">live page</a><a href="shots/results-c.png">full image</a></div></div></div>
+</div>
+<span class="flag">Fact note: these pages carry the live results-page plans ($34 / $99 / $180) while checkout carries the live join-page plans ($110 annual / $17.50 monthly). Both are lifted from your live pages, which genuinely disagree today. Worth deciding which offer is the real one.</span>
+</section>
+
+<section>
+<span class="kick">4 · Checkout</span><h2>join</h2>
+<p class="note">Keeping the feeling of the reveal instead of switching to cold commerce. Prices verbatim from the live checkout.</p>
+<div class="grid">
+<div class="card"><a class="shot" href="shots/checkout-a.png"><img src="shots/checkout-a.png" loading="lazy"></a><div class="pad"><div class="opt">A · The order as a letter</div><p>One warm column: recap discs, one quiet plan choice, payment, the guarantee written as a signed promise. <b>Look first:</b> "Due today $110" in the membership card.</p><div class="links"><a href="checkout-a.html">live page</a><a href="shots/checkout-a.png">full image</a></div></div></div>
+<div class="card"><a class="shot" href="shots/checkout-b.png"><img src="shots/checkout-b.png" loading="lazy"></a><div class="pad"><div class="opt">B · The guarantee is the hero</div><p>A dark panel keeps the reveal alive, then "Ninety days to live with it." carries the sell above one focused pay card. <b>Look first:</b> the transition into the guarantee headline.</p><div class="links"><a href="checkout-b.html">live page</a><a href="shots/checkout-b.png">full image</a></div></div></div>
+</div></section>
+
+<section>
+<span class="kick">5 · Quiz screens</span><h2>the quiz funnel</h2>
+<p class="note">Three design languages on the same three real beats from quiz v2 (question, give, reveal), so you compare pure design. Each is a working tap-through; images show beats 1, 2, 3.</p>
+<div class="grid">
+<div class="card"><a class="shot beats" href="quiz-a.html"><img src="shots/quiz-a-1.png" loading="lazy"><img src="shots/quiz-a-2.png" loading="lazy"><img src="shots/quiz-a-3.png" loading="lazy"></a><div class="pad"><div class="opt">A · Warm paper minimal</div><p>Type does everything; the give floods the screen with the violet tint like a breath. <b>Look first:</b> the giant Fraunces reveal on cream.</p><div class="links"><a href="quiz-a.html">tap-through</a></div></div></div>
+<div class="card"><a class="shot beats" href="quiz-b.html"><img src="shots/quiz-b-1.png" loading="lazy"><img src="shots/quiz-b-2.png" loading="lazy"><img src="shots/quiz-b-3.png" loading="lazy"></a><div class="pad"><div class="opt">B · The forming disc</div><p>The cymatic art sharpens as you answer, then the page goes dark for the reveal. <b>Look first:</b> beat 3, the disc snapping into focus.</p><div class="links"><a href="quiz-b.html">tap-through</a></div></div></div>
+<div class="card"><a class="shot beats" href="quiz-c.html"><img src="shots/quiz-c-1.png" loading="lazy"><img src="shots/quiz-c-2.png" loading="lazy"><img src="shots/quiz-c-3.png" loading="lazy"></a><div class="pad"><div class="opt">C · The card deck</div><p>Each beat is a physical card dealt off a stack; your answer stamps purple and the card flies. <b>Look first:</b> tap an answer and watch the deal.</p><div class="links"><a href="quiz-c.html">tap-through</a></div></div></div>
+</div></section>
+
+<section>
+<span class="kick">6 · Static ads (1080×1350)</span><h2>three ad types</h2>
+<div class="grid">
+<div class="card"><a class="shot" href="ads-a.png"><img src="ads-a.png" loading="lazy"></a><div class="pad"><div class="opt">A · Native forum story</div><p>Deliberately un-designed: a real-feeling post built from verbatim gold lines, brand only in the last line. <b>Look first:</b> does it smell like an ad?</p><div class="links"><a href="ads-a.png">full size</a></div></div></div>
+<div class="card"><a class="shot" href="ads-b.png"><img src="ads-b.png" loading="lazy"></a><div class="pad"><div class="opt">B · Brand poster</div><p>The disc glowing on dark, "Your chart, played, not read." Oura restraint. <b>Look first:</b> one object, one sentence.</p><div class="links"><a href="ads-b.png">full size</a></div></div></div>
+<div class="card"><a class="shot" href="ads-c.png"><img src="ads-c.png" loading="lazy"></a><div class="pad"><div class="opt">C · Proof pull-quote</div><p>Amber Hedrick's approved quote big in Fraunces, the real Love screen tilting in. <b>Look first:</b> the quote and the product visibly match.</p><div class="flag">If this ships: re-shoot the app screenshot without the prototype's placeholder "432 Hz."</div><div class="links"><a href="ads-c.png">full size</a></div></div></div>
+</div></section>
+
+<footer>
+<b>What these are:</b> design options for review, staged from the vault's `working/funnel-design-options/` exploration. Copy comes from gold, big-idea, and the approved testimonial bank; prices and form fields from the live pages; art and logo are the real assets. Nothing here is canon and nothing ships until Michael picks. Built 2026-07-01.
+</footer>
+</div></body></html>

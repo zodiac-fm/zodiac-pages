@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zodiac.fm · Join</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6F1E8; --moondust:#FBF8F3; --white:#FFFFFF; --hairline:#EFE6D6;
+    --mist:#EEE9E0; --ink:#1A1620; --muted:#7A7480;
+    --purple:#6521C9; --purple-deep:#38007A; --purple-tint:#EFECFF; --purple-soft:#D2C8FF;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    background:var(--cream); color:var(--ink);
+    font-family:'Inter',sans-serif; font-size:17px; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{max-width:560px; margin:0 auto; padding:40px 22px 72px;}
+  .logo{display:block; margin:0 auto 56px; width:124px;}
+  .kicker{
+    font-size:11px; font-weight:600; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--muted); text-align:center; margin-bottom:14px;
+  }
+  h1{
+    font-family:'Fraunces',serif; font-optical-sizing:auto; font-weight:500;
+    font-size:clamp(34px,9vw,44px); line-height:1.12; letter-spacing:-0.8px;
+    text-align:center; margin-bottom:16px;
+  }
+  .lede{
+    text-align:center; color:var(--muted); font-size:16.5px;
+    max-width:34ch; margin:0 auto 56px;
+  }
+
+  /* ---- the four discs ---- */
+  .discs{display:flex; justify-content:center; gap:18px; margin-bottom:14px;}
+  .disc{text-align:center; flex:0 0 auto;}
+  .disc img{
+    width:72px; height:72px; border-radius:50%; display:block; margin:0 auto 9px;
+    background:var(--moondust); box-shadow:0 4px 18px rgba(0,0,0,.09);
+    border:1px solid var(--hairline);
+  }
+  .disc span{
+    font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted);
+  }
+  .discs-note{
+    text-align:center; color:var(--muted); font-size:14.5px;
+    max-width:36ch; margin:0 auto 64px;
+  }
+
+  /* ---- the letter / order ---- */
+  .letter{
+    background:var(--white); border:1px solid var(--hairline); border-radius:16px;
+    box-shadow:0 4px 18px rgba(0,0,0,.04); padding:32px 26px 30px;
+  }
+  .letter-label{
+    font-size:11px; font-weight:600; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:20px;
+  }
+  .letter h2{
+    font-family:'Fraunces',serif; font-weight:500; font-size:24px;
+    letter-spacing:-0.4px; line-height:1.25; margin-bottom:24px;
+  }
+
+  .plan{
+    display:block; border:1px solid var(--hairline); border-radius:14px;
+    padding:18px 18px 16px; cursor:pointer; position:relative;
+    transition:border-color .18s, background .18s; margin-bottom:12px;
+    background:var(--moondust);
+  }
+  .plan input{position:absolute; opacity:0; pointer-events:none;}
+  .plan .dot{
+    position:absolute; top:20px; right:18px; width:20px; height:20px;
+    border:1.5px solid #D8CEBE; border-radius:50%; background:var(--white);
+    transition:border-color .18s;
+  }
+  .plan.sel{border-color:var(--purple); background:var(--white);}
+  .plan.sel .dot{border-color:var(--purple); border-width:6px;}
+  .plan-tag{
+    display:inline-block; font-size:10.5px; font-weight:600; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--purple-deep); background:var(--purple-tint);
+    border-radius:999px; padding:3px 10px; margin-bottom:9px;
+  }
+  .plan-name{font-weight:600; font-size:16px; margin-bottom:2px; padding-right:36px;}
+  .plan-price{
+    font-family:'Fraunces',serif; font-size:27px; font-weight:500; letter-spacing:-0.4px;
+    font-variant-numeric:tabular-nums;
+  }
+  .plan-price small{font-family:'Inter',sans-serif; font-size:14px; color:var(--muted); font-weight:400; letter-spacing:0;}
+  .plan-sub{font-size:13.5px; color:var(--muted); margin-top:3px;}
+
+  .due{
+    display:flex; justify-content:space-between; align-items:baseline;
+    border-top:1px solid var(--hairline); margin-top:22px; padding-top:16px;
+  }
+  .due .l{font-size:13px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--muted);}
+  .due .r{font-family:'Fraunces',serif; font-size:24px; font-weight:500; font-variant-numeric:tabular-nums;}
+  .due-sub{font-size:13px; color:var(--muted); text-align:right; margin-top:2px;}
+
+  /* ---- payment ---- */
+  .pay-label{
+    font-size:11px; font-weight:600; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--muted); margin:30px 0 14px;
+  }
+  .field{margin-bottom:12px;}
+  .field input{
+    width:100%; border:1px solid var(--hairline); border-radius:12px;
+    background:var(--moondust); padding:14px 15px; font-family:'Inter',sans-serif;
+    font-size:16px; color:var(--ink); outline:none; transition:border-color .18s;
+  }
+  .field input:focus{border-color:var(--purple-soft); background:var(--white);}
+  .field input::placeholder{color:#B4AEA3;}
+  .row2{display:flex; gap:12px;}
+  .row2 .field{flex:1;}
+
+  .cta{
+    display:block; width:100%; border:none; cursor:pointer;
+    background:var(--purple); color:#fff; font-family:'Inter',sans-serif;
+    font-size:16.5px; font-weight:600; letter-spacing:.01em;
+    border-radius:999px; padding:17px 20px; margin-top:22px;
+    transition:transform .12s, background .18s;
+  }
+  .cta:active{transform:scale(.985); background:var(--purple-deep);}
+  .cta-sub{text-align:center; font-size:13px; color:var(--muted); margin-top:12px;}
+
+  /* ---- the promise ---- */
+  .promise{margin:64px auto 0; max-width:44ch;}
+  .promise h3{
+    font-family:'Fraunces',serif; font-weight:500; font-size:25px;
+    letter-spacing:-0.4px; margin-bottom:14px; text-align:center;
+  }
+  .promise p{color:var(--ink); font-size:16.5px; text-align:center;}
+  .promise .soft{color:var(--muted); font-size:15px; margin-top:14px; text-align:center;}
+
+  /* ---- quote ---- */
+  .quote{margin:72px auto 0; max-width:42ch; text-align:center;}
+  .quote blockquote{
+    font-family:'Fraunces',serif; font-weight:400; font-style:italic;
+    font-size:22px; line-height:1.4; letter-spacing:-0.2px;
+  }
+  .quote cite{
+    display:block; font-style:normal; font-family:'Inter',sans-serif;
+    font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); margin-top:16px;
+  }
+
+  /* ---- footer trust ---- */
+  .trust{
+    margin-top:72px; padding-top:26px; border-top:1px solid var(--hairline);
+    text-align:center;
+  }
+  .trust .stats{
+    font-size:15px; font-weight:500; font-variant-numeric:tabular-nums; margin-bottom:6px;
+  }
+  .trust .stats i{font-style:normal; color:var(--muted); padding:0 8px;}
+  .trust p{font-size:13.5px; color:var(--muted);}
+  @media (max-width:389px){
+    .discs{gap:12px;} .disc img{width:58px;height:58px;}
+    .letter{padding:26px 18px 24px;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <img class="logo" src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
+
+  <div class="kicker">The last step</div>
+  <h1>your four frequencies are ready</h1>
+  <p class="lede">Calculated from your exact birth. They exist for you and no one else.</p>
+
+  <div class="discs">
+    <div class="disc"><img src="../inapp/app-assets-ring/sig-core-starseed.png" alt="Core frequency"><span>Core</span></div>
+    <div class="disc"><img src="../inapp/app-assets-ring/sig-love-kindred-spirits.png" alt="Love frequency"><span>Love</span></div>
+    <div class="disc"><img src="../inapp/app-assets-ring/sig-vitality-elysian-surge.png" alt="Vitality frequency"><span>Vitality</span></div>
+    <div class="disc"><img src="../inapp/app-assets-ring/sig-abundance-quiet-success.png" alt="Abundance frequency"><span>Abundance</span></div>
+  </div>
+  <p class="discs-note">Your 4 frequencies woven into over 23 personalized sound journeys.</p>
+
+  <div class="letter">
+    <div class="letter-label">Your membership</div>
+    <h2>One decision. Everything unlocks the moment you make it.</h2>
+
+    <label class="plan sel" id="plan-yearly">
+      <input type="radio" name="plan" value="yearly" checked>
+      <span class="dot"></span>
+      <span class="plan-tag">Best value · Save $100</span>
+      <div class="plan-name">Yearly</div>
+      <div class="plan-price">$9.17 <small>/ month</small></div>
+      <div class="plan-sub">$110 billed once per year · 90-day money-back guarantee</div>
+    </label>
+
+    <label class="plan" id="plan-monthly">
+      <input type="radio" name="plan" value="monthly">
+      <span class="dot"></span>
+      <div class="plan-name">Monthly</div>
+      <div class="plan-price">$17.50 <small>/ month</small></div>
+      <div class="plan-sub">Billed monthly · 30-day money-back guarantee</div>
+    </label>
+
+    <div class="due">
+      <span class="l">Due today</span>
+      <span class="r" id="due-amt">$110</span>
+    </div>
+    <div class="due-sub" id="due-sub">Instant access to all four frequencies</div>
+
+    <div class="pay-label">Payment</div>
+    <div class="field"><input type="email" placeholder="Email address" autocomplete="email"></div>
+    <div class="field"><input type="text" inputmode="numeric" placeholder="Card number" autocomplete="cc-number"></div>
+    <div class="row2">
+      <div class="field"><input type="text" inputmode="numeric" placeholder="MM / YY" autocomplete="cc-exp"></div>
+      <div class="field"><input type="text" inputmode="numeric" placeholder="CVC" autocomplete="cc-csc"></div>
+    </div>
+
+    <button class="cta">Activate all four frequencies</button>
+    <div class="cta-sub">Cancel anytime. Your information is never sold or shared.</div>
+  </div>
+
+  <div class="promise">
+    <h3 id="promise-h">Our promise: the full 90 days.</h3>
+    <p id="promise-p">Listen your way, at your pace. If it doesn't land as you, write to us and we'll return every dollar. No forms, no convincing. All you do is ask.</p>
+    <p class="soft">You might not feel much at first. A lot of people don't. They just notice, a few weeks in, that things are landing differently.</p>
+  </div>
+
+  <div class="quote">
+    <blockquote>&ldquo;I feel like ME. I feel like the person I've been trying to get back to for so long.&rdquo;</blockquote>
+    <cite>Amber Hedrick · Member</cite>
+  </div>
+
+  <div class="trust">
+    <div class="stats">10,000+ listeners <i>·</i> 4.7 stars</div>
+    <p>&copy; 2026 Zodiac.fm</p>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var yearly = document.getElementById('plan-yearly');
+  var monthly = document.getElementById('plan-monthly');
+  var due = document.getElementById('due-amt');
+  var dueSub = document.getElementById('due-sub');
+  var pH = document.getElementById('promise-h');
+  var pP = document.getElementById('promise-p');
+  function set(plan){
+    var y = plan === 'yearly';
+    yearly.classList.toggle('sel', y);
+    monthly.classList.toggle('sel', !y);
+    yearly.querySelector('input').checked = y;
+    monthly.querySelector('input').checked = !y;
+    due.textContent = y ? '$110' : '$17.50';
+    dueSub.textContent = 'Instant access to all four frequencies';
+    pH.textContent = y ? 'Our promise: the full 90 days.' : 'Our promise: the full 30 days.';
+    pP.textContent = 'Listen your way, at your pace. If it doesn\'t land as you, write to us and we\'ll return every dollar. No forms, no convincing. All you do is ask.';
+  }
+  yearly.addEventListener('click', function(){ set('yearly'); });
+  monthly.addEventListener('click', function(){ set('monthly'); });
+})();
+</script>
+</body>
+</html>

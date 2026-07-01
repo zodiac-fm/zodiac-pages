@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Zodiac.fm · Hear yourself</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6F1E8; --moondust:#FBF8F3; --white:#FFFFFF; --hair:#EFE6D6; --mist:#EEE9E0;
+    --ink:#1A1620; --mut:#7A7480;
+    --purple:#6521C9; --purple-deep:#38007A; --tint:#EFECFF; --soft:#D2C8FF;
+    --stage:#0B0712;
+    --core1:#6521C9; --core2:#A737C8;
+    --love1:#B90044; --love2:#CF4090;
+    --vit1:#FF9112; --vit2:#FFC251;
+    --ab1:#00AFDC; --ab2:#2ED7DD;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{background:var(--cream);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .inner{max-width:640px;margin:0 auto;padding:0 26px}
+  .label{font-weight:600;font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
+  .btn{display:inline-block;background:var(--purple);color:#fff;text-decoration:none;font-weight:600;font-size:16.5px;padding:17px 34px;border-radius:999px;letter-spacing:-.1px;transition:transform .08s ease}
+  .btn:active{transform:scale(.985)}
+
+  /* ============ THE DARK REVEAL ============ */
+  .stage{background:var(--stage);color:var(--moondust);padding:30px 0 92px;position:relative;overflow:hidden}
+  .stage .inner{position:relative}
+  .stage header{display:flex;justify-content:center;padding-bottom:70px}
+  .stage header img{width:126px;display:block}
+  .stage .label{color:#9a90a8}
+  .reveal{text-align:center}
+  .reveal h1{font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:400;font-size:clamp(34px,9vw,52px);line-height:1.16;letter-spacing:-.8px;color:var(--moondust)}
+  .discwrap{position:relative;width:min(300px,72vw);margin:52px auto 0}
+  .disc{width:100%;border-radius:50%;display:block;box-shadow:0 0 90px rgba(167,55,200,.35), 0 0 26px rgba(101,33,201,.4)}
+  #app-c.playing .disc{animation:slowspin 60s linear infinite}
+  @keyframes slowspin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  #playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:78px;height:78px;border-radius:50%;border:none;cursor:pointer;
+    background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.5),rgba(255,255,255,0) 46%),linear-gradient(140deg,var(--core1),var(--core2));
+    box-shadow:0 8px 30px rgba(11,7,18,.55), 0 0 0 6px rgba(251,248,243,.08);display:flex;align-items:center;justify-content:center;transition:transform .1s ease}
+  #playbtn:active{transform:translate(-50%,-50%) scale(.96)}
+  #playbtn svg{width:26px;height:26px;fill:#fff;display:block}
+  #playbtn .pause{display:none}
+  #app-c.playing #playbtn .play{display:none}
+  #app-c.playing #playbtn .pause{display:block}
+  .trackline{margin-top:30px;font-size:13.5px;color:#b3aabf}
+  .progress{margin:16px auto 0;width:min(240px,60vw);height:2px;background:rgba(251,248,243,.14);border-radius:2px;overflow:hidden}
+  .progress i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--core1),var(--core2))}
+  .honest{margin:34px auto 0;max-width:24em;font-size:14.5px;line-height:1.65;color:#b3aabf}
+  .honest b{color:var(--moondust);font-weight:600}
+
+  /* ============ WARM BELOW ============ */
+  .warm{background:var(--cream)}
+  .sect{padding:104px 0 0}
+  .sect h2{font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:500;font-size:clamp(27px,7.4vw,38px);letter-spacing:-.6px;line-height:1.18;max-width:15em}
+  .sect p.body{margin-top:18px;font-size:17.5px;color:#3d3745;max-width:32em}
+
+  .twolines{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(24px,6.6vw,34px);line-height:1.32;letter-spacing:-.5px;max-width:17em}
+  .twolines em{font-style:italic;color:var(--purple-deep)}
+
+  /* four tiles */
+  .tiles{margin-top:38px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .tile{background:var(--moondust);border:1px solid var(--hair);border-radius:16px;padding:18px 16px 16px;box-shadow:0 4px 18px rgba(0,0,0,.04);text-align:center}
+  .tile img{width:74%;border-radius:50%;display:block;margin:4px auto 0}
+  .tile h3{font-family:'Fraunces',serif;font-weight:500;font-size:18px;letter-spacing:-.3px;margin-top:14px}
+  .tile p{font-size:13px;color:var(--mut);line-height:1.5;margin-top:4px}
+
+  /* stats band */
+  .statband{margin-top:104px;background:var(--white);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:44px 0}
+  .statband .grid{display:grid;grid-template-columns:1fr 1fr;gap:28px 18px}
+  .stat b{display:block;font-family:'Fraunces',serif;font-weight:500;font-size:33px;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+  .stat span{display:block;margin-top:4px;font-size:13.5px;color:var(--mut);line-height:1.45}
+  .statband .note{margin-top:24px;font-size:12.5px;color:var(--mut)}
+
+  /* app + quotes */
+  .phonewrap{margin:42px auto 0;width:min(290px,72vw)}
+  .phone{border-radius:30px;overflow:hidden;border:1px solid var(--hair);box-shadow:0 22px 60px rgba(26,22,32,.16);background:var(--moondust)}
+  .phone img{width:100%;display:block}
+
+  .voices{padding:104px 0 0}
+  .voice{padding:30px 0;border-bottom:1px solid var(--hair)}
+  .voice:first-of-type{border-top:1px solid var(--hair)}
+  .voice p{font-family:'Fraunces',serif;font-size:19.5px;line-height:1.5;letter-spacing:-.3px;color:#2c2733}
+  .voice cite{display:block;margin-top:12px;font-style:normal;font-size:13px;color:var(--mut)}
+
+  .close{padding:116px 0 0;text-align:center}
+  .close h2{font-family:'Fraunces',serif;font-weight:400;font-size:clamp(32px,9vw,46px);letter-spacing:-.8px;line-height:1.15}
+  .close p.body{margin:20px auto 0;max-width:26em;font-size:17.5px;color:#3d3745}
+  .close .cta{margin-top:32px}
+  .close .guarantee{margin-top:18px;font-size:13.5px;color:var(--mut)}
+
+  footer{margin-top:100px;background:var(--stage);padding:46px 0 42px;text-align:center}
+  footer img{width:100px;opacity:.9}
+  footer p{margin-top:12px;font-size:12.5px;color:#9a90a8}
+
+  @media(min-width:700px){
+    .statband .grid{grid-template-columns:repeat(4,1fr)}
+    .tiles{grid-template-columns:repeat(4,1fr)}
+  }
+</style>
+</head>
+<body id="app-c">
+
+<!-- THE DARK REVEAL -->
+<section class="stage">
+  <div class="inner">
+    <header><img src="../inapp/app-assets/logo-cream.svg" alt="Zodiac.fm"></header>
+    <div class="reveal">
+      <div class="label">Before you read another word</div>
+      <h1 style="margin-top:18px">This is what a birth chart sounds like.</h1>
+      <div class="discwrap">
+        <img class="disc" src="../inapp/app-assets-ring/sig-core-astrolith.png" alt="A Core frequency, rendered as a cymatic disc">
+        <button id="playbtn" aria-label="Play the sample">
+          <svg class="play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+        </button>
+      </div>
+      <p class="trackline">A Core immersion, from one listener&rsquo;s chart.</p>
+      <div class="progress"><i id="bar"></i></div>
+      <p class="honest">Real composers, real production, one listener&rsquo;s exact birth frequencies inside the music. <b>Yours would sound different.</b> That&rsquo;s the point.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WARM EDITORIAL BELOW -->
+<div class="warm">
+  <div class="inner">
+
+    <section class="sect">
+      <p class="twolines">You know your chart. You&rsquo;ve just never heard it <em>loud enough to live from it</em>.</p>
+      <p class="body" style="margin-top:24px">Astrology can describe you almost perfectly. It just can&rsquo;t make you live there. Zodiac calculates four frequencies from your birth chart, embeds them in music, and turns your own signal up until you can finally hear it.</p>
+    </section>
+
+    <section class="sect">
+      <h2>Four frequencies. Four domains.</h2>
+      <p class="body">Each one calculated from your chart, each one carried by its own music.</p>
+      <div class="tiles">
+        <div class="tile">
+          <img src="../inapp/app-assets-ring/sig-core-quiet-success.png" alt="Core frequency art">
+          <h3>Core</h3><p>Who you are and what is yours to do.</p>
+        </div>
+        <div class="tile">
+          <img src="../inapp/app-assets-ring/sig-love-kindred-spirits.png" alt="Love frequency art">
+          <h3>Love</h3><p>Connection within yourself and with others.</p>
+        </div>
+        <div class="tile">
+          <img src="../inapp/app-assets-ring/sig-vitality-elysian-surge.png" alt="Vitality frequency art">
+          <h3>Vitality</h3><p>Energy, tension, and recovery.</p>
+        </div>
+        <div class="tile">
+          <img src="../inapp/app-assets-ring/sig-abundance-quiet-success.png" alt="Abundance frequency art">
+          <h3>Abundance</h3><p>Action, exchange, and material result.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="statband">
+      <div class="grid">
+        <div class="stat"><b>10,000+</b><span>listeners</span></div>
+        <div class="stat"><b>4.7</b><span>average rating</span></div>
+        <div class="stat"><b>98.6%</b><span>would recommend it to a friend*</span></div>
+        <div class="stat"><b>84%</b><span>called it life-changing*</span></div>
+      </div>
+      <p class="note">*From our 12-month beta of 300 listeners, among those who used it as designed: at least nine minutes a day.</p>
+    </section>
+
+    <section class="sect">
+      <h2>Nine minutes a day. Anywhere.</h2>
+      <p class="body">20 songs under nine minutes, 4 meditations, 4 sleep tracks. Walking, driving, cooking, working. You don&rsquo;t rearrange your life. The music carries you.</p>
+      <div class="phonewrap">
+        <div class="phone"><img src="assets/app-immersions.png" alt="The Zodiac.fm app: your immersions"></div>
+      </div>
+    </section>
+
+    <section class="voices">
+      <div class="label">Listeners</div>
+      <div class="voice">
+        <p>&ldquo;oh there you are, Hilary. I found you.&rdquo;</p>
+        <cite>Hilary Wilson, one week in</cite>
+      </div>
+      <div class="voice">
+        <p>&ldquo;I could hear me more. I&rsquo;ve never heard me before.&rdquo;</p>
+        <cite>Zehra Ashary, London</cite>
+      </div>
+      <div class="voice">
+        <p>&ldquo;When I listen to Zodiac.fm, my whole nervous system relaxes into recognition. Like coming home to myself.&rdquo;</p>
+        <cite>Rhonda Britten, Emmy winner, author of Fearless Living</cite>
+      </div>
+    </section>
+
+    <section class="sect">
+      <h2>It works with everything you already do.</h2>
+      <p class="body">You give up nothing. Your readings, your Human Design, your meditation, they all land deeper when it&rsquo;s the real you doing them.</p>
+    </section>
+
+    <section class="close" id="begin">
+      <h2>Now hear your own.</h2>
+      <p class="body">Enter your birth details. See your four frequencies. Press play on the sound of you.</p>
+      <div class="cta">
+        <a class="btn" href="#">Reveal my frequencies</a>
+        <p class="guarantee">Results in less than five minutes. 90-day guarantee on annual, 30-day on monthly.</p>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <img src="../inapp/app-assets/logo-cream.svg" alt="Zodiac.fm">
+    <p>The Sound of You &middot; 2026 Zodiac.fm</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var audio = new Audio('../inapp/elysian-sky-600hz.mp3');
+  var root = document.getElementById('app-c');
+  var btn = document.getElementById('playbtn');
+  var bar = document.getElementById('bar');
+  btn.addEventListener('click', function(){
+    if(audio.paused){ audio.play(); root.classList.add('playing'); btn.setAttribute('aria-label','Pause the sample'); }
+    else { audio.pause(); root.classList.remove('playing'); btn.setAttribute('aria-label','Play the sample'); }
+  });
+  audio.addEventListener('timeupdate', function(){
+    if(audio.duration){ bar.style.width = (audio.currentTime/audio.duration*100) + '%'; }
+  });
+  audio.addEventListener('ended', function(){
+    root.classList.remove('playing'); bar.style.width='0%';
+  });
+})();
+</script>
+</body>
+</html>
