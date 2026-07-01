@@ -107,7 +107,7 @@
   /* .fm tints to the active frequency (logo no longer locked to purple) */
   #favs .logo .d{color:#1A1620!important}
   /* GREYSCALE-CARD experiment: only the tile carries colour */
-  #rows .heart{color:#c9c4cf!important}
+  
   .cardpp{width:23px!important;height:23px!important}
   .cardpp svg{width:9px!important;height:9px!important}
   /* Hz readout instead of the frequency word: thin, cool font, paired with the play outline */
@@ -134,6 +134,15 @@
   .row.playing{box-shadow:0 0 0 2px var(--cink),0 8px 20px rgba(0,0,0,.08)!important;border-color:transparent!important}
   .dur{font-size:12px!important}
   .logo .logoimg{height:19px;width:auto;display:block}
+  /* play button back to small + WHITE (no coloured circle); white equaliser, frozen when paused */
+  .pov{background:radial-gradient(circle at 50% 50%,rgba(0,0,0,.16),rgba(0,0,0,.03))!important}
+  .pcirc{background:transparent!important;box-shadow:none!important;width:auto!important;height:auto!important}
+  .pplay{border-color:transparent transparent transparent #fff!important;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))!important}
+  .ppause i{background:#fff!important;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))!important}
+  /* time bold black; heart+download bold BLACK when clicked (filled), grey when empty */
+  .dur{color:#1A1620!important;font-weight:700!important}
+  .sic .dl.on{color:#1A1620!important}
+  .sic .heart.on{color:#1A1620!important;font-weight:700!important}
 </style></head><body>
 <div id="app">
 
