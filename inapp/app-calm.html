@@ -145,6 +145,10 @@
   .sic .heart.on{color:#1A1620!important;font-weight:700!important}
   .draghint{font-size:11px;color:#a8a2ad;font-weight:600;display:flex;align-items:center;gap:5px;padding-left:2px}
   .draghint .dharr{font-size:15px;line-height:1}
+  .lcol{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;flex:0 0 auto;padding-left:2px}
+  .qbox{width:17px;height:17px;border:1.5px solid #c2bdc7;border-radius:4px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-sizing:border-box}
+  .qbox.on{background:#1A1620;border-color:#1A1620}
+  .qbox.on::after{content:'';width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-2px}
 </style></head><body>
 <div id="app">
 
@@ -156,7 +160,7 @@
     </div>
     <div class="desc"><h2 class="serif" id="catTitle">Love Vibrational Frequency</h2>
       <p id="catDesc">These tracks increase your authentic resonance in matters of love and relationships.</p></div>
-    <div class="barrow"><div class="freqline"><span class="blob"></span><span class="hzsm" id="catHz">432<small> Hz</small></span></div><div class="qall">&#9776; Queue All</div></div>
+    <div class="barrow"><div class="freqline"><span class="hzsm" id="catHz">432<small> Hz</small></span></div><div class="qall">&#9776; Queue All</div></div>
     <div class="rows" id="rows"></div>
   </section>
 
@@ -278,7 +282,7 @@ function buildRows(){
   const cat=CATS[catKey]; rows.innerHTML=''; rowSongs=cat.songs;
   cat.songs.forEach((s,i)=>{
     const r=document.createElement('div');r.className='row';r.innerHTML=
-     `<div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
+     `<div class="lcol"><span class="qbox${(i%4===0)?' on':''}"></span></div><div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
       <div class="meta">
         <div class="mtop"><h3>${s.name}</h3><div class="sic"><span class="dl${(i%2===1)?' on':''}">${DL}</span><span class="heart${(i%3===0)?' on':''}">${(i%3===0)?'&#9829;':'&#9825;'}</span></div></div>
         <p>${s.sub}</p>
@@ -410,7 +414,7 @@ const FAVS=[['core','starseed'],['love','kindred-spirits'],['vitality','astrolit
 function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
  FAVS.forEach(([ck,slug],i)=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
   const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);
-  r.innerHTML=`<div class="grip">${GRIP}</div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
+  r.innerHTML=`<div class="lcol"><span class="grip">${GRIP}</span><span class="qbox${(i%3===0)?' on':''}"></span></div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
    <div class="meta">
     <div class="mtop"><h3>${s.name}</h3><div class="sic"><span class="dl${(i%2===0)?' on':''}">${DL}</span><span class="heart on" style="color:${cat.cink}">&#9829;</span></div></div>
     <p>${s.sub}</p>
