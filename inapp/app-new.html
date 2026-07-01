@@ -1,8 +1,9 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Zodiac.fm · app</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root{--cream:#F6F1E8;--card:#FFFFFF;--ink:#1a1620;--mut:#7a7480;--c1:#B90044;--c2:#CF4090;--cink:#B90044;--cglow:rgba(185,0,68,.45);--cdeep:#6E0024;}
+  :root{--cream:#F6F1E8;--card:#FFFFFF;--ink:#1a1620;--mut:#7a7480;--c1:#B90044;--c2:#CF4090;--cink:#B90044;--cglow:rgba(185,0,68,.45);--cdeep:#6E0024;--ctint:#FFE8EA;}
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%;background:#e7e2d8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ink);overflow:hidden}
   body{display:flex;align-items:center;justify-content:center}
@@ -43,8 +44,8 @@
   .freqline .blob{width:22px;height:22px;box-shadow:0 0 12px var(--cglow)}
   .hzsm{font-size:18px;font-weight:700}.hzsm small{font-size:11px;color:var(--mut);font-weight:600}
   .botrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .cardpp{width:26px;height:26px;margin-right:16px;border-radius:50%;border:1.5px solid #868491;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:transparent;box-shadow:none;cursor:pointer}
-  .cardpp svg{width:11px;height:11px;fill:#63616F}
+  .cardpp{width:26px;height:26px;margin-right:16px;border-radius:50%;border:none;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:#2A2530;box-shadow:0 1px 4px rgba(0,0,0,.18);cursor:pointer}
+  .cardpp svg{width:11px;height:11px;fill:#fff}
   .row.playing{border-color:var(--cink);box-shadow:0 0 0 1.5px var(--cink)}
   /* ---------- pinned player ---------- */
   #mini{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 56px);background:#FFFFFF;border-top:1px solid #ece3d3;padding:9px 14px;display:none;align-items:center;gap:11px;box-shadow:0 -4px 18px rgba(0,0,0,.06);cursor:pointer;z-index:20}
@@ -91,12 +92,54 @@
   .ctrls .skb{font-size:30px;color:#2a2530}
   .bigpp{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--cdeep));border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px var(--cglow);cursor:pointer}
   .bigpp svg{width:27px;height:27px;fill:#fff}
-.rtic{display:flex;align-items:center;gap:11px}.dl{display:flex;color:#a8a2ad}.grip{display:flex;align-items:center;color:#c2bdc7;flex:0 0 auto;padding-right:2px;cursor:grab}
-  .pills{background:#EAE4DA;border-radius:22px;padding:4px;gap:0;overflow:visible;margin:8px 18px 8px}
-  .pill{flex:1;text-align:center;justify-content:center;border:none;background:transparent;color:#8a8590;border-radius:18px;padding:8px 2px;font-size:12px}
-  .pill.on{background:#fff;color:var(--cink);box-shadow:0 1px 5px rgba(0,0,0,.13);font-weight:700}
-  #favs .logo .d{color:#1A1620}
+
+  .rtic{display:flex;align-items:center;gap:11px}.dl{display:flex;color:#a8a2ad}.grip{display:flex;align-items:center;color:#c2bdc7;flex:0 0 auto;padding-right:2px;cursor:grab}
+  /* ---- CALM / RATIONED overrides: purple structure, frequency only as small accents ---- */
+  .cardpp{background:transparent!important;border:1.5px solid var(--cink)!important;box-shadow:none!important}
+  .cardpp svg{fill:var(--cink)!important}
+  /* premium segmented control for the frequency toggle */
+  .pills{background:#EAE4DA!important;border-radius:22px!important;padding:4px!important;gap:0!important;overflow:visible!important;margin:8px 18px 8px!important}
+  .pill{flex:1!important;text-align:center!important;justify-content:center!important;border:none!important;background:transparent!important;color:#8a8590!important;border-radius:18px!important;padding:8px 2px!important;font-size:12px!important}
+  .pill.on{background:#fff!important;color:var(--cink)!important;box-shadow:0 1px 5px rgba(0,0,0,.13)!important;font-weight:700!important}
+  /* .fm tints to the active frequency (logo no longer locked to purple) */
+  #favs .logo .d{color:#1A1620!important}
+  /* GREYSCALE-CARD experiment: only the tile carries colour */
+  
+  .cardpp{width:23px!important;height:23px!important}
+  .cardpp svg{width:9px!important;height:9px!important}
+  /* Hz readout instead of the frequency word: thin, cool font, paired with the play outline */
+  .lab{font-size:11px!important;font-weight:700!important;color:var(--cink)!important;letter-spacing:.2px!important}
+  .hzu{font-size:12px!important;opacity:.6!important;font-weight:400!important}
+  .botrow{align-items:center!important;padding-top:4px!important}
+  .cardpp{margin-right:0!important}
+  /* tap-anywhere play: subtle play triangle on the tile idle; equaliser + lift when playing */
+  .pov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:transparent}
+  .pcirc{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 7px rgba(0,0,0,.28)}
+  .mtop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .sic{display:flex;gap:12px;align-items:center;flex:0 0 auto;padding-top:3px}
+  .sic .dl{color:#c2bdc7;display:flex}
+  .sic .dl.on{color:var(--cink)}
+  .sic .heart{color:#c9c4cf!important;font-size:16px;line-height:1}
+  .sic .heart.on{color:var(--cink)!important}
+  .pplay{width:0;height:0;border-style:solid;border-width:6px 0 6px 10px;border-color:transparent transparent transparent var(--cink);margin-left:2px}
+  .ppause{display:none;align-items:flex-end;gap:2px;height:12px}
+  .ppause i{width:2.5px;height:100%;background:var(--cink);border-radius:2px;transform-origin:bottom;animation:eq .9s ease-in-out infinite}
+  .ppause i:nth-child(1){animation-delay:0s}.ppause i:nth-child(2){animation-delay:.25s}.ppause i:nth-child(3){animation-delay:.5s}
+  @keyframes eq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+  .row.playing .pov{background:radial-gradient(circle at 50% 50%,rgba(0,0,0,.30),rgba(0,0,0,.12))}
+  .row.playing .pplay,.row.paused .pplay{display:none}.row.playing .ppause,.row.paused .ppause{display:flex}.row.paused .ppause i{animation-play-state:paused}
+  .row.playing{box-shadow:0 0 0 2px var(--cink),0 8px 20px rgba(0,0,0,.08)!important;border-color:transparent!important}
+  .dur{font-size:12px!important}
   .logo .logoimg{height:19px;width:auto;display:block}
+  /* play button back to small + WHITE (no coloured circle); white equaliser, frozen when paused */
+  .pov{background:radial-gradient(circle at 50% 50%,rgba(0,0,0,.16),rgba(0,0,0,.03))!important}
+  .pcirc{background:transparent!important;box-shadow:none!important;width:auto!important;height:auto!important}
+  .pplay{border-color:transparent transparent transparent #fff!important;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))!important}
+  .ppause i{background:#fff!important;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))!important}
+  /* time bold black; heart+download bold BLACK when clicked (filled), grey when empty */
+  .dur{color:#1A1620!important;font-weight:700!important}
+  .sic .dl.on{color:#1A1620!important}
+  .sic .heart.on{color:#1A1620!important;font-weight:700!important}
 </style></head><body>
 <div id="app">
 
@@ -183,13 +226,13 @@ const SONGLIST=[
  mk('Galactic Slumber',0,'Find your true self as deep sleep restores your inner resonance.','1 hour','galactic-slumber'),
 ];
 const CATS={
- core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
+ core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
    title:'Core Vibrational Frequency',desc:'These tracks deepen your authentic sense of who you are.',songs:SONGLIST},
- love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',cdeep:'#6E0024',cglow:'rgba(185,0,68,.45)',hue:0,filt:'none',gA:'255,150,190',gB:'185,0,68',hz:'432',
+ love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',cdeep:'#6E0024',ctint:'#FFE8EA',cglow:'rgba(185,0,68,.45)',hue:0,filt:'none',gA:'255,150,190',gB:'185,0,68',hz:'432',
    title:'Love Vibrational Frequency',desc:'These tracks increase your authentic resonance in matters of love and relationships.',songs:SONGLIST},
- vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#BC6700',cdeep:'#BC6700',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
+ vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#C25500',cdeep:'#BC6700',ctint:'#FFEADA',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
    title:'Vitality Vibrational Frequency',desc:'These tracks raise your energy, drive and aliveness.',songs:SONGLIST},
- abundance:{label:'Abundance',c1:'#00AFDC',c2:'#2ED7DD',cink:'#007B9C',cdeep:'#007B9C',cglow:'rgba(0,175,220,.5)',hue:0,filt:'none',gA:'150,225,245',gB:'0,175,220',hz:'611',
+ abundance:{label:'Abundance',c1:'#00AFDC',c2:'#2ED7DD',cink:'#007B9C',cdeep:'#007B9C',ctint:'#D8F4FF',cglow:'rgba(0,175,220,.5)',hue:0,filt:'none',gA:'150,225,245',gB:'0,175,220',hz:'611',
    title:'Abundance Vibrational Frequency',desc:'These tracks open your sense of opportunity and flow.',songs:SONGLIST},
 };
 let catKey='love';                 // currently-viewed category
@@ -230,10 +273,12 @@ function buildRows(){
   const cat=CATS[catKey]; rows.innerHTML=''; rowSongs=cat.songs;
   cat.songs.forEach((s,i)=>{
     const r=document.createElement('div');r.className='row';r.innerHTML=
-     `<div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas></div>
-      <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p>
-        <div class="botrow"><div class="lab">&#9679; ${cat.label}</div><button class="cardpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
-      <div class="rt"><div class="rtic"><span class="dl">${DL}</span><div class="heart">&#9825;</div></div><div class="dur">&#9201; ${s.dur}</div></div>`;
+     `<div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
+      <div class="meta">
+        <div class="mtop"><h3>${s.name}</h3><div class="sic"><span class="dl${(i%2===1)?' on':''}">${DL}</span><span class="heart${(i%3===0)?' on':''}">${(i%3===0)?'&#9829;':'&#9825;'}</span></div></div>
+        <p>${s.sub}</p>
+        <div class="botrow"><div class="lab">&#9679; ${cat.label}</div><div class="dur">&#9201; ${s.dur}</div></div>
+      </div>`;
     r.onclick=()=>playSong(catKey,i);
     rows.appendChild(r);
   });
@@ -242,7 +287,7 @@ function buildRows(){
 
 // ---------- theme / category switch ----------
 function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElementById('app').style;
-  st.setProperty('--c1',c.c1); st.setProperty('--c2',c.c2); st.setProperty('--cink',c.cink); st.setProperty('--cglow',c.cglow); st.setProperty('--cdeep',c.cdeep);
+  st.setProperty('--c1',c.c1); st.setProperty('--c2',c.c2); st.setProperty('--cink',c.cink); st.setProperty('--cglow',c.cglow); st.setProperty('--cdeep',c.cdeep); st.setProperty('--ctint',c.ctint);
   document.querySelectorAll('#pills .pill').forEach(p=>p.classList.toggle('on',p.dataset.cat===key));
   document.getElementById('catTitle').textContent=c.title;
   document.getElementById('catDesc').textContent=c.desc;
@@ -293,7 +338,7 @@ document.getElementById('svBack').onclick=()=>songEl.classList.remove('open');
 function markAlive(){ const playing=started&&!aud.paused, here=(catKey===playCat);
   rows.querySelectorAll('.row').forEach((r,i)=>{ const isThis=here&&!!curSong&&rowSongs[i]===curSong, isP=isThis&&playing; const b=r.querySelector('.cardpp');
     if(b){b.innerHTML=ppSVG(isP);const sv=b.querySelector('svg');if(sv)sv.style.marginLeft=isP?'0':'1px';}
-    r.classList.toggle('playing', isThis);
+    r.classList.toggle('playing', isP); r.classList.toggle('paused', isThis&&!isP);
     const cv=r.querySelector('canvas'); const im=r.querySelector('img'); if(!isThis){cv.getContext('2d').clearRect(0,0,cv.width,cv.height); if(im){im.style.transform='';im.style.filter='';}} }); }
 const miniGlow=document.getElementById('miniGlow').getContext('2d');
 // drive the whole-tile motion: scale from centre + a touch of brightness on the beat
@@ -358,13 +403,14 @@ const FAVS=[['core','starseed'],['love','kindred-spirits'],['vitality','astrolit
  ['core','galactic-slumber'],['love','starseed'],['vitality','elysian-surge'],['abundance','quiet-success'],
  ['core','astrolith'],['love','galactic-slumber'],['vitality','kindred-spirits'],['abundance','cosmic-drift']];
 function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
- FAVS.forEach(([ck,slug])=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
-  const r=document.createElement('div');r.className='row';
-  r.innerHTML=`<div class="grip">${GRIP}</div><div class="thumb"><img src="${tileSrc(ck,s)}" alt=""></div>
-   <div class="meta"><h3>${s.name}</h3><p>${s.sub}</p>
-    <div class="botrow"><div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div>
-     <button class="cardpp"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button></div></div>
-   <div class="rt"><div class="rtic"><span class="dl">${DL}</span><div class="heart" style="color:${cat.cink}">&#9829;</div></div><div class="dur">&#9201; ${s.dur}</div></div>`;
+ FAVS.forEach(([ck,slug],i)=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
+  const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);
+  r.innerHTML=`<div class="grip">${GRIP}</div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
+   <div class="meta">
+    <div class="mtop"><h3>${s.name}</h3><div class="sic"><span class="dl${(i%2===0)?' on':''}">${DL}</span><span class="heart on" style="color:${cat.cink}">&#9829;</span></div></div>
+    <p>${s.sub}</p>
+    <div class="botrow"><div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div><div class="dur">&#9201; ${s.dur}</div></div>
+   </div>`;
   r.onclick=()=>playSong(ck,cat.songs.indexOf(s));
   c.appendChild(r);});}
 const navItems=document.querySelectorAll('#nav div');
