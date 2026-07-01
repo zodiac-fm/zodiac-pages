@@ -53,7 +53,6 @@
     background:linear-gradient(180deg,#f4effc,#efe9fb); border:1px solid #e3d8f7;}
   .verdict .ey{font-size:10.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--violet); opacity:.9;}
   .verdict h1{font-family:var(--serif); font-size:27px; font-weight:600; line-height:1.08; letter-spacing:-.015em; color:var(--ink); margin-top:5px;}
-  body.low .verdict h1{color:var(--warn);}
   .verdict h1 em{font-style:normal; color:var(--violet-deep);}
   .gates{display:flex; gap:10px; margin-top:15px;}
   .gate{flex:1 1 0; min-width:0; background:rgba(255,255,255,.62); border:1px solid #e6ddf6; border-radius:13px; padding:11px 12px;}
@@ -112,7 +111,7 @@
   .frow .top{display:flex; align-items:center; gap:9px;}
   .frow .dot{width:9px; height:9px; border-radius:50%; flex:0 0 auto;}
   .frow .nm{font-size:15px; font-weight:600; letter-spacing:-.01em; color:var(--ink);}
-  .frow .lowtag{font-size:10px; font-weight:700; letter-spacing:.05em; color:#fff; background:var(--warn); border-radius:20px; padding:2px 8px;}
+  .frow .lowtag{font-size:10.5px; font-weight:600; letter-spacing:.02em; color:var(--warn); background:var(--warn-soft); border:1px solid #e6c4c1; border-radius:20px; padding:2px 9px;}
   .frow .pct{font-family:var(--serif); font-size:17px; font-weight:600; margin-left:auto; color:var(--ink);}
   .frow.low .pct{color:var(--warn);}
   .frow .bar2{position:relative; height:9px; border-radius:5px; background:var(--track); margin-top:10px;}
@@ -188,7 +187,7 @@
           <!-- VERDICT CARD -->
           <div class="verdict">
             <div class="ey">This week</div>
-            <h1 class="low-only">Almost there. One frequency is low.</h1>
+            <h1 class="low-only">Almost at <em>Level 2</em>.</h1>
             <h1 class="ok-only">You're on <em>Level 2</em>.</h1>
             <div class="gates">
               <div class="gate">
@@ -207,8 +206,8 @@
                 <div class="gsub">balanced week</div>
               </div>
             </div>
-            <div class="fixline low-only">Your time already clears Level 2. Bring <b>Vitality up to 15%</b> this week to reach your level, a level needs both.</div>
-            <div class="fixline ok-only">Time and balance are both on track. <b>21 min/day more</b> to reach Level 3.</div>
+            <div class="fixline low-only">Bring <b>Vitality up to 15%</b> to lock in your level.</div>
+            <div class="fixline ok-only">Both on track. <b>21 min/day more</b> to reach Level 3.</div>
           </div>
 
           <!-- TIME -->
@@ -243,7 +242,7 @@
             <div class="rule">Each of your four frequencies needs at least <b>15% of your weekly listening</b>. The other 40% is yours.</div>
             <div class="frow">
               <div class="top"><span class="dot" style="background:var(--core)"></span><span class="nm">Core</span><span class="pct">28%</span></div>
-              <div class="bar2"><div class="thresh"></div><div class="threshcap">15% min</div><div class="fg2" style="width:28%"></div></div>
+              <div class="bar2"><div class="thresh"></div><div class="threshcap">15%</div><div class="fg2" style="width:28%"></div></div>
             </div>
             <div class="frow">
               <div class="top"><span class="dot" style="background:var(--love)"></span><span class="nm">Love</span><span class="pct low-only">22%</span><span class="pct ok-only">24%</span></div>
@@ -251,8 +250,8 @@
             </div>
             <!-- Vitality: LOW in low state, OK in ok state -->
             <div class="frow low low-only">
-              <div class="top"><span class="dot" style="background:var(--vitality)"></span><span class="nm">Vitality</span><span class="lowtag">LOW</span><span class="pct">11%</span></div>
-              <div class="bar2"><div class="thresh"></div><div class="threshcap">15% min</div><div class="fg2" style="width:11%"></div></div>
+              <div class="top"><span class="dot" style="background:var(--vitality)"></span><span class="nm">Vitality</span><span class="lowtag">Low</span><span class="pct">11%</span></div>
+              <div class="bar2"><div class="thresh"></div><div class="fg2" style="width:11%"></div></div>
             </div>
             <div class="frow ok-only">
               <div class="top"><span class="dot" style="background:var(--vitality)"></span><span class="nm">Vitality</span><span class="pct">18%</span></div>
@@ -262,7 +261,7 @@
               <div class="top"><span class="dot" style="background:var(--abundance)"></span><span class="nm">Abundance</span><span class="pct low-only">39%</span><span class="pct ok-only">30%</span></div>
               <div class="bar2"><div class="thresh"></div><div class="fg2 low-only" style="width:39%"></div><div class="fg2 ok-only" style="width:30%"></div></div>
             </div>
-            <div class="balfix"><span class="b">&#9650;</span><span>Vitality is <b style="color:var(--warn)">4% short</b> of 15%. Play a little more Vitality this week and it counts toward your level.</span></div>
+            <div class="balfix"><span class="b">&#9650;</span><span>Vitality is <b style="color:var(--warn)">4% short</b> of 15%. A little more this week will do it.</span></div>
             <div class="balok"><span class="b">&#10003;</span><span>All four frequencies are getting their share. Nothing to fix this week.</span></div>
           </div>
 
