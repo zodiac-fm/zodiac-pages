@@ -199,11 +199,11 @@
       <div class="scrub" id="scrub"><div class="fill" id="scrubFill"></div><div class="knob" id="scrubKnob"></div></div>
       <div class="times"><span id="tCur">0:00</span><span id="tTot">0:00</span></div>
       <div class="ctrls">
-        <div class="sk" id="shuf">&#128256;</div>
+        <div class="sk" id="shuf"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg></div>
         <div class="skb" id="prev">&#9198;</div>
         <button class="bigpp" id="bigPP"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
         <div class="skb" id="next">&#9197;</div>
-        <div class="sk" id="rep">&#128257;</div>
+        <div class="sk" id="rep"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
       </div>
     </div>
   </section>
@@ -289,7 +289,7 @@ function buildRows(){
       <div class="meta">
         <div class="mtop"><h3>${s.name}</h3><div class="sic"><span class="dl${(i%2===1)?' on':''}">${DL}</span><span class="heart${(i%3===0)?' on':''}">${(i%3===0)?'&#9829;':'&#9825;'}</span></div></div>
         <p>${s.sub}</p>
-        <div class="botrow"><div class="lab">&#9679; ${cat.label}</div><div class="dur">&#9201; ${s.dur}</div></div>
+        <div class="botrow"><div class="lab">&#9679; ${cat.label}</div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
       </div>`;
     r.onclick=()=>playSong(catKey,i);
     rows.appendChild(r);
@@ -421,7 +421,7 @@ function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
    <div class="meta">
     <div class="mtop"><h3>${s.name}</h3><div class="sic"><span class="dl${(i%2===0)?' on':''}">${DL}</span><span class="heart on" style="color:${cat.cink}">&#9829;</span></div></div>
     <p>${s.sub}</p>
-    <div class="botrow"><div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div><div class="dur">&#9201; ${s.dur}</div></div>
+    <div class="botrow"><div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
    </div>`;
   r.onclick=()=>playSong(ck,cat.songs.indexOf(s));
   c.appendChild(r);});}
