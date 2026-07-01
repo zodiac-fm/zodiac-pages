@@ -60,7 +60,7 @@
   #mini .pp svg{width:16px;height:16px;fill:currentColor}
   /* ---------- bottom nav ---------- */
   #nav{position:absolute;left:0;right:0;bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center;z-index:15}
-  #nav div{font-size:11px;text-align:center;color:#9a95a0}#nav div.on{color:var(--cink)}
+  #nav div{font-size:11px;text-align:center;color:#9a95a0}#nav div.on{color:#1A1620;font-weight:700}
   #nav .ic{font-size:16px;display:block;margin-bottom:2px}
   /* ---------- SONG VIEW (matches the app player) ---------- */
   #song{background:#FFFFFF;color:#1a1620;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:40}
@@ -96,7 +96,6 @@
 
   .rtic{display:flex;align-items:center;gap:11px}.dl{display:flex;color:#a8a2ad}.grip{display:flex;align-items:center;color:#c2bdc7;flex:0 0 auto;padding-right:2px;cursor:grab}
   /* ---- CALM / RATIONED overrides: purple structure, frequency only as small accents ---- */
-  #nav div.on{color:#6521C9!important}
   .row.playing{border-color:#6521C9!important;box-shadow:0 0 0 1.5px #6521C9!important}
   .cardpp{background:transparent!important;border:1.5px solid var(--cink)!important;box-shadow:none!important}
   .cardpp svg{fill:var(--cink)!important}
@@ -181,7 +180,7 @@
   <div id="nav">
     <div class="on"><span class="ic">&#9835;</span>Immersions</div>
     <div><span class="ic">&#9776;</span>Results</div>
-    <div><span class="ic">&#9825;</span>Favorites</div>
+    <div><span class="ic">&#9825;</span>Playlist</div>
   </div>
 
   <!-- ===================== SONG VIEW (app player layout) ===================== -->
