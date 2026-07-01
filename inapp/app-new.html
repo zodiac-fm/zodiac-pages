@@ -140,6 +140,8 @@
   .dur{color:#1A1620!important;font-weight:700!important}
   .sic .dl.on{color:#1A1620!important}
   .sic .heart.on{color:#1A1620!important;font-weight:700!important}
+  .draghint{font-size:11px;color:#a8a2ad;font-weight:600;display:flex;align-items:center;gap:4px}
+  .draghint .dharr{font-size:14px;transform:translateY(1px)}
 </style></head><body>
 <div id="app">
 
@@ -199,7 +201,7 @@
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"></div><div class="ham">&#9776;</div></div>
-    <div class="barrow"><div class="qall">&#9776; Queue All</div></div>
+    <div class="barrow"><div class="draghint"><span class="dharr">&#8601;</span> Drag to reorder</div><div class="qall">&#9776; Queue All</div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
   </section>
 </div>
