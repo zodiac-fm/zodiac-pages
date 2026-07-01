@@ -133,12 +133,13 @@
   .row.playing .pplay,.row.paused .pplay{display:none}.row.playing .ppause,.row.paused .ppause{display:flex}.row.paused .ppause i{animation-play-state:paused}
   .row.playing{box-shadow:0 0 0 2px var(--cink),0 8px 20px rgba(0,0,0,.08)!important;border-color:transparent!important}
   .dur{font-size:12px!important}
+  .logo .logoimg{height:19px;width:auto;display:block}
 </style></head><body>
 <div id="app">
 
   <!-- ===================== LIST ===================== -->
   <section class="screen" id="list">
-    <div class="top"><div class="logo serif">zodiac<span class="d">.fm</span></div><div class="ham">&#9776;</div></div>
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"></div><div class="ham">&#9776;</div></div>
     <div class="pills" id="pills">
       <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
     </div>
@@ -191,7 +192,7 @@
 
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
-    <div class="top"><div class="logo serif">zodiac<span class="d">.fm</span></div><div class="ham">&#9776;</div></div>
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"></div><div class="ham">&#9776;</div></div>
     <div class="barrow"><div class="qall">&#9776; Queue All</div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
   </section>
