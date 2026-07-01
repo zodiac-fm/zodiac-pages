@@ -33,14 +33,14 @@
   <h2>Neutrals</h2>
   <div class="neut" id="neut"></div>
 
-  <div class="foot">Each frequency: <b>Tint</b> (badge / surface backgrounds), <b>Soft</b> (hover, fills), <b>Primary</b> (the colour, buttons, labels), <b>Deep</b> (text on tint, pressed states), and the <b>Gradient</b> (now-playing, tiles, hero accents). Neutrals carry a faint warm/cool ground; Stage is the dark backdrop for the visualiser.</div>
+  <div class="foot">Each frequency: <b>Tint</b> (badge / surface backgrounds), <b>Soft</b> (hover, fills), <b>Primary</b> (the colour, buttons, labels), <b>Deep</b> (text on tint, pressed states), and the <b>Gradient</b> (now-playing, tiles, hero accents). Neutrals carry a faint warm/cool ground; Stage is the dark backdrop for the visualiser. <b>In-app neutral treatment (LOCKED):</b> screen canvas = Cream #F6F1E8; tile squares = MoonDust #FBF8F3 (a hair brighter); cards/rows = Bleach #FFFFFF. Two creams on purpose — do not collapse. Accent = Core Purple #6521C9 everywhere (no blue).</div>
 </div>
 <script>
 const D={"Core":{role:"Identity",primary:"#6521C9",tint:"#EFECFF",soft:"#D2C8FF",deep:"#38007A",gradEnd:"#A737C8"},
 "Love":{role:"Relationships",primary:"#B90044",tint:"#FFE8EA",soft:"#FFBDC3",deep:"#6E0024",gradEnd:"#CF4090"},
 "Vitality":{role:"Energy",primary:"#FF9112",tint:"#FFEADA",soft:"#FFC392",deep:"#BC6700",gradEnd:"#FFC251"},
 "Abundance":{role:"Opportunity",primary:"#00AFDC",tint:"#D8F4FF",soft:"#8ADFFF",deep:"#007B9C",gradEnd:"#2ED7DD"}};
-const NE={"Bleach":"#FFFFFF","Cream":"#F6F1E8","Mist":"#EEE9E0","Ink":"#1A1620","Stage":"#0B0712"};
+const NE={"Bleach":"#FFFFFF","Cream":"#F6F1E8","MoonDust":"#FBF8F3","Mist":"#EEE9E0","Ink":"#1A1620","Stage":"#0B0712"};
 function tc(hex){const h=hex.replace('#','');const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);return (0.2126*r+0.7152*g+0.0722*b)>150?'#241a10':'#fff';}
 document.getElementById('freqs').innerHTML=Object.entries(D).map(([k,v])=>`
  <div class="fr"><div class="frh"><b>${k}</b><span>${v.role}</span></div>
