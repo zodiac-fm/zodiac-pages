@@ -76,11 +76,11 @@
   .sv-meta{display:flex;align-items:flex-start;justify-content:space-between;padding:24px 30px 2px}
   .sv-meta h2{font-family:Georgia,serif;font-size:23px;font-weight:600}
   .sv-meta .f{font-size:13px;color:var(--cink);font-weight:700;margin-top:3px}
-  .svfreq{display:inline-flex;align-items:center;gap:7px;margin-top:9px;padding:5px 12px;border-radius:20px;background:color-mix(in srgb,var(--cink) 12%,#fff);border:1px solid color-mix(in srgb,var(--cink) 24%,#fff)}
-  .svfreq .fdot{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.6),rgba(255,255,255,0) 46%),linear-gradient(140deg,var(--c1),var(--c2));box-shadow:0 2px 7px var(--cglow)}
+  .svfreq{display:inline-flex;align-items:center;gap:8px;margin-top:11px}
+  .svfreq .fdot{width:9px;height:9px;border-radius:50%;background:var(--cink)}
   .svfreq b{font-size:15px;font-weight:700;color:var(--ink)}
   .svfreq small{font-size:10.5px;color:var(--mut);font-weight:600;margin-left:-3px}
-  .svfreq span{font-size:11px;font-weight:700;color:var(--cink);margin-left:3px}
+  .svfreq span{font-size:13px;font-weight:700;color:var(--cink)}
   .sv-meta .heart{font-size:23px;color:var(--cink)}
   .player{padding:8px 30px calc(env(safe-area-inset-bottom,0px) + 24px)}
   .scrub{height:4px;background:#e7e2ea;border-radius:3px;position:relative;cursor:pointer;margin:12px 0 6px}
@@ -90,7 +90,7 @@
   .ctrls{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding:0 2px}
   .ctrls .sk{font-size:21px;color:#a8a2ad}
   .ctrls .skb{font-size:30px;color:#2a2530}
-  .bigpp{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--cdeep));border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px var(--cglow);cursor:pointer}
+  .bigpp{width:64px;height:64px;border-radius:50%;background:linear-gradient(160deg,var(--c1),var(--cdeep));border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.20);cursor:pointer}
   .bigpp svg{width:27px;height:27px;fill:#fff}
 
   .rtic{display:flex;align-items:center;gap:11px}.dl{display:flex;color:#a8a2ad}.grip{display:flex;align-items:center;color:#c2bdc7;flex:0 0 auto;padding-right:2px;cursor:grab}
@@ -193,7 +193,7 @@
     <div class="sv-art"><div id="viz"><canvas id="vc"></canvas></div></div>
     <div class="sv-meta">
       <div><h2 class="serif" id="svName">&mdash;</h2>
-        <div class="svfreq"><span class="fdot"></span><b id="svHz">432</b><small>Hz</small><span id="svCat">Love</span></div>
+        <div class="svfreq"><span class="fdot"></span><span id="svCat">Love</span><b id="svHz">432</b><small>Hz</small></div>
       </div>
       <div class="heart">&#9825;</div>
     </div>
@@ -317,15 +317,16 @@ function ppSVG(p){return p?'<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h
 function setIcons(){const p=started&&!aud.paused;miniPP.innerHTML=ppSVG(p);bigPP.innerHTML=ppSVG(p);markAlive();}
 function loadBurst(src){burstImg=null;const im=new Image();im.onload=()=>{burstImg=im;};im.src=src;}
 async function playSong(ck,i){
-  initGraph(); if(AC){try{await AC.resume();}catch(e){}}
   const cat=CATS[ck], s=cat.songs[i];
-  if(s===curSong && ck===playCat){ if(s.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } setIcons(); markAlive(); return; }   // same song + same frequency → just play/pause
+  if(s===curSong && ck===playCat){ initGraph(); if(AC){try{await AC.resume();}catch(e){}} if(s.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } setIcons(); markAlive(); return; }   // same song + same frequency → just play/pause
   const prev=curSong;
   curSong=s; playCat=ck; gA=cat.gA; gB=cat.gB; playHz=parseInt(cat.hz,10)||432; started=true;
   document.getElementById('app').classList.add('playing');
   miniImg.src=tileSrc(ck,s); miniImg.style.filter='none'; loadBurst(tileSrc(ck,s));
   miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion'; document.getElementById('miniSub').style.color=cat.cink;
   svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label;
+  ['song','mini'].forEach(function(id){var el=document.getElementById(id);el.style.setProperty('--c1',cat.c1);el.style.setProperty('--c2',cat.c2);el.style.setProperty('--cink',cat.cink);el.style.setProperty('--cdeep',cat.cdeep);el.style.setProperty('--cglow',cat.cglow);});
+  initGraph(); if(AC){try{await AC.resume();}catch(e){}}
   if(s!==prev||!D) D=await analyze(s.audio,playHz);   // re-analyze only when the track changes (snappy restart)
   synT=performance.now()/1000;                        // restart the (synthetic) playhead at 0
   // ALWAYS start from the beginning — a row press restarts even the same song, in the viewed frequency
