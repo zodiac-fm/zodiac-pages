@@ -2,189 +2,151 @@
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Zodiac — song fingerprint visualizer</title>
+<title>Zodiac — frequency player (equalizer)</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:#06030b;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-#c{display:block;width:100vw;height:100vh;position:fixed;inset:0}
-.cap{position:fixed;top:22px;left:24px;color:#5f5872;font-size:11px;letter-spacing:.18em;text-transform:uppercase;z-index:5}
-.cats{position:fixed;top:18px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:6;opacity:0;transition:.4s}
+html,body{height:100%;background:#F3EEE4;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1620;overflow:hidden}
+.player{position:fixed;inset:0;display:flex;flex-direction:column;padding:34px clamp(24px,5vw,80px)}
+.top{display:flex;justify-content:space-between;align-items:flex-start}
+.who .kick{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--acc,#0A7A52)}
+.who h1{font-family:Georgia,serif;font-size:clamp(30px,5vw,52px);font-weight:500;letter-spacing:-.01em;margin-top:6px}
+.who .role{font-size:13px;color:#8a8590;margin-top:4px;letter-spacing:.02em}
+.hz{text-align:right}
+.hz .big{font-family:Georgia,serif;font-size:clamp(40px,7vw,76px);font-weight:600;color:var(--acc,#0A7A52);line-height:1;letter-spacing:-.02em}
+.hz .u{font-size:.4em;color:#8a8590;font-weight:500}
+.hz .sub{font-size:12px;color:#8a8590;margin-top:6px}
+#c{flex:1;display:block;width:100%}
+.foot{display:flex;align-items:center;gap:16px;padding-top:6px}
+.time{font-size:12px;color:#8a8590;font-variant-numeric:tabular-nums;min-width:38px}
+.bar{flex:1;height:4px;background:#e3dbcc;border-radius:3px;position:relative}
+.bar .f{position:absolute;left:0;top:0;bottom:0;width:38%;border-radius:3px;background:var(--acc,#0A7A52)}
+.bar .k{position:absolute;left:38%;top:50%;width:12px;height:12px;border-radius:50%;background:var(--acc,#0A7A52);transform:translate(-50%,-50%);box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.cats{position:fixed;top:26px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:6;opacity:0;transition:.3s}
 .cats.show{opacity:1}
-.cats button{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#b9b2c6;font-size:12px;font-weight:600;padding:7px 14px;border-radius:999px;cursor:pointer}
-.cats button.on{background:#fff;color:#1a1620;border-color:#fff}
-#start{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;cursor:pointer;background:radial-gradient(circle at 50% 45%,rgba(30,20,44,.5),rgba(6,3,11,.93))}
-#start .play{width:96px;height:96px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;transition:.2s}
-#start:hover .play{border-color:#fff;transform:scale(1.05)}
-#start .play svg{width:34px;height:34px;fill:#fff;margin-left:5px}
-#start .t{color:#efe8f6;font-family:Georgia,serif;font-size:22px;margin-top:22px}
-#start .s{color:#8b8598;font-size:13px;margin-top:6px}
-#start .load{color:#8b8598;font-size:12px;margin-top:14px;opacity:0}
-.legend{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);color:#7a7488;font-size:12px;z-index:6;opacity:0;transition:.5s;text-align:center}
-.legend.show{opacity:1}
-.legend b{color:#efe8f6;font-family:Georgia,serif}
+.cats button{background:#fff;border:1px solid #e3dbcc;color:#6a6470;font-size:12px;font-weight:600;padding:6px 13px;border-radius:999px;cursor:pointer}
+.cats button.on{background:#1a1620;color:#fff;border-color:#1a1620}
+#start{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;cursor:pointer;background:rgba(243,238,228,.82)}
+#start .play{width:92px;height:92px;border-radius:50%;background:var(--acc,#0A7A52);display:flex;align-items:center;justify-content:center;box-shadow:0 12px 30px rgba(10,122,82,.3)}
+#start .play svg{width:32px;height:32px;fill:#fff;margin-left:5px}
+#start .t{font-family:Georgia,serif;font-size:20px;margin-top:20px}
+#start .s{font-size:13px;color:#8a8590;margin-top:5px}
 </style></head><body>
-<canvas id="c"></canvas>
-<div class="cap">Song fingerprint</div>
 <div class="cats" id="cats">
   <button data-cat="core">Core · 432</button>
   <button data-cat="love">Love · 528</button>
   <button data-cat="vitality">Vitality · 594</button>
   <button data-cat="abundance" class="on">Abundance · 611</button>
 </div>
-<div id="start">
-  <div class="play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div>
-  <div class="t">Play your frequency</div>
-  <div class="s">the whole track becomes a fingerprint · your tuned frequency threads through it</div>
-  <div class="load" id="load">reading the track…</div>
+<div class="player" id="player">
+  <div class="top">
+    <div class="who"><div class="kick" id="lab">Abundance · Opportunity</div><h1 id="name">Kindred Spirits</h1><div class="role">The Sound of You</div></div>
+    <div class="hz"><div class="big"><span id="hznum">611</span><span class="u"> Hz</span></div><div class="sub">your tuned frequency</div></div>
+  </div>
+  <canvas id="c"></canvas>
+  <div class="foot"><span class="time" id="t1">1:12</span><div class="bar"><div class="f" id="pf"></div><div class="k" id="pk"></div></div><span class="time" id="t2">-4:41</span></div>
 </div>
-<div class="legend" id="legend"><b>611 Hz</b> runs through the whole song. The bright ring is that frequency, present start to end, with every other frequency inside and outside it.</div>
+<div id="start"><div class="play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div><div class="t">Play</div><div class="s">Kindred Spirits · tuned to 611 Hz</div></div>
 <script>
-const PAL={
-  core:{dom:['#6521C9','#A737C8'],sec:['#C24FA8','#7A4AE0'],hz:432},
-  love:{dom:['#B90044','#CF4090'],sec:['#E8663E','#D8489A'],hz:528},
-  vitality:{dom:['#C25500','#FF9112'],sec:['#DD6A3C','#DDA92E'],hz:594},
-  abundance:{dom:['#0F9A66','#46D99A'],sec:['#22B7A6','#CBA646'],hz:611}
-};
+const PAL={core:{acc:'#6521C9',g:['#6521C9','#A737C8'],hz:432,name:'Astrolith',role:'Core · Identity'},
+  love:{acc:'#B90044',g:['#B90044','#E0559A'],hz:528,name:'Elysian Surge',role:'Love · Relationships'},
+  vitality:{acc:'#C25500',g:['#C25500','#FF9112'],hz:594,name:'Quiet Success',role:'Vitality · Energy'},
+  abundance:{acc:'#0A7A52',g:['#0A7A52','#1FB577'],hz:611,name:'Kindred Spirits',role:'Abundance · Opportunity'}};
 let cat='abundance';
 const cv=document.getElementById('c'),x=cv.getContext('2d');
-let W,H,DPR,base,cx,cy;
-function size(){DPR=Math.min(devicePixelRatio||1,2);W=cv.width=innerWidth*DPR;H=cv.height=innerHeight*DPR;
-  cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';base=Math.min(W,H);cx=W/2;cy=H/2;buildFP();}
+let W,H,DPR;
+function size(){DPR=Math.min(devicePixelRatio||1,2);W=cv.width=cv.clientWidth*DPR;H=cv.height=cv.clientHeight*DPR;}
 function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
-function mix(a,b,t){return a.map((v,i)=>v+(b[i]-v)*t);}
 function rgba(c,a){return `rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;}
+addEventListener('resize',size);
 
-// ---- frequency map of the WHOLE song ----
-const NS=260, NF=52;                       // time slices around the ring, frequency rows out from centre
-const FLO=180, FHI=1050;
-const freqs=Array.from({length:NF},(_,i)=>FLO*Math.pow(FHI/FLO,i/(NF-1)));
-function targetIdx(hz){ let best=0,bd=1e9; freqs.forEach((f,i)=>{const d=Math.abs(f-hz);if(d<bd){bd=d;best=i;}}); return best; }
-let grid=null, songLen=180, playing=false, fake=false, t0=performance.now(), an=null, live=null, startT=0;
+const NB=64, FLO=120, FHI=1400;              // 64 bars across a musical range
+const barFreq=i=>FLO*Math.pow(FHI/FLO,i/(NB-1));
+let an=null, live=null, playing=false, fake=false, t0=performance.now(), el=null, dur=180;
+const bars=new Float32Array(NB), peaks=new Float32Array(NB);
 
-function goertzel(buf, start, len, freq, sr){
-  const w=2*Math.PI*freq/sr, c=2*Math.cos(w); let s1=0,s2=0;
-  for(let n=0;n<len;n++){ const s0=(buf[start+n]||0)+c*s1-s2; s2=s1; s1=s0; }
-  return Math.sqrt(Math.max(0,s1*s1+s2*s2-c*s1*s2))/len;
-}
-function computeGrid(buf, sr, dur){
-  const g=Array.from({length:NS},()=>new Float32Array(NF));
-  const win=Math.min(4096, Math.floor(buf.length/NS));
-  for(let s=0;s<NS;s++){
-    const centre=Math.floor((s+0.5)/NS*buf.length); const st=Math.max(0,centre-win/2|0);
-    for(let fi=0;fi<NF;fi++) g[s][fi]=goertzel(buf,st,win,freqs[fi],sr);
-  }
-  // normalise per frequency row (so quiet high freqs still show), then a global lift
-  for(let fi=0;fi<NF;fi++){ let mx=1e-6; for(let s=0;s<NS;s++) mx=Math.max(mx,g[s][fi]);
-    for(let s=0;s<NS;s++) g[s][fi]=Math.pow(g[s][fi]/mx,0.8); }
-  grid=g; songLen=dur; buildFP();
-}
-function fakeGrid(){
-  const g=Array.from({length:NS},()=>new Float32Array(NF)); const ti=targetIdx(PAL[cat].hz);
-  for(let s=0;s<NS;s++){ const p=s/NS;
-    for(let fi=0;fi<NF;fi++){
-      let v=0.5*Math.exp(-fi/NF*2.2)*(0.5+0.5*Math.sin(p*40+fi));       // bass-leaning texture
-      v+=0.4*Math.exp(-Math.abs(fi-NF*0.4)*0.25)*(0.4+0.6*Math.sin(p*22-fi*2));
-      v+=0.3*Math.exp(-Math.abs(fi-NF*0.7)*0.3)*(0.4+0.6*Math.sin(p*30+fi));
-      if(Math.abs(fi-ti)<=1){ v+=0.55*(0.4+0.6*Math.pow(Math.abs(p-0.5)*2,1.4)); } // target: loud ends, soft middle
-      g[s][fi]=Math.min(1,v);
-    }
-  }
-  grid=g; songLen=180; fake=true; buildFP();
-}
-
-// static offscreen render of the whole-song fingerprint (drawn once, then rotated/composited)
-let fp=null;
-function buildFP(){
-  if(!grid||!base) return;
-  fp=document.createElement('canvas'); fp.width=W; fp.height=H; const f=fp.getContext('2d');
-  const P=PAL[cat], d0=hx(P.dom[0]),d1=hx(P.dom[1]);
-  const rIn=base*0.145, rOut=base*0.455;
-  f.globalCompositeOperation='lighter'; f.lineCap='round';
-  for(let s=0;s<NS;s++){
-    const a=s/NS*Math.PI*2 - Math.PI/2;
-    const x1=cx+Math.cos(a)*rIn, y1=cy+Math.sin(a)*rIn, x2=cx+Math.cos(a)*rOut, y2=cy+Math.sin(a)*rOut;
-    const g=f.createLinearGradient(x1,y1,x2,y2);
-    for(let fi=0;fi<NF;fi++){ const t=fi/(NF-1); const col=mix(d0,d1,t); const v=grid[s][fi];
-      g.addColorStop(t, rgba(col, Math.min(0.9, v*0.75))); }
-    f.strokeStyle=g; f.lineWidth=Math.max(1.1, (Math.PI*2*rOut/NS)*0.9);
-    f.beginPath(); f.moveTo(x1,y1); f.lineTo(x2,y2); f.stroke();
-  }
-}
-
-// ---- audio ----
-document.getElementById('start').onclick=async function(){
-  document.getElementById('load').style.opacity=1;
-  try{
-    const AC=window.AudioContext||window.webkitAudioContext; const ac=new AC();
-    const url='../inapp/elysian-sky-600hz.mp3';
-    const resp=await fetch(url); const arr=await resp.arrayBuffer();
-    const audioBuf=await ac.decodeAudioData(arr.slice(0));
-    const ch=audioBuf.getChannelData(0);
-    computeGrid(ch, audioBuf.sampleRate, audioBuf.duration);
-    // playback + live analyser for the playhead burst
-    const el=new Audio(url); el.crossOrigin='anonymous'; el.loop=true;
-    const src=ac.createMediaElementSource(el); an=ac.createAnalyser(); an.fftSize=1024;
-    src.connect(an); an.connect(ac.destination); live=new Uint8Array(an.frequencyBinCount);
-    ac.resume(); await el.play(); window.__el=el; startT=performance.now(); playing=true; reveal();
-  }catch(e){ fakeGrid(); playing=true; startT=performance.now(); reveal(); }
-};
-function reveal(){ document.getElementById('start').style.display='none';
-  ['cats','legend'].forEach(id=>document.getElementById(id).classList.add('show')); }
-if(new URLSearchParams(location.search).has('demo')){ fakeGrid(); playing=true; startT=performance.now();
-  document.getElementById('start').style.display='none'; ['cats','legend'].forEach(id=>document.getElementById(id).classList.add('show')); }
+function applyCat(){ const P=PAL[cat]; document.documentElement.style.setProperty('--acc',P.acc);
+  document.getElementById('hznum').textContent=P.hz; document.getElementById('name').textContent=P.name;
+  document.getElementById('lab').textContent=P.role; document.getElementById('start').querySelector('.s').textContent=P.name+' · tuned to '+P.hz+' Hz'; }
 document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{cat=b.dataset.cat;
-  document.querySelectorAll('[data-cat]').forEach(o=>o.classList.toggle('on',o===b));
-  document.querySelector('#legend b').textContent=PAL[cat].hz+' Hz'; if(fake)fakeGrid(); else buildFP();});
+  document.querySelectorAll('[data-cat]').forEach(o=>o.classList.toggle('on',o===b)); applyCat();});
+
+document.getElementById('start').onclick=async function(){
+  try{ const AC=window.AudioContext||window.webkitAudioContext; const ac=new AC();
+    el=new Audio('../inapp/elysian-sky-600hz.mp3'); el.crossOrigin='anonymous'; el.loop=true;
+    const src=ac.createMediaElementSource(el); an=ac.createAnalyser(); an.fftSize=4096; an.smoothingTimeConstant=0.75;
+    src.connect(an); an.connect(ac.destination); live=new Uint8Array(an.frequencyBinCount);
+    ac.resume(); await el.play(); an._sr=ac.sampleRate; playing=true;
+  }catch(e){ fake=true; playing=true; }
+  this.style.display='none'; document.getElementById('cats').classList.add('show');
+};
+if(new URLSearchParams(location.search).has('demo')){ fake=true; playing=true;
+  document.getElementById('start').style.display='none'; document.getElementById('cats').classList.add('show'); }
+
+function readBars(){
+  const P=PAL[cat];
+  if(fake){ const tt=(performance.now()-t0)/1000; const beat=0.55+0.45*Math.max(0,Math.sin(tt*3.2));
+    for(let i=0;i<NB;i++){ const f=i/NB;
+      let v=0.9*Math.exp(-f*2.4)*(0.5+0.5*Math.sin(tt*4+f*16));
+      v+=0.6*Math.exp(-Math.abs(f-0.4)*6)*(0.4+0.6*Math.sin(tt*6-f*20));
+      v+=0.5*Math.exp(-Math.abs(f-0.7)*8)*(0.4+0.6*Math.sin(tt*9+f*24));
+      // keep the tuned band clearly alive (it's embedded)
+      const tf=(Math.log(P.hz/FLO)/Math.log(FHI/FLO)); if(Math.abs(f-tf)<0.03) v=Math.max(v,0.55+0.35*beat);
+      bars[i]+=(Math.min(1,v*beat)-bars[i])*0.35;
+    } return; }
+  an.getByteFrequencyData(live); const sr=an._sr||44100, nyq=sr/2, N=live.length;
+  for(let i=0;i<NB;i++){ const f=barFreq(i); const bin=Math.round(f/nyq*N);
+    let s=0,n=0; for(let k=-1;k<=1;k++){const b=bin+k; if(b>=0&&b<N){s+=live[b];n++;}}
+    const v=(s/Math.max(1,n))/255; bars[i]+=(v-bars[i])*0.4; }
+}
+function targetBar(){ const P=PAL[cat]; let best=0,bd=1e9; for(let i=0;i<NB;i++){const d=Math.abs(barFreq(i)-P.hz); if(d<bd){bd=d;best=i;}} return best; }
 
 function frame(){
-  x.fillStyle='rgba(6,3,11,0.30)'; x.fillRect(0,0,W,H);
-  if(playing&&grid){
-    const P=PAL[cat], d0=hx(P.dom[0]),d1=hx(P.dom[1]),s0=hx(P.sec[0]),s1c=hx(P.sec[1]);
-    const rIn=base*0.145, rOut=base*0.455, ti=targetIdx(P.hz);
-    const tR=rIn+ti/(NF-1)*(rOut-rIn);
-    // playback position 0..1
-    let pos; if(fake){ pos=((performance.now()-startT)/1000/26)%1; }
-    else { pos=(window.__el? (window.__el.currentTime/Math.max(1,songLen)) : 0)%1; }
-    const rotOff=-pos*Math.PI*2;   // rotate so the playhead is always at the top
-    // 1) the whole-song fingerprint, slowly turning so the playhead sits at top
-    if(fp){ x.save(); x.translate(cx,cy); x.rotate(rotOff); x.translate(-cx,-cy); x.globalAlpha=0.92; x.drawImage(fp,0,0); x.restore(); x.globalAlpha=1; }
-    x.globalCompositeOperation='lighter';
-    // 2) the tuned-frequency ring threaded through the whole song (proof, in context)
-    const tcol=mix(d1,[255,255,255],0.35);
-    for(let s=0;s<NS;s++){ const a=s/NS*Math.PI*2 - Math.PI/2 + rotOff; const v=grid[s][ti];
-      const x2=cx+Math.cos(a)*tR, y2=cy+Math.sin(a)*tR;
-      x.fillStyle=rgba(tcol, 0.12+0.85*v); x.beginPath(); x.arc(x2,y2, Math.max(1.4,base*0.0022*(0.6+v)),0,7); x.fill(); }
-    // faint guide ring at the target radius
-    x.strokeStyle=rgba(tcol,0.14); x.lineWidth=DPR; x.beginPath(); x.arc(cx,cy,tR,0,7); x.stroke();
-    // 3) playhead at the top + live reactive burst (watching it play)
-    const pa=-Math.PI/2;
-    let liveAmp=0.5;
-    if(an){ an.getByteFrequencyData(live); let s=0; for(let i=0;i<40;i++)s+=live[i]; liveAmp=s/40/255; }
-    else { liveAmp=0.4+0.4*Math.abs(Math.sin((performance.now()-startT)/1000*3)); }
-    // sweep line
-    x.strokeStyle=rgba([255,255,255],0.5); x.lineWidth=1.4*DPR;
-    x.beginPath(); x.moveTo(cx,cy-rIn*0.4); x.lineTo(cx+Math.cos(pa)*(rOut+base*0.03),cy+Math.sin(pa)*(rOut+base*0.03)); x.stroke();
-    // reactive rays fanning from the playhead
-    for(let i=0;i<22;i++){ const spread=(i/21-0.5)*0.5; const a=pa+spread;
-      const amp=an? (live[(i*3)%live.length]/255) : (0.3+0.5*Math.abs(Math.sin((performance.now()-startT)/700+i)));
-      const len=rOut+base*(0.02+0.12*amp); const col= i%5===0? s0 : (i%7===0? s1c : mix(d0,d1,i/21));
-      const x1=cx+Math.cos(a)*rIn,y1=cy+Math.sin(a)*rIn,x2=cx+Math.cos(a)*len,y2=cy+Math.sin(a)*len;
-      const g=x.createLinearGradient(x1,y1,x2,y2); g.addColorStop(0,rgba(col,0.1+0.5*amp)); g.addColorStop(1,rgba(col,0));
-      x.strokeStyle=g; x.lineWidth=Math.max(0.8,base*0.0016); x.beginPath(); x.moveTo(x1,y1); x.lineTo(x2,y2); x.stroke();
+  x.clearRect(0,0,W,H);
+  if(playing){
+    readBars(); const P=PAL[cat], g0=hx(P.g[0]),g1=hx(P.g[1]),acc=hx(P.acc);
+    const ti=targetBar();
+    const padL=8*DPR, padR=8*DPR, baseY=H*0.9, topY=H*0.08;
+    const bw=(W-padL-padR)/NB, gap=bw*0.28, w=bw-gap;
+    for(let i=0;i<NB;i++){
+      const isT=Math.abs(i-ti)<=0; const hgt=(baseY-topY)*Math.max(0.02,bars[i]);
+      const bx=padL+i*bw+gap/2, by=baseY-hgt;
+      // peak cap that falls slowly (classic equalizer)
+      if(bars[i]>peaks[i]) peaks[i]=bars[i]; else peaks[i]=Math.max(bars[i],peaks[i]-0.012);
+      const grd=x.createLinearGradient(0,baseY,0,topY);
+      grd.addColorStop(0,rgba(g0,isT?1:0.9)); grd.addColorStop(1,rgba(g1,isT?1:0.9));
+      x.fillStyle=grd;
+      const r=Math.min(w/2,6*DPR);
+      x.beginPath(); x.moveTo(bx,baseY); x.lineTo(bx,by+r); x.arcTo(bx,by,bx+r,by,r); x.lineTo(bx+w-r,by); x.arcTo(bx+w,by,bx+w,by+r,r); x.lineTo(bx+w,baseY); x.closePath(); x.fill();
+      // peak cap
+      const py=baseY-(baseY-topY)*peaks[i];
+      x.fillStyle=rgba(isT?acc:g1,isT?0.95:0.5); x.fillRect(bx,py-2.5*DPR,w,2.5*DPR);
+      if(isT){ // glow + marker on the tuned bar
+        x.save(); x.shadowColor=rgba(acc,0.6); x.shadowBlur=22*DPR; x.fillStyle=grd; x.fillRect(bx,by,w,hgt); x.restore();
+      }
     }
-    // where the tuned frequency meets the playhead: a bright bead (you see it, right now, in the music)
-    const bx=cx+Math.cos(pa)*tR, by=cy+Math.sin(pa)*tR;
-    x.fillStyle='rgba(255,140,190,0.95)'; x.beginPath(); x.arc(bx,by,base*0.006*(0.7+grid[Math.floor(pos*NS)%NS][ti]),0,7); x.fill();
-    // 4) small core (leaves the centre open for a play button, no white wash)
-    const cr=base*(0.02+0.015*liveAmp);
-    const cg=x.createRadialGradient(cx,cy,0,cx,cy,cr*2.6); const cc=mix([240,232,255],d0,0.3);
-    cg.addColorStop(0,rgba(cc,0.9)); cg.addColorStop(0.5,rgba(cc,0.22)); cg.addColorStop(1,rgba(cc,0));
-    x.fillStyle=cg; x.beginPath(); x.arc(cx,cy,cr*2.6,0,7); x.fill();
-    x.globalCompositeOperation='source-over';
+    // baseline
+    x.fillStyle='rgba(0,0,0,0.06)'; x.fillRect(padL,baseY,W-padL-padR,1.4*DPR);
+    // the tuned-frequency marker: a clean vertical line + flag above its bar (obvious)
+    const tx=padL+ti*bw+bw/2;
+    x.strokeStyle=rgba(acc,0.55); x.lineWidth=1.5*DPR; x.setLineDash([4*DPR,4*DPR]);
+    x.beginPath(); x.moveTo(tx,topY*0.4); x.lineTo(tx,baseY); x.stroke(); x.setLineDash([]);
+    // flag
+    x.fillStyle=rgba(acc,1); const fw=52*DPR,fh=22*DPR, fx=Math.min(W-padR-fw,Math.max(padL,tx-fw/2)), fy=topY*0.4-fh-4*DPR;
+    x.beginPath(); x.roundRect? x.roundRect(fx,fy,fw,fh,5*DPR):x.rect(fx,fy,fw,fh); x.fill();
+    x.beginPath(); x.moveTo(tx-5*DPR,fy+fh); x.lineTo(tx+5*DPR,fy+fh); x.lineTo(tx,fy+fh+6*DPR); x.closePath(); x.fill();
+    x.fillStyle='#fff'; x.font=('700 '+(12*DPR)+'px -apple-system,sans-serif'); x.textAlign='center';
+    x.fillText(P.hz+' Hz',fx+fw/2,fy+fh/2+4.5*DPR);
+    // axis ticks
+    x.fillStyle='rgba(0,0,0,0.32)'; x.font=(10*DPR)+'px -apple-system,sans-serif';
+    [FLO,400,P.hz,1400].forEach(f=>{ let bi=0,bd=1e9; for(let i=0;i<NB;i++){const d=Math.abs(barFreq(i)-f);if(d<bd){bd=d;bi=i;}}
+      const ax=padL+bi*bw+bw/2; x.fillText(Math.round(f)+(f===1400?' Hz':''), ax, baseY+16*DPR); });
+    // move the footer scrubber
+    if(!fake&&el){ const p=(el.currentTime/Math.max(1,el.duration||dur)); document.getElementById('pf').style.width=(p*100)+'%'; document.getElementById('pk').style.left=(p*100)+'%';
+      const cur=el.currentTime, tot=el.duration||dur; document.getElementById('t1').textContent=fmt(cur); document.getElementById('t2').textContent='-'+fmt(Math.max(0,tot-cur)); }
   }
   requestAnimationFrame(frame);
 }
-size();addEventListener('resize',size);
-requestAnimationFrame(frame);
+function fmt(s){s=Math.floor(s);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+applyCat(); size(); requestAnimationFrame(frame);
 </script>
 </body></html>
