@@ -245,13 +245,13 @@ const GRIP='<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor">
 // Only the frequency (Hz) and the colour change per category. Descriptions are the current Core copy
 // (the real set we have) — per-category wording can be swapped in when provided.
 const SONGLIST=[
- mk('Quiet Success',0,'An immediate energetic self reset, come back home now.','3 min','quiet-success'),
+ mk('Quiet Success',0,'An immediate energetic self reset, come back home now.','3 min','quiet-success','app-assets/quiet-success.mp3'),
  mk('Kindred Spirits',0,'Allow your authentic self to deepen with the beat.','5 min','kindred-spirits',LIVE1),
  mk('Elysian Surge',0,'Feel your core energy build on this energetic ride.','5 min','elysian-surge',LIVE2),
- mk('Starseed',0,'Let your authentic self interact with your deepest energetic levels.','9 min','starseed'),
- mk('Astrolith',0,'Create resonance with your true self, develop authentic magnetism.','9 min','astrolith'),
- mk('Cosmic Drift',0,'Access profound authentic energy through deep frequency work.','25 min','cosmic-drift'),
- mk('Galactic Deep',0,'Find your true self as deep sleep restores your inner resonance.','1 hour','galactic-slumber'),
+ mk('Starseed',0,'Let your authentic self interact with your deepest energetic levels.','9 min','starseed','app-assets/starseed.mp3'),
+ mk('Astrolith',0,'Create resonance with your true self, develop authentic magnetism.','9 min','astrolith','app-assets/astrolith.mp3'),
+ mk('Cosmic Drift',0,'Access profound authentic energy through deep frequency work.','25 min','cosmic-drift','app-assets/cosmic-drift.mp3'),
+ mk('Galactic Deep',0,'Find your true self as deep sleep restores your inner resonance.','1 hour','galactic-slumber','app-assets/galactic-slumber.m4a'),
 ];
 
 // APPROVED song catalog (copy/song-catalog.md, Michael 2026-07-01): 4 purpose bubbles + one-liner
@@ -286,7 +286,11 @@ function initGraph(){ if(AC)return; try{ AC=new (window.AudioContext||webkitAudi
 // ---- analysis: env / target-presence / beat from the track (or synthetic for placeholders) ----
 async function analyze(url,target){
   if(!url){ const N=900,env=[],e6=[],bt=[]; let v=.4; for(let i=0;i<N;i++){v=Math.max(.05,Math.min(1,v+(Math.random()-.5)*.25)); env.push(v); e6.push(.45+.2*Math.sin(i/40)); bt.push(Math.random()<.04?Math.random():0);} return {dur:180,n:N,env,e600:e6,beat:bt,synthetic:true}; }
-  const buf=await AC.decodeAudioData(await (await fetch(url)).arrayBuffer());
+  let buf;
+  try{
+    const resp=await fetch(url,{headers:{'Range':'bytes=0-8388607'}});
+    buf=await AC.decodeAudioData(await resp.arrayBuffer());
+  }catch(e){ return analyze(null,target); }   // undecodable slice (e.g. long m4a) -> synthetic visuals, playback unaffected
   const sr=buf.sampleRate,dur=buf.duration; let ch=buf.getChannelData(0);
   if(buf.numberOfChannels>1){const c2=buf.getChannelData(1),m=new Float32Array(ch.length);for(let i=0;i<ch.length;i++)m[i]=(ch[i]+c2[i])*.5;ch=m;}
   const N=Math.max(8,Math.floor(dur*45)),win=Math.max(1,Math.floor(ch.length/N));
@@ -301,7 +305,7 @@ async function analyze(url,target){
   const pres=new Float32Array(N);for(let i=0;i<N;i++)pres[i]=Math.max(.18,Math.min(1,.32+.68*(e6[i]/(mx||1))));
   return {dur,n:N,env:Array.from(env),e600:Array.from(pres),beat:Array.from(beat)};
 }
-function at(arr,p){const L=arr.length,f=p*(L-1),i=Math.floor(f),g=f-i;return arr[i]*(1-g)+arr[Math.min(i+1,L-1)]*g;}
+function at(arr,p){p=Math.min(1,Math.max(0,p||0));const L=arr.length,f=p*(L-1),i=Math.floor(f),g=f-i;return arr[i]*(1-g)+arr[Math.min(i+1,L-1)]*g;}
 function clock(){ if(!started)return 0; return D&&D.synthetic ? ((performance.now()/1000-synT)%D.dur) : aud.currentTime; }
 let synT=0;
 
