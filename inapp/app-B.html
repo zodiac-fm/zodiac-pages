@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Zodiac.fm · app B — fine ray, darker</title>
+<title>Zodiac.fm · app B — bubbles only</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root{--cream:#F6F1E8;--card:#FFFFFF;--ink:#1a1620;--mut:#7a7480;--c1:#B90044;--c2:#CF4090;--cink:#B90044;--cglow:rgba(185,0,68,.45);--cdeep:#6E0024;--ctint:#FFE8EA;}
@@ -156,6 +156,10 @@
 
   .appletter{display:inline-block;font-family:Georgia,serif;font-size:14px;font-weight:700;color:#6a6470;background:#fff;border:1px solid #e6ddce;border-radius:9px;padding:1px 9px;margin-left:10px;letter-spacing:.05em;white-space:nowrap}
   .logo{display:flex!important;align-items:center!important;white-space:nowrap}
+
+  .bubs{display:flex;gap:4px;margin:2px 0 3px;flex-wrap:wrap}
+  .bub{font-size:8.5px;font-weight:700;letter-spacing:.05em;padding:2.5px 7px;border-radius:9px;background:#F6F1E8;border:1px solid #e6ddce;color:#55505c;white-space:nowrap}
+  .oneline{font-size:11.5px;color:#8a8590}
 </style></head><body>
 <!-- INTERACTION · REORDER: the WHOLE card is draggable on click-and-hold (long-press) anywhere on it, not just the grip dots — the grip is only the visual cue. Applies to Immersions + Favourites. Not wired in this prototype; spec for dev. -->
 <div id="app">
@@ -240,8 +244,19 @@ const SONGLIST=[
  mk('Starseed',0,'Let your authentic self interact with your deepest energetic levels.','9 min','starseed'),
  mk('Astrolith',0,'Create resonance with your true self, develop authentic magnetism.','9 min','astrolith'),
  mk('Cosmic Drift',0,'Access profound authentic energy through deep frequency work.','25 min','cosmic-drift'),
- mk('Galactic Slumber',0,'Find your true self as deep sleep restores your inner resonance.','1 hour','galactic-slumber'),
+ mk('Galactic Deep',0,'Find your true self as deep sleep restores your inner resonance.','1 hour','galactic-slumber'),
 ];
+
+// APPROVED song catalog (copy/song-catalog.md, Michael 2026-07-01): 4 purpose bubbles + one-liner
+const SONGMETA={
+ 'quiet-success':{b:['RESET','CALM','DE-STRESS','MEDITATE'],l:'Warm, low tones that ring like bowls.'},
+ 'kindred-spirits':{b:['ENERGY','HAPPY','MORNING','MOTIVATE'],l:'Bright and steady from the first note.'},
+ 'elysian-surge':{b:['ENERGY','MOTIVATE','BUILD','FLOW'],l:'Starts warm, ends unstoppable.'},
+ 'starseed':{b:['MEDITATE','DEEP','DREAMY','UNWIND'],l:'An otherworldly voice leads you in.'},
+ 'astrolith':{b:['FOCUS','MEDITATE','CALM','DEEP'],l:'A steady pulse that never distracts.'},
+ 'cosmic-drift':{b:['FOCUS','MEDITATE','NAP','CALM'],l:'Slow swells, like rain on a window.'},
+ 'galactic-slumber':{b:['SLEEP','FOCUS','MEDITATE','NIGHT'],l:'Dark, slow, and bottomless.'}};
+function bubs(s){return '<div class="bubs">'+((SONGMETA[s.slug]||{b:[]}).b.map(w=>'<span class="bub">'+w+'</span>').join(''))+'</div>';}
 const CATS={
  core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
    title:'Core Vibrational Frequency',desc:'These tracks deepen your authentic sense of who you are.',songs:SONGLIST},
@@ -252,7 +267,7 @@ const CATS={
  abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',cink:'#0A7A52',cdeep:'#0A6B48',ctint:'#DCF4E8',cglow:'rgba(18,165,110,.5)',hue:0,filt:'none',gA:'143,225,190',gB:'18,165,110',hz:'611',
    title:'Abundance Vibrational Frequency',desc:'These tracks open your sense of opportunity and flow.',songs:SONGLIST},
 };
-let catKey='love';                 // currently-viewed category
+let catKey=(['core','love','vitality','abundance'].includes(new URLSearchParams(location.search).get('cat'))?new URLSearchParams(location.search).get('cat'):'love');  // ?cat= opens a category (review aid)
 const aud=document.getElementById('aud');
 let curSong=null, playCat=null, D=null, started=false, playHz=432;
 let gA='255,180,230', gB='234,17,99';   // glow colors of the PLAYING song's category
@@ -293,7 +308,7 @@ function buildRows(){
      `<div class="lcol"><span class="grip">${GRIP}</span><span class="qbox${(i%4===0)?' on':''}"></span></div><div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
       <div class="meta">
         <div class="mtop"><h3>${s.name}</h3><div class="sic"><span class="dl${(i%2===1)?' on':''}">${DL}</span><span class="heart${(i%3===0)?' on':''}">${(i%3===0)?'&#9829;':'&#9825;'}</span></div></div>
-        <p>${s.sub}</p>
+        ${bubs(s)}
         <div class="botrow"><div class="lab">&#9679; ${cat.label}</div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
       </div>`;
     r.onclick=()=>playSong(catKey,i);
@@ -426,7 +441,7 @@ function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
   r.innerHTML=`<div class="lcol"><span class="grip">${GRIP}</span><span class="qbox${(i%3===0)?' on':''}"></span></div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
    <div class="meta">
     <div class="mtop"><h3>${s.name}</h3><div class="sic"><span class="dl${(i%2===0)?' on':''}">${DL}</span><span class="heart on" style="color:${cat.cink}">&#9829;</span></div></div>
-    <p>${s.sub}</p>
+    ${bubs(s)}
     <div class="botrow"><div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
    </div>`;
   r.onclick=()=>playSong(ck,cat.songs.indexOf(s));
@@ -439,7 +454,7 @@ navItems[0].onclick=()=>showTab('list');
 navItems[2].onclick=()=>showTab('favs');
 buildFavs();
 
-buildRows();vrz();drawViz();setIcons();
+setCat(catKey);vrz();drawViz();setIcons();
 </script>
 <!-- ===== ZDISC: fine-ray song-design layer (app-C experiment, 2026-07-02) =====
      C = app-A's locked surface (white free disc, scale 1.16, contact shadow) with the
@@ -457,10 +472,10 @@ buildRows();vrz();drawViz();setIcons();
 (function(){
   // day-mode palette per category: deep in-range tones + two subtle glint pairs
   const ZPAL={
-    core:{d:['#38007A','#6521C9'],s:[['#5A2BB0','#7A4AE0'],['#8F2E86','#C24FA8']]},
-    love:{d:['#6E0024','#B90044'],s:[['#A33A22','#E8663E'],['#96246A','#D8489A']]},
-    vitality:{d:['#8A3B00','#C25500'],s:[['#7E2F12','#B5451F'],['#7E5B06','#B8860B']]},
-    abundance:{d:['#0A6B48','#12A56E'],s:[['#0A6B60','#0E8E80'],['#8A6C1E','#A8832A']]}
+    core:{d:['#6521C9','#A737C8'],s:[['#7A4AE0','#B98AF0'],['#B44FD8','#D07DE8']]},
+    love:{d:['#B90044','#E0559A'],s:[['#F43F6B','#FF7A98'],['#EE3D9C','#FF7EC2']]},
+    vitality:{d:['#FF7A00','#FFC251'],s:[['#FF5426','#FF8A5C'],['#FFB020','#FFE08A']]},
+    abundance:{d:['#0B9159','#2BC47F'],s:[['#0FA98F','#3BC9AD'],['#2FBF6E','#63D992']]}
   };
   const FAM={'quiet-success':'halo','kindred-spirits':'mandala','elysian-surge':'burst',
              'starseed':'weave','astrolith':'iris','cosmic-drift':'orbit','galactic-slumber':'galaxy'};
@@ -469,18 +484,19 @@ buildRows();vrz();drawViz();setIcons();
   function rgba(c,a){return 'rgba('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+','+a+')';}
   function hash(s){let h=177;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h;}
   function ray(x,x1,y1,x2,y2,cA,cB,al,wd){const g=x.createLinearGradient(x1,y1,x2,y2);
-    g.addColorStop(0,rgba(cA,al));g.addColorStop(0.78,rgba(cB,al*0.88));g.addColorStop(1,rgba(cB,al*0.30));
-    x.strokeStyle=g;x.lineWidth=wd;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();}
+    g.addColorStop(0,rgba(cA,al));g.addColorStop(0.78,rgba(cB,al*0.9));g.addColorStop(1,rgba(cB,al*0.35));
+    x.strokeStyle=g;x.lineWidth=wd*2.3;x.globalAlpha=0.45;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
+    x.globalAlpha=1;x.lineWidth=wd;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();}
   function drawZ(cv,slug,catk,tt,alive,env){
     const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2;x.clearRect(0,0,W,H);
     const P=ZPAL[catk]||ZPAL.core,pr=hx(P.d[0]),en=hx(P.d[1]);
     const s0a=hx(P.s[0][0]),s0b=hx(P.s[0][1]),s1a=hx(P.s[1][0]),s1b=hx(P.s[1][1]);
     const seed=hash(slug),rr1=((seed%97)/97),puls=1+(alive?0.11*env:0),bmul=alive?(0.82+0.3*env):1;
     const R=Math.min(W,H)*0.44,r0=Math.min(W,H)*0.075,rot=(alive?tt*0.06:0.6)+rr1*6.28;
-    const wd=Math.max(0.7,W/240*1.15);
+    const wd=Math.max(1.35,W/240*1.3);
     // white interior disc (the locked A surface) so it reads as a solid white disc, not floaty lines
     x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,R*1.02,0,7);x.fill();
-    const tg=x.createRadialGradient(cx,cy,r0,cx,cy,R*0.95);tg.addColorStop(0,rgba(en,0.12));tg.addColorStop(1,rgba(en,0));
+    const tg=x.createRadialGradient(cx,cy,r0,cx,cy,R*0.95);tg.addColorStop(0,rgba(en,0.18));tg.addColorStop(1,rgba(en,0.02));
     x.fillStyle=tg;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();
     x.lineCap='round';
     const F=FAM[slug]||'burst';
@@ -488,19 +504,24 @@ buildRows();vrz();drawViz();setIcons();
     if(F==='burst'){const N=150;for(let i=0;i<N;i++){const a=i/N*6.283+rot;
       const L=R*(0.86+0.10*Math.sin(a*7+rr1*6))*puls;const[cA,cB,m]=glint(i);
       ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.85*m*bmul,wd);}}
-    else if(F==='iris'){const N=120;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L=R*0.7*puls;const[cA,cB,m]=glint(i);
-      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.5*m*bmul,wd);}
-      [0.5,0.84].forEach((r2,k)=>{x.strokeStyle=rgba(k?en:mix(pr,en,0.5),0.85*bmul);x.lineWidth=wd*(k?1.7:2.5);
+    else if(F==='iris'){const N=130;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L=R*0.7*puls;const[cA,cB,m]=glint(i);
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.7*m*bmul,wd);}
+      [[0.5,pr,2.6],[0.84,en,1.9]].forEach(([r2,cc,ww])=>{x.strokeStyle=rgba(cc,0.95*bmul);x.lineWidth=wd*ww;
       x.beginPath();x.arc(cx,cy,R*r2*puls,0,7);x.stroke();});}
-    else if(F==='orbit'){const ARMS=4,per=30;for(let ar=0;ar<ARMS;ar++)for(let i=0;i<per;i++){const t=i/per;
-      const a=ar/ARMS*6.283+rot+t*2.2;const r2=r0+(R*0.9-r0)*t*puls;
-      x.fillStyle=rgba(i%7?pr:s0a,(0.9-0.55*t)*bmul);x.beginPath();
-      x.arc(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2,wd*(1.5-t*0.8),0,7);x.fill();}}
-    else if(F==='galaxy'){const ARMS=6;for(let ar=0;ar<ARMS;ar++){const a0=ar/ARMS*6.283+rot;
-      for(let i=0;i<26;i++){const t=i/26;const a=a0+t*1.5;const r2=r0+(R*0.92-r0)*t*puls;
-        const[cA,cB,m]=glint(ar*26+i);
-        x.fillStyle=rgba(t<0.15?cA:mix(cA,cB,t),(0.95-0.6*t)*m*bmul);x.beginPath();
-        x.arc(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2,wd*(1.7-t),0,7);x.fill();}}}
+    else if(F==='orbit'){const RG=[0.36,0.52,0.68,0.84];RG.forEach((rr,k)=>{
+      x.strokeStyle=rgba(k%2?en:pr,(0.8-k*0.08)*bmul);x.lineWidth=wd*1.3;
+      x.beginPath();x.arc(cx,cy,R*rr*puls,0,7);x.stroke();
+      const NB2=3+k;for(let b=0;b<NB2;b++){const a=rot*(k%2?1.4:-1.1)+b/NB2*6.283+k*0.9;
+        const[cA,cB,m]=glint(k*7+b*3);
+        x.fillStyle=rgba(cB,0.95*m*bmul);x.beginPath();
+        x.arc(cx+Math.cos(a)*R*rr*puls,cy+Math.sin(a)*R*rr*puls,wd*2.1,0,7);x.fill();}});}
+    else if(F==='galaxy'){const ARMS=3;for(let ar=0;ar<ARMS;ar++){const a0=ar/ARMS*6.283+rot;
+      for(let i=0;i<34;i++){const t=i/34;const a=a0+t*3.1;const r2=r0*1.2+(R*0.92-r0*1.2)*t*puls;
+        const[cA,cB,m]=glint(ar*34+i);
+        x.fillStyle=rgba(t<0.12?cA:mix(cA,cB,t),(0.95-0.55*t)*m*bmul);x.beginPath();
+        x.arc(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2,wd*(1.9-t*1.1),0,7);x.fill();}}
+      const bg=x.createRadialGradient(cx,cy,0,cx,cy,r0*1.5);bg.addColorStop(0,rgba(en,0.8*bmul));bg.addColorStop(1,rgba(en,0));
+      x.fillStyle=bg;x.beginPath();x.arc(cx,cy,r0*1.5,0,7);x.fill();}
     else if(F==='mandala'){const Pt=10,N=170;for(let i=0;i<N;i++){const a=i/N*6.283+rot;
       const lobe=Math.max(0,Math.cos((a-rot)*Pt/2));const L=R*(0.44+0.5*Math.pow(lobe,1.6))*puls;
       if(L>R*0.45){const[cA,cB,m]=glint(i);
