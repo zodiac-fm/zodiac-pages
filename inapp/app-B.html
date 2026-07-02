@@ -153,13 +153,16 @@
   .qbox.on::after{width:4px!important;height:8px!important;border-width:0 2px 2px 0!important;margin-top:-2px!important}
   .grip{color:#948f9a!important}
   .grip svg{width:18px;height:18px}
+
+  .appletter{display:inline-block;font-family:Georgia,serif;font-size:14px;font-weight:700;color:#6a6470;background:#fff;border:1px solid #e6ddce;border-radius:9px;padding:1px 9px;margin-left:10px;letter-spacing:.05em;white-space:nowrap}
+  .logo{display:flex!important;align-items:center!important;white-space:nowrap}
 </style></head><body>
 <!-- INTERACTION · REORDER: the WHOLE card is draggable on click-and-hold (long-press) anywhere on it, not just the grip dots — the grip is only the visual cue. Applies to Immersions + Favourites. Not wired in this prototype; spec for dev. -->
 <div id="app">
 
   <!-- ===================== LIST ===================== -->
   <section class="screen" id="list">
-    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"></div><div class="ham">&#9776;</div></div>
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">B</span></div><div class="ham">&#9776;</div></div>
     <div class="pills" id="pills">
       <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
     </div>
@@ -212,7 +215,7 @@
 
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
-    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"></div><div class="ham">&#9776;</div></div>
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">B</span></div><div class="ham">&#9776;</div></div>
     <div class="barrow"><div class="draghint"><span class="dharr">&#8595;</span>Drag to reorder</div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All</div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
   </section>
