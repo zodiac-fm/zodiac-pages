@@ -3,3 +3,6 @@ node_modules/
 .env
 .env.*
 *-key.json
+
+# Licensed fonts — never publish to the public repo
+explorations/fonts/

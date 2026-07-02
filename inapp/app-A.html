@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Zodiac.fm · app</title>
+<title>Zodiac.fm · app A — fine ray, light</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root{--cream:#F6F1E8;--card:#FFFFFF;--ink:#1a1620;--mut:#7a7480;--c1:#B90044;--c2:#CF4090;--cink:#B90044;--cglow:rgba(185,0,68,.45);--cdeep:#6E0024;--ctint:#FFE8EA;}
@@ -227,7 +227,7 @@
 const SIG=n=>'app-assets/'+n+'.png';
 const LIVE1='app-assets/kindred-spirits.mp3', LIVE2='app-assets/elysian-surge.mp3';
 function mk(name,freq,sub,dur,slug,audio){return {name,freq,sub,dur,slug,audio:audio||null};}
-const tileSrc=(cat,s)=>'app-assets-ring-v4w/sig-'+cat+'-'+s.slug+'.png';
+const tileSrc=(cat,s)=>'app-assets-ring-white/sig-'+cat+'-'+s.slug+'.png';
 const DL='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
 const GRIP='<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><circle cx="9" cy="5" r="1.6"/><circle cx="15" cy="5" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="19" r="1.6"/><circle cx="15" cy="19" r="1.6"/></svg>';
 // One real song list (same names, order by length, and per-song tiles) shared across every category.
@@ -249,7 +249,7 @@ const CATS={
    title:'Love Vibrational Frequency',desc:'These tracks increase your authentic resonance in matters of love and relationships.',songs:SONGLIST},
  vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#C25500',cdeep:'#BC6700',ctint:'#FFEADA',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
    title:'Vitality Vibrational Frequency',desc:'These tracks raise your energy, drive and aliveness.',songs:SONGLIST},
- abundance:{label:'Abundance',c1:'#00AFDC',c2:'#2ED7DD',cink:'#007B9C',cdeep:'#007B9C',ctint:'#D8F4FF',cglow:'rgba(0,175,220,.5)',hue:0,filt:'none',gA:'150,225,245',gB:'0,175,220',hz:'611',
+ abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',cink:'#0A7A52',cdeep:'#0A6B48',ctint:'#DCF4E8',cglow:'rgba(18,165,110,.5)',hue:0,filt:'none',gA:'143,225,190',gB:'18,165,110',hz:'611',
    title:'Abundance Vibrational Frequency',desc:'These tracks open your sense of opportunity and flow.',songs:SONGLIST},
 };
 let catKey='love';                 // currently-viewed category
@@ -440,4 +440,127 @@ navItems[2].onclick=()=>showTab('favs');
 buildFavs();
 
 buildRows();vrz();drawViz();setIcons();
-</script></body></html>
+</script>
+<!-- ===== ZDISC: fine-ray song-design layer (app-C experiment, 2026-07-02) =====
+     C = app-A's locked surface (white free disc, scale 1.16, contact shadow) with the
+     fine-ray per-song signature engine as the ART. PNG tiles hidden, canvases drawn live.
+     Families are the exploration mapping; production would derive them from audio DNA. -->
+<style id="zdisc-css">
+  .thumb img{display:none!important}
+  .thumb canvas.zdisc{position:absolute;inset:0;width:100%;height:100%;transform:scale(1.16);filter:drop-shadow(0 3px 7px rgba(56,0,122,.13))}
+  .row.playing .pplay{border-color:transparent transparent transparent currentColor!important;filter:drop-shadow(0 1px 2px rgba(255,255,255,.8))!important}
+  .row.playing .ppause i{background:currentColor!important;filter:drop-shadow(0 1px 2px rgba(255,255,255,.8))!important}
+  #mini .mt img{display:none!important}
+  #mini .mt canvas.zdisc{position:absolute;inset:0;width:100%;height:100%}
+</style>
+<script id="zdisc-js">
+(function(){
+  // day-mode palette per category: deep in-range tones + two subtle glint pairs
+  const ZPAL={
+    core:{d:['#6521C9','#A737C8'],s:[['#7A4AE0','#B98AF0'],['#C24FA8','#E07AC8']]},
+    love:{d:['#B90044','#CF4090'],s:[['#E8663E','#F0A070'],['#D8489A','#EE8CC0']]},
+    vitality:{d:['#FF9112','#FFC251'],s:[['#B5451F','#DD6A3C'],['#B8860B','#DDA92E']]},
+    abundance:{d:['#12A56E','#46D99A'],s:[['#15B8A6','#5FE0D2'],['#D9B45A','#F0D28A']]}
+  };
+  const FAM={'quiet-success':'halo','kindred-spirits':'mandala','elysian-surge':'burst',
+             'starseed':'weave','astrolith':'iris','cosmic-drift':'orbit','galactic-slumber':'galaxy'};
+  function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+  function mix(a,b,t){return a.map((v,i)=>v+(b[i]-v)*t);}
+  function rgba(c,a){return 'rgba('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+','+a+')';}
+  function hash(s){let h=177;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h;}
+  function ray(x,x1,y1,x2,y2,cA,cB,al,wd){const g=x.createLinearGradient(x1,y1,x2,y2);
+    g.addColorStop(0,rgba(cA,al));g.addColorStop(0.7,rgba(cB,al*0.7));g.addColorStop(1,rgba(cB,0));
+    x.strokeStyle=g;x.lineWidth=wd;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();}
+  function drawZ(cv,slug,catk,tt,alive,env){
+    const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2;x.clearRect(0,0,W,H);
+    const P=ZPAL[catk]||ZPAL.core,pr=hx(P.d[0]),en=hx(P.d[1]);
+    const s0a=hx(P.s[0][0]),s0b=hx(P.s[0][1]),s1a=hx(P.s[1][0]),s1b=hx(P.s[1][1]);
+    const seed=hash(slug),rr1=((seed%97)/97),puls=1+(alive?0.11*env:0),bmul=alive?(0.82+0.3*env):1;
+    const R=Math.min(W,H)*0.44,r0=Math.min(W,H)*0.075,rot=(alive?tt*0.06:0.6)+rr1*6.28;
+    const wd=Math.max(0.7,W/240*1.15);
+    // white interior disc (the locked A surface) so it reads as a solid white disc, not floaty lines
+    x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,R*1.02,0,7);x.fill();
+    const tg=x.createRadialGradient(cx,cy,r0,cx,cy,R*0.95);tg.addColorStop(0,rgba(en,0.12));tg.addColorStop(1,rgba(en,0));
+    x.fillStyle=tg;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();
+    x.lineCap='round';
+    const F=FAM[slug]||'burst';
+    function glint(i){return i%6===0?[s0a,s0b,0.75]:(i%9===0?[s1a,s1b,0.72]:[pr,en,1]);}
+    if(F==='burst'){const N=150;for(let i=0;i<N;i++){const a=i/N*6.283+rot;
+      const L=R*(0.86+0.10*Math.sin(a*7+rr1*6))*puls;const[cA,cB,m]=glint(i);
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.85*m*bmul,wd);}}
+    else if(F==='iris'){const N=120;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L=R*0.7*puls;const[cA,cB,m]=glint(i);
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.5*m*bmul,wd);}
+      [0.5,0.84].forEach((r2,k)=>{x.strokeStyle=rgba(k?en:mix(pr,en,0.5),0.85*bmul);x.lineWidth=wd*(k?1.7:2.5);
+      x.beginPath();x.arc(cx,cy,R*r2*puls,0,7);x.stroke();});}
+    else if(F==='orbit'){const ARMS=4,per=30;for(let ar=0;ar<ARMS;ar++)for(let i=0;i<per;i++){const t=i/per;
+      const a=ar/ARMS*6.283+rot+t*2.2;const r2=r0+(R*0.9-r0)*t*puls;
+      x.fillStyle=rgba(i%7?pr:s0a,(0.9-0.55*t)*bmul);x.beginPath();
+      x.arc(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2,wd*(1.5-t*0.8),0,7);x.fill();}}
+    else if(F==='galaxy'){const ARMS=6;for(let ar=0;ar<ARMS;ar++){const a0=ar/ARMS*6.283+rot;
+      for(let i=0;i<26;i++){const t=i/26;const a=a0+t*1.5;const r2=r0+(R*0.92-r0)*t*puls;
+        const[cA,cB,m]=glint(ar*26+i);
+        x.fillStyle=rgba(t<0.15?cA:mix(cA,cB,t),(0.95-0.6*t)*m*bmul);x.beginPath();
+        x.arc(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2,wd*(1.7-t),0,7);x.fill();}}}
+    else if(F==='mandala'){const Pt=10,N=170;for(let i=0;i<N;i++){const a=i/N*6.283+rot;
+      const lobe=Math.max(0,Math.cos((a-rot)*Pt/2));const L=R*(0.44+0.5*Math.pow(lobe,1.6))*puls;
+      if(L>R*0.45){const[cA,cB,m]=glint(i);
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.8*m*bmul,wd);}}}
+    else if(F==='halo'){const N=36;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L=R*0.88*puls;const[cA,cB,m]=glint(i);
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.8*m*bmul,wd);}
+      x.strokeStyle=rgba(en,0.9*bmul);x.lineWidth=wd*2.6;x.beginPath();x.arc(cx,cy,R*0.88*puls,0,7);x.stroke();}
+    else{const N=130;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L1=R*0.52,L2=R*0.9*puls;const[cA,cB,m]=glint(i);
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L1,cy+Math.sin(a)*L1,pr,pr,0.8*bmul,wd);
+      if(i%2)ray(x,cx+Math.cos(a)*(L1+wd*3),cy+Math.sin(a)*(L1+wd*3),cx+Math.cos(a)*L2,cy+Math.sin(a)*L2,cA,cB,0.7*m*bmul,wd);}}
+    const cp=1+(alive?0.14*env:0),core=x.createRadialGradient(cx,cy,0,cx,cy,r0*1.8*cp);
+    core.addColorStop(0,'rgba(255,255,255,0.96)');core.addColorStop(0.55,rgba(pr,0.10+(alive?0.08*env:0)));core.addColorStop(1,rgba(pr,0));
+    x.fillStyle=core;x.beginPath();x.arc(cx,cy,r0*1.9*cp,0,7);x.fill();
+    x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,r0*0.5,0,7);x.fill();
+  }
+  // adopt thumbs: hide img, ensure a zdisc canvas, tag slug+cat
+  function adopt(){
+    document.querySelectorAll('.thumb').forEach(th=>{
+      if(th.querySelector('canvas.zdisc'))return;
+      const img=th.querySelector('img'); if(!img)return;
+      const m=(img.getAttribute('src')||'').match(/sig-([a-z]+)-([a-z-]+)\.png/); if(!m)return;
+      let cvs=document.createElement('canvas'); cvs.width=190;cvs.height=190; cvs.className='zdisc';
+      th.insertBefore(cvs, th.querySelector('.pov'));
+      cvs.dataset.cat=m[1]; cvs.dataset.slug=m[2]; cvs.dataset.drawn='';
+      const pov=th.querySelector('.pov'); if(pov){const ck=m[1], ink=(typeof CATS!=='undefined'&&CATS[ck])?CATS[ck].cink:'#1a1620'; pov.style.color=ink;}
+    });
+  }
+  const mo=new MutationObserver(adopt); mo.observe(document.body,{childList:true,subtree:true});
+  adopt();
+  let zt0=performance.now();
+  function beatEnv(){ // ride A's live beat vars when playing real audio; fall back to a clock
+    try{ if(typeof beatPulse!=='undefined'&&typeof glowLevel!=='undefined') return Math.min(1,glowLevel*0.6+beatPulse); }catch(e){}
+    const p=((performance.now()-zt0)/1000*1.7)%1; return p<0.11?p/0.11:Math.pow(1-(p-0.11)/0.89,1.7);
+  }
+  function loop(){
+    const tt=(performance.now()-zt0)/1000, env=beatEnv();
+    document.querySelectorAll('canvas.zdisc').forEach(cv=>{
+      const inMini=!!cv.closest('#mini');
+      const row=cv.closest('.row');
+      const alive=inMini ? (typeof started!=='undefined'&&started&&!document.getElementById('aud').paused)
+                         : !!(row&&row.classList.contains('playing'));
+      if(alive){ drawZ(cv,cv.dataset.slug,cv.dataset.cat,tt,true,env); cv.dataset.drawn=''; }
+      else if(cv.dataset.drawn!=='1'){ drawZ(cv,cv.dataset.slug,cv.dataset.cat,0,false,0); cv.dataset.drawn='1'; }
+    });
+    // mini: keep its canvas synced to the playing song
+    const mt=document.querySelector('#mini .mt');
+    if(mt&&!mt.querySelector('canvas.zdisc')){
+      const img=document.getElementById('miniImg');
+      const m=(img&&img.getAttribute('src')||'').match(/sig-([a-z]+)-([a-z-]+)\.png/);
+      if(m){const c=document.createElement('canvas');c.width=110;c.height=110;c.className='zdisc';mt.appendChild(c);
+        c.dataset.cat=m[1];c.dataset.slug=m[2];c.dataset.drawn='';}
+    } else if(mt){
+      const img=document.getElementById('miniImg'), c=mt.querySelector('canvas.zdisc');
+      const m=(img&&img.getAttribute('src')||'').match(/sig-([a-z]+)-([a-z-]+)\.png/);
+      if(m&&c&&(c.dataset.slug!==m[2]||c.dataset.cat!==m[1])){c.dataset.slug=m[2];c.dataset.cat=m[1];c.dataset.drawn='';}
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+
+</body></html>
