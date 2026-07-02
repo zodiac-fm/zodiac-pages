@@ -157,10 +157,16 @@
   .appletter{display:inline-block;font-family:Georgia,serif;font-size:14px;font-weight:700;color:#6a6470;background:#fff;border:1px solid #e6ddce;border-radius:9px;padding:1px 9px;margin-left:10px;letter-spacing:.05em;white-space:nowrap}
   .logo{display:flex!important;align-items:center!important;white-space:nowrap}
 
-  .bubs{display:flex;align-items:baseline;gap:6px;margin:3px 0 5px;white-space:nowrap;overflow:hidden;line-height:1}
+  .bubs{display:flex;align-items:baseline;gap:6px;row-gap:4px;margin:5px 0 8px;flex-wrap:wrap;line-height:1.1}
   .bub{font-size:9.5px;font-weight:600;letter-spacing:.09em;color:#8a8390}
   .sep{font-size:9.5px;color:#cfc8ba}
   .oneline{font-size:11.5px;color:#8a8590}
+
+  /* two-column card anatomy: text | rail (icons + minutes). Text can never cross the rail. */
+  .mcols{display:flex;gap:10px;align-items:stretch}
+  .mtext{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start}
+  .mtext .lab{margin-top:auto}
+  .mrail{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;padding:2px 0 1px}
 </style></head><body>
 <!-- INTERACTION · REORDER: the WHOLE card is draggable on click-and-hold (long-press) anywhere on it, not just the grip dots — the grip is only the visual cue. Applies to Immersions + Favourites. Not wired in this prototype; spec for dev. -->
 <div id="app">
@@ -307,10 +313,9 @@ function buildRows(){
   cat.songs.forEach((s,i)=>{
     const r=document.createElement('div');r.className='row';r.innerHTML=
      `<div class="lcol"><span class="grip">${GRIP}</span><span class="qbox${(i%4===0)?' on':''}"></span></div><div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
-      <div class="meta">
-        <div class="mtop"><h3>${s.name}</h3><div class="sic"><span class="dl${(i%2===1)?' on':''}">${DL}</span><span class="heart${(i%3===0)?' on':''}">${(i%3===0)?'&#9829;':'&#9825;'}</span></div></div>
-        ${bubs(s)}
-        <div class="botrow"><div class="lab">&#9679; ${cat.label}</div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
+      <div class="meta mcols">
+        <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab">&#9679; ${cat.label}</div></div>
+        <div class="mrail"><div class="sic"><span class="dl${(i%2===1)?' on':''}">${DL}</span><span class="heart${(i%3===0)?' on':''}">${(i%3===0)?'&#9829;':'&#9825;'}</span></div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
       </div>`;
     r.onclick=()=>playSong(catKey,i);
     rows.appendChild(r);
@@ -440,10 +445,9 @@ function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
  FAVS.forEach(([ck,slug],i)=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
   const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);
   r.innerHTML=`<div class="lcol"><span class="grip">${GRIP}</span><span class="qbox${(i%3===0)?' on':''}"></span></div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
-   <div class="meta">
-    <div class="mtop"><h3>${s.name}</h3><div class="sic"><span class="dl${(i%2===0)?' on':''}">${DL}</span><span class="heart on" style="color:${cat.cink}">&#9829;</span></div></div>
-    ${bubs(s)}
-    <div class="botrow"><div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
+   <div class="meta mcols">
+    <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div></div>
+    <div class="mrail"><div class="sic"><span class="dl${(i%2===0)?' on':''}">${DL}</span><span class="heart on" style="color:${cat.cink}">&#9829;</span></div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
    </div>`;
   r.onclick=()=>playSong(ck,cat.songs.indexOf(s));
   c.appendChild(r);});}
