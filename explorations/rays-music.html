@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Zodiac — reactive music visualizer</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:#07040d;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+#c{display:block;width:100vw;height:100vh}
+.cap{position:fixed;top:24px;left:50%;transform:translateX(-50%);color:#5f5872;font-size:11px;letter-spacing:.18em;text-transform:uppercase;z-index:5}
+#start{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;cursor:pointer;background:radial-gradient(circle at 50% 45%,rgba(30,20,44,.5),rgba(7,4,13,.9))}
+#start .play{width:96px;height:96px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;transition:.2s}
+#start:hover .play{border-color:#fff;transform:scale(1.05)}
+#start .play svg{width:34px;height:34px;fill:#fff;margin-left:5px}
+#start .t{color:#efe8f6;font-family:Georgia,serif;font-size:22px;margin-top:22px}
+#start .s{color:#8b8598;font-size:13px;margin-top:6px;letter-spacing:.02em}
+.ui{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);display:flex;gap:8px;background:rgba(20,14,28,.55);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:7px 8px;z-index:5;opacity:0;transition:.4s}
+.ui.show{opacity:1}
+.ui button{background:transparent;border:none;color:#b9b2c6;font-size:12.5px;font-weight:600;padding:8px 15px;border-radius:999px;cursor:pointer}
+.ui button.on{background:#fff;color:#1a1620}
+</style></head><body>
+<canvas id="c"></canvas>
+<div class="cap">The Sound of You · reactive visualizer</div>
+<div id="start">
+  <div class="play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div>
+  <div class="t">Play your frequencies</div>
+  <div class="s">real track · your music across the four domains</div>
+</div>
+<div class="ui" id="ui">
+  <button data-style="bloom" class="on">Bloom</button>
+  <button data-style="spectrum">Spectrum ring</button>
+  <button data-style="both">Both</button>
+</div>
+<script>
+const cv=document.getElementById('c'),x=cv.getContext('2d');
+let W,H,DPR;
+function size(){DPR=Math.min(devicePixelRatio||1,2);W=cv.width=innerWidth*DPR;H=cv.height=innerHeight*DPR;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';}
+size();addEventListener('resize',size);
+
+// four frequency colours (bright ends for glow on black) mapped to the four spectral bands
+const BANDS=[[103,55,201],[220,64,144],[255,145,18],[70,217,154]]; // Core, Love, Vitality, Abundance
+function mix(a,b,t){return a.map((v,i)=>v+(b[i]-v)*t);}
+function bandColor(p){ const f=p*4, i=Math.min(3,Math.floor(f)), t=f-i; return mix(BANDS[i],BANDS[Math.min(3,i+1)],t); }
+function rgba(c,a){return `rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;}
+
+let style='bloom';
+document.querySelectorAll('[data-style]').forEach(b=>b.onclick=()=>{style=b.dataset.style;
+  document.querySelectorAll('[data-style]').forEach(o=>o.classList.toggle('on',o===b));});
+
+// ---- audio ----
+let an, freqData, timeData, playing=false, fake=false, t0=performance.now();
+const NB=512; // bins we visualise
+function startAudio(){
+  const AC=window.AudioContext||window.webkitAudioContext;
+  const ac=new AC();
+  const audio=new Audio('../inapp/elysian-sky-600hz.mp3');
+  audio.crossOrigin='anonymous'; audio.loop=true;
+  const srcN=ac.createMediaElementSource(audio);
+  an=ac.createAnalyser(); an.fftSize=2048; an.smoothingTimeConstant=0.82;
+  srcN.connect(an); an.connect(ac.destination);
+  freqData=new Uint8Array(an.frequencyBinCount); timeData=new Uint8Array(an.fftSize);
+  ac.resume();
+  audio.play().then(()=>{playing=true;}).catch(()=>{startFake();});
+  audio.onerror=startFake;
+}
+function startFake(){ // graceful demo if audio can't load
+  fake=true; playing=true;
+  freqData=new Uint8Array(NB); timeData=new Uint8Array(NB);
+}
+function readFake(){
+  const tt=(performance.now()-t0)/1000;
+  const beat=0.6+0.4*Math.max(0,Math.sin(tt*2.2));
+  for(let i=0;i<NB;i++){
+    const f=i/NB;
+    let v=150*Math.exp(-f*2.2)*(0.55+0.45*Math.sin(tt*3+f*18)); // full but bass-leaning
+    v+=90*Math.exp(-Math.abs(f-0.35)*7)*(0.5+0.5*Math.sin(tt*5+f*22));
+    v+=70*Math.exp(-Math.abs(f-0.7)*9)*(0.5+0.5*Math.sin(tt*8-f*30));
+    v*=beat;
+    freqData[i]=Math.min(255,v);
+    timeData[i]=128+80*Math.sin(tt*6+i*0.35)*Math.exp(-i/NB*1.4);
+  }
+}
+document.getElementById('start').onclick=function(){ this.style.display='none'; document.getElementById('ui').classList.add('show'); startAudio(); };
+if(new URLSearchParams(location.search).has('demo')){ document.getElementById('start').style.display='none'; document.getElementById('ui').classList.add('show'); startFake(); }
+
+function sample(arr,n){ // resample lower part of spectrum (where music lives) into n bins, sqrt-spaced
+  const out=new Float32Array(n); const src=fake?arr.length:Math.floor(arr.length*0.55);
+  for(let i=0;i<n;i++){ const p=Math.pow(i/n,1.35); const idx=Math.min(arr.length-1,Math.floor(p*src)); out[i]=arr[idx]/255; }
+  return out;
+}
+let rot=0, smoothBass=0;
+function frame(){
+  x.fillStyle='rgba(7,4,13,0.30)'; x.fillRect(0,0,W,H); // motion trails
+  if(playing){
+    if(fake) readFake(); else an.getByteFrequencyData(freqData);
+    const cx=W/2, cy=H/2, base=Math.min(W,H);
+    const spec=sample(freqData, NB);
+    let bass=0; for(let i=0;i<24;i++) bass+=spec[i]; bass/=24; smoothBass+=(bass-smoothBass)*0.2;
+    rot += 0.0014 + smoothBass*0.016;
+    x.globalCompositeOperation='lighter';
+
+    const r0=base*0.115;
+    // faint base ring so there is always a disc silhouette
+    x.strokeStyle=rgba(BANDS[0],0.12); x.lineWidth=Math.max(1,base*0.001);
+    x.beginPath(); x.arc(cx,cy,r0*1.12,0,7); x.stroke();
+
+    if(style==='bloom'||style==='both'){
+      // symmetric reactive star: bass at the poles, treble to the sides, mirrored L/R
+      const half=NB;
+      for(let i=0;i<half;i++){
+        const frac=i/half;                 // 0 (bass) .. 1 (treble)
+        const amp=spec[i];
+        const col=bandColor(frac);
+        const len=r0 + base*(0.05 + 0.40*amp);
+        for(const s of [1,-1]){
+          const a=-Math.PI/2 + s*frac*Math.PI + rot;   // top pole -> down each side
+          const x1=cx+Math.cos(a)*r0, y1=cy+Math.sin(a)*r0;
+          const x2=cx+Math.cos(a)*len, y2=cy+Math.sin(a)*len;
+          const g=x.createLinearGradient(x1,y1,x2,y2);
+          g.addColorStop(0,rgba(col,0.10+0.55*amp)); g.addColorStop(0.75,rgba(col,0.10+0.25*amp)); g.addColorStop(1,rgba(col,0));
+          x.strokeStyle=g; x.lineWidth=Math.max(0.7,base*0.0015);
+          x.beginPath(); x.moveTo(x1,y1); x.lineTo(x2,y2); x.stroke();
+          if(amp>0.6){ x.fillStyle=rgba(mix(col,[255,255,255],0.45),(amp-0.6)*0.8);
+            x.beginPath(); x.arc(x2,y2,base*0.002,0,7); x.fill(); }
+        }
+      }
+    }
+    if(style==='spectrum'||style==='both'){
+      if(!fake) an.getByteTimeDomainData(timeData);
+      const RR=base*(0.28+0.06*smoothBass); const steps=200; const L=fake?NB:timeData.length;
+      x.beginPath();
+      for(let i=0;i<=steps;i++){
+        const a=i/steps*Math.PI*2 + rot*0.5;
+        const ti=Math.floor(i/steps*L)%L;
+        const w=(timeData[ti]-128)/128;
+        const rr=RR*(1+0.18*w);
+        const px=cx+Math.cos(a)*rr, py=cy+Math.sin(a)*rr;
+        i?x.lineTo(px,py):x.moveTo(px,py);
+      }
+      x.closePath();
+      x.strokeStyle=rgba(mix(BANDS[3],[255,255,255],0.3),0.55); x.lineWidth=Math.max(1,base*0.0016); x.stroke();
+      x.strokeStyle=rgba(BANDS[0],0.3); x.lineWidth=Math.max(1,base*0.001); x.stroke();
+    }
+
+    // tight jewel core (bass) — small, not a white wash
+    const cr=base*(0.028+0.05*smoothBass);
+    const cg=x.createRadialGradient(cx,cy,0,cx,cy,cr*2.6);
+    const cc=mix([240,232,255],BANDS[0],0.3);
+    cg.addColorStop(0,rgba(cc,0.95)); cg.addColorStop(0.45,rgba(cc,0.3)); cg.addColorStop(1,rgba(cc,0));
+    x.fillStyle=cg; x.beginPath(); x.arc(cx,cy,cr*2.6,0,7); x.fill();
+    x.globalCompositeOperation='source-over';
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body></html>
