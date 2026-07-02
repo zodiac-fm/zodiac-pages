@@ -2,35 +2,29 @@
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Zodiac — reactive music visualizer</title>
+<title>Zodiac — song fingerprint visualizer</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;background:#07040d;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+html,body{height:100%;background:#06030b;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
 #c{display:block;width:100vw;height:100vh;position:fixed;inset:0}
-.cap{position:fixed;top:24px;left:24px;color:#5f5872;font-size:11px;letter-spacing:.18em;text-transform:uppercase;z-index:5}
-#start{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;cursor:pointer;background:radial-gradient(circle at 50% 45%,rgba(30,20,44,.5),rgba(7,4,13,.92))}
+.cap{position:fixed;top:22px;left:24px;color:#5f5872;font-size:11px;letter-spacing:.18em;text-transform:uppercase;z-index:5}
+.cats{position:fixed;top:18px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:6;opacity:0;transition:.4s}
+.cats.show{opacity:1}
+.cats button{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#b9b2c6;font-size:12px;font-weight:600;padding:7px 14px;border-radius:999px;cursor:pointer}
+.cats button.on{background:#fff;color:#1a1620;border-color:#fff}
+#start{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;cursor:pointer;background:radial-gradient(circle at 50% 45%,rgba(30,20,44,.5),rgba(6,3,11,.93))}
 #start .play{width:96px;height:96px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;transition:.2s}
 #start:hover .play{border-color:#fff;transform:scale(1.05)}
 #start .play svg{width:34px;height:34px;fill:#fff;margin-left:5px}
 #start .t{color:#efe8f6;font-family:Georgia,serif;font-size:22px;margin-top:22px}
 #start .s{color:#8b8598;font-size:13px;margin-top:6px}
-.cats{position:fixed;top:20px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:6;opacity:0;transition:.4s}
-.cats.show{opacity:1}
-.cats button{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#b9b2c6;font-size:12px;font-weight:600;padding:7px 14px;border-radius:999px;cursor:pointer}
-.cats button.on{background:#fff;color:#1a1620;border-color:#fff}
-/* frequency proof panel */
-#proofwrap{position:fixed;left:0;right:0;bottom:0;height:132px;z-index:6;padding:14px 22px 18px;
-  background:linear-gradient(rgba(7,4,13,0),rgba(7,4,13,.7) 40%,rgba(7,4,13,.92));opacity:0;transition:.5s}
-#proofwrap.show{opacity:1}
-.plabel{display:flex;justify-content:space-between;align-items:baseline;color:#9a93a8;font-size:12px;margin-bottom:6px}
-.plabel b{font-family:Georgia,serif;font-size:15px;color:#efe8f6}
-.plabel .hz{font-weight:700;letter-spacing:.02em}
-#proof{display:block;width:100%;height:78px}
-.note{position:fixed;bottom:6px;left:50%;transform:translateX(-50%);color:#5f5872;font-size:10.5px;z-index:6;opacity:0;transition:.5s}
-.note.show{opacity:1}
+#start .load{color:#8b8598;font-size:12px;margin-top:14px;opacity:0}
+.legend{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);color:#7a7488;font-size:12px;z-index:6;opacity:0;transition:.5s;text-align:center}
+.legend.show{opacity:1}
+.legend b{color:#efe8f6;font-family:Georgia,serif}
 </style></head><body>
 <canvas id="c"></canvas>
-<div class="cap">The Sound of You · reactive visualizer</div>
+<div class="cap">Song fingerprint</div>
 <div class="cats" id="cats">
   <button data-cat="core">Core · 432</button>
   <button data-cat="love">Love · 528</button>
@@ -40,161 +34,157 @@ html,body{height:100%;background:#07040d;overflow:hidden;font-family:-apple-syst
 <div id="start">
   <div class="play"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></div>
   <div class="t">Play your frequency</div>
-  <div class="s">a real track · tuned to one frequency</div>
+  <div class="s">the whole track becomes a fingerprint · your tuned frequency threads through it</div>
+  <div class="load" id="load">reading the track…</div>
 </div>
-<div id="proofwrap">
-  <div class="plabel"><span>The tuned frequency, measured live in the track</span><b class="hz" id="hzlab">611 Hz</b></div>
-  <canvas id="proof"></canvas>
-</div>
-<div class="note" id="note">Loud at the open, softer through the middle, back at the close. That is the embedded frequency, on pace.</div>
+<div class="legend" id="legend"><b>611 Hz</b> runs through the whole song. The bright ring is that frequency, present start to end, with every other frequency inside and outside it.</div>
 <script>
 const PAL={
-  core:{dom:['#6521C9','#A737C8'],sec:[['#7A4AE0','#B98AF0'],['#C24FA8','#E07AC8']],hz:432,name:'Astrolith'},
-  love:{dom:['#B90044','#CF4090'],sec:[['#E8663E','#F0A070'],['#D8489A','#EE8CC0']],hz:528,name:'Elysian Surge'},
-  vitality:{dom:['#FF9112','#FFC251'],sec:[['#F0592E','#F59060'],['#FFD37A','#FFE7B0']],hz:594,name:'Quiet Success'},
-  abundance:{dom:['#12A56E','#46D99A'],sec:[['#15B8A6','#5FE0D2'],['#D9B45A','#F0D28A']],hz:611,name:'Kindred Spirits'}
+  core:{dom:['#6521C9','#A737C8'],sec:['#C24FA8','#7A4AE0'],hz:432},
+  love:{dom:['#B90044','#CF4090'],sec:['#E8663E','#D8489A'],hz:528},
+  vitality:{dom:['#C25500','#FF9112'],sec:['#DD6A3C','#DDA92E'],hz:594},
+  abundance:{dom:['#0F9A66','#46D99A'],sec:['#22B7A6','#CBA646'],hz:611}
 };
 let cat='abundance';
 const cv=document.getElementById('c'),x=cv.getContext('2d');
-const pf=document.getElementById('proof'),px=pf.getContext('2d');
-let W,H,DPR,PW,PH;
-function size(){DPR=Math.min(devicePixelRatio||1,2);
-  W=cv.width=innerWidth*DPR;H=cv.height=innerHeight*DPR;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';
-  PW=pf.width=pf.clientWidth*DPR;PH=pf.height=pf.clientHeight*DPR;}
-size();addEventListener('resize',size);
+let W,H,DPR,base,cx,cy;
+function size(){DPR=Math.min(devicePixelRatio||1,2);W=cv.width=innerWidth*DPR;H=cv.height=innerHeight*DPR;
+  cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';base=Math.min(W,H);cx=W/2;cy=H/2;buildFP();}
 function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
 function mix(a,b,t){return a.map((v,i)=>v+(b[i]-v)*t);}
 function rgba(c,a){return `rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;}
 
-// ---- audio ----
-let an, freqData, timeData, playing=false, fake=false, t0=performance.now(), sampleRate=44100;
-const NB=640;
-let targetHist=new Float32Array(240), thi=0;   // rolling history of the tuned-frequency level
-function startAudio(){
-  try{
-    const AC=window.AudioContext||window.webkitAudioContext; const ac=new AC(); sampleRate=ac.sampleRate;
-    const audio=new Audio('../inapp/'+ (cat==='abundance'?'elysian-sky-600hz.mp3':'elysian-sky-600hz.mp3'));
-    audio.crossOrigin='anonymous'; audio.loop=true;
-    const srcN=ac.createMediaElementSource(audio);
-    an=ac.createAnalyser(); an.fftSize=4096; an.smoothingTimeConstant=0.8;
-    srcN.connect(an); an.connect(ac.destination);
-    freqData=new Uint8Array(an.frequencyBinCount); timeData=new Uint8Array(an.fftSize);
-    ac.resume(); audio.play().then(()=>playing=true).catch(startFake); audio.onerror=startFake;
-  }catch(e){ startFake(); }
+// ---- frequency map of the WHOLE song ----
+const NS=260, NF=52;                       // time slices around the ring, frequency rows out from centre
+const FLO=180, FHI=1050;
+const freqs=Array.from({length:NF},(_,i)=>FLO*Math.pow(FHI/FLO,i/(NF-1)));
+function targetIdx(hz){ let best=0,bd=1e9; freqs.forEach((f,i)=>{const d=Math.abs(f-hz);if(d<bd){bd=d;best=i;}}); return best; }
+let grid=null, songLen=180, playing=false, fake=false, t0=performance.now(), an=null, live=null, startT=0;
+
+function goertzel(buf, start, len, freq, sr){
+  const w=2*Math.PI*freq/sr, c=2*Math.cos(w); let s1=0,s2=0;
+  for(let n=0;n<len;n++){ const s0=(buf[start+n]||0)+c*s1-s2; s2=s1; s1=s0; }
+  return Math.sqrt(Math.max(0,s1*s1+s2*s2-c*s1*s2))/len;
 }
-function startFake(){ fake=true; playing=true; freqData=new Uint8Array(NB); timeData=new Uint8Array(NB); }
-function readFake(){
-  const tt=(performance.now()-t0)/1000; const beat=0.6+0.4*Math.max(0,Math.sin(tt*2.2));
-  for(let i=0;i<NB;i++){ const f=i/NB;
-    let v=150*Math.exp(-f*2.4)*(0.55+0.45*Math.sin(tt*3+f*18));
-    v+=95*Math.exp(-Math.abs(f-0.34)*7)*(0.5+0.5*Math.sin(tt*5+f*22));
-    v+=70*Math.exp(-Math.abs(f-0.7)*9)*(0.5+0.5*Math.sin(tt*8-f*30));
-    v*=beat; freqData[i]=Math.min(255,v);
-    timeData[i]=128+80*Math.sin(tt*6+i*0.35)*Math.exp(-i/NB*1.4);
+function computeGrid(buf, sr, dur){
+  const g=Array.from({length:NS},()=>new Float32Array(NF));
+  const win=Math.min(4096, Math.floor(buf.length/NS));
+  for(let s=0;s<NS;s++){
+    const centre=Math.floor((s+0.5)/NS*buf.length); const st=Math.max(0,centre-win/2|0);
+    for(let fi=0;fi<NF;fi++) g[s][fi]=goertzel(buf,st,win,freqs[fi],sr);
+  }
+  // normalise per frequency row (so quiet high freqs still show), then a global lift
+  for(let fi=0;fi<NF;fi++){ let mx=1e-6; for(let s=0;s<NS;s++) mx=Math.max(mx,g[s][fi]);
+    for(let s=0;s<NS;s++) g[s][fi]=Math.pow(g[s][fi]/mx,0.8); }
+  grid=g; songLen=dur; buildFP();
+}
+function fakeGrid(){
+  const g=Array.from({length:NS},()=>new Float32Array(NF)); const ti=targetIdx(PAL[cat].hz);
+  for(let s=0;s<NS;s++){ const p=s/NS;
+    for(let fi=0;fi<NF;fi++){
+      let v=0.5*Math.exp(-fi/NF*2.2)*(0.5+0.5*Math.sin(p*40+fi));       // bass-leaning texture
+      v+=0.4*Math.exp(-Math.abs(fi-NF*0.4)*0.25)*(0.4+0.6*Math.sin(p*22-fi*2));
+      v+=0.3*Math.exp(-Math.abs(fi-NF*0.7)*0.3)*(0.4+0.6*Math.sin(p*30+fi));
+      if(Math.abs(fi-ti)<=1){ v+=0.55*(0.4+0.6*Math.pow(Math.abs(p-0.5)*2,1.4)); } // target: loud ends, soft middle
+      g[s][fi]=Math.min(1,v);
+    }
+  }
+  grid=g; songLen=180; fake=true; buildFP();
+}
+
+// static offscreen render of the whole-song fingerprint (drawn once, then rotated/composited)
+let fp=null;
+function buildFP(){
+  if(!grid||!base) return;
+  fp=document.createElement('canvas'); fp.width=W; fp.height=H; const f=fp.getContext('2d');
+  const P=PAL[cat], d0=hx(P.dom[0]),d1=hx(P.dom[1]);
+  const rIn=base*0.145, rOut=base*0.455;
+  f.globalCompositeOperation='lighter'; f.lineCap='round';
+  for(let s=0;s<NS;s++){
+    const a=s/NS*Math.PI*2 - Math.PI/2;
+    const x1=cx+Math.cos(a)*rIn, y1=cy+Math.sin(a)*rIn, x2=cx+Math.cos(a)*rOut, y2=cy+Math.sin(a)*rOut;
+    const g=f.createLinearGradient(x1,y1,x2,y2);
+    for(let fi=0;fi<NF;fi++){ const t=fi/(NF-1); const col=mix(d0,d1,t); const v=grid[s][fi];
+      g.addColorStop(t, rgba(col, Math.min(0.9, v*0.75))); }
+    f.strokeStyle=g; f.lineWidth=Math.max(1.1, (Math.PI*2*rOut/NS)*0.9);
+    f.beginPath(); f.moveTo(x1,y1); f.lineTo(x2,y2); f.stroke();
   }
 }
-// the tuned-frequency level: real = amplitude at the target bin; fake = the U-shaped arc
-function targetLevel(){
-  if(fake){ const songT=((performance.now()-t0)/1000)%26/26;   // 26s demo loop
-    const U=0.35+0.65*Math.pow(Math.abs(songT-0.5)*2,1.6);      // loud ends, soft middle
-    return Math.min(1,U*(0.7+0.3*Math.max(0,Math.sin((performance.now()-t0)/1000*3)))); }
-  const hz=PAL[cat].hz; const bin=Math.round(hz/(sampleRate/2)*freqData.length);
-  let s=0,n=0; for(let k=-2;k<=2;k++){const b=bin+k; if(b>=0&&b<freqData.length){s+=freqData[b];n++;}}
-  return (s/Math.max(1,n))/255;
-}
-document.getElementById('start').onclick=function(){ this.style.display='none';
-  document.getElementById('cats').classList.add('show'); document.getElementById('proofwrap').classList.add('show'); document.getElementById('note').classList.add('show');
-  startAudio(); };
-if(new URLSearchParams(location.search).has('demo')){ document.getElementById('start').style.display='none';
-  ['cats','proofwrap','note'].forEach(id=>document.getElementById(id).classList.add('show')); startFake();
-  for(let i=0;i<targetHist.length;i++){ const s=i/(targetHist.length-1); targetHist[i]=0.32+0.6*Math.pow(Math.abs(s-0.5)*2,1.5)*(0.85+0.15*Math.sin(i*0.7)); } thi=0; }
+
+// ---- audio ----
+document.getElementById('start').onclick=async function(){
+  document.getElementById('load').style.opacity=1;
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext; const ac=new AC();
+    const url='../inapp/elysian-sky-600hz.mp3';
+    const resp=await fetch(url); const arr=await resp.arrayBuffer();
+    const audioBuf=await ac.decodeAudioData(arr.slice(0));
+    const ch=audioBuf.getChannelData(0);
+    computeGrid(ch, audioBuf.sampleRate, audioBuf.duration);
+    // playback + live analyser for the playhead burst
+    const el=new Audio(url); el.crossOrigin='anonymous'; el.loop=true;
+    const src=ac.createMediaElementSource(el); an=ac.createAnalyser(); an.fftSize=1024;
+    src.connect(an); an.connect(ac.destination); live=new Uint8Array(an.frequencyBinCount);
+    ac.resume(); await el.play(); window.__el=el; startT=performance.now(); playing=true; reveal();
+  }catch(e){ fakeGrid(); playing=true; startT=performance.now(); reveal(); }
+};
+function reveal(){ document.getElementById('start').style.display='none';
+  ['cats','legend'].forEach(id=>document.getElementById(id).classList.add('show')); }
+if(new URLSearchParams(location.search).has('demo')){ fakeGrid(); playing=true; startT=performance.now();
+  document.getElementById('start').style.display='none'; ['cats','legend'].forEach(id=>document.getElementById(id).classList.add('show')); }
 document.querySelectorAll('[data-cat]').forEach(b=>b.onclick=()=>{cat=b.dataset.cat;
   document.querySelectorAll('[data-cat]').forEach(o=>o.classList.toggle('on',o===b));
-  document.getElementById('hzlab').textContent=PAL[cat].hz+' Hz';});
+  document.querySelector('#legend b').textContent=PAL[cat].hz+' Hz'; if(fake)fakeGrid(); else buildFP();});
 
-function sample(arr,n){ const out=new Float32Array(n); const src=fake?arr.length:Math.floor(arr.length*0.5);
-  for(let i=0;i<n;i++){ const p=Math.pow(i/n,1.35); out[i]=arr[Math.min(arr.length-1,Math.floor(p*src))]/255; } return out; }
-
-let rot=0, smoothBass=0, frameC=0;
 function frame(){
-  x.fillStyle='rgba(7,4,13,0.32)'; x.fillRect(0,0,W,H);
-  if(playing){
-    if(fake) readFake(); else an.getByteFrequencyData(freqData);
-    const cx=W/2, cy=H*0.42, base=Math.min(W,H);
-    const P=PAL[cat], dom0=hx(P.dom[0]),dom1=hx(P.dom[1]);
-    const s0a=hx(P.sec[0][0]),s0b=hx(P.sec[0][1]),s1a=hx(P.sec[1][0]),s1b=hx(P.sec[1][1]);
-    const spec=sample(freqData,NB);
-    let bass=0; for(let i=0;i<24;i++) bass+=spec[i]; bass/=24; smoothBass+=(bass-smoothBass)*0.2;
-    rot+=0.0011+smoothBass*0.014;
-    const tgt=targetLevel();
-    // record target history for the proof trace
-    if(frameC++%3===0){ targetHist[thi%targetHist.length]=tgt; thi++; }
-
+  x.fillStyle='rgba(6,3,11,0.30)'; x.fillRect(0,0,W,H);
+  if(playing&&grid){
+    const P=PAL[cat], d0=hx(P.dom[0]),d1=hx(P.dom[1]),s0=hx(P.sec[0]),s1c=hx(P.sec[1]);
+    const rIn=base*0.145, rOut=base*0.455, ti=targetIdx(P.hz);
+    const tR=rIn+ti/(NF-1)*(rOut-rIn);
+    // playback position 0..1
+    let pos; if(fake){ pos=((performance.now()-startT)/1000/26)%1; }
+    else { pos=(window.__el? (window.__el.currentTime/Math.max(1,songLen)) : 0)%1; }
+    const rotOff=-pos*Math.PI*2;   // rotate so the playhead is always at the top
+    // 1) the whole-song fingerprint, slowly turning so the playhead sits at top
+    if(fp){ x.save(); x.translate(cx,cy); x.rotate(rotOff); x.translate(-cx,-cy); x.globalAlpha=0.92; x.drawImage(fp,0,0); x.restore(); x.globalAlpha=1; }
     x.globalCompositeOperation='lighter';
-    const r0=base*0.06;
-    // base ring
-    x.strokeStyle=rgba(dom0,0.12); x.lineWidth=Math.max(1,base*0.0008);
-    x.beginPath(); x.arc(cx,cy,r0*1.1,0,7); x.stroke();
-    // finer symmetric reactive star: category-dominant with a few secondary glints
-    const half=NB;
-    for(let i=0;i<half;i++){
-      const frac=i/half, amp=spec[i];
-      let cA=dom0,cB=dom1,mul=1;
-      if(i%7===0){cA=s0a;cB=s0b;mul=0.75;} else if(i%11===0){cA=s1a;cB=s1b;mul=0.75;}
-      const len=r0+base*(0.04+0.37*amp);
-      for(const s of [1,-1]){
-        const a=-Math.PI/2+s*frac*Math.PI+rot;
-        const x1=cx+Math.cos(a)*r0,y1=cy+Math.sin(a)*r0,x2=cx+Math.cos(a)*len,y2=cy+Math.sin(a)*len;
-        const g=x.createLinearGradient(x1,y1,x2,y2);
-        g.addColorStop(0,rgba(cA,(0.09+0.5*amp)*mul)); g.addColorStop(0.75,rgba(cB,(0.06+0.22*amp)*mul)); g.addColorStop(1,rgba(cB,0));
-        x.strokeStyle=g; x.lineWidth=Math.max(0.6,base*0.0011);   // finer
-        x.beginPath(); x.moveTo(x1,y1); x.lineTo(x2,y2); x.stroke();
-        if(amp>0.62){ x.fillStyle=rgba(mix(cB,[255,255,255],0.4),(amp-0.62)*0.7); x.beginPath(); x.arc(x2,y2,base*0.0016,0,7); x.fill(); }
-      }
+    // 2) the tuned-frequency ring threaded through the whole song (proof, in context)
+    const tcol=mix(d1,[255,255,255],0.35);
+    for(let s=0;s<NS;s++){ const a=s/NS*Math.PI*2 - Math.PI/2 + rotOff; const v=grid[s][ti];
+      const x2=cx+Math.cos(a)*tR, y2=cy+Math.sin(a)*tR;
+      x.fillStyle=rgba(tcol, 0.12+0.85*v); x.beginPath(); x.arc(x2,y2, Math.max(1.4,base*0.0022*(0.6+v)),0,7); x.fill(); }
+    // faint guide ring at the target radius
+    x.strokeStyle=rgba(tcol,0.14); x.lineWidth=DPR; x.beginPath(); x.arc(cx,cy,tR,0,7); x.stroke();
+    // 3) playhead at the top + live reactive burst (watching it play)
+    const pa=-Math.PI/2;
+    let liveAmp=0.5;
+    if(an){ an.getByteFrequencyData(live); let s=0; for(let i=0;i<40;i++)s+=live[i]; liveAmp=s/40/255; }
+    else { liveAmp=0.4+0.4*Math.abs(Math.sin((performance.now()-startT)/1000*3)); }
+    // sweep line
+    x.strokeStyle=rgba([255,255,255],0.5); x.lineWidth=1.4*DPR;
+    x.beginPath(); x.moveTo(cx,cy-rIn*0.4); x.lineTo(cx+Math.cos(pa)*(rOut+base*0.03),cy+Math.sin(pa)*(rOut+base*0.03)); x.stroke();
+    // reactive rays fanning from the playhead
+    for(let i=0;i<22;i++){ const spread=(i/21-0.5)*0.5; const a=pa+spread;
+      const amp=an? (live[(i*3)%live.length]/255) : (0.3+0.5*Math.abs(Math.sin((performance.now()-startT)/700+i)));
+      const len=rOut+base*(0.02+0.12*amp); const col= i%5===0? s0 : (i%7===0? s1c : mix(d0,d1,i/21));
+      const x1=cx+Math.cos(a)*rIn,y1=cy+Math.sin(a)*rIn,x2=cx+Math.cos(a)*len,y2=cy+Math.sin(a)*len;
+      const g=x.createLinearGradient(x1,y1,x2,y2); g.addColorStop(0,rgba(col,0.1+0.5*amp)); g.addColorStop(1,rgba(col,0));
+      x.strokeStyle=g; x.lineWidth=Math.max(0.8,base*0.0016); x.beginPath(); x.moveTo(x1,y1); x.lineTo(x2,y2); x.stroke();
     }
-    // a subtle inner ring hugging the core, brightening with the tuned-frequency level (proof, in the art)
-    const tr=r0*(1.5+0.25*tgt);
-    x.strokeStyle=rgba(mix(dom1,[255,255,255],0.45),0.12+0.5*tgt); x.lineWidth=Math.max(1,base*0.0012);
-    x.beginPath(); x.arc(cx,cy,tr,0,7); x.stroke();
-    // tight core
-    const cr=base*(0.02+0.04*smoothBass);
-    const cg=x.createRadialGradient(cx,cy,0,cx,cy,cr*2.6); const cc=mix([240,232,255],dom0,0.3);
-    cg.addColorStop(0,rgba(cc,0.95)); cg.addColorStop(0.45,rgba(cc,0.3)); cg.addColorStop(1,rgba(cc,0));
+    // where the tuned frequency meets the playhead: a bright bead (you see it, right now, in the music)
+    const bx=cx+Math.cos(pa)*tR, by=cy+Math.sin(pa)*tR;
+    x.fillStyle='rgba(255,140,190,0.95)'; x.beginPath(); x.arc(bx,by,base*0.006*(0.7+grid[Math.floor(pos*NS)%NS][ti]),0,7); x.fill();
+    // 4) small core (leaves the centre open for a play button, no white wash)
+    const cr=base*(0.02+0.015*liveAmp);
+    const cg=x.createRadialGradient(cx,cy,0,cx,cy,cr*2.6); const cc=mix([240,232,255],d0,0.3);
+    cg.addColorStop(0,rgba(cc,0.9)); cg.addColorStop(0.5,rgba(cc,0.22)); cg.addColorStop(1,rgba(cc,0));
     x.fillStyle=cg; x.beginPath(); x.arc(cx,cy,cr*2.6,0,7); x.fill();
     x.globalCompositeOperation='source-over';
-    drawProof(P);
   }
   requestAnimationFrame(frame);
 }
-// the app-style proof: 250-950 axis on the left with the target tick highlighted, and a live trace of the tuned frequency over time
-function drawProof(P){
-  px.clearRect(0,0,PW,PH);
-  const dom0=hx(P.dom[0]),dom1=hx(P.dom[1]);
-  // left: a small 250-950 pitch scale showing WHERE the tuned frequency sits (echoes the app)
-  const axX=PW*0.055, lo=250,hi=950, yFor=v=>PH*0.86-(v-lo)/(hi-lo)*PH*0.64;
-  px.strokeStyle='rgba(255,255,255,.14)'; px.lineWidth=DPR;
-  px.beginPath(); px.moveTo(axX,yFor(hi)); px.lineTo(axX,yFor(lo)); px.stroke();
-  px.fillStyle='rgba(255,255,255,.30)'; px.font=(9.5*DPR)+'px -apple-system,sans-serif'; px.textAlign='right';
-  [250,950].forEach(v=>px.fillText(v,axX-6*DPR,yFor(v)+3*DPR));
-  const ty=yFor(P.hz);   // target tick on the pitch scale
-  px.fillStyle=rgba(mix(dom1,[255,255,255],0.4),1); px.beginPath(); px.arc(axX,ty,3.4*DPR,0,7); px.fill();
-  px.font=('700 '+(10.5*DPR)+'px -apple-system,sans-serif'); px.textAlign='left';
-  px.fillText(P.hz+' Hz',axX+8*DPR,ty+3.5*DPR);
-  // main: the tuned frequency's LEVEL over the song timeline (loud ends, soft middle = the arc)
-  const gx0=PW*0.20, gw=PW-gx0-PW*0.02, yB=PH*0.9;
-  const n=targetHist.length;
-  px.beginPath(); px.moveTo(gx0,yB);
-  for(let i=0;i<n;i++){ const lvl=targetHist[(thi+i)%n]; px.lineTo(gx0+i/(n-1)*gw, yB-lvl*PH*0.72); }
-  px.lineTo(gx0+gw,yB); px.closePath();
-  const fg=px.createLinearGradient(0,yB-PH*0.72,0,yB); fg.addColorStop(0,rgba(dom0,0.4)); fg.addColorStop(1,rgba(dom0,0.03));
-  px.fillStyle=fg; px.fill();
-  px.beginPath();
-  for(let i=0;i<n;i++){ const lvl=targetHist[(thi+i)%n]; const gx=gx0+i/(n-1)*gw, gy=yB-lvl*PH*0.72; i?px.lineTo(gx,gy):px.moveTo(gx,gy); }
-  px.strokeStyle=rgba(mix(dom0,[255,255,255],0.35),0.9); px.lineWidth=1.7*DPR; px.stroke();
-  // playing-now dot (pink)
-  const cur=targetHist[(thi-1+n)%n], gy=yB-cur*PH*0.72;
-  px.fillStyle='rgba(255,120,180,0.95)'; px.beginPath(); px.arc(gx0+gw,gy,3.6*DPR,0,7); px.fill();
-}
+size();addEventListener('resize',size);
 requestAnimationFrame(frame);
 </script>
 </body></html>
