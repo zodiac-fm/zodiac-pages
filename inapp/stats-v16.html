@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Zodiac.fm · Stats — v16, rebuilt on the locked design</title>
+<style>
+  /* COLORS from zodiac-pages/design/tokens.json (locked 2026-06-30; neutrals updated 2026-07-01;
+     green Abundance locked 2026-07-02). Cream canvas + white cards (the app's neutral treatment),
+     Core Purple #6521C9 = the one structure accent, frequency colour only as small chips (the 10%). */
+  :root{
+    --cream:#F6F1E8; --card:#FFFFFF; --ink:#1A1620; --ink2:#2A2530; --mut:#7a7480; --soft:#a8a2ad;
+    --line:#efe6d6; --mist:#EEE9E0;
+    --violet:#6521C9; --violet-deep:#38007A; --violet-tint:#EFECFF;
+    --neutral:#2A2530;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{min-height:100%;background:#e7e2d8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ink)}
+  body{display:flex;flex-direction:column;align-items:center;padding:18px 0 30px}
+  .serif{font-family:Georgia,'Times New Roman',serif}
+  #app{position:relative;width:min(420px,100vw);height:min(880px,88dvh);overflow:hidden;background:var(--cream);display:flex;flex-direction:column}
+  @media (min-width:440px){ #app{border-radius:30px;box-shadow:0 30px 80px rgba(0,0,0,.22);border:1px solid rgba(0,0,0,.05)} }
+  @media (max-width:439px){ body{padding:0} #app{width:100vw;height:100dvh} .toggle{padding-top:10px} }
+
+  /* review-aid state toggle (outside the phone) */
+  .toggle{display:flex;gap:6px;justify-content:center;padding-bottom:14px}
+  .toggle button{font-size:13px;font-weight:600;color:var(--ink2);background:#fff;border:1px solid #d8d2c6;padding:8px 15px;border-radius:20px;cursor:pointer;-webkit-appearance:none}
+  .toggle button.on{background:var(--violet);color:#fff;border-color:var(--violet)}
+
+  /* ---------- chrome (matches app-A) ---------- */
+  .top{padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 6px;display:flex;align-items:center;justify-content:space-between;flex:0 0 auto}
+  .logo{display:flex;align-items:center}
+  .logo img{height:19px;width:auto;display:block}
+  .ham{font-size:20px;color:#333}
+
+  .scroll{flex:1;overflow-y:auto;padding:0 0 20px}
+
+  .util{display:flex;align-items:center;justify-content:space-between;padding:10px 22px 0}
+  .util .wk{font-size:13px;font-weight:700;color:var(--violet)}
+  .util .wk span{font-weight:500;color:var(--mut)}
+  .util .qlink{display:inline-flex;align-items:center;gap:6px;min-height:30px;font-size:12.5px;color:var(--violet);font-weight:600;cursor:pointer}
+  .util .qlink .q{width:17px;height:17px;border-radius:50%;border:1.4px solid var(--violet);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:11px;font-style:italic}
+
+  /* ---------- hero: the level, said once ---------- */
+  .hero{padding:12px 22px 2px}
+  .hero .ey{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+  .hero h1{font-family:Georgia,serif;font-size:31px;font-weight:600;line-height:1.08;letter-spacing:-.02em;margin-top:7px}
+  .hero h1 em{font-style:normal;color:var(--violet-deep)}
+  .hero .sub{font-size:13.5px;color:var(--mut);margin-top:8px;line-height:1.5}
+  .hero .sub b{color:var(--ink2);font-weight:600}
+
+  /* ---------- white cards on the cream canvas (the app's surface rule) ---------- */
+  .card{margin:14px 18px 0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 20px;box-shadow:0 4px 18px rgba(0,0,0,.04)}
+  .shead{display:flex;align-items:center;gap:10px}
+  .shead h2{font-family:Georgia,serif;font-size:19px;font-weight:600;color:var(--violet);letter-spacing:-.005em}
+  /* neutral status pills (design ruling: no alert colour; Mist bg, muted ink) */
+  .status{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 11px;border-radius:20px;margin-left:auto;background:var(--mist);color:var(--mut)}
+
+  /* ---------- TIME ---------- */
+  .avg{display:flex;align-items:baseline;gap:8px;margin-top:13px}
+  .avg .n{font-family:Georgia,serif;font-size:24px;font-weight:600;letter-spacing:-.015em}
+  .avg .u{font-size:12.5px;color:var(--mut)}
+  .avg .wk{font-size:12px;color:var(--soft);margin-left:auto;font-weight:500}
+  .ladder{display:flex;margin-top:24px}
+  .step{flex:1 1 0;position:relative;text-align:center}
+  .step .track{position:absolute;top:8px;left:-50%;width:100%;height:3px;background:var(--mist);z-index:0}
+  .step:first-child .track{display:none}
+  .step .track.fill{background:var(--violet)}
+  .step .node{position:relative;z-index:1;width:19px;height:19px;border-radius:50%;margin:0 auto;background:var(--card);border:2.5px solid #ddd5c8}
+  .step.done .node{background:var(--violet);border-color:var(--violet)}
+  .step.now .node{background:var(--violet);border-color:var(--violet);box-shadow:0 0 0 4px var(--violet-tint)}
+  .step .mins{font-family:Georgia,serif;font-size:15px;font-weight:600;color:var(--soft);margin-top:10px}
+  .step .lv{font-size:11px;color:var(--soft);letter-spacing:.02em;margin-top:1px}
+  .step.done .mins,.step.now .mins{color:var(--ink)}
+  .step.now .lv{color:var(--violet-deep);font-weight:700}
+  .tonext{margin-top:20px;padding-top:14px;border-top:1px solid var(--line)}
+  .tonext .row{display:flex;align-items:baseline;justify-content:space-between;font-size:13px;color:var(--ink2)}
+  .tonext .row b{font-weight:600}
+  .tonext .row .g{color:var(--mut);font-size:12.5px}
+  .tonext .bar{height:6px;border-radius:4px;background:var(--violet-tint);margin-top:10px;overflow:hidden}
+  /* functional gradient: primary -> deep (per tokens gradient roles) */
+  .tonext .bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--violet),var(--violet-deep))}
+
+  /* ---------- BALANCE: four columns, one shared 15% line ---------- */
+  .rule{font-size:13px;color:var(--ink2);line-height:1.5;margin-top:11px}
+  .rule b{font-weight:700}
+  /* bars stop short of the right edge; the gate line runs past them into a reserved label lane */
+  .plot{position:relative;height:126px;margin-top:38px}
+  .cols{position:absolute;top:0;bottom:0;left:0;right:56px;display:flex;align-items:flex-end;gap:15px;z-index:1}
+  .col{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .col .cpct{font-family:Georgia,serif;font-size:14.5px;font-weight:600;color:var(--ink2);margin-bottom:7px;white-space:nowrap}
+  .col.low .cpct{color:var(--soft);font-weight:500}
+  /* cleared = solid graphite; below 15% = hollow dashed, recedes under the line */
+  .col .cbar{width:100%;max-width:42px;border-radius:6px 6px 0 0;background:var(--neutral)}
+  .col.low .cbar{background:transparent;border:1.6px dashed #b5b2bc;border-bottom:none}
+  /* the 15% gate line is the hero of the chart */
+  .thline{position:absolute;left:0;right:0;bottom:21.43%;border-top:2px dashed #7c7a85;z-index:2}
+  .thlab{position:absolute;right:0;bottom:calc(21.43% + 5px);font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--mut);z-index:3}
+  .names{display:flex;gap:15px;margin-top:11px;margin-right:56px}
+  .name{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:6px}
+  /* frequency identity = a small token-gradient chip, faded when low (the 10% accent) */
+  .name .chip{width:26px;height:7px;border-radius:4px}
+  .name.low .chip{opacity:.3}
+  .name .t{font-size:12px;font-weight:600;color:var(--ink2);letter-spacing:-.01em}
+  .name.low .t{color:var(--mut);font-weight:500}
+  .balnote{margin-top:18px;font-size:12.5px;line-height:1.5;display:flex;gap:7px;color:var(--ink2)}
+  .balnote b{font-weight:700}
+  .balnote .mk{flex:0 0 auto}
+
+  /* ---------- HISTORY ---------- */
+  .wkrow{display:flex;align-items:center;gap:12px;min-height:52px;padding:11px 2px;border-bottom:1px solid var(--line)}
+  .wkrow:last-child{border-bottom:none;padding-bottom:2px}
+  .wkrow .wl{display:flex;flex-direction:column;gap:3px}
+  .wkrow .wn{font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+  .wkrow .ws{font-size:12px;color:var(--soft)}
+  .wkrow .ws .lf{color:var(--mut);font-weight:600}
+  .wkrow .wr{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .wkrow .chev{color:#cfc6b6;font-size:20px;line-height:1}
+  .wkrow.cur{margin:2px -8px 0;padding:11px 12px;background:var(--violet-tint);border-radius:13px;border-bottom:none}
+  .wkrow.cur .wn{color:var(--violet-deep)}
+  .lvl{font-size:11.5px;font-weight:600;color:var(--ink2);background:var(--mist);border-radius:20px;padding:3px 11px;white-space:nowrap}
+  .lvl.none{color:var(--mut)}
+  .lvl.top{color:var(--violet-deep);background:#fff;border:1px solid #ddd0f4}
+
+  /* ---------- bottom nav (matches app-A) ---------- */
+  #nav{flex:0 0 auto;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center}
+  #nav div{font-size:11px;text-align:center;color:#9a95a0}
+  #nav div.on{color:#1A1620;font-weight:700}
+  #nav .ic{display:block;margin:0 auto 2px;width:17px;height:17px}
+  #nav svg{width:17px;height:17px;display:block;margin:0 auto}
+
+  .low-only{display:none}.ok-only{display:none}
+  body.low .low-only{display:inline}body.ok .ok-only{display:inline}
+</style></head><body class="low">
+
+  <div class="toggle">
+    <button id="btn-ok" onclick="setState('ok')">On track</button>
+    <button id="btn-low1" class="on" onclick="setState('low1')">1 low</button>
+    <button id="btn-low2" onclick="setState('low2')">2 low</button>
+    <button id="btn-low3" onclick="setState('low3')">3 low</button>
+  </div>
+
+  <div id="app">
+    <div class="top">
+      <div class="logo serif"><img src="app-assets/logo-black.svg" alt="zodiac.fm"></div>
+      <div class="ham">&#9776;</div>
+    </div>
+
+    <div class="scroll">
+      <div class="util">
+        <div class="wk">Week 3 <span>· resets Monday</span></div>
+        <div class="qlink"><span class="q">?</span> How levels work</div>
+      </div>
+
+      <!-- HERO: the level, said once -->
+      <div class="hero">
+        <div class="ey">This week</div>
+        <h1 id="hero-head"></h1>
+        <div class="sub" id="hero-sub"></div>
+      </div>
+
+      <!-- TIME -->
+      <div class="card">
+        <div class="shead">
+          <h2>Time</h2>
+          <span class="status">On track</span>
+        </div>
+        <div class="avg"><span class="n">24 min / day</span><span class="u">average</span><span class="wk">168 min this week</span></div>
+        <div class="ladder">
+          <div class="step done"><div class="track fill"></div><div class="node"></div><div class="mins">9</div><div class="lv">Level 1</div></div>
+          <div class="step now"><div class="track fill"></div><div class="node"></div><div class="mins">20</div><div class="lv">Level 2</div></div>
+          <div class="step"><div class="track"></div><div class="node"></div><div class="mins">45+</div><div class="lv">Level 3</div></div>
+        </div>
+        <div class="tonext">
+          <div class="row"><span class="g">Progress to Level 3</span><span><b>21 min/day</b> more</span></div>
+          <div class="bar"><i style="width:53%"></i></div>
+        </div>
+      </div>
+
+      <!-- BALANCE -->
+      <div class="card">
+        <div class="shead">
+          <h2>Balance</h2>
+          <span class="status" id="bal-status"></span>
+        </div>
+        <div class="rule">Every frequency needs at least <b>15% of your week</b>. The other 40% is yours.</div>
+        <div class="plot">
+          <div class="cols" id="bal-cols"></div>
+          <div class="thline"></div><div class="thlab">15% min</div>
+        </div>
+        <div class="names" id="bal-names"></div>
+        <div class="balnote" id="bal-note"></div>
+      </div>
+
+      <!-- HISTORY -->
+      <div class="card">
+        <div class="shead"><h2>Your weeks</h2></div>
+        <div class="wkrow cur">
+          <div class="wl"><span class="wn">Week 3</span><span class="ws low-only" id="cur-ws-low">On pace for Level 3 · Vitality low</span><span class="ws ok-only">On pace for Level 3</span></div>
+          <div class="wr"><span class="lvl top">This week</span><span class="chev">&#8250;</span></div>
+        </div>
+        <div class="wkrow">
+          <div class="wl"><span class="wn">Week 2</span><span class="ws">All four balanced</span></div>
+          <div class="wr"><span class="lvl">Level 3</span><span class="chev">&#8250;</span></div>
+        </div>
+        <div class="wkrow">
+          <div class="wl"><span class="wn">Week 1</span><span class="ws"><span class="lf">Vitality under 15%</span></span></div>
+          <div class="wr"><span class="lvl none">Not leveled</span><span class="chev">&#8250;</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="nav">
+      <div><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18V5l11-2v13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><circle cx="20" cy="16" r="3"/></svg></span>Immersions</div>
+      <div class="on"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14v4M9 9v9M14 5v13M19 11v7" stroke-linecap="round"/></svg></span>Stats</div>
+      <div><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Playlist</div>
+    </div>
+  </div>
+
+  <script>
+    // colours straight from design/tokens.json — c1=primary, c2=gradEnd (the drift gate checks these)
+    var CATS={
+      core:{label:'Core',c1:'#6521C9',c2:'#A737C8'},
+      love:{label:'Love',c1:'#B90044',c2:'#CF4090'},
+      vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251'},
+      abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A'}
+    };
+    var MIN=15, SCALE=70, KEYS=['core','love','vitality','abundance'];
+    var STATES={ ok:[28,24,18,30], low1:[28,22,11,39], low2:[36,42,13,9], low3:[61,14,13,12] };
+    function fmtList(a){ if(a.length===1)return a[0]; if(a.length===2)return a[0]+' and '+a[1]; return a.slice(0,-1).join(', ')+', and '+a[a.length-1]; }
+    function render(key){
+      var vals=STATES[key]||STATES.low1, lows=[];
+      vals.forEach(function(v,i){ if(v<MIN) lows.push(i); });
+      var ch=''; vals.forEach(function(v,i){ var h=Math.min(100,v/SCALE*100); ch+='<div class="col'+(v<MIN?' low':'')+'"><div class="cpct">'+v+'%</div><div class="cbar" style="height:'+h+'%"></div></div>'; });
+      document.getElementById('bal-cols').innerHTML=ch;
+      var nh=''; KEYS.forEach(function(k,i){ var c=CATS[k]; nh+='<div class="name'+(vals[i]<MIN?' low':'')+'"><span class="chip" style="background:linear-gradient(100deg,'+c.c1+','+c.c2+')"></span><span class="t">'+c.label+'</span></div>'; });
+      document.getElementById('bal-names').innerHTML=nh;
+      var stat=document.getElementById('bal-status');
+      stat.textContent = lows.length===0 ? 'Balanced' : lows.length+' under 15%';
+      var head=document.getElementById('hero-head'), sub=document.getElementById('hero-sub');
+      if(lows.length===0){
+        head.innerHTML="You're on <em>Level&nbsp;2</em>";
+        sub.innerHTML="Time and balance both on track. <b>21 min/day more</b> for Level&nbsp;3.";
+      } else {
+        var ln=lows.map(function(i){return CATS[KEYS[i]].label;}), list=fmtList(ln);
+        head.innerHTML="Almost at <em>Level&nbsp;2</em>";
+        sub.innerHTML="Your time's on track. <b>"+list+(ln.length===1?" is":" are")+" under 15%.</b> Bring "+(ln.length===1?"it":"them")+" up to lock your level in.";
+      }
+      var note=document.getElementById('bal-note');
+      if(lows.length===0){ note.innerHTML='<span class="mk">&#10003;</span><span>All four are clearing the line. Nothing to fix this week.</span>'; }
+      else if(lows.length===1){ var i=lows[0]; note.innerHTML='<span class="mk">&#9650;</span><span>'+CATS[KEYS[i]].label+' is <b>'+(MIN-vals[i])+'% short</b> of 15%. A little more this week will do it.</span>'; }
+      else { note.innerHTML='<span class="mk">&#9650;</span><span><b>'+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+'</b> are under 15%. Give each a bit more time this week to lock your level in.</span>'; }
+      var curws=document.getElementById('cur-ws-low');
+      if(lows.length) curws.textContent='On pace for Level 3 · '+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+' low';
+      document.body.classList.remove('low','ok'); document.body.classList.add(lows.length?'low':'ok');
+    }
+    function setState(key){
+      render(key);
+      ['ok','low1','low2','low3'].forEach(function(k){ var b=document.getElementById('btn-'+k); if(b) b.classList.toggle('on', k===key); });
+    }
+    var h=location.hash, start='low1';
+    if(h.indexOf('ok')>=0) start='ok'; else if(h.indexOf('low3')>=0) start='low3'; else if(h.indexOf('low2')>=0) start='low2';
+    setState(start);
+  </script>
+</body></html>
