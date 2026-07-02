@@ -24,13 +24,17 @@
   .toggle button{font-size:13px;font-weight:600;color:var(--ink2);background:#fff;border:1px solid #d8d2c6;padding:8px 15px;border-radius:20px;cursor:pointer;-webkit-appearance:none}
   .toggle button.on{background:var(--violet);color:#fff;border-color:var(--violet)}
 
+  /* soft violet presence at the top of the screen (the app's premium touch) */
+  .glow{position:absolute;top:-90px;left:50%;transform:translateX(-50%);width:480px;height:400px;z-index:0;pointer-events:none;
+    background:radial-gradient(closest-side,rgba(101,33,201,.07),rgba(101,33,201,.02) 55%,rgba(101,33,201,0) 75%)}
+
   /* ---------- chrome (matches app-A) ---------- */
-  .top{padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 6px;display:flex;align-items:center;justify-content:space-between;flex:0 0 auto}
+  .top{position:relative;z-index:1;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 6px;display:flex;align-items:center;justify-content:space-between;flex:0 0 auto}
   .logo{display:flex;align-items:center}
   .logo img{height:19px;width:auto;display:block}
   .ham{font-size:20px;color:#333}
 
-  .scroll{flex:1;overflow-y:auto;padding:0 0 20px}
+  .scroll{position:relative;z-index:1;flex:1;overflow-y:auto;padding:0 0 20px}
 
   .util{display:flex;align-items:center;justify-content:space-between;padding:10px 22px 0}
   .util .wk{font-size:13px;font-weight:700;color:var(--violet)}
@@ -47,11 +51,11 @@
   .hero .sub b{color:var(--ink2);font-weight:600}
 
   /* ---------- white cards on the cream canvas (the app's surface rule) ---------- */
-  .card{margin:14px 18px 0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 20px;box-shadow:0 4px 18px rgba(0,0,0,.04)}
+  .card{margin:14px 18px 0;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 18px 20px;box-shadow:0 6px 20px rgba(26,22,32,.05)}
   .shead{display:flex;align-items:center;gap:10px}
   .shead h2{font-family:Georgia,serif;font-size:19px;font-weight:600;color:var(--violet);letter-spacing:-.005em}
-  /* neutral status pills (design ruling: no alert colour; Mist bg, muted ink) */
-  .status{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 11px;border-radius:20px;margin-left:auto;background:var(--mist);color:var(--mut)}
+  /* crafted neutral status pill (design ruling: no alert colour) */
+  .status{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;margin-left:auto;background:#fff;border:1px solid #e3dbcb;color:var(--ink2);box-shadow:0 1px 3px rgba(26,22,32,.04)}
 
   /* ---------- TIME ---------- */
   .avg{display:flex;align-items:baseline;gap:8px;margin-top:13px}
@@ -74,29 +78,30 @@
   .tonext .row{display:flex;align-items:baseline;justify-content:space-between;font-size:13px;color:var(--ink2)}
   .tonext .row b{font-weight:600}
   .tonext .row .g{color:var(--mut);font-size:12.5px}
-  .tonext .bar{height:6px;border-radius:4px;background:var(--violet-tint);margin-top:10px;overflow:hidden}
+  .tonext .bar{height:5px;border-radius:4px;background:var(--violet-tint);margin-top:10px;overflow:hidden}
   /* functional gradient: primary -> deep (per tokens gradient roles) */
   .tonext .bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--violet),var(--violet-deep))}
 
-  /* ---------- BALANCE: four columns, one shared 15% line ---------- */
+  /* ---------- BALANCE: four tracked columns, one shared 15% line ---------- */
   .rule{font-size:13px;color:var(--ink2);line-height:1.5;margin-top:11px}
   .rule b{font-weight:700}
   /* bars stop short of the right edge; the gate line runs past them into a reserved label lane */
-  .plot{position:relative;height:126px;margin-top:38px}
-  .cols{position:absolute;top:0;bottom:0;left:0;right:56px;display:flex;align-items:flex-end;gap:15px;z-index:1}
-  .col{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
-  .col .cpct{font-family:Georgia,serif;font-size:14.5px;font-weight:600;color:var(--ink2);margin-bottom:7px;white-space:nowrap}
-  .col.low .cpct{color:var(--soft);font-weight:500}
-  /* cleared = solid graphite; below 15% = hollow dashed, recedes under the line */
-  .col .cbar{width:100%;max-width:42px;border-radius:6px 6px 0 0;background:var(--neutral)}
-  .col.low .cbar{background:transparent;border:1.6px dashed #b5b2bc;border-bottom:none}
-  /* the 15% gate line is the hero of the chart */
-  .thline{position:absolute;left:0;right:0;bottom:21.43%;border-top:2px dashed #7c7a85;z-index:2}
-  .thlab{position:absolute;right:0;bottom:calc(21.43% + 5px);font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--mut);z-index:3}
-  .names{display:flex;gap:15px;margin-top:11px;margin-right:56px}
+  .plot{position:relative;height:148px;margin-top:22px;border-bottom:1px solid #e7dfd0}
+  .cols{position:absolute;top:0;bottom:0;left:0;right:56px;display:flex;align-items:flex-end;gap:15px}
+  .col{flex:1 1 0;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  /* value pinned above its bar; white punch-out keeps it legible where it crosses the gate line */
+  .col .cpct{position:absolute;left:50%;transform:translateX(-50%);z-index:4;font-size:12px;font-weight:700;color:var(--ink2);white-space:nowrap;font-variant-numeric:tabular-nums;background:var(--card);padding:0 4px;line-height:1.3}
+  .col.low .cpct{color:var(--mut);font-weight:500}
+  /* cleared = solid graphite, advances; below 15% = pale solid fill, recedes (refined from the dashed-outline ruling) */
+  .col .cbar{position:relative;z-index:1;width:100%;max-width:44px;border-radius:9px 9px 0 0;background:var(--neutral)}
+  .col.low .cbar{background:#E2DBCE}
+  /* the 15% gate line is the hero of the chart (bottom set by JS to the shared scale) */
+  .thline{position:absolute;left:0;right:0;border-top:2px dashed #8d8a96;z-index:3}
+  .thlab{position:absolute;right:0;font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--mut);z-index:3}
+  .names{display:flex;gap:15px;margin-top:12px;margin-right:56px}
   .name{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:6px}
   /* frequency identity = a small token-gradient chip, faded when low (the 10% accent) */
-  .name .chip{width:26px;height:7px;border-radius:4px}
+  .name .chip{width:28px;height:7px;border-radius:4px}
   .name.low .chip{opacity:.3}
   .name .t{font-size:12px;font-weight:600;color:var(--ink2);letter-spacing:-.01em}
   .name.low .t{color:var(--mut);font-weight:500}
@@ -120,7 +125,7 @@
   .lvl.top{color:var(--violet-deep);background:#fff;border:1px solid #ddd0f4}
 
   /* ---------- bottom nav (matches app-A) ---------- */
-  #nav{flex:0 0 auto;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center}
+  #nav{position:relative;z-index:1;flex:0 0 auto;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center}
   #nav div{font-size:11px;text-align:center;color:#9a95a0}
   #nav div.on{color:#1A1620;font-weight:700}
   #nav .ic{display:block;margin:0 auto 2px;width:17px;height:17px}
@@ -138,6 +143,7 @@
   </div>
 
   <div id="app">
+    <div class="glow"></div>
     <div class="top">
       <div class="logo serif"><img src="app-assets/logo-black.svg" alt="zodiac.fm"></div>
       <div class="ham">&#9776;</div>
@@ -162,7 +168,7 @@
           <h2>Time</h2>
           <span class="status">On track</span>
         </div>
-        <div class="avg"><span class="n">24 min / day</span><span class="u">average</span><span class="wk">168 min this week</span></div>
+        <div class="avg"><span class="n">24 min/day</span><span class="u">average</span><span class="wk">168 min this week</span></div>
         <div class="ladder">
           <div class="step done"><div class="track fill"></div><div class="node"></div><div class="mins">9</div><div class="lv">Level 1</div></div>
           <div class="step now"><div class="track fill"></div><div class="node"></div><div class="mins">20</div><div class="lv">Level 2</div></div>
@@ -183,7 +189,7 @@
         <div class="rule">Every frequency needs at least <b>15% of your week</b>. The other 40% is yours.</div>
         <div class="plot">
           <div class="cols" id="bal-cols"></div>
-          <div class="thline"></div><div class="thlab">15% min</div>
+          <div class="thline" id="thline"></div><div class="thlab" id="thlab">15% min</div>
         </div>
         <div class="names" id="bal-names"></div>
         <div class="balnote" id="bal-note"></div>
@@ -222,14 +228,19 @@
       vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251'},
       abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A'}
     };
-    var MIN=15, SCALE=70, KEYS=['core','love','vitality','abundance'];
+    var MIN=15, KEYS=['core','love','vitality','abundance'];
     var STATES={ ok:[28,24,18,30], low1:[28,22,11,39], low2:[36,42,13,9], low3:[61,14,13,12] };
     function fmtList(a){ if(a.length===1)return a[0]; if(a.length===2)return a[0]+' and '+a[1]; return a.slice(0,-1).join(', ')+', and '+a[a.length-1]; }
     function render(key){
       var vals=STATES[key]||STATES.low1, lows=[];
       vals.forEach(function(v,i){ if(v<MIN) lows.push(i); });
-      var ch=''; vals.forEach(function(v,i){ var h=Math.min(100,v/SCALE*100); ch+='<div class="col'+(v<MIN?' low':'')+'"><div class="cpct">'+v+'%</div><div class="cbar" style="height:'+h+'%"></div></div>'; });
+      // shared scale sized to the data, so the bars use the plot instead of floating in dead air
+      var scale=Math.max(40, Math.ceil(Math.max.apply(null,vals)*1.18));
+      var ch=''; vals.forEach(function(v,i){ var h=Math.min(100,v/scale*100); ch+='<div class="col'+(v<MIN?' low':'')+'"><div class="cpct" style="bottom:calc('+h+'% + 7px)">'+v+'%</div><div class="cbar" style="height:'+h+'%"></div></div>'; });
       document.getElementById('bal-cols').innerHTML=ch;
+      var gate=(MIN/scale*100);
+      document.getElementById('thline').style.bottom=gate+'%';
+      document.getElementById('thlab').style.bottom='calc('+gate+'% + 5px)';
       var nh=''; KEYS.forEach(function(k,i){ var c=CATS[k]; nh+='<div class="name'+(vals[i]<MIN?' low':'')+'"><span class="chip" style="background:linear-gradient(100deg,'+c.c1+','+c.c2+')"></span><span class="t">'+c.label+'</span></div>'; });
       document.getElementById('bal-names').innerHTML=nh;
       var stat=document.getElementById('bal-status');
