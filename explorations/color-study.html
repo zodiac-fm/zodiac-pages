@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Zodiac — Color harmony study</title>
+<style>
+@font-face{font-family:'Canela';src:url('fonts/Canela-Regular.otf');font-weight:400}
+@font-face{font-family:'Canela';src:url('fonts/Canela-Medium.otf');font-weight:500}
+@font-face{font-family:'Canela';src:url('fonts/Canela-Italic.otf');font-weight:400;font-style:italic}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Regular.otf');font-weight:400}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Medium.otf');font-weight:500}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Semibold.otf');font-weight:600}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F6F1E8;color:#1A1620;font-family:'Suisse',system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:64px 40px 120px}
+.kick{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#8A6FB0}
+h1{font-family:'Canela',serif;font-size:clamp(38px,6vw,60px);font-weight:500;letter-spacing:-.01em;line-height:1.02;margin:14px 0 18px}
+.lead{font-size:19px;max-width:60ch;color:#4a4550}
+h2{font-family:'Canela',serif;font-size:30px;font-weight:500;margin:12px 0 6px;letter-spacing:-.01em}
+section{margin-top:76px}
+.sub{font-size:15px;color:#6a6470;max-width:64ch;margin-bottom:26px}
+.row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.sw{border-radius:14px;overflow:hidden;border:1px solid rgba(0,0,0,.06);background:#fff}
+.chip{height:150px;display:flex;align-items:flex-end;padding:12px}
+.chip .nm{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.35)}
+.meta{padding:11px 13px 14px}
+.meta .h{font-family:'Canela',serif;font-size:16px}
+.meta .d{font-size:11.5px;color:#8a8590;font-variant-numeric:tabular-nums;margin-top:3px;line-height:1.4}
+.darkband{background:#0B0712;border-radius:16px;padding:26px;margin-top:14px}
+.darkband .row .sw{background:#171021;border-color:rgba(255,255,255,.08)}
+.darkband .meta .h{color:#ECE7F2}.darkband .meta .d{color:#8b8598}
+.callout{background:#fff;border:1px solid #EFE6D6;border-left:3px solid #6521C9;border-radius:12px;padding:18px 22px;margin-top:22px;font-size:15px;color:#3a3540}
+.callout b{color:#1A1620}
+.wheel{display:flex;gap:40px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.legend{font-size:14px;color:#4a4550}
+.legend div{display:flex;align-items:center;gap:10px;margin:7px 0}
+.legend .d{width:16px;height:16px;border-radius:50%}
+.dist{display:grid;grid-template-columns:60% 30% 10%;height:56px;border-radius:12px;overflow:hidden;margin-top:8px;font-size:12px;font-weight:600}
+.dist div{display:flex;align-items:center;justify-content:center;color:#fff}
+.mini{display:flex;gap:9px;align-items:center;margin-top:7px}
+.mini .b{width:22px;height:22px;border-radius:50%}
+.foot{margin-top:70px;font-size:13px;color:#8a8590;line-height:1.7;border-top:1px solid #e4dccb;padding-top:20px}
+</style></head><body><div class="wrap">
+
+<span class="kick">Design study · 2026-07-01 · reacting to "our colors don't match on the wheel"</span>
+<h1>Why our four colors clash, and how a family is built.</h1>
+<p class="lead">Our frequency colors were each chosen on their own. Measured together, they don't belong to one set. Here is the honest diagnosis and the fix that world-class palettes use. This is a study to react to, not a locked decision.</p>
+
+<section>
+<span class="kick">The problem</span>
+<h2>Today: four colors, four different brightnesses.</h2>
+<p class="sub">Each swatch shows its real lightness (L), saturation (C) and hue angle (H) in OKLCH, the space that matches how the eye actually reads color. Notice the lightness numbers: they run from 46% to 76%. That 30-point spread is the "amateur" tell. Orange and aqua jump forward, violet and rose sink back, so the eye never sees them as one family.</p>
+<div class="row">
+  <div class="sw"><div class="chip" style="background:#6521C9"><span class="nm">Core</span></div><div class="meta"><div class="h">Violet</div><div class="d">#6521C9 · L 46% · C .230 · H 293</div></div></div>
+  <div class="sw"><div class="chip" style="background:#B90044"><span class="nm">Love</span></div><div class="meta"><div class="h">Rose</div><div class="d">#B90044 · L 50% · C .200 · H 12</div></div></div>
+  <div class="sw"><div class="chip" style="background:#FF9112"><span class="nm">Vitality</span></div><div class="meta"><div class="h">Amber</div><div class="d">#FF9112 · L 76% · C .175 · H 60</div></div></div>
+  <div class="sw"><div class="chip" style="background:#00AFDC"><span class="nm">Abundance</span></div><div class="meta"><div class="h">Aqua</div><div class="d">#00AFDC · L 70% · C .132 · H 225</div></div></div>
+</div>
+<div class="callout"><b>Read it in one line:</b> lightness 46 to 76 (a 30-point jump), saturation .132 to .230. Four colors, four different energies. Put them side by side as we do on the app and the brightest one always wins and the set looks like a paint box.</div>
+</section>
+
+<section>
+<span class="kick">The fix</span>
+<h2>Governed: same four identities, one brightness, one saturation.</h2>
+<p class="sub">Keep exactly which color means what (violet, rose, amber, aqua), but lock every one to the same lightness and the same saturation. Now they read as siblings from one family. This is what Aesop, Oura, and every serious brand system does. Below at a shared L 62%, C .13.</p>
+<div class="row">
+  <div class="sw"><div class="chip" style="background:oklch(62% 0.13 293)"><span class="nm">Core</span></div><div class="meta"><div class="h">Violet</div><div class="d">L 62% · C .13 · H 293</div></div></div>
+  <div class="sw"><div class="chip" style="background:oklch(62% 0.13 12)"><span class="nm">Love</span></div><div class="meta"><div class="h">Rose</div><div class="d">L 62% · C .13 · H 12</div></div></div>
+  <div class="sw"><div class="chip" style="background:oklch(62% 0.13 65)"><span class="nm">Vitality</span></div><div class="meta"><div class="h">Amber</div><div class="d">L 62% · C .13 · H 65</div></div></div>
+  <div class="sw"><div class="chip" style="background:oklch(62% 0.13 225)"><span class="nm">Abundance</span></div><div class="meta"><div class="h">Aqua</div><div class="d">L 62% · C .13 · H 225</div></div></div>
+</div>
+<div class="callout">Same four meanings, but now they sit together. No color shouts over the others. This is the single change that makes the whole system look designed instead of assembled.</div>
+</section>
+
+<section>
+<span class="kick">Two family registers to choose from</span>
+<h2>The same governance, two moods.</h2>
+<p class="sub">Once locked to one brightness, you pick the family's character. A brighter, more alive set, or a deeper, jewel-like set. Same discipline, different feeling. The direction boards apply these.</p>
+<h2 style="font-size:19px;margin-top:30px">Alive (lighter, for warm cream surfaces)</h2>
+<div class="row" style="margin-top:12px">
+  <div class="sw"><div class="chip" style="background:oklch(66% 0.14 293)"></div></div>
+  <div class="sw"><div class="chip" style="background:oklch(66% 0.14 12)"></div></div>
+  <div class="sw"><div class="chip" style="background:oklch(66% 0.14 65)"></div></div>
+  <div class="sw"><div class="chip" style="background:oklch(66% 0.14 225)"></div></div>
+</div>
+<h2 style="font-size:19px;margin-top:26px">Jewel (deeper, glows on dark)</h2>
+<div class="darkband">
+<div class="row">
+  <div class="sw"><div class="chip" style="background:oklch(58% 0.15 293)"><span class="nm">Core</span></div></div>
+  <div class="sw"><div class="chip" style="background:oklch(58% 0.15 12)"><span class="nm">Love</span></div></div>
+  <div class="sw"><div class="chip" style="background:oklch(58% 0.15 65)"><span class="nm">Vitality</span></div></div>
+  <div class="sw"><div class="chip" style="background:oklch(58% 0.15 225)"><span class="nm">Abundance</span></div></div>
+</div>
+</div>
+</section>
+
+<section>
+<span class="kick">The other half of the fix</span>
+<h2>Color is 10% of the page, not the page.</h2>
+<p class="sub">Even a perfect family looks cheap if it floods everything. The rule great brands hold: 60% neutral, 30% one structural brand color, 10% the frequency accents as small marks. The four colors are jewels you place, never paint you pour.</p>
+<div class="dist">
+  <div style="background:#F6F1E8;color:#1A1620">60% neutral canvas</div>
+  <div style="background:#6521C9">30% one brand color</div>
+  <div style="background:oklch(62% 0.13 65)">10% accents</div>
+</div>
+<div class="mini">
+  <span style="font-size:14px;color:#4a4550">The accents live as small dots, a single rule, one active state:</span>
+  <span class="b" style="background:oklch(62% 0.13 293)"></span>
+  <span class="b" style="background:oklch(62% 0.13 12)"></span>
+  <span class="b" style="background:oklch(62% 0.13 65)"></span>
+  <span class="b" style="background:oklch(62% 0.13 225)"></span>
+</div>
+</section>
+
+<div class="foot">
+Set in Canela and Suisse Int'l, the fonts Zodiac already owns. Colors computed in OKLCH (perceptual space). This study reacts to Michael's note that the colors don't match on the wheel; it proposes governance, it is not a locked palette. The three direction boards show these governed colors applied. Nothing here is canon until Michael picks.
+</div>
+
+</div></body></html>

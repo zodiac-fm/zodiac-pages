@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Zodiac.fm — Design directions (review)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F6F1E8;--ink:#1A1620;--mut:#7A7480;--purple:#6521C9;--tint:#EFECFF;--line:#EFE6D6}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--cream);color:var(--ink);font-family:Inter,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:44px 20px 120px}
+header img{width:132px;display:block;margin-bottom:26px}
+.kick{font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--purple)}
+h1{font-family:Fraunces,serif;font-size:clamp(32px,5.2vw,50px);font-weight:600;letter-spacing:-.5px;line-height:1.08;margin-top:12px}
+.lead{color:#4a4550;font-size:16px;line-height:1.65;max-width:70ch;margin-top:16px}
+.lead b{color:var(--ink)}
+section{margin-top:64px}
+h2{font-family:Fraunces,serif;font-size:27px;font-weight:600;letter-spacing:-.3px}
+.note{font-size:14.5px;color:var(--mut);line-height:1.6;max-width:72ch;margin:6px 0 20px}
+.board{border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 6px 26px rgba(0,0,0,.05);background:#fff;display:block}
+.board img{width:100%;display:block}
+.dcard{margin-top:30px}
+.dhead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+.dhead .n{font-family:Fraunces,serif;font-size:23px;font-weight:600}
+.dhead .ref{font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--purple)}
+.dcard p{font-size:14.5px;color:#4a4550;line-height:1.6;max-width:74ch;margin-bottom:14px}
+.dcard p b{color:var(--ink)}
+.flag{display:inline-block;font-size:12.5px;color:#8a6d1f;background:#FBF3DC;border-radius:8px;padding:5px 11px;line-height:1.5;margin-top:6px}
+.decide{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px 26px;margin-top:60px}
+.decide h2{margin-bottom:10px}
+.decide ol{margin:0 0 0 18px;font-size:15px;line-height:1.9;color:#3a3540}
+.decide b{color:var(--ink)}
+footer{margin-top:56px;font-size:13px;color:var(--mut);line-height:1.7;border-top:1px solid #e4dccb;padding-top:20px;max-width:80ch}
+a{color:var(--purple);text-decoration:none;font-weight:600}
+</style></head><body><div class="wrap">
+<header>
+<img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
+<span class="kick">Design directions · 2026-07-01 · options to react to, nothing is canon</span>
+<h1>Stepping the whole system up to world-class.</h1>
+<p class="lead">You asked to level up the look: fonts, how we use color, spacing, premium but not AI, consistent across app, pages, ads, content. This is the answer as a choice, not a lock. First the color fix you flagged, then three complete directions, each modeled on a world-class brand and shown on the same three surfaces so you compare the <b>system</b>, not the content. All of it is set in <b>Canela and Suisse, the premium fonts you already own</b> (the site currently ships free substitutes; that alone is a big step up).</p>
+</header>
+
+<section>
+<span class="kick">First, the fix you named</span>
+<h2>Our four colors don't match on the wheel. Here's why, and the family.</h2>
+<p class="note">The short version: our frequency colors were each picked alone, so they run from 46% to 76% brightness. That 30-point gap is exactly why the set reads amateur. Lock them to one brightness and one saturation and they become a family. This study shows it measured and fixed.</p>
+<a class="board" href="shots/color-study.png"><img src="shots/color-study.png" alt="Color harmony study"></a>
+</section>
+
+<section>
+<span class="kick">Then, three ways to be world-class</span>
+<h2>Pick a direction. Or mix.</h2>
+<p class="note">Each is a full system on one page: the reference it models, the type, the governed color, the spacing, and the same three Zodiac moments (a marketing hero, an in-app card, a static ad) so the consistency across surfaces is visible. Tap any board for the full image.</p>
+
+<div class="dcard">
+  <div class="dhead"><span class="n">01 · The Cosmos</span><span class="ref">modeled on Oura · premium dark</span></div>
+  <p>The sound made visible. Near-black cosmic ground, the cymatic disc glowing as a jewel, Canela in cream for the soul and Suisse for structure. The frequency hues become one luminous family on dark. <b>The richest, most dramatic option.</b> Look first at the hero: the violet disc floating with a soft halo over deep black.</p>
+  <a class="board" href="shots/direction-cosmos.png"><img src="shots/direction-cosmos.png" alt="The Cosmos direction"></a>
+</div>
+
+<div class="dcard">
+  <div class="dhead"><span class="n">02 · The Gallery</span><span class="ref">modeled on Aesop · Kinfolk</span></div>
+  <p>Quiet luxury on warm paper. An art book and a gallery wall label: enormous calm space, Canela set large, near-black ink, the frequencies reduced to tiny governed marks. <b>The calmest, most editorial option; premium because it is quiet.</b> Look first at the in-app card, proving the restraint works inside the product.</p>
+  <a class="board" href="shots/direction-gallery.png"><img src="shots/direction-gallery.png" alt="The Gallery direction"></a>
+</div>
+
+<div class="dcard">
+  <div class="dhead"><span class="n">03 · The Intimate</span><span class="ref">modeled on Maude · Loewe</span></div>
+  <p>Warm, tactile, human luxury. A warm amber-cream world lit from within, Canela set softly and up close, warmth itself reading as expensive. <b>The warmest, most approachable option, and the one that pushes the color fix furthest</b> into a single harmonized warm family. Look first at the rose "Kindred Spirits" app card.</p>
+  <span class="flag">Tradeoff to weigh: biasing the whole palette warm shifts Abundance from aqua toward green, which you'd retired. Warm family, yes; we can keep Abundance blue if you want the warmth without the green.</span>
+  <a class="board" href="shots/direction-intimate.png" style="margin-top:14px"><img src="shots/direction-intimate.png" alt="The Intimate direction"></a>
+</div>
+</section>
+
+<div class="decide">
+<h2>What I need from you</h2>
+<ol>
+<li><b>The color governance:</b> yes to locking the four colors to one brightness/saturation as a family? (This is the biggest single upgrade and it feeds every direction.)</li>
+<li><b>A direction to build from:</b> Cosmos, Gallery, or Intimate, or "Cosmos hero energy with Gallery's calm on content," whatever mix you feel.</li>
+<li><b>The fonts:</b> commit to Canela + Suisse as the real system? (You own them; I'll sort the web-licensing path for the live site.)</li>
+</ol>
+<p style="font-size:14px;color:#4a4550;margin-top:12px">Once you pick, that direction becomes the one Design Kit that governs everything, app, pages, ads, content, so the whole brand finally looks like one thing.</p>
+</div>
+
+<footer>
+Set in Canela and Suisse Int'l (Zodiac's licensed fonts, kept out of the public repo; these boards are rendered images so the fonts show faithfully). Colors computed in OKLCH. Real cymatic art, real logo, approved copy lines only. Built 2026-07-01 as options for review. Nothing here is canon until you choose. Staged from working/design-direction/ in the vault.
+</footer>
+</div></body></html>

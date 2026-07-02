@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm — Direction: THE INTIMATE</title>
+<style>
+/* ---- Real licensed fonts ---- */
+@font-face{font-family:'Canela';src:url('fonts/Canela-Regular.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Canela';src:url('fonts/Canela-Medium.otf') format('opentype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Canela';src:url('fonts/Canela-Bold.otf') format('opentype');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Canela';src:url('fonts/Canela-Italic.otf') format('opentype');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Canela';src:url('fonts/Canela-MediumItalic.otf') format('opentype');font-weight:500;font-style:italic;font-display:swap}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Regular.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Medium.otf') format('opentype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Semibold.otf') format('opentype');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Bold.otf') format('opentype');font-weight:700;font-style:normal;font-display:swap}
+
+/* ---- THE INTIMATE — warm amber-cream luxury ---- */
+:root{
+  /* 60% neutral canvas: a warm amber-cream world, richer than paper */
+  --paper:      #f4ece0;   /* base amber-cream */
+  --paper-deep: #ede2d2;   /* the warmer card floor */
+  --paper-hi:   #faf4ea;   /* lifted cream for cards under light */
+  --ink:        #2c2622;   /* warm near-black, never pure #000 */
+  --ink-soft:   #6a5f55;   /* warm taupe for body */
+  --ink-faint:  #a2958775; /* hairlines */
+  /* 30% structural brand accent: a warm plum/violet */
+  --plum:       #5e3b52;
+  --plum-deep:  #47293e;
+
+  /* 10% GOVERNED frequency jewels — one warm, muted family.
+     Equal lightness (~62%) + equal chroma (~0.115), biased warm/muted.
+     Curated cosmetics palette, not a paint set. */
+  --core:      oklch(62% 0.115 300);   /* identity — muted warm violet */
+  --love:      oklch(62% 0.115 18);    /* relationships — warm dusty rose */
+  --vitality:  oklch(62% 0.115 66);    /* energy — soft amber ochre */
+  --abundance: oklch(62% 0.115 168);   /* opportunity — warmed, muted jade */
+
+  --amber-glow: radial-gradient(120% 90% at 50% 0%, #fff6e9 0%, #f4ece0 46%, #ecdfcd 100%);
+
+  --sp-1: 8px; --sp-2: 12px; --sp-3: 20px; --sp-4: 32px;
+  --sp-5: 52px; --sp-6: 84px; --sp-7: 136px;
+  --r-lg: 30px; --r-md: 20px; --r-sm: 13px;
+  --shadow-soft: 0 24px 60px -28px rgba(71,41,62,.28), 0 4px 14px -8px rgba(71,41,62,.18);
+  --shadow-lift: 0 40px 90px -40px rgba(71,41,62,.34), 0 8px 20px -10px rgba(71,41,62,.20);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Suisse',system-ui,sans-serif;
+  line-height:1.6;
+}
+.serif{font-family:'Canela',Georgia,serif}
+.kicker{
+  font-family:'Suisse';font-weight:600;font-size:11px;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);
+}
+.tab{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+/* ============ PAGE SHELL ============ */
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,64px)}
+
+/* ============ MASTHEAD ============ */
+.mast{padding:var(--sp-7) 0 var(--sp-6);border-bottom:1px solid var(--ink-faint)}
+.mast .eyebrow{display:flex;gap:14px;align-items:baseline;margin-bottom:var(--sp-4)}
+.mast .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--plum);display:inline-block}
+.mast h1{
+  font-family:'Canela';font-weight:400;
+  font-size:clamp(50px,8.5vw,104px);line-height:.98;letter-spacing:-.015em;
+  max-width:15ch;
+}
+.mast h1 em{font-style:italic;color:var(--plum)}
+.mast .lede{
+  margin-top:var(--sp-4);max-width:60ch;
+  font-size:clamp(16px,2vw,19px);color:var(--ink-soft);line-height:1.65;
+}
+
+/* ============ SPEC STRIP ============ */
+.spec{padding:var(--sp-6) 0;border-bottom:1px solid var(--ink-faint)}
+.spec-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--sp-4) var(--sp-4)}
+.spec-block{grid-column:span 6}
+.spec-block.full{grid-column:span 12}
+@media(max-width:760px){.spec-block{grid-column:span 12}}
+.spec h3{
+  font-family:'Suisse';font-weight:600;font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:var(--sp-3);
+  padding-bottom:10px;border-bottom:1px solid var(--ink-faint);
+}
+/* reference */
+.ref-line{font-family:'Canela';font-size:26px;line-height:1.3;letter-spacing:-.01em;max-width:34ch}
+.ref-note{margin-top:14px;color:var(--ink-soft);font-size:14px;max-width:44ch}
+/* type system */
+.type-row{display:flex;align-items:baseline;gap:18px;padding:14px 0;border-bottom:1px dotted var(--ink-faint)}
+.type-row:last-child{border-bottom:0}
+.type-row .lab{flex:0 0 118px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+.type-row .samp{flex:1;overflow:hidden}
+.samp-display{font-family:'Canela';font-size:38px;line-height:1;letter-spacing:-.01em}
+.samp-italic{font-family:'Canela';font-style:italic;font-size:30px;color:var(--plum)}
+.samp-body{font-family:'Suisse';font-size:16px;color:var(--ink-soft)}
+.samp-eyebrow{font-family:'Suisse';font-weight:600;font-size:12px;letter-spacing:.24em;text-transform:uppercase}
+/* swatches */
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:2px}
+.sw{border-radius:var(--r-sm);overflow:hidden;background:var(--paper-hi);box-shadow:var(--shadow-soft)}
+.sw .chip{height:76px}
+.sw .meta{padding:11px 13px 13px}
+.sw .nm{font-family:'Canela';font-size:17px;line-height:1}
+.sw .role{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);margin-top:5px}
+.sw .val{font-size:10px;color:var(--ink-soft);margin-top:8px;font-variant-numeric:tabular-nums;opacity:.8}
+.gov-note{grid-column:span 12;margin-top:18px;font-size:13px;color:var(--ink-soft);max-width:70ch}
+.gov-note b{color:var(--ink);font-weight:600}
+/* structural swatch row */
+.struct{display:flex;gap:14px;margin-top:16px;flex-wrap:wrap}
+.struct .s{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--ink-soft)}
+.struct .s i{width:26px;height:26px;border-radius:8px;display:inline-block;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+/* spacing scale */
+.scale{display:flex;align-items:flex-end;gap:12px;margin-top:6px}
+.scale .bar{background:linear-gradient(180deg,var(--plum),var(--plum-deep));border-radius:4px 4px 0 0;width:26px;position:relative}
+.scale .bar span{position:absolute;bottom:-22px;left:0;right:0;text-align:center;font-size:10px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+
+/* ============ SURFACE SECTION LABELS ============ */
+.surface{padding:var(--sp-6) 0;border-bottom:1px solid var(--ink-faint)}
+.surface-head{display:flex;align-items:baseline;gap:16px;margin-bottom:var(--sp-5)}
+.surface-head .no{font-family:'Canela';font-style:italic;font-size:22px;color:var(--plum)}
+.surface-head .ti{font-family:'Suisse';font-weight:600;font-size:12px;letter-spacing:.22em;text-transform:uppercase}
+.surface-head .sub{font-size:13px;color:var(--ink-soft);margin-left:auto;max-width:40ch;text-align:right}
+@media(max-width:640px){.surface-head .sub{display:none}}
+
+/* ---- device frame ---- */
+.phone{
+  width:430px;max-width:100%;margin:0 auto;
+  border-radius:46px;padding:14px;
+  background:linear-gradient(160deg,#e7dccb,#d8cab4);
+  box-shadow:var(--shadow-lift);
+}
+.phone .screen{border-radius:34px;overflow:hidden;background:var(--paper);position:relative}
+
+/* ---- SURFACE 1: marketing hero ---- */
+.hero{
+  padding:44px 30px 40px;text-align:center;position:relative;
+  background:var(--amber-glow);
+}
+.hero .logo{height:19px;margin:2px auto 40px;display:block;opacity:.92}
+.hero .disc-wrap{position:relative;width:236px;height:236px;margin:0 auto 6px}
+.hero .disc-halo{
+  position:absolute;inset:-18% ;border-radius:50%;
+  background:radial-gradient(circle at 50% 46%, #ffe9d6 0%, rgba(255,233,214,0) 62%);
+  filter:blur(2px);
+}
+.hero .disc{position:relative;width:100%;height:100%;object-fit:contain;
+  filter:drop-shadow(0 20px 34px rgba(71,41,62,.22))}
+.hero .kick{margin-top:26px}
+.hero h2{
+  font-family:'Canela';font-weight:400;
+  font-size:44px;line-height:1.02;letter-spacing:-.015em;margin-top:16px;
+}
+.hero h2 em{font-style:italic;color:var(--plum)}
+.hero p{margin:18px auto 0;max-width:30ch;color:var(--ink-soft);font-size:15px;line-height:1.6}
+.hero .cta{
+  display:inline-block;margin-top:30px;
+  font-family:'Suisse';font-weight:600;font-size:14px;letter-spacing:.02em;
+  color:var(--paper-hi);background:linear-gradient(165deg,var(--plum),var(--plum-deep));
+  padding:16px 40px;border-radius:100px;
+  box-shadow:0 16px 30px -14px rgba(71,41,62,.55);
+}
+.hero .fine{margin-top:20px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);opacity:.7}
+
+/* ---- SURFACE 2: app frequency card ---- */
+.appscreen{padding:22px 20px 26px;background:var(--paper)}
+.app-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
+.app-top .back{font-size:20px;color:var(--ink-soft);line-height:1}
+.app-top .now{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+.app-top .more{font-size:20px;color:var(--ink-soft);line-height:1;letter-spacing:.08em}
+.app-card{
+  background:var(--paper-hi);border-radius:var(--r-lg);
+  padding:30px 26px 26px;box-shadow:var(--shadow-soft);
+  position:relative;overflow:hidden;
+}
+.app-card .glow{
+  position:absolute;top:-30%;left:50%;transform:translateX(-50%);
+  width:120%;height:70%;border-radius:50%;
+  background:radial-gradient(circle,rgba(139,74,104,.14) 0%,rgba(139,74,104,0) 70%);
+}
+.app-card .disc{position:relative;display:block;width:210px;height:210px;margin:2px auto 0;object-fit:contain;
+  filter:drop-shadow(0 16px 26px rgba(71,41,62,.20))}
+.app-meta{position:relative;text-align:center;margin-top:20px}
+.app-meta .freqk{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--love);font-weight:600}
+.app-meta h3{font-family:'Canela';font-size:32px;line-height:1.02;letter-spacing:-.01em;margin-top:8px}
+.app-meta h3 em{font-style:italic}
+.app-meta .song{font-size:13px;color:var(--ink-soft);margin-top:7px}
+/* scrubber */
+.scrub{position:relative;margin:24px 4px 0}
+.scrub .track{height:3px;border-radius:3px;background:var(--ink-faint)}
+.scrub .fill{position:absolute;top:0;left:0;height:3px;border-radius:3px;width:38%;
+  background:linear-gradient(90deg,var(--plum),var(--love))}
+.scrub .knob{position:absolute;top:50%;left:38%;width:11px;height:11px;border-radius:50%;
+  background:var(--paper-hi);transform:translate(-50%,-50%);box-shadow:0 2px 5px rgba(71,41,62,.4),inset 0 0 0 2px var(--love)}
+.scrub .times{display:flex;justify-content:space-between;margin-top:12px;font-size:11px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+/* transport */
+.transport{display:flex;align-items:center;justify-content:center;gap:34px;margin-top:22px}
+.transport .ic{font-size:19px;color:var(--ink-soft)}
+.transport .play{
+  width:66px;height:66px;border-radius:50%;
+  background:linear-gradient(165deg,var(--plum),var(--plum-deep));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 16px 30px -12px rgba(71,41,62,.55);
+}
+.transport .play svg{margin-left:3px}
+.app-foot{position:relative;text-align:center;margin-top:22px;
+  font-size:12px;color:var(--ink-soft);line-height:1.55;max-width:30ch;margin-left:auto;margin-right:auto}
+.app-foot em{font-family:'Canela';font-style:italic;color:var(--ink)}
+
+/* ---- SURFACE 3: static ad ---- */
+.ad{
+  width:520px;max-width:100%;aspect-ratio:1/1;margin:0 auto;
+  border-radius:var(--r-md);overflow:hidden;position:relative;
+  background:var(--amber-glow);
+  box-shadow:var(--shadow-lift);
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:44px 42px;
+}
+.ad .ad-logo{height:17px;opacity:.9;position:relative;z-index:2}
+.ad .ad-disc{
+  position:absolute;right:-118px;bottom:-70px;
+  width:340px;height:340px;object-fit:contain;opacity:.9;
+  filter:drop-shadow(0 22px 40px rgba(71,41,62,.20));
+}
+/* warm cream veil keeps the headline crisp where it nears the disc */
+.ad .ad-veil{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(96deg,#f7efe3 0%,#f7efe3 46%,rgba(247,239,227,.72) 60%,rgba(247,239,227,0) 78%);
+}
+.ad .ad-body{position:relative;z-index:2;max-width:62%}
+.ad .ad-kick{margin-bottom:18px}
+.ad .ad-body h3{
+  font-family:'Canela';font-weight:400;font-size:41px;line-height:1.08;letter-spacing:-.015em;
+}
+.ad .ad-body h3 em{font-style:italic;color:var(--plum)}
+.ad .ad-foot{position:relative;z-index:2;display:flex;align-items:center;gap:12px}
+.ad .ad-foot .r{width:5px;height:5px;border-radius:50%;background:var(--plum)}
+.ad .ad-foot span{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+
+/* ============ FOOTER ============ */
+.foot{padding:var(--sp-6) 0 var(--sp-7);text-align:center}
+.foot .mark{font-family:'Canela';font-style:italic;font-size:22px;color:var(--plum)}
+.foot .fine{margin-top:12px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft)}
+</style>
+</head>
+<body>
+
+<!-- ============ MASTHEAD ============ -->
+<header class="mast">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span><span class="kicker">Direction 01 &nbsp;·&nbsp; The Intimate</span></div>
+    <h1 class="serif">Warmth that reads as <em>expensive.</em></h1>
+    <p class="lede">A warm amber-cream world, Canela set softly and up close, Suisse holding the structure. Modeled on Maude, Loewe and Ritual: modern luxury that feels human, tactile and lit from within, never clinical. Proof that warm can be the most premium room in the house.</p>
+  </div>
+</header>
+
+<!-- ============ SPEC STRIP ============ -->
+<section class="spec">
+  <div class="wrap">
+    <div class="spec-grid">
+
+      <div class="spec-block">
+        <h3>Reference</h3>
+        <div class="ref-line serif">Maude&rsquo;s amber glow &amp; lowercase-serif intimacy. Loewe&rsquo;s craft. Ritual&rsquo;s calm clinical-warmth.</div>
+        <div class="ref-note">The boutique-wellness register: soft light, tactile surfaces, a curated warm palette. Emotionally the warmest of the three directions, still unmistakably premium.</div>
+      </div>
+
+      <div class="spec-block">
+        <h3>Type System</h3>
+        <div class="type-row">
+          <div class="lab">Canela · Display</div>
+          <div class="samp"><div class="samp-display">The Sound of You</div></div>
+        </div>
+        <div class="type-row">
+          <div class="lab">Canela · Italic</div>
+          <div class="samp"><div class="samp-italic">played, not read</div></div>
+        </div>
+        <div class="type-row">
+          <div class="lab">Suisse · Body</div>
+          <div class="samp"><div class="samp-body">Just listening restores coherence across four domains.</div></div>
+        </div>
+        <div class="type-row">
+          <div class="lab">Suisse · Eyebrow</div>
+          <div class="samp"><div class="samp-eyebrow">Personalized Audio</div></div>
+        </div>
+      </div>
+
+      <div class="spec-block full">
+        <h3>Governed Color — one warm family (equal L 62% · equal C 0.115, biased warm &amp; muted)</h3>
+        <div class="swatches">
+          <div class="sw"><div class="chip" style="background:var(--core)"></div><div class="meta"><div class="nm serif">Core</div><div class="role">Identity</div><div class="val">oklch 62 · .115 · 300</div></div></div>
+          <div class="sw"><div class="chip" style="background:var(--love)"></div><div class="meta"><div class="nm serif">Love</div><div class="role">Relationships</div><div class="val">oklch 62 · .115 · 18</div></div></div>
+          <div class="sw"><div class="chip" style="background:var(--vitality)"></div><div class="meta"><div class="nm serif">Vitality</div><div class="role">Energy</div><div class="val">oklch 62 · .115 · 66</div></div></div>
+          <div class="sw"><div class="chip" style="background:var(--abundance)"></div><div class="meta"><div class="nm serif">Abundance</div><div class="role">Opportunity</div><div class="val">oklch 62 · .115 · 168</div></div></div>
+        </div>
+        <div class="gov-note"><b>The fix:</b> the four hues share one lightness and one chroma, tuned toward a warmer, muted register, so they sit together like a curated cosmetics range, not a paint set. They appear only as 10% jewels. Structure is carried by one warm plum.</div>
+        <div class="struct">
+          <div class="s"><i style="background:var(--paper)"></i>Paper &middot; 60% canvas</div>
+          <div class="s"><i style="background:var(--paper-deep)"></i>Warm floor</div>
+          <div class="s"><i style="background:var(--plum)"></i>Plum &middot; 30% structure</div>
+          <div class="s"><i style="background:var(--ink)"></i>Warm ink</div>
+        </div>
+      </div>
+
+      <div class="spec-block full">
+        <h3>Spacing Scale &middot; 4px base</h3>
+        <div class="scale">
+          <div class="bar" style="height:16px"><span>8</span></div>
+          <div class="bar" style="height:24px"><span>12</span></div>
+          <div class="bar" style="height:40px"><span>20</span></div>
+          <div class="bar" style="height:64px"><span>32</span></div>
+          <div class="bar" style="height:104px"><span>52</span></div>
+          <div class="bar" style="height:150px"><span>84</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ SURFACE 1: MARKETING HERO ============ -->
+<section class="surface">
+  <div class="wrap">
+    <div class="surface-head">
+      <span class="no serif">i.</span>
+      <span class="ti">Marketing Hero</span>
+      <span class="sub">The brand&rsquo;s face. One disc, one line, one warm invitation.</span>
+    </div>
+    <div class="phone">
+      <div class="screen">
+        <div class="hero">
+          <img class="logo" src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm">
+          <div class="disc-wrap">
+            <div class="disc-halo"></div>
+            <img class="disc" src="../inapp/app-assets-ring/sig-core-quiet-success.png" alt="">
+          </div>
+          <div class="kick kicker">The Sound of You</div>
+          <h2 class="serif">Your chart, played,<br><em>not read.</em></h2>
+          <p>You already have your own signal. Zodiac turns it up.</p>
+          <a class="cta">Hear your frequency</a>
+          <div class="fine">Personalized audio &middot; four domains</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SURFACE 2: APP FREQUENCY CARD ============ -->
+<section class="surface">
+  <div class="wrap">
+    <div class="surface-head">
+      <span class="no serif">ii.</span>
+      <span class="ti">App Frequency Card</span>
+      <span class="sub">The now-playing moment. The direction living inside the product.</span>
+    </div>
+    <div class="phone">
+      <div class="screen">
+        <div class="appscreen">
+          <div class="app-top">
+            <span class="back">&#8249;</span>
+            <span class="now">Now Playing</span>
+            <span class="more">&middot;&middot;&middot;</span>
+          </div>
+          <div class="app-card">
+            <div class="glow"></div>
+            <img class="disc" src="../inapp/app-assets-ring/sig-love-kindred-spirits.png" alt="">
+            <div class="app-meta">
+              <div class="freqk">Love &middot; Relationships</div>
+              <h3 class="serif">Kindred <em>Spirits</em></h3>
+              <div class="song">Your relationship frequency, embedded</div>
+            </div>
+            <div class="scrub">
+              <div class="track"></div><div class="fill"></div><div class="knob"></div>
+              <div class="times tab"><span>4:12</span><span>&minus;6:47</span></div>
+            </div>
+            <div class="transport">
+              <span class="ic">&#8635;</span>
+              <span class="ic">&#9198;</span>
+              <span class="play">
+                <svg width="20" height="22" viewBox="0 0 20 22"><path d="M0 0 L20 11 L0 22 Z" fill="#faf4ea"/></svg>
+              </span>
+              <span class="ic">&#9197;</span>
+              <span class="ic">&#8734;</span>
+            </div>
+            <div class="app-foot">Just listening. <em>Coherence returns on its own.</em></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SURFACE 3: STATIC AD ============ -->
+<section class="surface">
+  <div class="wrap">
+    <div class="surface-head">
+      <span class="no serif">iii.</span>
+      <span class="ti">Static Ad</span>
+      <span class="sub">The system in a square. One hook, the disc, the mark.</span>
+    </div>
+    <div class="ad">
+      <img class="ad-disc" src="../inapp/app-assets-ring/sig-vitality-elysian-surge.png" alt="">
+      <div class="ad-veil"></div>
+      <img class="ad-logo" src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm">
+      <div class="ad-body">
+        <div class="ad-kick kicker">A frequency for who you already are</div>
+        <h3 class="serif">You already have your own signal. <em>Zodiac turns it&nbsp;up.</em></h3>
+      </div>
+      <div class="ad-foot"><span class="r"></span><span>The Sound of You</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="mark serif">The Intimate</div>
+    <div class="fine">Direction 01 of 03 &middot; A warm luxury system for Zodiac.fm</div>
+  </div>
+</footer>
+
+</body>
+</html>

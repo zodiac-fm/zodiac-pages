@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction — The Gallery</title>
+<style>
+/* ============ REAL LICENSED FONTS ============ */
+@font-face{font-family:'Canela';src:url('fonts/Canela-Regular.otf');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Canela';src:url('fonts/Canela-Medium.otf');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Canela';src:url('fonts/Canela-Bold.otf');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Canela';src:url('fonts/Canela-Italic.otf');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Regular.otf');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Medium.otf');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Semibold.otf');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Bold.otf');font-weight:700;font-style:normal;font-display:swap}
+
+/* ============ THE GALLERY — TOKENS ============ */
+:root{
+  /* 60% neutral canvas */
+  --paper:#F6F1E8;        /* refined warm off-white */
+  --paper-deep:#EFE8DB;   /* a half-shade for cards */
+  --ink:#1A1714;          /* near-black warm ink */
+  --ink-soft:#5C554C;     /* muted body ink */
+  --ink-faint:#948B7E;    /* captions / labels */
+  --hair:#D9CFBE;         /* hairline rules on paper */
+  --hair-soft:#E5DCCC;
+
+  /* 30% ONE structural brand color: deep governed aubergine (from Core violet) */
+  --aubergine:#3B2540;
+  --aubergine-ink:#2A1A2E;
+
+  /* 10% GOVERNED frequency marks — OKLCH family, equal L + C, only H moves */
+  --f-core:oklch(58% 0.11 300);       /* identity / violet */
+  --f-love:oklch(58% 0.11 15);        /* relationships / rose */
+  --f-vitality:oklch(58% 0.11 70);    /* energy / amber */
+  --f-abundance:oklch(58% 0.11 205);  /* opportunity / aqua */
+
+  /* spacing scale (8pt, editorial) */
+  --s1:8px; --s2:16px; --s3:24px; --s4:40px; --s5:64px; --s6:104px; --s7:168px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Suisse',-apple-system,sans-serif;
+  font-weight:400;
+  line-height:1.6;
+}
+img{display:block;max-width:100%}
+
+/* small-caps kicker */
+.kicker{
+  font-family:'Suisse';font-weight:500;
+  font-size:11px;letter-spacing:0.32em;text-transform:uppercase;
+  color:var(--ink-faint);
+}
+.serif{font-family:'Canela'}
+.ital{font-style:italic}
+
+/* ============ PAGE SCAFFOLD ============ */
+.page{max-width:1180px;margin:0 auto;padding:var(--s6) var(--s5) var(--s7)}
+
+/* =================================================== */
+/* SPEC STRIP                                          */
+/* =================================================== */
+.spec{border-bottom:1px solid var(--hair);padding-bottom:var(--s6)}
+.spec__head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:var(--s3);margin-bottom:var(--s5)}
+.spec__title{font-family:'Canela';font-weight:400;font-size:clamp(40px,6vw,68px);line-height:0.98;letter-spacing:-0.015em}
+.spec__no{font-family:'Suisse';font-weight:400;font-size:13px;color:var(--ink-faint);letter-spacing:0.04em}
+.spec__lede{font-family:'Canela';font-weight:400;font-size:22px;line-height:1.5;color:var(--ink-soft);max-width:64ch;margin-top:var(--s2)}
+.spec__lede em{font-style:italic}
+
+.spec__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s5);margin-top:var(--s6)}
+.spec__cell h4{font-family:'Suisse';font-weight:500;font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:var(--s3);padding-bottom:var(--s2);border-bottom:1px solid var(--hair-soft)}
+.spec__cell p{font-size:14px;line-height:1.65;color:var(--ink-soft)}
+.type-canela{font-family:'Canela';font-size:34px;line-height:1;letter-spacing:-0.01em;color:var(--ink);margin-bottom:6px}
+.type-canela.it{font-style:italic}
+.type-suisse{font-family:'Suisse';font-weight:500;font-size:15px;letter-spacing:0.02em;color:var(--ink);margin-bottom:2px}
+.type-meta{font-size:12px;color:var(--ink-faint);letter-spacing:0.02em}
+
+/* governed swatches — gallery label chips */
+.swatches{display:flex;flex-direction:column;gap:14px}
+.sw{display:flex;align-items:center;gap:14px}
+.sw__dot{width:14px;height:14px;border-radius:50%;flex:none}
+.sw__t{font-size:12.5px;color:var(--ink-soft)}
+.sw__t b{font-family:'Suisse';font-weight:500;color:var(--ink);letter-spacing:0.01em}
+.sw--struct .sw__dot{background:var(--aubergine)}
+.sw--struct{margin-bottom:6px}
+.sw--core .sw__dot{background:var(--f-core)}
+.sw--love .sw__dot{background:var(--f-love)}
+.sw--vitality .sw__dot{background:var(--f-vitality)}
+.sw--abundance .sw__dot{background:var(--f-abundance)}
+
+.scale{display:flex;align-items:flex-end;gap:10px;height:56px;margin-top:4px}
+.scale span{width:8px;background:var(--hair);display:block}
+.scale small{font-size:10px;color:var(--ink-faint);letter-spacing:0.04em;display:block;margin-top:10px}
+
+/* =================================================== */
+/* SECTION LABEL (gallery wall label)                  */
+/* =================================================== */
+.plate{display:flex;align-items:baseline;gap:var(--s3);margin:var(--s7) 0 var(--s5)}
+.plate__no{font-family:'Suisse';font-weight:400;font-size:12px;color:var(--ink-faint);letter-spacing:0.1em;padding-top:4px}
+.plate__title{font-family:'Canela';font-weight:400;font-size:clamp(26px,3vw,34px);line-height:1;letter-spacing:-0.01em}
+.plate__meta{font-family:'Suisse';font-weight:400;font-size:12px;color:var(--ink-faint);letter-spacing:0.04em;margin-left:auto;align-self:flex-end}
+
+/* =================================================== */
+/* PHONE FRAME                                         */
+/* =================================================== */
+.stage{display:flex;justify-content:center}
+.phone{
+  width:430px;background:var(--paper);
+  border:1px solid var(--hair);
+  box-shadow:0 40px 100px -60px rgba(42,26,46,0.4), 0 2px 0 var(--paper-deep);
+  overflow:hidden;
+}
+
+/* ---- SURFACE 1: MARKETING HERO ---- */
+.hero{padding:var(--s5) var(--s4) var(--s5)}
+.hero__top{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--s7)}
+.logo{width:118px}
+.logo svg{width:100%;height:auto}
+.logo svg path{fill:var(--ink)}
+.hero__ix{font-family:'Suisse';font-weight:400;font-size:11px;letter-spacing:0.12em;color:var(--ink-faint)}
+
+.hero__kick{margin-bottom:var(--s3)}
+.hero__h{
+  font-family:'Canela';font-weight:400;
+  font-size:60px;line-height:0.98;letter-spacing:-0.02em;color:var(--ink);
+}
+.hero__h em{font-style:italic}
+.hero__sub{
+  font-family:'Canela';font-weight:400;font-size:19px;line-height:1.5;
+  color:var(--ink-soft);max-width:26ch;margin-top:var(--s3)
+}
+.hero__disc{display:flex;justify-content:center;margin:var(--s6) 0 var(--s5)}
+.hero__disc img{width:248px;filter:saturate(0.85)}
+.hero__rule{height:1px;background:var(--hair);margin:0 auto var(--s4);width:100%}
+.hero__cta{display:flex;align-items:center;justify-content:space-between}
+.btn{
+  font-family:'Suisse';font-weight:500;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;
+  background:var(--aubergine);color:var(--paper);
+  padding:16px 30px;border:none;cursor:pointer;
+}
+.hero__meta{font-family:'Suisse';font-weight:400;font-size:11px;letter-spacing:0.1em;color:var(--ink-faint);text-transform:uppercase}
+.hero__ftr{display:flex;align-items:center;gap:8px;margin-top:var(--s5)}
+.hero__ftr .dot{width:7px;height:7px;border-radius:50%}
+.hero__ftr small{font-family:'Suisse';font-size:11px;letter-spacing:0.1em;color:var(--ink-faint);text-transform:uppercase}
+
+/* ---- SURFACE 2: APP FREQUENCY CARD ---- */
+.app{padding:var(--s4) var(--s4) var(--s5);background:var(--paper)}
+.app__bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--s5)}
+.app__bar .kicker{color:var(--ink-faint)}
+.app__x{font-family:'Suisse';font-size:18px;color:var(--ink-faint);line-height:1}
+.app__disc{display:flex;justify-content:center;margin-bottom:var(--s4)}
+.app__disc img{width:210px;filter:saturate(0.92)}
+.app__id{text-align:center;margin-bottom:var(--s5)}
+.app__freqmark{display:inline-flex;align-items:center;gap:9px;margin-bottom:var(--s3)}
+.app__freqmark .dot{width:9px;height:9px;border-radius:50%;background:var(--f-core)}
+.app__freqmark span{font-family:'Suisse';font-weight:500;font-size:10.5px;letter-spacing:0.28em;text-transform:uppercase;color:var(--ink-faint)}
+.app__name{font-family:'Canela';font-weight:400;font-size:42px;line-height:1;letter-spacing:-0.015em;color:var(--ink)}
+.app__name em{font-style:italic}
+.app__song{font-family:'Suisse';font-weight:400;font-size:13px;color:var(--ink-soft);margin-top:12px;letter-spacing:0.02em}
+/* now-playing control row */
+.player{border-top:1px solid var(--hair);padding-top:var(--s4)}
+.player__prog{height:1px;background:var(--hair);position:relative;margin-bottom:var(--s3)}
+.player__prog::before{content:"";position:absolute;left:0;top:-0.5px;height:2px;width:38%;background:var(--aubergine)}
+.player__prog::after{content:"";position:absolute;left:38%;top:-3px;width:6px;height:6px;border-radius:50%;background:var(--aubergine)}
+.player__t{display:flex;justify-content:space-between;font-family:'Suisse';font-size:11px;color:var(--ink-faint);letter-spacing:0.06em;font-variant-numeric:tabular-nums}
+.player__ctrl{display:flex;align-items:center;justify-content:center;gap:var(--s5);margin-top:var(--s4)}
+.player__ctrl .ic{font-family:'Suisse';font-weight:400;font-size:15px;color:var(--ink-soft);letter-spacing:0.1em}
+.player__play{
+  width:58px;height:58px;border-radius:50%;background:var(--aubergine);
+  display:flex;align-items:center;justify-content:center;flex:none;
+}
+.player__play .tri{width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:14px solid var(--paper);margin-left:3px}
+
+/* ---- SURFACE 3: STATIC AD ---- */
+.adstage{display:flex;justify-content:center}
+.ad{
+  width:460px;height:460px;background:var(--paper);
+  border:1px solid var(--hair);
+  box-shadow:0 40px 100px -60px rgba(42,26,46,0.4);
+  padding:var(--s4);
+  display:flex;flex-direction:column;
+  position:relative;
+}
+.ad__logo{width:104px}
+.ad__logo svg path{fill:var(--ink)}
+.ad__body{flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
+.ad__disc{position:absolute;right:-46px;bottom:-40px;width:196px;opacity:0.82;filter:saturate(0.78);z-index:1}
+.ad__kick{margin-bottom:var(--s3)}
+.ad__h{
+  font-family:'Canela';font-weight:400;font-size:46px;line-height:1.0;letter-spacing:-0.015em;
+  color:var(--ink);max-width:12ch;position:relative;z-index:2;
+}
+.ad__h em{font-style:italic}
+.ad__ftr{display:flex;align-items:center;gap:8px}
+.ad__ftr .dot{width:7px;height:7px;border-radius:50%;background:var(--f-core)}
+.ad__ftr small{font-family:'Suisse';font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--ink-faint)}
+
+/* footer note */
+.foot{margin-top:var(--s7);padding-top:var(--s4);border-top:1px solid var(--hair);display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--s2)}
+.foot p{font-family:'Suisse';font-size:11px;letter-spacing:0.06em;color:var(--ink-faint)}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ================= SPEC STRIP ================= -->
+  <section class="spec">
+    <div class="spec__head">
+      <div>
+        <div class="kicker" style="margin-bottom:20px">Direction · Zodiac.fm Visual System</div>
+        <h1 class="spec__title">The Gallery</h1>
+        <p class="spec__lede">Quiet luxury. Museum restraint. Premium because it is <em>quiet</em>. Warm paper, near-black ink, enormous calm space, and Canela set large and confident. The frequencies appear only as governed marks. The paper and the type carry the whole thing.</p>
+      </div>
+      <div class="spec__no">Ref · Aesop &nbsp;/&nbsp; Kinfolk &nbsp;/&nbsp; Cereal<br>Option 01 of 03</div>
+    </div>
+
+    <div class="spec__grid">
+      <!-- reference -->
+      <div class="spec__cell">
+        <h4>Reference</h4>
+        <p><b style="font-family:'Suisse';font-weight:500;color:var(--ink)">Aesop</b> packaging &amp; retail. <b style="font-family:'Suisse';font-weight:500;color:var(--ink)">Kinfolk</b> / <b style="font-family:'Suisse';font-weight:500;color:var(--ink)">Cereal</b> editorial. An art book and a gallery wall label: air, hairlines, one focal point, and nothing shouting.</p>
+      </div>
+      <!-- type -->
+      <div class="spec__cell">
+        <h4>Type System</h4>
+        <div class="type-canela">Canela</div>
+        <div class="type-meta" style="margin-bottom:14px">Display serif · tight leading · italic accents</div>
+        <div class="type-canela it">Regular italic</div>
+        <div class="type-meta" style="margin-bottom:14px">The emotional voice</div>
+        <div class="type-suisse">Suisse Int&rsquo;l</div>
+        <div class="type-meta">Grotesque · small-caps kickers · body</div>
+      </div>
+      <!-- color -->
+      <div class="spec__cell">
+        <h4>Governed Color</h4>
+        <div class="swatches">
+          <div class="sw sw--struct"><span class="sw__dot"></span><span class="sw__t"><b>Aubergine</b> · one structural accent</span></div>
+          <div class="sw sw--core"><span class="sw__dot"></span><span class="sw__t"><b>Core</b> · identity</span></div>
+          <div class="sw sw--love"><span class="sw__dot"></span><span class="sw__t"><b>Love</b> · relationships</span></div>
+          <div class="sw sw--vitality"><span class="sw__dot"></span><span class="sw__t"><b>Vitality</b> · energy</span></div>
+          <div class="sw sw--abundance"><span class="sw__dot"></span><span class="sw__t"><b>Abundance</b> · opportunity</span></div>
+        </div>
+        <p style="font-size:11px;color:var(--ink-faint);margin-top:16px;line-height:1.5">Four hues, one lightness &amp; chroma. <span style="font-family:'Suisse'">oklch(58% 0.11 H)</span>. Marks, never floods.</p>
+      </div>
+      <!-- scale -->
+      <div class="spec__cell">
+        <h4>Spacing Scale</h4>
+        <div class="scale">
+          <span style="height:8px"></span>
+          <span style="height:16px"></span>
+          <span style="height:24px"></span>
+          <span style="height:40px"></span>
+          <span style="height:56px"></span>
+        </div>
+        <small style="font-size:10px;color:var(--ink-faint);letter-spacing:0.04em;margin-top:12px;display:block">8 · 16 · 24 · 40 · 64 · 104 · 168</small>
+        <p style="font-size:12px;color:var(--ink-soft);margin-top:18px;line-height:1.6">Space marks the sections. When in doubt, add air.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SURFACE 1 ================= -->
+  <div class="plate">
+    <div class="plate__no">i</div>
+    <div class="plate__title">Marketing Hero</div>
+    <div class="plate__meta">Mobile · 430 &nbsp;/&nbsp; the brand&rsquo;s face</div>
+  </div>
+
+  <div class="stage">
+    <div class="phone">
+      <div class="hero">
+        <div class="hero__top">
+          <div class="logo" aria-label="zodiac.fm">
+            <img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm" style="width:100%;display:block">
+          </div>
+          <div class="hero__ix">01 — 04</div>
+        </div>
+
+        <div class="hero__kick"><span class="kicker">Personalized frequency audio</span></div>
+        <h1 class="hero__h">The Sound<br>of <em>You.</em></h1>
+        <p class="hero__sub">Your chart, played, not read. Four frequencies drawn from your birth chart, embedded in real music.</p>
+
+        <div class="hero__disc">
+          <img src="../inapp/app-assets-ring/sig-core-quiet-success.png" alt="Core frequency cymatic">
+        </div>
+
+        <div class="hero__rule"></div>
+        <div class="hero__cta">
+          <button class="btn">Play your chart</button>
+          <span class="hero__meta">Two minutes</span>
+        </div>
+        <div class="hero__ftr">
+          <span class="dot" style="background:var(--f-core)"></span>
+          <span class="dot" style="background:var(--f-love)"></span>
+          <span class="dot" style="background:var(--f-vitality)"></span>
+          <span class="dot" style="background:var(--f-abundance)"></span>
+          <small style="margin-left:8px">Identity · Love · Vitality · Abundance</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SURFACE 2 ================= -->
+  <div class="plate">
+    <div class="plate__no">ii</div>
+    <div class="plate__title">App Frequency Card</div>
+    <div class="plate__meta">In-app · now playing &nbsp;/&nbsp; the direction inside the product</div>
+  </div>
+
+  <div class="stage">
+    <div class="phone">
+      <div class="app">
+        <div class="app__bar">
+          <span class="kicker">Now playing</span>
+          <span class="app__x">&times;</span>
+        </div>
+
+        <div class="app__disc">
+          <img src="../inapp/app-assets-ring/sig-core-astrolith.png" alt="Core frequency cymatic">
+        </div>
+
+        <div class="app__id">
+          <div class="app__freqmark"><span class="dot"></span><span>Core Frequency · Identity</span></div>
+          <div class="app__name">The Sound<br>of <em>You</em></div>
+          <div class="app__song">Astrolith · 432 Hz foundation</div>
+        </div>
+
+        <div class="player">
+          <div class="player__prog"></div>
+          <div class="player__t"><span>7:24</span><span>19:03</span></div>
+          <div class="player__ctrl">
+            <span class="ic">&#8676;</span>
+            <div class="player__play"><span class="tri"></span></div>
+            <span class="ic">&#8677;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SURFACE 3 ================= -->
+  <div class="plate">
+    <div class="plate__no">iii</div>
+    <div class="plate__title">Static Ad</div>
+    <div class="plate__meta">1080 square &nbsp;/&nbsp; the direction in content</div>
+  </div>
+
+  <div class="adstage">
+    <div class="ad">
+      <div class="ad__logo" aria-label="zodiac.fm">
+        <img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm" style="width:100%;display:block">
+      </div>
+      <img class="ad__disc" src="../inapp/app-assets-ring/sig-core-elysian-surge.png" alt="">
+      <div class="ad__body">
+        <div class="ad__kick"><span class="kicker">You already have your own signal</span></div>
+        <h2 class="ad__h">Zodiac turns<br>it <em>up.</em></h2>
+      </div>
+      <div class="ad__ftr">
+        <span class="dot"></span>
+        <small>The Sound of You &nbsp;·&nbsp; zodiac.fm</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <p>The Gallery · Direction 01 of 03 · Zodiac.fm visual system</p>
+    <p>Canela &amp; Suisse Int&rsquo;l · governed OKLCH frequency family · warm paper #F6F1E8</p>
+  </div>
+
+</div>
+</body>
+</html>
