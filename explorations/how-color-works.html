@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Zodiac — how the colour works (plain version)</title>
+<style>
+@font-face{font-family:'Canela';src:url('fonts/Canela-Regular.otf');font-weight:400}
+@font-face{font-family:'Canela';src:url('fonts/Canela-Medium.otf');font-weight:500}
+@font-face{font-family:'Canela';src:url('fonts/Canela-Italic.otf');font-weight:400;font-style:italic}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Regular.otf');font-weight:400}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Medium.otf');font-weight:500}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Semibold.otf');font-weight:600}
+:root{--core:#6521C9;--core-d:#38007A;--core-g:#A737C8;--love:#B90044;--love-g:#CF4090;--vit:#FF9112;--vit-g:#FFC251;--vit-a:#C25500;--abn:#12A56E;--abn-g:#46D99A;--abn-a:#0A7A52;--cream:#F6F1E8;--moon:#FBF8F3;--ink:#1A1620;--mut:#7A7480;--line:#EAE1D2;--stage:#0B0712}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--cream);color:var(--ink);font-family:'Suisse',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 44px}
+.cover{padding:80px 0 40px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--core)}
+h1{font-family:'Canela',serif;font-size:clamp(40px,7vw,68px);font-weight:500;letter-spacing:-.02em;line-height:1;margin:14px 0}
+.cover p{font-size:18px;color:#4a4550;max-width:56ch}
+.sec{padding:60px 0;border-bottom:1px solid var(--line)}
+.q{font-family:'Canela',serif;font-size:clamp(26px,4vw,36px);font-weight:500;letter-spacing:-.01em;line-height:1.08;margin-bottom:8px}
+.a{font-size:17px;color:#3a3540;max-width:62ch;margin-bottom:8px}
+.a b{color:var(--ink)}
+.big{font-family:'Canela',serif;font-style:italic;font-size:20px;color:var(--core);margin:14px 0 22px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:10px}
+.mini{border-radius:20px;overflow:hidden;border:1px solid var(--line);background:var(--cream)}
+.mini .tag{padding:12px 16px;font-size:13px;font-weight:600}
+.wrongtag{background:#FBF3F3;color:#b0342f;border-bottom:1px solid #f0d5d3}
+.righttag{background:#F2FBF6;color:var(--abn-a);border-bottom:1px solid #cdeadd}
+.screen{padding:22px 18px;min-height:330px;display:flex;flex-direction:column;gap:12px}
+/* WRONG screen: colour everywhere */
+.wblock{height:52px;border-radius:10px}
+.wbtn{height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:14px}
+/* RIGHT screen: calm */
+.rkick{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+.rhead{font-family:'Canela',serif;font-size:26px;line-height:1.05;margin:2px 0 2px}
+.rsub{font-size:12.5px;color:#6a6470;max-width:30ch}
+.rdisc{width:120px;height:120px;margin:6px auto;border-radius:50%;background:
+  radial-gradient(circle at 34% 28%,rgba(255,255,255,.55),transparent 46%),
+  conic-gradient(from 200deg,var(--core),var(--love),var(--vit),var(--abn),var(--core));
+  filter:blur(.3px)}
+.rbtn{height:42px;border-radius:999px;background:linear-gradient(135deg,var(--core),var(--core-d));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;margin-top:auto}
+.rdots{display:flex;gap:6px;justify-content:center}
+.rdot{width:10px;height:10px;border-radius:50%}
+.note{background:#fff;border:1px solid var(--line);border-left:3px solid var(--core);border-radius:12px;padding:14px 18px;margin-top:20px;font-size:14.5px;color:#3a3540}
+.note b{color:var(--ink)}
+/* gradients section */
+.grow{display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:center;margin:18px 0;padding-bottom:18px;border-bottom:1px dashed var(--line)}
+.gbar{height:66px;border-radius:12px}
+.guse{font-size:14.5px;color:#3a3540}
+.guse .u{color:var(--abn-a);font-weight:600}.guse .n{color:#b0342f;font-weight:600}
+.gname{font-family:'Canela',serif;font-size:18px;margin-bottom:3px}
+/* secondary / tints */
+.tints{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+.tintcard{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#fff}
+.tintcard .sw{height:70px}.tintcard .t{padding:9px 11px;font-size:11px}.tintcard .t b{display:block;font-family:'Canela',serif;font-size:13px}
+/* recipe */
+.recipe{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:16px}
+.layer{text-align:center}
+.layer .box{width:96px;height:96px;border-radius:50%;margin:0 auto 8px}
+.layer .lab{font-size:12px;color:var(--mut);max-width:110px}
+.plus{font-family:'Canela',serif;font-size:30px;color:var(--mut)}
+.blob1{background:linear-gradient(140deg,var(--abn),var(--abn-g))}
+.blob2{background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.85),transparent 50%);border:1px dashed var(--line)}
+.blob3{background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.6),transparent 46%),linear-gradient(140deg,var(--abn),var(--abn-g));box-shadow:0 4px 16px rgba(18,165,110,.4)}
+.wavebox{height:90px;border-radius:14px;background:var(--stage);display:flex;align-items:center;justify-content:center;margin-top:14px;overflow:hidden}
+.foot{padding:40px 0 90px;font-size:13px;color:var(--mut);line-height:1.7;max-width:80ch}
+</style></head><body>
+<div class="wrap">
+<div class="cover">
+  <div class="eyebrow">Zodiac.fm · the colour system, explained simply</div>
+  <h1>How it all<br>fits together.</h1>
+  <p>Plain-English answers to your four questions. No jargon. If anything here is still fuzzy, that means the guide needs to be clearer, not you.</p>
+</div>
+
+<!-- Q1 -->
+<div class="sec">
+  <div class="q">1 · How do the colours share a page without it getting loud?</div>
+  <p class="a">Think of a calm, expensive room. The <b>walls and floor</b> are a soft neutral (our cream). There's <b>one main colour</b> for the important furniture (our purple). And just a <b>few small bright things</b>, a vase, a cushion (our frequency colours). You would never paint all four walls a different bright colour. Same with a page.</p>
+  <p class="big">The rule: mostly cream, one purple, and colour only in tiny spots. One frequency colour leads at a time.</p>
+  <div class="two">
+    <div class="mini">
+      <div class="tag wrongtag">✗ Too colourful (looks cheap)</div>
+      <div class="screen">
+        <div class="wblock" style="background:var(--core)"></div>
+        <div class="wblock" style="background:var(--love)"></div>
+        <div class="wblock" style="background:var(--vit)"></div>
+        <div class="wblock" style="background:var(--abn)"></div>
+        <div class="wbtn" style="background:var(--love)">Get started</div>
+        <div style="font-size:11px;color:var(--mut);text-align:center;margin-top:4px">every colour shouting at once</div>
+      </div>
+    </div>
+    <div class="mini">
+      <div class="tag righttag">✓ Just right (looks premium)</div>
+      <div class="screen" style="background:var(--cream)">
+        <div class="rkick">Personalized sound</div>
+        <div class="rhead">The Sound<br><em style="font-family:'Canela';font-style:italic">of You</em></div>
+        <div class="rsub">Your chart, played, not read.</div>
+        <div class="rdisc"></div>
+        <div class="rdots"><span class="rdot" style="background:var(--core)"></span><span class="rdot" style="background:var(--love)"></span><span class="rdot" style="background:var(--vit)"></span><span class="rdot" style="background:var(--abn)"></span></div>
+        <div class="rbtn">Reveal my frequencies</div>
+      </div>
+    </div>
+  </div>
+  <div class="note"><b>See the difference?</b> The right side still has all four colours (the little dots, the glowing disc), but they take up maybe a tenth of the page. The cream and the black text do the rest. That's the whole trick.</div>
+</div>
+
+<!-- Q2 -->
+<div class="sec">
+  <div class="q">2 · When and how do I use a gradient?</div>
+  <p class="a">A <b>gradient</b> is just a colour fading into another colour. We have three, and each has <b>one job</b>. The easiest way to remember: <b>buttons stay quiet, the glowing disc gets the pretty gradient, and only giant hero moments get the bold one.</b> When in doubt, use a flat colour, that's always safe.</p>
+  <div class="grow">
+    <div class="gbar" style="background:linear-gradient(135deg,var(--core),var(--core-d))"></div>
+    <div class="guse"><div class="gname">The quiet one (dark-to-darker of the same colour)</div><span class="u">✓ Use on:</span> buttons, play controls, sliders. It makes them look solid and pressable. <br><span class="n">✗ Not on:</span> backgrounds or the disc.</div>
+  </div>
+  <div class="grow">
+    <div class="gbar" style="background:linear-gradient(135deg,var(--abn),var(--abn-g))"></div>
+    <div class="guse"><div class="gname">The glowy one (colour to its bright cousin)</div><span class="u">✓ Use on:</span> the cymatic disc and the music waves only. This is the magic glow. <br><span class="n">✗ Not on:</span> buttons (it makes them look toy-like).</div>
+  </div>
+  <div class="grow" style="border-bottom:none">
+    <div class="gbar" style="background:linear-gradient(120deg,var(--core),var(--abn))"></div>
+    <div class="guse"><div class="gname">The bold one (one colour to a different colour)</div><span class="u">✓ Use on:</span> big hero images, a loading screen, the app icon, a video background. <br><span class="n">✗ Not on:</span> anything small or everyday, it is too loud.</div>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="sec">
+  <div class="q">3 · Do we have secondary colours?</div>
+  <p class="a">Good question. You don't need a whole second set of colours. Your <b>secondary colours are the pale, watered-down versions of the four you already have</b>, we call them tints. They're for gentle backgrounds, soft chips, and quiet fills, so a screen can feel "a little green" without shouting green.</p>
+  <div class="tints">
+    <div class="tintcard"><div class="sw" style="background:#EFECFF"></div><div class="t"><b>Core tint</b>soft violet wash</div></div>
+    <div class="tintcard"><div class="sw" style="background:#FFE8EA"></div><div class="t"><b>Love tint</b>soft rose wash</div></div>
+    <div class="tintcard"><div class="sw" style="background:#FFEADA"></div><div class="t"><b>Vitality tint</b>soft amber wash</div></div>
+    <div class="tintcard"><div class="sw" style="background:#DCF4E8"></div><div class="t"><b>Abundance tint</b>soft green wash</div></div>
+  </div>
+  <div class="note"><b>So the full set is small on purpose:</b> the creams, black text, one purple, four frequency colours, and their four pale tints. That's everything. Adding a fifth "brand colour" is the fastest way to look off. Restraint is the luxury.</div>
+</div>
+
+<!-- Q5 -->
+<div class="sec">
+  <div class="q">4 · How are the little blobs and waves made?</div>
+  <p class="a">They look fancy but they're simple recipes. A <b>blob</b> is three things stacked: a coloured circle, a little white shine in the top corner (that's what makes it look like a glossy bubble), and a soft shadow. That shine is the whole secret.</p>
+  <div class="recipe">
+    <div class="layer"><div class="box blob1"></div><div class="lab">1. a circle with the colour gradient</div></div>
+    <div class="plus">+</div>
+    <div class="layer"><div class="box blob2"></div><div class="lab">2. a white shine, top-left</div></div>
+    <div class="plus">=</div>
+    <div class="layer"><div class="box blob3"></div><div class="lab">a glossy blob</div></div>
+  </div>
+  <p class="a" style="margin-top:26px">A <b>wave</b> is even simpler: a wavy line that gets <b>taller where the music is louder</b> and shorter where it's quieter, painted in the frequency colour. When a song plays, the line dances to the actual sound.</p>
+  <div class="wavebox">
+    <svg width="80%" height="60" viewBox="0 0 400 60" preserveAspectRatio="none">
+      <defs><linearGradient id="wg" x1="0" x2="1"><stop offset="0" stop-color="#12A56E"/><stop offset="1" stop-color="#46D99A"/></linearGradient></defs>
+      <path d="M0 30 Q 20 6 40 30 T 80 30 Q 100 2 120 30 T 160 30 Q 180 12 200 30 T 240 30 Q 260 0 280 30 T 320 30 Q 340 10 360 30 T 400 30" fill="none" stroke="url(#wg)" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="note"><b>Why this matters:</b> because they're recipes (colour + shine, or line + sound), they automatically use whatever the current frequency colour is. Switch to Abundance and the blob turns green, the wave turns green, with zero extra work. The system does it for you.</div>
+</div>
+
+<div class="foot">
+Plain-language companion to the style guide, 2026-07-01. The moving multicolour rays are a separate live page (rays-visualizer). Set in Canela and Suisse (kept out of the public repo; this is a rendered image so the fonts show). Everything shown uses the four frequency colours with the proposed green Abundance. Nothing is canon until Michael approves.
+</div>
+</div>
+</body></html>
