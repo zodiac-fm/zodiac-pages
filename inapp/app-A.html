@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Zodiac.fm · app A — fine ray, light</title>
+<title>Zodiac.fm · app A</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root{--cream:#F6F1E8;--card:#FFFFFF;--ink:#1a1620;--mut:#7a7480;--c1:#B90044;--c2:#CF4090;--cink:#B90044;--cglow:rgba(185,0,68,.45);--cdeep:#6E0024;--ctint:#FFE8EA;}
@@ -35,7 +35,7 @@
   .thumb img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.16);filter:drop-shadow(0 3px 7px rgba(56,0,122,.13))}
   .thumb canvas{position:absolute;inset:0}
   .meta{flex:1;min-width:0}
-  .meta h3{font-size:16px;font-weight:600;font-family:Georgia,serif}
+  .meta h3{font-size:16px;font-weight:600;font-family:Georgia,serif;line-height:1.12}
   .meta p{font-size:12px;color:#8a8590;margin:3px 0 7px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .meta .lab{font-size:11px;color:var(--cink);font-weight:700}
   .rt{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
@@ -156,6 +156,17 @@
 
   .appletter{display:inline-block;font-family:Georgia,serif;font-size:14px;font-weight:700;color:#6a6470;background:#fff;border:1px solid #e6ddce;border-radius:9px;padding:1px 9px;margin-left:10px;letter-spacing:.05em;white-space:nowrap}
   .logo{display:flex!important;align-items:center!important;white-space:nowrap}
+
+  .bubs{display:flex;align-items:baseline;gap:6px;row-gap:4px;margin:7px 0 8px;flex-wrap:wrap;line-height:1.1;max-height:27px;overflow:hidden}
+  .bub{font-size:9.5px;font-weight:600;letter-spacing:.09em;color:#8a8390}
+  .sep{font-size:9.5px;color:#cfc8ba}
+  .oneline{font-size:11.5px;color:#8a8590}
+
+  /* two-column card anatomy: text | rail (icons + minutes). Text can never cross the rail. */
+  .mcols{display:flex;gap:10px;align-items:stretch}
+  .mtext{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start}
+  .mtext .lab{margin-top:auto}
+  .mrail{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;padding:2px 0 1px}
 </style></head><body>
 <!-- INTERACTION · REORDER: the WHOLE card is draggable on click-and-hold (long-press) anywhere on it, not just the grip dots — the grip is only the visual cue. Applies to Immersions + Favourites. Not wired in this prototype; spec for dev. -->
 <div id="app">
@@ -240,8 +251,19 @@ const SONGLIST=[
  mk('Starseed',0,'Let your authentic self interact with your deepest energetic levels.','9 min','starseed'),
  mk('Astrolith',0,'Create resonance with your true self, develop authentic magnetism.','9 min','astrolith'),
  mk('Cosmic Drift',0,'Access profound authentic energy through deep frequency work.','25 min','cosmic-drift'),
- mk('Galactic Slumber',0,'Find your true self as deep sleep restores your inner resonance.','1 hour','galactic-slumber'),
+ mk('Galactic Deep',0,'Find your true self as deep sleep restores your inner resonance.','1 hour','galactic-slumber'),
 ];
+
+// APPROVED song catalog (copy/song-catalog.md, Michael 2026-07-01): 4 purpose bubbles + one-liner
+const SONGMETA={
+ 'quiet-success':{b:['RESET','CALM','DE-STRESS','UNWIND'],l:'Warm, low tones that ring like bowls.'},
+ 'kindred-spirits':{b:['ENERGY','HAPPY','FLOW','MOTIVATE'],l:'Bright and steady from the first note.'},
+ 'elysian-surge':{b:['ENERGY','MOTIVATE','BUILD','FLOW'],l:'Starts warm, ends unstoppable.'},
+ 'starseed':{b:['MEDITATE','DEEP','DREAMY','UNWIND'],l:'An otherworldly voice leads you in.'},
+ 'astrolith':{b:['FOCUS','MEDITATE','CALM','DEEP'],l:'A steady pulse that never distracts.'},
+ 'cosmic-drift':{b:['FOCUS','MEDITATE','NAP','CALM'],l:'Slow swells, like rain on a window.'},
+ 'galactic-slumber':{b:['SLEEP','FOCUS','MEDITATE','UNWIND'],l:'Dark, slow, and bottomless.'}};
+function bubs(s){const b=(SONGMETA[s.slug]||{b:[]}).b;return '<div class="bubs">'+b.map(w=>'<span class="bub">'+w+'</span>').join('<span class="sep">·</span>')+'</div>';}
 const CATS={
  core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
    title:'Core Vibrational Frequency',desc:'These tracks deepen your authentic sense of who you are.',songs:SONGLIST},
@@ -291,10 +313,9 @@ function buildRows(){
   cat.songs.forEach((s,i)=>{
     const r=document.createElement('div');r.className='row';r.innerHTML=
      `<div class="lcol"><span class="grip">${GRIP}</span><span class="qbox${(i%4===0)?' on':''}"></span></div><div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
-      <div class="meta">
-        <div class="mtop"><h3>${s.name}</h3><div class="sic"><span class="dl${(i%2===1)?' on':''}">${DL}</span><span class="heart${(i%3===0)?' on':''}">${(i%3===0)?'&#9829;':'&#9825;'}</span></div></div>
-        <p>${s.sub}</p>
-        <div class="botrow"><div class="lab">&#9679; ${cat.label}</div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
+      <div class="meta mcols">
+        <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab">&#9679; ${cat.label}</div></div>
+        <div class="mrail"><div class="sic"><span class="dl${(i%2===1)?' on':''}">${DL}</span><span class="heart${(i%3===0)?' on':''}">${(i%3===0)?'&#9829;':'&#9825;'}</span></div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
       </div>`;
     r.onclick=()=>playSong(catKey,i);
     rows.appendChild(r);
@@ -424,10 +445,9 @@ function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
  FAVS.forEach(([ck,slug],i)=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
   const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);
   r.innerHTML=`<div class="lcol"><span class="grip">${GRIP}</span><span class="qbox${(i%3===0)?' on':''}"></span></div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
-   <div class="meta">
-    <div class="mtop"><h3>${s.name}</h3><div class="sic"><span class="dl${(i%2===0)?' on':''}">${DL}</span><span class="heart on" style="color:${cat.cink}">&#9829;</span></div></div>
-    <p>${s.sub}</p>
-    <div class="botrow"><div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
+   <div class="meta mcols">
+    <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div></div>
+    <div class="mrail"><div class="sic"><span class="dl${(i%2===0)?' on':''}">${DL}</span><span class="heart on" style="color:${cat.cink}">&#9829;</span></div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
    </div>`;
   r.onclick=()=>playSong(ck,cat.songs.indexOf(s));
   c.appendChild(r);});}

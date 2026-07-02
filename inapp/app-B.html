@@ -157,7 +157,7 @@
   .appletter{display:inline-block;font-family:Georgia,serif;font-size:14px;font-weight:700;color:#6a6470;background:#fff;border:1px solid #e6ddce;border-radius:9px;padding:1px 9px;margin-left:10px;letter-spacing:.05em;white-space:nowrap}
   .logo{display:flex!important;align-items:center!important;white-space:nowrap}
 
-  .bubs{display:flex;align-items:baseline;gap:6px;row-gap:4px;margin:5px 0 8px;flex-wrap:wrap;line-height:1.1}
+  .bubs{display:flex;align-items:baseline;gap:6px;row-gap:4px;margin:7px 0 8px;flex-wrap:wrap;line-height:1.1;max-height:27px;overflow:hidden}
   .bub{font-size:9.5px;font-weight:600;letter-spacing:.09em;color:#8a8390}
   .sep{font-size:9.5px;color:#cfc8ba}
   .oneline{font-size:11.5px;color:#8a8590}
@@ -257,12 +257,12 @@ const SONGLIST=[
 // APPROVED song catalog (copy/song-catalog.md, Michael 2026-07-01): 4 purpose bubbles + one-liner
 const SONGMETA={
  'quiet-success':{b:['RESET','CALM','DE-STRESS','UNWIND'],l:'Warm, low tones that ring like bowls.'},
- 'kindred-spirits':{b:['ENERGY','HAPPY','MORNING','MOTIVATE'],l:'Bright and steady from the first note.'},
+ 'kindred-spirits':{b:['ENERGY','HAPPY','FLOW','MOTIVATE'],l:'Bright and steady from the first note.'},
  'elysian-surge':{b:['ENERGY','MOTIVATE','BUILD','FLOW'],l:'Starts warm, ends unstoppable.'},
  'starseed':{b:['MEDITATE','DEEP','DREAMY','UNWIND'],l:'An otherworldly voice leads you in.'},
  'astrolith':{b:['FOCUS','MEDITATE','CALM','DEEP'],l:'A steady pulse that never distracts.'},
  'cosmic-drift':{b:['FOCUS','MEDITATE','NAP','CALM'],l:'Slow swells, like rain on a window.'},
- 'galactic-slumber':{b:['SLEEP','FOCUS','MEDITATE','NIGHT'],l:'Dark, slow, and bottomless.'}};
+ 'galactic-slumber':{b:['SLEEP','FOCUS','MEDITATE','UNWIND'],l:'Dark, slow, and bottomless.'}};
 function bubs(s){const b=(SONGMETA[s.slug]||{b:[]}).b;return '<div class="bubs">'+b.map(w=>'<span class="bub">'+w+'</span>').join('<span class="sep">·</span>')+'</div>';}
 const CATS={
  core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
