@@ -157,8 +157,9 @@
   .appletter{display:inline-block;font-family:Georgia,serif;font-size:14px;font-weight:700;color:#6a6470;background:#fff;border:1px solid #e6ddce;border-radius:9px;padding:1px 9px;margin-left:10px;letter-spacing:.05em;white-space:nowrap}
   .logo{display:flex!important;align-items:center!important;white-space:nowrap}
 
-  .bubs{display:grid;grid-template-columns:repeat(2,max-content);gap:3.5px 4px;margin:5px 0 6px}
-  .bub{font-size:7.5px;font-weight:600;letter-spacing:.06em;padding:2px 7.5px;border-radius:999px;background:#fff;border:1px solid #3a3540;color:#2A2530;white-space:nowrap;text-align:center}
+  .bubs{display:flex;align-items:baseline;gap:6px;margin:4px 0 6px;white-space:nowrap;overflow:hidden}
+  .bub{font-size:8.5px;font-weight:600;letter-spacing:.1em;color:#7a7480}
+  .sep{font-size:8.5px;color:#cfc8ba}
   .oneline{font-size:11.5px;color:#8a8590}
 </style></head><body>
 <!-- INTERACTION · REORDER: the WHOLE card is draggable on click-and-hold (long-press) anywhere on it, not just the grip dots — the grip is only the visual cue. Applies to Immersions + Favourites. Not wired in this prototype; spec for dev. -->
@@ -256,7 +257,7 @@ const SONGMETA={
  'astrolith':{b:['FOCUS','MEDITATE','CALM','DEEP'],l:'A steady pulse that never distracts.'},
  'cosmic-drift':{b:['FOCUS','MEDITATE','NAP','CALM'],l:'Slow swells, like rain on a window.'},
  'galactic-slumber':{b:['SLEEP','FOCUS','MEDITATE','NIGHT'],l:'Dark, slow, and bottomless.'}};
-function bubs(s){return '<div class="bubs">'+((SONGMETA[s.slug]||{b:[]}).b.map(w=>'<span class="bub">'+w+'</span>').join(''))+'</div>';}
+function bubs(s){const b=(SONGMETA[s.slug]||{b:[]}).b;return '<div class="bubs">'+b.map(w=>'<span class="bub">'+w+'</span>').join('<span class="sep">·</span>')+'</div>';}
 const CATS={
  core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
    title:'Core Vibrational Frequency',desc:'These tracks deepen your authentic sense of who you are.',songs:SONGLIST},
