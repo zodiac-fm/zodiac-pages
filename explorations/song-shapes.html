@@ -61,40 +61,70 @@ function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.
 function rgba(c,a){return `rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;}
 function hash(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19;}return (h>>>0);}
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
-// a unique but stable ray-shape recipe per song
-function shapeFor(name){
+// STRUCTURAL FAMILIES — each song is a different construction, unmistakable even frozen.
+// (Demo seeds from the name; in production family+params come from the song's measured audio DNA,
+//  same as the cymatic tiles — never ship a name-seeded generator.)
+const FAMILIES=['burst','iris','spiral','frost','mandala','halo','weave'];
+function shapeFor(name,idx){
   const r=mulberry32(hash(name));
-  const petals=5+Math.floor(r()*12);          // 5..16 dominant petals = the song's identity
-  const depth=0.16+r()*0.26;                  // subtle lobes .. dramatic star
-  const harm=[{k:petals, amp:depth, ph:r()*6.283},
-              {k:petals*2+(r()<0.5?1:3), amp:0.04+r()*0.06, ph:r()*6.283}];
-  if(r()<0.6) harm.push({k:3+Math.floor(r()*4), amp:0.03+r()*0.05, ph:r()*6.283});
-  return {harm, rays:110+Math.floor(r()*80), spin:(r()<0.5?1:-1)*(0.03+r()*0.03)};
+  return {fam:FAMILIES[idx%FAMILIES.length], r1:r(), r2:r(), r3:r(), spin:(r()<0.5?1:-1)*(0.03+r()*0.03)};
 }
-function envelope(a,tt,harm){let v=1;for(const h of harm)v+=h.amp*Math.sin(a*h.k+h.ph+Math.sin(tt*0.4)*0.3);return v;}
 function beat(tt){const p=(tt*1.7)%1;return p<0.11?p/0.11:Math.pow(1-(p-0.11)/0.89,1.7);}
+const s0a=hx(SEC[0][0]),s0b=hx(SEC[0][1]),pr=hx(DOM[0]),en=hx(DOM[1]);
 
-const s0a=hx(SEC[0][0]),s0b=hx(SEC[0][1]),s1a=hx(SEC[1][0]),s1b=hx(SEC[1][1]),pr=hx(DOM[0]),en=hx(DOM[1]);
+function ray(x,x1,y1,x2,y2,cA,cB,alpha,wd){
+  const g=x.createLinearGradient(x1,y1,x2,y2);
+  g.addColorStop(0,rgba(cA,alpha)); g.addColorStop(0.7,rgba(cB,alpha*0.7)); g.addColorStop(1,rgba(cB,0));
+  x.strokeStyle=g; x.lineWidth=wd; x.beginPath(); x.moveTo(x1,y1); x.lineTo(x2,y2); x.stroke();
+}
 function drawDisc(cv,shape,tt,alive){
   const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2; x.clearRect(0,0,W,H);
-  const env=alive?beat(tt):0.15, bmul=alive?(0.8+0.34*env):0.85;
-  const R=Math.min(W,H)*0.46,r0=Math.min(W,H)*0.085,rot=alive?tt*shape.spin:0.6;
-  const N=shape.rays;
-  const tg=x.createRadialGradient(cx,cy,r0,cx,cy,R*0.95); tg.addColorStop(0,rgba(en,0.13)); tg.addColorStop(1,rgba(en,0));
+  const env=alive?beat(tt):0, bmul=alive?(0.8+0.3*env):1;
+  const R=Math.min(W,H)*0.46, r0=Math.min(W,H)*0.075, rot=(alive?tt*shape.spin:0.6);
+  const wd=Math.max(0.7,W/240*1.15), puls=1+(alive?0.10*env:0);
+  const tg=x.createRadialGradient(cx,cy,r0,cx,cy,R*0.95); tg.addColorStop(0,rgba(en,0.12)); tg.addColorStop(1,rgba(en,0));
   x.fillStyle=tg; x.beginPath(); x.arc(cx,cy,R,0,7); x.fill();
   x.lineCap='round';
-  for(let i=0;i<N;i++){
-    const a=i/N*Math.PI*2+rot, e=envelope(a,tt,shape.harm);
-    const len=R*(0.60+0.34*e)*(0.90+0.15*env);
-    const x1=cx+Math.cos(a)*r0,y1=cy+Math.sin(a)*r0,x2=cx+Math.cos(a)*len,y2=cy+Math.sin(a)*len;
-    let cA=pr,cB=en,mul=1; if(i%6===0){cA=s0a;cB=s0b;mul=0.75;}else if(i%9===0){cA=s1a;cB=s1b;mul=0.72;}
-    const g=x.createLinearGradient(x1,y1,x2,y2);
-    g.addColorStop(0,rgba(cA,1*mul*bmul)); g.addColorStop(0.7,rgba(cB,0.72*mul*bmul)); g.addColorStop(1,rgba(cB,0));
-    x.strokeStyle=g; x.lineWidth=Math.max(0.7,W/240*1.2);
-    x.beginPath(); x.moveTo(x1,y1); x.lineTo(x2,y2); x.stroke();
-  }
-  const cp=1+0.16*env, core=x.createRadialGradient(cx,cy,0,cx,cy,r0*1.8*cp);
-  core.addColorStop(0,'rgba(255,255,255,0.95)'); core.addColorStop(0.55,rgba(pr,0.10+0.08*env)); core.addColorStop(1,rgba(pr,0));
+  const F=shape.fam, r1=shape.r1, r2=shape.r2;
+  if(F==='burst'){                    // dense even starburst, clean edge
+    const N=150; for(let i=0;i<N;i++){ const a=i/N*Math.PI*2+rot;
+      const L=R*(0.88+0.08*Math.sin(a*3+r1*6))*puls;
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,i%6?pr:s0a,en,i%6?0.85:0.6,wd); } }
+  else if(F==='iris'){                // shortish rays + two bright concentric rings = an eye
+    const N=120; for(let i=0;i<N;i++){ const a=i/N*Math.PI*2+rot; const L=R*0.72*puls;
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,pr,en,0.55,wd); }
+    [0.5,0.82].forEach((rr,k)=>{ x.strokeStyle=rgba(k?en:s0a,0.85*bmul); x.lineWidth=wd*(k?1.6:2.4);
+      x.beginPath(); x.arc(cx,cy,R*rr*puls,0,7); x.stroke(); }); }
+  else if(F==='spiral'){              // strongly curved pinwheel arms
+    const ARMS=3+Math.floor(r1*3), per=34;
+    for(let ar=0;ar<ARMS;ar++) for(let i=0;i<per;i++){ const t=i/per;
+      const a=ar/ARMS*Math.PI*2+rot+t*2.6*(shape.spin>0?1:-1);
+      const rr=r0+(R*0.92-r0)*t*puls;
+      x.fillStyle=rgba(i%7?pr:s0a, (0.9-0.55*t)*bmul); x.beginPath();
+      x.arc(cx+Math.cos(a)*rr, cy+Math.sin(a)*rr, wd*(1.5-t*0.8),0,7); x.fill(); } }
+  else if(F==='frost'){               // 6 crystalline arms with side branches
+    const ARMS=6;
+    for(let ar=0;ar<ARMS;ar++){ const a=ar/ARMS*Math.PI*2+rot; const L=R*0.92*puls;
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,pr,en,0.95,wd*1.4);
+      for(let b=1;b<=4;b++){ const bt=b/5, bx=cx+Math.cos(a)*(r0+(L-r0)*bt), by=cy+Math.sin(a)*(r0+(L-r0)*bt);
+        for(const s of[-1,1]){ const ba=a+s*(0.55-0.06*b); const bl=L*0.22*(1-bt*0.6);
+          ray(x,bx,by,bx+Math.cos(ba)*bl,by+Math.sin(ba)*bl,b%2?en:s0a,en,0.7,wd); } } } }
+  else if(F==='mandala'){             // bold petal lobes with dark gaps between
+    const P=8+Math.floor(r1*4), N=170;
+    for(let i=0;i<N;i++){ const a=i/N*Math.PI*2+rot;
+      const lobe=Math.max(0,Math.cos((a-rot)*P/2)); const L=R*(0.45+0.5*Math.pow(lobe,1.6))*puls;
+      if(L>R*0.46) ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,i%9?pr:s0a,en,0.8,wd); } }
+  else if(F==='halo'){                // sparse long needles + one strong outer ring, airy
+    const N=36; for(let i=0;i<N;i++){ const a=i/N*Math.PI*2+rot; const L=R*0.9*puls;
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,i%5?pr:s0a,en,0.8,wd); }
+    x.strokeStyle=rgba(en,0.9*bmul); x.lineWidth=wd*2.6; x.beginPath(); x.arc(cx,cy,R*0.9*puls,0,7); x.stroke(); }
+  else{                               // weave: two interleaved ray shells -> banded moiré
+    const N=130; for(let i=0;i<N;i++){ const a=i/N*Math.PI*2+rot;
+      const L1=R*0.55, L2=R*0.92*puls;
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L1,cy+Math.sin(a)*L1,pr,pr,0.8,wd);
+      if(i%2) ray(x,cx+Math.cos(a)*(L1+wd*3),cy+Math.sin(a)*(L1+wd*3),cx+Math.cos(a)*L2,cy+Math.sin(a)*L2,i%6?en:s0a,en,0.7,wd); } }
+  const cp=1+(alive?0.14*env:0), core=x.createRadialGradient(cx,cy,0,cx,cy,r0*1.8*cp);
+  core.addColorStop(0,'rgba(255,255,255,0.95)'); core.addColorStop(0.55,rgba(pr,0.10+(alive?0.08*env:0))); core.addColorStop(1,rgba(pr,0));
   x.fillStyle=core; x.beginPath(); x.arc(cx,cy,r0*1.9*cp,0,7); x.fill();
   x.fillStyle='#FBF8F3'; x.beginPath(); x.arc(cx,cy,r0*0.5,0,7); x.fill();
 }
@@ -108,7 +138,7 @@ SONGS.forEach((name,i)=>{
   row.onclick=()=>{ playing=(playing===i?-1:i);
     [...list.children].forEach((r,j)=>r.classList.toggle('playing',j===playing)); };
   list.appendChild(row);
-  tiles.push({cv:row.querySelector('canvas'), shape:shapeFor(name), still:0});
+  tiles.push({cv:row.querySelector('canvas'), shape:shapeFor(name,i), still:0});
 });
 function loop(){ const tt=(performance.now()-t0)/1000;
   tiles.forEach((t,i)=>{ const alive=i===playing;
