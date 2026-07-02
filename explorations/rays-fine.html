@@ -61,29 +61,39 @@ canvas{display:block}
 </div>
 
 <script>
-const FR={core:['#6521C9','#A737C8'],love:['#B90044','#CF4090'],vitality:['#FF9112','#FFC251'],abundance:['#12A56E','#46D99A']};
-const SEC={
-  core:[['#7A4AE0','#B98AF0'],['#C24FA8','#E07AC8']],
-  love:[['#E8663E','#F0A070'],['#D8489A','#EE8CC0']],
-  vitality:[['#F0592E','#F59060'],['#FFD37A','#FFE7B0']],
-  abundance:[['#15B8A6','#5FE0D2'],['#D9B45A','#F0D28A']]
+// DAY (on white): deeper tones for the light-hued frequencies so they read as striking as Core & Love
+const DAY={
+  core:{d:['#6521C9','#A737C8'],s:[['#7A4AE0','#B98AF0'],['#C24FA8','#E07AC8']]},
+  love:{d:['#B90044','#CF4090'],s:[['#E8663E','#F0A070'],['#D8489A','#EE8CC0']]},
+  vitality:{d:['#C25500','#FF9112'],s:[['#B5451F','#DD6A3C'],['#B8860B','#DDA92E']]},   // deep burnt->amber, rust + bronze
+  abundance:{d:['#0A7A52','#1FB577'],s:[['#0E8E80','#2ABBAA'],['#A8832A','#CBA646']]}   // deep->vivid green, teal + bronze
 };
+// NIGHT (on dark): brighter ends so they glow
+const NIGHT={
+  core:{d:['#6521C9','#A737C8'],s:[['#7A4AE0','#B98AF0'],['#C24FA8','#E07AC8']]},
+  love:{d:['#B90044','#CF4090'],s:[['#E8663E','#F0A070'],['#D8489A','#EE8CC0']]},
+  vitality:{d:['#FF9112','#FFC251'],s:[['#F0592E','#F59060'],['#FFD37A','#FFE7B0']]},
+  abundance:{d:['#12A56E','#46D99A'],s:[['#15B8A6','#5FE0D2'],['#D9B45A','#F0D28A']]}
+};
+function labelColor(f){return DAY[f].d[0];}
 const LAB={core:'Core',love:'Love',vitality:'Vitality',abundance:'Abundance'};
 const ROLE={core:'Identity',love:'Relationships',vitality:'Energy',abundance:'Opportunity'};
 let freq='abundance', night=false, t0=performance.now();
+{const q=new URLSearchParams(location.search); if(q.get('f')&&DAY[q.get('f')])freq=q.get('f'); if(q.has('night'))night=true;}
 function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
 function mix(a,b,t){return a.map((v,i)=>v+(b[i]-v)*t);}
 function rgba(c,a){return `rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;}
 function envelope(a,tt){return 1+0.15*Math.sin(a*11+Math.sin(tt*0.4))+0.09*Math.sin(a*7-tt*0.25)+0.05*Math.sin(a*17+tt*0.5);}
-function beat(tt){const p=(tt*0.9)%1;return p<0.14?p/0.14:Math.pow(1-(p-0.14)/0.86,1.6);}
+function beat(tt){const p=(tt*1.7)%1;return p<0.11?p/0.11:Math.pow(1-(p-0.11)/0.89,1.7);}  // ~102 bpm, sharper
 
 function drawDisc(cv){
   const x=cv.getContext('2d'); const W=cv.width,H=cv.height; x.clearRect(0,0,W,H);
   const dark=night;
   const cx=W/2, cy=H/2, tt=(performance.now()-t0)/1000;
-  const pr=hx(FR[freq][0]), en=hx(FR[freq][1]);
-  const s0a=hx(SEC[freq][0][0]),s0b=hx(SEC[freq][0][1]),s1a=hx(SEC[freq][1][0]),s1b=hx(SEC[freq][1][1]);
-  const env=beat(tt), R=Math.min(W,H)*0.46, r0=Math.min(W,H)*0.085, rot=tt*0.05;
+  const P=(dark?NIGHT:DAY)[freq];
+  const pr=hx(P.d[0]), en=hx(P.d[1]);
+  const s0a=hx(P.s[0][0]),s0b=hx(P.s[0][1]),s1a=hx(P.s[1][0]),s1b=hx(P.s[1][1]);
+  const env=beat(tt), bmul=0.8+0.34*env, R=Math.min(W,H)*0.46, r0=Math.min(W,H)*0.085, rot=tt*0.05+env*0.02;
   const N=Math.max(90,Math.min(220,Math.round(W*0.9)));
   // soft frequency wash behind so it reads bright on white
   const tg=x.createRadialGradient(cx,cy,r0,cx,cy,R*0.95);
@@ -93,22 +103,23 @@ function drawDisc(cv){
   x.globalCompositeOperation = dark ? 'lighter' : 'source-over';
   for(let i=0;i<N;i++){
     const a=i/N*Math.PI*2+rot, e=envelope(a,tt);
-    const len=R*(0.62+0.34*e)*(0.94+0.06*env);
+    const len=R*(0.60+0.34*e)*(0.90+0.15*env);   // visible beat pulse
     const x1=cx+Math.cos(a)*r0, y1=cy+Math.sin(a)*r0, x2=cx+Math.cos(a)*len, y2=cy+Math.sin(a)*len;
     let cA=pr,cB=en,mul=1;
     if(i%6===0){cA=s0a;cB=s0b;mul=0.75;} else if(i%9===0){cA=s1a;cB=s1b;mul=0.72;}
     const g=x.createLinearGradient(x1,y1,x2,y2);
     const c1=dark?mix(cA,cB,0.2):cA, c2=cB;
-    g.addColorStop(0,rgba(c1,(dark?0.55:1)*mul)); g.addColorStop(0.7,rgba(c2,(dark?0.35:0.72)*mul)); g.addColorStop(1,rgba(c2,0));
+    g.addColorStop(0,rgba(c1,(dark?0.55:1)*mul*bmul)); g.addColorStop(0.7,rgba(c2,(dark?0.35:0.72)*mul*bmul)); g.addColorStop(1,rgba(c2,0));
     x.strokeStyle=g; x.lineWidth=Math.max(0.7,W/700*1.25);
     x.beginPath(); x.moveTo(x1,y1); x.lineTo(x2,y2); x.stroke();
   }
-  // soft core glow
-  const core=x.createRadialGradient(cx,cy,0,cx,cy,r0*1.8);
+  // soft core glow (pulses on the beat)
+  const cp=1+0.16*env;
+  const core=x.createRadialGradient(cx,cy,0,cx,cy,r0*1.8*cp);
   if(dark){core.addColorStop(0,rgba(mix(en,[255,255,255],0.5),0.9));core.addColorStop(1,rgba(en,0));}
-  else{core.addColorStop(0,'rgba(255,255,255,0.95)');core.addColorStop(0.55,rgba(pr,0.12));core.addColorStop(1,rgba(pr,0));}
+  else{core.addColorStop(0,'rgba(255,255,255,0.95)');core.addColorStop(0.55,rgba(pr,0.10+0.08*env));core.addColorStop(1,rgba(pr,0));}
   x.globalCompositeOperation='source-over';
-  x.fillStyle=core; x.beginPath(); x.arc(cx,cy,r0*1.9,0,7); x.fill();
+  x.fillStyle=core; x.beginPath(); x.arc(cx,cy,r0*1.9*cp,0,7); x.fill();
   // open centre "eye" (where the play button sits)
   x.fillStyle=dark?'#120c1c':'#FBF8F3'; x.beginPath(); x.arc(cx,cy,r0*0.5,0,7); x.fill();
 }
@@ -117,10 +128,10 @@ function loop(){ cs.forEach(drawDisc); requestAnimationFrame(loop); }
 requestAnimationFrame(loop);
 document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{freq=b.dataset.f;
   document.querySelectorAll('[data-f]').forEach(o=>o.classList.toggle('on',o===b));
-  const ml=document.getElementById('miniLab'); ml.textContent=LAB[freq]; ml.style.color=FR[freq][0];
-  const npf=document.getElementById('npf'); npf.textContent=LAB[freq]+' · '+ROLE[freq]; npf.style.color=FR[freq][0];});
-document.getElementById('miniLab').style.color=FR.abundance[0];
-document.getElementById('npf').style.color=FR.abundance[0];
+  const ml=document.getElementById('miniLab'); ml.textContent=LAB[freq]; ml.style.color=labelColor(freq);
+  const npf=document.getElementById('npf'); npf.textContent=LAB[freq]+' · '+ROLE[freq]; npf.style.color=labelColor(freq);});
+document.getElementById('miniLab').style.color=labelColor("abundance");
+document.getElementById('npf').style.color=labelColor("abundance");
 document.getElementById('mode').onclick=function(){ night=!night; document.body.classList.toggle('night',night);
   this.textContent=night?'☾ Night':'☀ Day'; };
 </script>
