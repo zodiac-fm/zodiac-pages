@@ -184,8 +184,10 @@
   #rows .lcol .grip{display:none}
   #rows .lcol{justify-content:center}
   .legimm{flex-direction:column;align-items:flex-start;gap:7px}
-  .barrow .legend{padding:0}
-  .barrow{padding-top:6px}
+  .descrow{display:flex;align-items:center;gap:14px}
+  .descrow p{flex:1 1 0;min-width:0}
+  .descrow .qall{flex:0 0 auto}
+  .barhints{justify-content:space-between;padding-top:12px;padding-bottom:10px}
   #catTitle{display:none}
   .desc{padding-top:10px}
   .desc p{font-size:15px;color:#55505c;margin-top:0}
@@ -207,9 +209,8 @@
     <div class="pills" id="pills">
       <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
     </div>
-    <div class="desc"><h2 class="serif" id="catTitle">Love Vibrational Frequency</h2>
-      <p id="catDesc">Increase your authentic resonance in matters of love and relationships.</p></div>
-    <div class="barrow"><div class="legend legimm"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Checkmark tracks to build your queue</div><div class="lgline"><span class="lgico"><span class="lgheart">&#9829;</span></span>saves to Favorites</div></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
+    <div class="desc descrow"><h2 class="serif" id="catTitle" style="display:none"></h2><p id="catDesc">Increase your authentic resonance in matters of love and relationships.</p><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
+    <div class="legend barhints"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Checkmark tracks to build your queue</div><div class="lgline"><span class="lgheart">&#9829;</span>saves to Favorites</div></div>
     <div class="rows" id="rows"></div>
   </section>
 
