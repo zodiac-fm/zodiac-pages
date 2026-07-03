@@ -261,7 +261,7 @@
     <div class="sv-art"><div id="viz"><canvas id="vc"></canvas></div></div>
     <div class="sv-meta">
       <div><h2 class="serif" id="svName">&mdash;</h2>
-        <div class="svfreq"><span class="fdot"></span><span id="svCat">Love</span><b id="svHz">432</b><small>Hz</small><span id="svBand" style="font-size:12px;color:var(--mut);font-weight:500">· Solar Plexus</span></div>
+        <div class="svfreq"><span class="fdot"></span><span id="svCat">Love</span><b id="svHz">432</b><small>Hz</small><span id="svBand" style="font-size:12px;color:var(--mut);font-weight:500">· Solar Plexus</span></div><div id="svFeel" style="margin-top:7px;font-size:12.5px;line-height:1.45;color:var(--mut)">You may feel something high in your stomach, just under the ribs.</div><div style="display:none"></div>
       </div>
       <div class="heart">&#9825;</div>
     </div>
@@ -403,7 +403,13 @@ function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElemen
   st.setProperty('--c1',c.c1); st.setProperty('--c2',c.c2); st.setProperty('--cink',c.cink); st.setProperty('--cglow',c.cglow); st.setProperty('--cdeep',c.cdeep); st.setProperty('--ctint',c.ctint);
   document.querySelectorAll('#pills .pill').forEach(p=>p.classList.toggle('on',p.dataset.cat===key));
   document.getElementById('catTitle').textContent=c.title;
-  var bd=bandOf(c.hz); document.getElementById('catDesc').innerHTML='<b style="color:var(--cink);font-weight:700">'+c.hz+' Hz</b> '+c.desc+' Yours sits in your '+bd.name+' band ('+bd.lo+' to '+bd.hi+' Hz). As it plays, you may feel something '+bd.place+'.';
+  var bd=bandOf(c.hz), ALT=location.hash.indexOf('alt')>=0;
+  if(ALT){
+    document.getElementById('catDesc').innerHTML='<b style="color:var(--cink);font-weight:700">'+c.hz+' Hz</b> '+c.desc
+      +'<span style="display:block;margin-top:6px;font-size:12.5px;color:var(--mut)"><b style="color:var(--cink);font-weight:600">'+bd.name+' band</b> \u00b7 you may feel something '+bd.place+'</span>';
+  } else {
+    document.getElementById('catDesc').innerHTML='<b style="color:var(--cink);font-weight:700">'+c.hz+' Hz \u00b7 '+bd.name+'</b> '+c.desc;
+  }
   document.getElementById('catHz').innerHTML=c.hz+'<small> Hz</small>';
   buildRows();
 }
@@ -423,7 +429,7 @@ async function playSong(ck,i){
   document.getElementById('app').classList.add('playing');
   miniImg.src=tileSrc(ck,s); miniImg.style.filter='none'; loadBurst(tileSrc(ck,s));
   miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion'; document.getElementById('miniSub').style.color=cat.cink;
-  svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label; document.getElementById('svBand').textContent='\u00b7 '+bandOf(cat.hz).name;
+  svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label; var pb=bandOf(cat.hz); document.getElementById('svBand').textContent='\u00b7 '+pb.name; document.getElementById('svFeel').textContent='You may feel something '+pb.place+'.';
   ['song','mini'].forEach(function(id){var el=document.getElementById(id);el.style.setProperty('--c1',cat.c1);el.style.setProperty('--c2',cat.c2);el.style.setProperty('--cink',cat.cink);el.style.setProperty('--cdeep',cat.cdeep);el.style.setProperty('--cglow',cat.cglow);});
   initGraph(); if(AC){try{await AC.resume();}catch(e){}}
   if(s!==prev||!D) D=await analyze(s.audio,playHz);   // re-analyze only when the track changes (snappy restart)
