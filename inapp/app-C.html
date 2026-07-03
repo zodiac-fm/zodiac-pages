@@ -231,7 +231,7 @@
       <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
     </div>
     <div class="desc"><h2 class="serif" id="catTitle">Love Vibrational Frequency</h2>
-      <p id="catDesc">is your personal connection signal. The guard drops, real warmth comes through.</p></div>
+      <p id="catDesc">is your personal connection signal. It clears the fog around how you connect.</p></div>
     <div class="ctarow"><span style="display:none" id="catHz"></span><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
     <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Adds to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>saves to Playlist</div></div></div></div>
     <div class="rows" id="rows"></div>
@@ -321,13 +321,13 @@ const SONGMETA={
 function bubs(s){const b=(SONGMETA[s.slug]||{b:[]}).b;return '<div class="bubs">'+b.map((w,i)=>'<span class="bub">'+w+(i<b.length-1?'<span class="sep"> · </span>':'')+'</span>').join('')+'</div>';}
 const CATS={
  core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
-   title:'Core Vibrational Frequency',desc:'is your personal identity signal. It steadies your sense of who you are.',songs:SONGLIST},
+   title:'Core Vibrational Frequency',desc:'is your personal identity signal. It turns your sense of who you are back up.',songs:SONGLIST},
  love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',cdeep:'#6E0024',ctint:'#FFE8EA',cglow:'rgba(185,0,68,.45)',hue:0,filt:'none',gA:'255,150,190',gB:'185,0,68',hz:'432',
-   title:'Love Vibrational Frequency',desc:'is your personal connection signal. The guard drops, real warmth comes through.',songs:SONGLIST},
+   title:'Love Vibrational Frequency',desc:'is your personal connection signal. It clears the fog around how you connect.',songs:SONGLIST},
  vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#C25500',cdeep:'#BC6700',ctint:'#FFEADA',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
-   title:'Vitality Vibrational Frequency',desc:'is your personal energy signal. It helps the body unbrace, so energy holds.',songs:SONGLIST},
+   title:'Vitality Vibrational Frequency',desc:'is your personal energy signal. It tunes your read on what feeds or drains you.',songs:SONGLIST},
  abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',cink:'#0A7A52',cdeep:'#0A6B48',ctint:'#DCF4E8',cglow:'rgba(18,165,110,.5)',hue:0,filt:'none',gA:'143,225,190',gB:'18,165,110',hz:'611',
-   title:'Abundance Vibrational Frequency',desc:'is your personal opportunity signal. It clears the hesitation around openings.',songs:SONGLIST},
+   title:'Abundance Vibrational Frequency',desc:'is your personal opportunity signal. It tunes your sense for openings and timing.',songs:SONGLIST},
 };
 let catKey=(['core','love','vitality','abundance'].includes(new URLSearchParams(location.search).get('cat'))?new URLSearchParams(location.search).get('cat'):'love');  // ?cat= opens a category (review aid)
 const aud=document.getElementById('aud');
