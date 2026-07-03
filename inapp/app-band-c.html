@@ -195,7 +195,7 @@
   .bsheet-wrap{position:absolute;inset:0;z-index:60;display:none}
   .bsheet-wrap.open{display:block}
   .bsheet-ovl{position:absolute;inset:0;background:rgba(26,22,32,.34)}
-  .bsheet{position:absolute;left:16px;right:16px;top:50%;transform:translateY(-50%);background:#fff;border-radius:22px;padding:20px 22px 22px;box-shadow:0 18px 50px rgba(26,22,32,.28)}
+  .bsheet{position:absolute;left:16px;right:16px;top:50%;transform:translateY(-50%);max-height:calc(100% - 116px);overflow-y:auto;background:#fff;border-radius:22px;padding:20px 22px 22px;box-shadow:0 18px 50px rgba(26,22,32,.28)}
   .bsx{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#F6F1E8;color:#63616F;font-size:19px;line-height:1;cursor:pointer}
   .bscale{margin-top:16px}
   .bstrack{position:relative;display:flex;height:12px;border-radius:7px;overflow:hidden}
@@ -268,6 +268,7 @@
       <div class="bscale"><div class="bstrack" id="bsTrack"></div><div class="bslabs" id="bsLabs"></div></div>
       <p id="bsWhat"></p>
       <p id="bsYours"></p>
+      <p id="bsYours2"></p>
       
     </div>
   </div>
@@ -400,7 +401,8 @@ function openBandSheet(){ var c=CATS[catKey], bd=bandOf(c.hz);
   document.getElementById('bsTitle').textContent=bd.name+' band';
   document.getElementById('bsRange').textContent=bd.lo+' to '+bd.hi+' Hz';
   document.getElementById('bsWhat').innerHTML=BANDMEANING[bd.name];
-  document.getElementById('bsYours').innerHTML='By design, the easier way for you to process '+DOMAINPHRASE[c.label]+' is through '+BANDWAY[bd.name]+'. You can use all four ways, but '+BANDWAY2[bd.name]+' easier and more effective for you. Your '+c.label+' sits at <b>'+c.hz+' Hz</b>, '+bd.place+'. As it plays, you may feel something there.';
+  document.getElementById('bsYours').innerHTML='By design, the easier way for you to process '+DOMAINPHRASE[c.label]+' is through '+BANDWAY[bd.name]+'. You can use all four ways, but '+BANDWAY2[bd.name]+' easier and more effective for you.';
+  document.getElementById('bsYours2').innerHTML='Your '+c.label+' sits at <b>'+c.hz+' Hz</b>, '+bd.place+'. As it plays, you may feel something there.';
   var hz=parseInt(c.hz,10), pct=(hz-250)/(950-250)*100;
   var th=''; BANDS.forEach(function(b){ th+='<div class="bseg'+(b.name===bd.name?' act':'')+'"></div>'; });
   document.getElementById('bsTrack').innerHTML=th+'<div class="bdotm" style="left:'+pct+'%"></div>';
@@ -775,7 +777,7 @@ setCat(catKey);vrz();drawViz();setIcons();
 </script>
 <script>
 // GUIDE card: open on the very first visit, minimized on every return (per-device memory)
-try{/* guide stays OPEN by default for now (first-open teaching, Michael 2026-07-03) */if(false){document.querySelectorAll('.tipcard').forEach(function(c){c.classList.add('min');});}
+try{if(localStorage.getItem('zfm_guide_seen')){document.querySelectorAll('.tipcard').forEach(function(c){c.classList.add('min');});}
 localStorage.setItem('zfm_guide_seen','1');}catch(e){}
 document.querySelectorAll('.tiphead').forEach(function(h){h.addEventListener('click',function(){h.parentElement.classList.toggle('min');});});
 </script>
