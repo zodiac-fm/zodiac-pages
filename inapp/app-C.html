@@ -203,6 +203,16 @@
   .lgdown{font-size:13px;color:#a8a2ad;line-height:1}
   .lggrip{color:#a8a2ad;display:inline-flex;align-items:center}
   .topright{display:flex;align-items:center;gap:12px}
+  .qfab{width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid #eadfce;display:flex;align-items:center;justify-content:center;color:var(--cink);position:relative;flex:0 0 auto}
+  #favs .qfab{color:#1A1620}
+  .qbadge{position:absolute;top:-4px;right:-5px;min-width:15px;height:15px;border-radius:8px;background:#1A1620;color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px}
+  .qbadge:empty{display:none}
+  .pillsrow{display:flex;align-items:center;gap:10px;margin:8px 18px}
+  .pillsrow .pills{margin:0!important;flex:1 1 0}
+  .qfab.qfabfill{background:var(--cink);border-color:var(--cink);color:#fff;width:38px;height:38px}
+  .qfab.qfabfill .qbadge{background:#1A1620}
+  .qfab.qfabdark{background:#1A1620;border-color:#1A1620;color:#fff}
+  #favs .qfab.qfabdark{color:#fff}
   #favs .legend{padding-top:18px}
   .scrtitle{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;line-height:1;color:var(--ink)}
 </style></head><body>
@@ -211,9 +221,9 @@
 
   <!-- ===================== LIST ===================== -->
   <section class="screen" id="list">
-    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">C</span></div><div class="topright"><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div></div>
-    <div class="pills" id="pills">
-      <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">C</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
+    <div class="pillsrow"><div class="pills" id="pills">
+      <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div><div class="qfab qfabfill"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="margin-left:2px"><path d="M8 5v14l11-7z"/></svg><span class="qbadge" id="qn"></span></div></div>
     </div>
     <div class="desc"><h2 class="serif" id="catTitle">Love Vibrational Frequency</h2>
       <p id="catDesc">increases your authentic resonance in matters of love and relationships.</p></div>
@@ -265,7 +275,7 @@
 
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
-    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">C</span></div><div class="topright"><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div></div>
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">C</span></div><div class="topright"><div class="qfab qfabdark"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="margin-left:2px"><path d="M8 5v14l11-7z"/></svg><span class="qbadge" id="qnf"></span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div></div>
         <div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Adds to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>saves to Playlist</div></div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
   </section>
@@ -639,8 +649,8 @@ setCat(catKey);vrz();drawViz();setIcons();
 // Play All), heart = save to Favorites, drag-to-reorder on Favorites ONLY (frequency pages keep list order).
 (function(){
  const qn=document.getElementById('qn'),qnf=document.getElementById('qnf');let sup=false;
- function upd(){const n=document.querySelectorAll('#rows .qbox.on').length;qn.textContent=n?' ('+n+')':'';
-  const m=document.querySelectorAll('#favRows .qbox.on').length;qnf.textContent=m?' ('+m+')':'';}
+ function upd(){const n=document.querySelectorAll('#rows .qbox.on').length;qn.textContent=n||'';
+  const m=document.querySelectorAll('#favRows .qbox.on').length;qnf.textContent=m||'';}
  function wire(id){document.getElementById(id).addEventListener('click',function(e){
   if(sup){sup=false;e.stopPropagation();e.preventDefault();return;}
   const q=e.target.closest('.qbox');if(q){e.stopPropagation();q.classList.toggle('on');upd();return;}
