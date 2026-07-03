@@ -184,7 +184,8 @@
   #rows .lcol .grip{display:none}
   #rows .lcol{justify-content:center}
   .legimm{flex-direction:column;align-items:flex-start;gap:7px}
-  .hzsm{font-size:43px;line-height:1;letter-spacing:-1px}.hzsm small{font-size:12px}
+  .barrow .legend{padding:0}
+  .barrow{padding-top:6px}
   #catTitle{display:none}
   .desc{padding-top:10px}
   .desc p{font-size:15px;color:#55505c;margin-top:0}
@@ -208,8 +209,7 @@
     </div>
     <div class="desc"><h2 class="serif" id="catTitle">Love Vibrational Frequency</h2>
       <p id="catDesc">Increase your authentic resonance in matters of love and relationships.</p></div>
-    <div class="barrow"><div class="freqline"><span class="hzsm" id="catHz">432<small> Hz</small></span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
-    <div class="legend legimm"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Checkmark tracks to build your queue</div><div class="lgline"><span class="lgico"><span class="lgheart">&#9829;</span></span>saves to Favorites</div></div>
+    <div class="barrow"><div class="legend legimm"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Checkmark tracks to build your queue</div><div class="lgline"><span class="lgico"><span class="lgheart">&#9829;</span></span>saves to Favorites</div></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
     <div class="rows" id="rows"></div>
   </section>
 
@@ -363,8 +363,7 @@ function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElemen
   st.setProperty('--c1',c.c1); st.setProperty('--c2',c.c2); st.setProperty('--cink',c.cink); st.setProperty('--cglow',c.cglow); st.setProperty('--cdeep',c.cdeep); st.setProperty('--ctint',c.ctint);
   document.querySelectorAll('#pills .pill').forEach(p=>p.classList.toggle('on',p.dataset.cat===key));
   document.getElementById('catTitle').textContent=c.title;
-  document.getElementById('catDesc').textContent=c.desc;
-  document.getElementById('catHz').innerHTML=c.hz+'<small> Hz</small>';
+  document.getElementById('catDesc').innerHTML='<b style="color:var(--cink);font-weight:700">'+c.hz+' Hz</b><span style="color:#cfc8ba"> &middot; </span>'+c.desc;
   buildRows();
 }
 document.querySelectorAll('#pills .pill').forEach(p=>p.onclick=()=>setCat(p.dataset.cat));
