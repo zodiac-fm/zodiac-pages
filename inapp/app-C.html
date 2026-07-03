@@ -185,9 +185,7 @@
   #rows .lcol{justify-content:center}
   .legimm{flex-direction:column;align-items:flex-start;gap:7px}
   .desc{padding-top:12px}
-  .hzbig{font-family:'Cormorant Garamond',Georgia,serif;font-size:38px;font-weight:600;line-height:1;color:var(--cink)}
-  .hzbig small{font-size:17px;font-weight:600;margin-left:1px}
-  .hzsent{font-size:15px;color:#55505c;margin-top:5px;line-height:1.5}
+  #catDesc{font-size:15px;color:#55505c;line-height:1.5}
   .ctarow{display:flex;justify-content:flex-end;padding:12px 22px 0}
   .barhints{justify-content:space-between;padding-top:14px;padding-bottom:12px}
   #catTitle{display:none}
@@ -367,7 +365,7 @@ function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElemen
   st.setProperty('--c1',c.c1); st.setProperty('--c2',c.c2); st.setProperty('--cink',c.cink); st.setProperty('--cglow',c.cglow); st.setProperty('--cdeep',c.cdeep); st.setProperty('--ctint',c.ctint);
   document.querySelectorAll('#pills .pill').forEach(p=>p.classList.toggle('on',p.dataset.cat===key));
   document.getElementById('catTitle').textContent=c.title;
-  document.getElementById('catDesc').innerHTML='<div class="hzbig">'+c.hz+'<small> Hz</small></div><p class="hzsent">'+c.desc+'</p>';
+  document.getElementById('catDesc').innerHTML='<b style="color:var(--cink);font-weight:700">'+c.hz+' Hz</b> '+c.desc;
   buildRows();
 }
 document.querySelectorAll('#pills .pill').forEach(p=>p.onclick=()=>setCat(p.dataset.cat));
