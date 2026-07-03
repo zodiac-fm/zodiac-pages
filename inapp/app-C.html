@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Zodiac.fm · app C</title>
+<title>Zodiac.fm · C</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
 <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
 <style>
@@ -169,6 +169,21 @@
   .mtext{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start}
   .mtext .lab{margin-top:auto}
   .mrail{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;padding:2px 0 1px}
+
+  .legend{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#8a8390;padding:0 22px 10px}
+  .legend .lgbox{width:13px;height:13px;border:1.5px solid #c2bdc7;border-radius:3.5px;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;color:#8a8390}
+  .legend .lgheart{color:#1A1620;font-size:12px;line-height:1}
+  .legend .lgsep{color:#cfc8ba;margin:0 2px}
+  .qbox,.sic .heart{cursor:pointer}
+  .grip{cursor:grab;touch-action:none}
+  #favRows .row.dragging{opacity:.95;box-shadow:0 12px 26px rgba(56,0,122,.20);transform:scale(1.015);position:relative;z-index:6}
+  .legend2{flex-direction:column;align-items:flex-start;gap:7px;padding-bottom:12px}
+  .lgline{display:flex;align-items:center;gap:6px}
+  .lgico{width:13px;display:inline-flex;justify-content:center;flex:0 0 auto}
+  .lgdown{font-size:13px;color:#a8a2ad;line-height:1}
+  .scrtitle{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;line-height:1;color:var(--ink)}
+  #rows .lcol .grip{display:none}
+  #rows .lcol{justify-content:center}
 </style></head><body>
 <!-- INTERACTION · REORDER: the WHOLE card is draggable on click-and-hold (long-press) anywhere on it, not just the grip dots — the grip is only the visual cue. Applies to Immersions + Favourites. Not wired in this prototype; spec for dev. -->
 <div id="app">
@@ -181,7 +196,8 @@
     </div>
     <div class="desc"><h2 class="serif" id="catTitle">Love Vibrational Frequency</h2>
       <p id="catDesc">These tracks increase your authentic resonance in matters of love and relationships.</p></div>
-    <div class="barrow"><div class="freqline"><span class="hzsm" id="catHz">432<small> Hz</small></span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All</div></div>
+    <div class="barrow"><div class="freqline"><span class="hzsm" id="catHz">432<small> Hz</small></span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
+    <div class="legend"><span class="lgbox">&#10003;</span>Checkmark tracks to build your queue<span class="lgsep">&middot;</span><span class="lgheart">&#9829;</span>saves to Favorites</div>
     <div class="rows" id="rows"></div>
   </section>
 
@@ -229,7 +245,8 @@
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">C</span></div><div class="ham">&#9776;</div></div>
-    <div class="barrow"><div class="draghint"><span class="dharr">&#8595;</span>Drag to reorder</div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All</div></div>
+    <div class="barrow"><div class="scrtitle serif">Playlist</div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
+    <div class="legend legend2"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Checkmark tracks to build your queue<span class="lgsep">&middot;</span><span class="lgheart">&#9829;</span>saves to Favorites</div><div class="lgline"><span class="lgico lgdown">&#8595;</span>Drag to reorder</div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
   </section>
 </div>
@@ -597,4 +614,32 @@ setCat(catKey);vrz();drawViz();setIcons();
 })();
 </script>
 
+<script>
+// B EXPERIMENT (2026-07-02, dev's idea + Michael's spec): checkbox = build the queue (live count in
+// Play All), heart = save to Favorites, drag-to-reorder on Favorites ONLY (frequency pages keep list order).
+(function(){
+ const qn=document.getElementById('qn'),qnf=document.getElementById('qnf');let sup=false;
+ function upd(){const n=document.querySelectorAll('#rows .qbox.on').length;qn.textContent=n?' ('+n+')':'';
+  const m=document.querySelectorAll('#favRows .qbox.on').length;qnf.textContent=m?' ('+m+')':'';}
+ function wire(id){document.getElementById(id).addEventListener('click',function(e){
+  if(sup){sup=false;e.stopPropagation();e.preventDefault();return;}
+  const q=e.target.closest('.qbox');if(q){e.stopPropagation();q.classList.toggle('on');upd();return;}
+  const h=e.target.closest('.heart');if(h){e.stopPropagation();h.classList.toggle('on');}
+ },true);}
+ wire('rows');wire('favRows');
+ if(new URLSearchParams(location.search).get('tab')==='favs'){showTab('favs');}
+ const _sc=window.setCat;window.setCat=function(k){_sc(k);upd();};
+ const _bf=window.buildFavs;window.buildFavs=function(){_bf();upd();};
+ upd();
+ const fc=document.getElementById('favRows');let drag=null,moved=false;
+ fc.addEventListener('pointerdown',function(e){const g=e.target.closest('.grip');if(!g)return;
+  drag=g.closest('.row');moved=false;drag.classList.add('dragging');e.preventDefault();});
+ document.addEventListener('pointermove',function(e){if(!drag)return;moved=true;e.preventDefault();
+  const y=e.clientY,sibs=[...fc.querySelectorAll('.row')].filter(r=>r!==drag);
+  for(const s of sibs){const r=s.getBoundingClientRect();if(y<r.top+r.height/2){if(s.previousElementSibling!==drag||true)fc.insertBefore(drag,s);return;}}
+  fc.appendChild(drag);},{passive:false});
+ document.addEventListener('pointerup',function(){if(!drag)return;drag.classList.remove('dragging');drag=null;
+  if(moved){sup=true;setTimeout(function(){sup=false;},150);}});
+})();
+</script>
 </body></html>
