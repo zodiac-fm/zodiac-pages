@@ -172,11 +172,23 @@
 
   .legend{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#8a8390;padding:0 22px 10px}
   .legend .lgbox{width:13px;height:13px;border:1.5px solid #c2bdc7;border-radius:3.5px;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;color:#8a8390}
-  .legend .lgheart{color:var(--cink);font-size:12px;line-height:1}
+  .legend .lgheart{color:#1A1620;font-size:12px;line-height:1}
   .legend .lgsep{color:#cfc8ba;margin:0 2px}
   .qbox,.sic .heart{cursor:pointer}
   .grip{cursor:grab;touch-action:none}
   #favRows .row.dragging{opacity:.95;box-shadow:0 12px 26px rgba(56,0,122,.20);transform:scale(1.015);position:relative;z-index:6}
+  .legend2{flex-direction:column;align-items:flex-start;gap:7px;padding-bottom:12px}
+  .legend3{align-items:flex-start;justify-content:space-between;gap:10px;padding-bottom:12px}
+  .legend3 .lgleft{display:flex;flex-direction:column;gap:7px}
+  .legend3 .lgright{flex:0 0 auto;white-space:nowrap}
+  #rows .lcol .grip{display:none}
+  #rows .lcol{justify-content:center}
+  .qall{color:var(--cink)}
+  #favs .qall{color:#6521C9}
+  .lgline{display:flex;align-items:center;gap:6px}
+  .lgico{width:13px;display:inline-flex;justify-content:center;flex:0 0 auto}
+  .lgdown{font-size:13px;color:#a8a2ad;line-height:1}
+  .scrtitle{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;line-height:1;color:var(--ink)}
 </style></head><body>
 <!-- INTERACTION · REORDER: the WHOLE card is draggable on click-and-hold (long-press) anywhere on it, not just the grip dots — the grip is only the visual cue. Applies to Immersions + Favourites. Not wired in this prototype; spec for dev. -->
 <div id="app">
@@ -238,7 +250,8 @@
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">B</span></div><div class="ham">&#9776;</div></div>
-    <div class="barrow"><div class="draghint"><span class="dharr">&#8595;</span>Drag to reorder</div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
+    <div class="barrow"><div></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
+    <div class="legend legend3"><div class="lgleft"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Checkmark tracks to build your queue</div><div class="lgline"><span class="lgico lgdown">&#8595;</span>Drag to reorder</div></div><div class="lgline lgright"><span class="lgheart">&#9829;</span>saves to Favorites</div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
   </section>
 </div>
