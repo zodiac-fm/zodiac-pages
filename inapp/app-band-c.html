@@ -268,7 +268,7 @@
       <div class="bscale"><div class="bstrack" id="bsTrack"></div><div class="bslabs" id="bsLabs"></div></div>
       <p id="bsWhat"></p>
       <p id="bsYours"></p>
-      <div class="cage" id="bsCage">You use all four ways. Your band is just your easiest path, not a limit.</div>
+      
     </div>
   </div>
 
@@ -360,10 +360,10 @@ function bubs(s){const b=(SONGMETA[s.slug]||{b:[]}).b;return '<div class="bubs">
 // Throat 600-775 Say it / Crown 775-950 See it. Place phrase = position within the band
 // (thirds), since most frequencies sit between anchors (a bodygraph does this properly later).
 const BANDS=[
- {name:'Root',verb:'Feel it',lo:250,hi:425,places:['deep at the base of your spine','low in your belly, below the navel','just below your navel']},
- {name:'Solar Plexus',verb:'Do it',lo:425,hi:600,places:['just above your navel','in the pit of your stomach','high in your stomach, just under the ribs']},
- {name:'Throat',verb:'Say it',lo:600,hi:775,places:['at the base of your throat, where chest meets voice','in the center of your throat','high in your throat, up behind the jaw']},
- {name:'Crown',verb:'See it',lo:775,hi:950,places:['where the back of your head rises to the crown','at the very top of your head','just above the top of your head']}
+ {name:'Root',verb:'Ground',lo:250,hi:425,places:['deep at the base of your spine','low in your belly, below the navel','just below your navel']},
+ {name:'Solar Plexus',verb:'Action',lo:425,hi:600,places:['just above your navel','in the pit of your stomach','high in your stomach, just under the ribs']},
+ {name:'Throat',verb:'Articulation',lo:600,hi:775,places:['at the base of your throat, where chest meets voice','in the center of your throat','high in your throat, up behind the jaw']},
+ {name:'Crown',verb:'Big picture',lo:775,hi:950,places:['where the back of your head rises to the crown','at the very top of your head','just above the top of your head']}
 ];
 function bandOf(hz){ hz=parseInt(hz,10);
   const b=BANDS.find(b=>hz>=b.lo&&hz<b.hi)||BANDS[BANDS.length-1];
@@ -371,10 +371,28 @@ function bandOf(hz){ hz=parseInt(hz,10);
   return {name:b.name,lo:b.lo,hi:b.hi,place:b.places[t]};
 }
 const BANDMEANING={
- 'Root':'<b>Root is the feeling band.</b> You access this area through grounding and steadiness. Settled, solid, sure in the body.',
- 'Solar Plexus':'<b>Solar Plexus is the doing band.</b> You access this area through action and forward motion. You find out by moving.',
- 'Throat':'<b>Throat is the saying band.</b> You access this area through putting it into words. It feels unfinished until it is voiced.',
- 'Crown':'<b>Crown is the seeing band.</b> You access this area through perspective and the big picture. The pattern shows you the way.'
+ 'Root':'<b>Root is the grounding band.</b> Understanding arrives through steadiness: things become clear once you feel settled, solid, grounded.',
+ 'Solar Plexus':'<b>Solar Plexus is the action band.</b> Understanding arrives through motion and motivation: clarity tends to come once you are already moving on it.',
+ 'Throat':'<b>Throat is the articulation band.</b> Understanding arrives through words: thinking it in language, talking it through, writing it down.',
+ 'Crown':'<b>Crown is the big-picture band.</b> Understanding arrives through systems and perspective: things make sense once you can see the whole pattern.'
+};
+const BANDWAY={
+ 'Root':'groundedness',
+ 'Solar Plexus':'action',
+ 'Throat':'articulation',
+ 'Crown':'the big picture'
+};
+const BANDWAY2={
+ 'Root':'steadiness tends to be',
+ 'Solar Plexus':'motion tends to be',
+ 'Throat':'words tend to be',
+ 'Crown':'perspective tends to be'
+};
+const DOMAINPHRASE={
+ 'Core':'who you are',
+ 'Love':'connection',
+ 'Vitality':'your energy',
+ 'Abundance':'exchange, timing, and opportunity'
 };
 const BANDPOS=['near the base of the band','in the middle of the band','in the upper part of the band'];
 function openBandSheet(){ var c=CATS[catKey], bd=bandOf(c.hz);
@@ -382,7 +400,7 @@ function openBandSheet(){ var c=CATS[catKey], bd=bandOf(c.hz);
   document.getElementById('bsTitle').textContent=bd.name+' band';
   document.getElementById('bsRange').textContent=bd.lo+' to '+bd.hi+' Hz';
   document.getElementById('bsWhat').innerHTML=BANDMEANING[bd.name];
-  document.getElementById('bsYours').innerHTML='Your '+c.label+' sits at <b>'+c.hz+' Hz</b>, '+bd.place+'. As it plays, you may feel something there.';
+  document.getElementById('bsYours').innerHTML='By design, the easier way for you to process '+DOMAINPHRASE[c.label]+' is through '+BANDWAY[bd.name]+'. You can use all four ways, but '+BANDWAY2[bd.name]+' easier and more effective for you. Your '+c.label+' sits at <b>'+c.hz+' Hz</b>, '+bd.place+'. As it plays, you may feel something there.';
   var hz=parseInt(c.hz,10), pct=(hz-250)/(950-250)*100;
   var th=''; BANDS.forEach(function(b){ th+='<div class="bseg'+(b.name===bd.name?' act':'')+'"></div>'; });
   document.getElementById('bsTrack').innerHTML=th+'<div class="bdotm" style="left:'+pct+'%"></div>';
