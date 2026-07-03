@@ -176,13 +176,11 @@
   .legend .lgsep{color:#cfc8ba;margin:0 2px}
   .qbox,.sic .heart{cursor:pointer}
   .grip{cursor:grab;touch-action:none}
-  #favRows .row.dragging{opacity:.95;box-shadow:0 12px 26px rgba(56,0,122,.20);transform:scale(1.015);position:relative;z-index:6}
+  #favRows .row.dragging,#rows .row.dragging{opacity:.95;box-shadow:0 12px 26px rgba(56,0,122,.20);transform:scale(1.015);position:relative;z-index:6}
   .legend2{flex-direction:column;align-items:flex-start;gap:7px;padding-bottom:12px}
   .legend3{align-items:flex-start;justify-content:space-between;gap:10px;padding-bottom:12px}
   .legend3 .lgleft{display:flex;flex-direction:column;gap:7px}
   .legend3 .lgright{flex:0 0 auto;white-space:nowrap}
-  #rows .lcol .grip{display:none}
-  #rows .lcol{justify-content:center}
   .legimm{flex-direction:column;align-items:flex-start;gap:7px}
   #catTitle{display:none}
   .desc{padding-top:8px}
@@ -192,7 +190,8 @@
   .desc{padding-top:10px}
   .desc p{line-height:1.5}
   .ctarow{display:flex;justify-content:flex-end;padding:14px 22px 0}
-  .barhints{justify-content:space-between;padding-top:16px;padding-bottom:12px}
+  .barhints{justify-content:space-between;padding-top:14px;padding-bottom:12px}
+  .immleg{padding-top:14px}
   .qall{color:var(--cink)}
   #favs .qall{color:#1A1620;font-weight:700}
   .lgline{display:flex;align-items:center;gap:6px}
@@ -202,12 +201,6 @@
   .legend4{flex-direction:column;align-items:stretch;gap:7px;padding-bottom:12px}
   .legend4 .lgrow{display:flex;justify-content:space-between}
   .lgdlh{color:#a8a2ad;display:inline-flex;align-items:center}
-  .topright{display:flex;align-items:center;gap:12px}
-  .qfab{width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid #eadfce;display:flex;align-items:center;justify-content:center;color:var(--cink);position:relative;flex:0 0 auto}
-  #favs .qfab{color:#1A1620}
-  .qbadge{position:absolute;top:-4px;right:-5px;min-width:15px;height:15px;border-radius:8px;background:#1A1620;color:#fff;font-size:9.5px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px}
-  .qbadge:empty{display:none}
-  #favs .legend{padding-top:18px}
   .scrtitle{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;line-height:1;color:var(--ink)}
 </style></head><body>
 <!-- INTERACTION · REORDER: the WHOLE card is draggable on click-and-hold (long-press) anywhere on it, not just the grip dots — the grip is only the visual cue. Applies to Immersions + Favourites. Not wired in this prototype; spec for dev. -->
@@ -215,14 +208,14 @@
 
   <!-- ===================== LIST ===================== -->
   <section class="screen" id="list">
-    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">B</span></div><div class="topright"><div class="qfab"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="margin-left:2px"><path d="M8 5v14l11-7z"/></svg><span class="qbadge" id="qn"></span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div></div>
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">B</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
     <div class="pills" id="pills">
       <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
     </div>
     <div class="desc"><h2 class="serif" id="catTitle">Love Vibrational Frequency</h2>
       <p id="catDesc">increases your authentic resonance in matters of love and relationships.</p></div>
-    <span style="display:none" id="catHz"></span>
-    <div class="legend barhints"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Adds to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>saves to Playlist</div></div>
+    <div class="ctarow"><span style="display:none" id="catHz"></span><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
+    <div class="legend legend4 immleg"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Adds to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>saves to Playlist</div></div></div>
     <div class="rows" id="rows"></div>
   </section>
 
@@ -269,8 +262,9 @@
 
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
-    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">B</span></div><div class="topright"><div class="qfab"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" style="margin-left:2px"><path d="M8 5v14l11-7z"/></svg><span class="qbadge" id="qnf"></span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div></div>
-        <div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Adds to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>saves to Playlist</div></div></div>
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">B</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
+    <div class="barrow"><div></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
+    <div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Adds to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>saves to Playlist</div></div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
   </section>
 </div>
@@ -643,8 +637,8 @@ setCat(catKey);vrz();drawViz();setIcons();
 // Play All), heart = save to Favorites, drag-to-reorder on Favorites ONLY (frequency pages keep list order).
 (function(){
  const qn=document.getElementById('qn'),qnf=document.getElementById('qnf');let sup=false;
- function upd(){const n=document.querySelectorAll('#rows .qbox.on').length;qn.textContent=n||'';
-  const m=document.querySelectorAll('#favRows .qbox.on').length;qnf.textContent=m||'';}
+ function upd(){const n=document.querySelectorAll('#rows .qbox.on').length;qn.textContent=n?' ('+n+')':'';
+  const m=document.querySelectorAll('#favRows .qbox.on').length;qnf.textContent=m?' ('+m+')':'';}
  function wire(id){document.getElementById(id).addEventListener('click',function(e){
   if(sup){sup=false;e.stopPropagation();e.preventDefault();return;}
   const q=e.target.closest('.qbox');if(q){e.stopPropagation();q.classList.toggle('on');upd();return;}
@@ -655,13 +649,14 @@ setCat(catKey);vrz();drawViz();setIcons();
  const _sc=window.setCat;window.setCat=function(k){_sc(k);upd();};
  const _bf=window.buildFavs;window.buildFavs=function(){_bf();upd();};
  upd();
- const fc=document.getElementById('favRows');let drag=null,moved=false;
- fc.addEventListener('pointerdown',function(e){const g=e.target.closest('.grip');if(!g)return;
-  drag=g.closest('.row');moved=false;drag.classList.add('dragging');e.preventDefault();});
+ let drag=null,moved=false;
+ function dragify(c){c.addEventListener('pointerdown',function(e){const g=e.target.closest('.grip');if(!g)return;
+  drag=g.closest('.row');moved=false;drag.classList.add('dragging');e.preventDefault();});}
+ dragify(document.getElementById('favRows'));dragify(document.getElementById('rows'));
  document.addEventListener('pointermove',function(e){if(!drag)return;moved=true;e.preventDefault();
-  const y=e.clientY,sibs=[...fc.querySelectorAll('.row')].filter(r=>r!==drag);
-  for(const s of sibs){const r=s.getBoundingClientRect();if(y<r.top+r.height/2){if(s.previousElementSibling!==drag||true)fc.insertBefore(drag,s);return;}}
-  fc.appendChild(drag);},{passive:false});
+  const c=drag.parentElement,y=e.clientY,sibs=[...c.querySelectorAll('.row')].filter(r=>r!==drag);
+  for(const s of sibs){const r=s.getBoundingClientRect();if(y<r.top+r.height/2){c.insertBefore(drag,s);return;}}
+  c.appendChild(drag);},{passive:false});
  document.addEventListener('pointerup',function(){if(!drag)return;drag.classList.remove('dragging');drag=null;
   if(moved){sup=true;setTimeout(function(){sup=false;},150);}});
 })();
