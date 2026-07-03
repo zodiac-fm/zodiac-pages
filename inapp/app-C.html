@@ -185,6 +185,11 @@
   #rows .lcol{justify-content:center}
   .legimm{flex-direction:column;align-items:flex-start;gap:7px}
   .hzsm{font-size:43px;line-height:1;letter-spacing:-1px}.hzsm small{font-size:12px}
+  #catTitle{display:none}
+  .desc{padding-top:10px}
+  .desc p{font-size:15px;color:#55505c;margin-top:0}
+  .pill{background:rgba(255,255,255,.55)!important;margin:0 2px!important;color:#7b7580!important}
+  .pill.on{background:#fff!important;color:var(--cink)!important;box-shadow:0 1px 5px rgba(0,0,0,.13)!important;font-weight:700!important}
   .qall{background:var(--cink);border-color:var(--cink);color:#fff}
   #favs .qall{background:#1A1620;border-color:#1A1620;color:#fff}
   .lgline{display:flex;align-items:center;gap:6px}
@@ -202,7 +207,7 @@
       <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
     </div>
     <div class="desc"><h2 class="serif" id="catTitle">Love Vibrational Frequency</h2>
-      <p id="catDesc">These tracks increase your authentic resonance in matters of love and relationships.</p></div>
+      <p id="catDesc">Increase your authentic resonance in matters of love and relationships.</p></div>
     <div class="barrow"><div class="freqline"><span class="hzsm" id="catHz">432<small> Hz</small></span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
     <div class="legend legimm"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Checkmark tracks to build your queue</div><div class="lgline"><span class="lgico"><span class="lgheart">&#9829;</span></span>saves to Favorites</div></div>
     <div class="rows" id="rows"></div>
@@ -292,13 +297,13 @@ const SONGMETA={
 function bubs(s){const b=(SONGMETA[s.slug]||{b:[]}).b;return '<div class="bubs">'+b.map((w,i)=>'<span class="bub">'+w+(i<b.length-1?'<span class="sep"> · </span>':'')+'</span>').join('')+'</div>';}
 const CATS={
  core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
-   title:'Core Vibrational Frequency',desc:'These tracks deepen your authentic sense of who you are.',songs:SONGLIST},
+   title:'Core Vibrational Frequency',desc:'Deepen your authentic sense of who you are.',songs:SONGLIST},
  love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',cdeep:'#6E0024',ctint:'#FFE8EA',cglow:'rgba(185,0,68,.45)',hue:0,filt:'none',gA:'255,150,190',gB:'185,0,68',hz:'432',
-   title:'Love Vibrational Frequency',desc:'These tracks increase your authentic resonance in matters of love and relationships.',songs:SONGLIST},
+   title:'Love Vibrational Frequency',desc:'Increase your authentic resonance in matters of love and relationships.',songs:SONGLIST},
  vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#C25500',cdeep:'#BC6700',ctint:'#FFEADA',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
-   title:'Vitality Vibrational Frequency',desc:'These tracks raise your energy, drive and aliveness.',songs:SONGLIST},
+   title:'Vitality Vibrational Frequency',desc:'Raise your energy, drive and aliveness.',songs:SONGLIST},
  abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',cink:'#0A7A52',cdeep:'#0A6B48',ctint:'#DCF4E8',cglow:'rgba(18,165,110,.5)',hue:0,filt:'none',gA:'143,225,190',gB:'18,165,110',hz:'611',
-   title:'Abundance Vibrational Frequency',desc:'These tracks open your sense of opportunity and flow.',songs:SONGLIST},
+   title:'Abundance Vibrational Frequency',desc:'Open your sense of opportunity and flow.',songs:SONGLIST},
 };
 let catKey=(['core','love','vitality','abundance'].includes(new URLSearchParams(location.search).get('cat'))?new URLSearchParams(location.search).get('cat'):'love');  // ?cat= opens a category (review aid)
 const aud=document.getElementById('aud');
