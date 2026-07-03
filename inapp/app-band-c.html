@@ -337,13 +337,13 @@ function bandOf(hz){ hz=parseInt(hz,10);
 }
 const CATS={
  core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
-   title:'Core Vibrational Frequency',desc:'is your identity signal. It turns your sense of self back up, wherever you are.',songs:SONGLIST},
+   title:'Core Vibrational Frequency',desc:'is your identity signal. It turns your sense of self back up, wherever you are.',short:'identity, turned back up.',songs:SONGLIST},
  love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',cdeep:'#6E0024',ctint:'#FFE8EA',cglow:'rgba(185,0,68,.45)',hue:0,filt:'none',gA:'255,150,190',gB:'185,0,68',hz:'432',
-   title:'Love Vibrational Frequency',desc:'tunes your connection, to yourself and everyone else. Warmth stops being work.',songs:SONGLIST},
+   title:'Love Vibrational Frequency',desc:'tunes your connection, to yourself and everyone else. Warmth stops being work.',short:'connection, tuned.',songs:SONGLIST},
  vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#C25500',cdeep:'#BC6700',ctint:'#FFEADA',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
-   title:'Vitality Vibrational Frequency',desc:'is your energy meter, restored. You feel again what feeds you and what drains you.',songs:SONGLIST},
+   title:'Vitality Vibrational Frequency',desc:'is your energy meter, restored. You feel again what feeds you and what drains you.',short:'energy, restored.',songs:SONGLIST},
  abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',cink:'#0A7A52',cdeep:'#0A6B48',ctint:'#DCF4E8',cglow:'rgba(18,165,110,.5)',hue:0,filt:'none',gA:'143,225,190',gB:'18,165,110',hz:'611',
-   title:'Abundance Vibrational Frequency',desc:'is your timing, restored. Opportunity stops feeling like something to chase.',songs:SONGLIST},
+   title:'Abundance Vibrational Frequency',desc:'is your timing, restored. Opportunity stops feeling like something to chase.',short:'timing, restored.',songs:SONGLIST},
 };
 let catKey=(['core','love','vitality','abundance'].includes(new URLSearchParams(location.search).get('cat'))?new URLSearchParams(location.search).get('cat'):'love');  // ?cat= opens a category (review aid)
 const aud=document.getElementById('aud');
@@ -408,7 +408,7 @@ function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElemen
     document.getElementById('catDesc').innerHTML='<b style="color:var(--cink);font-weight:700">'+c.hz+' Hz</b> '+c.desc
       +'<span style="display:block;margin-top:6px;font-size:12.5px;color:var(--mut)"><b style="color:var(--cink);font-weight:600">'+bd.name+' band</b> \u00b7 you may feel something '+bd.place+'</span>';
   } else {
-    document.getElementById('catDesc').innerHTML='<b style="color:var(--cink);font-weight:700">'+c.hz+' Hz \u00b7 '+bd.name+'</b> '+c.desc;
+    var cd=document.getElementById('catDesc'); cd.style.fontSize='14.5px'; cd.innerHTML='<b style="color:var(--cink);font-weight:700">'+c.hz+' Hz \u00b7 '+bd.name+'</b> \u00b7 '+(c.short||c.desc);
   }
   document.getElementById('catHz').innerHTML=c.hz+'<small> Hz</small>';
   buildRows();
