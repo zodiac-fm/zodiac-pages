@@ -184,10 +184,12 @@
   #rows .lcol .grip{display:none}
   #rows .lcol{justify-content:center}
   .legimm{flex-direction:column;align-items:flex-start;gap:7px}
-  .descrow{display:flex;align-items:center;gap:14px}
-  .descrow p{flex:1 1 0;min-width:0}
-  .descrow .qall{flex:0 0 auto}
-  .barhints{justify-content:space-between;padding-top:12px;padding-bottom:10px}
+  .desc{padding-top:12px}
+  .hzbig{font-family:'Cormorant Garamond',Georgia,serif;font-size:38px;font-weight:600;line-height:1;color:var(--cink)}
+  .hzbig small{font-size:17px;font-weight:600;margin-left:1px}
+  .hzsent{font-size:15px;color:#55505c;margin-top:5px;line-height:1.5}
+  .ctarow{display:flex;justify-content:flex-end;padding:12px 22px 0}
+  .barhints{justify-content:space-between;padding-top:14px;padding-bottom:12px}
   #catTitle{display:none}
   .desc{padding-top:10px}
   .desc p{font-size:15px;color:#55505c;margin-top:0}
@@ -209,7 +211,8 @@
     <div class="pills" id="pills">
       <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
     </div>
-    <div class="desc descrow"><h2 class="serif" id="catTitle" style="display:none"></h2><p id="catDesc">Increase your authentic resonance in matters of love and relationships.</p><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
+    <div class="desc"><h2 class="serif" id="catTitle" style="display:none"></h2><div id="catDesc"></div></div>
+    <div class="ctarow"><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
     <div class="legend barhints"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Checkmark tracks to build your queue</div><div class="lgline"><span class="lgheart">&#9829;</span>saves to Favorites</div></div>
     <div class="rows" id="rows"></div>
   </section>
@@ -298,13 +301,13 @@ const SONGMETA={
 function bubs(s){const b=(SONGMETA[s.slug]||{b:[]}).b;return '<div class="bubs">'+b.map((w,i)=>'<span class="bub">'+w+(i<b.length-1?'<span class="sep"> · </span>':'')+'</span>').join('')+'</div>';}
 const CATS={
  core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
-   title:'Core Vibrational Frequency',desc:'Deepen your authentic sense of who you are.',songs:SONGLIST},
+   title:'Core Vibrational Frequency',desc:'deepens your authentic sense of who you are.',songs:SONGLIST},
  love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',cdeep:'#6E0024',ctint:'#FFE8EA',cglow:'rgba(185,0,68,.45)',hue:0,filt:'none',gA:'255,150,190',gB:'185,0,68',hz:'432',
-   title:'Love Vibrational Frequency',desc:'Increase your authentic resonance in matters of love and relationships.',songs:SONGLIST},
+   title:'Love Vibrational Frequency',desc:'increases your authentic resonance in matters of love and relationships.',songs:SONGLIST},
  vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#C25500',cdeep:'#BC6700',ctint:'#FFEADA',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
-   title:'Vitality Vibrational Frequency',desc:'Raise your energy, drive and aliveness.',songs:SONGLIST},
+   title:'Vitality Vibrational Frequency',desc:'raises your energy, drive and aliveness.',songs:SONGLIST},
  abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',cink:'#0A7A52',cdeep:'#0A6B48',ctint:'#DCF4E8',cglow:'rgba(18,165,110,.5)',hue:0,filt:'none',gA:'143,225,190',gB:'18,165,110',hz:'611',
-   title:'Abundance Vibrational Frequency',desc:'Open your sense of opportunity and flow.',songs:SONGLIST},
+   title:'Abundance Vibrational Frequency',desc:'opens your sense of opportunity and flow.',songs:SONGLIST},
 };
 let catKey=(['core','love','vitality','abundance'].includes(new URLSearchParams(location.search).get('cat'))?new URLSearchParams(location.search).get('cat'):'love');  // ?cat= opens a category (review aid)
 const aud=document.getElementById('aud');
@@ -364,7 +367,7 @@ function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElemen
   st.setProperty('--c1',c.c1); st.setProperty('--c2',c.c2); st.setProperty('--cink',c.cink); st.setProperty('--cglow',c.cglow); st.setProperty('--cdeep',c.cdeep); st.setProperty('--ctint',c.ctint);
   document.querySelectorAll('#pills .pill').forEach(p=>p.classList.toggle('on',p.dataset.cat===key));
   document.getElementById('catTitle').textContent=c.title;
-  document.getElementById('catDesc').innerHTML='<b style="color:var(--cink);font-weight:700">'+c.hz+' Hz</b><span style="color:#cfc8ba"> &middot; </span>'+c.desc;
+  document.getElementById('catDesc').innerHTML='<div class="hzbig">'+c.hz+'<small> Hz</small></div><p class="hzsent">'+c.desc+'</p>';
   buildRows();
 }
 document.querySelectorAll('#pills .pill').forEach(p=>p.onclick=()=>setCat(p.dataset.cat));
