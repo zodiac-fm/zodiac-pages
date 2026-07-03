@@ -190,7 +190,18 @@
   .desc{padding-top:10px}
   .desc p{line-height:1.5}
   .ctarow{display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0}
-  .bandchip{font-size:12px;font-weight:600;color:var(--cink);background:var(--ctint);border-radius:20px;padding:6px 12px}
+  .bandchip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--cink);background:var(--ctint);border:1px solid color-mix(in srgb,var(--cink) 25%,transparent);border-radius:20px;padding:6px 12px;cursor:pointer}
+  .bandchip:after{content:'\203A';font-size:14px;line-height:1;opacity:.7}
+  .bsheet-wrap{position:absolute;inset:0;z-index:60;display:none}
+  .bsheet-wrap.open{display:block}
+  .bsheet-ovl{position:absolute;inset:0;background:rgba(26,22,32,.34)}
+  .bsheet{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:22px 22px 0 0;padding:22px 24px calc(env(safe-area-inset-bottom,0px) + 26px);box-shadow:0 -12px 40px rgba(26,22,32,.18)}
+  .bsheet .grab{width:38px;height:4px;border-radius:3px;background:#e3dbcb;margin:0 auto 16px}
+  .bsheet h3{font-family:inherit;font-size:21px;font-weight:700;letter-spacing:-.01em;color:var(--ink,#1a1620)}
+  .bsheet .hzr{font-size:12.5px;font-weight:600;color:var(--cink);margin-top:3px}
+  .bsheet p{font-size:14px;line-height:1.55;color:#3a3542;margin-top:12px}
+  .bsheet p b{font-weight:700}
+  .bsheet .cage{font-size:12.5px;color:#7a7480;margin-top:14px}
   .barhints{justify-content:space-between;padding-top:14px;padding-bottom:12px}
   .immleg{padding-top:14px}
   .qall{color:var(--cink)}
@@ -237,6 +248,18 @@
     <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Adds to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>saves to Playlist</div></div></div></div>
     <div class="rows" id="rows"></div>
   </section>
+
+  <!-- band sheet (tap the band chip) -->
+  <div class="bsheet-wrap" id="bsheetWrap"><div class="bsheet-ovl" id="bsheetOvl"></div>
+    <div class="bsheet">
+      <div class="grab"></div>
+      <h3 id="bsTitle">Solar Plexus band</h3>
+      <div class="hzr" id="bsRange">425 to 600 Hz</div>
+      <p id="bsWhat"></p>
+      <p id="bsYours"></p>
+      <div class="cage" id="bsCage">You use all four ways. Your band is just your easiest path, not a limit.</div>
+    </div>
+  </div>
 
   <!-- pinned mini player -->
   <div id="mini">
@@ -336,6 +359,21 @@ function bandOf(hz){ hz=parseInt(hz,10);
   const t=Math.min(2,Math.floor((hz-b.lo)/(b.hi-b.lo)*3));
   return {name:b.name,lo:b.lo,hi:b.hi,place:b.places[t]};
 }
+const BANDMEANING={
+ 'Root':'<b>Root is the feeling band.</b> You access this area through grounding and steadiness. Settled, solid, sure in the body.',
+ 'Solar Plexus':'<b>Solar Plexus is the doing band.</b> You access this area through action and forward motion. You find out by moving.',
+ 'Throat':'<b>Throat is the saying band.</b> You access this area through putting it into words. It feels unfinished until it is voiced.',
+ 'Crown':'<b>Crown is the seeing band.</b> You access this area through perspective and the big picture. The pattern shows you the way.'
+};
+const BANDPOS=['near the base of the band','in the middle of the band','in the upper part of the band'];
+function openBandSheet(){ var c=CATS[catKey], bd=bandOf(c.hz);
+  var t=Math.min(2,Math.floor((parseInt(c.hz,10)-bd.lo)/(bd.hi-bd.lo)*3));
+  document.getElementById('bsTitle').textContent=bd.name+' band';
+  document.getElementById('bsRange').textContent=bd.lo+' to '+bd.hi+' Hz';
+  document.getElementById('bsWhat').innerHTML=BANDMEANING[bd.name];
+  document.getElementById('bsYours').innerHTML='Your '+c.label+' sits at <b>'+c.hz+' Hz</b>, '+BANDPOS[t]+'. As it plays, you may feel something '+bd.place+'.';
+  document.getElementById('bsheetWrap').classList.add('open');
+}
 const CATS={
  core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
    title:'Core Vibrational Frequency',desc:'is your identity signal. It turns your sense of self back up, wherever you are.',short:'identity, turned back up.',songs:SONGLIST},
@@ -411,6 +449,8 @@ function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElemen
   buildRows();
 }
 document.querySelectorAll('#pills .pill').forEach(p=>p.onclick=()=>setCat(p.dataset.cat));
+document.getElementById('bandChip').onclick=openBandSheet;
+document.getElementById('bsheetOvl').onclick=function(){document.getElementById('bsheetWrap').classList.remove('open');};
 
 // ---------- play control ----------
 const miniImg=document.getElementById('miniImg'),miniName=document.getElementById('miniName'),miniPP=document.getElementById('miniPP');
