@@ -204,7 +204,8 @@
   .bseg.act{background:var(--ctint)}
   .bdotm{position:absolute;top:50%;transform:translate(-50%,-50%);width:15px;height:15px;border-radius:50%;background:var(--cink);border:2.5px solid #fff;box-shadow:0 1px 5px rgba(26,22,32,.3)}
   .bslabs{display:flex;margin-top:7px}
-  .bslabs span{flex:1 1 0;text-align:center;font-size:9.5px;font-weight:600;letter-spacing:.02em;color:#a8a2ad}
+  .bslabs span{flex:1 1 0;text-align:center;font-size:10px;font-weight:600;letter-spacing:.02em;color:#a8a2ad}
+  .bslabs em.vb{display:block;font-style:normal;font-weight:500;font-size:10px;margin-top:2px;opacity:.8}
   .bslabs span.act{color:var(--cink)}
   .bsheet h3{font-family:inherit;font-size:21px;font-weight:700;letter-spacing:-.01em;color:var(--ink,#1a1620)}
   .bsheet .hzr{font-size:12.5px;font-weight:600;color:var(--cink);margin-top:3px}
@@ -359,10 +360,10 @@ function bubs(s){const b=(SONGMETA[s.slug]||{b:[]}).b;return '<div class="bubs">
 // Throat 600-775 Say it / Crown 775-950 See it. Place phrase = position within the band
 // (thirds), since most frequencies sit between anchors (a bodygraph does this properly later).
 const BANDS=[
- {name:'Root',lo:250,hi:425,places:['deep at the base of your spine','low in your belly, below the navel','just below your navel']},
- {name:'Solar Plexus',lo:425,hi:600,places:['just above your navel','in the pit of your stomach','high in your stomach, just under the ribs']},
- {name:'Throat',lo:600,hi:775,places:['at the base of your throat, where chest meets voice','in the center of your throat','high in your throat, up behind the jaw']},
- {name:'Crown',lo:775,hi:950,places:['where the back of your head rises to the crown','at the very top of your head','just above the top of your head']}
+ {name:'Root',verb:'Feel it',lo:250,hi:425,places:['deep at the base of your spine','low in your belly, below the navel','just below your navel']},
+ {name:'Solar Plexus',verb:'Do it',lo:425,hi:600,places:['just above your navel','in the pit of your stomach','high in your stomach, just under the ribs']},
+ {name:'Throat',verb:'Say it',lo:600,hi:775,places:['at the base of your throat, where chest meets voice','in the center of your throat','high in your throat, up behind the jaw']},
+ {name:'Crown',verb:'See it',lo:775,hi:950,places:['where the back of your head rises to the crown','at the very top of your head','just above the top of your head']}
 ];
 function bandOf(hz){ hz=parseInt(hz,10);
   const b=BANDS.find(b=>hz>=b.lo&&hz<b.hi)||BANDS[BANDS.length-1];
@@ -385,7 +386,7 @@ function openBandSheet(){ var c=CATS[catKey], bd=bandOf(c.hz);
   var hz=parseInt(c.hz,10), pct=(hz-250)/(950-250)*100;
   var th=''; BANDS.forEach(function(b){ th+='<div class="bseg'+(b.name===bd.name?' act':'')+'"></div>'; });
   document.getElementById('bsTrack').innerHTML=th+'<div class="bdotm" style="left:'+pct+'%"></div>';
-  var lh=''; BANDS.forEach(function(b){ lh+='<span class="'+(b.name===bd.name?'act':'')+'">'+(b.name==='Solar Plexus'?'Solar Plexus':b.name)+'</span>'; });
+  var lh=''; BANDS.forEach(function(b){ lh+='<span class="'+(b.name===bd.name?'act':'')+'">'+b.name+'<em class="vb">'+b.verb+'</em></span>'; });
   document.getElementById('bsLabs').innerHTML=lh;
   document.getElementById('bsheetWrap').classList.add('open');
 }
