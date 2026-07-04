@@ -34,7 +34,8 @@
   .swrap{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-height:0}
   .swrap .rows{flex:none;overflow:visible}
   .catey{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9a93a0}
-  .serif2{font-family:'Cormorant Garamond',Georgia,serif;font-size:27px;font-weight:600;line-height:1.08;margin-top:2px}
+  .serif2{font-family:'Cormorant Garamond',Georgia,serif;font-size:27px;font-weight:600;line-height:1.08;margin:4px 0 9px}
+  .hznum{font-family:'Switzer',-apple-system,sans-serif;font-weight:700;font-size:23px;letter-spacing:-.01em;color:var(--cink);font-variant-numeric:lining-nums}
   #list .ctarow{justify-content:flex-end}
   .hztap{color:var(--cink);font-weight:700;cursor:pointer;white-space:nowrap}
   .hztap .hzchev{display:inline-block;font-size:10px;vertical-align:1px;margin-left:3px;transition:transform .2s;opacity:.75}
@@ -283,7 +284,7 @@
         <p id="bpWhat"></p><p id="bpYours"></p>
       </div></div>
     <div class="ctarow"><span style="display:none" id="catHz"></span><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
-    <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Adds to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>saves to Playlist</div></div></div></div>
+    <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
     <div class="rows" id="rows"></div>
     </div>
   </section>
@@ -348,7 +349,7 @@
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
     <div class="barrow"><div></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
     <div class="swrap">
-    <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Adds to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>saves to Playlist</div></div></div></div>
+    <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
     </div>
   </section>
@@ -522,7 +523,10 @@ function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElemen
   var bd=bandOf(c.hz), RET=location.hash.indexOf('return')>=0;
   var ROLE={'Core':'identity','Love':'connection','Vitality':'energy','Abundance':'opportunity'};
   var t2=document.getElementById('catTitle2'); t2.style.display=RET?'none':'block';
-  t2.innerHTML='<span style="color:var(--cink)">'+c.hz+'</span> is Your '+c.label+' Frequency';
+  var FLIP=location.hash.indexOf('flip')>=0;
+  t2.innerHTML = FLIP
+    ? 'Your '+ROLE[c.label]+' frequency <span class="hznum">= '+c.hz+'</span>'
+    : '<span class="hznum">'+c.hz+'</span> is Your '+c.label+' Frequency';
   if(RET){
     document.getElementById('catDesc').innerHTML='<b class="hztap" id="hzTap">'+c.hz+' Hz \u00b7 '+bd.name+'<span class="hzchev">\u25BC</span></b>';
   } else {
