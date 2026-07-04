@@ -34,6 +34,8 @@
   /* scroll region: description + guide scroll away; see per-variant sticky rules */
   .swrap{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-height:0}
   .swrap .rows{flex:none;overflow:visible}
+  .catey{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9a93a0}
+  .serif2{font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;font-weight:600;line-height:1.1;margin-top:3px}
   #list .ctarow{justify-content:flex-end}
   .hztap{color:var(--cink);font-weight:700;cursor:pointer;white-space:nowrap}
   .hztap .hzchev{display:inline-block;font-size:10px;vertical-align:1px;margin-left:3px;transition:transform .2s;opacity:.75}
@@ -271,7 +273,9 @@
     </div>
     <div class="dockbar" id="dockbar"><div class="qall" id="qallDock"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All</div></div>
     <div class="swrap">
-    <div class="desc"><h2 class="serif" id="catTitle">Love Vibrational Frequency</h2>
+    <div class="desc"><h2 class="serif" id="catTitle" style="display:none">Love Vibrational Frequency</h2>
+      <div class="catey" id="catEy">From your birth chart</div>
+      <h2 class="serif2" id="catTitle2">Your connection frequency</h2>
       <p id="catDesc">tunes your connection, to yourself and everyone else. Warmth stops being work.</p>
       <div class="bandpanel" id="bandPanel">
         <h4 id="bpTitle"></h4><div class="hzr2" id="bpRange"></div>
@@ -517,8 +521,15 @@ function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElemen
   document.querySelectorAll('#pills .pill').forEach(p=>p.classList.toggle('on',p.dataset.cat===key));
   document.getElementById('catTitle').textContent=c.title;
   var bd=bandOf(c.hz), RET=location.hash.indexOf('return')>=0;
-  var lead='<b class="hztap" id="hzTap">'+c.hz+' Hz \u00b7 '+bd.name+'<span class="hzchev">\u25BC</span></b>';
-  document.getElementById('catDesc').innerHTML = RET ? lead : lead+' '+c.desc;
+  var ROLE={'Core':'identity','Love':'connection','Vitality':'energy','Abundance':'opportunity'};
+  document.getElementById('catEy').style.display=RET?'none':'block';
+  var t2=document.getElementById('catTitle2'); t2.style.display=RET?'none':'block';
+  t2.textContent='Your '+ROLE[c.label]+' frequency';
+  if(RET){
+    document.getElementById('catDesc').innerHTML='<b class="hztap" id="hzTap">'+c.hz+' Hz \u00b7 '+bd.name+'<span class="hzchev">\u25BC</span></b>';
+  } else {
+    document.getElementById('catDesc').innerHTML='Yours is <b style="color:var(--cink);font-weight:700">'+c.hz+' Hz</b>, in your <b class="hztap" id="hzTap">'+bd.name+' band<span class="hzchev">\u25BC</span></b>. It '+c.desc;
+  }
   document.getElementById('bandPanel').classList.remove('open');
   document.getElementById('hzTap').onclick=function(){
     var p=document.getElementById('bandPanel'), open=!p.classList.contains('open');
