@@ -853,5 +853,14 @@ document.querySelectorAll('.tiphead').forEach(function(h){h.addEventListener('cl
    dock.classList.toggle('show',show);
  },{passive:true});
 })();
+
+// LABELED STATE "#graduated" (Michael 2026-07-04): the banked guide-goes-down layout.
+// Default = guide up top (first experience). Add #graduated to the URL to render the
+// after-a-few-sessions layout: guide below the song list. (#return still = bare headline;
+// hashes combine, e.g. #return-graduated.)
+if(location.hash.indexOf('graduated')>=0){
+  var tip=document.querySelector('#list .swrap .tipcard'), rows=document.getElementById('rows');
+  if(tip&&rows){ rows.parentNode.insertBefore(tip, rows.nextSibling); tip.style.marginBottom='96px'; rows.style.paddingBottom='10px'; }
+}
 </script>
 </body></html>
