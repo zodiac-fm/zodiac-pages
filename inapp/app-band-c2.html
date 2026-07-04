@@ -274,7 +274,6 @@
     <div class="dockbar" id="dockbar"><div class="qall" id="qallDock"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All</div></div>
     <div class="swrap">
     <div class="desc"><h2 class="serif" id="catTitle" style="display:none">Love Vibrational Frequency</h2>
-      <div class="catey" id="catEy">From your birth chart</div>
       <h2 class="serif2" id="catTitle2">Your connection frequency</h2>
       <p id="catDesc">tunes your connection, to yourself and everyone else. Warmth stops being work.</p>
       <div class="bandpanel" id="bandPanel">
@@ -522,13 +521,12 @@ function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElemen
   document.getElementById('catTitle').textContent=c.title;
   var bd=bandOf(c.hz), RET=location.hash.indexOf('return')>=0;
   var ROLE={'Core':'identity','Love':'connection','Vitality':'energy','Abundance':'opportunity'};
-  document.getElementById('catEy').style.display=RET?'none':'block';
   var t2=document.getElementById('catTitle2'); t2.style.display=RET?'none':'block';
   t2.textContent='Your '+ROLE[c.label]+' frequency';
   if(RET){
     document.getElementById('catDesc').innerHTML='<b class="hztap" id="hzTap">'+c.hz+' Hz \u00b7 '+bd.name+'<span class="hzchev">\u25BC</span></b>';
   } else {
-    document.getElementById('catDesc').innerHTML='Yours is <b style="color:var(--cink);font-weight:700">'+c.hz+' Hz</b>, in your <b class="hztap" id="hzTap">'+bd.name+' band<span class="hzchev">\u25BC</span></b>. It '+c.desc;
+    document.getElementById('catDesc').innerHTML='<b style="color:var(--cink);font-weight:700">'+c.hz+' Hz</b>: located in your <b class="hztap" id="hzTap">'+bd.name+' band<span class="hzchev">\u25BC</span></b>. This '+c.desc;
   }
   document.getElementById('bandPanel').classList.remove('open');
   document.getElementById('hzTap').onclick=function(){
