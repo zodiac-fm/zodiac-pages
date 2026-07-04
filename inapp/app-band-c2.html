@@ -777,8 +777,8 @@ setCat(catKey);vrz();drawViz();setIcons();
 </script>
 <script>
 // GUIDE card: open on the very first visit, minimized on every return (per-device memory)
-try{if(localStorage.getItem('zfm_guide_seen')){document.querySelectorAll('.tipcard').forEach(function(c){c.classList.add('min');});}
-localStorage.setItem('zfm_guide_seen','1');}catch(e){}
+// GUIDE rule (Michael 2026-07-03): Immersions + Playlist guides start OPEN by default, every visit.
+// Any guide added elsewhere in future starts closed. (Real-app spec: open until after the first PWA session.)
 document.querySelectorAll('.tiphead').forEach(function(h){h.addEventListener('click',function(){h.parentElement.classList.toggle('min');});});
 </script>
 </body></html>
