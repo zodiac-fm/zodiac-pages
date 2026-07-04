@@ -104,8 +104,8 @@
   .svfreq .svsep{color:#cfc8ba;font-weight:500}
   .svfreq .svhz{color:#2A2530;font-weight:600;font-variant-numeric:lining-nums}
   .svfreq .svhz b{font-weight:700;color:#2A2530}
-  .svfreq #svBand{color:#7a7480;font-weight:600;cursor:pointer}
-  .svfreq #svBand:after{content:' \25BE';font-size:9.5px;opacity:.75}
+  .svfreq #svBand{display:inline-flex;align-items:center;gap:4px;color:var(--cink);font-weight:600;cursor:pointer;background:var(--ctint);border:1px solid color-mix(in srgb,var(--cink) 26%,transparent);border-radius:12px;padding:2.5px 9px;font-size:12.5px}
+  .svfreq #svBand:after{content:'\25BE';font-size:11px;opacity:.85}
   .sv-meta .heart{font-size:23px;color:var(--cink)}
   .player{padding:8px 30px calc(env(safe-area-inset-bottom,0px) + 24px)}
   .scrub{height:4px;background:#e7e2ea;border-radius:3px;position:relative;cursor:pointer;margin:12px 0 6px}
