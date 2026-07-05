@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>BAND C3 (number headline) · Zodiac.fm · A</title>
+<title>BAND C2 (player meta) · Zodiac.fm · A</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
 <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
 <style>
@@ -98,11 +98,14 @@
   .sv-meta{display:flex;align-items:flex-start;justify-content:space-between;padding:24px 30px 2px}
   .sv-meta h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;line-height:1.02}
   .sv-meta .f{font-size:13px;color:var(--cink);font-weight:700;margin-top:3px}
-  .svfreq{display:inline-flex;align-items:center;gap:8px;margin-top:11px}
-  .svfreq .fdot{width:9px;height:9px;border-radius:50%;background:var(--cink)}
-  .svfreq b{font-size:15px;font-weight:700;color:var(--ink)}
-  .svfreq small{font-size:10.5px;color:var(--mut);font-weight:600;margin-left:-3px}
-  .svfreq span{font-size:13px;font-weight:700;color:var(--cink)}
+  .svfreq{display:inline-flex;align-items:center;gap:7px;margin-top:11px;font-size:13.5px;font-weight:600}
+  .svfreq .fdot{width:9px;height:9px;border-radius:50%;background:var(--cink);flex:0 0 auto}
+  .svfreq #svCat{color:var(--cink);font-weight:700}
+  .svfreq .svsep{color:#cfc8ba;font-weight:500}
+  .svfreq .svhz{color:#2A2530;font-weight:600;font-variant-numeric:lining-nums}
+  .svfreq .svhz b{font-weight:700;color:#2A2530}
+  .svfreq #svBand{display:inline-flex;align-items:center;gap:4px;color:var(--cink);font-weight:600;cursor:pointer;background:var(--ctint);border:1px solid color-mix(in srgb,var(--cink) 26%,transparent);border-radius:12px;padding:2.5px 9px;font-size:12.5px}
+  .svfreq #svBand:after{content:'\25BE';font-size:11px;opacity:.85}
   .sv-meta .heart{font-size:23px;color:var(--cink)}
   .player{padding:8px 30px calc(env(safe-area-inset-bottom,0px) + 24px)}
   .scrub{height:4px;background:#e7e2ea;border-radius:3px;position:relative;cursor:pointer;margin:12px 0 6px}
@@ -327,7 +330,7 @@
     <div class="sv-art"><div id="viz"><canvas id="vc"></canvas></div></div>
     <div class="sv-meta">
       <div><h2 class="serif" id="svName">&mdash;</h2>
-        <div class="svfreq"><span class="fdot"></span><span id="svCat">Love</span><b id="svHz">432</b><small>Hz</small><span id="svBand" style="font-size:12px;color:var(--mut);font-weight:500">· Solar Plexus</span></div><div id="svFeel" style="margin-top:7px;font-size:12.5px;line-height:1.45;color:var(--mut)">You may feel something high in your stomach, just under the ribs.</div><div style="display:none"></div>
+        <div class="svfreq"><span class="fdot"></span><span id="svCat">Love</span><span class="svsep">·</span><span class="svhz"><b id="svHz">432</b> Hz</span><span class="svsep">·</span><span id="svBand">Solar Plexus</span></div><div id="svFeel" style="margin-top:7px;font-size:12.5px;line-height:1.45;color:var(--mut)">You may feel something high in your stomach, just under the ribs.</div><div style="display:none"></div>
       </div>
       <div class="heart">&#9825;</div>
     </div>
@@ -462,7 +465,7 @@ const CATS={
  abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',cink:'#0A7A52',cdeep:'#0A6B48',ctint:'#DCF4E8',cglow:'rgba(18,165,110,.5)',hue:0,filt:'none',gA:'143,225,190',gB:'18,165,110',hz:'611',
    title:'Abundance Vibrational Frequency',desc:'is your timing, restored. Opportunity stops feeling like something to chase.',short:'timing, restored.',songs:SONGLIST},
 };
-let catKey=(['core','love','vitality','abundance'].includes(new URLSearchParams(location.search).get('cat'))?new URLSearchParams(location.search).get('cat'):'love');  // ?cat= opens a category (review aid)
+let catKey=(['core','love','vitality','abundance'].includes(new URLSearchParams(location.search).get('cat'))?new URLSearchParams(location.search).get('cat'):'core');  // ?cat= opens a category (review aid)
 const aud=document.getElementById('aud');
 let curSong=null, playCat=null, D=null, started=false, playHz=432;
 let gA='255,180,230', gB='234,17,99';   // glow colors of the PLAYING song's category
@@ -544,6 +547,7 @@ function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElemen
 document.querySelectorAll('#pills .pill').forEach(p=>p.onclick=()=>setCat(p.dataset.cat));
 document.getElementById('bsheetOvl').onclick=function(){document.getElementById('bsheetWrap').classList.remove('open');};
 document.getElementById('bpClose').onclick=function(){document.getElementById('bandPanel').classList.remove('open');var t=document.getElementById('hzTap');if(t)t.classList.remove('open');};
+document.getElementById('svBand').onclick=function(){ var prev=catKey; if(typeof playCat==='string'&&playCat){catKey=playCat;} openBandSheet(); catKey=prev; };
 document.getElementById('bsClose').onclick=function(){document.getElementById('bsheetWrap').classList.remove('open');};
 
 // ---------- play control ----------
@@ -560,7 +564,7 @@ async function playSong(ck,i){
   document.getElementById('app').classList.add('playing');
   miniImg.src=tileSrc(ck,s); miniImg.style.filter='none'; loadBurst(tileSrc(ck,s));
   miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion'; document.getElementById('miniSub').style.color=cat.cink;
-  svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label; var pb=bandOf(cat.hz); document.getElementById('svBand').textContent='\u00b7 '+pb.name; document.getElementById('svFeel').textContent='You may feel something '+pb.place+'.';
+  svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label; var pb=bandOf(cat.hz); document.getElementById('svBand').textContent=pb.name; document.getElementById('svFeel').textContent='You may feel something '+pb.place+'.';
   ['song','mini'].forEach(function(id){var el=document.getElementById(id);el.style.setProperty('--c1',cat.c1);el.style.setProperty('--c2',cat.c2);el.style.setProperty('--cink',cat.cink);el.style.setProperty('--cdeep',cat.cdeep);el.style.setProperty('--cglow',cat.cglow);});
   initGraph(); if(AC){try{await AC.resume();}catch(e){}}
   if(s!==prev||!D) D=await analyze(s.audio,playHz);   // re-analyze only when the track changes (snappy restart)
