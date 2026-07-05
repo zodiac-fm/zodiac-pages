@@ -30,6 +30,26 @@
   .barrow{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 8px}
   .qall{display:flex;align-items:center;gap:6px;font-size:13px;color:#55505c;background:#fff;border:1px solid #eadfce;border-radius:16px;padding:7px 14px}
   .rows{flex:1;overflow-y:auto;padding:2px 14px 84px}
+  /* scroll region: description + guide scroll away; see per-variant sticky rules */
+  .swrap{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-height:0}
+  .swrap .rows{flex:none;overflow:visible}
+  .catey{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9a93a0}
+  .desc h2.serif2{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;line-height:1.08;margin:6px 0 13px;white-space:nowrap}
+  .hznum{font-family:'Switzer',-apple-system,sans-serif;font-weight:700;font-size:23px;letter-spacing:-.01em;color:var(--cink);font-variant-numeric:lining-nums}
+  #list .ctarow{justify-content:flex-end}
+  .hztap{color:var(--cink);font-weight:700;cursor:pointer;white-space:nowrap}
+  .hztap .hzchev{display:inline-block;font-size:10px;vertical-align:1px;margin-left:3px;transition:transform .2s;opacity:.75}
+  .hztap.open .hzchev{transform:rotate(180deg)}
+  .bandpanel{position:relative;display:none;margin:12px 22px 2px;background:#fff;border:1px solid #efe6d6;border-radius:16px;padding:16px 18px 18px;box-shadow:0 6px 20px rgba(26,22,32,.06)}
+  .bandpanel.open{display:block}
+  .bandpanel h4{font-size:16px;font-weight:700;letter-spacing:-.01em}
+  .bandpanel .hzr2{font-size:12px;font-weight:600;color:var(--cink);margin-top:2px}
+  .bandpanel p{font-size:13px;line-height:1.5;color:#3a3542;margin-top:10px}
+  .bpx{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;background:#F6F1E8;color:#63616F;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer}
+  .dockbar{position:absolute;left:0;right:0;z-index:4;display:flex;justify-content:flex-end;padding:6px 18px 10px;opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity .22s ease,transform .22s ease}
+  .dockbar.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+  .dockbar{background:var(--cream);border-bottom:1px solid #e9e1d1}
+
   #app.playing .rows{padding-bottom:150px}
   .row{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid #efe6d6;border-radius:14px;padding:10px;margin-bottom:12px;cursor:pointer}
   .thumb{position:relative;width:79px;height:79px;border-radius:13px;overflow:visible;flex:0 0 auto;background:transparent;margin-left:-4px}
@@ -78,11 +98,14 @@
   .sv-meta{display:flex;align-items:flex-start;justify-content:space-between;padding:24px 30px 2px}
   .sv-meta h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;line-height:1.02}
   .sv-meta .f{font-size:13px;color:var(--cink);font-weight:700;margin-top:3px}
-  .svfreq{display:inline-flex;align-items:center;gap:8px;margin-top:11px}
-  .svfreq .fdot{width:9px;height:9px;border-radius:50%;background:var(--cink)}
-  .svfreq b{font-size:15px;font-weight:700;color:var(--ink)}
-  .svfreq small{font-size:10.5px;color:var(--mut);font-weight:600;margin-left:-3px}
-  .svfreq span{font-size:13px;font-weight:700;color:var(--cink)}
+  .svfreq{display:inline-flex;align-items:center;gap:7px;margin-top:11px;font-size:13.5px;font-weight:600}
+  .svfreq .fdot{width:9px;height:9px;border-radius:50%;background:var(--cink);flex:0 0 auto}
+  .svfreq #svCat{color:var(--cink);font-weight:700}
+  .svfreq .svsep{color:#cfc8ba;font-weight:500}
+  .svfreq .svhz{color:#2A2530;font-weight:600;font-variant-numeric:lining-nums}
+  .svfreq .svhz b{font-weight:700;color:#2A2530}
+  .svfreq #svBand{display:inline-flex;align-items:center;gap:4px;color:var(--cink);font-weight:600;cursor:pointer;background:var(--ctint);border:1px solid color-mix(in srgb,var(--cink) 26%,transparent);border-radius:12px;padding:2.5px 9px;font-size:12.5px}
+  .svfreq #svBand:after{content:'\25BE';font-size:11px;opacity:.85}
   .sv-meta .heart{font-size:23px;color:var(--cink)}
   .player{padding:8px 30px calc(env(safe-area-inset-bottom,0px) + 24px)}
   .scrub{height:4px;background:#e7e2ea;border-radius:3px;position:relative;cursor:pointer;margin:12px 0 6px}
@@ -189,11 +212,33 @@
   .pill.on{background:#fff!important;color:var(--cink)!important;box-shadow:0 1px 5px rgba(0,0,0,.13)!important;font-weight:700!important}
   .desc{padding-top:10px}
   .desc p{line-height:1.5}
-  .ctarow{display:flex;justify-content:flex-end;padding:14px 22px 0}
+  .ctarow{display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0}
+  .bandchip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--cink);background:var(--ctint);border:1px solid color-mix(in srgb,var(--cink) 25%,transparent);border-radius:20px;padding:6px 12px;cursor:pointer}
+  .bandchip:after{content:'\203A';font-size:14px;line-height:1;opacity:.7}
+  .bsheet-wrap{position:absolute;inset:0;z-index:60;display:none}
+  .bsheet-wrap.open{display:block}
+  .bsheet-ovl{position:absolute;inset:0;background:rgba(26,22,32,.34)}
+  .bsheet{position:absolute;left:16px;right:16px;top:50%;transform:translateY(-50%);max-height:calc(100% - 116px);overflow-y:auto;background:#fff;border-radius:22px;padding:20px 22px 22px;box-shadow:0 18px 50px rgba(26,22,32,.28)}
+  .bsx{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#F6F1E8;color:#63616F;font-size:19px;line-height:1;cursor:pointer}
+  .bscale{margin-top:16px}
+  .bstrack{position:relative;display:flex;height:12px;border-radius:7px;overflow:hidden}
+  .bseg{flex:1 1 0;background:#EEE9E0;border-right:2px solid #fff}
+  .bseg:last-child{border-right:none}
+  .bseg.act{background:var(--ctint)}
+  .bdotm{position:absolute;top:50%;transform:translate(-50%,-50%);width:15px;height:15px;border-radius:50%;background:var(--cink);border:2.5px solid #fff;box-shadow:0 1px 5px rgba(26,22,32,.3)}
+  .bslabs{display:flex;margin-top:7px}
+  .bslabs span{flex:1 1 0;text-align:center;font-size:10px;font-weight:600;letter-spacing:.02em;color:#a8a2ad}
+  .bslabs em.vb{display:block;font-style:normal;font-weight:500;font-size:10px;margin-top:2px;opacity:.8}
+  .bslabs span.act{color:var(--cink)}
+  .bsheet h3{font-family:inherit;font-size:21px;font-weight:700;letter-spacing:-.01em;color:var(--ink,#1a1620)}
+  .bsheet .hzr{font-size:12.5px;font-weight:600;color:var(--cink);margin-top:3px}
+  .bsheet p{font-size:14px;line-height:1.55;color:#3a3542;margin-top:12px}
+  .bsheet p b{font-weight:700}
+  .bsheet .cage{font-size:12.5px;color:#7a7480;margin-top:14px}
   .barhints{justify-content:space-between;padding-top:14px;padding-bottom:12px}
   .immleg{padding-top:14px}
-  .qall{color:var(--cink)}
-  #favs .qall{color:#1A1620;font-weight:700}
+  .qall{background:var(--cink);border-color:var(--cink);color:#fff}
+  #favs .qall{background:#2A2530;border:1px solid #2A2530;color:#fff;font-weight:700}
   .lgline{display:flex;align-items:center;gap:6px}
   .lgico{width:13px;display:inline-flex;justify-content:center;flex:0 0 auto}
   .lgdown{font-size:13px;color:#a8a2ad;line-height:1}
@@ -230,12 +275,36 @@
     <div class="pills" id="pills">
       <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
     </div>
-    <div class="desc"><h2 class="serif" id="catTitle">Love Vibrational Frequency</h2>
-      <p id="catDesc">tunes your connection, to yourself and everyone else. Warmth stops being work.</p></div>
+    <div class="dockbar" id="dockbar"><div class="qall" id="qallDock"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All</div></div>
+    <div class="swrap">
+    <div class="desc"><h2 class="serif" id="catTitle" style="display:none">Love Vibrational Frequency</h2>
+      <h2 class="serif2" id="catTitle2">Your connection frequency</h2>
+      <p id="catDesc">tunes your connection, to yourself and everyone else. Warmth stops being work.</p>
+      <div class="bandpanel" id="bandPanel">
+        <div class="bpx" id="bpClose">&#10005;</div>
+        <h4 id="bpTitle"></h4><div class="hzr2" id="bpRange"></div>
+        <div class="bscale"><div class="bstrack" id="bpTrack"></div><div class="bslabs" id="bpLabs"></div></div>
+        <p id="bpWhat"></p><p id="bpYours"></p>
+      </div></div>
     <div class="ctarow"><span style="display:none" id="catHz"></span><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
     <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
     <div class="rows" id="rows"></div>
+    </div>
   </section>
+
+  <!-- band sheet (tap the band chip) -->
+  <div class="bsheet-wrap" id="bsheetWrap"><div class="bsheet-ovl" id="bsheetOvl"></div>
+    <div class="bsheet">
+      <div class="bsx" id="bsClose">&#10005;</div>
+      <h3 id="bsTitle">Solar Plexus band</h3>
+      <div class="hzr" id="bsRange">425 to 600 Hz</div>
+      <div class="bscale"><div class="bstrack" id="bsTrack"></div><div class="bslabs" id="bsLabs"></div></div>
+      <p id="bsWhat"></p>
+      <p id="bsYours"></p>
+      <p id="bsYours2"></p>
+      
+    </div>
+  </div>
 
   <!-- pinned mini player -->
   <div id="mini">
@@ -261,7 +330,7 @@
     <div class="sv-art"><div id="viz"><canvas id="vc"></canvas></div></div>
     <div class="sv-meta">
       <div><h2 class="serif" id="svName">&mdash;</h2>
-        <div class="svfreq"><span class="fdot"></span><span id="svCat">Love</span><b id="svHz">432</b><small>Hz</small></div>
+        <div class="svfreq"><span class="fdot"></span><span id="svCat">Love</span><span class="svsep">·</span><span class="svhz"><b id="svHz">432</b> Hz</span><span class="svsep">·</span><span id="svBand">Solar Plexus</span></div><div id="svFeel" style="margin-top:7px;font-size:12.5px;line-height:1.45;color:var(--mut)">You may feel something high in your stomach, just under the ribs.</div><div style="display:none"></div>
       </div>
       <div class="heart">&#9825;</div>
     </div>
@@ -282,8 +351,10 @@
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">C</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
     <div class="barrow"><div></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
+    <div class="swrap">
     <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
+    </div>
   </section>
 </div>
 
@@ -319,17 +390,82 @@ const SONGMETA={
  'cosmic-drift':{b:['FOCUS','MEDITATE','NAP','CALM','DREAMY'],l:'Slow swells, like rain on a window.'},
  'galactic-slumber':{b:['SLEEP','FOCUS','MEDITATE','UNWIND','DEEP'],l:'Dark, slow, and bottomless.'}};
 function bubs(s){const b=(SONGMETA[s.slug]||{b:[]}).b;return '<div class="bubs">'+b.map((w,i)=>'<span class="bub">'+w+(i<b.length-1?'<span class="sep"> · </span>':'')+'</span>').join('')+'</div>';}
+
+// ---- band location (experiment C) ----
+// Bands per the deep reference: Root 250-425 Feel it / Solar Plexus 425-600 Do it /
+// Throat 600-775 Say it / Crown 775-950 See it. Place phrase = position within the band
+// (thirds), since most frequencies sit between anchors (a bodygraph does this properly later).
+const BANDS=[
+ {name:'Root',verb:'Ground',lo:250,hi:425,places:['deep at the base of your spine','low in your belly, below the navel','just below your navel']},
+ {name:'Solar Plexus',verb:'Action',lo:425,hi:600,places:['just above your navel','in the pit of your stomach','high in your stomach, just under the ribs']},
+ {name:'Throat',verb:'Articulation',lo:600,hi:775,places:['at the base of your throat, where chest meets voice','in the center of your throat','high in your throat, up behind the jaw']},
+ {name:'Crown',verb:'Big picture',lo:775,hi:950,places:['where the back of your head rises to the crown','at the very top of your head','just above the top of your head']}
+];
+function bandOf(hz){ hz=parseInt(hz,10);
+  const b=BANDS.find(b=>hz>=b.lo&&hz<b.hi)||BANDS[BANDS.length-1];
+  const t=Math.min(2,Math.floor((hz-b.lo)/(b.hi-b.lo)*3));
+  return {name:b.name,lo:b.lo,hi:b.hi,place:b.places[t]};
+}
+const BANDMEANING={
+ 'Root':'<b>Root is the grounding band.</b> Understanding arrives through steadiness: things become clear once you feel settled, solid, grounded.',
+ 'Solar Plexus':'<b>Solar Plexus is the action band.</b> Understanding arrives through motion and motivation: clarity tends to come once you are already moving on it.',
+ 'Throat':'<b>Throat is the articulation band.</b> Understanding arrives through words: thinking it in language, talking it through, writing it down.',
+ 'Crown':'<b>Crown is the big-picture band.</b> Understanding arrives through systems and perspective: things make sense once you can see the whole pattern.'
+};
+const BANDWAY={
+ 'Root':'groundedness',
+ 'Solar Plexus':'action',
+ 'Throat':'articulation',
+ 'Crown':'the big picture'
+};
+const BANDWAY2={
+ 'Root':'steadiness tends to be',
+ 'Solar Plexus':'motion tends to be',
+ 'Throat':'words tend to be',
+ 'Crown':'perspective tends to be'
+};
+const DOMAINPHRASE={
+ 'Core':'who you are',
+ 'Love':'connection',
+ 'Vitality':'your energy',
+ 'Abundance':'exchange, timing, and opportunity'
+};
+const BANDPOS=['near the base of the band','in the middle of the band','in the upper part of the band'];
+function openBandSheet(){ var c=CATS[catKey], bd=bandOf(c.hz);
+  var t=Math.min(2,Math.floor((parseInt(c.hz,10)-bd.lo)/(bd.hi-bd.lo)*3));
+  document.getElementById('bsTitle').textContent=bd.name+' band';
+  document.getElementById('bsRange').textContent=bd.lo+' to '+bd.hi+' Hz';
+  document.getElementById('bsWhat').innerHTML=BANDMEANING[bd.name];
+  document.getElementById('bsYours').innerHTML='By design, the easier way for you to process '+DOMAINPHRASE[c.label]+' is through '+BANDWAY[bd.name]+'. You can use all four ways, but '+BANDWAY2[bd.name]+' easier and more effective for you.';
+  document.getElementById('bsYours2').innerHTML='Your '+c.label+' sits at <b>'+c.hz+' Hz</b>, '+bd.place+'. As it plays, you may feel something there.';
+  var hz=parseInt(c.hz,10), pct=(hz-250)/(950-250)*100;
+  var th=''; BANDS.forEach(function(b){ th+='<div class="bseg'+(b.name===bd.name?' act':'')+'"></div>'; });
+  document.getElementById('bsTrack').innerHTML=th+'<div class="bdotm" style="left:'+pct+'%"></div>';
+  var lh=''; BANDS.forEach(function(b){ lh+='<span class="'+(b.name===bd.name?'act':'')+'">'+b.name+'<em class="vb">'+b.verb+'</em></span>'; });
+  document.getElementById('bsLabs').innerHTML=lh;
+  document.getElementById('bsheetWrap').classList.add('open');
+}
+function fillBandPanel(){ var c=CATS[catKey], bd=bandOf(c.hz);
+  document.getElementById('bpTitle').textContent=bd.name+' band';
+  document.getElementById('bpRange').textContent=bd.lo+' to '+bd.hi+' Hz';
+  document.getElementById('bpWhat').innerHTML=BANDMEANING[bd.name];
+  document.getElementById('bpYours').innerHTML='By design, the easier way for you to process '+DOMAINPHRASE[c.label]+' is through '+BANDWAY[bd.name]+'. You can use all four ways, but '+BANDWAY2[bd.name]+' easier and more effective for you. Your '+c.label+' sits at <b>'+c.hz+' Hz</b>, '+bd.place+'. As it plays, you may feel something there.';
+  var th=''; BANDS.forEach(function(b){ th+='<div class="bseg'+(b.name===bd.name?' act':'')+'"></div>'; });
+  document.getElementById('bpTrack').innerHTML=th+'<div class="bdotm" style="left:'+((parseInt(c.hz,10)-250)/700*100)+'%"></div>';
+  var lh=''; BANDS.forEach(function(b){ lh+='<span class="'+(b.name===bd.name?'act':'')+'">'+b.name+'<em class="vb">'+b.verb+'</em></span>'; });
+  document.getElementById('bpLabs').innerHTML=lh;
+}
 const CATS={
  core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
-   title:'Core Vibrational Frequency',desc:'is your identity signal. It turns your sense of self back up, wherever you are.',songs:SONGLIST},
+   title:'Core Vibrational Frequency',desc:'is your identity signal. It turns your sense of self back up, wherever you are.',short:'identity, turned back up.',songs:SONGLIST},
  love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',cdeep:'#6E0024',ctint:'#FFE8EA',cglow:'rgba(185,0,68,.45)',hue:0,filt:'none',gA:'255,150,190',gB:'185,0,68',hz:'432',
-   title:'Love Vibrational Frequency',desc:'tunes your connection, to yourself and everyone else. Warmth stops being work.',songs:SONGLIST},
+   title:'Love Vibrational Frequency',desc:'tunes your connection, to yourself and everyone else. Warmth stops being work.',short:'connection, tuned.',songs:SONGLIST},
  vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#C25500',cdeep:'#BC6700',ctint:'#FFEADA',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
-   title:'Vitality Vibrational Frequency',desc:'is your energy meter, restored. You feel again what feeds you and what drains you.',songs:SONGLIST},
+   title:'Vitality Vibrational Frequency',desc:'is your energy meter, restored. You feel again what feeds you and what drains you.',short:'energy, restored.',songs:SONGLIST},
  abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',cink:'#0A7A52',cdeep:'#0A6B48',ctint:'#DCF4E8',cglow:'rgba(18,165,110,.5)',hue:0,filt:'none',gA:'143,225,190',gB:'18,165,110',hz:'611',
-   title:'Abundance Vibrational Frequency',desc:'is your timing, restored. Opportunity stops feeling like something to chase.',songs:SONGLIST},
+   title:'Abundance Vibrational Frequency',desc:'is your timing, restored. Opportunity stops feeling like something to chase.',short:'timing, restored.',songs:SONGLIST},
 };
-let catKey=(['core','love','vitality','abundance'].includes(new URLSearchParams(location.search).get('cat'))?new URLSearchParams(location.search).get('cat'):'love');  // ?cat= opens a category (review aid)
+let catKey=(['core','love','vitality','abundance'].includes(new URLSearchParams(location.search).get('cat'))?new URLSearchParams(location.search).get('cat'):'core');  // ?cat= opens a category (review aid)
 const aud=document.getElementById('aud');
 let curSong=null, playCat=null, D=null, started=false, playHz=432;
 let gA='255,180,230', gB='234,17,99';   // glow colors of the PLAYING song's category
@@ -387,11 +523,32 @@ function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElemen
   st.setProperty('--c1',c.c1); st.setProperty('--c2',c.c2); st.setProperty('--cink',c.cink); st.setProperty('--cglow',c.cglow); st.setProperty('--cdeep',c.cdeep); st.setProperty('--ctint',c.ctint);
   document.querySelectorAll('#pills .pill').forEach(p=>p.classList.toggle('on',p.dataset.cat===key));
   document.getElementById('catTitle').textContent=c.title;
-  document.getElementById('catDesc').innerHTML='<b style="color:var(--cink);font-weight:700">'+c.hz+' Hz</b> '+c.desc;
+  var bd=bandOf(c.hz), RET=location.hash.indexOf('return')>=0;
+  var ROLE={'Core':'identity','Love':'connection','Vitality':'energy','Abundance':'opportunity'};
+  var t2=document.getElementById('catTitle2'); t2.style.display=RET?'none':'block';
+  var FLIP=location.hash.indexOf('flip')>=0;
+  t2.innerHTML = FLIP
+    ? 'Your '+ROLE[c.label]+' frequency <span class="hznum">= '+c.hz+'</span>'
+    : '<span class="hznum">'+c.hz+'</span> is Your '+c.label+' Tone';
+  if(RET){
+    document.getElementById('catDesc').innerHTML='<b class="hztap" id="hzTap">'+c.hz+' Hz \u00b7 '+bd.name+'<span class="hzchev">\u25BC</span></b>';
+  } else {
+    document.getElementById('catDesc').innerHTML='Located in your <b class="hztap" id="hzTap">'+bd.name+' band<span class="hzchev">\u25BC</span></b>. This '+c.desc;
+  }
+  document.getElementById('bandPanel').classList.remove('open');
+  document.getElementById('hzTap').onclick=function(){
+    var p=document.getElementById('bandPanel'), open=!p.classList.contains('open');
+    if(open) fillBandPanel();
+    p.classList.toggle('open',open); this.classList.toggle('open',open);
+  };
   document.getElementById('catHz').innerHTML=c.hz+'<small> Hz</small>';
   buildRows();
 }
 document.querySelectorAll('#pills .pill').forEach(p=>p.onclick=()=>setCat(p.dataset.cat));
+document.getElementById('bsheetOvl').onclick=function(){document.getElementById('bsheetWrap').classList.remove('open');};
+document.getElementById('bpClose').onclick=function(){document.getElementById('bandPanel').classList.remove('open');var t=document.getElementById('hzTap');if(t)t.classList.remove('open');};
+document.getElementById('svBand').onclick=function(){ var prev=catKey; if(typeof playCat==='string'&&playCat){catKey=playCat;} openBandSheet(); catKey=prev; };
+document.getElementById('bsClose').onclick=function(){document.getElementById('bsheetWrap').classList.remove('open');};
 
 // ---------- play control ----------
 const miniImg=document.getElementById('miniImg'),miniName=document.getElementById('miniName'),miniPP=document.getElementById('miniPP');
@@ -407,7 +564,7 @@ async function playSong(ck,i){
   document.getElementById('app').classList.add('playing');
   miniImg.src=tileSrc(ck,s); miniImg.style.filter='none'; loadBurst(tileSrc(ck,s));
   miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion'; document.getElementById('miniSub').style.color=cat.cink;
-  svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label;
+  svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label; var pb=bandOf(cat.hz); document.getElementById('svBand').textContent=pb.name; document.getElementById('svFeel').textContent='You may feel something '+pb.place+'.';
   ['song','mini'].forEach(function(id){var el=document.getElementById(id);el.style.setProperty('--c1',cat.c1);el.style.setProperty('--c2',cat.c2);el.style.setProperty('--cink',cat.cink);el.style.setProperty('--cdeep',cat.cdeep);el.style.setProperty('--cglow',cat.cglow);});
   initGraph(); if(AC){try{await AC.resume();}catch(e){}}
   if(s!==prev||!D) D=await analyze(s.audio,playHz);   // re-analyze only when the track changes (snappy restart)
@@ -681,8 +838,42 @@ setCat(catKey);vrz();drawViz();setIcons();
 </script>
 <script>
 // GUIDE card: open on the very first visit, minimized on every return (per-device memory)
-try{if(localStorage.getItem('zfm_guide_seen')){document.querySelectorAll('.tipcard').forEach(function(c){c.classList.add('min');});}
-localStorage.setItem('zfm_guide_seen','1');}catch(e){}
+// GUIDE rule (Michael 2026-07-03): Immersions + Playlist guides start OPEN by default, every visit.
+// Any guide added elsewhere in future starts closed. (Real-app spec: open until after the first PWA session.)
 document.querySelectorAll('.tiphead').forEach(function(h){h.addEventListener('click',function(){h.parentElement.classList.toggle('min');});});
+
+// dock-into-header Play All: nothing sticks inside the list; when the in-flow Play All
+// scrolls away, a compact one fades into the header under the pills (z-4, below #favs's 5)
+(function(){
+ var sw=document.querySelector('#list .swrap'), dock=document.getElementById('dockbar'),
+     dq=document.getElementById('qallDock'), main=document.querySelector('#list .ctarow .qall'),
+     pills=document.getElementById('pills');
+ if(!sw||!dock||!main) return;
+ function place(){ dock.style.top=(pills.offsetTop+pills.offsetHeight+2)+'px'; }
+ place(); window.addEventListener('resize',place);
+ sw.addEventListener('scroll',function(){
+   var show=main.getBoundingClientRect().bottom < pills.getBoundingClientRect().bottom+8;
+   if(show) dq.innerHTML=main.innerHTML;
+   dock.classList.toggle('show',show);
+ },{passive:true});
+})();
+
+// LABELED STATE "#graduated" (Michael 2026-07-04): the banked guide-goes-down layout.
+// Default = guide up top (first experience). Add #graduated to the URL to render the
+// after-a-few-sessions layout: guide below the song list. (#return still = bare headline;
+// hashes combine, e.g. #return-graduated.)
+function applyGraduated(){
+  var on=location.hash.indexOf('graduated')>=0;
+  var tip=document.querySelector('#list .swrap .tipcard'), rows=document.getElementById('rows');
+  if(!tip||!rows) return;
+  if(on && tip.nextSibling!==null && tip.compareDocumentPosition(rows) & Node.DOCUMENT_POSITION_FOLLOWING){
+    rows.parentNode.insertBefore(tip, rows.nextSibling); tip.style.marginBottom='96px'; rows.style.paddingBottom='10px';
+  } else if(!on && (rows.compareDocumentPosition(tip) & Node.DOCUMENT_POSITION_FOLLOWING)){
+    rows.parentNode.insertBefore(tip, rows); tip.style.marginBottom=''; rows.style.paddingBottom='';
+  }
+}
+window.addEventListener('hashchange',applyGraduated);
+window.addEventListener('DOMContentLoaded',applyGraduated);
+applyGraduated();
 </script>
 </body></html>
