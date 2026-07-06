@@ -296,19 +296,23 @@ function drawBlob(cv,catk){
   const P=ZPAL[catk]||ZPAL.core, pr=hx(P.d[0]), gl=hx(P.s[0][1]), dp=hx(FREQS_DEEP[catk]);
   x.clearRect(0,0,W,H);
   // soft on-hue glow
-  const halo=x.createRadialGradient(cx,cy,R*0.55,cx,cy,R*1.5);
-  halo.addColorStop(0,rgba(pr,0.20)); halo.addColorStop(1,rgba(pr,0));
+  const halo=x.createRadialGradient(cx,cy,R*0.62,cx,cy,R*1.5);
+  halo.addColorStop(0,rgba(pr,0.16)); halo.addColorStop(1,rgba(pr,0));
   x.fillStyle=halo; x.beginPath(); x.arc(cx,cy,R*1.5,0,7); x.fill();
-  // the orb: one soft two-hue gradient, lit upper-left, deepening lower-right
-  const g=x.createRadialGradient(cx-R*0.34,cy-R*0.38,R*0.06, cx+R*0.16,cy+R*0.24,R*1.06);
-  g.addColorStop(0, rgba(gl,1));
-  g.addColorStop(0.52, rgba(pr,1));
-  g.addColorStop(1, rgba(dp,1));
-  x.fillStyle=g; x.beginPath(); x.arc(cx,cy,R,0,7); x.fill();
-  // barely-there rim shading for roundness (a soft inner shadow, never a ring)
-  const edge=x.createRadialGradient(cx,cy,R*0.72,cx,cy,R);
-  edge.addColorStop(0,'rgba(0,0,0,0)'); edge.addColorStop(1, rgba(dp,0.22));
-  x.fillStyle=edge; x.beginPath(); x.arc(cx,cy,R,0,7); x.fill();
+  // orb body: a soft diagonal two-hue wash (flat like the app, no 3D hotspot, no rim shadow)
+  x.save(); x.beginPath(); x.arc(cx,cy,R,0,7); x.clip();
+  const g=x.createLinearGradient(cx-R*0.75,cy-R*0.85, cx+R*0.7,cy+R*0.9);
+  g.addColorStop(0, rgba(gl,1)); g.addColorStop(0.55, rgba(pr,1)); g.addColorStop(1, rgba(dp,1));
+  x.fillStyle=g; x.fillRect(cx-R,cy-R,R*2,R*2);
+  // a gentle light bloom in the upper-left, soft not plastic
+  const bloom=x.createRadialGradient(cx-R*0.3,cy-R*0.34,0, cx-R*0.3,cy-R*0.34,R*0.95);
+  bloom.addColorStop(0, rgba(gl,0.42)); bloom.addColorStop(1, rgba(gl,0));
+  x.fillStyle=bloom; x.fillRect(cx-R,cy-R,R*2,R*2);
+  x.restore();
+  // feather the very edge into the white card so it is not a hard vector circle
+  const rim=x.createRadialGradient(cx,cy,R*0.93,cx,cy,R*1.02);
+  rim.addColorStop(0,'rgba(255,255,255,0)'); rim.addColorStop(1,'rgba(255,255,255,1)');
+  x.fillStyle=rim; x.beginPath(); x.arc(cx,cy,R*1.02,0,7); x.fill();
 }
 const FREQS_DEEP={core:'#38007A',love:'#6E0024',vitality:'#BC6700',abundance:'#0A6B48'};
 function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
