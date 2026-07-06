@@ -52,7 +52,7 @@ pp.addEventListener('click', async ()=>{
   if(aud.paused){ try{ await aud.play(); }catch(e){} } else { aud.pause(); }
   setIcon();
 });
-aud.addEventListener('play', setIcon); aud.addEventListener('pause', setIcon);
+aud.addEventListener('play', ()=>{ started=true; setIcon(); }); aud.addEventListener('pause', setIcon);
 addEventListener('load', startSound); startSound();
 aud.addEventListener('canplay', startSound);            // retry once the audio is decodable
 aud.addEventListener('loadeddata', startSound);
@@ -215,7 +215,7 @@ function frame(){
 // ---- inputs: a track URL + a target Hz (override via window.__ , ?query, or defaults) ----
 const P=new URLSearchParams(location.search);
 const AUDIO=(window.__AUDIO__)||P.get('audio')||'./elysian-sky-600hz.mp3';
-const TARGET_HZ=parseFloat((window.__TARGET__)||P.get('target')||'600');
+let TARGET_HZ=parseFloat((window.__TARGET__)||P.get('target')||'600');
 const CENTER=P.get('center')==='1';   // waves wrap the target line at panel middle (results-page mode)
 const LIGHT=P.get('light')==='1';     // light stage (results page); default dark for the app
 const COL = LIGHT ? {
@@ -242,6 +242,21 @@ const COL = LIGHT ? {
 if(LIGHT){ document.getElementById('title').style.color='#1A1620';
   document.getElementById('sub').style.color='rgba(26,22,32,0.45)';
   document.documentElement.style.background='#FBF8F3'; document.body.style.background='#FBF8F3'; }
+function setWave(hex){ if(!LIGHT||!hex) return; hex=hex.replace('#','');
+  const r=parseInt(hex.slice(0,2),16), g=parseInt(hex.slice(2,4),16), b=parseInt(hex.slice(4,6),16);
+  const pre='rgba('+r+','+g+','+b+',';
+  COL.wash=pre; COL.wfTop=pre+'0.38)'; COL.wfMid=pre+'0.08)'; COL.wfStroke=pre+'0.42)';
+  COL.wfTopG=pre+'0.10)'; COL.wfMidG=pre+'0.03)'; COL.wfStrokeG=pre+'0.14)';
+  COL.nowA=pre+'0.85)'; COL.nowB=pre+'0.20)'; COL.nowGlow=pre+'0.55)'; COL.pulse=pre; COL.mote=pre; }
+setWave(P.get('wave'));
+// switch track/target/colour IN PLACE (same document, so a parent tap gesture carries into play())
+window.zSwitch=function(audio,target,title2,wave){
+  TARGET_HZ=parseFloat(target); if(title2) document.getElementById('title').textContent=title2;
+  setWave(wave);
+  aud.src=audio; aud.currentTime=0;
+  try{ initGraph(); if(AC) AC.resume(); const pr=aud.play(); if(pr&&pr.catch)pr.catch(()=>{}); sound=true; setIcon(); }catch(e){}
+  analyze(audio,parseFloat(target)).then(nd=>{ D=nd; }).catch(()=>{});
+};
 const MINUI=P.get('minui')==='1';     // no play button; tap the canvas to play/pause
 if(MINUI){ pp.style.display='none'; cv.style.cursor='pointer';
   cv.addEventListener('click', async()=>{ if(!sound){ await startSound(); return; }
