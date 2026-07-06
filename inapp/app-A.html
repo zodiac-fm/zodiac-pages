@@ -34,13 +34,14 @@
   .swrap{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-height:0}
   .swrap .rows{flex:none;overflow:visible}
   /* mini status by the logo — Michael's late-night idea 2026-07-05 (two demo takes; tap -> Progress) */
-  .ministat{margin-left:auto;margin-right:12px;display:flex;flex-direction:column;align-items:flex-end;gap:3px;cursor:pointer;-webkit-tap-highlight-color:transparent}
-  .ms-time{font-size:10px;font-weight:600;color:#7a7480;display:inline-flex;align-items:center;gap:4px;letter-spacing:.02em}
-  .ms-time .mschk{color:#0A7A52;font-weight:800;font-size:11.5px;font-style:normal;line-height:1}
-  .ms-time .mschk.low{color:#B90044}
-  .ms-dots{display:inline-flex;gap:4px}
-  .ms-dots i{width:9px;height:9px;border-radius:50%;background:#0A7A52;display:inline-flex;align-items:center;justify-content:center;font-style:normal}
-  .ms-dots i.low{background:#B90044;color:#fff;font-size:8px;font-weight:800;line-height:1}
+  .ministat{margin-left:auto;margin-right:12px;display:grid;grid-template-columns:auto auto;column-gap:6px;row-gap:4px;align-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .ms-lbl{font-size:9.5px;font-weight:600;color:#8a8390;letter-spacing:.03em;justify-self:end}
+  .ms-ind{justify-self:start;display:inline-flex;align-items:center}
+  .mschk{color:#0A7A52;font-weight:800;font-size:11px;font-style:normal;line-height:1}
+  .mschk.low{color:#B90044}
+  .ms-dots{display:inline-flex;gap:3.5px}
+  .ms-dots i{width:8px;height:8px;border-radius:50%;background:#0A7A52;display:inline-flex;align-items:center;justify-content:center;font-style:normal}
+  .ms-dots i.low{background:#B90044;color:#fff;font-size:7px;font-weight:800;line-height:1}
   .ms-line{font-size:10px;font-weight:600;color:#7a7480;letter-spacing:.01em}
   .ms-line b{font-weight:700;color:#0A7A52}
   .ms-line b.low{color:#B90044}
@@ -474,7 +475,7 @@ function renderMiniStat(){
     var dots=''; ['core','love','vitality','abundance'].forEach(function(k){
       var low=MS.vals[k]<MS.MIN; dots+='<i class="'+(low?'low':'')+'" title="'+k+'">'+(low?'\u2212':'')+'</i>';
     });
-    el.innerHTML='<span class="ms-time"><i class="mschk'+(behind?' low':'')+'">'+(behind?'\u2212':'\u2713')+'</i>Time</span><span class="ms-dots">'+dots+'</span>';
+    el.innerHTML='<span class="ms-lbl">Time:</span><span class="ms-ind"><i class="mschk'+(behind?' low':'')+'">'+(behind?'\u2212':'\u2713')+'</i></span><span class="ms-lbl">Balance:</span><span class="ms-ind ms-dots">'+dots+'</span>';
   });
 }
 window.addEventListener('hashchange',renderMiniStat);
