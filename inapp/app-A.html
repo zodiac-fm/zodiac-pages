@@ -33,6 +33,16 @@
   /* scroll region: description + guide scroll away; see per-variant sticky rules */
   .swrap{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-height:0}
   .swrap .rows{flex:none;overflow:visible}
+  /* mini status by the logo — Michael's late-night idea 2026-07-05 (two demo takes; tap -> Progress) */
+  .ministat{margin-left:auto;margin-right:12px;display:flex;flex-direction:column;align-items:flex-end;gap:3px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .ms-time{font-size:10px;font-weight:600;color:#7a7480;display:inline-flex;align-items:center;gap:4px;letter-spacing:.01em}
+  .ms-time .msdot{width:6px;height:6px;border-radius:50%;background:#0A7A52}
+  .ms-dots{display:inline-flex;gap:4px}
+  .ms-dots i{width:9px;height:9px;border-radius:50%;background:#0A7A52;display:inline-flex;align-items:center;justify-content:center;font-style:normal}
+  .ms-dots i.low{background:#B90044;color:#fff;font-size:8px;font-weight:800;line-height:1}
+  .ms-line{font-size:10px;font-weight:600;color:#7a7480;letter-spacing:.01em}
+  .ms-line b{font-weight:700;color:#0A7A52}
+  .ms-line b.low{color:#B90044}
   .catey{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9a93a0}
   .desc h2.serif2{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;line-height:1.08;margin:6px 0 13px;white-space:nowrap}
   .hznum{font-family:'Switzer',-apple-system,sans-serif;font-weight:700;font-size:23px;letter-spacing:-.01em;color:var(--cink);font-variant-numeric:lining-nums}
@@ -271,7 +281,7 @@
 
   <!-- ===================== LIST ===================== -->
   <section class="screen" id="list">
-    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ministat" onclick="window.location.href='https://zodiac-pages.vercel.app/inapp/stats-v17b'"></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
     <div class="pills" id="pills">
       <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
     </div>
@@ -349,7 +359,7 @@
 
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
-    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ministat" onclick="window.location.href='https://zodiac-pages.vercel.app/inapp/stats-v17b'"></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
     <div class="barrow"><div></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
     <div class="swrap">
     <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
@@ -455,6 +465,23 @@ function fillBandPanel(){ var c=CATS[catKey], bd=bandOf(c.hz);
   var lh=''; BANDS.forEach(function(b){ lh+='<span class="'+(b.name===bd.name?'act':'')+'">'+b.name+'<em class="vb">'+b.verb+'</em></span>'; });
   document.getElementById('bpLabs').innerHTML=lh;
 }
+// mini status demo data: Vitality is 4% under the 15% gate this week
+const MS={time:'20 min left this week', vals:{core:28,love:22,vitality:11,abundance:39}, MIN:15};
+function renderMiniStat(){
+  var idea2=location.hash.indexOf('idea2')>=0;
+  document.querySelectorAll('.ministat').forEach(function(el){
+    if(!idea2){
+      var dots=''; ['core','love','vitality','abundance'].forEach(function(k){
+        var low=MS.vals[k]<MS.MIN; dots+='<i class="'+(low?'low':'')+'" title="'+k+'">'+(low?'\u2212':'')+'</i>';
+      });
+      el.innerHTML='<span class="ms-time"><span class="msdot"></span>'+MS.time+'</span><span class="ms-dots">'+dots+'</span>';
+    } else {
+      var c=CATS[catKey], v=MS.vals[catKey], low=v<MS.MIN, d=MS.MIN-v;
+      el.innerHTML='<span class="ms-line">'+(low?'<b class="low">'+c.label+' \u2212'+d+'%</b>':'<b>'+c.label+' \u2713</b>')+' \u00b7 '+MS.time+'</span>';
+    }
+  });
+}
+window.addEventListener('hashchange',renderMiniStat);
 const CATS={
  core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
    title:'Core Vibrational Frequency',desc:'is your identity signal. It turns your sense of self back up, wherever you are.',short:'identity, turned back up.',songs:SONGLIST},
@@ -545,6 +572,7 @@ function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElemen
   buildRows();
 }
 document.querySelectorAll('#pills .pill').forEach(p=>p.onclick=()=>setCat(p.dataset.cat));
+var _sc2=window.setCat; window.setCat=function(k){_sc2(k); renderMiniStat();}; renderMiniStat();
 document.getElementById('bsheetOvl').onclick=function(){document.getElementById('bsheetWrap').classList.remove('open');};
 document.getElementById('bpClose').onclick=function(){document.getElementById('bandPanel').classList.remove('open');var t=document.getElementById('hzTap');if(t)t.classList.remove('open');};
 document.getElementById('svBand').onclick=function(){ var prev=catKey; if(typeof playCat==='string'&&playCat){catKey=playCat;} openBandSheet(); catKey=prev; };
