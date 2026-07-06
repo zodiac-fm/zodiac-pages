@@ -400,8 +400,11 @@ function toneSize(){ const r=$('viewer').getBoundingClientRect(), d=Math.min(dev
   const w=Math.max(2,Math.round(r.width*d)), h=Math.max(2,Math.round(r.height*d));
   if (tcv.width!==w||tcv.height!==h){ tcv.width=w; tcv.height=h; } }
 function drawTone(T, playing, prog){
-  const W=tcv.width, H=tcv.height, cx=W/2, midY=H/2, d=Math.min(devicePixelRatio||1,2);
+  const W=tcv.width, H=tcv.height, cx=W/2, d=Math.min(devicePixelRatio||1,2);
   const f=FREQS[active], col=hx(f.c1);
+  // the tone sits at its TRUE height on the 250-950 range (higher Hz = higher), same idea as the songs
+  const yTop=H*0.34, yBot=H*0.78, fr=Math.max(0,Math.min(1,(f.hz-250)/700));
+  const midY=yBot-(yBot-yTop)*fr;
   const g=tctx.createLinearGradient(0,0,0,H);
   g.addColorStop(0,'#FBF8F3'); g.addColorStop(0.55,'#F5EFE6'); g.addColorStop(1,'#F8F4EC');
   tctx.fillStyle=g; tctx.fillRect(0,0,W,H);
@@ -430,10 +433,17 @@ function drawTone(T, playing, prog){
   tctx.shadowColor='rgba(178,124,16,0.55)'; tctx.shadowBlur=(playing?12:6)*d;
   tctx.strokeStyle='rgba(178,124,16,0.95)'; tctx.lineWidth=2*d;
   tctx.beginPath(); tctx.moveTo(x0,midY); tctx.lineTo(x1,midY); tctx.stroke(); tctx.shadowBlur=0;
-  // Hz label on the gold line (Switzer, every number is Switzer)
+  // light 250-950 scale so the line's height reads as real
+  tctx.strokeStyle='rgba(26,22,32,0.12)'; tctx.lineWidth=1*d;
+  tctx.beginPath(); tctx.moveTo(x0-3*d,yTop); tctx.lineTo(x0-3*d,yBot); tctx.stroke();
+  tctx.textAlign='right'; tctx.textBaseline='middle'; tctx.font='500 '+(8*d)+'px Switzer, -apple-system, sans-serif'; tctx.fillStyle='rgba(26,22,32,0.32)';
+  tctx.fillText('950 Hz', x0-9*d, yTop); tctx.fillText('250 Hz', x0-9*d, yBot);
+  // Hz label bold on the gold line + a tick into the scale (Switzer, every number is Switzer)
+  tctx.strokeStyle='rgba(178,124,16,0.9)'; tctx.lineWidth=1.6*d;
+  tctx.beginPath(); tctx.moveTo(x0-7*d,midY); tctx.lineTo(x0,midY); tctx.stroke();
   tctx.textBaseline='middle'; tctx.textAlign='right';
-  tctx.font='600 '+(11.5*d)+'px Switzer, -apple-system, sans-serif'; tctx.fillStyle='rgba(122,86,10,0.95)';
-  tctx.fillText(f.hz+' Hz', x0-8*d, midY);
+  tctx.font='700 '+(11.5*d)+'px Switzer, -apple-system, sans-serif'; tctx.fillStyle='rgba(122,86,10,0.95)';
+  tctx.fillText(f.hz+' Hz', x0-11*d, midY);
   // header, locked Switzer caps with real tracking
   tracked('PURE TONE', cx, 19*d, 12*d, '600', 'rgba(26,22,32,0.82)', 3.4*d);
   tracked('THE SOUND OF YOU', cx, 37*d, 8.5*d, '500', 'rgba(26,22,32,0.4)', 2.1*d);

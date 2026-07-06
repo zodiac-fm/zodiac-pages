@@ -78,7 +78,7 @@ function frame(){
   requestAnimationFrame(frame);
   const tt=clock(), p=tt/D.dur, T=performance.now()/1000;
   const portrait=H>W; const cx=W/2; let midY=H*(portrait?0.46:0.52), halfMax=H*(portrait?0.26:0.255);
-  if(CENTER){ midY=H*0.5; halfMax=H*0.30; }
+  if(CENTER){ const fr=Math.max(0,Math.min(1,(TARGET_HZ-250)/700)); midY=H*0.88-(H*0.76)*fr; halfMax=H*0.17; }  // the target sits at its TRUE height on 250-950; music wraps it there
   const e6=at(D.e600,p), env=at(D.env,p), bs=at(D.bass,p), md=at(D.mid,p), tb=at(D.treb,p);
   if(sound && ana){ ana.getByteTimeDomainData(td); let s2=0; for(let i=0;i<td.length;i++){const d=(td[i]-128)/128; s2+=d*d;} const amp=Math.sqrt(s2/td.length); react+=(amp-react)*0.45; liveBeat=Math.max(liveBeat*0.85, Math.max(0,amp-lastAmp)*4.0); lastAmp=amp; } else { react*=0.9; liveBeat*=0.85; }
 
@@ -113,12 +113,12 @@ function frame(){
   function wpr(a0,b0){ x.beginPath();
     for(let i=a0;i<=b0;i++){const xx=tx(i*tper), a=D.env[i]*halfMax*0.92; i===a0?x.moveTo(xx,midY-a):x.lineTo(xx,midY-a);}
     for(let i=b0;i>=a0;i--){const xx=tx(i*tper), a=D.env[i]*halfMax*0.92; x.lineTo(xx,midY+a);} x.closePath(); }
-  // COMING — the music ahead, ghosted
+  // COMING: the music ahead, ghosted
   if(iHi>iNow){ wpr(iNow,iHi);
     let gfu=x.createLinearGradient(0,midY-halfMax,0,midY+halfMax);
     gfu.addColorStop(0,COL.wfTopG); gfu.addColorStop(0.5,COL.wfMidG); gfu.addColorStop(1,COL.wfTopG);
     x.fillStyle=gfu; x.fill(); x.lineWidth=1*DPR; x.strokeStyle=COL.wfStrokeG; x.stroke(); }
-  // PAST + PRESENT — solid
+  // PAST + PRESENT: solid
   if(iNow>iLo){ wpr(iLo,iNow);
     let wf=x.createLinearGradient(0,midY-halfMax,0,midY+halfMax);
     wf.addColorStop(0,COL.wfTop); wf.addColorStop(0.5,COL.wfMid); wf.addColorStop(1,COL.wfTop);
@@ -151,8 +151,16 @@ function frame(){
 
   // ---- static frequency axis on the left (numbered range 250–950) ----
   if(CENTER){
-    x.textBaseline='middle'; x.textAlign='right'; x.font=(9.5*DPR)+'px Georgia, serif';
-    x.fillStyle=COL.label; x.fillText(TARGET+' Hz', x0-9*DPR, lineY);
+    // a light 250-950 scale so the line's HEIGHT means something (the target sits at its real place)
+    const yTop=H*0.12, yBot=H*0.88;
+    x.strokeStyle=COL.ink+'0.13)'; x.lineWidth=1*DPR;
+    x.beginPath(); x.moveTo(x0-3*DPR,yTop); x.lineTo(x0-3*DPR,yBot); x.stroke();
+    x.textAlign='right'; x.textBaseline='middle'; x.font='500 '+(8*DPR)+'px Switzer, sans-serif'; x.fillStyle=COL.ink+'0.34)';
+    x.fillText('950 Hz', x0-9*DPR, yTop); x.fillText('250 Hz', x0-9*DPR, yBot);
+    // the target, bold, on its own line + a tick into the scale
+    x.strokeStyle=COL.line+'0.9)'; x.lineWidth=1.6*DPR; x.beginPath(); x.moveTo(x0-7*DPR,lineY); x.lineTo(x0,lineY); x.stroke();
+    x.textAlign='right'; x.font='700 '+(10.5*DPR)+'px Switzer, sans-serif'; x.fillStyle=COL.label;
+    x.fillText(TARGET+' Hz', x0-11*DPR, lineY);
   } else {
   x.textBaseline='middle'; x.font=(8.5*DPR)+'px Georgia, serif'; x.lineCap='butt';
   x.strokeStyle='rgba(180,165,210,0.12)'; x.lineWidth=1*DPR;
