@@ -888,7 +888,7 @@ document.querySelectorAll('.tiphead').forEach(function(h){h.addEventListener('cl
 // after-a-few-sessions layout: guide below the song list. (#return still = bare headline;
 // hashes combine, e.g. #return-graduated.)
 function applyGraduated(){
-  var on=location.hash.indexOf('graduated')>=0;
+  var on=location.hash.indexOf('graduated')>=0 || location.hash==='#2';
   var tip=document.querySelector('#list .swrap .tipcard'), rows=document.getElementById('rows');
   if(!tip||!rows) return;
   if(on && tip.nextSibling!==null && tip.compareDocumentPosition(rows) & Node.DOCUMENT_POSITION_FOLLOWING){
