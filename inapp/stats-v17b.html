@@ -85,7 +85,7 @@
   /* ---------- BALANCE: four horizontal bars, words first, ONE gate line ----------
      (astrology element-bars pattern; band words are the evaluative labels; the 15% line is the
      only comparator on the chart and is labeled once) */
-  .rule{font-size:13px;color:var(--ink2);line-height:1.5;margin-top:11px}
+  .rule{font-size:13px;color:var(--ink2);line-height:1.5;margin-top:18px}
   .rule b{font-weight:700}
   .bal{position:relative;margin-top:20px}
   .brow{display:flex;align-items:center;gap:12px;min-height:44px}
@@ -100,7 +100,7 @@
   /* the ONE reference on the chart: a single gate line crossing all four bars, labeled once */
   .gate{position:absolute;top:-16px;bottom:0;border-left:2px dashed #8d8a96;z-index:2}
   .gatelab{position:absolute;top:-17px;transform:translateX(-50%);font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--mut);background:var(--card);padding:0 5px;z-index:3}
-  .balnote{margin-top:16px;font-size:12.5px;line-height:1.5;display:flex;gap:7px;color:var(--ink2)}
+  .balnote{margin-top:12px;font-size:12.5px;line-height:1.5;display:flex;gap:7px;color:var(--ink2)}
   .balnote b{font-weight:700}
   .balnote .mk{flex:0 0 auto}
 
@@ -176,9 +176,9 @@
           <h2>Balance</h2>
           <span class="status" id="bal-status"></span>
         </div>
-        <div class="rule">Every frequency needs at least <b>15% of your week</b>. The other 40% is yours.</div>
-        <div class="bal" id="bal-rows"></div>
         <div class="balnote" id="bal-note"></div>
+        <div class="bal" id="bal-rows"></div>
+        <div class="rule">Every frequency needs at least <b>15% of your week</b>. The other 40% is yours.</div>
       </div>
 
       <!-- HISTORY -->
