@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Your Frequencies — Zodiac.fm (new results, v1)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* tokens.json — locked 2026-06-30 */
+    --cream:#F6F1E8; --bleach:#FFFFFF; --moondust:#FBF8F3; --mist:#EEE9E0; --ink:#1A1620;
+    --control:#2A2530; --track:#EAE4DA;
+    --core:#6521C9; --core-deep:#38007A; --core-tint:#EFECFF; --core-grad:#A737C8;
+    --love:#B90044; --love-deep:#6E0024; --love-tint:#FFE8EA; --love-grad:#CF4090;
+    --vit:#FF9112; --vit-deep:#BC6700; --vit-tint:#FFEADA; --vit-grad:#FFC251; --vit-accent:#C25500;
+    --abn:#12A56E; --abn-deep:#0A6B48; --abn-tint:#DCF4E8; --abn-grad:#46D99A; --abn-accent:#0A7A52;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Switzer',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    /* active frequency (JS swaps these) */
+    --f:#6521C9; --f-deep:#38007A; --f-tint:#EFECFF; --f-grad:#A737C8; --f-accent:#6521C9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--cream);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:480px;margin:0 auto;padding:0 18px 60px}
+
+  header{padding:20px 0 16px;border-bottom:1px solid rgba(26,22,32,.08)}
+  header img{height:24px;display:block}
+
+  .hero{padding:30px 0 8px}
+  .hero h1{font-family:var(--serif);font-weight:600;font-size:36px;line-height:1.08;letter-spacing:-.01em}
+  .hero h1 .nm{color:var(--core);font-style:italic}
+  .hero p{margin-top:10px;font-size:16px;line-height:1.5;color:rgba(26,22,32,.62)}
+
+  .sect{font-family:var(--serif);font-weight:600;font-size:29px;line-height:1.1;margin:34px 0 14px}
+
+  .card{background:var(--bleach);border-radius:18px;padding:18px 18px;box-shadow:0 1px 3px rgba(56,0,122,.06);margin-bottom:12px}
+
+  /* four frequency cards */
+  .fc-head{display:flex;align-items:center;gap:12px}
+  .fc-dot{width:34px;height:34px;border-radius:50%;flex:none}
+  .fc-name{font-family:var(--serif);font-weight:600;font-size:24px}
+  .fc-hz{font-size:14px;font-weight:600;letter-spacing:.02em;margin-left:auto}
+  .fc-desc{font-size:15px;line-height:1.5;margin-top:11px;color:var(--ink)}
+  .fc-band{font-size:13.5px;line-height:1.5;margin-top:7px;color:rgba(26,22,32,.55)}
+
+  /* first listen card */
+  .listen{padding:20px 18px 24px}
+  .eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--core)}
+  .listen .lead{font-size:15px;line-height:1.5;color:rgba(26,22,32,.62);margin:8px 0 16px}
+
+  /* locked segmented control: track #EAE4DA, white thumb, active label in freq accent */
+  .seg{display:flex;background:var(--track);border-radius:22px;padding:4px}
+  .seg button{flex:1;border:0;background:transparent;border-radius:18px;padding:9px 2px;font-family:var(--sans);font-size:12.5px;font-weight:600;color:rgba(26,22,32,.55);cursor:pointer;transition:all .18s}
+  .seg button.on{background:var(--bleach);box-shadow:0 2px 6px rgba(26,22,32,.10);color:var(--f-accent)}
+
+  .blk-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(26,22,32,.45);margin:22px 0 7px}
+  .blk-copy{font-size:14.5px;line-height:1.55;color:rgba(26,22,32,.72)}
+  .hair{height:1px;background:rgba(26,22,32,.07);margin:22px -18px 0}
+
+  .sine{display:block;width:100%;margin-top:12px}
+  .sine path{stroke:var(--f)}
+
+  .prow{display:flex;align-items:center;gap:12px;margin-top:12px}
+  .pbtn{width:46px;height:46px;border-radius:50%;border:0;background:var(--control);flex:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .pbtn svg{margin-left:2px}
+  .pbtn.playing svg{margin-left:0}
+  .pbar{flex:1;height:6px;border-radius:3px;background:var(--mist);position:relative;overflow:hidden}
+  .pbar i{position:absolute;left:0;top:0;bottom:0;width:0%;border-radius:3px;background:linear-gradient(90deg,var(--f),var(--f-deep));display:block}
+  .ptime{font-size:12.5px;font-weight:600;color:rgba(26,22,32,.55);min-width:34px;text-align:right}
+  .pcap{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(26,22,32,.42);margin-top:10px}
+  .pcap b{color:var(--f-accent)}
+
+  /* the line-through-music visual */
+  .strip{margin-top:12px;border-radius:14px;overflow:hidden;display:block;width:100%;background:var(--moondust)}
+  .strip-note{margin-top:9px;font-size:13px;line-height:1.5;color:rgba(26,22,32,.5)}
+
+  /* song rows — locked disc treatment */
+  .song{display:flex;align-items:center;gap:14px;margin-top:20px}
+  .thumb{width:64px;height:64px;flex:none;position:relative}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;transform:scale(1.16);filter:drop-shadow(0 3px 7px rgba(56,0,122,.13))}
+  .song .st{font-size:16.5px;font-weight:600}
+  .song .sd{font-size:12.5px;line-height:1.45;color:rgba(26,22,32,.55);margin-top:2px}
+
+  /* library */
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px;margin-top:16px}
+  .tile{text-align:center}
+  .tile .thumb{width:58px;height:58px;margin:0 auto 8px}
+  .tile .tn{font-size:10.5px;line-height:1.3;color:rgba(26,22,32,.62)}
+  .tile .more{width:58px;height:58px;border-radius:50%;margin:0 auto 8px;border:1.5px dashed rgba(26,22,32,.25);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:rgba(26,22,32,.45);background:var(--bleach)}
+
+  .cta{display:block;width:100%;margin-top:22px;border:0;border-radius:14px;padding:17px 0;font-family:var(--sans);font-size:16px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--core),var(--core-deep));cursor:pointer}
+  .cta-sub{text-align:center;font-size:12.5px;color:rgba(26,22,32,.5);margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header><img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm"></header>
+
+  <div class="hero">
+    <h1><span class="nm">Michael&rsquo;s</span> Frequencies, Decoded.</h1>
+    <p>Calculated from 248+ celestial data points.</p>
+  </div>
+
+  <div class="sect">Your Four Frequencies</div>
+
+  <div class="card">
+    <div class="fc-head">
+      <div class="fc-dot" style="background:radial-gradient(circle at 32% 30%,var(--core-grad),var(--core) 60%,var(--core-deep))"></div>
+      <div class="fc-name" style="color:var(--core)">Core</div>
+      <div class="fc-hz" style="color:var(--core)">422 Hz</div>
+    </div>
+    <p class="fc-desc">Increases identity coherence and aligns you with your true purpose.</p>
+    <p class="fc-band">Belly Band: Identity is experienced as felt stability</p>
+  </div>
+
+  <div class="card">
+    <div class="fc-head">
+      <div class="fc-dot" style="background:radial-gradient(circle at 32% 30%,var(--love-grad),var(--love) 60%,var(--love-deep))"></div>
+      <div class="fc-name" style="color:var(--love)">Love</div>
+      <div class="fc-hz" style="color:var(--love)">432 Hz</div>
+    </div>
+    <p class="fc-desc">Expands magnetism, attunement, and connection.</p>
+    <p class="fc-band">Solar Plexus Band: Connection is experienced as movement and action</p>
+  </div>
+
+  <div class="card">
+    <div class="fc-head">
+      <div class="fc-dot" style="background:radial-gradient(circle at 32% 30%,var(--vit-grad),var(--vit) 60%,var(--vit-deep))"></div>
+      <div class="fc-name" style="color:var(--vit-accent)">Vitality</div>
+      <div class="fc-hz" style="color:var(--vit-accent)">579 Hz</div>
+    </div>
+    <p class="fc-desc">Steadies your nervous system and keeps your energy clean.</p>
+    <p class="fc-band">Solar Plexus Band: Energy is experienced as drive and motion</p>
+  </div>
+
+  <div class="card">
+    <div class="fc-head">
+      <div class="fc-dot" style="background:radial-gradient(circle at 32% 30%,var(--abn-grad),var(--abn) 60%,var(--abn-deep))"></div>
+      <div class="fc-name" style="color:var(--abn-accent)">Abundance</div>
+      <div class="fc-hz" style="color:var(--abn-accent)">611 Hz</div>
+    </div>
+    <p class="fc-desc">Aligns your timing with prosperity, opportunity, and exchange.</p>
+    <p class="fc-band">Throat Band: Prosperity and opportunity experienced through articulation and expression</p>
+  </div>
+
+  <!-- YOUR FIRST LISTEN -->
+  <div class="card listen">
+    <div class="eyebrow">Your First Listen</div>
+    <p class="lead">You have your four numbers. Now hear what they sound like. Pick a frequency:</p>
+
+    <div class="seg" id="seg">
+      <button class="on" data-f="core">Core</button>
+      <button data-f="love">Love</button>
+      <button data-f="vitality">Vitality</button>
+      <button data-f="abundance">Abundance</button>
+    </div>
+
+    <div class="blk-label">The Raw Signal</div>
+    <p class="blk-copy">A pure tone at exactly <b id="hz1">422</b>&nbsp;Hz, calculated from your chart. No music yet. Just your signal.</p>
+    <svg class="sine" viewBox="0 0 330 36" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 18 Q 10 4, 20 18 T 40 18 T 60 18 T 80 18 T 100 18 T 120 18 T 140 18 T 160 18 T 180 18 T 200 18 T 220 18 T 240 18 T 260 18 T 280 18 T 300 18 T 320 18 T 340 18" fill="none" stroke-width="2" opacity=".85"/>
+    </svg>
+    <div class="prow">
+      <button class="pbtn" id="toneBtn" aria-label="Play pure tone">
+        <svg width="15" height="17" viewBox="0 0 16 18"><path d="M0 0 L16 9 L0 18 Z" fill="#fff"/></svg>
+      </button>
+      <div class="pbar"><i id="toneBar"></i></div>
+      <span class="ptime" id="toneTime">0:10</span>
+    </div>
+    <div class="pcap">Pure tone &middot; <b id="hz2">422 Hz</b></div>
+
+    <div class="hair"></div>
+
+    <div class="blk-label">Now Inside Music</div>
+    <p class="blk-copy">You never listen to a bare tone. We weave it into full compositions. Hear your <b id="hz3">422</b>&nbsp;Hz inside two very different songs.</p>
+
+    <svg class="strip" viewBox="0 0 330 88" xmlns="http://www.w3.org/2000/svg">
+      <rect width="330" height="88" fill="#FBF8F3"/>
+      <g filter="url(#soft)" opacity=".9">
+        <ellipse cx="28"  cy="64" rx="30" ry="18" fill="#EFECFF"/>
+        <ellipse cx="78"  cy="48" rx="32" ry="24" fill="#D2C8FF"/>
+        <ellipse cx="132" cy="60" rx="28" ry="20" fill="#EFECFF"/>
+        <ellipse cx="182" cy="40" rx="36" ry="27" fill="#D2C8FF"/>
+        <ellipse cx="238" cy="52" rx="32" ry="24" fill="#E3DCFF"/>
+        <ellipse cx="296" cy="64" rx="32" ry="18" fill="#EFECFF"/>
+      </g>
+      <defs><filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4"/></filter></defs>
+      <line id="stripLine" x1="0" y1="36" x2="330" y2="36" stroke="#6521C9" stroke-width="2.5"/>
+      <rect id="stripChip" x="212" y="6" rx="5" width="108" height="20" fill="#6521C9"/>
+      <text id="stripTxt" x="266" y="19.5" text-anchor="middle" font-family="Switzer,sans-serif" font-size="10" font-weight="700" letter-spacing="1" fill="#fff">YOUR 422 HZ</text>
+      <line id="stripTick" x1="266" y1="26" x2="266" y2="34" stroke="#6521C9" stroke-width="1.5"/>
+    </svg>
+    <p class="strip-note">The straight line is your frequency. It never moves. The music around it does.</p>
+
+    <div class="song">
+      <div class="thumb"><img id="qsArt" src="../inapp/app-assets/sig-core-quiet-success.png" alt="Quiet Success"></div>
+      <div>
+        <div class="st">Quiet Success</div>
+        <div class="sd">Warm and low. Slow tones that ring like singing bowls.</div>
+      </div>
+    </div>
+    <div class="prow">
+      <button class="pbtn" data-song="qs" aria-label="Play Quiet Success sample">
+        <svg width="15" height="17" viewBox="0 0 16 18"><path d="M0 0 L16 9 L0 18 Z" fill="#fff"/></svg>
+      </button>
+      <div class="pbar"><i id="qsBar"></i></div>
+      <span class="ptime" id="qsTime">1:30</span>
+    </div>
+    <div class="pcap">First 90 seconds &middot; <b class="hzcap">422 Hz</b> throughout</div>
+
+    <div class="song">
+      <div class="thumb"><img id="ksArt" src="../inapp/app-assets/sig-core-kindred-spirits.png" alt="Kindred Spirits"></div>
+      <div>
+        <div class="st">Kindred Spirits</div>
+        <div class="sd">Bright from the first note.</div>
+      </div>
+    </div>
+    <div class="prow">
+      <button class="pbtn" data-song="ks" aria-label="Play Kindred Spirits sample">
+        <svg width="15" height="17" viewBox="0 0 16 18"><path d="M0 0 L16 9 L0 18 Z" fill="#fff"/></svg>
+      </button>
+      <div class="pbar"><i id="ksBar"></i></div>
+      <span class="ptime" id="ksTime">1:30</span>
+    </div>
+    <div class="pcap">First 90 seconds &middot; <b class="hzcap">422 Hz</b> throughout</div>
+  </div>
+
+  <!-- LIBRARY -->
+  <div class="sect" style="font-size:26px">It runs through your whole library.</div>
+  <div class="card">
+    <p class="blk-copy">The same four frequencies thread through all 20+ tracks, from ambient to cinematic. The music varies. Your signal never does.</p>
+    <div class="tiles">
+      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-starseed.png" alt=""></div><div class="tn">Starseed</div></div>
+      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-astrolith.png" alt=""></div><div class="tn">Astrolith</div></div>
+      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-kindred-spirits.png" alt=""></div><div class="tn">Kindred Spirits</div></div>
+      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-elysian-surge.png" alt=""></div><div class="tn">Elysian Surge</div></div>
+      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-cosmic-drift.png" alt=""></div><div class="tn">Cosmic Drift</div></div>
+      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-quiet-success.png" alt=""></div><div class="tn">Quiet Success</div></div>
+      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-galactic-slumber.png" alt=""></div><div class="tn">Galactic Deep</div></div>
+      <div class="tile"><div class="more">+14</div><div class="tn">and more</div></div>
+    </div>
+    <button class="cta">Unlock Your Library</button>
+    <div class="cta-sub">90-Day Money-Back Guarantee</div>
+  </div>
+
+</div>
+
+<script>
+// demo chart (michael): the four frequencies
+const FREQS = {
+  core:{label:'Core',      hz:422, c1:'#6521C9',c2:'#A737C8', deep:'#38007A', tint:'#EFECFF', soft:'#D2C8FF', accent:'#6521C9'},
+  love:{label:'Love',      hz:432, c1:'#B90044',c2:'#CF4090', deep:'#6E0024', tint:'#FFE8EA', soft:'#FFBDC3', accent:'#B90044'},
+  vitality:{label:'Vitality',  hz:579, c1:'#FF9112',c2:'#FFC251', deep:'#BC6700', tint:'#FFEADA', soft:'#FFC392', accent:'#C25500'},
+  abundance:{label:'Abundance', hz:611, c1:'#12A56E',c2:'#46D99A', deep:'#0A6B48', tint:'#DCF4E8', soft:'#8FE1BE', accent:'#0A7A52'}
+};
+let active = 'core';
+const $ = id => document.getElementById(id);
+const PLAY = '<svg width="15" height="17" viewBox="0 0 16 18"><path d="M0 0 L16 9 L0 18 Z" fill="#fff"/></svg>';
+const PAUSE = '<svg width="14" height="16" viewBox="0 0 14 16"><rect x="0" y="0" width="5" height="16" rx="1.5" fill="#fff"/><rect x="9" y="0" width="5" height="16" rx="1.5" fill="#fff"/></svg>';
+
+function setFreq(key){
+  active = key;
+  const f = FREQS[key];
+  const r = document.documentElement.style;
+  r.setProperty('--f', f.c1); r.setProperty('--f-deep', f.deep);
+  r.setProperty('--f-tint', f.tint); r.setProperty('--f-grad', f.c2); r.setProperty('--f-accent', f.accent);
+  $('hz1').textContent = f.hz; $('hz2').textContent = f.hz + ' Hz'; $('hz3').textContent = f.hz;
+  document.querySelectorAll('.hzcap').forEach(el => el.textContent = f.hz + ' Hz');
+  $('stripLine').setAttribute('stroke', f.c1);
+  $('stripChip').setAttribute('fill', f.c1);
+  $('stripTick').setAttribute('stroke', f.c1);
+  $('stripTxt').textContent = 'YOUR ' + f.hz + ' HZ';
+  $('qsArt').src = '../inapp/app-assets/sig-' + key + '-quiet-success.png';
+  $('ksArt').src = '../inapp/app-assets/sig-' + key + '-kindred-spirits.png';
+  document.querySelectorAll('#seg button').forEach(b => b.classList.toggle('on', b.dataset.f === key));
+  // blobs tint to the frequency's soft/tint pair
+  document.querySelectorAll('.strip ellipse').forEach((el,i)=> el.setAttribute('fill', i%2 ? f.soft : f.tint));
+  stopTone(); stopSongs();
+}
+document.querySelectorAll('#seg button').forEach(b => b.addEventListener('click', () => setFreq(b.dataset.f)));
+
+/* ---- raw tone: WebAudio oscillator at the exact Hz, 10s with a soft envelope ---- */
+let ctx=null, osc=null, gain=null, toneTimer=null, toneStart=0;
+const TONE_LEN = 10;
+function stopTone(){
+  if (osc){ try{ gain.gain.setTargetAtTime(0, ctx.currentTime, .08); osc.stop(ctx.currentTime + .4);}catch(e){} osc=null; }
+  clearInterval(toneTimer);
+  $('toneBar').style.width = '0%';
+  $('toneTime').textContent = '0:10';
+  $('toneBtn').innerHTML = PLAY; $('toneBtn').classList.remove('playing');
+}
+$('toneBtn').addEventListener('click', () => {
+  if (osc){ stopTone(); return; }
+  ctx = ctx || new (window.AudioContext||window.webkitAudioContext)();
+  osc = ctx.createOscillator(); gain = ctx.createGain();
+  osc.type = 'sine'; osc.frequency.value = FREQS[active].hz;
+  gain.gain.value = 0; osc.connect(gain); gain.connect(ctx.destination);
+  osc.start();
+  gain.gain.setTargetAtTime(.18, ctx.currentTime, .25);           // soft attack
+  gain.gain.setTargetAtTime(0, ctx.currentTime + TONE_LEN - .8, .3); // soft release
+  osc.stop(ctx.currentTime + TONE_LEN);
+  const me = osc;
+  osc.onended = () => { if (osc === me) stopTone(); };
+  toneStart = Date.now();
+  $('toneBtn').innerHTML = PAUSE; $('toneBtn').classList.add('playing');
+  toneTimer = setInterval(() => {
+    const t = Math.min((Date.now()-toneStart)/1000, TONE_LEN);
+    $('toneBar').style.width = (t/TONE_LEN*100) + '%';
+    $('toneTime').textContent = '0:' + String(Math.max(0, Math.ceil(TONE_LEN - t))).padStart(2,'0');
+  }, 100);
+});
+
+/* ---- songs: real tracks, first 90 seconds ---- */
+const CAP = 90;
+const SONGS = {
+  qs: { audio: new Audio('../inapp/app-assets/quiet-success.mp3') },
+  ks: { audio: new Audio('../inapp/app-assets/kindred-spirits.mp3') }
+};
+function fmt(s){ s=Math.max(0,Math.round(s)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+function stopSongs(except){
+  for (const k in SONGS){
+    if (k === except) continue;
+    const s = SONGS[k]; s.audio.pause(); s.audio.currentTime = 0;
+    $(k+'Bar').style.width='0%'; $(k+'Time').textContent='1:30';
+    const btn = document.querySelector('[data-song="'+k+'"]');
+    btn.innerHTML = PLAY; btn.classList.remove('playing');
+  }
+}
+document.querySelectorAll('[data-song]').forEach(btn => {
+  const key = btn.dataset.song, s = SONGS[key], a = s.audio;
+  a.preload = 'none';
+  a.addEventListener('timeupdate', () => {
+    if (a.currentTime >= CAP){ a.pause(); a.currentTime = 0; $(key+'Bar').style.width='0%'; $(key+'Time').textContent='1:30'; btn.innerHTML=PLAY; btn.classList.remove('playing'); return; }
+    $(key+'Bar').style.width = (a.currentTime/CAP*100) + '%';
+    $(key+'Time').textContent = fmt(CAP - a.currentTime);
+  });
+  btn.addEventListener('click', () => {
+    if (!a.paused){ a.pause(); btn.innerHTML=PLAY; btn.classList.remove('playing'); return; }
+    stopTone(); stopSongs(key);
+    a.play(); btn.innerHTML=PAUSE; btn.classList.add('playing');
+  });
+});
+</script>
+</body>
+</html>
