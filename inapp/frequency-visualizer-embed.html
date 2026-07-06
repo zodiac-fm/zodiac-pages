@@ -84,11 +84,11 @@ function frame(){
 
   // ---- background ----
   let bg=x.createLinearGradient(0,0,0,H);
-  bg.addColorStop(0,'#0c0913'); bg.addColorStop(0.55,'#140e22'); bg.addColorStop(1,'#0a0710');
+  bg.addColorStop(0,COL.bg0); bg.addColorStop(0.55,COL.bg1); bg.addColorStop(1,COL.bg2);
   x.fillStyle=bg; x.fillRect(0,0,W,H);
   // subtle wash that breathes with 600
   let rw=x.createRadialGradient(cx,midY,0,cx,midY,W*0.6);
-  rw.addColorStop(0,'rgba(123,95,203,'+(0.05+e6*0.07)+')'); rw.addColorStop(1,'rgba(0,0,0,0)');
+  rw.addColorStop(0,COL.wash+(0.05+e6*0.07)+')'); rw.addColorStop(1,'rgba(0,0,0,0)');
   x.fillStyle=rw; x.fillRect(0,0,W,H);
 
   const x0=W*0.15, x1=W*0.95, span=x1-x0;
@@ -106,7 +106,7 @@ function frame(){
   // beat -> decaying pink "flash" (pops on a hit, fades out)
   const bt=at(D.beat,p); flash = bt>flash ? bt : flash*0.89; flash=Math.max(flash,Math.min(1,liveBeat)); const fl=Math.min(1,flash);
   if(fl>0.03){ let pw=x.createRadialGradient(px,midY,0,px,midY,W*0.5);
-    pw.addColorStop(0,'rgba(255,120,220,'+(0.12*fl)+')'); pw.addColorStop(1,'rgba(0,0,0,0)');
+    pw.addColorStop(0,COL.flashWash+(0.12*fl)+')'); pw.addColorStop(1,'rgba(0,0,0,0)');
     x.fillStyle=pw; x.fillRect(0,0,W,H); }
 
   // ---- granular waveform across the window (keep the detail) ----
@@ -116,43 +116,43 @@ function frame(){
   // COMING — the music ahead, ghosted
   if(iHi>iNow){ wpr(iNow,iHi);
     let gfu=x.createLinearGradient(0,midY-halfMax,0,midY+halfMax);
-    gfu.addColorStop(0,'rgba(124,99,201,0.12)'); gfu.addColorStop(0.5,'rgba(70,52,130,0.03)'); gfu.addColorStop(1,'rgba(124,99,201,0.12)');
-    x.fillStyle=gfu; x.fill(); x.lineWidth=1*DPR; x.strokeStyle='rgba(160,140,215,0.16)'; x.stroke(); }
+    gfu.addColorStop(0,COL.wfTopG); gfu.addColorStop(0.5,COL.wfMidG); gfu.addColorStop(1,COL.wfTopG);
+    x.fillStyle=gfu; x.fill(); x.lineWidth=1*DPR; x.strokeStyle=COL.wfStrokeG; x.stroke(); }
   // PAST + PRESENT — solid
   if(iNow>iLo){ wpr(iLo,iNow);
     let wf=x.createLinearGradient(0,midY-halfMax,0,midY+halfMax);
-    wf.addColorStop(0,'rgba(124,99,201,0.46)'); wf.addColorStop(0.5,'rgba(70,52,130,0.10)'); wf.addColorStop(1,'rgba(124,99,201,0.46)');
-    x.fillStyle=wf; x.fill(); x.lineWidth=1.2*DPR; x.strokeStyle='rgba(160,140,215,0.5)'; x.stroke(); }
+    wf.addColorStop(0,COL.wfTop); wf.addColorStop(0.5,COL.wfMid); wf.addColorStop(1,COL.wfTop);
+    x.fillStyle=wf; x.fill(); x.lineWidth=1.2*DPR; x.strokeStyle=COL.wfStroke; x.stroke(); }
   // pink-violet blush on the freshest music, on the beat
   if(fl>0.03 && iNow>iLo){ x.save(); x.beginPath(); x.rect(Math.max(0,px-span*0.05),0,span*0.05,H); x.clip();
     wpr(iLo,iNow);
     let pf=x.createLinearGradient(0,midY-halfMax,0,midY+halfMax);
-    pf.addColorStop(0,'rgba(255,118,222,'+(0.72*fl)+')'); pf.addColorStop(0.5,'rgba(255,118,222,0.06)'); pf.addColorStop(1,'rgba(255,118,222,'+(0.72*fl)+')');
+    pf.addColorStop(0,COL.flash+(0.72*fl)+')'); pf.addColorStop(0.5,COL.flash+'0.06)'); pf.addColorStop(1,COL.flash+(0.72*fl)+')');
     x.fillStyle=pf; x.fill(); x.restore(); }
 
   // ---- the "now" column: the music being born at the playhead, reacting live ----
   const aNow=Math.min(1.0, env*0.45 + react*2.0)*halfMax*0.96;   // live-reactive height
   let nb=x.createLinearGradient(0,midY-aNow,0,midY+aNow);
-  nb.addColorStop(0,'rgba(214,201,255,0.9)'); nb.addColorStop(0.5,'rgba(150,123,220,0.22)'); nb.addColorStop(1,'rgba(214,201,255,0.9)');
+  nb.addColorStop(0,COL.nowA); nb.addColorStop(0.5,COL.nowB); nb.addColorStop(1,COL.nowA);
   x.strokeStyle=nb; x.lineWidth=2.2*DPR; x.lineCap='round';
-  x.shadowColor='rgba(150,123,220,0.9)'; x.shadowBlur=14*DPR;
+  x.shadowColor=COL.nowGlow; x.shadowBlur=14*DPR;
   x.beginPath(); x.moveTo(px,midY-aNow); x.lineTo(px,midY+aNow); x.stroke(); x.shadowBlur=0;
   // pink-violet beat flare on the now-column
   if(fl>0.03){ const aB=aNow*(1+0.20*fl);
-    x.strokeStyle='rgba(255,118,222,'+(0.95*fl)+')'; x.lineWidth=3.0*DPR; x.lineCap='round';
-    x.shadowColor='rgba(255,118,222,0.95)'; x.shadowBlur=24*DPR*fl;
+    x.strokeStyle=COL.flash+(0.95*fl)+')'; x.lineWidth=3.0*DPR; x.lineCap='round';
+    x.shadowColor=COL.flash+'0.95)'; x.shadowBlur=24*DPR*fl;
     x.beginPath(); x.moveTo(px,midY-aB); x.lineTo(px,midY+aB); x.stroke(); x.shadowBlur=0; }
 
   // ---- live reactive pulse at NOW ----
   if(react>0.01 || liveBeat>0.01){ const pr=(8+react*46+liveBeat*34)*DPR;
     const rg=x.createRadialGradient(px,lineY,0,px,lineY,pr);
-    rg.addColorStop(0,'rgba(214,201,255,'+Math.min(0.85,0.18+react*1.6)+')'); rg.addColorStop(1,'rgba(214,201,255,0)');
+    rg.addColorStop(0,COL.pulse+Math.min(0.85,0.18+react*1.6)+')'); rg.addColorStop(1,COL.pulse+'0)');
     x.fillStyle=rg; x.beginPath(); x.arc(px,lineY,pr,0,7); x.fill(); }
 
   // ---- static frequency axis on the left (numbered range 250–950) ----
   if(CENTER){
     x.textBaseline='middle'; x.textAlign='right'; x.font=(9.5*DPR)+'px Georgia, serif';
-    x.fillStyle='rgba(255,248,233,0.92)'; x.fillText(TARGET+' Hz', x0-9*DPR, lineY);
+    x.fillStyle=COL.label; x.fillText(TARGET+' Hz', x0-9*DPR, lineY);
   } else {
   x.textBaseline='middle'; x.font=(8.5*DPR)+'px Georgia, serif'; x.lineCap='butt';
   x.strokeStyle='rgba(180,165,210,0.12)'; x.lineWidth=1*DPR;
@@ -174,40 +174,40 @@ function frame(){
   const ty=lineY;
   x.lineCap='round';
   let lg=x.createLinearGradient(x0,0,px,0);
-  lg.addColorStop(0,'rgba(240,231,214,0.06)'); lg.addColorStop(1,'rgba(240,231,214,'+(0.45+e6*0.3)+')');
+  lg.addColorStop(0,COL.line+'0.10)'); lg.addColorStop(1,COL.line+(0.55+e6*0.3)+')');
   x.strokeStyle=lg; x.lineWidth=1.2*DPR;
   x.beginPath(); x.moveTo(x0,ty); x.lineTo(px,ty); x.stroke();
   // origin dot at the target tick + soft glow at the leading point
-  x.fillStyle='rgba(255,248,233,0.8)'; x.beginPath(); x.arc(x0,ty,2.0*DPR,0,7); x.fill();
+  x.fillStyle=COL.lineDot; x.beginPath(); x.arc(x0,ty,2.0*DPR,0,7); x.fill();
   const hg=x.createRadialGradient(px,ty,0,px,ty,22*DPR);
-  hg.addColorStop(0,'rgba(255,248,233,'+(0.45+e6*0.4)+')'); hg.addColorStop(1,'rgba(255,248,233,0)');
+  hg.addColorStop(0,COL.lineGlow+(0.45+e6*0.4)+')'); hg.addColorStop(1,COL.lineGlow+'0)');
   x.fillStyle=hg; x.beginPath(); x.arc(px,ty,22*DPR,0,7); x.fill();
 
   // ---- playhead ----
   let ph=x.createLinearGradient(px,midY-halfMax,px,midY+halfMax);
-  ph.addColorStop(0,'rgba(236,228,214,0)'); ph.addColorStop(0.5,'rgba(236,228,214,0.5)'); ph.addColorStop(1,'rgba(236,228,214,0)');
+  ph.addColorStop(0,COL.playhead+'0)'); ph.addColorStop(0.5,COL.playhead+'0.5)'); ph.addColorStop(1,COL.playhead+'0)');
   x.strokeStyle=ph; x.lineWidth=1*DPR; x.beginPath(); x.moveTo(px,midY-halfMax); x.lineTo(px,midY+halfMax); x.stroke();
   // node where playhead meets the thread
   const ng=x.createRadialGradient(px,ty,0,px,ty,16*DPR);
-  ng.addColorStop(0,'rgba(236,228,255,0.95)'); ng.addColorStop(1,'rgba(236,228,255,0)');
+  ng.addColorStop(0,COL.node+'0.85)'); ng.addColorStop(1,COL.node+'0)');
   x.fillStyle=ng; x.beginPath(); x.arc(px,ty,16*DPR,0,7); x.fill();
   // expanding pink ring emitted on the beat
-  if(fl>0.04){ x.strokeStyle='rgba(255,118,222,'+(0.68*fl)+')'; x.lineWidth=1.9*DPR;
+  if(fl>0.04){ x.strokeStyle=COL.ring+(0.68*fl)+')'; x.lineWidth=1.9*DPR;
     x.beginPath(); x.arc(px,ty,(8+34*(1-fl))*DPR,0,7); x.stroke(); }
 
   // ---- motes + grain (animate only once playing) ----
   if(started){
     for(const m of motes){ const mx=((m.x+ (T*0.01*m.s))%1)*W, my=(m.y*0.8+0.1)*H + Math.sin(T*0.3+m.ph)*6*DPR;
-      x.fillStyle='rgba(183,162,232,'+(0.05+0.05*Math.sin(T*0.7+m.ph))+')'; x.beginPath(); x.arc(mx,my,m.s*1.6*DPR,0,7); x.fill(); }
+      x.fillStyle=COL.mote+(0.05+0.05*Math.sin(T*0.7+m.ph))+')'; x.beginPath(); x.arc(mx,my,m.s*1.6*DPR,0,7); x.fill(); }
     if(grain){x.save();x.globalAlpha=0.5;const p2=x.createPattern(grain,'repeat');x.fillStyle=p2;x.translate((T*7)%160,(T*5)%160);x.fillRect(-160,-160,W+320,H+320);x.restore();}
   }
   let vg=x.createRadialGradient(cx,H*0.5,H*0.2,cx,H*0.5,H*0.8);
-  vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,0.55)');
+  vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,'+COL.vig+')');
   x.fillStyle=vg; x.fillRect(0,0,W,H);
 
   // ---- time, right below the waves ----
   const f=s=>{s=isFinite(s)?s:0;return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');};
-  x.fillStyle='rgba(236,228,214,0.82)'; x.textAlign='center'; x.textBaseline='top';
+  x.fillStyle=COL.ink+'0.82)'; x.textAlign='center'; x.textBaseline='top';
   x.font=(12*DPR)+'px ui-monospace, Menlo, monospace';
   x.fillText(f(tt)+'   /   '+f(D.dur), cx, midY+halfMax+16*DPR);
   pp.style.top=(((midY+halfMax)/H)+0.12)*100+'%';   // play/pause sits just below the time
@@ -217,6 +217,31 @@ const P=new URLSearchParams(location.search);
 const AUDIO=(window.__AUDIO__)||P.get('audio')||'./elysian-sky-600hz.mp3';
 const TARGET_HZ=parseFloat((window.__TARGET__)||P.get('target')||'600');
 const CENTER=P.get('center')==='1';   // waves wrap the target line at panel middle (results-page mode)
+const LIGHT=P.get('light')==='1';     // light stage (results page); default dark for the app
+const COL = LIGHT ? {
+  bg0:'#FBF8F3', bg1:'#F5EFE6', bg2:'#F8F4EC',
+  wash:'rgba(101,33,201,', flashWash:'rgba(224,40,144,',
+  wfTop:'rgba(101,33,201,0.38)', wfMid:'rgba(101,33,201,0.08)', wfStroke:'rgba(101,33,201,0.42)',
+  wfTopG:'rgba(101,33,201,0.10)', wfMidG:'rgba(101,33,201,0.03)', wfStrokeG:'rgba(101,33,201,0.14)',
+  flash:'rgba(224,40,144,', nowA:'rgba(101,33,201,0.85)', nowB:'rgba(101,33,201,0.20)',
+  nowGlow:'rgba(101,33,201,0.55)', pulse:'rgba(101,33,201,',
+  line:'rgba(178,124,16,', lineDot:'rgba(178,124,16,0.9)', lineGlow:'rgba(178,124,16,',
+  playhead:'rgba(26,22,32,', node:'rgba(178,124,16,', ring:'rgba(224,40,144,',
+  mote:'rgba(101,33,201,', ink:'rgba(26,22,32,', label:'rgba(122,86,10,0.95)', vig:0
+} : {
+  bg0:'#0c0913', bg1:'#140e22', bg2:'#0a0710',
+  wash:'rgba(123,95,203,', flashWash:'rgba(255,120,220,',
+  wfTop:'rgba(124,99,201,0.46)', wfMid:'rgba(70,52,130,0.10)', wfStroke:'rgba(160,140,215,0.5)',
+  wfTopG:'rgba(124,99,201,0.12)', wfMidG:'rgba(70,52,130,0.03)', wfStrokeG:'rgba(160,140,215,0.16)',
+  flash:'rgba(255,118,222,', nowA:'rgba(214,201,255,0.9)', nowB:'rgba(150,123,220,0.22)',
+  nowGlow:'rgba(150,123,220,0.9)', pulse:'rgba(214,201,255,',
+  line:'rgba(240,231,214,', lineDot:'rgba(255,248,233,0.8)', lineGlow:'rgba(255,248,233,',
+  playhead:'rgba(236,228,214,', node:'rgba(236,228,255,', ring:'rgba(255,118,222,',
+  mote:'rgba(183,162,232,', ink:'rgba(236,228,214,', label:'rgba(255,248,233,0.92)', vig:0.55
+};
+if(LIGHT){ document.getElementById('title').style.color='#1A1620';
+  document.getElementById('sub').style.color='rgba(26,22,32,0.45)';
+  document.documentElement.style.background='#FBF8F3'; document.body.style.background='#FBF8F3'; }
 const MINUI=P.get('minui')==='1';     // no play button; tap the canvas to play/pause
 if(MINUI){ pp.style.display='none'; cv.style.cursor='pointer';
   cv.addEventListener('click', async()=>{ if(!sound){ await startSound(); return; }
