@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Your Frequencies — Zodiac.fm (new results, v2)</title>
+<title>Your Frequencies — Zodiac.fm (new results, v3)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
   :root{
     /* tokens.json — locked 2026-06-30 */
     --cream:#F6F1E8; --bleach:#FFFFFF; --moondust:#FBF8F3; --mist:#EEE9E0; --ink:#1A1620;
-    --control:#2A2530; --track:#EAE4DA;
+    --control:#2A2530; --track:#EAE4DA; --stage:#0B0712;
     --core:#6521C9; --core-deep:#38007A; --core-grad:#A737C8;
     --serif:'Cormorant Garamond',Georgia,serif;
     --sans:'Switzer',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
@@ -35,14 +35,14 @@
 
   .card{background:var(--bleach);border-radius:18px;padding:18px 18px;box-shadow:0 1px 3px rgba(56,0,122,.06);margin-bottom:12px}
 
-  /* four frequency cards — framed frequency medallions (ring + orb, frequency gradient) */
+  /* four frequency cards — framed frequency medallions (vivid ring + orb) */
   .fc-head{display:flex;align-items:center;gap:14px}
   .med{width:46px;height:46px;border-radius:50%;flex:none;position:relative;
        background:conic-gradient(from 210deg, var(--m1), var(--m2), var(--m1));
        box-shadow:0 3px 7px rgba(56,0,122,.13)}
-  .med::before{content:'';position:absolute;inset:3px;border-radius:50%;background:#fff}
-  .med::after{content:'';position:absolute;inset:7px;border-radius:50%;
-       background:radial-gradient(circle at 32% 28%, #fff 0%, var(--m3) 22%, var(--m1) 62%, var(--m0) 100%)}
+  .med::before{content:'';position:absolute;inset:4px;border-radius:50%;background:#fff}
+  .med::after{content:'';position:absolute;inset:8px;border-radius:50%;
+       background:radial-gradient(circle at 30% 26%, #fff 0%, var(--m2) 18%, var(--m1) 52%, var(--m0) 100%)}
   .fc-name{font-family:var(--serif);font-weight:600;font-size:24px}
   .fc-hz{font-size:14px;font-weight:600;letter-spacing:.02em;margin-left:auto}
   .fc-desc{font-size:15px;line-height:1.5;margin-top:11px;color:var(--ink)}
@@ -54,7 +54,7 @@
   .listen .lead{font-size:15px;line-height:1.55;color:rgba(26,22,32,.62);margin:10px 0 16px}
   .tn-hl{color:var(--f-accent);font-weight:600}
 
-  /* locked segmented control: track #EAE4DA, white thumb, active label in freq accent */
+  /* locked segmented control */
   .seg{display:flex;background:var(--track);border-radius:22px;padding:4px}
   .seg button{flex:1;border:0;background:transparent;border-radius:18px;padding:9px 2px;font-family:var(--sans);font-size:12.5px;font-weight:600;color:rgba(26,22,32,.55);cursor:pointer;transition:all .18s}
   .seg button.on{background:var(--bleach);box-shadow:0 2px 6px rgba(26,22,32,.10);color:var(--f-accent)}
@@ -76,22 +76,48 @@
   .pcap{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(26,22,32,.42);margin-top:10px}
   .pcap b{color:var(--f-accent)}
 
-  .strip{margin-top:12px;border-radius:14px;overflow:hidden;display:block;width:100%;background:var(--moondust)}
-  .strip-note{margin-top:9px;font-size:13px;line-height:1.5;color:rgba(26,22,32,.5)}
+  /* THE PLAYING VIEW — the app's song-playing view, embedded live */
+  .nowbar{display:none;align-items:center;justify-content:space-between;margin-top:16px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+  .nowbar.on{display:flex}
+  .nowbar .npl{color:rgba(26,22,32,.55)} .nowbar .npl b{color:var(--ink)}
+  .nowbar .nhz{color:var(--f-accent)}
+  .viewer{position:relative;height:300px;border-radius:16px;overflow:hidden;background:#0c0913;margin-top:10px;box-shadow:0 10px 30px rgba(11,7,18,.25)}
+  .viewer iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:none}
+  .viewer.playing iframe{display:block}
+  .viewer.playing #idle{display:none}
+  #idle{position:absolute;inset:0}
+  #idle svg{position:absolute;inset:0;width:100%;height:100%}
+  #idle .prompt{position:absolute;left:0;right:0;bottom:18px;text-align:center;color:rgba(236,228,214,.85);font-size:13px;letter-spacing:.02em}
+  #idle .prompt b{color:#F2C879}
+  .view-note{margin-top:10px;font-size:13px;line-height:1.5;color:rgba(26,22,32,.5)}
+  #vload{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#0c0913;z-index:3;color:rgba(236,228,214,.9);font-size:13.5px;text-align:center;padding:0 24px}
+  #vload.on{display:flex}
+  #vload b{color:#F2C879}
+  #vload .dots{display:flex;gap:6px}
+  #vload .dots i{width:6px;height:6px;border-radius:50%;background:#7B5FCB;animation:vp 1s ease-in-out infinite}
+  #vload .dots i:nth-child(2){animation-delay:.2s}#vload .dots i:nth-child(3){animation-delay:.4s}
+  @keyframes vp{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+  #vhint{position:absolute;left:0;right:0;bottom:12px;display:none;text-align:center;z-index:4;color:#FFF1D6;font-size:12.5px;letter-spacing:.02em;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+  #vhint.on{display:block}
 
-  .hearing{font-size:14.5px;line-height:1.55;margin-top:20px}
-  .hearing b{color:var(--f-accent)}
-  .hearing .sw{display:block;font-size:12.5px;color:rgba(26,22,32,.5);margin-top:3px}
-
-  /* song rows — locked disc treatment, LIVE zdisc art (app engine v4) */
-  .song{display:flex;align-items:center;gap:14px;margin-top:18px}
-  .thumb{width:64px;height:64px;flex:none;position:relative}
+  /* song choosers */
+  .pick-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(26,22,32,.45);margin:20px 0 4px}
+  .song{display:flex;align-items:center;gap:14px;margin-top:14px;padding:10px 12px;border:1.5px solid transparent;border-radius:16px;transition:border-color .15s, background .15s}
+  .song.active{border-color:var(--f);background:color-mix(in srgb, var(--f-tint) 55%, #fff)}
+  .thumb{width:58px;height:58px;flex:none;position:relative}
   .thumb canvas{position:absolute;inset:0;width:100%;height:100%;transform:scale(1.16);filter:drop-shadow(0 3px 7px rgba(56,0,122,.13))}
+  .song .sx{flex:1;min-width:0}
   .song .st{font-size:16.5px;font-weight:600}
   .song .sd{font-size:12.5px;line-height:1.45;color:rgba(26,22,32,.55);margin-top:2px}
+  .pill{flex:none;border:1.5px solid var(--f);color:var(--f-accent);background:#fff;border-radius:999px;padding:9px 16px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;min-width:74px}
+  .song.active .pill{background:linear-gradient(135deg,var(--f),var(--f-deep));border-color:transparent;color:#fff}
+  .eqi{display:inline-flex;gap:2.5px;height:11px;align-items:flex-end;margin-right:6px;vertical-align:-1px}
+  .eqi i{width:2.5px;background:#fff;border-radius:2px;transform-origin:bottom;animation:eq .9s ease-in-out infinite;height:100%}
+  .eqi i:nth-child(2){animation-delay:.25s}.eqi i:nth-child(3){animation-delay:.5s}
+  @keyframes eq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
 
-  /* library rows — locked editorial treatment: caps purpose words, no chips */
-  .lib .song{margin-top:20px}
+  /* library rows — locked editorial treatment */
+  .lib .song{margin-top:16px;padding:0;border:0}
   .lib .thumb{width:52px;height:52px}
   .bubbles{font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(26,22,32,.45);margin-top:4px}
   .lib .sd{margin-top:4px}
@@ -167,7 +193,7 @@
     <div class="blk-label">The Raw Tone</div>
     <p class="blk-copy">This is your <b class="fname" style="color:var(--f-accent)">Core</b> <span class="tn-hl">tone</span>: the pure signal at exactly <b class="hzb">422 Hz</b>, straight from your chart. No music yet.</p>
     <svg class="sine" viewBox="0 0 330 36" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0 18 Q 10 4, 20 18 T 40 18 T 60 18 T 80 18 T 100 18 T 120 18 T 140 18 T 160 18 T 180 18 T 200 18 T 220 18 T 240 18 T 260 18 T 280 18 T 300 18 T 320 18 T 340 18" fill="none" stroke-width="2" opacity=".85"/>
+      <path d="M0 18 Q 10 4, 20 18 T 40 18 T 60 18 T 80 18 T 100 18 T 120 18 T 140 18 T 160 18 T 180 18 T 200 18 T 220 18 T 240 18 T 260 18 T 280 18 T 300 18 T 320 18 T 340 18" fill="none" stroke-width="3" opacity="1"/>
     </svg>
     <div class="prow">
       <button class="pbtn" id="toneBtn" aria-label="Play pure tone">
@@ -180,61 +206,60 @@
 
     <div class="hair"></div>
 
-    <div class="blk-label">Now Inside the Music</div>
+    <div class="blk-label">Now Watch It Inside the Music</div>
     <p class="blk-copy">A tone on its own gets annoying fast. So we do it the hard way: our engineering team shifts the music around your frequency, rebuilding each composition so it highlights your <span class="tn-hl">tone</span>, carries it through the harmonics, and still sounds beautiful.</p>
+    <p class="blk-copy" style="margin-top:8px">This is the same player as the app. The gold line is your <b class="fname" style="color:var(--f-accent)">Core</b> at <b class="hzb">422 Hz</b>. It holds steady while the music moves around it.</p>
 
-    <svg class="strip" viewBox="0 0 330 88" xmlns="http://www.w3.org/2000/svg">
-      <rect width="330" height="88" fill="#FBF8F3"/>
-      <g filter="url(#soft)" opacity=".9">
-        <ellipse cx="28"  cy="64" rx="30" ry="18" fill="#EFECFF"/>
-        <ellipse cx="78"  cy="48" rx="32" ry="24" fill="#D2C8FF"/>
-        <ellipse cx="132" cy="60" rx="28" ry="20" fill="#EFECFF"/>
-        <ellipse cx="182" cy="40" rx="36" ry="27" fill="#D2C8FF"/>
-        <ellipse cx="238" cy="52" rx="32" ry="24" fill="#E3DCFF"/>
-        <ellipse cx="296" cy="64" rx="32" ry="18" fill="#EFECFF"/>
-      </g>
-      <defs><filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4"/></filter></defs>
-      <line id="stripLine" x1="0" y1="36" x2="330" y2="36" stroke="#6521C9" stroke-width="2.5"/>
-      <rect id="stripChip" x="212" y="6" rx="5" width="108" height="20" fill="#6521C9"/>
-      <text id="stripTxt" x="266" y="19.5" text-anchor="middle" font-family="Switzer,sans-serif" font-size="10" font-weight="700" letter-spacing="1" fill="#fff">YOUR 422 HZ</text>
-      <line id="stripTick" x1="266" y1="26" x2="266" y2="34" stroke="#6521C9" stroke-width="1.5"/>
-    </svg>
-    <p class="strip-note">The straight line is your frequency. It never moves. The music around it does.</p>
+    <div class="nowbar" id="nowbar">
+      <span class="npl">Now playing &middot; <b id="npSong">&mdash;</b></span>
+      <span class="nhz" id="npHz">YOUR CORE &middot; 422 HZ</span>
+    </div>
 
-    <p class="hearing">You&rsquo;re hearing your <b class="fname">Core</b> inside two very different songs.
-      <span class="sw">Switch frequencies up top any time. Everything on this card re-tunes.</span></p>
+    <div class="viewer" id="viewer">
+      <div id="idle">
+        <svg viewBox="0 0 360 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="360" height="300" fill="#0c0913"/>
+          <path id="idleWave" d="M40 150 C 60 120, 75 120, 95 150 S 130 195, 150 150 S 185 100, 205 150 S 240 185, 260 150 S 295 115, 315 150 L 340 150"
+                fill="none" stroke="rgba(124,99,201,.5)" stroke-width="2"/>
+          <path d="M40 150 C 60 135, 75 135, 95 150 S 130 172, 150 150 S 185 125, 205 150 S 240 168, 260 150 S 295 132, 315 150 L 340 150"
+                fill="none" stroke="rgba(124,99,201,.28)" stroke-width="6" stroke-linecap="round"/>
+          <g font-family="Georgia,serif" font-size="9" fill="rgba(214,205,232,.55)" text-anchor="end">
+            <text x="32" y="253">300</text><text x="32" y="219">400</text><text x="32" y="185">500</text>
+            <text x="32" y="151">600</text><text x="32" y="117">700</text><text x="32" y="83">800</text><text x="32" y="49">900</text>
+          </g>
+          <line x1="40" y1="46" x2="40" y2="250" stroke="rgba(180,165,210,.16)" stroke-width="1"/>
+          <line id="idleLine" x1="40" y1="211" x2="340" y2="211" stroke="#F2C879" stroke-width="2"/>
+          <circle id="idleDot" cx="40" cy="211" r="3" fill="#FFF1D6"/>
+          <rect id="idleChipBg" x="240" y="192" rx="5" width="100" height="17" fill="rgba(242,200,121,.14)" stroke="rgba(242,200,121,.5)" stroke-width="1"/>
+          <text id="idleChip" x="290" y="204" text-anchor="middle" font-family="Georgia,serif" font-size="9.5" letter-spacing="1.5" fill="#F2C879">YOUR 422 HZ</text>
+        </svg>
+        <div class="prompt">Pick a song below and press <b>Play</b></div>
+      </div>
+      <iframe id="vframe" title="Zodiac playing view" allow="autoplay"></iframe>
+      <div id="vload"><div class="dots"><i></i><i></i><i></i></div><div>Tuning <b id="vloadSong">the song</b> to your <b id="vloadHz">422 Hz</b>&hellip;</div></div>
+      <div id="vhint">Tap &#9654; in the player to start</div>
+    </div>
+    <p class="view-note">The line never moves. The music around it does. Switch frequencies up top and the line moves to your other numbers.</p>
 
-    <div class="song">
-      <div class="thumb"><canvas data-slug="quiet-success" width="190" height="190"></canvas></div>
-      <div>
+    <div class="pick-label">Pick a song &middot; first 90 seconds</div>
+
+    <div class="song" data-song="quiet-success" data-title="Quiet Success">
+      <div class="thumb"><canvas data-slug="quiet-success" width="232" height="232"></canvas></div>
+      <div class="sx">
         <div class="st">Quiet Success</div>
         <div class="sd">Warm, low tones that ring like bowls.</div>
       </div>
+      <button class="pill">Play</button>
     </div>
-    <div class="prow">
-      <button class="pbtn" data-song="qs" aria-label="Play Quiet Success sample">
-        <svg width="15" height="17" viewBox="0 0 16 18"><path d="M0 0 L16 9 L0 18 Z" fill="#fff"/></svg>
-      </button>
-      <div class="pbar"><i id="qsBar"></i></div>
-      <span class="ptime" id="qsTime">1:30</span>
-    </div>
-    <div class="pcap">First 90 seconds &middot; <b class="hzcap">422 Hz</b> throughout</div>
 
-    <div class="song">
-      <div class="thumb"><canvas data-slug="kindred-spirits" width="190" height="190"></canvas></div>
-      <div>
+    <div class="song" data-song="kindred-spirits" data-title="Kindred Spirits">
+      <div class="thumb"><canvas data-slug="kindred-spirits" width="232" height="232"></canvas></div>
+      <div class="sx">
         <div class="st">Kindred Spirits</div>
         <div class="sd">Bright and steady from the first note.</div>
       </div>
+      <button class="pill">Play</button>
     </div>
-    <div class="prow">
-      <button class="pbtn" data-song="ks" aria-label="Play Kindred Spirits sample">
-        <svg width="15" height="17" viewBox="0 0 16 18"><path d="M0 0 L16 9 L0 18 Z" fill="#fff"/></svg>
-      </button>
-      <div class="pbar"><i id="ksBar"></i></div>
-      <span class="ptime" id="ksTime">1:30</span>
-    </div>
-    <div class="pcap">First 90 seconds &middot; <b class="hzcap">422 Hz</b> throughout</div>
   </div>
 
   <!-- THE LIBRARY -->
@@ -243,8 +268,8 @@
     <p class="blk-copy">Seven soundscapes so far, every one rebuilt around your frequencies so the harmonics sit right and the music simply sounds good. Besides the two you just heard, your library holds:</p>
 
     <div class="song">
-      <div class="thumb"><canvas data-slug="starseed" width="190" height="190"></canvas></div>
-      <div>
+      <div class="thumb"><canvas data-slug="starseed" width="232" height="232"></canvas></div>
+      <div class="sx">
         <div class="st">Starseed</div>
         <div class="bubbles">Meditate &middot; Deep &middot; Dreamy</div>
         <div class="sd">An otherworldly voice leads you in.</div>
@@ -252,8 +277,8 @@
     </div>
 
     <div class="song">
-      <div class="thumb"><canvas data-slug="astrolith" width="190" height="190"></canvas></div>
-      <div>
+      <div class="thumb"><canvas data-slug="astrolith" width="232" height="232"></canvas></div>
+      <div class="sx">
         <div class="st">Astrolith</div>
         <div class="bubbles">Focus &middot; Meditate &middot; Calm</div>
         <div class="sd">A steady pulse that never distracts.</div>
@@ -261,8 +286,8 @@
     </div>
 
     <div class="song">
-      <div class="thumb"><canvas data-slug="elysian-surge" width="190" height="190"></canvas></div>
-      <div>
+      <div class="thumb"><canvas data-slug="elysian-surge" width="232" height="232"></canvas></div>
+      <div class="sx">
         <div class="st">Elysian Surge</div>
         <div class="bubbles">Energy &middot; Motivate &middot; Build</div>
         <div class="sd">Starts warm, ends unstoppable.</div>
@@ -270,8 +295,8 @@
     </div>
 
     <div class="song">
-      <div class="thumb"><canvas data-slug="cosmic-drift" width="190" height="190"></canvas></div>
-      <div>
+      <div class="thumb"><canvas data-slug="cosmic-drift" width="232" height="232"></canvas></div>
+      <div class="sx">
         <div class="st">Cosmic Drift</div>
         <div class="bubbles">Focus &middot; Meditate &middot; Nap</div>
         <div class="sd">Slow swells, like rain on a window.</div>
@@ -279,8 +304,8 @@
     </div>
 
     <div class="song">
-      <div class="thumb"><canvas data-slug="galactic-slumber" width="190" height="190"></canvas></div>
-      <div>
+      <div class="thumb"><canvas data-slug="galactic-slumber" width="232" height="232"></canvas></div>
+      <div class="sx">
         <div class="st">Galactic Deep</div>
         <div class="bubbles">Sleep &middot; Meditate &middot; Deep</div>
         <div class="sd">Dark, slow, and bottomless. A full hour, made for sleep.</div>
@@ -303,10 +328,8 @@ const FREQS = {
 };
 let active = 'core';
 const $ = id => document.getElementById(id);
-const PLAY = '<svg width="15" height="17" viewBox="0 0 16 18"><path d="M0 0 L16 9 L0 18 Z" fill="#fff"/></svg>';
-const PAUSE = '<svg width="14" height="16" viewBox="0 0 14 16"><rect x="0" y="0" width="5" height="16" rx="1.5" fill="#fff"/><rect x="9" y="0" width="5" height="16" rx="1.5" fill="#fff"/></svg>';
 
-/* ---- zdisc art engine, ported from the app build (app-C engine v4) ---- */
+/* ---- zdisc art engine, ported from the app build (app-C engine v4), vivid pass ---- */
 const ZPAL={
   core:{d:['#6521C9','#A737C8'],s:[['#7A4AE0','#B98AF0'],['#B44FD8','#D07DE8']]},
   love:{d:['#B90044','#E0559A'],s:[['#F43F6B','#FF7A98'],['#EE3D9C','#FF7EC2']]},
@@ -321,7 +344,7 @@ function rgba(c,a){return 'rgba('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+','+a+')';}
 function hash(s){let h=177;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h;}
 function ray(x,x1,y1,x2,y2,cA,cB,al,wd){const g=x.createLinearGradient(x1,y1,x2,y2);
   g.addColorStop(0,rgba(cA,al));g.addColorStop(0.78,rgba(cB,al*0.9));g.addColorStop(1,rgba(cB,al*0.35));
-  x.strokeStyle=g;x.lineWidth=wd*2.3;x.globalAlpha=0.45;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
+  x.strokeStyle=g;x.lineWidth=wd*2.3;x.globalAlpha=0.62;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
   x.globalAlpha=1;x.lineWidth=wd;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();}
 function drawZ(cv,slug,catk,tt,alive,env){
   const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2;x.clearRect(0,0,W,H);
@@ -329,9 +352,9 @@ function drawZ(cv,slug,catk,tt,alive,env){
   const s0a=hx(P.s[0][0]),s0b=hx(P.s[0][1]),s1a=hx(P.s[1][0]),s1b=hx(P.s[1][1]);
   const seed=hash(slug),rr1=((seed%97)/97),puls=1+(alive?0.11*env:0),bmul=alive?(0.82+0.3*env):1;
   const R=Math.min(W,H)*0.44,r0=Math.min(W,H)*0.075,rot=(alive?tt*0.06:0.6)+rr1*6.28;
-  const wd=Math.max(1.35,W/240*1.3);
+  const wd=Math.max(2.1,W/240*2.0);
   x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,R*1.02,0,7);x.fill();
-  const tg=x.createRadialGradient(cx,cy,r0,cx,cy,R*0.95);tg.addColorStop(0,rgba(en,0.18));tg.addColorStop(1,rgba(en,0.02));
+  const tg=x.createRadialGradient(cx,cy,r0,cx,cy,R*0.95);tg.addColorStop(0,rgba(en,0.34));tg.addColorStop(1,rgba(en,0.05));
   x.fillStyle=tg;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();
   x.lineCap='round';
   const F=FAM[slug]||'burst';
@@ -376,7 +399,71 @@ function drawAll(){
   document.querySelectorAll('canvas[data-slug]').forEach(cv => drawZ(cv, cv.dataset.slug, active, 0, false, 0));
 }
 
-/* ---- frequency toggle: everything re-tunes ---- */
+/* ---- the playing view (the app's visualizer, embedded) ---- */
+const HZ_TOP=950, HZ_BOT=250, AXIS_TOP=46, AXIS_BOT=250;   // idle SVG axis geometry
+let currentSong=null, capTimer=null;
+const CAP=90;
+function idleLineY(hz){ return AXIS_TOP + (HZ_TOP-hz)/(HZ_TOP-HZ_BOT)*(AXIS_BOT-AXIS_TOP); }
+function updateIdle(){
+  const f=FREQS[active], y=idleLineY(f.hz);
+  $('idleLine').setAttribute('y1',y); $('idleLine').setAttribute('y2',y);
+  $('idleDot').setAttribute('cy',y);
+  $('idleChipBg').setAttribute('y',y-19);
+  $('idleChip').setAttribute('y',y-7);
+  $('idleChip').textContent='YOUR '+f.hz+' HZ';
+}
+function loadSong(slug,title){
+  const f=FREQS[active];
+  currentSong={slug,title};
+  const src='../inapp/frequency-visualizer-embed.html'
+    + '?audio='+encodeURIComponent('./app-assets/'+slug+'.mp3')
+    + '&target='+f.hz
+    + '&title='+encodeURIComponent(title)
+    + '&r='+(slug.length*1000+f.hz);   // per-selection URL so a stale cached embed never sticks
+  $('vframe').src=src;
+  $('viewer').classList.add('playing');
+  $('nowbar').classList.add('on');
+  $('npSong').textContent=title;
+  $('npHz').textContent='YOUR '+f.label.toUpperCase()+' · '+f.hz+' HZ';
+  document.querySelectorAll('.song[data-song]').forEach(row=>{
+    const on=row.dataset.song===slug;
+    row.classList.toggle('active',on);
+    row.querySelector('.pill').innerHTML = on
+      ? '<span class="eqi"><i></i><i></i><i></i></span>Playing'
+      : 'Play';
+  });
+  $('vload').classList.add('on'); $('vhint').classList.remove('on');
+  $('vloadSong').textContent=title; $('vloadHz').textContent=f.hz+' Hz';
+  clearInterval(capTimer);
+  let ready=false, autoTried=0;
+  capTimer=setInterval(()=>{          // ready-detect + autostart + 90-second cap (same-origin iframe)
+    try{
+      const w=$('vframe').contentWindow;
+      if(!w || !w.aud) return;
+      if(!ready && w.aud.src){ ready=true; $('vload').classList.remove('on'); try{ w.dispatchEvent(new w.Event('resize')); }catch(e){} }   // aud.src is set only after the embed's analysis completes; resize kick sizes the canvas
+      if(ready && w.aud.paused && w.aud.currentTime<CAP){
+        if(autoTried<4){ autoTried++; try{ w.startSound&&w.startSound(); }catch(e){} }
+        else $('vhint').classList.add('on');
+      }
+      if(ready && !w.aud.paused){ $('vhint').classList.remove('on'); }
+      if(w.aud.currentTime>=CAP && !w.aud.paused){ w.aud.pause(); }
+    }catch(e){}
+  },400);
+  // the viewer stays visible while they read; scroll it into view
+  $('viewer').scrollIntoView({behavior:'smooth',block:'center'});
+}
+document.querySelectorAll('.song[data-song]').forEach(row=>{
+  row.querySelector('.pill').addEventListener('click',()=>{
+    stopTone();
+    if (currentSong && currentSong.slug===row.dataset.song){   // active row: toggle pause/resume, don't restart
+      try{ const w=$('vframe').contentWindow;
+        if(w&&w.aud&&w.aud.src){ if(w.aud.paused){ w.aud.play(); } else { w.aud.pause(); } return; } }catch(e){}
+    }
+    loadSong(row.dataset.song,row.dataset.title);
+  });
+});
+
+/* ---- frequency toggle: everything re-tunes (including a loaded playing view) ---- */
 function setFreq(key){
   active = key;
   const f = FREQS[key];
@@ -385,13 +472,9 @@ function setFreq(key){
   r.setProperty('--f-tint', f.tint); r.setProperty('--f-grad', f.c2); r.setProperty('--f-accent', f.accent);
   document.querySelectorAll('.fname').forEach(el => el.textContent = f.label);
   document.querySelectorAll('.hzb, .hzcap').forEach(el => el.textContent = f.hz + ' Hz');
-  $('stripLine').setAttribute('stroke', f.c1);
-  $('stripChip').setAttribute('fill', f.c1);
-  $('stripTick').setAttribute('stroke', f.c1);
-  $('stripTxt').textContent = 'YOUR ' + f.hz + ' HZ';
   document.querySelectorAll('#seg button').forEach(b => b.classList.toggle('on', b.dataset.f === key));
-  document.querySelectorAll('.strip ellipse').forEach((el,i)=> el.setAttribute('fill', i%2 ? f.soft : f.tint));
-  stopTone(); stopSongs(); drawAll();
+  stopTone(); updateIdle(); drawAll();
+  if (currentSong) loadSong(currentSong.slug, currentSong.title);   // reload the view: line moves to the new Hz
 }
 document.querySelectorAll('#seg button').forEach(b => b.addEventListener('click', () => setFreq(b.dataset.f)));
 
@@ -404,7 +487,8 @@ function stopTone(){
   clearInterval(toneTimer);
   $('toneBar').style.width = '0%';
   $('toneTime').textContent = '0:10';
-  $('toneBtn').innerHTML = PLAY; $('toneBtn').classList.remove('playing');
+  $('toneBtn').innerHTML = '<svg width="15" height="17" viewBox="0 0 16 18"><path d="M0 0 L16 9 L0 18 Z" fill="#fff"/></svg>';
+  $('toneBtn').classList.remove('playing');
 }
 $('toneBtn').addEventListener('click', () => {
   if (osc){ stopTone(); return; }
@@ -419,7 +503,8 @@ $('toneBtn').addEventListener('click', () => {
   const me = osc;
   osc.onended = () => { if (osc === me) stopTone(); };
   toneStart = Date.now();
-  $('toneBtn').innerHTML = PAUSE; $('toneBtn').classList.add('playing');
+  $('toneBtn').innerHTML = '<svg width="14" height="16" viewBox="0 0 14 16"><rect x="0" y="0" width="5" height="16" rx="1.5" fill="#fff"/><rect x="9" y="0" width="5" height="16" rx="1.5" fill="#fff"/></svg>';
+  $('toneBtn').classList.add('playing');
   toneTimer = setInterval(() => {
     const t = Math.min((Date.now()-toneStart)/1000, TONE_LEN);
     $('toneBar').style.width = (t/TONE_LEN*100) + '%';
@@ -427,60 +512,7 @@ $('toneBtn').addEventListener('click', () => {
   }, 100);
 });
 
-/* ---- songs: real tracks, first 90 seconds; disc art comes ALIVE to the audio ---- */
-const CAP = 90;
-const SONGS = {
-  qs: { slug:'quiet-success',   audio: new Audio('../inapp/app-assets/quiet-success.mp3') },
-  ks: { slug:'kindred-spirits', audio: new Audio('../inapp/app-assets/kindred-spirits.mp3') }
-};
-let analyser=null, aData=null, raf=null, liveKey=null, env=0;
-function hookAnalyser(s){
-  if (s.node) return;
-  const ctx = audioCtx();
-  s.node = ctx.createMediaElementSource(s.audio);
-  analyser = analyser || ctx.createAnalyser();
-  s.node.connect(analyser); analyser.connect(ctx.destination);
-  analyser.fftSize = 128; aData = new Uint8Array(analyser.frequencyBinCount);
-}
-function liveLoop(ts){
-  if (!liveKey) return;
-  const s = SONGS[liveKey];
-  if (analyser){ analyser.getByteFrequencyData(aData);
-    let sum=0,n=Math.floor(aData.length*0.5); for(let i=0;i<n;i++)sum+=aData[i];
-    const raw=(sum/n)/255; env = env*0.82 + raw*0.18; }
-  const cv = document.querySelector('canvas[data-slug="'+s.slug+'"]');
-  if (cv) drawZ(cv, s.slug, active, ts/1000*6, true, Math.min(1, env*1.6));
-  raf = requestAnimationFrame(liveLoop);
-}
-function fmt(s){ s=Math.max(0,Math.round(s)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
-function stopSongs(except){
-  for (const k in SONGS){
-    if (k === except) continue;
-    const s = SONGS[k]; s.audio.pause(); s.audio.currentTime = 0;
-    $(k+'Bar').style.width='0%'; $(k+'Time').textContent='1:30';
-    const btn = document.querySelector('[data-song="'+k+'"]');
-    btn.innerHTML = PLAY; btn.classList.remove('playing');
-  }
-  if (!except){ liveKey=null; cancelAnimationFrame(raf); drawAll(); }
-}
-document.querySelectorAll('[data-song]').forEach(btn => {
-  const key = btn.dataset.song, s = SONGS[key], a = s.audio;
-  a.preload = 'none';
-  a.addEventListener('timeupdate', () => {
-    if (a.currentTime >= CAP){ a.pause(); a.currentTime = 0; $(key+'Bar').style.width='0%'; $(key+'Time').textContent='1:30'; btn.innerHTML=PLAY; btn.classList.remove('playing'); liveKey=null; cancelAnimationFrame(raf); drawAll(); return; }
-    $(key+'Bar').style.width = (a.currentTime/CAP*100) + '%';
-    $(key+'Time').textContent = fmt(CAP - a.currentTime);
-  });
-  btn.addEventListener('click', () => {
-    if (!a.paused){ a.pause(); btn.innerHTML=PLAY; btn.classList.remove('playing'); liveKey=null; cancelAnimationFrame(raf); drawAll(); return; }
-    stopTone(); stopSongs(key);
-    try{ hookAnalyser(s); }catch(e){}
-    a.play(); btn.innerHTML=PAUSE; btn.classList.add('playing');
-    liveKey = key; env = 0; cancelAnimationFrame(raf); raf = requestAnimationFrame(liveLoop);
-  });
-});
-
-drawAll();
+updateIdle(); drawAll();
 </script>
 </body>
 </html>

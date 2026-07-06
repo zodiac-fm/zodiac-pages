@@ -40,12 +40,19 @@ let t0=performance.now()/1000, sound=false, flash=0, started=false;
 function clock(){ return started ? aud.currentTime : 0; }
 function at(arr,p){ const f=p*(D.n-1), i=Math.floor(f), g=f-i; return arr[i]*(1-g)+(arr[Math.min(i+1,D.n-1)])*g; }
 
-snd.addEventListener('click',async()=>{
-  if(!sound){ try{ aud.currentTime=clock(); await aud.play(); sound=true; snd.innerHTML='&#9834; sound on'; }catch(e){} }
-  else { t0=performance.now()/1000 - aud.currentTime; aud.pause(); sound=false; snd.innerHTML='&#9834; sound off'; }
-});
+/* dead '#snd' toggle removed 2026-07-06: the button no longer exists in this HTML and the
+   bare reference threw at load, killing the whole script (no title, no analysis, no frame). */
 
+function setIcon(){ const playing=sound&&!aud.paused;
+  pp.innerHTML = playing ? '<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>'
+                         : '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'; }
 async function startSound(){ if(sound) return; try{ initGraph(); if(AC) await AC.resume(); aud.currentTime=clock(); await aud.play(); sound=true; setIcon(); }catch(e){} }
+pp.addEventListener('click', async ()=>{
+  if(!sound){ await startSound(); return; }
+  if(aud.paused){ try{ await aud.play(); }catch(e){} } else { aud.pause(); }
+  setIcon();
+});
+aud.addEventListener('play', setIcon); aud.addEventListener('pause', setIcon);
 addEventListener('load', startSound); startSound();
 aud.addEventListener('canplay', startSound);            // retry once the audio is decodable
 aud.addEventListener('loadeddata', startSound);
