@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Your Frequencies — Zodiac.fm (new results, v1)</title>
+<title>Your Frequencies — Zodiac.fm (new results, v2)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
@@ -13,10 +13,7 @@
     /* tokens.json — locked 2026-06-30 */
     --cream:#F6F1E8; --bleach:#FFFFFF; --moondust:#FBF8F3; --mist:#EEE9E0; --ink:#1A1620;
     --control:#2A2530; --track:#EAE4DA;
-    --core:#6521C9; --core-deep:#38007A; --core-tint:#EFECFF; --core-grad:#A737C8;
-    --love:#B90044; --love-deep:#6E0024; --love-tint:#FFE8EA; --love-grad:#CF4090;
-    --vit:#FF9112; --vit-deep:#BC6700; --vit-tint:#FFEADA; --vit-grad:#FFC251; --vit-accent:#C25500;
-    --abn:#12A56E; --abn-deep:#0A6B48; --abn-tint:#DCF4E8; --abn-grad:#46D99A; --abn-accent:#0A7A52;
+    --core:#6521C9; --core-deep:#38007A; --core-grad:#A737C8;
     --serif:'Cormorant Garamond',Georgia,serif;
     --sans:'Switzer',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     /* active frequency (JS swaps these) */
@@ -38,18 +35,24 @@
 
   .card{background:var(--bleach);border-radius:18px;padding:18px 18px;box-shadow:0 1px 3px rgba(56,0,122,.06);margin-bottom:12px}
 
-  /* four frequency cards */
-  .fc-head{display:flex;align-items:center;gap:12px}
-  .fc-dot{width:34px;height:34px;border-radius:50%;flex:none}
+  /* four frequency cards — framed frequency medallions (ring + orb, frequency gradient) */
+  .fc-head{display:flex;align-items:center;gap:14px}
+  .med{width:46px;height:46px;border-radius:50%;flex:none;position:relative;
+       background:conic-gradient(from 210deg, var(--m1), var(--m2), var(--m1));
+       box-shadow:0 3px 7px rgba(56,0,122,.13)}
+  .med::before{content:'';position:absolute;inset:3px;border-radius:50%;background:#fff}
+  .med::after{content:'';position:absolute;inset:7px;border-radius:50%;
+       background:radial-gradient(circle at 32% 28%, #fff 0%, var(--m3) 22%, var(--m1) 62%, var(--m0) 100%)}
   .fc-name{font-family:var(--serif);font-weight:600;font-size:24px}
   .fc-hz{font-size:14px;font-weight:600;letter-spacing:.02em;margin-left:auto}
   .fc-desc{font-size:15px;line-height:1.5;margin-top:11px;color:var(--ink)}
   .fc-band{font-size:13.5px;line-height:1.5;margin-top:7px;color:rgba(26,22,32,.55)}
 
-  /* first listen card */
-  .listen{padding:20px 18px 24px}
-  .eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--core)}
-  .listen .lead{font-size:15px;line-height:1.5;color:rgba(26,22,32,.62);margin:8px 0 16px}
+  /* the spin card */
+  .listen{padding:22px 18px 24px}
+  .listen h2{font-family:var(--serif);font-weight:600;font-size:27px;line-height:1.1}
+  .listen .lead{font-size:15px;line-height:1.55;color:rgba(26,22,32,.62);margin:10px 0 16px}
+  .tn-hl{color:var(--f-accent);font-weight:600}
 
   /* locked segmented control: track #EAE4DA, white thumb, active label in freq accent */
   .seg{display:flex;background:var(--track);border-radius:22px;padding:4px}
@@ -73,25 +76,27 @@
   .pcap{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(26,22,32,.42);margin-top:10px}
   .pcap b{color:var(--f-accent)}
 
-  /* the line-through-music visual */
   .strip{margin-top:12px;border-radius:14px;overflow:hidden;display:block;width:100%;background:var(--moondust)}
   .strip-note{margin-top:9px;font-size:13px;line-height:1.5;color:rgba(26,22,32,.5)}
 
-  /* song rows — locked disc treatment */
-  .song{display:flex;align-items:center;gap:14px;margin-top:20px}
+  .hearing{font-size:14.5px;line-height:1.55;margin-top:20px}
+  .hearing b{color:var(--f-accent)}
+  .hearing .sw{display:block;font-size:12.5px;color:rgba(26,22,32,.5);margin-top:3px}
+
+  /* song rows — locked disc treatment, LIVE zdisc art (app engine v4) */
+  .song{display:flex;align-items:center;gap:14px;margin-top:18px}
   .thumb{width:64px;height:64px;flex:none;position:relative}
-  .thumb img{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%;transform:scale(1.16);filter:drop-shadow(0 3px 7px rgba(56,0,122,.13))}
+  .thumb canvas{position:absolute;inset:0;width:100%;height:100%;transform:scale(1.16);filter:drop-shadow(0 3px 7px rgba(56,0,122,.13))}
   .song .st{font-size:16.5px;font-weight:600}
   .song .sd{font-size:12.5px;line-height:1.45;color:rgba(26,22,32,.55);margin-top:2px}
 
-  /* library */
-  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px;margin-top:16px}
-  .tile{text-align:center}
-  .tile .thumb{width:58px;height:58px;margin:0 auto 8px}
-  .tile .tn{font-size:10.5px;line-height:1.3;color:rgba(26,22,32,.62)}
-  .tile .more{width:58px;height:58px;border-radius:50%;margin:0 auto 8px;border:1.5px dashed rgba(26,22,32,.25);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:rgba(26,22,32,.45);background:var(--bleach)}
+  /* library rows — locked editorial treatment: caps purpose words, no chips */
+  .lib .song{margin-top:20px}
+  .lib .thumb{width:52px;height:52px}
+  .bubbles{font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(26,22,32,.45);margin-top:4px}
+  .lib .sd{margin-top:4px}
 
-  .cta{display:block;width:100%;margin-top:22px;border:0;border-radius:14px;padding:17px 0;font-family:var(--sans);font-size:16px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--core),var(--core-deep));cursor:pointer}
+  .cta{display:block;width:100%;margin-top:24px;border:0;border-radius:14px;padding:17px 0;font-family:var(--sans);font-size:16px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--core),var(--core-deep));cursor:pointer}
   .cta-sub{text-align:center;font-size:12.5px;color:rgba(26,22,32,.5);margin-top:10px}
 </style>
 </head>
@@ -109,9 +114,9 @@
 
   <div class="card">
     <div class="fc-head">
-      <div class="fc-dot" style="background:radial-gradient(circle at 32% 30%,var(--core-grad),var(--core) 60%,var(--core-deep))"></div>
-      <div class="fc-name" style="color:var(--core)">Core</div>
-      <div class="fc-hz" style="color:var(--core)">422 Hz</div>
+      <div class="med" style="--m0:#38007A;--m1:#6521C9;--m2:#A737C8;--m3:#D2C8FF"></div>
+      <div class="fc-name" style="color:#6521C9">Core</div>
+      <div class="fc-hz" style="color:#6521C9">422 Hz</div>
     </div>
     <p class="fc-desc">Increases identity coherence and aligns you with your true purpose.</p>
     <p class="fc-band">Belly Band: Identity is experienced as felt stability</p>
@@ -119,9 +124,9 @@
 
   <div class="card">
     <div class="fc-head">
-      <div class="fc-dot" style="background:radial-gradient(circle at 32% 30%,var(--love-grad),var(--love) 60%,var(--love-deep))"></div>
-      <div class="fc-name" style="color:var(--love)">Love</div>
-      <div class="fc-hz" style="color:var(--love)">432 Hz</div>
+      <div class="med" style="--m0:#6E0024;--m1:#B90044;--m2:#CF4090;--m3:#FFBDC3"></div>
+      <div class="fc-name" style="color:#B90044">Love</div>
+      <div class="fc-hz" style="color:#B90044">432 Hz</div>
     </div>
     <p class="fc-desc">Expands magnetism, attunement, and connection.</p>
     <p class="fc-band">Solar Plexus Band: Connection is experienced as movement and action</p>
@@ -129,9 +134,9 @@
 
   <div class="card">
     <div class="fc-head">
-      <div class="fc-dot" style="background:radial-gradient(circle at 32% 30%,var(--vit-grad),var(--vit) 60%,var(--vit-deep))"></div>
-      <div class="fc-name" style="color:var(--vit-accent)">Vitality</div>
-      <div class="fc-hz" style="color:var(--vit-accent)">579 Hz</div>
+      <div class="med" style="--m0:#BC6700;--m1:#FF9112;--m2:#FFC251;--m3:#FFC392"></div>
+      <div class="fc-name" style="color:#C25500">Vitality</div>
+      <div class="fc-hz" style="color:#C25500">579 Hz</div>
     </div>
     <p class="fc-desc">Steadies your nervous system and keeps your energy clean.</p>
     <p class="fc-band">Solar Plexus Band: Energy is experienced as drive and motion</p>
@@ -139,18 +144,18 @@
 
   <div class="card">
     <div class="fc-head">
-      <div class="fc-dot" style="background:radial-gradient(circle at 32% 30%,var(--abn-grad),var(--abn) 60%,var(--abn-deep))"></div>
-      <div class="fc-name" style="color:var(--abn-accent)">Abundance</div>
-      <div class="fc-hz" style="color:var(--abn-accent)">611 Hz</div>
+      <div class="med" style="--m0:#0A6B48;--m1:#12A56E;--m2:#46D99A;--m3:#8FE1BE"></div>
+      <div class="fc-name" style="color:#0A7A52">Abundance</div>
+      <div class="fc-hz" style="color:#0A7A52">611 Hz</div>
     </div>
     <p class="fc-desc">Aligns your timing with prosperity, opportunity, and exchange.</p>
     <p class="fc-band">Throat Band: Prosperity and opportunity experienced through articulation and expression</p>
   </div>
 
-  <!-- YOUR FIRST LISTEN -->
+  <!-- TAKE THE MUSIC FOR A SPIN -->
   <div class="card listen">
-    <div class="eyebrow">Your First Listen</div>
-    <p class="lead">You have your four numbers. Now hear what they sound like. Pick a frequency:</p>
+    <h2>Take the Music for a Spin</h2>
+    <p class="lead">You have your four numbers. Each one becomes a <span class="tn-hl">tone</span>: the sound of your frequency. Hear them for yourself. Pick a frequency and toggle:</p>
 
     <div class="seg" id="seg">
       <button class="on" data-f="core">Core</button>
@@ -159,8 +164,8 @@
       <button data-f="abundance">Abundance</button>
     </div>
 
-    <div class="blk-label">The Raw Signal</div>
-    <p class="blk-copy">A pure tone at exactly <b id="hz1">422</b>&nbsp;Hz, calculated from your chart. No music yet. Just your signal.</p>
+    <div class="blk-label">The Raw Tone</div>
+    <p class="blk-copy">This is your <b class="fname" style="color:var(--f-accent)">Core</b> <span class="tn-hl">tone</span>: the pure signal at exactly <b class="hzb">422 Hz</b>, straight from your chart. No music yet.</p>
     <svg class="sine" viewBox="0 0 330 36" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 18 Q 10 4, 20 18 T 40 18 T 60 18 T 80 18 T 100 18 T 120 18 T 140 18 T 160 18 T 180 18 T 200 18 T 220 18 T 240 18 T 260 18 T 280 18 T 300 18 T 320 18 T 340 18" fill="none" stroke-width="2" opacity=".85"/>
     </svg>
@@ -171,12 +176,12 @@
       <div class="pbar"><i id="toneBar"></i></div>
       <span class="ptime" id="toneTime">0:10</span>
     </div>
-    <div class="pcap">Pure tone &middot; <b id="hz2">422 Hz</b></div>
+    <div class="pcap">Pure tone &middot; <b class="hzcap">422 Hz</b></div>
 
     <div class="hair"></div>
 
-    <div class="blk-label">Now Inside Music</div>
-    <p class="blk-copy">You never listen to a bare tone. We weave it into full compositions. Hear your <b id="hz3">422</b>&nbsp;Hz inside two very different songs.</p>
+    <div class="blk-label">Now Inside the Music</div>
+    <p class="blk-copy">A tone on its own gets annoying fast. So we do it the hard way: our engineering team shifts the music around your frequency, rebuilding each composition so it highlights your <span class="tn-hl">tone</span>, carries it through the harmonics, and still sounds beautiful.</p>
 
     <svg class="strip" viewBox="0 0 330 88" xmlns="http://www.w3.org/2000/svg">
       <rect width="330" height="88" fill="#FBF8F3"/>
@@ -196,11 +201,14 @@
     </svg>
     <p class="strip-note">The straight line is your frequency. It never moves. The music around it does.</p>
 
+    <p class="hearing">You&rsquo;re hearing your <b class="fname">Core</b> inside two very different songs.
+      <span class="sw">Switch frequencies up top any time. Everything on this card re-tunes.</span></p>
+
     <div class="song">
-      <div class="thumb"><img id="qsArt" src="../inapp/app-assets/sig-core-quiet-success.png" alt="Quiet Success"></div>
+      <div class="thumb"><canvas data-slug="quiet-success" width="190" height="190"></canvas></div>
       <div>
         <div class="st">Quiet Success</div>
-        <div class="sd">Warm and low. Slow tones that ring like singing bowls.</div>
+        <div class="sd">Warm, low tones that ring like bowls.</div>
       </div>
     </div>
     <div class="prow">
@@ -213,10 +221,10 @@
     <div class="pcap">First 90 seconds &middot; <b class="hzcap">422 Hz</b> throughout</div>
 
     <div class="song">
-      <div class="thumb"><img id="ksArt" src="../inapp/app-assets/sig-core-kindred-spirits.png" alt="Kindred Spirits"></div>
+      <div class="thumb"><canvas data-slug="kindred-spirits" width="190" height="190"></canvas></div>
       <div>
         <div class="st">Kindred Spirits</div>
-        <div class="sd">Bright from the first note.</div>
+        <div class="sd">Bright and steady from the first note.</div>
       </div>
     </div>
     <div class="prow">
@@ -229,20 +237,56 @@
     <div class="pcap">First 90 seconds &middot; <b class="hzcap">422 Hz</b> throughout</div>
   </div>
 
-  <!-- LIBRARY -->
-  <div class="sect" style="font-size:26px">It runs through your whole library.</div>
-  <div class="card">
-    <p class="blk-copy">The same four frequencies thread through all 20+ tracks, from ambient to cinematic. The music varies. Your signal never does.</p>
-    <div class="tiles">
-      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-starseed.png" alt=""></div><div class="tn">Starseed</div></div>
-      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-astrolith.png" alt=""></div><div class="tn">Astrolith</div></div>
-      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-kindred-spirits.png" alt=""></div><div class="tn">Kindred Spirits</div></div>
-      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-elysian-surge.png" alt=""></div><div class="tn">Elysian Surge</div></div>
-      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-cosmic-drift.png" alt=""></div><div class="tn">Cosmic Drift</div></div>
-      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-quiet-success.png" alt=""></div><div class="tn">Quiet Success</div></div>
-      <div class="tile"><div class="thumb"><img src="../inapp/app-assets/sig-core-galactic-slumber.png" alt=""></div><div class="tn">Galactic Deep</div></div>
-      <div class="tile"><div class="more">+14</div><div class="tn">and more</div></div>
+  <!-- THE LIBRARY -->
+  <div class="sect" style="font-size:26px">These aren&rsquo;t your only songs.</div>
+  <div class="card lib">
+    <p class="blk-copy">Seven soundscapes so far, every one rebuilt around your frequencies so the harmonics sit right and the music simply sounds good. Besides the two you just heard, your library holds:</p>
+
+    <div class="song">
+      <div class="thumb"><canvas data-slug="starseed" width="190" height="190"></canvas></div>
+      <div>
+        <div class="st">Starseed</div>
+        <div class="bubbles">Meditate &middot; Deep &middot; Dreamy</div>
+        <div class="sd">An otherworldly voice leads you in.</div>
+      </div>
     </div>
+
+    <div class="song">
+      <div class="thumb"><canvas data-slug="astrolith" width="190" height="190"></canvas></div>
+      <div>
+        <div class="st">Astrolith</div>
+        <div class="bubbles">Focus &middot; Meditate &middot; Calm</div>
+        <div class="sd">A steady pulse that never distracts.</div>
+      </div>
+    </div>
+
+    <div class="song">
+      <div class="thumb"><canvas data-slug="elysian-surge" width="190" height="190"></canvas></div>
+      <div>
+        <div class="st">Elysian Surge</div>
+        <div class="bubbles">Energy &middot; Motivate &middot; Build</div>
+        <div class="sd">Starts warm, ends unstoppable.</div>
+      </div>
+    </div>
+
+    <div class="song">
+      <div class="thumb"><canvas data-slug="cosmic-drift" width="190" height="190"></canvas></div>
+      <div>
+        <div class="st">Cosmic Drift</div>
+        <div class="bubbles">Focus &middot; Meditate &middot; Nap</div>
+        <div class="sd">Slow swells, like rain on a window.</div>
+      </div>
+    </div>
+
+    <div class="song">
+      <div class="thumb"><canvas data-slug="galactic-slumber" width="190" height="190"></canvas></div>
+      <div>
+        <div class="st">Galactic Deep</div>
+        <div class="bubbles">Sleep &middot; Meditate &middot; Deep</div>
+        <div class="sd">Dark, slow, and bottomless. A full hour, made for sleep.</div>
+      </div>
+    </div>
+
     <button class="cta">Unlock Your Library</button>
     <div class="cta-sub">90-Day Money-Back Guarantee</div>
   </div>
@@ -262,32 +306,101 @@ const $ = id => document.getElementById(id);
 const PLAY = '<svg width="15" height="17" viewBox="0 0 16 18"><path d="M0 0 L16 9 L0 18 Z" fill="#fff"/></svg>';
 const PAUSE = '<svg width="14" height="16" viewBox="0 0 14 16"><rect x="0" y="0" width="5" height="16" rx="1.5" fill="#fff"/><rect x="9" y="0" width="5" height="16" rx="1.5" fill="#fff"/></svg>';
 
+/* ---- zdisc art engine, ported from the app build (app-C engine v4) ---- */
+const ZPAL={
+  core:{d:['#6521C9','#A737C8'],s:[['#7A4AE0','#B98AF0'],['#B44FD8','#D07DE8']]},
+  love:{d:['#B90044','#E0559A'],s:[['#F43F6B','#FF7A98'],['#EE3D9C','#FF7EC2']]},
+  vitality:{d:['#FF7A00','#FFC251'],s:[['#FF5426','#FF8A5C'],['#FFB020','#FFE08A']]},
+  abundance:{d:['#0B9159','#2BC47F'],s:[['#0FA98F','#3BC9AD'],['#2FBF6E','#63D992']]}
+};
+const FAM={'quiet-success':'halo','kindred-spirits':'mandala','elysian-surge':'burst',
+           'starseed':'weave','astrolith':'iris','cosmic-drift':'orbit','galactic-slumber':'galaxy'};
+function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+function mix(a,b,t){return a.map((v,i)=>v+(b[i]-v)*t);}
+function rgba(c,a){return 'rgba('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+','+a+')';}
+function hash(s){let h=177;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h;}
+function ray(x,x1,y1,x2,y2,cA,cB,al,wd){const g=x.createLinearGradient(x1,y1,x2,y2);
+  g.addColorStop(0,rgba(cA,al));g.addColorStop(0.78,rgba(cB,al*0.9));g.addColorStop(1,rgba(cB,al*0.35));
+  x.strokeStyle=g;x.lineWidth=wd*2.3;x.globalAlpha=0.45;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
+  x.globalAlpha=1;x.lineWidth=wd;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();}
+function drawZ(cv,slug,catk,tt,alive,env){
+  const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2;x.clearRect(0,0,W,H);
+  const P=ZPAL[catk]||ZPAL.core,pr=hx(P.d[0]),en=hx(P.d[1]);
+  const s0a=hx(P.s[0][0]),s0b=hx(P.s[0][1]),s1a=hx(P.s[1][0]),s1b=hx(P.s[1][1]);
+  const seed=hash(slug),rr1=((seed%97)/97),puls=1+(alive?0.11*env:0),bmul=alive?(0.82+0.3*env):1;
+  const R=Math.min(W,H)*0.44,r0=Math.min(W,H)*0.075,rot=(alive?tt*0.06:0.6)+rr1*6.28;
+  const wd=Math.max(1.35,W/240*1.3);
+  x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,R*1.02,0,7);x.fill();
+  const tg=x.createRadialGradient(cx,cy,r0,cx,cy,R*0.95);tg.addColorStop(0,rgba(en,0.18));tg.addColorStop(1,rgba(en,0.02));
+  x.fillStyle=tg;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();
+  x.lineCap='round';
+  const F=FAM[slug]||'burst';
+  function glint(i){return i%6===0?[s0a,s0b,0.75]:(i%9===0?[s1a,s1b,0.72]:[pr,en,1]);}
+  if(F==='burst'){const N=150;for(let i=0;i<N;i++){const a=i/N*6.283+rot;
+    const L=R*(0.86+0.10*Math.sin(a*7+rr1*6))*puls;const[cA,cB,m]=glint(i);
+    ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.85*m*bmul,wd);}}
+  else if(F==='iris'){const N=130;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L=R*0.7*puls;const[cA,cB,m]=glint(i);
+    ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.7*m*bmul,wd);}
+    [[0.5,pr,2.6],[0.84,en,1.9]].forEach(([r2,cc,ww])=>{x.strokeStyle=rgba(cc,0.95*bmul);x.lineWidth=wd*ww;
+    x.beginPath();x.arc(cx,cy,R*r2*puls,0,7);x.stroke();});}
+  else if(F==='orbit'){const RG=[0.36,0.52,0.68,0.84];RG.forEach((rr,k)=>{
+    x.strokeStyle=rgba(k%2?en:pr,(0.8-k*0.08)*bmul);x.lineWidth=wd*1.3;
+    x.beginPath();x.arc(cx,cy,R*rr*puls,0,7);x.stroke();
+    const NB2=3+k;for(let b=0;b<NB2;b++){const a=rot*(k%2?1.4:-1.1)+b/NB2*6.283+k*0.9;
+      const[cA,cB,m]=glint(k*7+b*3);
+      x.fillStyle=rgba(cB,0.95*m*bmul);x.beginPath();
+      x.arc(cx+Math.cos(a)*R*rr*puls,cy+Math.sin(a)*R*rr*puls,wd*2.1,0,7);x.fill();}});}
+  else if(F==='galaxy'){const ARMS=3;for(let ar=0;ar<ARMS;ar++){const a0=ar/ARMS*6.283+rot;
+    for(let i=0;i<34;i++){const t=i/34;const a=a0+t*3.1;const r2=r0*1.2+(R*0.92-r0*1.2)*t*puls;
+      const[cA,cB,m]=glint(ar*34+i);
+      x.fillStyle=rgba(t<0.12?cA:mix(cA,cB,t),(0.95-0.55*t)*m*bmul);x.beginPath();
+      x.arc(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2,wd*(1.9-t*1.1),0,7);x.fill();}}
+    const bg=x.createRadialGradient(cx,cy,0,cx,cy,r0*1.5);bg.addColorStop(0,rgba(en,0.8*bmul));bg.addColorStop(1,rgba(en,0));
+    x.fillStyle=bg;x.beginPath();x.arc(cx,cy,r0*1.5,0,7);x.fill();}
+  else if(F==='mandala'){const Pt=10,N=170;for(let i=0;i<N;i++){const a=i/N*6.283+rot;
+    const lobe=Math.max(0,Math.cos((a-rot)*Pt/2));const L=R*(0.44+0.5*Math.pow(lobe,1.6))*puls;
+    if(L>R*0.45){const[cA,cB,m]=glint(i);
+    ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.8*m*bmul,wd);}}}
+  else if(F==='halo'){const N=36;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L=R*0.88*puls;const[cA,cB,m]=glint(i);
+    ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.8*m*bmul,wd);}
+    x.strokeStyle=rgba(en,0.9*bmul);x.lineWidth=wd*2.6;x.beginPath();x.arc(cx,cy,R*0.88*puls,0,7);x.stroke();}
+  else{const N=130;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L1=R*0.52,L2=R*0.9*puls;const[cA,cB,m]=glint(i);
+    ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L1,cy+Math.sin(a)*L1,pr,pr,0.8*bmul,wd);
+    if(i%2)ray(x,cx+Math.cos(a)*(L1+wd*3),cy+Math.sin(a)*(L1+wd*3),cx+Math.cos(a)*L2,cy+Math.sin(a)*L2,cA,cB,0.7*m*bmul,wd);}}
+  const cp=1+(alive?0.14*env:0),core=x.createRadialGradient(cx,cy,0,cx,cy,r0*1.8*cp);
+  core.addColorStop(0,'rgba(255,255,255,0.96)');core.addColorStop(0.55,rgba(pr,0.10+(alive?0.08*env:0)));core.addColorStop(1,rgba(pr,0));
+  x.fillStyle=core;x.beginPath();x.arc(cx,cy,r0*1.9*cp,0,7);x.fill();
+  x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,r0*0.5,0,7);x.fill();
+}
+function drawAll(){
+  document.querySelectorAll('canvas[data-slug]').forEach(cv => drawZ(cv, cv.dataset.slug, active, 0, false, 0));
+}
+
+/* ---- frequency toggle: everything re-tunes ---- */
 function setFreq(key){
   active = key;
   const f = FREQS[key];
   const r = document.documentElement.style;
   r.setProperty('--f', f.c1); r.setProperty('--f-deep', f.deep);
   r.setProperty('--f-tint', f.tint); r.setProperty('--f-grad', f.c2); r.setProperty('--f-accent', f.accent);
-  $('hz1').textContent = f.hz; $('hz2').textContent = f.hz + ' Hz'; $('hz3').textContent = f.hz;
-  document.querySelectorAll('.hzcap').forEach(el => el.textContent = f.hz + ' Hz');
+  document.querySelectorAll('.fname').forEach(el => el.textContent = f.label);
+  document.querySelectorAll('.hzb, .hzcap').forEach(el => el.textContent = f.hz + ' Hz');
   $('stripLine').setAttribute('stroke', f.c1);
   $('stripChip').setAttribute('fill', f.c1);
   $('stripTick').setAttribute('stroke', f.c1);
   $('stripTxt').textContent = 'YOUR ' + f.hz + ' HZ';
-  $('qsArt').src = '../inapp/app-assets/sig-' + key + '-quiet-success.png';
-  $('ksArt').src = '../inapp/app-assets/sig-' + key + '-kindred-spirits.png';
   document.querySelectorAll('#seg button').forEach(b => b.classList.toggle('on', b.dataset.f === key));
-  // blobs tint to the frequency's soft/tint pair
   document.querySelectorAll('.strip ellipse').forEach((el,i)=> el.setAttribute('fill', i%2 ? f.soft : f.tint));
-  stopTone(); stopSongs();
+  stopTone(); stopSongs(); drawAll();
 }
 document.querySelectorAll('#seg button').forEach(b => b.addEventListener('click', () => setFreq(b.dataset.f)));
 
-/* ---- raw tone: WebAudio oscillator at the exact Hz, 10s with a soft envelope ---- */
-let ctx=null, osc=null, gain=null, toneTimer=null, toneStart=0;
+/* ---- raw tone: WebAudio oscillator at the exact Hz, 10s, soft envelope ---- */
+let actx=null, osc=null, gain=null, toneTimer=null, toneStart=0;
 const TONE_LEN = 10;
+function audioCtx(){ actx = actx || new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended')actx.resume(); return actx; }
 function stopTone(){
-  if (osc){ try{ gain.gain.setTargetAtTime(0, ctx.currentTime, .08); osc.stop(ctx.currentTime + .4);}catch(e){} osc=null; }
+  if (osc){ try{ gain.gain.setTargetAtTime(0, actx.currentTime, .08); osc.stop(actx.currentTime + .4);}catch(e){} osc=null; }
   clearInterval(toneTimer);
   $('toneBar').style.width = '0%';
   $('toneTime').textContent = '0:10';
@@ -295,13 +408,13 @@ function stopTone(){
 }
 $('toneBtn').addEventListener('click', () => {
   if (osc){ stopTone(); return; }
-  ctx = ctx || new (window.AudioContext||window.webkitAudioContext)();
+  const ctx = audioCtx();
   osc = ctx.createOscillator(); gain = ctx.createGain();
   osc.type = 'sine'; osc.frequency.value = FREQS[active].hz;
   gain.gain.value = 0; osc.connect(gain); gain.connect(ctx.destination);
   osc.start();
-  gain.gain.setTargetAtTime(.18, ctx.currentTime, .25);           // soft attack
-  gain.gain.setTargetAtTime(0, ctx.currentTime + TONE_LEN - .8, .3); // soft release
+  gain.gain.setTargetAtTime(.18, ctx.currentTime, .25);
+  gain.gain.setTargetAtTime(0, ctx.currentTime + TONE_LEN - .8, .3);
   osc.stop(ctx.currentTime + TONE_LEN);
   const me = osc;
   osc.onended = () => { if (osc === me) stopTone(); };
@@ -314,12 +427,31 @@ $('toneBtn').addEventListener('click', () => {
   }, 100);
 });
 
-/* ---- songs: real tracks, first 90 seconds ---- */
+/* ---- songs: real tracks, first 90 seconds; disc art comes ALIVE to the audio ---- */
 const CAP = 90;
 const SONGS = {
-  qs: { audio: new Audio('../inapp/app-assets/quiet-success.mp3') },
-  ks: { audio: new Audio('../inapp/app-assets/kindred-spirits.mp3') }
+  qs: { slug:'quiet-success',   audio: new Audio('../inapp/app-assets/quiet-success.mp3') },
+  ks: { slug:'kindred-spirits', audio: new Audio('../inapp/app-assets/kindred-spirits.mp3') }
 };
+let analyser=null, aData=null, raf=null, liveKey=null, env=0;
+function hookAnalyser(s){
+  if (s.node) return;
+  const ctx = audioCtx();
+  s.node = ctx.createMediaElementSource(s.audio);
+  analyser = analyser || ctx.createAnalyser();
+  s.node.connect(analyser); analyser.connect(ctx.destination);
+  analyser.fftSize = 128; aData = new Uint8Array(analyser.frequencyBinCount);
+}
+function liveLoop(ts){
+  if (!liveKey) return;
+  const s = SONGS[liveKey];
+  if (analyser){ analyser.getByteFrequencyData(aData);
+    let sum=0,n=Math.floor(aData.length*0.5); for(let i=0;i<n;i++)sum+=aData[i];
+    const raw=(sum/n)/255; env = env*0.82 + raw*0.18; }
+  const cv = document.querySelector('canvas[data-slug="'+s.slug+'"]');
+  if (cv) drawZ(cv, s.slug, active, ts/1000*6, true, Math.min(1, env*1.6));
+  raf = requestAnimationFrame(liveLoop);
+}
 function fmt(s){ s=Math.max(0,Math.round(s)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
 function stopSongs(except){
   for (const k in SONGS){
@@ -329,21 +461,26 @@ function stopSongs(except){
     const btn = document.querySelector('[data-song="'+k+'"]');
     btn.innerHTML = PLAY; btn.classList.remove('playing');
   }
+  if (!except){ liveKey=null; cancelAnimationFrame(raf); drawAll(); }
 }
 document.querySelectorAll('[data-song]').forEach(btn => {
   const key = btn.dataset.song, s = SONGS[key], a = s.audio;
   a.preload = 'none';
   a.addEventListener('timeupdate', () => {
-    if (a.currentTime >= CAP){ a.pause(); a.currentTime = 0; $(key+'Bar').style.width='0%'; $(key+'Time').textContent='1:30'; btn.innerHTML=PLAY; btn.classList.remove('playing'); return; }
+    if (a.currentTime >= CAP){ a.pause(); a.currentTime = 0; $(key+'Bar').style.width='0%'; $(key+'Time').textContent='1:30'; btn.innerHTML=PLAY; btn.classList.remove('playing'); liveKey=null; cancelAnimationFrame(raf); drawAll(); return; }
     $(key+'Bar').style.width = (a.currentTime/CAP*100) + '%';
     $(key+'Time').textContent = fmt(CAP - a.currentTime);
   });
   btn.addEventListener('click', () => {
-    if (!a.paused){ a.pause(); btn.innerHTML=PLAY; btn.classList.remove('playing'); return; }
+    if (!a.paused){ a.pause(); btn.innerHTML=PLAY; btn.classList.remove('playing'); liveKey=null; cancelAnimationFrame(raf); drawAll(); return; }
     stopTone(); stopSongs(key);
+    try{ hookAnalyser(s); }catch(e){}
     a.play(); btn.innerHTML=PAUSE; btn.classList.add('playing');
+    liveKey = key; env = 0; cancelAnimationFrame(raf); raf = requestAnimationFrame(liveLoop);
   });
 });
+
+drawAll();
 </script>
 </body>
 </html>
