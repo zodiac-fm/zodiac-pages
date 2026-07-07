@@ -22,28 +22,21 @@
 </style>
 </head>
 <body>
-  <h1>The frequency circles: pick one</h1>
-  <p class="sub">Three treatments, each shown big and at real card size. Same four token colors everywhere. Tell me A, B, or C (or what to mix).</p>
+  <h1>Round 2: crisp edge, rich inside</h1>
+  <p class="sub">You called the blur. These keep a confident circle edge; all the color work happens inside the shape, like the app orbs. Two flavors, big and at card size. Tell me D or E.</p>
 
-  <div class="opt"><span class="tag">A</span>
-    <h2>Two soft lights</h2>
-    <p>Each orb is two out-of-focus glows overlapping, one per hue, with fine grain. Light, not paint.</p>
-    <div class="big" data-style="A" data-res="480"></div>
-    <div class="small"><canvas data-style="A" data-cat="core" width="232" height="232"></canvas><span>at card size</span></div>
+  <div class="opt"><span class="tag">D</span>
+    <h2>Mesh, flat-luminous</h2>
+    <p>Crisp silhouette. Inside: the deep, primary, bright, and light hues blend like a mesh gradient, with fine grain. No shading tricks.</p>
+    <div class="big" data-style="D" data-res="480"></div>
+    <div class="small"><canvas data-style="D" data-cat="core" width="232" height="232"></canvas><span>at card size</span></div>
   </div>
 
-  <div class="opt"><span class="tag">B</span>
-    <h2>Dense core, big bloom</h2>
-    <p>The homepage orb miniaturized: a saturated off-center core dissolving into a wide atmospheric bloom.</p>
-    <div class="big" data-style="B" data-res="480"></div>
-    <div class="small"><canvas data-style="B" data-cat="core" width="232" height="232"></canvas><span>at card size</span></div>
-  </div>
-
-  <div class="opt"><span class="tag">C</span>
-    <h2>Aurora disc</h2>
-    <p>The two hues sweep around the disc like aurora light, airbrushed, with the light tint breathing through.</p>
-    <div class="big" data-style="C" data-res="480"></div>
-    <div class="small"><canvas data-style="C" data-cat="core" width="232" height="232"></canvas><span>at card size</span></div>
+  <div class="opt"><span class="tag">E</span>
+    <h2>Mesh, lit from above</h2>
+    <p>Same crisp mesh, plus the light-tint wash coming down from the top edge, the shading move from the old site.</p>
+    <div class="big" data-style="E" data-res="480"></div>
+    <div class="small"><canvas data-style="E" data-cat="core" width="232" height="232"></canvas><span>at card size</span></div>
   </div>
 
 <script>
@@ -67,79 +60,50 @@ function grain(){ if(grainCv) return grainCv;
     id.data[i]=id.data[i+1]=id.data[i+2]=v; id.data[i+3]=rnd()*22; }
   g.putImageData(id,0,0); grainCv=o; return o; }
 
-function addGrain(x,W,H,alpha){
-  x.save(); x.globalAlpha=alpha; const p=x.createPattern(grain(),'repeat');
-  x.fillStyle=p; x.fillRect(0,0,W,H); x.restore(); }
+/* shared: the barely-off-circle silhouette, crisp (all blur lives INSIDE the clip) */
+function orbPath(x,cx,cy,R){ x.beginPath();
+  for(let i=0;i<=120;i++){ const a=i/120*6.2832;
+    const r=R*(1 + 0.035*Math.sin(2*a+0.9) + 0.02*Math.sin(3*a+2.1));
+    const px=cx+Math.cos(a)*r, py=cy+Math.sin(a)*r;
+    i===0?x.moveTo(px,py):x.lineTo(px,py); } x.closePath(); }
 
-/* A. two soft lights: one glow per hue, overlapping, deep undertone, grain */
-function drawA(cv,cat){
-  const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=Math.min(W,H)*0.30;
-  const f=FREQS[cat],c1=hx(f.c1),c2=hx(f.c2),dp=hx(f.deep),lt=hx(f.soft);
-  x.clearRect(0,0,W,H);
-  function glow(gx,gy,r,col,core,plateau){
+function meshInside(x,cx,cy,R,f,lit){
+  const c1=hx(f.c1),c2=hx(f.c2),dp=hx(f.deep),lt=hx(f.soft);
+  // base: the primary hue, full strength
+  x.fillStyle=rgba(c1,1); x.fillRect(cx-R*1.2,cy-R*1.2,R*2.4,R*2.4);
+  function field(gx,gy,r,col,a){
     const g=x.createRadialGradient(gx,gy,0,gx,gy,r);
-    g.addColorStop(0,rgba(col,core)); g.addColorStop(plateau,rgba(col,core*0.92));
-    g.addColorStop(1,rgba(col,0));
-    x.fillStyle=g; x.beginPath(); x.arc(gx,gy,r,0,7); x.fill(); }
-  glow(cx-R*0.28,cy+R*0.22,R*1.5,dp,0.85,0.30);       // deep weight, lower-left
-  glow(cx-R*0.18,cy+R*0.08,R*1.42,c1,0.96,0.36);      // primary mass
-  glow(cx+R*0.42,cy-R*0.28,R*1.18,c2,0.9,0.30);       // second hue, upper-right
-  glow(cx-R*0.15,cy-R*0.55,R*0.85,lt,0.34,0.12);      // light tint breathing at the top
-  x.save(); x.beginPath(); x.arc(cx,cy,R*1.35,0,7); x.clip(); addGrain(x,W,H,0.5); x.restore();
-}
-
-/* B. dense core, big bloom: the homepage orb, miniaturized */
-function drawB(cv,cat){
-  const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=Math.min(W,H)*0.26;
-  const f=FREQS[cat],c1=hx(f.c1),c2=hx(f.c2),dp=hx(f.deep),lt=hx(f.soft);
-  x.clearRect(0,0,W,H);
-  // wide atmospheric bloom in the second hue
-  let g=x.createRadialGradient(cx+R*0.3,cy-R*0.2,R*0.2, cx+R*0.3,cy-R*0.2,R*2.0);
-  g.addColorStop(0,rgba(c2,0.5)); g.addColorStop(1,rgba(c2,0));
-  x.fillStyle=g; x.fillRect(0,0,W,H);
-  // low under-shadow of the deep hue for weight (never a ring)
-  g=x.createRadialGradient(cx-R*0.45,cy+R*0.4,0, cx-R*0.45,cy+R*0.4,R*1.1);
-  g.addColorStop(0,rgba(dp,0.5)); g.addColorStop(1,rgba(dp,0));
-  x.fillStyle=g; x.beginPath(); x.arc(cx-R*0.45,cy+R*0.4,R*1.1,0,7); x.fill();
-  // dense saturated core, off-center to the lower-left, dissolving through the second hue
-  g=x.createRadialGradient(cx-R*0.28,cy+R*0.18,0, cx-R*0.28,cy+R*0.18,R*1.35);
-  g.addColorStop(0,rgba(c1,1)); g.addColorStop(0.5,rgba(c1,0.95));
-  g.addColorStop(0.78,rgba(c2,0.45)); g.addColorStop(1,rgba(c2,0));
-  x.fillStyle=g; x.beginPath(); x.arc(cx-R*0.28,cy+R*0.18,R*1.35,0,7); x.fill();
-  // light tint kiss on top of the core
-  g=x.createRadialGradient(cx-R*0.5,cy-R*0.35,0, cx-R*0.5,cy-R*0.35,R*0.9);
-  g.addColorStop(0,rgba(lt,0.4)); g.addColorStop(1,rgba(lt,0));
-  x.fillStyle=g; x.beginPath(); x.arc(cx-R*0.5,cy-R*0.35,R*0.9,0,7); x.fill();
-  x.save(); x.beginPath(); x.arc(cx,cy,R*1.7,0,7); x.clip(); addGrain(x,W,H,0.5); x.restore();
-}
-
-/* C. aurora disc: the hues sweep around the disc, airbrushed */
-function drawC(cv,cat){
-  const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=Math.min(W,H)*0.32;
-  const f=FREQS[cat],c1=hx(f.c1),c2=hx(f.c2),dp=hx(f.deep),lt=hx(f.soft);
-  x.clearRect(0,0,W,H);
-  // many soft glows placed around a ring, hue rotating c1 -> c2 -> deep, overlapping into an aurora
-  const stops=[[c1,-2.6],[c1,-1.9],[c2,-0.9],[c2,0.0],[lt,0.8],[c2,1.6],[c1,2.4],[dp,3.2]];
-  for(const [col,ang] of stops){
-    const gx=cx+Math.cos(ang)*R*0.45, gy=cy+Math.sin(ang)*R*0.45;
-    const g=x.createRadialGradient(gx,gy,0,gx,gy,R*1.05);
-    g.addColorStop(0,rgba(col, col===lt?0.5:0.8)); g.addColorStop(1,rgba(col,0));
-    x.fillStyle=g; x.beginPath(); x.arc(gx,gy,R*1.05,0,7); x.fill();
+    g.addColorStop(0,rgba(col,a)); g.addColorStop(1,rgba(col,0));
+    x.fillStyle=g; x.fillRect(cx-R*1.2,cy-R*1.2,R*2.4,R*2.4); }
+  field(cx-R*0.55,cy+R*0.6, R*1.15, dp, 0.85);   // deep field, lower-left
+  field(cx+R*0.75,cy-R*0.15,R*1.35, c2, 0.95);   // bright second hue, right
+  field(cx+R*0.35,cy+R*0.75,R*0.9,  c2, 0.5);    // echo of the second hue, lower-right
+  if(lit){
+    field(cx-R*0.15,cy-R*0.95,R*1.15, lt, 0.55); // light wash from the top edge
+  } else {
+    field(cx-R*0.4,cy-R*0.5, R*0.85, lt, 0.3);   // faint lift, upper-left
   }
-  // the light tint breathing through the middle (lifts the centre, kills the mud)
-  const lift=x.createRadialGradient(cx-R*0.1,cy-R*0.15,0, cx-R*0.1,cy-R*0.15,R*0.75);
-  lift.addColorStop(0,rgba(lt,0.42)); lift.addColorStop(1,rgba(lt,0));
-  x.fillStyle=lift; x.beginPath(); x.arc(cx,cy,R*1.1,0,7); x.fill();
-  // fade the whole mass out at the rim so it stays "pretty much a circle"
-  const fade=x.createRadialGradient(cx,cy,R*0.85,cx,cy,R*1.45);
-  fade.addColorStop(0,'rgba(0,0,0,0)'); fade.addColorStop(1,'rgba(0,0,0,1)');
-  x.globalCompositeOperation='destination-out';
-  x.fillStyle=fade; x.fillRect(0,0,W,H);
-  x.globalCompositeOperation='source-over';
-  x.save(); x.beginPath(); x.arc(cx,cy,R*1.3,0,7); x.clip(); addGrain(x,W,H,0.5); x.restore();
+  addGrain(x,cx-R*1.2,cy-R*1.2,R*2.4);
 }
+function addGrain(x,gx,gy,size){
+  x.save(); x.globalAlpha=0.55; const p=x.createPattern(grain(),'repeat');
+  x.fillStyle=p; x.fillRect(gx,gy,size,size); x.restore(); }
 
-const DRAW={A:drawA,B:drawB,C:drawC};
+function drawD(cv,cat){
+  const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=Math.min(W,H)*0.42;
+  x.clearRect(0,0,W,H);
+  x.save(); orbPath(x,cx,cy,R); x.clip();
+  meshInside(x,cx,cy,R,FREQS[cat],false);
+  x.restore();
+}
+function drawE(cv,cat){
+  const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=Math.min(W,H)*0.42;
+  x.clearRect(0,0,W,H);
+  x.save(); orbPath(x,cx,cy,R); x.clip();
+  meshInside(x,cx,cy,R,FREQS[cat],true);
+  x.restore();
+}
+const DRAW={D:drawD,E:drawE};
 document.querySelectorAll('.big').forEach(row=>{
   const st=row.dataset.style;
   for(const cat of ['core','love','vitality','abundance']){
