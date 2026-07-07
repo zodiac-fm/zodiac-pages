@@ -85,19 +85,23 @@ function addGrain(x,gx,gy,size){
   x.save(); x.globalAlpha=0.55; const p=x.createPattern(grain(),'repeat');
   x.fillStyle=p; x.fillRect(gx,gy,size,size); x.restore(); }
 
+function circleMask(x,W,H,cx,cy,R){   // clip() edges are aliased; a 1px alpha ramp anti-aliases the rim
+  const m=x.createRadialGradient(cx,cy,0,cx,cy,R);
+  m.addColorStop(0,'rgba(0,0,0,1)'); m.addColorStop(0.965,'rgba(0,0,0,1)'); m.addColorStop(1,'rgba(0,0,0,0)');
+  x.globalCompositeOperation='destination-in';
+  x.fillStyle=m; x.fillRect(0,0,W,H);
+  x.globalCompositeOperation='source-over'; }
 function drawD(cv,cat){
   const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=Math.min(W,H)*0.42;
   x.clearRect(0,0,W,H);
-  x.save(); orbPath(x,cx,cy,R); x.clip();
   meshInside(x,cx,cy,R,FREQS[cat],false);
-  x.restore();
+  circleMask(x,W,H,cx,cy,R);
 }
 function drawE(cv,cat){
   const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=Math.min(W,H)*0.42;
   x.clearRect(0,0,W,H);
-  x.save(); orbPath(x,cx,cy,R); x.clip();
   meshInside(x,cx,cy,R,FREQS[cat],true);
-  x.restore();
+  circleMask(x,W,H,cx,cy,R);
 }
 const DRAW={D:drawD,E:drawE};
 document.querySelectorAll('.big').forEach(row=>{
