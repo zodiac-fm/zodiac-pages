@@ -2,5 +2,17 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "buildCommand": "node gen-index.mjs",
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "redirects": [
+    {
+      "source": "/inapp/stats-v17b",
+      "destination": "/inapp/progress",
+      "permanent": true
+    },
+    {
+      "source": "/inapp/stats-v17b.html",
+      "destination": "/inapp/progress",
+      "permanent": true
+    }
+  ]
 }

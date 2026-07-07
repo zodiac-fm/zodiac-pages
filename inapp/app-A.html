@@ -313,9 +313,9 @@
     <div class="pp" id="miniPP"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
   </div>
 
-  <!-- Progress screen (app-A): stats-v17b inline; iframe auto-sized via postMessage, panel scrolls; URL stays on app-A -->
+  <!-- Progress screen (app-A): the Progress page (inapp/progress) shown inline; auto-embeds when framed, iframe auto-sized via postMessage, panel scrolls; URL stays on app-A -->
   <section class="screen" id="progress" style="display:none;z-index:6;background:var(--cream);bottom:calc(56px + env(safe-area-inset-bottom,0px));overflow-y:auto;-webkit-overflow-scrolling:touch">
-    <iframe id="progressFrame" src="stats-v17b?embed=1" title="Progress" scrolling="no" style="display:block;flex:0 0 auto;width:100%;height:820px;border:0;background:var(--cream)"></iframe>
+    <iframe id="progressFrame" src="progress" title="Progress" scrolling="no" style="display:block;flex:0 0 auto;width:100%;height:820px;border:0;background:var(--cream)"></iframe>
   </section>
 
   <!-- bottom nav -->

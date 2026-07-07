@@ -275,7 +275,7 @@
     setState(start);
     (function(){var el=document.getElementById('dayx');if(el){var wd=new Date().getDay();el.textContent=(wd===0?7:wd);}})();
   </script>
-<script>if(new URLSearchParams(location.search).has("embed")){
+<script>if(window.self!==window.top||new URLSearchParams(location.search).has("embed")){
   /* Embed mode (used by app-A's Progress tab): unlock the fixed phone shell so the
      content flows to natural height and the iframe scrolls it. Standalone is unaffected. */
   var st=document.createElement("style");
