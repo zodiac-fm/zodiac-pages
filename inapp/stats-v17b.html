@@ -273,5 +273,13 @@
     if(h.indexOf('ok')>=0) start='ok'; else if(h.indexOf('low3')>=0) start='low3'; else if(h.indexOf('low2')>=0) start='low2';
     setState(start);
   </script>
-<script>if(new URLSearchParams(location.search).has("embed")){document.documentElement.style.height="100%";document.body.style.height="100%";document.body.style.margin="0";var a=document.getElementById("app");if(a){a.style.height="100%";a.style.width="100%";}}</script>
+<script>if(new URLSearchParams(location.search).has("embed")){
+  /* Embed mode (used by app-A's Progress tab): unlock the fixed phone shell so the
+     content flows to natural height and the iframe scrolls it. Standalone is unaffected. */
+  var st=document.createElement("style");
+  st.textContent="html,body{height:auto!important;margin:0!important;background:var(--cream)}"
+    +"#app{height:auto!important;min-height:100%!important;max-width:none!important;width:100%!important;overflow:visible!important;border-radius:0!important;box-shadow:none!important;border:none!important}"
+    +".scroll{height:auto!important;overflow:visible!important;flex:none!important}";
+  document.head.appendChild(st);
+}</script>
 </body></html>
