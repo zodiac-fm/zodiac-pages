@@ -22,8 +22,8 @@
 </style>
 </head>
 <body>
-  <h1>Round 2: crisp edge, rich inside</h1>
-  <p class="sub">You called the blur. These keep a confident circle edge; all the color work happens inside the shape, like the app orbs. Two flavors, big and at card size. Tell me D or E.</p>
+  <h1>Round 3: perfect circles, mesh coloring</h1>
+  <p class="sub">Clean perfect circles now, keeping the rich mesh coloring inside. Two flavors, big and at card size. Tell me D or E.</p>
 
   <div class="opt"><span class="tag">D</span>
     <h2>Mesh, flat-luminous</h2>
@@ -60,12 +60,8 @@ function grain(){ if(grainCv) return grainCv;
     id.data[i]=id.data[i+1]=id.data[i+2]=v; id.data[i+3]=rnd()*22; }
   g.putImageData(id,0,0); grainCv=o; return o; }
 
-/* shared: the barely-off-circle silhouette, crisp (all blur lives INSIDE the clip) */
-function orbPath(x,cx,cy,R){ x.beginPath();
-  for(let i=0;i<=120;i++){ const a=i/120*6.2832;
-    const r=R*(1 + 0.035*Math.sin(2*a+0.9) + 0.02*Math.sin(3*a+2.1));
-    const px=cx+Math.cos(a)*r, py=cy+Math.sin(a)*r;
-    i===0?x.moveTo(px,py):x.lineTo(px,py); } x.closePath(); }
+/* shared: a clean perfect circle, crisp (all blur lives INSIDE the clip) */
+function orbPath(x,cx,cy,R){ x.beginPath(); x.arc(cx,cy,R,0,6.2832); x.closePath(); }
 
 function meshInside(x,cx,cy,R,f,lit){
   const c1=hx(f.c1),c2=hx(f.c2),dp=hx(f.deep),lt=hx(f.soft);
