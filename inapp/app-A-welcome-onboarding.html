@@ -744,6 +744,7 @@ function showTab(t){document.getElementById('favs').style.display=(t==='favs')?'
  navItems.forEach((n,i)=>n.classList.toggle('on',(t==='favs'&&i===2)||(t!=='favs'&&i===0)));
  if(t==='favs')buildFavs();}
 navItems[0].onclick=()=>showTab('list');
+navItems[1].onclick=()=>{ window.location.href='app-A.html'; };
 navItems[2].onclick=()=>showTab('favs');
 buildFavs();
 
