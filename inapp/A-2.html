@@ -125,25 +125,26 @@
   #nav div.on{color:#1A1620;font-weight:700}
   #nav .ic{display:block;margin:0 auto 2px;width:17px;height:17px}
   #nav svg{width:17px;height:17px;display:block;margin:0 auto}
-  /* ---------- YOUR YEAR (A-2 addition; same grammar as the rest) ---------- */
-  .yr{position:relative;margin-top:12px;height:12px}
-  .yrtrack{position:absolute;left:0;right:0;top:0;height:10px;border-radius:6px;background:var(--mist);overflow:hidden}
-  .yrfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,var(--violet),var(--violet-deep))}
-  .mstick{position:absolute;top:-4px;width:2px;height:18px;background:#d8d0c2;border-radius:2px}
-  .mstick.hit{background:#D2C8FF}
-  .mslab{position:absolute;top:20px;transform:translateX(-50%);font-size:9px;font-weight:600;color:var(--soft);white-space:nowrap;text-align:center;line-height:1.2}
-  .mslab b{display:block;color:var(--mut);font-weight:700}
-  .youpin{position:absolute;top:-7px;transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center}
-  .youpin .dot{width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--violet);box-shadow:0 2px 6px rgba(56,0,122,.28)}
-  .youpin .lab{margin-top:4px;font-size:9px;font-weight:700;color:var(--violet-deep)}
-  .yrbank{display:flex;align-items:center;gap:12px;margin-top:54px;padding-top:15px;border-top:1px solid var(--line)}
-  .yrbank .yn{font-family:'Canela',serif;font-size:26px;font-weight:500;color:var(--violet-deep);line-height:1}
-  .yrbank .yl{display:flex;flex-direction:column;gap:2px}
-  .yrbank .yk{font-size:12.5px;font-weight:600;color:var(--ink)}
-  .yrbank .yv{font-size:11px;color:var(--mut)}
-  .yrbank .yt{margin-left:auto;font-size:11px;font-weight:700;color:#0A7A52;white-space:nowrap}
-  .yrule{margin-top:14px;font-size:13px;color:var(--ink2);line-height:1.5}
-  .yrule b{font-weight:700;color:var(--violet-deep)}
+  /* ---------- WHERE THIS IS GOING: the levels, what each means (A-2 fix #2) ---------- */
+  .levels{margin-top:18px;position:relative}
+  .lstep{display:flex;gap:13px;align-items:flex-start;position:relative;padding-bottom:20px;max-width:100%}
+  .lstep:last-child{padding-bottom:0}
+  .lstep:not(:last-child):before{content:'';position:absolute;left:11px;top:26px;bottom:2px;width:2px;background:var(--line)}
+  .lmark{position:relative;z-index:1;flex:0 0 24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+  .lstep.done .lmark{background:var(--violet-tint);color:var(--violet)}
+  .lstep.now .lmark{background:linear-gradient(135deg,var(--violet),var(--violet-deep));box-shadow:0 3px 9px rgba(56,0,122,.30)}
+  .lstep.now .lmark:after{content:'';width:8px;height:8px;border-radius:50%;background:#fff}
+  .lstep.next .lmark{background:#fff;border:2px solid #e0d8ca}
+  .lbody{flex:1;min-width:0;padding-top:1px}
+  .lname{font-size:14.5px;font-weight:700;color:var(--ink);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .lstep.now .lname{color:var(--violet-deep)}
+  .lstep.next .lname{color:var(--mut);font-weight:600}
+  .lname .lmin{font-size:12px;font-weight:600;color:var(--soft);font-variant-numeric:lining-nums}
+  .lname em{font-style:normal;font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--violet);border-radius:20px;padding:2.5px 9px;align-self:center}
+  .lmean{font-size:12.5px;color:var(--mut);margin-top:3px;line-height:1.45;overflow-wrap:anywhere}
+  .lstep.now .lmean{color:var(--ink2)}
+  .lnote{margin-top:4px;padding-top:15px;border-top:1px solid var(--line);font-size:13px;color:var(--ink2);line-height:1.55}
+  .lnote b{font-weight:700;color:var(--violet-deep)}
 </style></head><body>
 
   <div class="toggle">
@@ -216,16 +217,33 @@
           <div class="wr"><span class="lvl none">Not leveled</span><span class="chev">&#8250;</span></div>
         </div>
       </div>
-      <!-- YOUR YEAR (A-2 addition) -->
+      <!-- WHERE THIS IS GOING (A-2 fix #2): the levels + what each means -->
       <div class="card">
-        <div class="shead"><h2>Your year</h2><span class="status">Week 3 of 52</span></div>
-        <div class="yr" id="yr"></div>
-        <div class="yrbank">
-          <div class="yn">1</div>
-          <div class="yl"><div class="yk">balanced week banked</div><div class="yv">the weeks that count toward what's ahead</div></div>
-          <div class="yt">&#9650; and counting</div>
+        <div class="shead"><h2>Where this is going</h2></div>
+        <div class="levels">
+          <div class="lstep done">
+            <div class="lmark">&#10003;</div>
+            <div class="lbody">
+              <div class="lname">The floor <span class="lmin">9 min a day</span></div>
+              <div class="lmean">enough to keep the connection alive.</div>
+            </div>
+          </div>
+          <div class="lstep now">
+            <div class="lmark"></div>
+            <div class="lbody">
+              <div class="lname">The practice <span class="lmin">20 min a day</span> <em>you're here</em></div>
+              <div class="lmean">the dose where, in our study, the shift tended to show up a little sooner.</div>
+            </div>
+          </div>
+          <div class="lstep next">
+            <div class="lmark"></div>
+            <div class="lbody">
+              <div class="lname">Immersion <span class="lmin">45 min a day</span></div>
+              <div class="lmean">living with your signal on, through a sleep track, a long sit, or the workday.</div>
+            </div>
+          </div>
         </div>
-        <div class="yrule">Next: <b>your first month</b>, around week&nbsp;4. In the study this is where many people felt a first clear shift, some sooner, some later.</div>
+        <div class="lnote">Not a leaderboard. More minutes, kept in balance, is simply more of your own signal turned up, and that's what tended to bring the shift on sooner.</div>
       </div>
     </div>
 
@@ -303,16 +321,5 @@
     if(h.indexOf('ok')>=0) start='ok'; else if(h.indexOf('low3')>=0) start='low3'; else if(h.indexOf('low2')>=0) start='low2';
     setState(start);
 
-    // YOUR YEAR arc (A-2): calendar bar, milestone moments, You pin
-    (function(){
-      var MS=[{w:4,l:'Month 1'},{w:13,l:'Turning point'},{w:26,l:'Half year'},{w:52,l:'Birthday'}];
-      var cal=3; function pct(w){return w/52*100;}
-      var h='<div class="yrtrack"><div class="yrfill" style="width:'+pct(cal)+'%"></div></div>';
-      MS.forEach(function(m){ var hit=cal>=m.w;
-        h+='<div class="mstick'+(hit?' hit':'')+'" style="left:calc('+pct(m.w)+'% - 1px)"></div>';
-        h+='<div class="mslab" style="left:'+pct(m.w)+'%"><b>Wk '+m.w+'</b>'+m.l+'</div>'; });
-      h+='<div class="youpin" style="left:'+pct(cal)+'%"><div class="dot"></div><div class="lab">You</div></div>';
-      document.getElementById('yr').innerHTML=h;
-    })();
   </script>
 </body></html>
