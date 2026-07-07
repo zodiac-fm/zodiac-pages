@@ -150,7 +150,6 @@
 
       <!-- GLANCE LAYER: the level said once + one editorial insight sentence -->
       <div class="hero">
-        <div class="ey">This week</div>
         <h1 id="hero-head"></h1>
         <div class="insight" id="hero-insight"></div>
         <div class="sub" id="hero-sub"></div>
@@ -162,13 +161,13 @@
           <h2>Time</h2>
           <span class="status">On track</span>
         </div>
-        <div class="avg"><span class="n">24 min</span><span class="u">a day</span><span class="wk">168 min this week</span></div>
+        <div class="avg"><span class="n" id="t-perday">24 min</span><span class="u">a day so far</span><span class="wk" id="t-total">48 min over 2 days</span></div>
         <div class="tbal">
-          <div class="ttrack"><div class="tfill" style="width:48%"></div></div>
+          <div class="ttrack"><div class="tfill" id="t-fill" style="width:48%"></div></div>
           <div class="tgate" style="left:90%"></div>
           <div class="tgatelab" style="left:90%">Level 3 · 45 min</div>
         </div>
-        <div class="twords">Levels 1 and 2 cleared. <b>21 min a day more</b> reaches Level 3.</div>
+        <div class="twords" id="t-words">Levels 1 and 2 cleared. <b>21 min a day more</b> reaches Level 3.</div>
       </div>
 
       <!-- BALANCE -->
@@ -186,7 +185,7 @@
       <div class="card">
         <div class="shead"><h2>Your weeks</h2></div>
         <div class="wkrow cur">
-          <div class="wl"><span class="wn">Week 3</span><span class="ws" id="cur-ws">On pace for Level 3</span></div>
+          <div class="wl"><span class="wn">Week 3</span><span class="ws" id="cur-ws">Level 2 this week</span></div>
           <div class="wr"><span class="lvl top">This week</span><span class="chev">&#8250;</span></div>
         </div>
         <div class="wkrow">
@@ -218,6 +217,28 @@
     var MIN=15, KEYS=['core','love','vitality','abundance'];
     var STATES={ ok:[28,24,18,30], low1:[28,22,11,39], low2:[36,42,13,9], low3:[61,14,13,12] };
     function fmtList(a){ if(a.length===1)return a[0]; if(a.length===2)return a[0]+' and '+a[1]; return a.slice(0,-1).join(', ')+', and '+a[a.length-1]; }
+
+    /* ONE numeric model — every number on this screen derives from these + the live day,
+       so no two can disagree. (Fixed the frozen "168 min this week" = 24x7 phantom: total is
+       now minutes actually banked so far = per-day x days elapsed, and it moves with the day.) */
+    var PERDAY=24;                     // average minutes a day so far this week (demo value)
+    var TSCALE=50;                     // Time bar runs 0..50 min, so Level 3 (45) sits at 90%
+    var LEVELS=[{n:1,min:9},{n:2,min:20},{n:3,min:45}];   // a level = your average min a day this week
+    function dayNum(){ var wd=new Date().getDay(); return wd===0?7:wd; }        // Mon-based 1..7, live
+    function curLevel(pd){ var L=LEVELS[0]; LEVELS.forEach(function(l){ if(pd>=l.min) L=l; }); return L; }
+    function nextLevel(pd){ for(var i=0;i<LEVELS.length;i++){ if(pd<LEVELS[i].min) return LEVELS[i]; } return null; }
+    function renderTime(){
+      var day=dayNum(), total=PERDAY*day, lv=curLevel(PERDAY), nx=nextLevel(PERDAY);
+      var dx=document.getElementById('dayx'); if(dx) dx.textContent=day;
+      var pd=document.getElementById('t-perday'); if(pd) pd.textContent=PERDAY+' min';
+      var tot=document.getElementById('t-total'); if(tot) tot.textContent=total+' min over '+day+(day===1?' day':' days');
+      var fill=document.getElementById('t-fill'); if(fill) fill.style.width=Math.min(100,PERDAY/TSCALE*100)+'%';
+      var cleared=LEVELS.filter(function(l){ return PERDAY>=l.min; });
+      var names=cleared.length===1 ? ('Level '+cleared[0].n) : ('Levels '+fmtList(cleared.map(function(l){ return String(l.n); })));
+      var w=document.getElementById('t-words');
+      if(w){ w.innerHTML = nx ? (names+' cleared. <b>'+(nx.min-PERDAY)+' min a day more</b> reaches Level '+nx.n+'.')
+                              : (names+" cleared. You're at full immersion."); }
+    }
     function render(key){
       var vals=STATES[key]||STATES.low1, lows=[];
       vals.forEach(function(v,i){ if(v<MIN) lows.push(i); });
@@ -251,12 +272,12 @@
       var head=document.getElementById('hero-head'), sub=document.getElementById('hero-sub'), ins=document.getElementById('hero-insight');
       var topIdx=vals.indexOf(Math.max.apply(null,vals)), topName=CATS[KEYS[topIdx]].label;
       if(lows.length===0){
-        head.innerHTML="You're on <em>Level&nbsp;2</em>";
+        head.innerHTML="You're on <em>Level&nbsp;"+curLevel(PERDAY).n+"</em>";
         ins.textContent="All four frequencies are getting their time. "+topName+" carried your week.";
         sub.innerHTML="Time and balance both on track.";
       } else {
         var ln=lows.map(function(i){return CATS[KEYS[i]].label;}), list=fmtList(ln);
-        head.innerHTML="Almost at <em>Level&nbsp;2</em>";
+        head.innerHTML="Almost at <em>Level&nbsp;"+curLevel(PERDAY).n+"</em>";
         ins.textContent="You listened most to "+topName+". "+list+(ln.length===1?" has":" have")+" been quiet this week.";
         sub.innerHTML="Your time's on track. A little more "+(ln.length===1?list:"in each")+" locks your level in.";
       }
@@ -264,7 +285,7 @@
       if(lows.length===0){ note.innerHTML='<span class="mk">&#10003;</span><span>All four are clearing the line. Nothing to fix this week.</span>'; }
       else if(lows.length===1){ var i=lows[0]; note.innerHTML='<span class="mk">&#9650;</span><span>'+CATS[KEYS[i]].label+' is <b>'+(MIN-vals[i])+'% short</b> of 15%. A little more this week will do it.</span>'; }
       else { note.innerHTML='<span class="mk">&#9650;</span><span><b>'+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+'</b> are under 15%. Give each a bit more time this week to lock your level in.</span>'; }
-      document.getElementById('cur-ws').textContent = lows.length ? 'On pace for Level 3 · '+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+' quiet' : 'On pace for Level 3';
+      document.getElementById('cur-ws').textContent = lows.length ? ('Almost Level '+curLevel(PERDAY).n+' · '+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+' to top up') : ('Level '+curLevel(PERDAY).n+' this week');
     }
     function setState(key){
       render(key);
@@ -273,7 +294,7 @@
     var h=location.hash, start='low1';
     if(h.indexOf('ok')>=0) start='ok'; else if(h.indexOf('low3')>=0) start='low3'; else if(h.indexOf('low2')>=0) start='low2';
     setState(start);
-    (function(){var el=document.getElementById('dayx');if(el){var wd=new Date().getDay();el.textContent=(wd===0?7:wd);}})();
+    renderTime();   // day, "X min a day so far", "Y min over N days", bar fill and the level words all from PERDAY + the live day
   </script>
 <script>if(window.self!==window.top||new URLSearchParams(location.search).has("embed")){
   /* Embed mode (used by app-A's Progress tab): unlock the fixed phone shell so the
