@@ -1,15 +1,10 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Zodiac.fm · Progress A-2 (app-A + Your Year)</title>
+<title>Zodiac.fm · Progress A-2 (rebuilt around: where am I / on track / what it's building)</title>
 <style>
-  /* COLORS from zodiac-pages/design/tokens.json (locked 2026-06-30; neutrals 2026-07-01; green Abundance 2026-07-02).
-     Cream canvas + white cards, Core Purple = the one structure accent, frequency colour as small accents (the 10%).
-     BUILD NOTES (stats research 2026-07-02, working/stats-research/): glance layer first (one hero statement +
-     one prose insight); status as WORDS with colour, numbers whisper; ONE comparator (the 15% gate) on the chart;
-     self-referential comparisons only; low = quiet, never shame. Fonts = the REAL Canela + Suisse.
-     v17b: ONE VISUAL GRAMMAR (Michael 2026-07-02) — every graph on the screen is the same horizontal
-     track + fill with a single dashed target line; the Time dot-ladder and the extra progress strip
-     are dissolved into that grammar + words. Fill crossing the dashed line = cleared, everywhere. */
+  /* app-A language: Canela + Suisse, cream canvas, white cards, Core Purple structure, frequency accents.
+     Rebuilt around the 3 new-user questions: (1) where am I right now (day), (2) am I on track (no math, low flagged),
+     (3) what is this building toward (total time under frequency + the real study outcomes). "How levels work" = a real dropdown. */
   @font-face{font-family:'Canela';src:url('../explorations/fonts/Canela-Regular.otf');font-weight:400}
   @font-face{font-family:'Canela';src:url('../explorations/fonts/Canela-Medium.otf');font-weight:500}
   @font-face{font-family:'Canela';src:url('../explorations/fonts/Canela-Italic.otf');font-weight:400;font-style:italic}
@@ -20,8 +15,7 @@
   :root{
     --cream:#F6F1E8; --card:#FFFFFF; --ink:#1A1620; --ink2:#2A2530; --mut:#7a7480; --soft:#a8a2ad;
     --line:#efe6d6; --mist:#EEE9E0;
-    --violet:#6521C9; --violet-deep:#38007A; --violet-tint:#EFECFF;
-    --neutral:#2A2530;
+    --violet:#6521C9; --violet-deep:#38007A; --violet-tint:#EFECFF; --violet-soft:#D2C8FF;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{min-height:100%;background:#e7e2d8;font-family:'Suisse',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--ink)}
@@ -29,129 +23,121 @@
   #app{position:relative;width:min(420px,100vw);height:min(880px,88dvh);overflow:hidden;background:var(--cream);display:flex;flex-direction:column}
   @media (min-width:440px){ #app{border-radius:30px;box-shadow:0 30px 80px rgba(0,0,0,.22);border:1px solid rgba(0,0,0,.05)} }
   @media (max-width:439px){ body{padding:0} #app{width:100vw;height:100dvh} .toggle{padding-top:10px} }
+  .num{font-variant-numeric:lining-nums}
 
-  /* review-aid state toggle (outside the phone) */
   .toggle{display:flex;gap:6px;justify-content:center;padding-bottom:14px}
   .toggle button{font-family:'Suisse',sans-serif;font-size:13px;font-weight:600;color:var(--ink2);background:#fff;border:1px solid #d8d2c6;padding:8px 15px;border-radius:20px;cursor:pointer;-webkit-appearance:none}
   .toggle button.on{background:var(--violet);color:#fff;border-color:var(--violet)}
 
-  /* soft violet presence at the top of the screen */
   .glow{position:absolute;top:-90px;left:50%;transform:translateX(-50%);width:480px;height:400px;z-index:0;pointer-events:none;
     background:radial-gradient(closest-side,rgba(101,33,201,.07),rgba(101,33,201,.02) 55%,rgba(101,33,201,0) 75%)}
-
-  /* ---------- chrome (matches app-A) ---------- */
   .top{position:relative;z-index:1;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 6px;display:flex;align-items:center;justify-content:space-between;flex:0 0 auto}
   .logo img{height:19px;width:auto;display:block}
   .ham{font-size:20px;color:#333}
-
   .scroll{position:relative;z-index:1;flex:1;overflow-y:auto;padding:0 0 20px}
 
+  /* util: DAY context + the levels dropdown trigger */
   .util{display:flex;align-items:center;justify-content:space-between;padding:10px 22px 0}
   .util .wk{font-size:13px;font-weight:700;color:var(--violet)}
   .util .wk span{font-weight:500;color:var(--mut)}
-  .util .qlink{display:inline-flex;align-items:center;gap:6px;min-height:30px;font-size:12.5px;color:var(--violet);font-weight:600;cursor:pointer}
-  .util .qlink .q{width:17px;height:17px;border-radius:50%;border:1.4px solid var(--violet);display:flex;align-items:center;justify-content:center;font-family:'Canela',serif;font-size:11px;font-style:italic}
+  .qlink{display:inline-flex;align-items:center;gap:6px;min-height:30px;font-size:12.5px;color:var(--violet);font-weight:700;cursor:pointer}
+  .qlink .qchev{font-size:10px;transition:transform .2s;opacity:.8}
+  .qlink.open .qchev{transform:rotate(180deg)}
+  /* the LEVELS dropdown panel (the interactive explainer, like the band press-to-open) */
+  .lpanel{display:none;margin:8px 18px 0;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 17px 17px;box-shadow:0 6px 20px rgba(26,22,32,.06)}
+  .lpanel.open{display:block}
+  .lpanel .lp-lead{font-size:13px;line-height:1.5;color:var(--ink2)}
+  .lpanel .lp-lead b{font-weight:700}
+  .lprow{display:flex;gap:11px;align-items:baseline;margin-top:13px}
+  .lprow .lpdot{flex:0 0 9px;height:9px;border-radius:50%;margin-top:5px;background:var(--violet-soft)}
+  .lprow.here .lpdot{background:linear-gradient(135deg,var(--violet),var(--violet-deep))}
+  .lprow .lpn{font-size:13px;font-weight:700;color:var(--ink)}
+  .lprow .lpn .lpm{font-weight:600;color:var(--soft);font-variant-numeric:lining-nums}
+  .lprow .lpn em{font-style:normal;font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--violet);border-radius:10px;padding:2px 7px;margin-left:5px}
+  .lprow .lpd{font-size:12px;color:var(--mut);margin-top:2px;line-height:1.4}
 
-  /* ---------- the glance layer: level said once + one prose insight ---------- */
   .hero{padding:14px 22px 4px}
   .hero .ey{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
-  .hero h1{font-family:'Canela',serif;font-size:34px;font-weight:500;line-height:1.06;letter-spacing:-.015em;margin-top:8px}
+  .hero h1{font-family:'Canela',serif;font-size:33px;font-weight:500;line-height:1.06;letter-spacing:-.015em;margin-top:8px}
   .hero h1 em{font-style:normal;color:var(--violet-deep)}
-  /* the editorial insight sentence — the premium layer (prose reduces false confidence; see research) */
-  .hero .insight{font-family:'Canela',serif;font-style:italic;font-size:16.5px;line-height:1.45;color:var(--ink2);margin-top:10px;max-width:32ch}
-  .hero .sub{font-size:13px;color:var(--mut);margin-top:9px;line-height:1.5}
-  .hero .sub b{color:var(--ink2);font-weight:600}
+  .hero .insight{font-family:'Canela',serif;font-style:italic;font-size:16.5px;line-height:1.46;color:var(--ink2);margin-top:10px;max-width:33ch}
 
-  /* ---------- white cards on the cream canvas ---------- */
   .card{margin:14px 18px 0;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 18px 20px;box-shadow:0 6px 20px rgba(26,22,32,.05)}
   .shead{display:flex;align-items:center;gap:10px}
   .shead h2{font-family:'Canela',serif;font-size:19px;font-weight:500;color:var(--violet);letter-spacing:-.005em}
-  .status{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;margin-left:auto;background:#fff;border:1px solid #e3dbcb;color:var(--ink2);box-shadow:0 1px 3px rgba(26,22,32,.04)}
+  .status{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;margin-left:auto;background:#fff;border:1px solid #e3dbcb;color:var(--ink2)}
+  .status.good{color:#0A7A52;border-color:#cdeadd;background:#f2fbf6}
+  .status.wait{color:var(--violet-deep);border-color:#ddd0f4;background:var(--violet-tint)}
 
-  /* ---------- TIME ---------- */
+  /* THIS WEEK — time (no math, day-aware) then the four balance bars */
   .avg{display:flex;align-items:baseline;gap:8px;margin-top:13px}
   .avg .n{font-family:'Canela',serif;font-size:26px;font-weight:500;letter-spacing:-.01em}
   .avg .u{font-size:12.5px;color:var(--mut)}
-  .avg .wk{font-size:12px;color:var(--soft);margin-left:auto;font-weight:500}
-  /* the ONE grammar, applied to Time: a single track + fill, dashed target at Level 3 */
-  .tbal{position:relative;margin-top:26px}
-  .ttrack{position:relative;height:10px;border-radius:6px;background:var(--mist)}
+  .avg .side{font-size:12px;color:var(--soft);margin-left:auto;font-weight:500;font-variant-numeric:lining-nums}
+  .tline{position:relative;margin-top:24px;height:10px}
+  .ttrack{position:absolute;left:0;right:0;height:10px;border-radius:6px;background:var(--mist)}
   .tfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,var(--violet),var(--violet-deep))}
-  .tgate{position:absolute;top:-14px;bottom:-6px;border-left:2px dashed #8d8a96}
-  .tgatelab{position:absolute;top:-30px;transform:translateX(-50%);font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--mut);white-space:nowrap}
-  .twords{margin-top:16px;font-size:13px;color:var(--ink2);line-height:1.5}
+  .tmark{position:absolute;top:-5px;width:2px;height:20px;background:#d3cbbd;border-radius:2px}
+  .tmlab{position:absolute;top:18px;transform:translateX(-50%);font-size:9px;font-weight:700;letter-spacing:.02em;color:var(--soft);white-space:nowrap}
+  .tmlab.on{color:var(--violet-deep)}
+  .twords{margin-top:34px;font-size:13px;color:var(--ink2);line-height:1.5}
   .twords b{font-weight:600}
 
-  /* ---------- BALANCE: four horizontal bars, words first, ONE gate line ----------
-     (astrology element-bars pattern; band words are the evaluative labels; the 15% line is the
-     only comparator on the chart and is labeled once) */
-  .rule{font-size:13px;color:var(--ink2);line-height:1.5;margin-top:18px}
-  .rule b{font-weight:700}
-  .bal{position:relative;margin-top:20px}
-  .brow{display:flex;align-items:center;gap:12px;min-height:44px}
-  .brow .bl{flex:0 0 84px}
+  .baldiv{margin-top:20px;border-top:1px solid var(--line);padding-top:16px}
+  .balcap{font-size:12px;font-weight:600;color:var(--mut)}
+  .bal{position:relative;margin-top:14px}
+  .brow{display:flex;align-items:center;gap:11px;min-height:40px}
+  .brow .bl{flex:0 0 78px}
   .brow .bn{font-size:13px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
-  .brow .bw{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
-  .brow.low .bn{color:var(--mut);font-weight:500}
+  .brow.low .bn{color:var(--ink)}
   .brow .btrack{position:relative;flex:1 1 auto;height:10px;border-radius:6px;background:transparent}
   .brow .bfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px}
-  .brow .bpct{flex:0 0 40px;text-align:right;font-size:12.5px;font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums}
-  .brow.low .bpct{color:var(--mut);font-weight:500}
-  /* the ONE reference on the chart: a single gate line crossing all four bars, labeled once */
-  .gate{position:absolute;top:-16px;bottom:0;border-left:2px dashed #8d8a96;z-index:2}
-  .gatelab{position:absolute;top:-17px;transform:translateX(-50%);font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--mut);background:var(--card);padding:0 5px;z-index:3}
-  .balnote{margin-top:12px;font-size:12.5px;line-height:1.5;display:flex;gap:7px;color:var(--ink2)}
+  .brow .bpct{flex:0 0 66px;text-align:right;font-size:12.5px;font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .brow .togo{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap;margin-left:6px}
+  .gate{position:absolute;top:-15px;bottom:0;border-left:2px dashed #9a97a3;z-index:2}
+  .gatelab{position:absolute;top:-16px;transform:translateX(-50%);font-size:9.5px;font-weight:700;color:var(--mut);background:var(--card);padding:0 5px;z-index:3}
+  .balnote{margin-top:14px;font-size:12.5px;line-height:1.5;color:var(--ink2)}
   .balnote b{font-weight:700}
-  .balnote .mk{flex:0 0 auto}
 
-  /* ---------- HISTORY (yours vs your own weeks, nothing else) ---------- */
-  .wkrow{display:flex;align-items:center;gap:12px;min-height:52px;padding:11px 2px;border-bottom:1px solid var(--line)}
-  .wkrow:last-child{border-bottom:none;padding-bottom:2px}
+  /* TIME UNDER FREQUENCY — the foundation number + what it's building toward */
+  .tuf{display:flex;align-items:baseline;gap:9px;margin-top:14px}
+  .tuf .big{font-family:'Canela',serif;font-size:38px;font-weight:500;color:var(--violet-deep);line-height:1;letter-spacing:-.01em}
+  .tuf .g{font-size:12.5px;color:var(--mut);font-weight:600}
+  .tufsub{font-size:12.5px;color:var(--mut);margin-top:8px;line-height:1.5}
+  .building{margin-top:16px;padding-top:15px;border-top:1px solid var(--line)}
+  .building .bh{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
+  .building p{font-size:13px;line-height:1.58;color:var(--ink2);margin-top:9px}
+  .building p b{font-weight:600;color:var(--ink)}
+
+  /* YOUR WEEKS — tappable */
+  .wkrow{display:flex;align-items:center;gap:12px;min-height:50px;padding:11px 2px;border-bottom:1px solid var(--line);cursor:pointer}
+  .wkrow:last-of-type{border-bottom:none}
   .wkrow .wl{display:flex;flex-direction:column;gap:3px}
   .wkrow .wn{font-size:14.5px;font-weight:600;letter-spacing:-.01em}
-  .wkrow .ws{font-size:12px;color:var(--soft)}
+  .wkrow .ws{font-size:12px;color:var(--soft);font-variant-numeric:lining-nums}
   .wkrow .ws .lf{color:var(--mut);font-weight:600}
   .wkrow .wr{margin-left:auto;display:flex;align-items:center;gap:10px}
-  .wkrow .chev{color:#cfc6b6;font-size:20px;line-height:1}
-  .wkrow.cur{margin:2px -8px 0;padding:11px 12px;background:var(--violet-tint);border-radius:13px;border-bottom:none}
+  .wkrow .chev{color:#cfc6b6;font-size:19px;line-height:1;transition:transform .2s}
+  .wkrow.open .chev{transform:rotate(90deg)}
+  .wkrow.cur{margin:0 -8px;padding:11px 12px;background:var(--violet-tint);border-radius:13px;border-bottom:none}
   .wkrow.cur .wn{color:var(--violet-deep)}
-  .lvl{font-size:11.5px;font-weight:600;color:var(--ink2);background:var(--mist);border-radius:20px;padding:3px 11px;white-space:nowrap}
-  .lvl.none{color:var(--mut)}
-  .lvl.top{color:var(--violet-deep);background:#fff;border:1px solid #ddd0f4}
+  .lvpill{font-size:11px;font-weight:700;color:var(--ink2);background:var(--mist);border-radius:20px;padding:3px 11px;white-space:nowrap}
+  .lvpill.none{color:var(--mut)}
+  .lvpill.top{color:var(--violet-deep);background:#fff;border:1px solid #ddd0f4}
+  .wkdetail{display:none;font-size:12.5px;color:var(--ink2);line-height:1.5;padding:2px 4px 12px;border-bottom:1px solid var(--line)}
+  .wkdetail.open{display:block}
+  .wkdetail b{font-weight:700;color:var(--violet-deep)}
 
-  /* ---------- bottom nav (matches app-A) ---------- */
   #nav{position:relative;z-index:1;flex:0 0 auto;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center}
   #nav div{font-size:11px;text-align:center;color:#9a95a0}
   #nav div.on{color:#1A1620;font-weight:700}
-  #nav .ic{display:block;margin:0 auto 2px;width:17px;height:17px}
-  #nav svg{width:17px;height:17px;display:block;margin:0 auto}
-  /* ---------- WHERE THIS IS GOING: the levels, what each means (A-2 fix #2) ---------- */
-  .levels{margin-top:18px;position:relative}
-  .lstep{display:flex;gap:13px;align-items:flex-start;position:relative;padding-bottom:20px;max-width:100%}
-  .lstep:last-child{padding-bottom:0}
-  .lstep:not(:last-child):before{content:'';position:absolute;left:11px;top:26px;bottom:2px;width:2px;background:var(--line)}
-  .lmark{position:relative;z-index:1;flex:0 0 24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
-  .lstep.done .lmark{background:var(--violet-tint);color:var(--violet)}
-  .lstep.now .lmark{background:linear-gradient(135deg,var(--violet),var(--violet-deep));box-shadow:0 3px 9px rgba(56,0,122,.30)}
-  .lstep.now .lmark:after{content:'';width:8px;height:8px;border-radius:50%;background:#fff}
-  .lstep.next .lmark{background:#fff;border:2px solid #e0d8ca}
-  .lbody{flex:1;min-width:0;padding-top:1px}
-  .lname{font-size:14.5px;font-weight:700;color:var(--ink);display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
-  .lstep.now .lname{color:var(--violet-deep)}
-  .lstep.next .lname{color:var(--mut);font-weight:600}
-  .lname .lmin{font-size:12px;font-weight:600;color:var(--soft);font-variant-numeric:lining-nums}
-  .lname em{font-style:normal;font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--violet);border-radius:20px;padding:2.5px 9px;align-self:center}
-  .lmean{font-size:12.5px;color:var(--mut);margin-top:3px;line-height:1.45;overflow-wrap:anywhere}
-  .lstep.now .lmean{color:var(--ink2)}
-  .lnote{margin-top:4px;padding-top:15px;border-top:1px solid var(--line);font-size:13px;color:var(--ink2);line-height:1.55}
-  .lnote b{font-weight:700;color:var(--violet-deep)}
+  #nav svg{width:17px;height:17px;display:block;margin:0 auto 2px}
 </style></head><body>
 
   <div class="toggle">
-    <button id="btn-ok" onclick="setState('ok')">On track</button>
-    <button id="btn-low1" class="on" onclick="setState('low1')">1 low</button>
-    <button id="btn-low2" onclick="setState('low2')">2 low</button>
-    <button id="btn-low3" onclick="setState('low3')">3 low</button>
+    <button id="btn-ok" onclick="setState('ok')">All four in</button>
+    <button id="btn-low1" class="on" onclick="setState('low1')">1 to top up</button>
+    <button id="btn-low2" onclick="setState('low2')">2 to top up</button>
   </div>
 
   <div id="app">
@@ -162,164 +148,144 @@
     </div>
 
     <div class="scroll">
+      <!-- 1 · WHERE AM I: the day, plainly -->
       <div class="util">
-        <div class="wk">Week 3 <span>· resets Monday</span></div>
-        <div class="qlink"><span class="q">?</span> How levels work</div>
+        <div class="wk num">Week 3 <span>· Day 4 of 7</span></div>
+        <div class="qlink" id="lp-trigger" onclick="toggleLevels()">How levels work <span class="qchev">&#9662;</span></div>
+      </div>
+      <div class="lpanel" id="lpanel">
+        <div class="lp-lead">A <b>level</b> is your average listening a day this week. It only counts when <b>all four frequencies</b> are in the mix (each at least 15%).</div>
+        <div class="lprow"><div class="lpdot"></div><div><div class="lpn">Floor <span class="lpm">9 min a day</span></div><div class="lpd">enough to keep the connection alive.</div></div></div>
+        <div class="lprow here"><div class="lpdot"></div><div><div class="lpn">Practice <span class="lpm">20 min a day</span><em>you're here</em></div><div class="lpd">where it tends to move. Most people aim here.</div></div></div>
+        <div class="lprow"><div class="lpdot"></div><div><div class="lpn">Immersion <span class="lpm">45 min a day</span></div><div class="lpd">living with your signal on, through sleep or a long sit.</div></div></div>
       </div>
 
-      <!-- GLANCE LAYER: the level said once + one editorial insight sentence -->
       <div class="hero">
         <div class="ey">This week</div>
         <h1 id="hero-head"></h1>
         <div class="insight" id="hero-insight"></div>
-        <div class="sub" id="hero-sub"></div>
       </div>
 
-      <!-- TIME -->
+      <!-- 2 · AM I ON TRACK: the two goals, no math, low flagged -->
       <div class="card">
-        <div class="shead">
-          <h2>Time</h2>
-          <span class="status">On track</span>
+        <div class="shead"><h2>This week</h2><span class="status" id="tw-status"></span></div>
+        <div class="avg"><span class="n num">22 min</span><span class="u">a day so far</span><span class="side num">88 min over 4 days</span></div>
+        <div class="tline">
+          <div class="ttrack"><div class="tfill" style="width:44%"></div></div>
+          <div class="tmark" style="left:20%"></div><div class="tmlab" style="left:20%">Floor</div>
+          <div class="tmark" style="left:44%"></div><div class="tmlab on" style="left:44%">Practice &#9679;</div>
+          <div class="tmark" style="left:100%"></div><div class="tmlab" style="left:100%">Immersion</div>
         </div>
-        <div class="avg"><span class="n">24 min</span><span class="u">a day</span><span class="wk">168 min this week</span></div>
-        <div class="tbal">
-          <div class="ttrack"><div class="tfill" style="width:48%"></div></div>
-          <div class="tgate" style="left:90%"></div>
-          <div class="tgatelab" style="left:90%">Level 3 · 45 min</div>
+        <div class="twords">Your minutes are right at <b>the practice level</b>. No math to do, just keep showing up and the week lands there.</div>
+
+        <div class="baldiv">
+          <div class="balcap">All four in the mix (each needs 15% of your week)</div>
+          <div class="bal" id="bal-rows"></div>
+          <div class="balnote" id="bal-note"></div>
         </div>
-        <div class="twords">Levels 1 and 2 cleared. <b>21 min a day more</b> reaches Level 3.</div>
       </div>
 
-      <!-- BALANCE -->
+      <!-- 3 · WHAT IT'S BUILDING: total time under frequency + the real outcomes -->
       <div class="card">
-        <div class="shead">
-          <h2>Balance</h2>
-          <span class="status" id="bal-status"></span>
+        <div class="shead"><h2>Time under frequency</h2></div>
+        <div class="tuf"><span class="big num">5h 40m</span><span class="g">in balance, and growing</span></div>
+        <div class="tufsub">This is the number everything is built on. Every balanced minute is more of your own signal, turned up.</div>
+        <div class="building">
+          <div class="bh">What these hours tend to build</div>
+          <p>In our study, it arrived in its own order, <b>some sooner, some later</b>: sleeping deeper and feeling less on edge first, then a beat of space before you react. Over the months, more people described feeling <b>like themselves again</b>, trusting their gut, and the right things starting to move.</p>
         </div>
-        <div class="balnote" id="bal-note"></div>
-        <div class="bal" id="bal-rows"></div>
-        <div class="rule">Every frequency needs at least <b>15% of your week</b>. The other 40% is yours.</div>
       </div>
 
-      <!-- HISTORY -->
+      <!-- YOUR WEEKS — tappable -->
       <div class="card">
         <div class="shead"><h2>Your weeks</h2></div>
-        <div class="wkrow cur">
-          <div class="wl"><span class="wn">Week 3</span><span class="ws" id="cur-ws">On pace for Level 3</span></div>
-          <div class="wr"><span class="lvl top">This week</span><span class="chev">&#8250;</span></div>
+        <div class="wkrow cur" onclick="toggleWk(this)">
+          <div class="wl"><span class="wn">Week 3</span><span class="ws" id="cur-ws">In progress · 88 min so far</span></div>
+          <div class="wr"><span class="lvpill top">This week</span><span class="chev">&#8250;</span></div>
         </div>
-        <div class="wkrow">
-          <div class="wl"><span class="wn">Week 2</span><span class="ws">All four balanced</span></div>
-          <div class="wr"><span class="lvl">Level 3</span><span class="chev">&#8250;</span></div>
+        <div class="wkdetail">You're 4 days in, averaging the practice level. One frequency, Vitality, still to top up before the week counts as balanced.</div>
+        <div class="wkrow" onclick="toggleWk(this)">
+          <div class="wl"><span class="wn">Week 2</span><span class="ws">All four in balance · 2h 20m</span></div>
+          <div class="wr"><span class="lvpill">Practice</span><span class="chev">&#8250;</span></div>
         </div>
-        <div class="wkrow">
-          <div class="wl"><span class="wn">Week 1</span><span class="ws"><span class="lf">Vitality under 15%</span></span></div>
-          <div class="wr"><span class="lvl none">Not leveled</span><span class="chev">&#8250;</span></div>
+        <div class="wkdetail"><b>2h 20m</b> of balanced time under frequency. All four cleared 15%; you averaged the practice level. This is a week that fully counts toward what's building.</div>
+        <div class="wkrow" onclick="toggleWk(this)">
+          <div class="wl"><span class="wn">Week 1</span><span class="ws"><span class="lf">Vitality stayed under 15%</span></span></div>
+          <div class="wr"><span class="lvpill none">Didn't count</span><span class="chev">&#8250;</span></div>
         </div>
-      </div>
-      <!-- WHERE THIS IS GOING (A-2 fix #2): the levels + what each means -->
-      <div class="card">
-        <div class="shead"><h2>Where this is going</h2></div>
-        <div class="levels">
-          <div class="lstep done">
-            <div class="lmark">&#10003;</div>
-            <div class="lbody">
-              <div class="lname">The floor <span class="lmin">9 min a day</span></div>
-              <div class="lmean">enough to keep the connection alive.</div>
-            </div>
-          </div>
-          <div class="lstep now">
-            <div class="lmark"></div>
-            <div class="lbody">
-              <div class="lname">The practice <span class="lmin">20 min a day</span> <em>you're here</em></div>
-              <div class="lmean">the dose where, in our study, the shift tended to show up a little sooner.</div>
-            </div>
-          </div>
-          <div class="lstep next">
-            <div class="lmark"></div>
-            <div class="lbody">
-              <div class="lname">Immersion <span class="lmin">45 min a day</span></div>
-              <div class="lmean">living with your signal on, through a sleep track, a long sit, or the workday.</div>
-            </div>
-          </div>
-        </div>
-        <div class="lnote">Not a leaderboard. More minutes, kept in balance, is simply more of your own signal turned up, and that's what tended to bring the shift on sooner.</div>
+        <div class="wkdetail">You listened, and it still counts as showing up. But with Vitality under 15% the week wasn't balanced, so it didn't add to your time under frequency. Nothing lost, just not banked.</div>
       </div>
     </div>
 
     <div id="nav">
-      <div><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18V5l11-2v13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><circle cx="20" cy="16" r="3"/></svg></span>Immersions</div>
-      <div class="on"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14v4M9 9v9M14 5v13M19 11v7" stroke-linecap="round"/></svg></span>Progress</div>
-      <div><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Playlist</div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18V5l11-2v13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><circle cx="20" cy="16" r="3"/></svg>Immersions</div>
+      <div class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14v4M9 9v9M14 5v13M19 11v7" stroke-linecap="round"/></svg>Progress</div>
+      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z" stroke-linecap="round" stroke-linejoin="round"/></svg>Playlist</div>
     </div>
   </div>
 
   <script>
-    // colours straight from design/tokens.json — c1=primary, c2=gradEnd, tint + text accent per family
     var CATS={
-      core:{label:'Core',c1:'#6521C9',c2:'#A737C8',tint:'#EFECFF',ac:'#6521C9'},
-      love:{label:'Love',c1:'#B90044',c2:'#CF4090',tint:'#FFE8EA',ac:'#B90044'},
-      vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',tint:'#FFEADA',ac:'#C25500'},
-      abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',tint:'#DCF4E8',ac:'#0A7A52'}
+      core:{label:'Core',c1:'#6521C9',c2:'#A737C8',ac:'#6521C9'},
+      love:{label:'Love',c1:'#B90044',c2:'#CF4090',ac:'#B90044'},
+      vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',ac:'#C25500'},
+      abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',ac:'#0A7A52'}
     };
     var MIN=15, KEYS=['core','love','vitality','abundance'];
-    var STATES={ ok:[28,24,18,30], low1:[28,22,11,39], low2:[36,42,13,9], low3:[61,14,13,12] };
+    var STATES={ ok:[30,26,18,26], low1:[38,24,11,27], low2:[42,38,12,8] };
     function fmtList(a){ if(a.length===1)return a[0]; if(a.length===2)return a[0]+' and '+a[1]; return a.slice(0,-1).join(', ')+', and '+a[a.length-1]; }
+
     function render(key){
       var vals=STATES[key]||STATES.low1, lows=[];
       vals.forEach(function(v,i){ if(v<MIN) lows.push(i); });
-      // shared horizontal scale sized to the data; the 15% gate is the ONE reference line
-      var scale=Math.max(40, Math.ceil(Math.max.apply(null,vals)*1.15));
+      var scale=Math.max(45, Math.ceil(Math.max.apply(null,vals)*1.12));
       var rh='';
       vals.forEach(function(v,i){
         var c=CATS[KEYS[i]], low=v<MIN, w=Math.min(100,v/scale*100);
-        // band word = the evaluative label; low recedes into the family tint, cleared carries the frequency gradient
-        var word=low?'quiet':'in tune';
-        var fill=low? 'background:'+c.tint : 'background:linear-gradient(90deg,'+c.c1+','+c.c2+')';
+        // LOW is flagged, not hidden: keep the colour (lighter), show a clear "+X% to go" chip in the family accent
+        var fill=low? 'background:'+hexA(c.c1,.38) : 'background:linear-gradient(90deg,'+c.c1+','+c.c2+')';
+        var right = low
+          ? '<span class="bpct" style="color:'+c.ac+'">'+v+'%</span><span class="togo" style="color:#fff;background:'+c.ac+'">+'+(MIN-v)+'% to go</span>'
+          : '<span class="bpct">'+v+'%</span>';
         rh+='<div class="brow'+(low?' low':'')+'">'
-          +'<div class="bl"><div class="bn">'+c.label+'</div><div class="bw" style="color:'+(low?'#a8a2ad':c.ac)+'">'+word+'</div></div>'
+          +'<div class="bl"><div class="bn">'+c.label+'</div></div>'
           +'<div class="btrack"><div class="bfill" style="width:'+w+'%;'+fill+'"></div></div>'
-          +'<div class="bpct">'+v+'%</div>'
-          +'</div>';
+          +right+'</div>';
       });
-      document.getElementById('bal-rows').innerHTML=rh;
-      // one gate line across all four bars, labeled once (position within the track column)
-      var rows=document.getElementById('bal-rows');
+      var bal=document.getElementById('bal-rows'); bal.innerHTML=rh;
       var gp=(MIN/scale*100);
       var gate=document.createElement('div'); gate.className='gate';
-      var lab=document.createElement('div'); lab.className='gatelab'; lab.textContent='15%';
-      // the track column starts after the 84px label + 12px gap and ends before the 40px pct + 12px gap
-      gate.style.left='calc(96px + (100% - 148px) * '+(gp/100)+')';
-      lab.style.left='calc(96px + (100% - 148px) * '+(gp/100)+')';
-      rows.appendChild(gate); rows.appendChild(lab);
-      var stat=document.getElementById('bal-status');
-      stat.textContent = lows.length===0 ? 'Balanced' : lows.length+' under 15%';
-      // the glance layer: level + the one prose insight (self-referential, calm)
-      var head=document.getElementById('hero-head'), sub=document.getElementById('hero-sub'), ins=document.getElementById('hero-insight');
-      var topIdx=vals.indexOf(Math.max.apply(null,vals)), topName=CATS[KEYS[topIdx]].label;
+      var lab=document.createElement('div'); lab.className='gatelab num'; lab.textContent='15%';
+      gate.style.left='calc(89px + (100% - 89px - 132px) * '+(gp/100)+')';
+      lab.style.left='calc(89px + (100% - 89px - 132px) * '+(gp/100)+')';
+      bal.appendChild(gate); bal.appendChild(lab);
+
+      // hero + statuses (honest, day-aware, no false "on pace for Level 3")
+      var head=document.getElementById('hero-head'), ins=document.getElementById('hero-insight');
+      var tw=document.getElementById('tw-status');
       if(lows.length===0){
-        head.innerHTML="You're on <em>Level&nbsp;2</em>";
-        ins.textContent="All four frequencies are getting their time. "+topName+" carried your week.";
-        sub.innerHTML="Time and balance both on track.";
+        head.innerHTML="You're <em>on track</em>";
+        ins.textContent="Four days in and your minutes are there. All four frequencies are in the mix, this week is on its way to counting in full.";
+        tw.textContent='On track'; tw.className='status good';
       } else {
-        var ln=lows.map(function(i){return CATS[KEYS[i]].label;}), list=fmtList(ln);
-        head.innerHTML="Almost at <em>Level&nbsp;2</em>";
-        ins.textContent="You listened most to "+topName+". "+list+(ln.length===1?" has":" have")+" been quiet this week.";
-        sub.innerHTML="Your time's on track. A little more "+(ln.length===1?list:"in each")+" locks your level in.";
+        var ln=lows.map(function(i){return CATS[KEYS[i]].label;});
+        head.innerHTML="Nearly a <em>full week</em>";
+        ins.textContent="Your minutes are right where they should be. "+fmtList(ln)+(ln.length===1?" is":" are")+" the only one"+(ln.length===1?"":"s")+" still light, a little more and the week counts in full.";
+        tw.textContent=ln.length+' to top up'; tw.className='status wait';
       }
       var note=document.getElementById('bal-note');
-      if(lows.length===0){ note.innerHTML='<span class="mk">&#10003;</span><span>All four are clearing the line. Nothing to fix this week.</span>'; }
-      else if(lows.length===1){ var i=lows[0]; note.innerHTML='<span class="mk">&#9650;</span><span>'+CATS[KEYS[i]].label+' is <b>'+(MIN-vals[i])+'% short</b> of 15%. A little more this week will do it.</span>'; }
-      else { note.innerHTML='<span class="mk">&#9650;</span><span><b>'+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+'</b> are under 15%. Give each a bit more time this week to lock your level in.</span>'; }
-      document.getElementById('cur-ws').textContent = lows.length ? 'On pace for Level 3 · '+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+' quiet' : 'On pace for Level 3';
+      if(lows.length===0){ note.innerHTML='<b>&#10003; All four are over the line.</b> Nothing to top up, this week will count in full.'; }
+      else { note.innerHTML='<b>'+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+'</b> '+(lows.length===1?'is':'are')+' the only thing between you and a full week. A few minutes each does it.'; }
+      var cw=document.getElementById('cur-ws');
+      if(cw) cw.textContent = lows.length ? 'In progress · '+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+' to top up' : 'In progress · all four in';
+      ['ok','low1','low2'].forEach(function(k){ var b=document.getElementById('btn-'+k); if(b) b.classList.toggle('on', k===key); });
     }
-    function setState(key){
-      render(key);
-      ['ok','low1','low2','low3'].forEach(function(k){ var b=document.getElementById('btn-'+k); if(b) b.classList.toggle('on', k===key); });
-    }
+    function hexA(hex,a){ var n=parseInt(hex.slice(1),16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; }
+    function setState(key){ render(key); }
+    function toggleLevels(){ document.getElementById('lpanel').classList.toggle('open'); document.getElementById('lp-trigger').classList.toggle('open'); }
+    function toggleWk(row){ row.classList.toggle('open'); var d=row.nextElementSibling; if(d&&d.classList.contains('wkdetail')) d.classList.toggle('open'); }
     var h=location.hash, start='low1';
-    if(h.indexOf('ok')>=0) start='ok'; else if(h.indexOf('low3')>=0) start='low3'; else if(h.indexOf('low2')>=0) start='low2';
+    if(h.indexOf('ok')>=0) start='ok'; else if(h.indexOf('low2')>=0) start='low2';
     setState(start);
-
   </script>
 </body></html>
