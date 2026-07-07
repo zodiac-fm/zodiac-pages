@@ -46,9 +46,10 @@
 
   .scroll{position:relative;z-index:1;flex:1;overflow-y:auto;padding:0 0 20px}
 
-  .util{display:flex;align-items:center;justify-content:space-between;padding:10px 22px 0}
-  .util .wk{font-size:13px;font-weight:700;color:var(--violet)}
+  .util{display:flex;align-items:flex-start;justify-content:space-between;padding:10px 22px 0}
+  .util .wk{font-size:13px;font-weight:700;color:var(--violet);line-height:1.35}
   .util .wk span{font-weight:500;color:var(--mut)}
+  .util .wk .rst{display:block;font-weight:500;color:var(--mut);font-size:11.5px;margin-top:2px}
   .util .qlink{display:inline-flex;align-items:center;gap:6px;min-height:30px;font-size:12.5px;color:var(--violet);font-weight:600;cursor:pointer}
   .util .qlink .q{width:17px;height:17px;border-radius:50%;border:1.4px solid var(--violet);display:flex;align-items:center;justify-content:center;font-family:'Canela',serif;font-size:11px;font-style:italic}
 
@@ -143,7 +144,7 @@
 
     <div class="scroll">
       <div class="util">
-        <div class="wk">Week 3 <span>· resets Monday</span></div>
+        <div class="wk">Week 3 <span>· Day <span id="dayx">2</span> of 7</span><span class="rst">resets Monday</span></div>
         <div class="qlink"><span class="q">?</span> How levels work</div>
       </div>
 
@@ -272,6 +273,7 @@
     var h=location.hash, start='low1';
     if(h.indexOf('ok')>=0) start='ok'; else if(h.indexOf('low3')>=0) start='low3'; else if(h.indexOf('low2')>=0) start='low2';
     setState(start);
+    (function(){var el=document.getElementById('dayx');if(el){var wd=new Date().getDay();el.textContent=(wd===0?7:wd);}})();
   </script>
 <script>if(new URLSearchParams(location.search).has("embed")){
   /* Embed mode (used by app-A's Progress tab): unlock the fixed phone shell so the
