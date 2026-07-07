@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Zodiac.fm · Welcome first listen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6F1E8;
+    --card:#FFFFFF;
+    --moondust:#FBF8F3;
+    --mist:#EEE9E0;
+    --ink:#1A1620;
+    --ink2:#2A2530;
+    --muted:#716B78;
+    --soft:#A8A0AE;
+    --line:#EFE6D6;
+    --track:#EAE4DA;
+    --control:#2A2530;
+    --core:#6521C9;
+    --core-deep:#38007A;
+    --core-tint:#EFECFF;
+    --core-grad:#A737C8;
+    --love:#B90044;
+    --love-grad:#CF4090;
+    --vitality:#FF9112;
+    --vitality-accent:#C25500;
+    --vitality-grad:#FFC251;
+    --abundance:#12A56E;
+    --abundance-accent:#0A7A52;
+    --abundance-grad:#46D99A;
+    --serif:"Cormorant Garamond", Georgia, serif;
+    --sans:"Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{min-height:100%}
+  body{
+    background:#E4DED3;
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:18px 0 30px;
+  }
+
+  .review-note{
+    width:min(420px,100vw);
+    padding:0 18px 12px;
+    font-size:12px;
+    line-height:1.45;
+    color:#6F6875;
+  }
+  .review-note b{color:var(--ink2)}
+
+  #app{
+    position:relative;
+    width:min(420px,100vw);
+    height:min(880px,88dvh);
+    overflow:hidden;
+    background:var(--cream);
+    display:flex;
+    flex-direction:column;
+  }
+  @media (min-width:440px){
+    #app{border-radius:30px;box-shadow:0 30px 80px rgba(26,22,32,.22);border:1px solid rgba(26,22,32,.06)}
+  }
+  @media (max-width:439px){
+    body{padding:0}
+    .review-note{display:none}
+    #app{width:100vw;height:100dvh}
+  }
+
+  .glow{
+    position:absolute;
+    top:-122px;
+    left:50%;
+    transform:translateX(-50%);
+    width:500px;
+    height:430px;
+    pointer-events:none;
+    background:
+      radial-gradient(closest-side, rgba(101,33,201,.10), rgba(101,33,201,.035) 54%, rgba(101,33,201,0) 76%),
+      radial-gradient(circle at 72% 34%, rgba(18,165,110,.10), rgba(18,165,110,0) 32%);
+  }
+
+  .top{
+    position:relative;
+    z-index:1;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex:0 0 auto;
+    padding:calc(env(safe-area-inset-top,0px) + 15px) 20px 8px;
+  }
+  .logo img{display:block;height:19px;width:auto}
+  .skip{
+    border:1px solid rgba(26,22,32,.10);
+    background:rgba(255,255,255,.64);
+    color:var(--ink2);
+    border-radius:999px;
+    padding:7px 12px;
+    font-family:var(--sans);
+    font-size:12px;
+    font-weight:600;
+  }
+
+  .scroll{
+    position:relative;
+    z-index:1;
+    flex:1 1 auto;
+    overflow-y:auto;
+    padding:8px 18px 132px;
+  }
+
+  .hero{padding:8px 4px 0}
+  .eyebrow{
+    color:var(--core);
+    font-size:12px;
+    line-height:1;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1{
+    margin-top:9px;
+    max-width:10ch;
+    font-family:var(--serif);
+    font-size:44px;
+    line-height:.98;
+    font-weight:600;
+    letter-spacing:-.012em;
+    text-wrap:balance;
+  }
+  h1 span{color:var(--core)}
+  .lede{
+    margin-top:13px;
+    max-width:31ch;
+    color:var(--ink2);
+    font-size:16px;
+    line-height:1.48;
+  }
+  .lede strong{font-weight:700}
+
+  .freq-strip{
+    margin-top:20px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+  }
+  .freq{
+    min-width:0;
+    border:1px solid rgba(26,22,32,.08);
+    background:rgba(255,255,255,.58);
+    border-radius:14px;
+    padding:10px 8px 9px;
+    box-shadow:0 4px 14px rgba(56,0,122,.035);
+  }
+  .mark{width:100%;height:6px;border-radius:999px;margin-bottom:9px}
+  .freq strong{display:block;font-size:12px;line-height:1;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
+  .freq span{display:block;margin-top:5px;font-size:11px;line-height:1;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+  .core .mark{background:linear-gradient(100deg,var(--core),var(--core-grad))}
+  .love .mark{background:linear-gradient(100deg,var(--love),var(--love-grad))}
+  .vitality .mark{background:linear-gradient(100deg,var(--vitality),var(--vitality-grad))}
+  .abundance .mark{background:linear-gradient(100deg,var(--abundance),var(--abundance-grad))}
+
+  .listen-card{
+    position:relative;
+    margin-top:18px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:17px;
+    box-shadow:0 12px 30px rgba(56,0,122,.075);
+    overflow:hidden;
+  }
+  .listen-card:before{
+    content:"";
+    position:absolute;
+    inset:auto -70px -110px auto;
+    width:220px;
+    height:220px;
+    background:radial-gradient(closest-side, rgba(101,33,201,.13), rgba(101,33,201,0) 72%);
+    pointer-events:none;
+  }
+  .card-label{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    color:var(--core);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+  }
+  .pill{
+    color:var(--core);
+    background:var(--core-tint);
+    border-radius:999px;
+    padding:5px 9px;
+    font-size:11px;
+    line-height:1;
+    font-weight:700;
+    letter-spacing:.03em;
+    text-transform:none;
+  }
+
+  .track{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:92px minmax(0,1fr);
+    gap:16px;
+    align-items:center;
+    margin-top:16px;
+  }
+  .disc-wrap{
+    position:relative;
+    width:92px;
+    height:92px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .disc{
+    width:78px;
+    height:78px;
+    border-radius:50%;
+    background:#fff;
+    transform:scale(1.16);
+    box-shadow:0 3px 7px rgba(56,0,122,.13);
+  }
+  .disc img{
+    display:block;
+    width:100%;
+    height:100%;
+    border-radius:50%;
+  }
+  .play-float{
+    position:absolute;
+    right:1px;
+    bottom:3px;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    border:0;
+    background:var(--control);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 8px 22px rgba(26,22,32,.24);
+  }
+  .play-float svg{display:block;width:15px;height:15px;fill:currentColor;margin-left:2px}
+  .play-float.playing svg{margin-left:0}
+  .track-copy{min-width:0}
+  .track-copy h2{
+    font-size:22px;
+    line-height:1.04;
+    font-weight:700;
+    letter-spacing:-.018em;
+  }
+  .track-copy p{
+    margin-top:8px;
+    color:var(--muted);
+    font-size:13.5px;
+    line-height:1.43;
+  }
+  .meta{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    flex-wrap:wrap;
+    margin-top:10px;
+    color:var(--core);
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+  }
+  .dot{width:5px;height:5px;border-radius:50%;background:var(--core);opacity:.5}
+
+  .progress{
+    position:relative;
+    z-index:1;
+    margin-top:16px;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:10px;
+    color:var(--soft);
+    font-size:11px;
+    font-weight:600;
+    font-variant-numeric:tabular-nums;
+  }
+  .bar{height:6px;border-radius:999px;background:var(--track);overflow:hidden}
+  .fill{width:0%;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--core),var(--core-deep))}
+
+  .note{
+    margin-top:12px;
+    border-top:1px solid var(--line);
+    padding-top:12px;
+    color:var(--ink2);
+    font-size:13px;
+    line-height:1.45;
+  }
+  .note b{color:var(--core-deep)}
+
+  .mini-grid{
+    margin-top:12px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  .mini{
+    border:1px solid rgba(26,22,32,.08);
+    background:rgba(255,255,255,.54);
+    border-radius:16px;
+    padding:13px 13px 12px;
+  }
+  .mini svg{width:18px;height:18px;color:var(--core);display:block;margin-bottom:9px}
+  .mini strong{display:block;font-size:13px;line-height:1.2}
+  .mini span{display:block;margin-top:5px;color:var(--muted);font-size:12px;line-height:1.35}
+
+  .bottom{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:3;
+    padding:18px 18px calc(env(safe-area-inset-bottom,0px) + 18px);
+    background:linear-gradient(rgba(246,241,232,0), var(--cream) 22%, var(--cream));
+  }
+  .cta{
+    width:100%;
+    min-height:56px;
+    border:0;
+    border-radius:17px;
+    background:linear-gradient(135deg,var(--core),var(--core-deep));
+    color:#fff;
+    font-family:var(--sans);
+    font-size:16px;
+    font-weight:700;
+    box-shadow:0 12px 28px -14px rgba(56,0,122,.65);
+  }
+  .secondary{
+    margin-top:10px;
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    color:var(--core);
+    font-size:13px;
+    font-weight:700;
+  }
+  .secondary button{
+    border:0;
+    background:transparent;
+    color:inherit;
+    font:inherit;
+  }
+
+  @media (max-height:760px){
+    h1{font-size:38px}
+    .lede{font-size:15px}
+    .scroll{padding-bottom:120px}
+    .track{grid-template-columns:82px minmax(0,1fr);gap:13px}
+    .disc-wrap{width:82px;height:82px}
+    .disc{width:70px;height:70px}
+    .mini-grid{display:none}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *,*:before,*:after{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  }
+</style>
+</head>
+<body>
+<div class="review-note"><b>Concept:</b> first-run Welcome as an activation screen. It gives ownership, then pushes one listen. No stats, no level ladder.</div>
+
+<main id="app">
+  <div class="glow"></div>
+
+  <header class="top">
+    <div class="logo"><img src="app-assets/logo-black.svg" alt="zodiac.fm"></div>
+    <button class="skip" type="button">Skip</button>
+  </header>
+
+  <section class="scroll" aria-label="Welcome">
+    <div class="hero">
+      <div class="eyebrow">Welcome, Maya</div>
+      <h1>Your frequencies are <span>ready.</span></h1>
+      <p class="lede">You do not study this. You listen to it. Press play, live your day, and let your signal run in the background.</p>
+    </div>
+
+    <div class="freq-strip" aria-label="Your four frequencies">
+      <div class="freq core"><div class="mark"></div><strong>Core</strong><span>422 Hz</span></div>
+      <div class="freq love"><div class="mark"></div><strong>Love</strong><span>432 Hz</span></div>
+      <div class="freq vitality"><div class="mark"></div><strong>Vitality</strong><span>579 Hz</span></div>
+      <div class="freq abundance"><div class="mark"></div><strong>Abundance</strong><span>611 Hz</span></div>
+    </div>
+
+    <article class="listen-card">
+      <div class="card-label">
+        <span>Your first listen</span>
+        <span class="pill">3 min</span>
+      </div>
+
+      <div class="track">
+        <div class="disc-wrap">
+          <div class="disc"><img src="app-assets-disc/sig-core-quiet-success.png" alt=""></div>
+          <button id="playSmall" class="play-float" type="button" aria-label="Play Quiet Success">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+          </button>
+        </div>
+        <div class="track-copy">
+          <h2>Start with Core.</h2>
+          <p>Quiet Success is the shortest way in. A small reset, built around your identity frequency.</p>
+          <div class="meta"><span>Core Infusion</span><span class="dot"></span><span>Quiet</span><span class="dot"></span><span>Ground</span></div>
+        </div>
+      </div>
+
+      <div class="progress">
+        <span id="elapsed">0:00</span>
+        <div class="bar"><div id="fill" class="fill"></div></div>
+        <span>3:00</span>
+      </div>
+
+      <p class="note"><b>Nothing to perform.</b> If you do not feel much the first time, that is normal. The point is time with your frequency playing.</p>
+    </article>
+
+    <div class="mini-grid">
+      <div class="mini">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"></path><rect x="7" y="3" width="10" height="18" rx="3"></rect></svg>
+        <strong>Add it to your home screen</strong>
+        <span>So Zodiac opens like an app tomorrow.</span>
+      </div>
+      <div class="mini">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 18V5l11-2v13" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="6" cy="18" r="3"></circle><circle cx="20" cy="16" r="3"></circle></svg>
+        <strong>Speaker is fine</strong>
+        <span>AirPods, car, or a good Bluetooth speaker all work.</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="bottom">
+    <button id="playCta" class="cta" type="button">Start first listen</button>
+    <div class="secondary">
+      <button type="button">Install app</button>
+      <button type="button">How it works</button>
+    </div>
+  </div>
+
+  <audio id="audio" preload="metadata" src="app-assets/quiet-success.mp3"></audio>
+</main>
+
+<script>
+  var audio = document.getElementById("audio");
+  var playSmall = document.getElementById("playSmall");
+  var playCta = document.getElementById("playCta");
+  var fill = document.getElementById("fill");
+  var elapsed = document.getElementById("elapsed");
+  var iconPlay = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>';
+  var iconPause = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"></path></svg>';
+  var cap = 180;
+
+  function fmt(seconds){
+    var s = Math.max(0, Math.floor(seconds || 0));
+    return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+  }
+
+  function sync(){
+    var t = Math.min(audio.currentTime || 0, cap);
+    elapsed.textContent = fmt(t);
+    fill.style.width = Math.min(100, (t / cap) * 100) + "%";
+    if(t >= cap){
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  }
+
+  function setPlaying(on){
+    playSmall.classList.toggle("playing", on);
+    playSmall.innerHTML = on ? iconPause : iconPlay;
+    playCta.textContent = on ? "Pause first listen" : "Start first listen";
+  }
+
+  function toggle(){
+    if(audio.paused){
+      audio.play().catch(function(){});
+    }else{
+      audio.pause();
+    }
+  }
+
+  playSmall.addEventListener("click", toggle);
+  playCta.addEventListener("click", toggle);
+  audio.addEventListener("play", function(){ setPlaying(true); });
+  audio.addEventListener("pause", function(){ setPlaying(false); });
+  audio.addEventListener("timeupdate", sync);
+  audio.addEventListener("loadedmetadata", sync);
+</script>
+</body>
+</html>
