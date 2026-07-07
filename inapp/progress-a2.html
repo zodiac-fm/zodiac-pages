@@ -1,239 +1,318 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Zodiac.fm · Progress A-2</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
-<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<title>Zodiac.fm · Progress A-2 (app-A + Your Year)</title>
 <style>
-  /* Progress screen, in app-A's language. tokens.json colours. Core Purple = structure; frequencies = small accents.
-     Cormorant = ONE number-free serif moment (the insight line). EVERYTHING else + ALL numbers = Switzer (lining figures). */
+  /* COLORS from zodiac-pages/design/tokens.json (locked 2026-06-30; neutrals 2026-07-01; green Abundance 2026-07-02).
+     Cream canvas + white cards, Core Purple = the one structure accent, frequency colour as small accents (the 10%).
+     BUILD NOTES (stats research 2026-07-02, working/stats-research/): glance layer first (one hero statement +
+     one prose insight); status as WORDS with colour, numbers whisper; ONE comparator (the 15% gate) on the chart;
+     self-referential comparisons only; low = quiet, never shame. Fonts = the REAL Canela + Suisse.
+     v17b: ONE VISUAL GRAMMAR (Michael 2026-07-02) — every graph on the screen is the same horizontal
+     track + fill with a single dashed target line; the Time dot-ladder and the extra progress strip
+     are dissolved into that grammar + words. Fill crossing the dashed line = cleared, everywhere. */
+  @font-face{font-family:'Canela';src:url('../explorations/fonts/Canela-Regular.otf');font-weight:400}
+  @font-face{font-family:'Canela';src:url('../explorations/fonts/Canela-Medium.otf');font-weight:500}
+  @font-face{font-family:'Canela';src:url('../explorations/fonts/Canela-Italic.otf');font-weight:400;font-style:italic}
+  @font-face{font-family:'Suisse';src:url('../explorations/fonts/Suisse-Regular.otf');font-weight:400}
+  @font-face{font-family:'Suisse';src:url('../explorations/fonts/Suisse-Medium.otf');font-weight:500}
+  @font-face{font-family:'Suisse';src:url('../explorations/fonts/Suisse-Semibold.otf');font-weight:600}
+  @font-face{font-family:'Suisse';src:url('../explorations/fonts/Suisse-Bold.otf');font-weight:700}
   :root{
-    --cream:#F6F1E8;--card:#FFFFFF;--ink:#1a1620;--ink2:#2A2530;--mut:#7a7480;--soft:#a8a2ad;--line:#efe6d6;--mist:#EEE9E0;
-    --violet:#6521C9;--violet-deep:#38007A;--violet-tint:#EFECFF;--violet-soft:#D2C8FF;
-    --core1:#6521C9;--core2:#A737C8;--love1:#B90044;--love2:#CF4090;--vit1:#FF9112;--vit2:#FFC251;--vitink:#C25500;--ab1:#12A56E;--ab2:#46D99A;--abink:#0A7A52;
+    --cream:#F6F1E8; --card:#FFFFFF; --ink:#1A1620; --ink2:#2A2530; --mut:#7a7480; --soft:#a8a2ad;
+    --line:#efe6d6; --mist:#EEE9E0;
+    --violet:#6521C9; --violet-deep:#38007A; --violet-tint:#EFECFF;
+    --neutral:#2A2530;
   }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%;background:#e7e2d8;font-family:'Switzer',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ink);overflow:hidden}
-  body{display:flex;align-items:center;justify-content:center}
-  .serif{font-family:'Cormorant Garamond',Georgia,serif}
-  .num{font-variant-numeric:lining-nums}
-  #app{position:relative;width:min(420px,100vw);height:min(880px,100dvh);overflow:hidden;background:var(--cream);display:flex;flex-direction:column}
-  @media (min-width:440px) and (min-height:900px){ #app{border-radius:30px;box-shadow:0 30px 80px rgba(0,0,0,.22);border:1px solid rgba(0,0,0,.05)} }
-  @media (max-width:439px),(max-height:899px){ body{align-items:flex-start} #app{width:100vw;height:100dvh} }
+  html,body{min-height:100%;background:#e7e2d8;font-family:'Suisse',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--ink)}
+  body{display:flex;flex-direction:column;align-items:center;padding:18px 0 30px}
+  #app{position:relative;width:min(420px,100vw);height:min(880px,88dvh);overflow:hidden;background:var(--cream);display:flex;flex-direction:column}
+  @media (min-width:440px){ #app{border-radius:30px;box-shadow:0 30px 80px rgba(0,0,0,.22);border:1px solid rgba(0,0,0,.05)} }
+  @media (max-width:439px){ body{padding:0} #app{width:100vw;height:100dvh} .toggle{padding-top:10px} }
 
-  .glow{position:absolute;top:-90px;left:50%;transform:translateX(-50%);width:480px;height:360px;z-index:0;pointer-events:none;
+  /* review-aid state toggle (outside the phone) */
+  .toggle{display:flex;gap:6px;justify-content:center;padding-bottom:14px}
+  .toggle button{font-family:'Suisse',sans-serif;font-size:13px;font-weight:600;color:var(--ink2);background:#fff;border:1px solid #d8d2c6;padding:8px 15px;border-radius:20px;cursor:pointer;-webkit-appearance:none}
+  .toggle button.on{background:var(--violet);color:#fff;border-color:var(--violet)}
+
+  /* soft violet presence at the top of the screen */
+  .glow{position:absolute;top:-90px;left:50%;transform:translateX(-50%);width:480px;height:400px;z-index:0;pointer-events:none;
     background:radial-gradient(closest-side,rgba(101,33,201,.07),rgba(101,33,201,.02) 55%,rgba(101,33,201,0) 75%)}
 
+  /* ---------- chrome (matches app-A) ---------- */
   .top{position:relative;z-index:1;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 6px;display:flex;align-items:center;justify-content:space-between;flex:0 0 auto}
-  .logo{display:flex;align-items:center}
   .logo img{height:19px;width:auto;display:block}
-  .appletter{display:inline-block;font-size:13px;font-weight:700;color:#6a6470;background:#fff;border:1px solid #e6ddce;border-radius:9px;padding:1px 8px;margin-left:9px;letter-spacing:.04em}
-  .ham svg{width:21px;height:21px;color:#2A2530}
-
-  .util{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;padding:10px 22px 0;flex:0 0 auto}
-  .util .wk{font-size:13px;font-weight:700;color:var(--violet)}
-  .util .wk span{font-weight:500;color:var(--mut)}
-  .util .qlink{display:inline-flex;align-items:center;gap:6px;min-height:30px;font-size:12.5px;color:var(--violet);font-weight:600;cursor:pointer}
-  .util .qlink .q{width:17px;height:17px;border-radius:50%;border:1.4px solid var(--violet);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:11px;font-style:italic}
+  .ham{font-size:20px;color:#333}
 
   .scroll{position:relative;z-index:1;flex:1;overflow-y:auto;padding:0 0 20px}
 
-  /* glance layer */
-  .hero{padding:14px 22px 2px}
+  .util{display:flex;align-items:center;justify-content:space-between;padding:10px 22px 0}
+  .util .wk{font-size:13px;font-weight:700;color:var(--violet)}
+  .util .wk span{font-weight:500;color:var(--mut)}
+  .util .qlink{display:inline-flex;align-items:center;gap:6px;min-height:30px;font-size:12.5px;color:var(--violet);font-weight:600;cursor:pointer}
+  .util .qlink .q{width:17px;height:17px;border-radius:50%;border:1.4px solid var(--violet);display:flex;align-items:center;justify-content:center;font-family:'Canela',serif;font-size:11px;font-style:italic}
+
+  /* ---------- the glance layer: level said once + one prose insight ---------- */
+  .hero{padding:14px 22px 4px}
   .hero .ey{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
-  .hero h1{font-size:27px;font-weight:700;line-height:1.05;letter-spacing:-.02em;margin-top:8px;font-variant-numeric:lining-nums}
-  .hero h1 b{color:var(--violet-deep);font-weight:700}
-  .hero .insight{font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:17px;line-height:1.4;color:var(--ink2);margin-top:10px;max-width:31ch}
+  .hero h1{font-family:'Canela',serif;font-size:34px;font-weight:500;line-height:1.06;letter-spacing:-.015em;margin-top:8px}
+  .hero h1 em{font-style:normal;color:var(--violet-deep)}
+  /* the editorial insight sentence — the premium layer (prose reduces false confidence; see research) */
+  .hero .insight{font-family:'Canela',serif;font-style:italic;font-size:16.5px;line-height:1.45;color:var(--ink2);margin-top:10px;max-width:32ch}
+  .hero .sub{font-size:13px;color:var(--mut);margin-top:9px;line-height:1.5}
+  .hero .sub b{color:var(--ink2);font-weight:600}
 
+  /* ---------- white cards on the cream canvas ---------- */
   .card{margin:14px 18px 0;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 18px 20px;box-shadow:0 6px 20px rgba(26,22,32,.05)}
-  .shead{display:flex;align-items:center;gap:10px;margin-bottom:2px}
-  .shead h2{font-size:17px;font-weight:700;color:var(--violet);letter-spacing:-.01em}
-  .status{display:inline-flex;align-items:center;font-size:11px;font-weight:600;padding:5px 12px;border-radius:20px;margin-left:auto;background:#fff;border:1px solid #e3dbcb;color:var(--ink2)}
-  .status.good{color:var(--abink);border-color:#cdeadd;background:#f2fbf6}
+  .shead{display:flex;align-items:center;gap:10px}
+  .shead h2{font-family:'Canela',serif;font-size:19px;font-weight:500;color:var(--violet);letter-spacing:-.005em}
+  .status{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;margin-left:auto;background:#fff;border:1px solid #e3dbcb;color:var(--ink2);box-shadow:0 1px 3px rgba(26,22,32,.04)}
 
-  /* THIS WEEK: time then the four balance bars */
-  .avg{display:flex;align-items:baseline;gap:7px;margin-top:12px}
-  .avg .n{font-size:25px;font-weight:700;letter-spacing:-.01em}
+  /* ---------- TIME ---------- */
+  .avg{display:flex;align-items:baseline;gap:8px;margin-top:13px}
+  .avg .n{font-family:'Canela',serif;font-size:26px;font-weight:500;letter-spacing:-.01em}
   .avg .u{font-size:12.5px;color:var(--mut)}
-  .avg .side{font-size:12px;color:var(--soft);margin-left:auto;font-weight:500}
-  .ttrackwrap{position:relative;margin-top:22px}
-  .ttrack{position:relative;height:9px;border-radius:6px;background:var(--mist)}
+  .avg .wk{font-size:12px;color:var(--soft);margin-left:auto;font-weight:500}
+  /* the ONE grammar, applied to Time: a single track + fill, dashed target at Level 3 */
+  .tbal{position:relative;margin-top:26px}
+  .ttrack{position:relative;height:10px;border-radius:6px;background:var(--mist)}
   .tfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,var(--violet),var(--violet-deep))}
-  .tgate{position:absolute;top:-13px;bottom:-5px;border-left:2px dashed #9a97a3}
-  .tgatelab{position:absolute;top:-27px;transform:translateX(-50%);font-size:9.5px;font-weight:700;letter-spacing:.03em;color:var(--mut);white-space:nowrap}
-  .twords{margin-top:15px;font-size:12.5px;color:var(--ink2);line-height:1.5}
+  .tgate{position:absolute;top:-14px;bottom:-6px;border-left:2px dashed #8d8a96}
+  .tgatelab{position:absolute;top:-30px;transform:translateX(-50%);font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--mut);white-space:nowrap}
+  .twords{margin-top:16px;font-size:13px;color:var(--ink2);line-height:1.5}
   .twords b{font-weight:600}
 
-  .baldivide{margin:18px 0 0;border-top:1px solid var(--line);padding-top:16px}
-  .balcap{font-size:12px;font-weight:600;color:var(--mut);letter-spacing:.02em}
-  .bal{position:relative;margin-top:14px}
-  .brow{display:flex;align-items:center;gap:11px;min-height:38px}
-  .brow .bl{flex:0 0 74px}
-  .brow .bn{font-size:12.5px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+  /* ---------- BALANCE: four horizontal bars, words first, ONE gate line ----------
+     (astrology element-bars pattern; band words are the evaluative labels; the 15% line is the
+     only comparator on the chart and is labeled once) */
+  .rule{font-size:13px;color:var(--ink2);line-height:1.5;margin-top:18px}
+  .rule b{font-weight:700}
+  .bal{position:relative;margin-top:20px}
+  .brow{display:flex;align-items:center;gap:12px;min-height:44px}
+  .brow .bl{flex:0 0 84px}
+  .brow .bn{font-size:13px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+  .brow .bw{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
   .brow.low .bn{color:var(--mut);font-weight:500}
-  .brow .btrack{position:relative;flex:1 1 auto;height:9px;border-radius:6px;background:transparent}
+  .brow .btrack{position:relative;flex:1 1 auto;height:10px;border-radius:6px;background:transparent}
   .brow .bfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px}
-  .brow .bpct{flex:0 0 34px;text-align:right;font-size:12px;font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums}
+  .brow .bpct{flex:0 0 40px;text-align:right;font-size:12.5px;font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums}
   .brow.low .bpct{color:var(--mut);font-weight:500}
-  .gate{position:absolute;top:-13px;bottom:2px;border-left:2px dashed #9a97a3;z-index:2}
-  .gatelab{position:absolute;top:-14px;transform:translateX(-50%);font-size:9px;font-weight:700;color:var(--mut);background:var(--card);padding:0 5px;z-index:3}
-  .balnote{margin-top:12px;font-size:12px;line-height:1.5;color:var(--ink2)}
-  .balnote b{font-weight:600}
+  /* the ONE reference on the chart: a single gate line crossing all four bars, labeled once */
+  .gate{position:absolute;top:-16px;bottom:0;border-left:2px dashed #8d8a96;z-index:2}
+  .gatelab{position:absolute;top:-17px;transform:translateX(-50%);font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--mut);background:var(--card);padding:0 5px;z-index:3}
+  .balnote{margin-top:12px;font-size:12.5px;line-height:1.5;display:flex;gap:7px;color:var(--ink2)}
+  .balnote b{font-weight:700}
+  .balnote .mk{flex:0 0 auto}
 
-  /* YOUR WEEKS: the chain (a record, never a streak) */
-  .chain{display:flex;align-items:flex-end;gap:7px;margin-top:14px;height:34px}
-  .clink{flex:1;border-radius:5px;min-width:0}
-  .clink.full{background:linear-gradient(180deg,var(--violet),var(--violet-deep));height:100%}
-  .clink.l2{background:linear-gradient(180deg,var(--violet),var(--violet-deep));height:100%;opacity:1}
-  .clink.l1{background:var(--violet-soft);height:64%}
-  .clink.gap{background:#ece5d7;height:34%}
-  .clink.cur{outline:2px solid var(--violet);outline-offset:2px}
-  .chainkey{margin-top:16px;font-size:12px;color:var(--ink2);line-height:1.5}
-  .chainkey b{font-weight:600}
+  /* ---------- HISTORY (yours vs your own weeks, nothing else) ---------- */
+  .wkrow{display:flex;align-items:center;gap:12px;min-height:52px;padding:11px 2px;border-bottom:1px solid var(--line)}
+  .wkrow:last-child{border-bottom:none;padding-bottom:2px}
+  .wkrow .wl{display:flex;flex-direction:column;gap:3px}
+  .wkrow .wn{font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+  .wkrow .ws{font-size:12px;color:var(--soft)}
+  .wkrow .ws .lf{color:var(--mut);font-weight:600}
+  .wkrow .wr{margin-left:auto;display:flex;align-items:center;gap:10px}
+  .wkrow .chev{color:#cfc6b6;font-size:20px;line-height:1}
+  .wkrow.cur{margin:2px -8px 0;padding:11px 12px;background:var(--violet-tint);border-radius:13px;border-bottom:none}
+  .wkrow.cur .wn{color:var(--violet-deep)}
+  .lvl{font-size:11.5px;font-weight:600;color:var(--ink2);background:var(--mist);border-radius:20px;padding:3px 11px;white-space:nowrap}
+  .lvl.none{color:var(--mut)}
+  .lvl.top{color:var(--violet-deep);background:#fff;border:1px solid #ddd0f4}
 
-  /* YOUR YEAR: one calendar bar, milestone moments, banked count */
-  .yr{position:relative;margin-top:26px;height:12px}
-  .yrtrack{position:absolute;left:0;right:0;top:0;height:11px;border-radius:7px;background:var(--mist);overflow:hidden}
-  .yrfill{position:absolute;left:0;top:0;bottom:0;border-radius:7px;background:linear-gradient(90deg,var(--violet),var(--violet-deep))}
-  .mstick{position:absolute;top:-5px;width:2px;height:21px;background:#d8d0c2;border-radius:2px}
-  .mstick.hit{background:var(--violet-soft)}
-  .mslab{position:absolute;top:23px;transform:translateX(-50%);font-size:9px;font-weight:600;color:var(--soft);white-space:nowrap;text-align:center;line-height:1.15}
-  .mslab b{display:block;color:var(--mut);font-weight:700;font-variant-numeric:lining-nums}
-  .youpin{position:absolute;top:-8px;transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center}
-  .youpin .dot{width:15px;height:15px;border-radius:50%;background:#fff;border:3px solid var(--violet);box-shadow:0 2px 6px rgba(56,0,122,.28)}
-  .youpin .lab{margin-top:4px;font-size:9.5px;font-weight:700;color:var(--violet-deep)}
-  .banked{display:flex;align-items:center;gap:12px;margin-top:60px;padding-top:15px;border-top:1px solid var(--line)}
-  .banked .bignum{font-size:27px;font-weight:700;color:var(--violet-deep);line-height:1;font-variant-numeric:lining-nums}
-  .banked .bl2{display:flex;flex-direction:column;gap:2px}
-  .banked .k{font-size:12.5px;font-weight:600;color:var(--ink)}
-  .banked .v{font-size:11px;color:var(--mut)}
-  .banked .tick{margin-left:auto;font-size:11px;font-weight:700;color:var(--abink);white-space:nowrap}
-  .nextnote{margin-top:14px;font-size:12.5px;line-height:1.5;color:var(--ink2)}
-  .nextnote b{font-weight:600;color:var(--violet-deep)}
-
-  /* bottom nav (matches app-A) */
-  #nav{position:relative;z-index:1;flex:0 0 auto;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #EFE6D6;display:flex;justify-content:space-around;align-items:center}
-  #nav div{font-size:11px;text-align:center;color:#9a95a0;cursor:pointer}
+  /* ---------- bottom nav (matches app-A) ---------- */
+  #nav{position:relative;z-index:1;flex:0 0 auto;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #eee;display:flex;justify-content:space-around;align-items:center}
+  #nav div{font-size:11px;text-align:center;color:#9a95a0}
   #nav div.on{color:#1A1620;font-weight:700}
-  #nav svg{width:17px;height:17px;display:block;margin:0 auto 2px}
+  #nav .ic{display:block;margin:0 auto 2px;width:17px;height:17px}
+  #nav svg{width:17px;height:17px;display:block;margin:0 auto}
+  /* ---------- YOUR YEAR (A-2 addition; same grammar as the rest) ---------- */
+  .yr{position:relative;margin-top:12px;height:12px}
+  .yrtrack{position:absolute;left:0;right:0;top:0;height:10px;border-radius:6px;background:var(--mist);overflow:hidden}
+  .yrfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,var(--violet),var(--violet-deep))}
+  .mstick{position:absolute;top:-4px;width:2px;height:18px;background:#d8d0c2;border-radius:2px}
+  .mstick.hit{background:#D2C8FF}
+  .mslab{position:absolute;top:20px;transform:translateX(-50%);font-size:9px;font-weight:600;color:var(--soft);white-space:nowrap;text-align:center;line-height:1.2}
+  .mslab b{display:block;color:var(--mut);font-weight:700}
+  .youpin{position:absolute;top:-7px;transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center}
+  .youpin .dot{width:14px;height:14px;border-radius:50%;background:#fff;border:3px solid var(--violet);box-shadow:0 2px 6px rgba(56,0,122,.28)}
+  .youpin .lab{margin-top:4px;font-size:9px;font-weight:700;color:var(--violet-deep)}
+  .yrbank{display:flex;align-items:center;gap:12px;margin-top:54px;padding-top:15px;border-top:1px solid var(--line)}
+  .yrbank .yn{font-family:'Canela',serif;font-size:26px;font-weight:500;color:var(--violet-deep);line-height:1}
+  .yrbank .yl{display:flex;flex-direction:column;gap:2px}
+  .yrbank .yk{font-size:12.5px;font-weight:600;color:var(--ink)}
+  .yrbank .yv{font-size:11px;color:var(--mut)}
+  .yrbank .yt{margin-left:auto;font-size:11px;font-weight:700;color:#0A7A52;white-space:nowrap}
+  .yrule{margin-top:14px;font-size:13px;color:var(--ink2);line-height:1.5}
+  .yrule b{font-weight:700;color:var(--violet-deep)}
 </style></head><body>
+
+  <div class="toggle">
+    <button id="btn-ok" onclick="setState('ok')">On track</button>
+    <button id="btn-low1" class="on" onclick="setState('low1')">1 low</button>
+    <button id="btn-low2" onclick="setState('low2')">2 low</button>
+    <button id="btn-low3" onclick="setState('low3')">3 low</button>
+  </div>
+
   <div id="app">
     <div class="glow"></div>
-
     <div class="top">
-      <div class="logo"><img src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A-2</span></div>
-      <div class="ham"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div>
+      <div class="logo"><img src="app-assets/logo-black.svg" alt="zodiac.fm"></div>
+      <div class="ham">&#9776;</div>
     </div>
 
     <div class="scroll">
       <div class="util">
-        <div class="wk num">Week 9 <span>&middot; resets Monday</span></div>
-        <div class="qlink"><span class="q">?</span> How it works</div>
+        <div class="wk">Week 3 <span>· resets Monday</span></div>
+        <div class="qlink"><span class="q">?</span> How levels work</div>
       </div>
 
-      <!-- GLANCE: level said plainly + one serif insight (number-free) -->
+      <!-- GLANCE LAYER: the level said once + one editorial insight sentence -->
       <div class="hero">
         <div class="ey">This week</div>
-        <h1>You're at <b>Level&nbsp;2</b>, the practice</h1>
-        <div class="insight">All four of your frequencies are getting their time. Core carried the week.</div>
+        <h1 id="hero-head"></h1>
+        <div class="insight" id="hero-insight"></div>
+        <div class="sub" id="hero-sub"></div>
       </div>
 
-      <!-- 1 · THIS WEEK: your two goals (time + balance) -->
+      <!-- TIME -->
       <div class="card">
-        <div class="shead"><h2>This week</h2><span class="status good">On track</span></div>
-        <div class="avg"><span class="n num">22&nbsp;min</span><span class="u">a day</span><span class="side num">154 min so far</span></div>
-        <div class="ttrackwrap">
-          <div class="ttrack"><div class="tfill" style="width:49%"></div></div>
-          <div class="tgate" style="left:100%"></div>
-          <div class="tgatelab" style="left:100%">Level 3</div>
+        <div class="shead">
+          <h2>Time</h2>
+          <span class="status">On track</span>
         </div>
-        <div class="twords">The floor and the practice are both cleared. <b>Listening a little longer</b> reaches immersion, where shifts have tended to arrive sooner.</div>
-
-        <div class="baldivide">
-          <div class="balcap">All four in the mix (each needs 15% of your week)</div>
-          <div class="bal" id="bal"></div>
-          <div class="balnote"><b>&#10003; All four are clearing the line.</b> Nothing to fix. Where you spent the other time is yours; this week it leaned Core.</div>
+        <div class="avg"><span class="n">24 min</span><span class="u">a day</span><span class="wk">168 min this week</span></div>
+        <div class="tbal">
+          <div class="ttrack"><div class="tfill" style="width:48%"></div></div>
+          <div class="tgate" style="left:90%"></div>
+          <div class="tgatelab" style="left:90%">Level 3 · 45 min</div>
         </div>
+        <div class="twords">Levels 1 and 2 cleared. <b>21 min a day more</b> reaches Level 3.</div>
       </div>
 
-      <!-- 2 · YOUR WEEKS: the record (never a streak) -->
+      <!-- BALANCE -->
+      <div class="card">
+        <div class="shead">
+          <h2>Balance</h2>
+          <span class="status" id="bal-status"></span>
+        </div>
+        <div class="balnote" id="bal-note"></div>
+        <div class="bal" id="bal-rows"></div>
+        <div class="rule">Every frequency needs at least <b>15% of your week</b>. The other 40% is yours.</div>
+      </div>
+
+      <!-- HISTORY -->
       <div class="card">
         <div class="shead"><h2>Your weeks</h2></div>
-        <div class="chain" id="chain"></div>
-        <div class="chainkey">Every week you practice is a link you keep. <b>A missed week is just a gap, it never breaks the chain.</b> You can always pick up where you are.</div>
-      </div>
-
-      <!-- 3 · YOUR YEAR: one bar, the moments ahead -->
-      <div class="card">
-        <div class="shead"><h2>Your year</h2></div>
-        <div class="yr" id="yr"></div>
-        <div class="banked">
-          <div class="bignum num">8</div>
-          <div class="bl2"><div class="k">balanced weeks banked</div><div class="v">the ones that count toward what's ahead</div></div>
-          <div class="tick">&#9650; and counting</div>
+        <div class="wkrow cur">
+          <div class="wl"><span class="wn">Week 3</span><span class="ws" id="cur-ws">On pace for Level 3</span></div>
+          <div class="wr"><span class="lvl top">This week</span><span class="chev">&#8250;</span></div>
         </div>
-        <div class="nextnote">Next moment: <b>the Turning Point</b>, around week 13. In the study this was where the shift stopped being a session thing for most people. However it lands for you, you're on your own timeline.</div>
+        <div class="wkrow">
+          <div class="wl"><span class="wn">Week 2</span><span class="ws">All four balanced</span></div>
+          <div class="wr"><span class="lvl">Level 3</span><span class="chev">&#8250;</span></div>
+        </div>
+        <div class="wkrow">
+          <div class="wl"><span class="wn">Week 1</span><span class="ws"><span class="lf">Vitality under 15%</span></span></div>
+          <div class="wr"><span class="lvl none">Not leveled</span><span class="chev">&#8250;</span></div>
+        </div>
+      </div>
+      <!-- YOUR YEAR (A-2 addition) -->
+      <div class="card">
+        <div class="shead"><h2>Your year</h2><span class="status">Week 3 of 52</span></div>
+        <div class="yr" id="yr"></div>
+        <div class="yrbank">
+          <div class="yn">1</div>
+          <div class="yl"><div class="yk">balanced week banked</div><div class="yv">the weeks that count toward what's ahead</div></div>
+          <div class="yt">&#9650; and counting</div>
+        </div>
+        <div class="yrule">Next: <b>your first month</b>, around week&nbsp;4. In the study this is where many people felt a first clear shift, some sooner, some later.</div>
       </div>
     </div>
 
     <div id="nav">
-      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18V5l11-2v13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><circle cx="20" cy="16" r="3"/></svg>Immersions</div>
-      <div class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14v4M9 9v9M14 5v13M19 11v7" stroke-linecap="round"/></svg>Progress</div>
-      <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z" stroke-linecap="round" stroke-linejoin="round"/></svg>Playlist</div>
+      <div><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 18V5l11-2v13" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3"/><circle cx="20" cy="16" r="3"/></svg></span>Immersions</div>
+      <div class="on"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14v4M9 9v9M14 5v13M19 11v7" stroke-linecap="round"/></svg></span>Progress</div>
+      <div><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-4.5-9.5-9A5 5 0 0 1 12 6a5 5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Playlist</div>
     </div>
   </div>
 
-<script>
-  // BALANCE bars — colours straight from tokens.json (primary -> gradEnd), text accent per family
-  var CATS=[
-    {label:'Core',c1:'#6521C9',c2:'#A737C8',ac:'#6521C9',v:34},
-    {label:'Love',c1:'#B90044',c2:'#CF4090',ac:'#B90044',v:22},
-    {label:'Vitality',c1:'#FF9112',c2:'#FFC251',ac:'#C25500',v:19},
-    {label:'Abundance',c1:'#12A56E',c2:'#46D99A',ac:'#0A7A52',v:25}
-  ];
-  var MIN=15;
-  (function(){
-    var scale=Math.max(40,Math.ceil(Math.max.apply(null,CATS.map(c=>c.v))*1.15));
-    var h='';
-    CATS.forEach(function(c){
-      var low=c.v<MIN, w=Math.min(100,c.v/scale*100);
-      var fill=low?'background:'+c.ac+'22':'background:linear-gradient(90deg,'+c.c1+','+c.c2+')';
-      h+='<div class="brow'+(low?' low':'')+'"><div class="bl"><div class="bn">'+c.label+'</div></div>'
-        +'<div class="btrack"><div class="bfill" style="width:'+w+'%;'+fill+'"></div></div>'
-        +'<div class="bpct num">'+c.v+'%</div></div>';
-    });
-    var bal=document.getElementById('bal'); bal.innerHTML=h;
-    var gp=(MIN/scale*100);
-    var gate=document.createElement('div'); gate.className='gate';
-    var lab=document.createElement('div'); lab.className='gatelab num'; lab.textContent='15%';
-    gate.style.left='calc(85px + (100% - 119px) * '+(gp/100)+')';
-    lab.style.left='calc(85px + (100% - 119px) * '+(gp/100)+')';
-    bal.appendChild(gate); bal.appendChild(lab);
-  })();
+  <script>
+    // colours straight from design/tokens.json — c1=primary, c2=gradEnd, tint + text accent per family
+    var CATS={
+      core:{label:'Core',c1:'#6521C9',c2:'#A737C8',tint:'#EFECFF',ac:'#6521C9'},
+      love:{label:'Love',c1:'#B90044',c2:'#CF4090',tint:'#FFE8EA',ac:'#B90044'},
+      vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',tint:'#FFEADA',ac:'#C25500'},
+      abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',tint:'#DCF4E8',ac:'#0A7A52'}
+    };
+    var MIN=15, KEYS=['core','love','vitality','abundance'];
+    var STATES={ ok:[28,24,18,30], low1:[28,22,11,39], low2:[36,42,13,9], low3:[61,14,13,12] };
+    function fmtList(a){ if(a.length===1)return a[0]; if(a.length===2)return a[0]+' and '+a[1]; return a.slice(0,-1).join(', ')+', and '+a[a.length-1]; }
+    function render(key){
+      var vals=STATES[key]||STATES.low1, lows=[];
+      vals.forEach(function(v,i){ if(v<MIN) lows.push(i); });
+      // shared horizontal scale sized to the data; the 15% gate is the ONE reference line
+      var scale=Math.max(40, Math.ceil(Math.max.apply(null,vals)*1.15));
+      var rh='';
+      vals.forEach(function(v,i){
+        var c=CATS[KEYS[i]], low=v<MIN, w=Math.min(100,v/scale*100);
+        // band word = the evaluative label; low recedes into the family tint, cleared carries the frequency gradient
+        var word=low?'quiet':'in tune';
+        var fill=low? 'background:'+c.tint : 'background:linear-gradient(90deg,'+c.c1+','+c.c2+')';
+        rh+='<div class="brow'+(low?' low':'')+'">'
+          +'<div class="bl"><div class="bn">'+c.label+'</div><div class="bw" style="color:'+(low?'#a8a2ad':c.ac)+'">'+word+'</div></div>'
+          +'<div class="btrack"><div class="bfill" style="width:'+w+'%;'+fill+'"></div></div>'
+          +'<div class="bpct">'+v+'%</div>'
+          +'</div>';
+      });
+      document.getElementById('bal-rows').innerHTML=rh;
+      // one gate line across all four bars, labeled once (position within the track column)
+      var rows=document.getElementById('bal-rows');
+      var gp=(MIN/scale*100);
+      var gate=document.createElement('div'); gate.className='gate';
+      var lab=document.createElement('div'); lab.className='gatelab'; lab.textContent='15%';
+      // the track column starts after the 84px label + 12px gap and ends before the 40px pct + 12px gap
+      gate.style.left='calc(96px + (100% - 148px) * '+(gp/100)+')';
+      lab.style.left='calc(96px + (100% - 148px) * '+(gp/100)+')';
+      rows.appendChild(gate); rows.appendChild(lab);
+      var stat=document.getElementById('bal-status');
+      stat.textContent = lows.length===0 ? 'Balanced' : lows.length+' under 15%';
+      // the glance layer: level + the one prose insight (self-referential, calm)
+      var head=document.getElementById('hero-head'), sub=document.getElementById('hero-sub'), ins=document.getElementById('hero-insight');
+      var topIdx=vals.indexOf(Math.max.apply(null,vals)), topName=CATS[KEYS[topIdx]].label;
+      if(lows.length===0){
+        head.innerHTML="You're on <em>Level&nbsp;2</em>";
+        ins.textContent="All four frequencies are getting their time. "+topName+" carried your week.";
+        sub.innerHTML="Time and balance both on track.";
+      } else {
+        var ln=lows.map(function(i){return CATS[KEYS[i]].label;}), list=fmtList(ln);
+        head.innerHTML="Almost at <em>Level&nbsp;2</em>";
+        ins.textContent="You listened most to "+topName+". "+list+(ln.length===1?" has":" have")+" been quiet this week.";
+        sub.innerHTML="Your time's on track. A little more "+(ln.length===1?list:"in each")+" locks your level in.";
+      }
+      var note=document.getElementById('bal-note');
+      if(lows.length===0){ note.innerHTML='<span class="mk">&#10003;</span><span>All four are clearing the line. Nothing to fix this week.</span>'; }
+      else if(lows.length===1){ var i=lows[0]; note.innerHTML='<span class="mk">&#9650;</span><span>'+CATS[KEYS[i]].label+' is <b>'+(MIN-vals[i])+'% short</b> of 15%. A little more this week will do it.</span>'; }
+      else { note.innerHTML='<span class="mk">&#9650;</span><span><b>'+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+'</b> are under 15%. Give each a bit more time this week to lock your level in.</span>'; }
+      document.getElementById('cur-ws').textContent = lows.length ? 'On pace for Level 3 · '+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+' quiet' : 'On pace for Level 3';
+    }
+    function setState(key){
+      render(key);
+      ['ok','low1','low2','low3'].forEach(function(k){ var b=document.getElementById('btn-'+k); if(b) b.classList.toggle('on', k===key); });
+    }
+    var h=location.hash, start='low1';
+    if(h.indexOf('ok')>=0) start='ok'; else if(h.indexOf('low3')>=0) start='low3'; else if(h.indexOf('low2')>=0) start='low2';
+    setState(start);
 
-  // CHAIN — 9 weeks: mostly full, one L1 (lighter), one gap; current week highlighted
-  (function(){
-    var weeks=['full','l2','full','gap','l1','full','l2','full','cur'];
-    var h='';
-    weeks.forEach(function(w){
-      var cls = w==='cur' ? 'full cur' : w;
-      h+='<div class="clink '+cls+'"></div>';
-    });
-    document.getElementById('chain').innerHTML=h;
-  })();
-
-  // YEAR — week 9 of 52, milestone moments, You pin at calendar position (Option A: calendar bar)
-  (function(){
-    var MS=[{w:4,l:'Month 1'},{w:13,l:'Turning point'},{w:26,l:'Half year'},{w:52,l:'Birthday'}];
-    var cal=9;
-    function pct(w){return w/52*100;}
-    var h='<div class="yrtrack"><div class="yrfill" style="width:'+pct(cal)+'%"></div></div>';
-    MS.forEach(function(m){
-      var hit=cal>=m.w;
-      h+='<div class="mstick'+(hit?' hit':'')+'" style="left:calc('+pct(m.w)+'% - 1px)"></div>';
-      h+='<div class="mslab" style="left:'+pct(m.w)+'%"><b>Wk '+m.w+'</b>'+m.l+'</div>';
-    });
-    h+='<div class="youpin" style="left:'+pct(cal)+'%"><div class="dot"></div><div class="lab">You</div></div>';
-    document.getElementById('yr').innerHTML=h;
-  })();
-</script>
+    // YOUR YEAR arc (A-2): calendar bar, milestone moments, You pin
+    (function(){
+      var MS=[{w:4,l:'Month 1'},{w:13,l:'Turning point'},{w:26,l:'Half year'},{w:52,l:'Birthday'}];
+      var cal=3; function pct(w){return w/52*100;}
+      var h='<div class="yrtrack"><div class="yrfill" style="width:'+pct(cal)+'%"></div></div>';
+      MS.forEach(function(m){ var hit=cal>=m.w;
+        h+='<div class="mstick'+(hit?' hit':'')+'" style="left:calc('+pct(m.w)+'% - 1px)"></div>';
+        h+='<div class="mslab" style="left:'+pct(m.w)+'%"><b>Wk '+m.w+'</b>'+m.l+'</div>'; });
+      h+='<div class="youpin" style="left:'+pct(cal)+'%"><div class="dot"></div><div class="lab">You</div></div>';
+      document.getElementById('yr').innerHTML=h;
+    })();
+  </script>
 </body></html>
