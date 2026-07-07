@@ -289,30 +289,47 @@ const ZPAL={
 const FAM={'quiet-success':'halo','kindred-spirits':'mandala','elysian-surge':'burst',
            'starseed':'weave','astrolith':'iris','cosmic-drift':'orbit','galactic-slumber':'galaxy'};
 
-/* the frequency marks, matched to the app: soft two-hue gradient orbs, lit upper-left,
-   no white specular, no hard rim. Same form for all four; the colour is the identity. */
+/* the frequency marks, matched to the live-site orbs: a barely-off-circle smooth shape,
+   two hues drifting sideways into each other, a light-tint bloom for shading (the "light
+   gradient accent" we kept from the old site), and a soft halo that dissolves the edge.
+   Same form for all four; the colour is the identity. */
 function drawBlob(cv,catk){
-  const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=Math.min(W,H)*0.40;
-  const P=ZPAL[catk]||ZPAL.core, pr=hx(P.d[0]), gl=hx(P.s[0][1]), dp=hx(FREQS_DEEP[catk]);
+  const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=Math.min(W,H)*0.37;
+  const f=FREQS[catk]||FREQS.core, c1=hx(f.c1), c2=hx(f.c2), lt=hx(f.soft);
   x.clearRect(0,0,W,H);
-  // soft on-hue glow
-  const halo=x.createRadialGradient(cx,cy,R*0.62,cx,cy,R*1.5);
-  halo.addColorStop(0,rgba(pr,0.16)); halo.addColorStop(1,rgba(pr,0));
-  x.fillStyle=halo; x.beginPath(); x.arc(cx,cy,R*1.5,0,7); x.fill();
-  // orb body: a soft diagonal two-hue wash (flat like the app, no 3D hotspot, no rim shadow)
-  x.save(); x.beginPath(); x.arc(cx,cy,R,0,7); x.clip();
-  const g=x.createLinearGradient(cx-R*0.75,cy-R*0.85, cx+R*0.7,cy+R*0.9);
-  g.addColorStop(0, rgba(gl,1)); g.addColorStop(0.55, rgba(pr,1)); g.addColorStop(1, rgba(dp,1));
-  x.fillStyle=g; x.fillRect(cx-R,cy-R,R*2,R*2);
-  // a gentle light bloom in the upper-left, soft not plastic
-  const bloom=x.createRadialGradient(cx-R*0.3,cy-R*0.34,0, cx-R*0.3,cy-R*0.34,R*0.95);
-  bloom.addColorStop(0, rgba(gl,0.42)); bloom.addColorStop(1, rgba(gl,0));
-  x.fillStyle=bloom; x.fillRect(cx-R,cy-R,R*2,R*2);
+  // the shared silhouette: pretty much a circle, gently off (fixed phases, identical every time)
+  function path(scale){ x.beginPath();
+    for(let i=0;i<=96;i++){ const a=i/96*6.2832;
+      const r=R*scale*(1 + 0.042*Math.sin(2*a+0.9) + 0.024*Math.sin(3*a+2.1));
+      const px=cx+Math.cos(a)*r, py=cy+Math.sin(a)*r;
+      i===0?x.moveTo(px,py):x.lineTo(px,py); } x.closePath(); }
+  // soft on-hue halo, drawn first so the dissolved rim melts into it
+  const halo=x.createRadialGradient(cx,cy,R*0.5,cx,cy,R*1.55);
+  halo.addColorStop(0,rgba(c1,0.22)); halo.addColorStop(1,rgba(c1,0));
+  x.fillStyle=halo; x.fillRect(0,0,W,H);
+  x.save(); path(1); x.clip();
+  // body: the two hues drifting sideways into each other, with real territory for each
+  // (deep anchors the far left, c1 owns the left half, c2 clearly owns the right, like the reference orbs)
+  const dp=hx(f.deep);
+  const body=x.createLinearGradient(cx-R,cy+R*0.3, cx+R,cy-R*0.3);
+  body.addColorStop(0,rgba(dp,1)); body.addColorStop(0.3,rgba(c1,1));
+  body.addColorStop(0.72,rgba(c2,1)); body.addColorStop(1,rgba(c2,1));
+  x.fillStyle=body; x.fillRect(cx-R*1.2,cy-R*1.2,R*2.4,R*2.4);
+  // reinforce the second hue drifting in from the right, soft
+  const drift=x.createRadialGradient(cx+R*0.55,cy-R*0.1,0, cx+R*0.55,cy-R*0.1,R*1.05);
+  drift.addColorStop(0,rgba(c2,0.55)); drift.addColorStop(1,rgba(c2,0));
+  x.fillStyle=drift; x.fillRect(cx-R*1.2,cy-R*1.2,R*2.4,R*2.4);
+  // the light-gradient accent: a broad soft wash of the light tint from above (shading, not a highlight)
+  const bloom=x.createRadialGradient(cx-R*0.2,cy-R*0.6,R*0.1, cx-R*0.2,cy-R*0.6,R*1.35);
+  bloom.addColorStop(0,rgba(lt,0.38)); bloom.addColorStop(1,rgba(lt,0));
+  x.fillStyle=bloom; x.fillRect(cx-R*1.2,cy-R*1.2,R*2.4,R*2.4);
+  // dissolve the rim (no hard vector edge, no ring)
+  const fade=x.createRadialGradient(cx,cy,R*0.86,cx,cy,R*1.08);
+  fade.addColorStop(0,'rgba(0,0,0,0)'); fade.addColorStop(1,'rgba(0,0,0,1)');
+  x.globalCompositeOperation='destination-out';
+  x.fillStyle=fade; x.fillRect(cx-R*1.2,cy-R*1.2,R*2.4,R*2.4);
+  x.globalCompositeOperation='source-over';
   x.restore();
-  // feather the very edge into the white card so it is not a hard vector circle
-  const rim=x.createRadialGradient(cx,cy,R*0.93,cx,cy,R*1.02);
-  rim.addColorStop(0,'rgba(255,255,255,0)'); rim.addColorStop(1,'rgba(255,255,255,1)');
-  x.fillStyle=rim; x.beginPath(); x.arc(cx,cy,R*1.02,0,7); x.fill();
 }
 const FREQS_DEEP={core:'#38007A',love:'#6E0024',vitality:'#BC6700',abundance:'#0A6B48'};
 function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
