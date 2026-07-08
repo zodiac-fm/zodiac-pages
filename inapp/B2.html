@@ -934,4 +934,5 @@ applyGraduated();
 </script>
 <script>/* AUTO-BADGE: single source of truth for the corner badge. Derived from the page filename (app-A -> A), applied to every .appletter so they can never disagree and a cloned page auto-shows its own name. Override with window.APP_BADGE for special names. */
 (function(){function setBadge(){var b=window.APP_BADGE;if(!b){var s=(location.pathname.split("/").pop()||"").replace(/\.html$/,"").replace(/^app-/,"");b=s.toUpperCase();}document.querySelectorAll(".appletter").forEach(function(e){e.textContent=b;});}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setBadge);}else{setBadge();}})();</script>
+<script src="ministat.js"></script>
 </body></html>
