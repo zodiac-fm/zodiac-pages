@@ -85,31 +85,41 @@
     return { total: total, byFreq: byFreq, balanced: balanced, empty: total === 0, shortfalls: shortfalls, floor: floor, freqs: freqs };
   }
 
-  // ---- how many songs of a short frequency to add to clear the floor.
-  //      Adding a song raises that frequency AND the total, so it is not just
-  //      "fill the gap". Solve (x + kL) / (T + kL) >= p  for k:
-  //         k >= (pT - x) / (L * (1 - p))
-  //      deficitSec = pT - x (seconds short of the floor at the current total).
-  //      songLenSec  = a representative length for that frequency. ----
-  function songsToAdd(deficitSec, songLenSec, floor) {
+  // ---- how many MORE seconds of a short frequency are needed to clear the floor.
+  //      Adding time raises that frequency AND the total, so it is not just
+  //      "fill the gap". Adding S seconds clears when (x + S)/(T + S) >= p, i.e.
+  //         S >= (pT - x) / (1 - p)
+  //      deficitSec = pT - x (seconds short of the floor at the current total). ----
+  function neededSec(deficitSec, floor) {
     floor = floor != null ? floor : FLOOR;
-    if (deficitSec <= 0) return 0;
-    if (!songLenSec || songLenSec <= 0) return null; // length unknown -> "add a song", no number
-    return Math.max(1, Math.ceil(deficitSec / (songLenSec * (1 - floor))));
+    return deficitSec > 0 ? deficitSec / (1 - floor) : 0;
   }
 
-  // ---- representative song length per frequency = MEDIAN of the catalog for
-  //      that frequency (robust to a lone 1-hour track skewing an average). ----
-  function repLenByFreq(catalog, freqs) {
-    freqs = freqs || FREQS;
-    var buckets = {}; freqs.forEach(function (f) { buckets[f] = []; });
-    (catalog || []).forEach(function (s) { if (s && s.freq in buckets) buckets[s.freq].push(s.sec || 0); });
-    var out = {};
-    freqs.forEach(function (f) {
-      var a = buckets[f].slice().sort(function (x, y) { return x - y; });
-      out[f] = a.length ? a[Math.floor((a.length - 1) / 2)] : 0;
-    });
-    return out;
+  // ---- pick the REAL songs to add, using each candidate's EXACT length.
+  //      Returns the set of available songs whose exact lengths sum to at least
+  //      `need`, with the LEAST overshoot (tie: fewest songs). This lands on the
+  //      tightest honest answer ("add these one or two") and names them, instead
+  //      of guessing an average song length.
+  //      available: [{slug?, name?, freq?, sec}] candidate songs (exact seconds). ----
+  function bestAdditions(need, available) {
+    var pool = (available || []).filter(function (s) { return s && (s.sec || 0) > 0; });
+    if (need <= 0) return { songs: [], count: 0, addedSec: 0, cleared: true };
+    // small catalogs per frequency -> exact search; guard against a huge pool.
+    if (pool.length > 18) {
+      var asc = pool.slice().sort(function (a, b) { return a.sec - b.sec; }), pick = [], sum = 0;
+      for (var i = 0; i < asc.length && sum < need; i++) { pick.push(asc[i]); sum += asc[i].sec; }
+      return { songs: pick, count: pick.length, addedSec: sum, cleared: sum >= need };
+    }
+    var best = null, n = pool.length;
+    for (var mask = 1; mask < (1 << n); mask++) {
+      var s = 0, songs = [];
+      for (var b = 0; b < n; b++) if (mask & (1 << b)) { s += pool[b].sec; songs.push(pool[b]); }
+      if (s >= need && (!best || s < best.addedSec || (s === best.addedSec && songs.length < best.count)))
+        best = { songs: songs, count: songs.length, addedSec: s, cleared: true };
+    }
+    if (best) return best;
+    var all = pool.reduce(function (a, x) { return a + x.sec; }, 0);
+    return { songs: pool.slice(), count: pool.length, addedSec: all, cleared: false }; // catalog can't clear it
   }
 
   // ---- the single call a view makes ----
@@ -137,9 +147,19 @@
     // 3) balance facts on the projected totals
     var res = balanceOf(proj, { floor: floor, freqs: freqs });
 
-    // 4) recommendation: neediest frequency + how many songs to add
-    var rep = repLenByFreq(input.catalog, freqs);
-    res.shortfalls.forEach(function (sf) { sf.songsToAdd = songsToAdd(sf.deficitSec, rep[sf.freq], floor); });
+    // 4) recommendation: neediest frequency + the real songs to add (exact lengths).
+    //    available = catalog songs of that frequency; caller can pre-filter out
+    //    songs already queued so it never suggests a duplicate.
+    var catalog = input.catalog || [];
+    res.shortfalls.forEach(function (sf) {
+      var avail = catalog.filter(function (s) { return s && s.freq === sf.freq; });
+      sf.neededSec = neededSec(sf.deficitSec, floor);
+      var pick = bestAdditions(sf.neededSec, avail);
+      sf.suggest = pick.songs;        // the actual songs, each with its exact sec
+      sf.songsToAdd = pick.count;     // how many that is
+      sf.addsSec = pick.addedSec;     // exact minutes those songs add
+      sf.canClear = pick.cleared;     // false if the catalog can't get this freq to 15%
+    });
     res.primary = res.shortfalls[0] || null;
 
     res.window = window;
@@ -147,10 +167,48 @@
     return res;
   }
 
+  // ---- the WHOLE fix at once. Because filling one frequency shrinks the others'
+  //      share, short frequencies must be solved together or a razor-tight fill
+  //      pushes a neighbor back under. This walks the neediest frequency, adds the
+  //      smallest REAL song that clears it (with slack, so it survives later adds),
+  //      recomputes the whole pie, and repeats until every frequency holds >=15%.
+  //      Returns the exact list of songs to add. Never suggests the same song twice. ----
+  function plan(input) {
+    input = input || {};
+    var freqs = input.freqs || FREQS;
+    var floor = input.floor != null ? input.floor : FLOOR;
+    var window = input.window !== undefined ? input.window
+      : weekWindow(input.now != null ? input.now : Date.now());
+    var played = timeUnderFrequency(input.events, window, freqs);
+    var proj = {}; freqs.forEach(function (f) { proj[f] = played[f]; });
+    (input.projection || []).forEach(function (p) { if (p && p.freq in proj) proj[p.freq] += (p.sec || 0); });
+    var catalog = input.catalog || [];
+    var used = {};
+    (input.projection || []).forEach(function (p) { if (p && p.slug) used[p.freq + '|' + p.slug] = true; });
+    var additions = [], guard = 0;
+    while (guard++ < 500) {
+      var res = balanceOf(proj, { floor: floor, freqs: freqs });
+      if (res.empty || res.balanced) break;
+      var sf = res.shortfalls[0];
+      var avail = catalog.filter(function (s) { return s && s.freq === sf.freq && !used[sf.freq + '|' + (s.slug || s.name)]; });
+      if (!avail.length) break; // the catalog can't lift this frequency to the floor
+      var need = neededSec(sf.deficitSec, floor);
+      var asc = avail.slice().sort(function (a, b) { return a.sec - b.sec; });
+      var pick = null;
+      for (var i = 0; i < asc.length; i++) { if (asc[i].sec >= need) { pick = asc[i]; break; } }
+      if (!pick) pick = asc[asc.length - 1]; // none clears it alone -> take the longest, loop again
+      used[sf.freq + '|' + (pick.slug || pick.name)] = true;
+      additions.push(pick);
+      proj[sf.freq] += pick.sec;
+    }
+    var fin = balanceOf(proj, { floor: floor, freqs: freqs });
+    return { additions: additions, balanced: fin.balanced, byFreq: fin.byFreq, total: fin.total };
+  }
+
   return {
     FREQS: FREQS, FLOOR: FLOOR,
     toSec: toSec, weekWindow: weekWindow,
     timeUnderFrequency: timeUnderFrequency, balanceOf: balanceOf,
-    songsToAdd: songsToAdd, repLenByFreq: repLenByFreq, compute: compute
+    neededSec: neededSec, bestAdditions: bestAdditions, compute: compute, plan: plan
   };
 });
