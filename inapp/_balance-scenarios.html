@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#EFE9DE;font-family:'Switzer',system-ui,sans-serif;color:#1a1620;padding:14px 14px 30px}
+  .head{font-size:13px;font-weight:700;color:#8a8290;letter-spacing:.04em;text-transform:uppercase;margin:14px 4px 8px}
+  .cap{font-size:11.5px;color:#8a8290;margin:0 4px 10px;line-height:1.35}
+  /* ---- the panel ---- */
+  .panel{background:#fff;border:1px solid #eadfce;border-radius:15px;padding:13px 15px 12px;margin-bottom:11px;box-shadow:0 1px 2px rgba(56,0,122,.04)}
+  .ptitle{font-size:14px;font-weight:600;color:#1a1620}
+  .psub{font-size:11.5px;color:#8a8290;margin-top:2px;line-height:1.3}
+  .rows{margin-top:11px;display:flex;flex-direction:column;gap:8px}
+  .r{display:flex;align-items:center;font-size:13px}
+  .dot{width:9px;height:9px;border-radius:50%;flex:none;margin-right:9px}
+  .nm{font-weight:600;color:#3a3540}
+  .r.ok .nm{color:#a49db0;font-weight:500}
+  .state{margin-left:auto;font-size:12px;color:#a49db0;font-weight:500}
+  .r.low .state{color:inherit;font-weight:700}
+  .r.low{}
+  .chk{color:#0A7A52;font-weight:700}
+  .act{font-size:11px;color:#8a8290;margin-left:6px;font-weight:500}
+  /* collapsed line */
+  .barrow{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #eadfce;border-radius:13px;padding:11px 14px;margin-bottom:9px}
+  .fbln{font-size:13px;color:#55505c;padding-right:12px}
+  .fbln b{font-weight:700}
+  .fbln.ok{color:#0A7A52;font-weight:600}
+  .play{font-size:12px;font-weight:700;color:#fff;background:#2A2530;border-radius:15px;padding:7px 14px;white-space:nowrap}
+  .scn{font-size:11px;color:#b3aab8;margin:0 4px 4px;font-style:italic}
+</style></head><body>
+
+<div class="head">Redesign · the expanded panel (opens by default, teaches, responds)</div>
+<div class="cap">Names the four frequencies, says why (each wants ~15% of your week), shows where you stand, and each short one shows how many minutes it needs. Check a song and that number ticks down and flips to a check. THAT is the responsiveness that was missing.</div>
+
+<div class="scn">One frequency low (the everyday case)</div>
+<div class="panel">
+  <div class="ptitle">Your week in balance</div>
+  <div class="psub">A little of all four keeps you tuned. Each wants about 15% of your listening.</div>
+  <div class="rows">
+    <div class="r ok"><span class="dot" style="background:#6521C9"></span><span class="nm">Core</span><span class="state"><span class="chk">&#10003;</span> covered</span></div>
+    <div class="r ok"><span class="dot" style="background:#B90044"></span><span class="nm">Love</span><span class="state"><span class="chk">&#10003;</span> covered</span></div>
+    <div class="r low" style="color:#C25500"><span class="dot" style="background:#C25500"></span><span class="nm" style="color:#C25500">Vitality</span><span class="state">7 min short<span class="act">check one below</span></span></div>
+    <div class="r ok"><span class="dot" style="background:#0A7A52"></span><span class="nm">Abundance</span><span class="state"><span class="chk">&#10003;</span> covered</span></div>
+  </div>
+</div>
+
+<div class="scn">Two out of whack</div>
+<div class="panel">
+  <div class="ptitle">Your week in balance</div>
+  <div class="psub">A little of all four keeps you tuned. Each wants about 15% of your listening.</div>
+  <div class="rows">
+    <div class="r ok"><span class="dot" style="background:#6521C9"></span><span class="nm">Core</span><span class="state"><span class="chk">&#10003;</span> covered</span></div>
+    <div class="r ok"><span class="dot" style="background:#B90044"></span><span class="nm">Love</span><span class="state"><span class="chk">&#10003;</span> covered</span></div>
+    <div class="r low" style="color:#C25500"><span class="dot" style="background:#C25500"></span><span class="nm" style="color:#C25500">Vitality</span><span class="state">7 min short</span></div>
+    <div class="r low" style="color:#0A7A52"><span class="dot" style="background:#0A7A52"></span><span class="nm" style="color:#0A7A52">Abundance</span><span class="state">15 min short</span></div>
+  </div>
+</div>
+
+<div class="scn">New listener · leaning all on Core (and one they don't own yet)</div>
+<div class="panel">
+  <div class="ptitle">Your week in balance</div>
+  <div class="psub">A little of all four keeps you tuned. Each wants about 15% of your listening.</div>
+  <div class="rows">
+    <div class="r ok"><span class="dot" style="background:#6521C9"></span><span class="nm">Core</span><span class="state"><span class="chk">&#10003;</span> covered</span></div>
+    <div class="r low" style="color:#B90044"><span class="dot" style="background:#B90044"></span><span class="nm" style="color:#B90044">Love</span><span class="state">12 min short</span></div>
+    <div class="r low" style="color:#C25500"><span class="dot" style="background:#C25500"></span><span class="nm" style="color:#C25500">Vitality</span><span class="state">18 min short</span></div>
+    <div class="r low" style="color:#0A7A52"><span class="dot" style="background:#0A7A52"></span><span class="nm" style="color:#0A7A52">Abundance</span><span class="state">none yet<span class="act">add one</span></span></div>
+  </div>
+</div>
+
+<div class="scn">Balanced · the payoff</div>
+<div class="panel">
+  <div class="ptitle" style="color:#0A7A52">&#10003; Your week is in balance</div>
+  <div class="psub">All four frequencies are covered. Press play.</div>
+  <div class="rows">
+    <div class="r ok"><span class="dot" style="background:#6521C9"></span><span class="nm">Core</span><span class="state"><span class="chk">&#10003;</span></span></div>
+    <div class="r ok"><span class="dot" style="background:#B90044"></span><span class="nm">Love</span><span class="state"><span class="chk">&#10003;</span></span></div>
+    <div class="r ok"><span class="dot" style="background:#C25500"></span><span class="nm">Vitality</span><span class="state"><span class="chk">&#10003;</span></span></div>
+    <div class="r ok"><span class="dot" style="background:#0A7A52"></span><span class="nm">Abundance</span><span class="state"><span class="chk">&#10003;</span></span></div>
+  </div>
+</div>
+
+</body></html>
