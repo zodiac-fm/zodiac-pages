@@ -366,8 +366,8 @@
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
-    <div class="barrow"><div class="selall" data-scope="favRows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
     <div class="fbbal" id="fbbal"><div class="fbbal-hd">Frequency balance</div><div class="fbbal-cols" id="fbbalCols"></div></div>
+    <div class="barrow"><div class="selall" data-scope="favRows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
     <div class="swrap">
     <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 8 12 4 16 8"/><polyline points="8 16 12 20 16 16"/><line x1="12" y1="4" x2="12" y2="20"/></svg></span>Hold to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
@@ -930,8 +930,8 @@ window.addEventListener('DOMContentLoaded',applyGraduated);
 applyGraduated();
 </script>
 <style id="fbln-css">
-  .fbbal{margin:6px 20px 12px}
-  .fbbal-hd{font-size:10.5px;font-weight:700;color:#8a8290;letter-spacing:.09em;text-transform:uppercase;margin-bottom:12px}
+  .fbbal{margin:6px 20px 4px}
+  .fbbal-hd{font-size:10.5px;font-weight:700;color:#8a8290;letter-spacing:.09em;text-transform:uppercase;margin-bottom:11px}
   .fbbal-cols{display:flex}
   .fbbal-c{flex:1;text-align:center}
   .fbbal-dot{width:15px;height:15px;border-radius:50%;margin:0 auto 7px}
@@ -966,11 +966,14 @@ applyGraduated();
   }
   window.fbUpd = render;
   if (window.buildFavs){ var _bf = window.buildFavs; window.buildFavs = function(){ _bf.apply(this, arguments); render(); }; }
-  document.addEventListener('DOMContentLoaded', function(){
-    var favs = document.getElementById('favs');
-    if (favs) favs.addEventListener('click', function(){ setTimeout(render, 0); });
-  });
-  render();
+  function boot(){
+    render();
+    var fr = document.getElementById('favRows');
+    if (fr && window.MutationObserver){
+      new MutationObserver(function(){ render(); }).observe(fr, { subtree:true, attributes:true, attributeFilter:['class'] });
+    }
+  }
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
 </script>
 <script>/* AUTO-BADGE: single source of truth for the corner badge. Derived from the page filename (app-A -> A), applied to every .appletter so they can never disagree and a cloned page auto-shows its own name. Override with window.APP_BADGE for special names. */
