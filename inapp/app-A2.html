@@ -204,6 +204,9 @@
   .legend .lgsep{color:#cfc8ba;margin:0 2px}
   .qbox,.sic .heart{cursor:pointer}
   .grip{cursor:grab;touch-action:none}
+  .row{transition:box-shadow .16s ease, transform .12s ease}
+  .row.dragging{box-shadow:0 10px 28px rgba(26,22,32,.18);transform:scale(1.025);opacity:.98;position:relative;z-index:4}
+  .grip.gright{align-self:center;color:#d0cbd4;padding:0 2px 0 6px;margin-left:2px}
   #favRows .row.dragging,#rows .row.dragging{opacity:.95;box-shadow:0 12px 26px rgba(56,0,122,.20);transform:scale(1.015);position:relative;z-index:6}
   .legend2{flex-direction:column;align-items:flex-start;gap:7px;padding-bottom:12px}
   .legend3{align-items:flex-start;justify-content:space-between;gap:10px;padding-bottom:12px}
@@ -291,7 +294,7 @@
         <div class="bscale"><div class="bstrack" id="bpTrack"></div><div class="bslabs" id="bpLabs"></div></div>
         <p id="bpWhat"></p><p id="bpYours"></p>
       </div></div>
-    <div class="ctarow"><span style="display:none" id="catHz"></span><div class="selall" data-scope="rows"><span class="qbox"></span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
+    <div class="ctarow"><span style="display:none" id="catHz"></span><div class="selall" data-scope="rows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
     <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
     <div class="rows" id="rows"></div>
     </div>
@@ -360,7 +363,7 @@
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
-    <div class="barrow"><div class="selall" data-scope="favRows"><span class="qbox"></span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
+    <div class="barrow"><div class="selall" data-scope="favRows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
     <div class="swrap">
     <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
@@ -517,7 +520,7 @@ function buildRows(){
   const cat=CATS[catKey]; rows.innerHTML=''; rowSongs=cat.songs;
   cat.songs.forEach((s,i)=>{
     const r=document.createElement('div');r.className='row';r.innerHTML=
-     `<div class="lcol"><span class="grip">${GRIP}</span><span class="qbox${(i%4===0)?' on':''}"></span></div><div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
+     `<div class="lcol"><span class="qbox${(i%4===0)?' on':''}"></span></div><div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
       <div class="meta mcols">
         <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab">&#9679; ${cat.label}</div></div>
         <div class="mrail"><div class="sic"><span class="dl${(i%2===1)?' on':''}">${DL}</span><span class="heart${(i%3===0)?' on':''}">${(i%3===0)?'&#9829;':'&#9825;'}</span></div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
@@ -670,7 +673,7 @@ const FAVS=[['core','starseed'],['love','kindred-spirits'],['vitality','astrolit
 function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
  FAVS.forEach(([ck,slug],i)=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
   const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);
-  r.innerHTML=`<div class="lcol"><span class="grip">${GRIP}</span><span class="qbox${(i%3===0)?' on':''}"></span></div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
+  r.innerHTML=`<div class="lcol"><span class="qbox${(i%3===0)?' on':''}"></span></div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
    <div class="meta mcols">
     <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div></div>
     <div class="mrail"><div class="sic"><span class="dl${(i%2===0)?' on':''}">${DL}</span><span class="heart on" style="color:${cat.cink}">&#9829;</span></div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
@@ -848,16 +851,33 @@ setCat(catKey);vrz();drawViz();setIcons();
  const _sc=window.setCat;window.setCat=function(k){_sc(k);upd();};
  const _bf=window.buildFavs;window.buildFavs=function(){_bf();upd();};
  upd();
- let drag=null,moved=false;
- function dragify(c){c.addEventListener('pointerdown',function(e){const g=e.target.closest('.grip');if(!g)return;
-  drag=g.closest('.row');moved=false;drag.classList.add('dragging');e.preventDefault();});}
+ function addGrips(){document.querySelectorAll('#rows .row, #favRows .row').forEach(function(r){if(!r.querySelector('.gright')){var g=document.createElement('span');g.className='grip gright';g.innerHTML=GRIP;r.appendChild(g);}});}
+ var _scg=window.setCat;window.setCat=function(k){_scg(k);addGrips();};
+ var _bfg=window.buildFavs;window.buildFavs=function(){_bfg();addGrips();};
+ addGrips();
+ let drag=null,moved=false,holdT=null,armed=null,sy=0,sx=0,dragSW=null;
+ function beginDrag(row){drag=row;moved=false;row.classList.add('dragging');
+  var sw=row.closest('.swrap'); if(sw){dragSW=sw;sw.style.touchAction='none';}
+  if(navigator.vibrate)navigator.vibrate(12);}
+ function cancelHold(){if(holdT){clearTimeout(holdT);holdT=null;} armed=null;}
+ function dragify(c){c.addEventListener('pointerdown',function(e){
+   if(e.target.closest('.qbox,.heart,.dl'))return;      // let the row's own controls act
+   var row=e.target.closest('.row'); if(!row)return;
+   armed=row;sy=e.clientY;sx=e.clientX;
+   holdT=setTimeout(function(){holdT=null;if(armed)beginDrag(armed);},220);
+ });}
  dragify(document.getElementById('favRows'));dragify(document.getElementById('rows'));
- document.addEventListener('pointermove',function(e){if(!drag)return;moved=true;e.preventDefault();
+ document.addEventListener('pointermove',function(e){
+  if(!drag){ if(holdT&&(Math.abs(e.clientY-sy)>10||Math.abs(e.clientX-sx)>10)) cancelHold(); return; }
+  moved=true;e.preventDefault();
   const c=drag.parentElement,y=e.clientY,sibs=[...c.querySelectorAll('.row')].filter(r=>r!==drag);
   for(const s of sibs){const r=s.getBoundingClientRect();if(y<r.top+r.height/2){c.insertBefore(drag,s);return;}}
   c.appendChild(drag);},{passive:false});
- document.addEventListener('pointerup',function(){if(!drag)return;drag.classList.remove('dragging');drag=null;
-  if(moved){sup=true;setTimeout(function(){sup=false;},150);}});
+ document.addEventListener('pointerup',function(){
+  cancelHold();
+  if(dragSW){dragSW.style.touchAction='';dragSW=null;}
+  if(!drag)return; drag.classList.remove('dragging'); drag=null;
+  sup=true; setTimeout(function(){sup=false;},150);});   // holding always suppresses the play-tap
 })();
 </script>
 <script>
@@ -887,14 +907,14 @@ document.querySelectorAll('.tiphead').forEach(function(h){h.addEventListener('cl
 // after-a-few-sessions layout: guide below the song list. (#return still = bare headline;
 // hashes combine, e.g. #return-graduated.)
 function applyGraduated(){
-  var on=location.hash.indexOf('graduated')>=0;
-  var tip=document.querySelector('#list .swrap .tipcard'), rows=document.getElementById('rows');
-  if(!tip||!rows) return;
-  if(on && tip.nextSibling!==null && tip.compareDocumentPosition(rows) & Node.DOCUMENT_POSITION_FOLLOWING){
-    rows.parentNode.insertBefore(tip, rows.nextSibling); tip.style.marginBottom='96px'; rows.style.paddingBottom='10px';
-  } else if(!on && (rows.compareDocumentPosition(tip) & Node.DOCUMENT_POSITION_FOLLOWING)){
-    rows.parentNode.insertBefore(tip, rows); tip.style.marginBottom=''; rows.style.paddingBottom='';
-  }
+  [['#list .swrap .tipcard','rows'],['#favs .swrap .tipcard','favRows']].forEach(function(p){
+    var tip=document.querySelector(p[0]), rows=document.getElementById(p[1]);
+    if(!tip||!rows) return;
+    if(tip.compareDocumentPosition(rows) & Node.DOCUMENT_POSITION_FOLLOWING){
+      rows.parentNode.insertBefore(tip, rows.nextSibling);
+    }
+    tip.style.marginBottom='96px'; rows.style.paddingBottom='10px';
+  });
 }
 window.addEventListener('hashchange',applyGraduated);
 window.addEventListener('DOMContentLoaded',applyGraduated);
