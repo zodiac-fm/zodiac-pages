@@ -1,10 +1,12 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Zodiac.fm · Progress A-2 (rebuilt around: where am I / on track / what it's building)</title>
+<title>Zodiac.fm · Progress A-2 (this week → balance → total → what to expect)</title>
 <style>
   /* app-A language: Canela + Suisse, cream canvas, white cards, Core Purple structure, frequency accents.
-     Rebuilt around the 3 new-user questions: (1) where am I right now (day), (2) am I on track (no math, low flagged),
-     (3) what is this building toward (total time under frequency + the real study outcomes). "How levels work" = a real dropdown. */
+     Restructure 2026-07-08 (Michael): drop the total-time block from the top; lead with This week; keep "How this works";
+     Balance card indicates banking; Total time under frequency gets its own card AFTER balance; "Milestones" becomes
+     "What to expect" = ~40 waypoints on a day/hour scale, showing only PAST + NEXT ahead, each with where it may land.
+     One left justification down the whole page. Copy is placeholder, pacing-safe (possibility, never a promise). */
   @font-face{font-family:'Canela';src:url('../explorations/fonts/Canela-Regular.otf');font-weight:400}
   @font-face{font-family:'Canela';src:url('../explorations/fonts/Canela-Medium.otf');font-weight:500}
   @font-face{font-family:'Canela';src:url('../explorations/fonts/Canela-Italic.otf');font-weight:400;font-style:italic}
@@ -36,113 +38,81 @@
   .ham{font-size:20px;color:#333}
   .scroll{position:relative;z-index:1;flex:1;overflow-y:auto;padding:0 0 20px}
 
-  /* util: DAY context + the levels dropdown trigger */
-  .util{display:flex;align-items:center;justify-content:space-between;padding:10px 22px 0}
+  /* util: DAY context + the "how this works" dropdown trigger */
+  .util{display:flex;align-items:center;justify-content:space-between;padding:12px 22px 0}
   .util .wk{font-size:13px;font-weight:700;color:var(--violet)}
   .util .wk span{font-weight:500;color:var(--mut)}
   .qlink{display:inline-flex;align-items:center;gap:6px;min-height:30px;font-size:12.5px;color:var(--violet);font-weight:700;cursor:pointer}
   .qlink .qchev{font-size:10px;transition:transform .2s;opacity:.8}
   .qlink.open .qchev{transform:rotate(180deg)}
-  /* the LEVELS dropdown panel (the interactive explainer, like the band press-to-open) */
   .lpanel{display:none;margin:8px 18px 0;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 17px 17px;box-shadow:0 6px 20px rgba(26,22,32,.06)}
   .lpanel.open{display:block}
   .lpanel .lp-lead{font-size:13px;line-height:1.5;color:var(--ink2)}
   .lpanel .lp-lead b{font-weight:700}
   .lprow{display:flex;gap:11px;align-items:baseline;margin-top:13px}
   .lprow .lpdot{flex:0 0 9px;height:9px;border-radius:50%;margin-top:5px;background:var(--violet-soft)}
-  .lprow.here .lpdot{background:linear-gradient(135deg,var(--violet),var(--violet-deep))}
   .lprow .lpn{font-size:13px;font-weight:700;color:var(--ink)}
   .lprow .lpn .lpm{font-weight:600;color:var(--soft);font-variant-numeric:lining-nums}
-  .lprow .lpn em{font-style:normal;font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#fff;background:var(--violet);border-radius:10px;padding:2px 7px;margin-left:5px}
   .lprow .lpd{font-size:12px;color:var(--mut);margin-top:2px;line-height:1.4}
 
-  .hero{padding:14px 22px 4px}
-  .hero .ey{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
-  .hero h1{font-family:'Canela',serif;font-size:33px;font-weight:500;line-height:1.06;letter-spacing:-.015em;margin-top:8px}
-  .hero h1 em{font-style:normal;color:var(--violet-deep)}
-  .hero .insight{font-family:'Canela',serif;font-style:italic;font-size:16.5px;line-height:1.46;color:var(--ink2);margin-top:10px;max-width:33ch}
-
-  /* HERO 2 · total balanced time as the calm headline (a short stat, left-aligned like the whole page) */
-  .hero2{padding:18px 22px 2px}
-  .hero2 .ey{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
-  .hero2 .bigstat{font-family:'Canela',serif;font-size:37px;font-weight:500;color:var(--violet-deep);line-height:1.04;letter-spacing:-.01em;margin-top:7px}
-  .hero2 .bigstat .gg{font-family:'Suisse',sans-serif;font-size:13px;font-weight:600;color:var(--mut);margin-left:9px;letter-spacing:0}
-  .hero2 .expect{font-size:13.5px;line-height:1.55;color:var(--ink2);margin-top:11px}
-  /* This week: the achievement line (passed the weekly minimum) */
-  .achieved{margin-top:14px;font-size:13px;line-height:1.5;color:var(--ink2)}
-  .achieved b{font-weight:700;color:#0A7A52}
-  .brow .bw{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
-
   .card{margin:14px 18px 0;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 18px 20px;box-shadow:0 6px 20px rgba(26,22,32,.05)}
+  .card:first-child{margin-top:14px}
   .shead{display:flex;align-items:center;gap:10px}
   .shead h2{font-family:'Canela',serif;font-size:19px;font-weight:500;color:var(--violet);letter-spacing:-.005em}
   .status{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;margin-left:auto;background:#fff;border:1px solid #e3dbcb;color:var(--ink2)}
   .status.good{color:#0A7A52;border-color:#cdeadd;background:#f2fbf6}
   .status.wait{color:var(--violet-deep);border-color:#ddd0f4;background:var(--violet-tint)}
+  .lead{font-size:12.5px;color:var(--mut);line-height:1.5;margin-top:2px}
 
-  /* THIS WEEK: time (no math, day-aware) then the four balance bars */
-  .avg{display:flex;align-items:baseline;gap:8px;margin-top:13px}
-  .avg .n{font-family:'Canela',serif;font-size:26px;font-weight:500;letter-spacing:-.01em}
+  /* THIS WEEK: time so far (no math), left-justified like everything else */
+  .avg{display:flex;align-items:baseline;gap:8px;margin-top:14px}
+  .avg .n{font-family:'Canela',serif;font-size:27px;font-weight:500;letter-spacing:-.01em}
   .avg .u{font-size:12.5px;color:var(--mut)}
-  .avg .side{font-size:12px;color:var(--soft);margin-left:auto;font-weight:500;font-variant-numeric:lining-nums}
-  .tline{position:relative;margin-top:24px;height:10px}
-  .ttrack{position:absolute;left:0;right:0;height:10px;border-radius:6px;background:var(--mist)}
-  .tfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,var(--violet),var(--violet-deep))}
-  .tmark{position:absolute;top:-5px;width:2px;height:20px;background:#d3cbbd;border-radius:2px}
-  .tmlab{position:absolute;top:18px;transform:translateX(-50%);font-size:9px;font-weight:700;letter-spacing:.02em;color:var(--soft);white-space:nowrap}
-  .tmlab.on{color:var(--violet-deep)}
-  .twords{margin-top:34px;font-size:13px;color:var(--ink2);line-height:1.5}
-  .twords b{font-weight:600}
+  .subline{font-size:12px;color:var(--soft);margin-top:8px;font-variant-numeric:lining-nums}
+  .achieved{margin-top:14px;font-size:13px;line-height:1.5;color:var(--ink2)}
+  .achieved b{font-weight:700;color:#0A7A52}
 
-  .baldiv{margin-top:20px;border-top:1px solid var(--line);padding-top:16px}
-  .balcap{font-size:12px;font-weight:600;color:var(--mut)}
+  /* BALANCE: control treatment (in tune / quiet) + banking indicator */
+  .bw{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
   .bal{position:relative;margin-top:14px}
   .brow{display:flex;align-items:center;gap:11px;min-height:40px}
   .brow .bl{flex:0 0 78px}
   .brow .bn{font-size:13px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
-  .brow.low .bn{color:var(--ink)}
   .brow .btrack{position:relative;flex:1 1 auto;height:10px;border-radius:6px;background:transparent}
   .brow .bfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px}
-  .brow .bpct{flex:0 0 66px;text-align:right;font-size:12.5px;font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap}
-  .brow .togo{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap;margin-left:6px}
+  .brow .bpct{flex:0 0 52px;text-align:right;font-size:12.5px;font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap}
   .gate{position:absolute;top:-15px;bottom:0;border-left:2px dashed #9a97a3;z-index:2}
   .gatelab{position:absolute;top:-16px;transform:translateX(-50%);font-size:9.5px;font-weight:700;color:var(--mut);background:var(--card);padding:0 5px;z-index:3}
-  .balnote{margin-top:14px;font-size:12.5px;line-height:1.5;color:var(--ink2)}
-  .balnote b{font-weight:700}
+  .balbank{display:flex;align-items:baseline;gap:9px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.5;color:var(--ink2)}
+  .balbank b{font-weight:700}
+  .bkdot{flex:0 0 8px;height:8px;border-radius:50%;align-self:center;background:var(--soft)}
+  .bkdot.on{background:#12A56E}
 
-  /* TIME UNDER FREQUENCY: the foundation number + what it's building toward */
+  /* TOTAL TIME UNDER FREQUENCY: its own card, after balance */
   .tuf{display:flex;align-items:baseline;gap:9px;margin-top:14px}
-  .tuf .big{font-family:'Canela',serif;font-size:38px;font-weight:500;color:var(--violet-deep);line-height:1;letter-spacing:-.01em}
+  .tuf .big{font-family:'Canela',serif;font-size:40px;font-weight:500;color:var(--violet-deep);line-height:1;letter-spacing:-.01em}
   .tuf .g{font-size:12.5px;color:var(--mut);font-weight:600}
-  .tufsub{font-size:12.5px;color:var(--mut);margin-top:8px;line-height:1.5}
-  .building{margin-top:16px;padding-top:15px;border-top:1px solid var(--line)}
-  .building .bh{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
-  .building p{font-size:13px;line-height:1.58;color:var(--ink2);margin-top:9px}
-  .building p b{font-weight:600;color:var(--ink)}
+  .tufsub{font-size:12.5px;color:var(--mut);margin-top:10px;line-height:1.55}
+  .tufexp{font-size:13px;line-height:1.58;color:var(--ink2);margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
 
-  /* MILESTONES: the lifetime ladder that replaced levels — named waypoints on balanced time */
-  .miles{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
-  .miles .mh{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
-  .mtrack{position:relative;height:8px;border-radius:6px;background:var(--mist);margin:15px 0 22px}
-  .mtfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,var(--violet),var(--violet-deep))}
-  .mtick{position:absolute;top:50%;width:11px;height:11px;border-radius:50%;transform:translate(-50%,-50%);background:#fff;border:2px solid #d8cfe4;z-index:2}
-  .mtick.hit{background:var(--violet-deep);border-color:var(--violet-deep)}
-  .mtick.now{background:#fff;border-color:var(--violet);box-shadow:0 0 0 4px var(--violet-tint)}
-  .mtlab{position:absolute;top:16px;transform:translateX(-50%);font-size:9px;font-weight:700;letter-spacing:.01em;color:var(--soft);white-space:nowrap;font-variant-numeric:lining-nums}
-  .mnext{background:var(--violet-tint);border-radius:14px;padding:13px 15px;margin-top:4px}
-  .mnext .ml{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--violet-deep)}
-  .mnext .mt{font-family:'Canela',serif;font-size:17px;font-weight:500;color:var(--ink);margin-top:5px;display:flex;align-items:baseline;gap:9px}
-  .mnext .mt .mgo{margin-left:auto;font-family:'Suisse',sans-serif;font-size:12px;font-weight:700;color:var(--violet-deep);white-space:nowrap}
-  .mnext .md{font-size:12.5px;color:var(--ink2);line-height:1.5;margin-top:7px}
-  .mlist{margin-top:14px}
-  .mrow{display:flex;align-items:flex-start;gap:11px;padding:8px 0}
-  .mrow .mdot{flex:0 0 17px;height:17px;border-radius:50%;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;line-height:1}
-  .mdot.done{background:linear-gradient(135deg,var(--violet),var(--violet-deep));color:#fff}
-  .mdot.next{background:#fff;border:2px solid var(--violet)}
-  .mdot.lock{background:var(--mist)}
-  .mrow .mn{font-size:13px;font-weight:700;color:var(--ink)}
-  .mrow .mn .mhrs{font-weight:600;color:var(--soft);font-size:12px;margin-left:7px;font-variant-numeric:lining-nums}
-  .mrow.islock .mn{color:var(--soft);font-weight:600}
+  /* WHAT TO EXPECT: waypoints on a day/hour scale, past + next only */
+  .exp{margin-top:2px}
+  .expnext{background:var(--violet-tint);border-radius:14px;padding:14px 15px;margin-top:15px}
+  .expnext .el{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--violet-deep)}
+  .expnext .et{font-family:'Canela',serif;font-size:18px;font-weight:500;color:var(--ink);margin-top:6px;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+  .expnext .et .eh{font-family:'Suisse',sans-serif;font-size:12px;font-weight:600;color:var(--violet-deep)}
+  .expnext .et .eeta{margin-left:auto;font-family:'Suisse',sans-serif;font-size:12px;font-weight:700;color:var(--violet-deep);white-space:nowrap}
+  .expnext .ed{font-size:12.5px;color:var(--ink2);line-height:1.52;margin-top:8px}
+  .expsec{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);margin:18px 0 2px}
+  .exprow{display:flex;align-items:center;gap:11px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .exprow:last-child{border-bottom:none}
+  .exd{flex:0 0 16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--violet),var(--violet-deep))}
+  .exprow.up .exd{background:#fff;border:2px solid var(--violet-soft)}
+  .exprow .exn{font-size:13px;font-weight:600;color:var(--ink)}
+  .exprow.done .exn{color:var(--soft);font-weight:600}
+  .exprow .exh{font-size:12px;color:var(--soft);margin-left:auto;font-variant-numeric:lining-nums;white-space:nowrap}
+  .exprow .exeta{font-size:11.5px;color:var(--mut);font-weight:600;margin-left:11px;white-space:nowrap;font-variant-numeric:lining-nums}
+  .expmore{font-size:12px;color:var(--soft);margin-top:12px;line-height:1.5}
 
   /* YOUR WEEKS: tappable */
   .wkrow{display:flex;align-items:center;gap:12px;min-height:50px;padding:11px 2px;border-bottom:1px solid var(--line);cursor:pointer}
@@ -183,7 +153,7 @@
     </div>
 
     <div class="scroll">
-      <!-- 1 · WHERE AM I: the day, plainly -->
+      <!-- WHERE AM I: the day, plainly + the "how this works" dropdown (kept) -->
       <div class="util">
         <div class="wk num">Week 3 <span>· Day 4 of 7</span></div>
         <div class="qlink" id="lp-trigger" onclick="toggleLevels()">How this works <span class="qchev">&#9662;</span></div>
@@ -191,39 +161,41 @@
       <div class="lpanel" id="lpanel">
         <div class="lp-lead">Two simple things make a week <b>count</b>, and every week that counts adds to your total time under frequency.</div>
         <div class="lprow"><div class="lpdot"></div><div><div class="lpn">Show up <span class="lpm">9 min a day</span></div><div class="lpd">about an hour across the week. Skipping a day is fine.</div></div></div>
-        <div class="lprow"><div class="lpdot"></div><div><div class="lpn">Keep it balanced <span class="lpm">all four ≥ 15%</span></div><div class="lpd">let one drop below 15% and the week doesn't bank.</div></div></div>
-        <div class="lprow"><div class="lpdot"></div><div><div class="lpn">The rest builds <span class="lpm">on its own</span></div><div class="lpd">balanced time adds up, and milestones mark the road. The more you listen, the sooner they come.</div></div></div>
+        <div class="lprow"><div class="lpdot"></div><div><div class="lpn">Keep it balanced <span class="lpm">all four &#8805; 15%</span></div><div class="lpd">let one drop below 15% and the week doesn't bank.</div></div></div>
+        <div class="lprow"><div class="lpdot"></div><div><div class="lpn">The rest builds <span class="lpm">on its own</span></div><div class="lpd">balanced time adds up, and the road ahead marks what may be coming. The more you listen, the sooner it lands.</div></div></div>
       </div>
 
-      <!-- HERO · the number they actually want: total balanced time under frequency -->
-      <div class="hero2">
-        <div class="ey">Total time under frequency</div>
-        <div class="bigstat num">5h 40m<span class="gg">in balance</span></div>
-        <div class="expect" id="expect">[placeholder voice] Around this much balanced time, some people begin to notice sleep going a little deeper and less of an edge through the day. It may be arriving now, or still on its way.</div>
-      </div>
-
-      <!-- THIS WEEK · the two gates, plainly. Distinguish passing the 63-min weekly minimum. -->
+      <!-- THIS WEEK -->
       <div class="card">
         <div class="shead"><h2>This week</h2><span class="status good">Minimum met</span></div>
-        <div class="avg"><span class="n num">22 min</span><span class="u">a day so far</span><span class="side num">88 min over 4 days</span></div>
+        <div class="avg"><span class="n num">22 min</span><span class="u">a day so far</span></div>
+        <div class="subline num">88 min over 4 days</div>
         <div class="achieved"><b>&#10003; You've passed this week's 63-minute minimum.</b> These minutes count toward your total, as long as all four frequencies stay balanced.</div>
       </div>
 
-      <!-- BALANCE · the control treatment (in tune / quiet), plus the keep-it-balanced nudge -->
+      <!-- BALANCE -->
       <div class="card">
         <div class="shead"><h2>Balance</h2><span class="status" id="bal-status"></span></div>
         <div class="bal" id="bal-rows"></div>
-        <div class="balnote" id="bal-note"></div>
+        <div class="balbank" id="bal-bank"></div>
       </div>
 
-      <!-- MILESTONES · rough placeholder, we build the real set together -->
+      <!-- TOTAL TIME UNDER FREQUENCY -->
       <div class="card">
-        <div class="shead"><h2>Milestones</h2><span class="status">Rough draft</span></div>
-        <div class="tufsub" style="margin-top:0">The road ahead, marked by milestones instead of levels. These are placeholders, we'll write the real ones together.</div>
-        <div class="miles" id="miles"></div>
+        <div class="shead"><h2>Total time under frequency</h2></div>
+        <div class="tuf"><span class="big num">5h 40m</span><span class="g">in balance</span></div>
+        <div class="tufsub">The one number everything is built on. Every balanced week adds to it, and it never resets.</div>
+        <div class="tufexp">[placeholder voice] Around this much balanced time, some people say sleep goes a little deeper and the day carries less of an edge. It may be arriving now, or still on its way.</div>
       </div>
 
-      <!-- YOUR WEEKS: tappable -->
+      <!-- WHAT TO EXPECT -->
+      <div class="card">
+        <div class="shead"><h2>What to expect</h2><span class="status">Draft copy</span></div>
+        <div class="lead">Small waypoints on your total time under frequency. Where each may land depends on your pace, so these are possibilities, never promises.</div>
+        <div class="exp" id="exp"></div>
+      </div>
+
+      <!-- YOUR WEEKS -->
       <div class="card">
         <div class="shead"><h2>Your weeks</h2></div>
         <div class="wkrow cur" onclick="toggleWk(this)">
@@ -262,46 +234,87 @@
     var STATES={ ok:[30,26,18,26], low1:[38,24,11,27], low2:[42,38,12,8] };
     function fmtList(a){ if(a.length===1)return a[0]; if(a.length===2)return a[0]+' and '+a[1]; return a.slice(0,-1).join(', ')+', and '+a[a.length-1]; }
 
-    /* MILESTONES — the lifetime ladder that replaced levels. Unit = BALANCED time under frequency (minutes).
-       Thresholds anchor to the study windows at the ~1 hour/week baseline: month 1 ~ 4h, month 3 ~ 13h,
-       month 6 ~ 26h (the weeks 4 / 13 / 26 anchors). Listen more, reach them in fewer weeks. Notes are the
-       study's ordered arc as POSSIBILITY, never a promise; the total never resets and windows never expire. */
+    /* WHAT TO EXPECT — ~40 waypoints on BALANCED time under frequency (minutes).
+       Anchors nod to the study windows (~4h month 1, ~13h month 3, ~26h month 6); the rest are placeholder,
+       written as possibility, never a promise. Only PAST + the NEXT few ahead render; the far future stays hidden.
+       DAILY is a demo balanced pace used only to estimate "where you may be" in days. */
     var LIFETIME_MIN=340;   // 5h 40m banked in balance (demo)
-    var MILES=[
-      {min:60,   name:'First hour',      note:'Your frequency has been in the room. The practice is real now.'},
-      {min:240,  name:'The first shift', note:'Around here in the study, sleep went deeper and the edge started coming off. The first thing many people noticed.'},
-      {min:780,  name:'It settles in',   note:"The study's turning point: it stops being a session you do and becomes a baseline you live from, and a beat of space arrives before you react."},
-      {min:1560, name:'Living in it',    note:'Further in, more people felt like themselves again, their gut louder and easier to trust, and the right things beginning to move.'}
+    var DAILY=21;           // demo balanced minutes/day, for the ~days-away estimate
+    var WAY=[
+      {min:30,   name:'First half hour',   note:"Your frequency has been in the room. The practice is real now."},
+      {min:60,   name:'One hour',          note:"A full hour in. It has a foothold."},
+      {min:90,   name:'Ninety minutes',    note:"A quiet baseline starts to have somewhere to sit."},
+      {min:120,  name:'Two hours',         note:"Some notice the morning starts a touch softer. Nothing to force."},
+      {min:150,  name:'Two and a half hours', note:"Still mostly listening. The rest builds on its own."},
+      {min:180,  name:'Three hours',       note:"For a few, ordinary days pick up a little more room."},
+      {min:210,  name:'Three and a half hours', note:"Small steadiness, easy to miss from the inside."},
+      {min:240,  name:'Four hours',        note:"Around here in the study, sleep went deeper and the edge started coming off. Often the first thing people felt."},
+      {min:300,  name:'Five hours',        note:"If it's arriving, it tends to arrive quietly."},
+      {min:360,  name:'Six hours',         note:"A beat of space before reacting may show up here and there."},
+      {min:420,  name:'Seven hours',       note:"The signal has had real time in the room."},
+      {min:480,  name:'Eight hours',       note:"Some say they feel a touch more like themselves."},
+      {min:540,  name:'Nine hours',        note:"Still building. Nothing here expires."},
+      {min:600,  name:'Ten hours',         note:"Double digits. The practice is well set by now."},
+      {min:660,  name:'Eleven hours',      note:"For some, reactions land a half-step slower."},
+      {min:720,  name:'Twelve hours',      note:"Approaching the study's turning point."},
+      {min:780,  name:'Thirteen hours',    note:"The study's turning point: for many it stops being a session you do and starts being a baseline you live from."},
+      {min:840,  name:'Fourteen hours',    note:"Past the turn. It may feel less like effort."},
+      {min:900,  name:'Fifteen hours',     note:"A steadier floor under ordinary days."},
+      {min:960,  name:'Sixteen hours',     note:"Some notice their gut is a little louder."},
+      {min:1020, name:'Seventeen hours',   note:"Easier, for a few, to trust the first read."},
+      {min:1080, name:'Eighteen hours',    note:"The total keeps compounding on its own."},
+      {min:1140, name:'Nineteen hours',    note:"For some, a close relationship warms a degree."},
+      {min:1200, name:'Twenty hours',      note:"Twenty hours in balance. Well past most starting points."},
+      {min:1260, name:'Twenty-one hours',  note:"The right things may start moving a little more easily."},
+      {min:1320, name:'Twenty-two hours',  note:"No waypoint is a finish line."},
+      {min:1380, name:'Twenty-three hours',note:"Approaching the six-month window."},
+      {min:1440, name:'Twenty-four hours', note:"A full day of balanced time under frequency, banked."},
+      {min:1500, name:'Twenty-five hours', note:"Close to the deepest window the study measured."},
+      {min:1560, name:'Twenty-six hours',  note:"The study's six-month mark. For some it is simply who they are now."},
+      {min:1680, name:'Twenty-eight hours',note:"Past what the study formally tracked. It keeps going."},
+      {min:1800, name:'Thirty hours',      note:"Thirty hours. The practice runs itself by now."},
+      {min:1920, name:'Thirty-two hours',  note:"Deep, unhurried, ongoing."},
+      {min:2040, name:'Thirty-four hours', note:"Every balanced hour still adds."},
+      {min:2160, name:'Thirty-six hours',  note:"Steadiness you mostly stop thinking about."},
+      {min:2280, name:'Thirty-eight hours',note:"The road simply keeps going."},
+      {min:2400, name:'Forty hours',       note:"Forty hours in balance."},
+      {min:2520, name:'Forty-two hours',   note:"Nothing expires, nothing resets."},
+      {min:2640, name:'Forty-four hours',  note:"Still here, still building."},
+      {min:2760, name:'Forty-six hours',   note:"As far as the map is drawn, for now."}
     ];
-    function fmtHrs(m){ if(m<60) return m+' min'; var h=m/60; return (h%1===0?h:(Math.round(h*10)/10))+(h===1?' hour':' hours'); }
-    function fmtGo(m){ var h=Math.floor(m/60), mm=m%60; if(h===0) return mm+'m to go'; if(mm===0) return h+'h to go'; return h+'h '+mm+'m to go'; }
-    function renderMiles(){
-      var el=document.getElementById('miles'); if(!el) return;
-      var cap=MILES[MILES.length-1].min, fillPct=Math.min(100,LIFETIME_MIN/cap*100), nextIdx=-1;
-      for(var j=0;j<MILES.length;j++){ if(LIFETIME_MIN<MILES[j].min){ nextIdx=j; break; } }
-      var ticks='';
-      MILES.forEach(function(m,i){
-        var p=Math.min(100,m.min/cap*100), hit=LIFETIME_MIN>=m.min, isNow=(i===nextIdx);
-        ticks+='<div class="mtick'+(hit?' hit':'')+(isNow?' now':'')+'" style="left:'+p+'%"></div>'
-              +'<div class="mtlab" style="left:'+p+'%">'+fmtHrs(m.min)+'</div>';
-      });
-      var next = nextIdx>=0 ? MILES[nextIdx] : null;
-      var nextHTML = next
-        ? '<div class="mnext"><div class="ml">Next milestone</div>'
-          +'<div class="mt">'+next.name+'<span class="mgo">'+fmtGo(next.min-LIFETIME_MIN)+'</span></div>'
-          +'<div class="md">'+next.note+'</div></div>'
-        : '<div class="mnext"><div class="ml">You’re living in it</div><div class="mt">The road keeps going</div><div class="md">Every balanced hour deepens what’s already here. Nothing here expires.</div></div>';
-      var list='<div class="mlist">';
-      MILES.forEach(function(m,i){
-        var hit=LIFETIME_MIN>=m.min, isNow=(i===nextIdx), dotCls=hit?'done':(isNow?'next':'lock');
-        list+='<div class="mrow'+(hit||isNow?'':' islock')+'">'
-          +'<div class="mdot '+dotCls+'">'+(hit?'✓':'')+'</div>'
-          +'<div class="mn">'+m.name+'<span class="mhrs">'+fmtHrs(m.min)+'</span></div></div>';
-      });
-      list+='</div>';
-      el.innerHTML='<div class="mh">Milestones</div>'
-        +'<div class="mtrack"><div class="mtfill" style="width:'+fillPct+'%"></div>'+ticks+'</div>'
-        +nextHTML+list;
+    function fmtHrs(m){ if(m<60) return m+' min'; var h=m/60; return (h%1===0?h:(Math.round(h*10)/10))+(h===1?' hr':' hrs'); }
+    function daysAway(m){ var d=Math.ceil((m-LIFETIME_MIN)/DAILY); if(d<=0) return 'now'; return d===1?'~1 day':'~'+d+' days'; }
+    function renderExpect(){
+      var el=document.getElementById('exp'); if(!el) return;
+      var nextIdx=-1;
+      for(var j=0;j<WAY.length;j++){ if(LIFETIME_MIN<WAY[j].min){ nextIdx=j; break; } }
+      var passed = nextIdx<0 ? WAY.length : nextIdx;
+      var html='';
+      if(nextIdx>=0){
+        var n=WAY[nextIdx];
+        html+='<div class="expnext"><div class="el">Next &middot; where you may be headed</div>'
+          +'<div class="et">'+n.name+'<span class="eh">'+fmtHrs(n.min)+' total</span><span class="eeta num">'+daysAway(n.min)+' away</span></div>'
+          +'<div class="ed">'+n.note+'</div></div>';
+        var up='';
+        for(var k=nextIdx+1;k<Math.min(nextIdx+3,WAY.length);k++){
+          up+='<div class="exprow up"><div class="exd"></div><div class="exn">'+WAY[k].name+'</div><div class="exh">'+fmtHrs(WAY[k].min)+'</div><div class="exeta">'+daysAway(WAY[k].min)+'</div></div>';
+        }
+        if(up) html+='<div class="expsec">Coming up</div>'+up;
+        var remaining = WAY.length-(nextIdx+3);
+        if(remaining>0) html+='<div class="expmore">'+remaining+' more ahead, revealed as you get closer.</div>';
+      } else {
+        html+='<div class="expnext"><div class="el">Where you are</div>'
+          +'<div class="et">Past the drawn map<span class="eh">'+fmtHrs(LIFETIME_MIN)+' total</span></div>'
+          +'<div class="ed">Every balanced hour still adds. Nothing here expires.</div></div>';
+      }
+      if(passed>0){
+        var pr='';
+        for(var p=passed-1;p>=0;p--){
+          pr+='<div class="exprow done"><div class="exd">&#10003;</div><div class="exn">'+WAY[p].name+'</div><div class="exh">'+fmtHrs(WAY[p].min)+'</div></div>';
+        }
+        html+='<div class="expsec">Passed &middot; '+passed+'</div>'+pr;
+      }
+      el.innerHTML=html;
     }
 
     function render(key){
@@ -311,7 +324,6 @@
       var rh='';
       vals.forEach(function(v,i){
         var c=CATS[KEYS[i]], low=v<MIN, w=Math.min(100,v/scale*100);
-        // control treatment: a band WORD (in tune / quiet); low recedes into a lighter family fill, cleared carries the gradient
         var word=low?'quiet':'in tune';
         var fill=low? 'background:'+hexA(c.c1,.30) : 'background:linear-gradient(90deg,'+c.c1+','+c.c2+')';
         rh+='<div class="brow'+(low?' low':'')+'">'
@@ -323,20 +335,21 @@
       var gp=(MIN/scale*100);
       var gate=document.createElement('div'); gate.className='gate';
       var lab=document.createElement('div'); lab.className='gatelab num'; lab.textContent='15%';
-      gate.style.left='calc(89px + (100% - 89px - 132px) * '+(gp/100)+')';
-      lab.style.left='calc(89px + (100% - 89px - 132px) * '+(gp/100)+')';
+      gate.style.left='calc(89px + (100% - 89px - 63px) * '+(gp/100)+')';
+      lab.style.left='calc(89px + (100% - 89px - 63px) * '+(gp/100)+')';
       bal.appendChild(gate); bal.appendChild(lab);
 
-      // balance status + the keep-it-balanced nudge (Michael: "make sure to increase Vitality to keep balanced")
       var stat=document.getElementById('bal-status');
       if(stat){ stat.textContent = lows.length===0 ? 'Balanced' : lows.length+' under 15%'; stat.className='status'+(lows.length===0?' good':' wait'); }
-      var note=document.getElementById('bal-note');
-      var lowNames=lows.map(function(i){return CATS[KEYS[i]].label;});
-      if(lows.length===0){ note.innerHTML='<b>&#10003; All four are over the line.</b> Keep it here and this week banks toward your total.'; }
-      else if(lows.length===1){ note.innerHTML='Increase <b>'+lowNames[0]+'</b> above 15% to keep this week balanced. It is '+(MIN-vals[lows[0]])+'% short right now.'; }
-      else { note.innerHTML='Bring <b>'+fmtList(lowNames)+'</b> above 15% to keep this week balanced. Until then it will not bank.'; }
+      var bank=document.getElementById('bal-bank');
+      if(bank){
+        if(lows.length===0){ bank.innerHTML='<span class="bkdot on"></span><div>In balance now. This week is <b>banking</b> to your total time under frequency.</div>'; }
+        else { var lowNames=lows.map(function(i){return CATS[KEYS[i]].label;});
+          var verb=lowNames.length===1?'clears':'clear';
+          bank.innerHTML='<span class="bkdot"></span><div>Off balance. This week <b>pauses</b> until '+fmtList(lowNames)+' '+verb+' 15%, then it banks. Nothing is lost.</div>'; }
+      }
       var cw=document.getElementById('cur-ws');
-      if(cw) cw.textContent = lows.length ? 'In progress · '+fmtList(lowNames)+' to top up' : 'In progress · all four in';
+      if(cw) cw.textContent = lows.length ? 'In progress · '+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+' to top up' : 'In progress · all four in';
       ['ok','low1','low2'].forEach(function(k){ var b=document.getElementById('btn-'+k); if(b) b.classList.toggle('on', k===key); });
     }
     function hexA(hex,a){ var n=parseInt(hex.slice(1),16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; }
@@ -346,6 +359,6 @@
     var h=location.hash, start='low1';
     if(h.indexOf('ok')>=0) start='ok'; else if(h.indexOf('low2')>=0) start='low2';
     setState(start);
-    renderMiles();
+    renderExpect();
   </script>
 </body></html>
