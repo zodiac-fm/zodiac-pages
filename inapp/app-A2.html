@@ -204,9 +204,12 @@
   .legend .lgsep{color:#cfc8ba;margin:0 2px}
   .qbox,.sic .heart{cursor:pointer}
   .grip{cursor:grab;touch-action:none}
-  .row{transition:box-shadow .16s ease, transform .12s ease}
-  .row.dragging{box-shadow:0 10px 28px rgba(26,22,32,.18);transform:scale(1.025);opacity:.98;position:relative;z-index:4}
   .grip.gright{align-self:center;color:#d0cbd4;padding:0 2px 0 6px;margin-left:2px}
+  .row,.row *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+  .row{transition:box-shadow .15s ease, transform .12s ease}
+  #rows .row.dragging,#favRows .row.dragging{opacity:1!important;transform:scale(1.045) rotate(-.5deg)!important;box-shadow:0 18px 38px rgba(26,22,32,.30)!important;border-color:#efe6d6!important;z-index:9!important}
+  #dragHint{position:fixed;transform:translate(-50%,0);background:#2A2530;color:#fbf8f3;font:600 11px/1 'Switzer',-apple-system,sans-serif;letter-spacing:.03em;padding:6px 11px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .12s ease;z-index:30;white-space:nowrap;box-shadow:0 4px 12px rgba(26,22,32,.22)}
+  #dragHint.show{opacity:1}
   #favRows .row.dragging,#rows .row.dragging{opacity:.95;box-shadow:0 12px 26px rgba(56,0,122,.20);transform:scale(1.015);position:relative;z-index:6}
   .legend2{flex-direction:column;align-items:flex-start;gap:7px;padding-bottom:12px}
   .legend3{align-items:flex-start;justify-content:space-between;gap:10px;padding-bottom:12px}
@@ -855,20 +858,24 @@ setCat(catKey);vrz();drawViz();setIcons();
  var _scg=window.setCat;window.setCat=function(k){_scg(k);addGrips();};
  var _bfg=window.buildFavs;window.buildFavs=function(){_bfg();addGrips();};
  addGrips();
- let drag=null,moved=false,holdT=null,armed=null,sy=0,sx=0,dragSW=null;
- function beginDrag(row){drag=row;moved=false;row.classList.add('dragging');
+ let drag=null,moved=false,holdT=null,hintT=null,armed=null,sy=0,sx=0,dragSW=null,dragHintEl=null;
+ function showHint(row){if(!dragHintEl)return;var r=row.getBoundingClientRect();
+  dragHintEl.style.left=(r.left+r.width/2)+'px';dragHintEl.style.top=(r.top+12)+'px';dragHintEl.classList.add('show');}
+ function hideHint(){if(dragHintEl)dragHintEl.classList.remove('show');}
+ function beginDrag(row){drag=row;moved=false;hideHint();row.classList.add('dragging');
   var sw=row.closest('.swrap'); if(sw){dragSW=sw;sw.style.touchAction='none';}
-  if(navigator.vibrate)navigator.vibrate(12);}
- function cancelHold(){if(holdT){clearTimeout(holdT);holdT=null;} armed=null;}
+  if(navigator.vibrate)navigator.vibrate(14);}
+ function cancelHold(){if(holdT){clearTimeout(holdT);holdT=null;} if(hintT){clearTimeout(hintT);hintT=null;} hideHint(); armed=null;}
  function dragify(c){c.addEventListener('pointerdown',function(e){
    if(e.target.closest('.qbox,.heart,.dl'))return;      // let the row's own controls act
    var row=e.target.closest('.row'); if(!row)return;
    armed=row;sy=e.clientY;sx=e.clientX;
-   holdT=setTimeout(function(){holdT=null;if(armed)beginDrag(armed);},220);
+   hintT=setTimeout(function(){hintT=null;if(armed)showHint(armed);},130);   // "Hold to drag" (skips quick taps)
+   holdT=setTimeout(function(){holdT=null;if(armed)beginDrag(armed);},240);
  });}
  dragify(document.getElementById('favRows'));dragify(document.getElementById('rows'));
  document.addEventListener('pointermove',function(e){
-  if(!drag){ if(holdT&&(Math.abs(e.clientY-sy)>10||Math.abs(e.clientX-sx)>10)) cancelHold(); return; }
+  if(!drag){ if((holdT||hintT)&&(Math.abs(e.clientY-sy)>10||Math.abs(e.clientX-sx)>10)) cancelHold(); return; }
   moved=true;e.preventDefault();
   const c=drag.parentElement,y=e.clientY,sibs=[...c.querySelectorAll('.row')].filter(r=>r!==drag);
   for(const s of sibs){const r=s.getBoundingClientRect();if(y<r.top+r.height/2){c.insertBefore(drag,s);return;}}
@@ -877,7 +884,7 @@ setCat(catKey);vrz();drawViz();setIcons();
   cancelHold();
   if(dragSW){dragSW.style.touchAction='';dragSW=null;}
   if(!drag)return; drag.classList.remove('dragging'); drag=null;
-  sup=true; setTimeout(function(){sup=false;},150);});   // holding always suppresses the play-tap
+  sup=true; setTimeout(function(){sup=false;},150);});   // a completed hold always suppresses the play-tap
 })();
 </script>
 <script>
