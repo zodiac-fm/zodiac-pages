@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#EFE9DE;font-family:'Switzer',system-ui,sans-serif;color:#1a1620;padding:14px 0 40px}
+  .wrap{padding:0 18px}
+  h1{font-size:15px;font-weight:700;margin:6px 2px 4px}
+  .lead{font-size:12px;color:#8a8290;margin:0 2px 14px;line-height:1.4}
+  .dirlabel{font-size:12px;font-weight:700;color:#8a8290;letter-spacing:.03em;margin:20px 2px 3px}
+  .dirnote{font-size:11px;color:#a49db0;margin:0 2px 9px;line-height:1.35}
+  .scn{font-size:10.5px;color:#b3aab8;font-style:italic;margin:9px 2px 5px}
+
+  /* a phone-accurate frame: same width feel as the app cards */
+  .frame{background:#F6F1E8;border:1px solid #e6ddce;border-radius:12px;padding:14px 16px}
+  .playrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .playrow .ttl{font-size:11px;font-weight:700;color:#8a8290;letter-spacing:.08em}
+  .play{font-size:11px;font-weight:700;color:#fff;background:#2A2530;border-radius:14px;padding:6px 12px}
+
+  /* shared meter title */
+  .mt{font-size:10.5px;font-weight:700;color:#8a8290;letter-spacing:.09em;text-transform:uppercase}
+
+  /* ---- A: quiet row ---- */
+  .a-cols{display:flex;justify-content:space-between;margin-top:11px}
+  .a-c{text-align:center;flex:1}
+  .a-nm{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9a94a2;margin-bottom:5px}
+  .a-st{font-size:13px;font-weight:700;color:#c7c1cf;line-height:1}
+  .a-st.cov{color:#1f9d63}
+  .a-st.low{color:#C25500}
+
+  /* ---- B: dots ---- */
+  .b-row{display:flex;align-items:center;justify-content:space-between}
+  .b-dots{display:flex;gap:9px}
+  .b-dot{width:10px;height:10px;border-radius:50%;background:#dfd7ca}
+  .b-act{font-size:12px;color:#6b6673;margin-top:11px}
+  .b-act b{font-weight:700}
+
+  /* ---- C: section card ---- */
+  .c-card{background:#fff;border:1px solid #eadfce;border-radius:13px;padding:11px 15px 12px}
+  .c-hd{font-size:11px;font-weight:700;color:#8a8290;letter-spacing:.05em;text-transform:uppercase;margin-bottom:10px}
+  .c-cols{display:flex;justify-content:space-between}
+  .c-c{text-align:center;flex:1}
+  .c-nm{font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9a94a2;margin-bottom:5px}
+  .c-st{font-size:12.5px;font-weight:700;color:#c7c1cf}
+  .c-st.cov{color:#1f9d63}
+</style></head><body>
+<div class="wrap">
+  <h1>Frequency balance &middot; three directions</h1>
+  <div class="lead">Renamed to Frequency Balance, no red X, everything on one grid so it lines up. The four frequencies stay color-coded by their dot only; names go neutral so it isn't loud. Each shows the everyday "one low" state, then the "add a song" state.</div>
+
+  <!-- ================= A ================= -->
+  <div class="dirlabel">A &middot; Quiet row under Play All</div>
+  <div class="dirnote">Names neutral, color only where it matters: green check when covered, the frequency's color + minutes when it's low. Reads left-to-right, tight to the card edges.</div>
+
+  <div class="scn">One frequency low</div>
+  <div class="frame">
+    <div class="playrow"><span class="mt">Frequency balance</span><span class="play">&#9654; Play All</span></div>
+    <div class="a-cols">
+      <div class="a-c"><div class="a-nm" style="color:#6521C9">Core</div><div class="a-st cov">&#10003;</div></div>
+      <div class="a-c"><div class="a-nm" style="color:#B90044">Love</div><div class="a-st cov">&#10003;</div></div>
+      <div class="a-c"><div class="a-nm" style="color:#C25500">Vitality</div><div class="a-st low">13 min</div></div>
+      <div class="a-c"><div class="a-nm" style="color:#0A7A52">Abundance</div><div class="a-st cov">&#10003;</div></div>
+    </div>
+  </div>
+
+  <div class="scn">Needs a song they don't have yet &rarr; "add"</div>
+  <div class="frame">
+    <div class="playrow"><span class="mt">Frequency balance</span><span class="play">&#9654; Play All</span></div>
+    <div class="a-cols">
+      <div class="a-c"><div class="a-nm" style="color:#6521C9">Core</div><div class="a-st cov">&#10003;</div></div>
+      <div class="a-c"><div class="a-nm" style="color:#B90044">Love</div><div class="a-st cov">&#10003;</div></div>
+      <div class="a-c"><div class="a-nm" style="color:#C25500">Vitality</div><div class="a-st low">13 min</div></div>
+      <div class="a-c"><div class="a-nm" style="color:#0A7A52">Abundance</div><div class="a-st low" style="color:#0A7A52">+ add</div></div>
+    </div>
+  </div>
+
+  <!-- ================= B ================= -->
+  <div class="dirlabel">B &middot; Dots + one line (quietest)</div>
+  <div class="dirnote">Four dots, filled in color when covered, hollow when low. One plain line tells the single next move. Least color, most compact. Tap the line to act.</div>
+
+  <div class="scn">One frequency low</div>
+  <div class="frame">
+    <div class="playrow"><span class="mt">Frequency balance</span><span class="play">&#9654; Play All</span></div>
+    <div class="b-row">
+      <div class="b-dots">
+        <span class="b-dot" style="background:#6521C9"></span>
+        <span class="b-dot" style="background:#B90044"></span>
+        <span class="b-dot"></span>
+        <span class="b-dot" style="background:#0A7A52"></span>
+      </div>
+    </div>
+    <div class="b-act">Give <b style="color:#C25500">Vitality</b> about 13 more min &mdash; check one below.</div>
+  </div>
+
+  <div class="scn">Needs a song they don't have yet &rarr; "add"</div>
+  <div class="frame">
+    <div class="playrow"><span class="mt">Frequency balance</span><span class="play">&#9654; Play All</span></div>
+    <div class="b-row">
+      <div class="b-dots">
+        <span class="b-dot" style="background:#6521C9"></span>
+        <span class="b-dot" style="background:#B90044"></span>
+        <span class="b-dot" style="background:#C25500"></span>
+        <span class="b-dot"></span>
+      </div>
+    </div>
+    <div class="b-act">You have no <b style="color:#0A7A52">Abundance</b> songs yet &mdash; add one to balance.</div>
+  </div>
+
+  <!-- ================= C ================= -->
+  <div class="dirlabel">C &middot; Its own titled section</div>
+  <div class="dirnote">A contained block rather than spread across the whole top. Feels like a section of the page, sits below Play All.</div>
+
+  <div class="scn">One frequency low</div>
+  <div class="frame">
+    <div class="playrow"><span class="mt">&nbsp;</span><span class="play">&#9654; Play All</span></div>
+    <div class="c-card">
+      <div class="c-hd">Frequency balance</div>
+      <div class="c-cols">
+        <div class="c-c"><div class="c-nm" style="color:#6521C9">Core</div><div class="c-st cov">&#10003;</div></div>
+        <div class="c-c"><div class="c-nm" style="color:#B90044">Love</div><div class="c-st cov">&#10003;</div></div>
+        <div class="c-c"><div class="c-nm" style="color:#C25500">Vitality</div><div class="c-st" style="color:#C25500">13 min</div></div>
+        <div class="c-c"><div class="c-nm" style="color:#0A7A52">Abundance</div><div class="c-st cov">&#10003;</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scn">Balanced</div>
+  <div class="frame">
+    <div class="playrow"><span class="mt">&nbsp;</span><span class="play">&#9654; Play All</span></div>
+    <div class="c-card">
+      <div class="c-hd">Frequency balance &middot; <span style="color:#1f9d63">all covered</span></div>
+      <div class="c-cols">
+        <div class="c-c"><div class="c-nm" style="color:#6521C9">Core</div><div class="c-st cov">&#10003;</div></div>
+        <div class="c-c"><div class="c-nm" style="color:#B90044">Love</div><div class="c-st cov">&#10003;</div></div>
+        <div class="c-c"><div class="c-nm" style="color:#C25500">Vitality</div><div class="c-st cov">&#10003;</div></div>
+        <div class="c-c"><div class="c-nm" style="color:#0A7A52">Abundance</div><div class="c-st cov">&#10003;</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body></html>
