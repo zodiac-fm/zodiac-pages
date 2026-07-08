@@ -109,6 +109,30 @@
   .building p{font-size:13px;line-height:1.58;color:var(--ink2);margin-top:9px}
   .building p b{font-weight:600;color:var(--ink)}
 
+  /* MILESTONES: the lifetime ladder that replaced levels — named waypoints on balanced time */
+  .miles{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+  .miles .mh{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mut)}
+  .mtrack{position:relative;height:8px;border-radius:6px;background:var(--mist);margin:15px 0 22px}
+  .mtfill{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,var(--violet),var(--violet-deep))}
+  .mtick{position:absolute;top:50%;width:11px;height:11px;border-radius:50%;transform:translate(-50%,-50%);background:#fff;border:2px solid #d8cfe4;z-index:2}
+  .mtick.hit{background:var(--violet-deep);border-color:var(--violet-deep)}
+  .mtick.now{background:#fff;border-color:var(--violet);box-shadow:0 0 0 4px var(--violet-tint)}
+  .mtlab{position:absolute;top:16px;transform:translateX(-50%);font-size:9px;font-weight:700;letter-spacing:.01em;color:var(--soft);white-space:nowrap;font-variant-numeric:lining-nums}
+  .mnext{background:var(--violet-tint);border-radius:14px;padding:13px 15px;margin-top:4px}
+  .mnext .ml{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--violet-deep)}
+  .mnext .mt{font-family:'Canela',serif;font-size:17px;font-weight:500;color:var(--ink);margin-top:5px;display:flex;align-items:baseline;gap:9px}
+  .mnext .mt .mgo{margin-left:auto;font-family:'Suisse',sans-serif;font-size:12px;font-weight:700;color:var(--violet-deep);white-space:nowrap}
+  .mnext .md{font-size:12.5px;color:var(--ink2);line-height:1.5;margin-top:7px}
+  .mlist{margin-top:14px}
+  .mrow{display:flex;align-items:flex-start;gap:11px;padding:8px 0}
+  .mrow .mdot{flex:0 0 17px;height:17px;border-radius:50%;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;line-height:1}
+  .mdot.done{background:linear-gradient(135deg,var(--violet),var(--violet-deep));color:#fff}
+  .mdot.next{background:#fff;border:2px solid var(--violet)}
+  .mdot.lock{background:var(--mist)}
+  .mrow .mn{font-size:13px;font-weight:700;color:var(--ink)}
+  .mrow .mn .mhrs{font-weight:600;color:var(--soft);font-size:12px;margin-left:7px;font-variant-numeric:lining-nums}
+  .mrow.islock .mn{color:var(--soft);font-weight:600}
+
   /* YOUR WEEKS: tappable */
   .wkrow{display:flex;align-items:center;gap:12px;min-height:50px;padding:11px 2px;border-bottom:1px solid var(--line);cursor:pointer}
   .wkrow:last-of-type{border-bottom:none}
@@ -151,13 +175,13 @@
       <!-- 1 · WHERE AM I: the day, plainly -->
       <div class="util">
         <div class="wk num">Week 3 <span>· Day 4 of 7</span></div>
-        <div class="qlink" id="lp-trigger" onclick="toggleLevels()">How levels work <span class="qchev">&#9662;</span></div>
+        <div class="qlink" id="lp-trigger" onclick="toggleLevels()">How this works <span class="qchev">&#9662;</span></div>
       </div>
       <div class="lpanel" id="lpanel">
-        <div class="lp-lead">A <b>level</b> is your average listening a day this week. It only counts when <b>all four frequencies</b> are in the mix (each at least 15%).</div>
-        <div class="lprow"><div class="lpdot"></div><div><div class="lpn">Floor <span class="lpm">9 min a day</span></div><div class="lpd">enough to keep the connection alive.</div></div></div>
-        <div class="lprow here"><div class="lpdot"></div><div><div class="lpn">Practice <span class="lpm">20 min a day</span><em>you're here</em></div><div class="lpd">where it tends to move. Most people aim here.</div></div></div>
-        <div class="lprow"><div class="lpdot"></div><div><div class="lpn">Immersion <span class="lpm">45 min a day</span></div><div class="lpd">living with your signal on, through sleep or a long sit.</div></div></div>
+        <div class="lp-lead">Two simple things make a week <b>count</b>, and every week that counts adds to your total time under frequency.</div>
+        <div class="lprow"><div class="lpdot"></div><div><div class="lpn">Show up <span class="lpm">9 min a day</span></div><div class="lpd">about an hour across the week. Skipping a day is fine.</div></div></div>
+        <div class="lprow"><div class="lpdot"></div><div><div class="lpn">Keep it balanced <span class="lpm">all four ≥ 15%</span></div><div class="lpd">let one drop below 15% and the week doesn't bank.</div></div></div>
+        <div class="lprow"><div class="lpdot"></div><div><div class="lpn">The rest builds <span class="lpm">on its own</span></div><div class="lpd">balanced time adds up, and milestones mark the road. The more you listen, the sooner they come.</div></div></div>
       </div>
 
       <div class="hero">
@@ -171,12 +195,10 @@
         <div class="shead"><h2>This week</h2><span class="status" id="tw-status"></span></div>
         <div class="avg"><span class="n num">22 min</span><span class="u">a day so far</span><span class="side num">88 min over 4 days</span></div>
         <div class="tline">
-          <div class="ttrack"><div class="tfill" style="width:44%"></div></div>
-          <div class="tmark" style="left:20%"></div><div class="tmlab" style="left:20%">Floor</div>
-          <div class="tmark" style="left:44%"></div><div class="tmlab on" style="left:44%">Practice &#9679;</div>
-          <div class="tmark" style="left:100%"></div><div class="tmlab" style="left:100%">Immersion</div>
+          <div class="ttrack"><div class="tfill" style="width:71%"></div></div>
+          <div class="tmark" style="left:29%"></div><div class="tmlab on" style="left:29%">9 min &#9679; the floor</div>
         </div>
-        <div class="twords">Your minutes are right at <b>the practice level</b>. No math to do, just keep showing up and the week lands there.</div>
+        <div class="twords">You're <b>well past the 9-minute floor</b>. Every minute above it banks faster. No number to chase, just keep showing up balanced.</div>
 
         <div class="baldiv">
           <div class="balcap">All four in the mix (each needs 15% of your week)</div>
@@ -189,11 +211,8 @@
       <div class="card">
         <div class="shead"><h2>Time under frequency</h2></div>
         <div class="tuf"><span class="big num">5h 40m</span><span class="g">in balance, and growing</span></div>
-        <div class="tufsub">This is the number everything is built on. Every balanced minute is more of your own signal, turned up.</div>
-        <div class="building">
-          <div class="bh">What these hours tend to build</div>
-          <p>In our study, it arrived in its own order, <b>some sooner, some later</b>: sleeping deeper and feeling less on edge first, then a beat of space before you react. Over the months, more people described feeling <b>like themselves again</b>, trusting their gut, and the right things starting to move.</p>
-        </div>
+        <div class="tufsub">The one number everything builds on. Only balanced weeks add to it, and it never resets. The road ahead is marked by milestones, not levels.</div>
+        <div class="miles" id="miles"></div>
       </div>
 
       <!-- YOUR WEEKS: tappable -->
@@ -203,12 +222,12 @@
           <div class="wl"><span class="wn">Week 3</span><span class="ws" id="cur-ws">In progress · 88 min so far</span></div>
           <div class="wr"><span class="lvpill top">This week</span><span class="chev">&#8250;</span></div>
         </div>
-        <div class="wkdetail">You're 4 days in, averaging the practice level. One frequency, Vitality, still to top up before the week counts as balanced.</div>
+        <div class="wkdetail">You're 4 days in at a steady ~22 min a day. One frequency, Vitality, still to top up before the week counts as balanced.</div>
         <div class="wkrow" onclick="toggleWk(this)">
           <div class="wl"><span class="wn">Week 2</span><span class="ws">All four in balance · 2h 20m</span></div>
-          <div class="wr"><span class="lvpill">Practice</span><span class="chev">&#8250;</span></div>
+          <div class="wr"><span class="lvpill">Balanced</span><span class="chev">&#8250;</span></div>
         </div>
-        <div class="wkdetail"><b>2h 20m</b> of balanced time under frequency. All four cleared 15%; you averaged the practice level. This is a week that fully counts toward what's building.</div>
+        <div class="wkdetail"><b>2h 20m</b> of balanced time under frequency. All four cleared 15%, so the whole week banked toward your total. This is a week that fully counts toward what's building.</div>
         <div class="wkrow" onclick="toggleWk(this)">
           <div class="wl"><span class="wn">Week 1</span><span class="ws"><span class="lf">Vitality stayed under 15%</span></span></div>
           <div class="wr"><span class="lvpill none">Didn't count</span><span class="chev">&#8250;</span></div>
@@ -234,6 +253,48 @@
     var MIN=15, KEYS=['core','love','vitality','abundance'];
     var STATES={ ok:[30,26,18,26], low1:[38,24,11,27], low2:[42,38,12,8] };
     function fmtList(a){ if(a.length===1)return a[0]; if(a.length===2)return a[0]+' and '+a[1]; return a.slice(0,-1).join(', ')+', and '+a[a.length-1]; }
+
+    /* MILESTONES — the lifetime ladder that replaced levels. Unit = BALANCED time under frequency (minutes).
+       Thresholds anchor to the study windows at the ~1 hour/week baseline: month 1 ~ 4h, month 3 ~ 13h,
+       month 6 ~ 26h (the weeks 4 / 13 / 26 anchors). Listen more, reach them in fewer weeks. Notes are the
+       study's ordered arc as POSSIBILITY, never a promise; the total never resets and windows never expire. */
+    var LIFETIME_MIN=340;   // 5h 40m banked in balance (demo)
+    var MILES=[
+      {min:60,   name:'First hour',      note:'Your frequency has been in the room. The practice is real now.'},
+      {min:240,  name:'The first shift', note:'Around here in the study, sleep went deeper and the edge started coming off. The first thing many people noticed.'},
+      {min:780,  name:'It settles in',   note:"The study's turning point: it stops being a session you do and becomes a baseline you live from, and a beat of space arrives before you react."},
+      {min:1560, name:'Living in it',    note:'Further in, more people felt like themselves again, their gut louder and easier to trust, and the right things beginning to move.'}
+    ];
+    function fmtHrs(m){ if(m<60) return m+' min'; var h=m/60; return (h%1===0?h:(Math.round(h*10)/10))+(h===1?' hour':' hours'); }
+    function fmtGo(m){ var h=Math.floor(m/60), mm=m%60; if(h===0) return mm+'m to go'; if(mm===0) return h+'h to go'; return h+'h '+mm+'m to go'; }
+    function renderMiles(){
+      var el=document.getElementById('miles'); if(!el) return;
+      var cap=MILES[MILES.length-1].min, fillPct=Math.min(100,LIFETIME_MIN/cap*100), nextIdx=-1;
+      for(var j=0;j<MILES.length;j++){ if(LIFETIME_MIN<MILES[j].min){ nextIdx=j; break; } }
+      var ticks='';
+      MILES.forEach(function(m,i){
+        var p=Math.min(100,m.min/cap*100), hit=LIFETIME_MIN>=m.min, isNow=(i===nextIdx);
+        ticks+='<div class="mtick'+(hit?' hit':'')+(isNow?' now':'')+'" style="left:'+p+'%"></div>'
+              +'<div class="mtlab" style="left:'+p+'%">'+fmtHrs(m.min)+'</div>';
+      });
+      var next = nextIdx>=0 ? MILES[nextIdx] : null;
+      var nextHTML = next
+        ? '<div class="mnext"><div class="ml">Next milestone</div>'
+          +'<div class="mt">'+next.name+'<span class="mgo">'+fmtGo(next.min-LIFETIME_MIN)+'</span></div>'
+          +'<div class="md">'+next.note+'</div></div>'
+        : '<div class="mnext"><div class="ml">You’re living in it</div><div class="mt">The road keeps going</div><div class="md">Every balanced hour deepens what’s already here. Nothing here expires.</div></div>';
+      var list='<div class="mlist">';
+      MILES.forEach(function(m,i){
+        var hit=LIFETIME_MIN>=m.min, isNow=(i===nextIdx), dotCls=hit?'done':(isNow?'next':'lock');
+        list+='<div class="mrow'+(hit||isNow?'':' islock')+'">'
+          +'<div class="mdot '+dotCls+'">'+(hit?'✓':'')+'</div>'
+          +'<div class="mn">'+m.name+'<span class="mhrs">'+fmtHrs(m.min)+'</span></div></div>';
+      });
+      list+='</div>';
+      el.innerHTML='<div class="mh">Milestones</div>'
+        +'<div class="mtrack"><div class="mtfill" style="width:'+fillPct+'%"></div>'+ticks+'</div>'
+        +nextHTML+list;
+    }
 
     function render(key){
       var vals=STATES[key]||STATES.low1, lows=[];
@@ -287,5 +348,6 @@
     var h=location.hash, start='low1';
     if(h.indexOf('ok')>=0) start='ok'; else if(h.indexOf('low2')>=0) start='low2';
     setState(start);
+    renderMiles();
   </script>
 </body></html>
