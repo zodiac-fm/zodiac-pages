@@ -265,13 +265,22 @@
 
   .pill,.pills,.tiphead,.qall,#nav div,.legend{user-select:none;-webkit-user-select:none}
   .pill{touch-action:manipulation}
+  /* mini status by the logo: Time state + 4 balance dots, taps to Progress */
+  .ministat{margin-left:auto;margin-right:12px;display:grid;grid-template-columns:auto 44px;column-gap:7px;row-gap:5px;align-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .ms-lbl{font-size:9.5px;font-weight:600;color:#8a8390;letter-spacing:.03em;justify-self:start}
+  .ms-ind{justify-self:start;display:inline-flex;align-items:center}
+  .ms-txt{font-size:9.5px;font-weight:700;color:#0A7A52;letter-spacing:.02em;font-style:normal;line-height:1;white-space:nowrap}
+  .ms-txt.low{color:#B90044}
+  .ms-dots{display:inline-flex;gap:4px;width:44px}
+  .ms-dots i{width:8px;height:8px;border-radius:50%;background:#0A7A52;display:inline-flex;align-items:center;justify-content:center;font-style:normal}
+  .ms-dots i.low{background:#B90044;color:#fff;font-size:7px;font-weight:800;line-height:1}
 </style></head><body>
 <!-- INTERACTION · REORDER: the WHOLE card is draggable on click-and-hold (long-press) anywhere on it, not just the grip dots — the grip is only the visual cue. Applies to Immersions + Favourites. Not wired in this prototype; spec for dev. -->
 <div id="app">
 
   <!-- ===================== LIST ===================== -->
   <section class="screen" id="list">
-    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">B</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">B</span></div><div class="ministat" onclick="location.href='progress'"></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
     <div class="pills" id="pills">
       <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
     </div>
@@ -349,7 +358,7 @@
 
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
-    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">B</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">B</span></div><div class="ministat" onclick="location.href='progress'"></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
     <div class="barrow"><div></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
     <div class="swrap">
     <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
@@ -673,6 +682,19 @@ function showTab(t){document.getElementById('favs').style.display=(t==='favs')?'
  if(t==='favs')buildFavs();}
 navItems[0].onclick=()=>showTab('list');
 navItems[2].onclick=()=>showTab('favs');
+// mini status by the logo (shared control element): static demo data; add #behind to preview the off-track state
+const MS={time:'20 min left this week', vals:{core:28,love:22,vitality:11,abundance:39}, MIN:15};
+function renderMiniStat(){
+  var behind=location.hash.indexOf('behind')>=0;
+  document.querySelectorAll('.ministat').forEach(function(el){
+    var dots=''; ['core','love','vitality','abundance'].forEach(function(k){
+      var low=MS.vals[k]<MS.MIN; dots+='<i class="'+(low?'low':'')+'" title="'+k+'">'+(low?'\u2212':'')+'</i>';
+    });
+    el.innerHTML='<span class="ms-lbl">Time:</span><span class="ms-ind"><i class="ms-txt'+(behind?' low':'')+'">'+(behind?'Not on track':'On track')+'</i></span><span class="ms-lbl">Balance:</span><span class="ms-ind ms-dots">'+dots+'</span>';
+  });
+}
+window.addEventListener('hashchange',renderMiniStat);
+renderMiniStat();
 buildFavs();
 
 setCat(catKey);vrz();drawViz();setIcons();
