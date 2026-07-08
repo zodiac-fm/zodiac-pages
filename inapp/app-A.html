@@ -36,7 +36,7 @@
   .catey{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9a93a0}
   .desc h2.serif2{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;line-height:1.08;margin:6px 0 13px;white-space:nowrap}
   .hznum{font-family:'Switzer',-apple-system,sans-serif;font-weight:700;font-size:23px;letter-spacing:-.01em;color:var(--cink);font-variant-numeric:lining-nums}
-  #list .ctarow{justify-content:flex-end}
+  #list .ctarow{justify-content:space-between}
   .hztap{color:var(--cink);font-weight:700;cursor:pointer;white-space:nowrap}
   .hztap .hzchev{display:inline-block;font-size:10px;vertical-align:1px;margin-left:3px;transition:transform .2s;opacity:.75}
   .hztap.open .hzchev{transform:rotate(180deg)}
@@ -172,6 +172,11 @@
   .qbox{width:17px;height:17px;border:1.5px solid #c2bdc7;border-radius:4px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-sizing:border-box}
   .qbox.on{background:transparent;border-color:#948f9a}
   .qbox.on::after{content:'';width:5px;height:9px;border:solid #1A1620;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-2px}
+  .selall{display:flex;align-items:center;gap:8px;cursor:pointer;-webkit-user-select:none;user-select:none;padding-left:2px}
+  .selall .qbox{cursor:pointer}
+  .qbox.dash{border-color:#948f9a}
+  .qbox.dash::after{content:'';width:9px;height:0;border:0;border-top:2px solid #1A1620;transform:none;margin:0;border-radius:1px}
+  .selall-lbl{font-size:12.5px;color:#7a7580;font-weight:500;letter-spacing:.01em}
   .hzsm{color:var(--cink)!important}
   .qbox{width:14px!important;height:14px!important;border-radius:3px!important;border-width:1.5px!important}
   .qbox.on::after{width:4px!important;height:8px!important;border-width:0 2px 2px 0!important;margin-top:-2px!important}
@@ -286,7 +291,7 @@
         <div class="bscale"><div class="bstrack" id="bpTrack"></div><div class="bslabs" id="bpLabs"></div></div>
         <p id="bpWhat"></p><p id="bpYours"></p>
       </div></div>
-    <div class="ctarow"><span style="display:none" id="catHz"></span><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
+    <div class="ctarow"><span style="display:none" id="catHz"></span><div class="selall" data-scope="rows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
     <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
     <div class="rows" id="rows"></div>
     </div>
@@ -355,7 +360,7 @@
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
-    <div class="barrow"><div></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
+    <div class="barrow"><div class="selall" data-scope="favRows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
     <div class="swrap">
     <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><circle cx="9" cy="5" r="1.9"/><circle cx="15" cy="5" r="1.9"/><circle cx="9" cy="12" r="1.9"/><circle cx="15" cy="12" r="1.9"/><circle cx="9" cy="19" r="1.9"/><circle cx="15" cy="19" r="1.9"/></svg></span>Drag to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
@@ -821,7 +826,16 @@ setCat(catKey);vrz();drawViz();setIcons();
 // Play All), heart = save to Favorites, drag-to-reorder on Favorites ONLY (frequency pages keep list order).
 (function(){
  const qn=document.getElementById('qn'),qnf=document.getElementById('qnf');let sup=false;
- function upd(){const n=document.querySelectorAll('#rows .qbox.on').length;qn.textContent=n?' ('+n+')':'';
+ function upd(){
+  document.querySelectorAll('.selall').forEach(function(sa){
+   var box=sa.querySelector('.qbox'),scope=sa.dataset.scope;
+   var boxes=document.querySelectorAll('#'+scope+' .qbox');
+   var t=boxes.length,c=0;boxes.forEach(function(b){if(b.classList.contains('on'))c++;});
+   box.classList.toggle('on',t>0&&c===t);
+   box.classList.toggle('dash',c>0&&c<t);
+   var lbl=sa.querySelector('.selall-lbl');if(lbl)lbl.textContent=c>0?'Clear':'Select all';
+  });
+  const n=document.querySelectorAll('#rows .qbox.on').length;qn.textContent=n?' ('+n+')':'';
   const m=document.querySelectorAll('#favRows .qbox.on').length;qnf.textContent=m?' ('+m+')':'';}
  function wire(id){document.getElementById(id).addEventListener('click',function(e){
   if(sup){sup=false;e.stopPropagation();e.preventDefault();return;}
@@ -829,6 +843,7 @@ setCat(catKey);vrz();drawViz();setIcons();
   const h=e.target.closest('.heart');if(h){e.stopPropagation();h.classList.toggle('on');}
  },true);}
  wire('rows');wire('favRows');
+ document.querySelectorAll('.selall').forEach(function(sa){sa.addEventListener('click',function(e){e.stopPropagation();var scope=sa.dataset.scope,boxes=document.querySelectorAll('#'+scope+' .qbox');var any=false;boxes.forEach(function(b){if(b.classList.contains('on'))any=true;});boxes.forEach(function(b){b.classList.toggle('on',!any);});upd();});});
  {var _t=new URLSearchParams(location.search).get('tab');if(_t==='favs')showTab('favs');else if(_t==='progress')showTab('progress');}
  const _sc=window.setCat;window.setCat=function(k){_sc(k);upd();};
  const _bf=window.buildFavs;window.buildFavs=function(){_bf();upd();};
@@ -872,14 +887,14 @@ document.querySelectorAll('.tiphead').forEach(function(h){h.addEventListener('cl
 // after-a-few-sessions layout: guide below the song list. (#return still = bare headline;
 // hashes combine, e.g. #return-graduated.)
 function applyGraduated(){
-  var on=location.hash.indexOf('graduated')>=0;
-  var tip=document.querySelector('#list .swrap .tipcard'), rows=document.getElementById('rows');
-  if(!tip||!rows) return;
-  if(on && tip.nextSibling!==null && tip.compareDocumentPosition(rows) & Node.DOCUMENT_POSITION_FOLLOWING){
-    rows.parentNode.insertBefore(tip, rows.nextSibling); tip.style.marginBottom='96px'; rows.style.paddingBottom='10px';
-  } else if(!on && (rows.compareDocumentPosition(tip) & Node.DOCUMENT_POSITION_FOLLOWING)){
-    rows.parentNode.insertBefore(tip, rows); tip.style.marginBottom=''; rows.style.paddingBottom='';
-  }
+  [['#list .swrap .tipcard','rows'],['#favs .swrap .tipcard','favRows']].forEach(function(p){
+    var tip=document.querySelector(p[0]), rows=document.getElementById(p[1]);
+    if(!tip||!rows) return;
+    if(tip.compareDocumentPosition(rows) & Node.DOCUMENT_POSITION_FOLLOWING){
+      rows.parentNode.insertBefore(tip, rows.nextSibling);
+    }
+    tip.style.marginBottom='96px'; rows.style.paddingBottom='10px';
+  });
 }
 window.addEventListener('hashchange',applyGraduated);
 window.addEventListener('DOMContentLoaded',applyGraduated);
