@@ -62,6 +62,17 @@
   .hero h1 em{font-style:normal;color:var(--violet-deep)}
   .hero .insight{font-family:'Canela',serif;font-style:italic;font-size:16.5px;line-height:1.46;color:var(--ink2);margin-top:10px;max-width:33ch}
 
+  /* HERO 2 · total balanced time as the calm headline (a short stat, left-aligned like the whole page) */
+  .hero2{padding:18px 22px 2px}
+  .hero2 .ey{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+  .hero2 .bigstat{font-family:'Canela',serif;font-size:37px;font-weight:500;color:var(--violet-deep);line-height:1.04;letter-spacing:-.01em;margin-top:7px}
+  .hero2 .bigstat .gg{font-family:'Suisse',sans-serif;font-size:13px;font-weight:600;color:var(--mut);margin-left:9px;letter-spacing:0}
+  .hero2 .expect{font-size:13.5px;line-height:1.55;color:var(--ink2);margin-top:11px}
+  /* This week: the achievement line (passed the weekly minimum) */
+  .achieved{margin-top:14px;font-size:13px;line-height:1.5;color:var(--ink2)}
+  .achieved b{font-weight:700;color:#0A7A52}
+  .brow .bw{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
+
   .card{margin:14px 18px 0;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 18px 20px;box-shadow:0 6px 20px rgba(26,22,32,.05)}
   .shead{display:flex;align-items:center;gap:10px}
   .shead h2{font-family:'Canela',serif;font-size:19px;font-weight:500;color:var(--violet);letter-spacing:-.005em}
@@ -184,34 +195,31 @@
         <div class="lprow"><div class="lpdot"></div><div><div class="lpn">The rest builds <span class="lpm">on its own</span></div><div class="lpd">balanced time adds up, and milestones mark the road. The more you listen, the sooner they come.</div></div></div>
       </div>
 
-      <div class="hero">
-        <div class="ey">This week</div>
-        <h1 id="hero-head"></h1>
-        <div class="insight" id="hero-insight"></div>
+      <!-- HERO · the number they actually want: total balanced time under frequency -->
+      <div class="hero2">
+        <div class="ey">Total time under frequency</div>
+        <div class="bigstat num">5h 40m<span class="gg">in balance</span></div>
+        <div class="expect" id="expect">[placeholder voice] Around this much balanced time, some people begin to notice sleep going a little deeper and less of an edge through the day. It may be arriving now, or still on its way.</div>
       </div>
 
-      <!-- 2 · AM I ON TRACK: the two goals, no math, low flagged -->
+      <!-- THIS WEEK · the two gates, plainly. Distinguish passing the 63-min weekly minimum. -->
       <div class="card">
-        <div class="shead"><h2>This week</h2><span class="status" id="tw-status"></span></div>
+        <div class="shead"><h2>This week</h2><span class="status good">Minimum met</span></div>
         <div class="avg"><span class="n num">22 min</span><span class="u">a day so far</span><span class="side num">88 min over 4 days</span></div>
-        <div class="tline">
-          <div class="ttrack"><div class="tfill" style="width:71%"></div></div>
-          <div class="tmark" style="left:29%"></div><div class="tmlab on" style="left:29%">9 min &#9679; the floor</div>
-        </div>
-        <div class="twords">You're <b>well past the 9-minute floor</b>. Every minute above it banks faster. No number to chase, just keep showing up balanced.</div>
-
-        <div class="baldiv">
-          <div class="balcap">All four in the mix (each needs 15% of your week)</div>
-          <div class="bal" id="bal-rows"></div>
-          <div class="balnote" id="bal-note"></div>
-        </div>
+        <div class="achieved"><b>&#10003; You've passed this week's 63-minute minimum.</b> These minutes count toward your total, as long as all four frequencies stay balanced.</div>
       </div>
 
-      <!-- 3 · WHAT IT'S BUILDING: total time under frequency + the real outcomes -->
+      <!-- BALANCE · the control treatment (in tune / quiet), plus the keep-it-balanced nudge -->
       <div class="card">
-        <div class="shead"><h2>Time under frequency</h2></div>
-        <div class="tuf"><span class="big num">5h 40m</span><span class="g">in balance, and growing</span></div>
-        <div class="tufsub">The one number everything builds on. Only balanced weeks add to it, and it never resets. The road ahead is marked by milestones, not levels.</div>
+        <div class="shead"><h2>Balance</h2><span class="status" id="bal-status"></span></div>
+        <div class="bal" id="bal-rows"></div>
+        <div class="balnote" id="bal-note"></div>
+      </div>
+
+      <!-- MILESTONES · rough placeholder, we build the real set together -->
+      <div class="card">
+        <div class="shead"><h2>Milestones</h2><span class="status">Rough draft</span></div>
+        <div class="tufsub" style="margin-top:0">The road ahead, marked by milestones instead of levels. These are placeholders, we'll write the real ones together.</div>
         <div class="miles" id="miles"></div>
       </div>
 
@@ -303,15 +311,13 @@
       var rh='';
       vals.forEach(function(v,i){
         var c=CATS[KEYS[i]], low=v<MIN, w=Math.min(100,v/scale*100);
-        // LOW is flagged, not hidden: keep the colour (lighter), show a clear "+X% to go" chip in the family accent
-        var fill=low? 'background:'+hexA(c.c1,.38) : 'background:linear-gradient(90deg,'+c.c1+','+c.c2+')';
-        var right = low
-          ? '<span class="bpct" style="color:'+c.ac+'">'+v+'%</span><span class="togo" style="color:#fff;background:'+c.ac+'">+'+(MIN-v)+'% to go</span>'
-          : '<span class="bpct">'+v+'%</span>';
+        // control treatment: a band WORD (in tune / quiet); low recedes into a lighter family fill, cleared carries the gradient
+        var word=low?'quiet':'in tune';
+        var fill=low? 'background:'+hexA(c.c1,.30) : 'background:linear-gradient(90deg,'+c.c1+','+c.c2+')';
         rh+='<div class="brow'+(low?' low':'')+'">'
-          +'<div class="bl"><div class="bn">'+c.label+'</div></div>'
+          +'<div class="bl"><div class="bn">'+c.label+'</div><div class="bw" style="color:'+(low?'#a8a2ad':c.ac)+'">'+word+'</div></div>'
           +'<div class="btrack"><div class="bfill" style="width:'+w+'%;'+fill+'"></div></div>'
-          +right+'</div>';
+          +'<span class="bpct"'+(low?' style="color:'+c.ac+'"':'')+'>'+v+'%</span></div>';
       });
       var bal=document.getElementById('bal-rows'); bal.innerHTML=rh;
       var gp=(MIN/scale*100);
@@ -321,24 +327,16 @@
       lab.style.left='calc(89px + (100% - 89px - 132px) * '+(gp/100)+')';
       bal.appendChild(gate); bal.appendChild(lab);
 
-      // hero + statuses (honest, day-aware, no false "on pace for Level 3")
-      var head=document.getElementById('hero-head'), ins=document.getElementById('hero-insight');
-      var tw=document.getElementById('tw-status');
-      if(lows.length===0){
-        head.innerHTML="You're <em>on track</em>";
-        ins.textContent="Four days in and your minutes are there. All four frequencies are in the mix, this week is on its way to counting in full.";
-        tw.textContent='On track'; tw.className='status good';
-      } else {
-        var ln=lows.map(function(i){return CATS[KEYS[i]].label;});
-        head.innerHTML="Nearly a <em>full week</em>";
-        ins.textContent="Your minutes are right where they should be. "+fmtList(ln)+(ln.length===1?" is":" are")+" the only one"+(ln.length===1?"":"s")+" still light, a little more and the week counts in full.";
-        tw.textContent=ln.length+' to top up'; tw.className='status wait';
-      }
+      // balance status + the keep-it-balanced nudge (Michael: "make sure to increase Vitality to keep balanced")
+      var stat=document.getElementById('bal-status');
+      if(stat){ stat.textContent = lows.length===0 ? 'Balanced' : lows.length+' under 15%'; stat.className='status'+(lows.length===0?' good':' wait'); }
       var note=document.getElementById('bal-note');
-      if(lows.length===0){ note.innerHTML='<b>&#10003; All four are over the line.</b> Nothing to top up, this week will count in full.'; }
-      else { note.innerHTML='<b>'+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+'</b> '+(lows.length===1?'is':'are')+' the only thing between you and a full week. A few minutes each does it.'; }
+      var lowNames=lows.map(function(i){return CATS[KEYS[i]].label;});
+      if(lows.length===0){ note.innerHTML='<b>&#10003; All four are over the line.</b> Keep it here and this week banks toward your total.'; }
+      else if(lows.length===1){ note.innerHTML='Increase <b>'+lowNames[0]+'</b> above 15% to keep this week balanced. It is '+(MIN-vals[lows[0]])+'% short right now.'; }
+      else { note.innerHTML='Bring <b>'+fmtList(lowNames)+'</b> above 15% to keep this week balanced. Until then it will not bank.'; }
       var cw=document.getElementById('cur-ws');
-      if(cw) cw.textContent = lows.length ? 'In progress · '+fmtList(lows.map(function(i){return CATS[KEYS[i]].label;}))+' to top up' : 'In progress · all four in';
+      if(cw) cw.textContent = lows.length ? 'In progress · '+fmtList(lowNames)+' to top up' : 'In progress · all four in';
       ['ok','low1','low2'].forEach(function(k){ var b=document.getElementById('btn-'+k); if(b) b.classList.toggle('on', k===key); });
     }
     function hexA(hex,a){ var n=parseInt(hex.slice(1),16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; }
