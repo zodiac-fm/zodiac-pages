@@ -27,9 +27,39 @@ h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:33px
 .rp{font-size:9px;font-weight:600;letter-spacing:.02em;color:var(--v);border:1px solid color-mix(in srgb,var(--v) 32%,transparent);border-radius:4px;padding:1px 5px;line-height:1.4;}
 .pv{font-weight:500;font-size:17px;letter-spacing:.01em;color:var(--ink);font-variant-numeric:tabular-nums lining-nums;font-feature-settings:"tnum" 1,"lnum" 1;white-space:nowrap;}
 .pv .dg{color:var(--mut);font-weight:400;}
-.foot{padding:16px 22px 4px;}
+.foot{padding:14px 22px 2px;}
 .foot .line{font-size:11px;color:var(--mut);line-height:1.55;}
 .foot .line b{color:var(--sub);font-weight:600;}
+
+/* ---- translation section ---- */
+.sec{margin-top:30px;padding-top:26px;border-top:8px solid #efe8da;}
+.sechd{padding:0 22px;}
+.sechd .ey{color:var(--mut);}
+.sechd h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:27px;line-height:1.05;}
+.sechd .sub{margin-top:8px;}
+.steps{margin:22px 22px 0;position:relative;}
+.step{display:grid;grid-template-columns:34px 1fr;gap:14px;padding-bottom:22px;position:relative;}
+.step:not(:last-child)::before{content:"";position:absolute;left:16px;top:30px;bottom:-4px;width:1px;background:var(--line);}
+.snode{width:32px;height:32px;border-radius:50%;border:1px solid #d9cfbd;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--sub);font-variant-numeric:lining-nums;z-index:1;}
+.stitle{font-size:15px;font-weight:600;letter-spacing:-.005em;padding-top:6px;}
+.sbody{font-size:12.5px;color:var(--sub);line-height:1.55;margin-top:4px;}
+.sbody i{font-style:italic;color:var(--mut);}
+
+/* ---- result: four frequencies ---- */
+.result{margin:6px 22px 0;background:#fff;border:1px solid #efe6d6;border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(56,0,122,.05);}
+.rhd{padding:15px 16px 12px;border-bottom:1px solid var(--line);}
+.rhd .k{font-size:9.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);}
+.rhd .t{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;margin-top:3px;}
+.fr{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line);}
+.fr:last-child{border-bottom:none;}
+.fdot{width:22px;height:22px;border-radius:50%;flex:0 0 auto;box-shadow:0 2px 7px rgba(0,0,0,.14);}
+.fnm{font-size:15px;font-weight:600;}
+.fdom{font-size:11.5px;color:var(--mut);margin-top:1px;}
+.fhz{margin-left:auto;text-align:right;font-variant-numeric:tabular-nums lining-nums;}
+.fhz b{font-size:16px;font-weight:600;}.fhz small{font-size:10px;color:var(--mut);font-weight:500;display:block;letter-spacing:.04em;text-transform:uppercase;}
+.note{padding:14px 22px 4px;font-size:11.5px;color:var(--mut);line-height:1.6;}
+.note b{color:var(--sub);font-weight:600;}
+
 #nav{position:fixed;left:0;right:0;bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 60px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #EFE6D6;display:flex;justify-content:space-around;align-items:center;z-index:20;}
 #nav div{font-size:11px;text-align:center;color:#9a95a0;flex:1;}#nav div.on{color:var(--ink);font-weight:700;}
 #nav .ic{font-size:16px;display:block;margin-bottom:3px;}
@@ -61,6 +91,47 @@ h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:33px
 
   <div class="foot">
     <div class="line"><b>Rx</b> retrograde. Positions computed with the <b>Swiss Ephemeris</b>, built on NASA JPL data, accurate to a fraction of an arc-second.</div>
+  </div>
+
+  <div class="sec">
+    <div class="sechd">
+      <div class="ey">The calculation</div>
+      <h2>How these numbers become your four frequencies</h2>
+      <div class="sub">The positions above are your raw signal. Here is what happens to them.</div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="snode">1</div>
+        <div><div class="stitle">Your raw signal</div>
+          <div class="sbody">Every body&#39;s exact position, <b>248 celestial data points</b> in all. The starting pattern no one else shares.</div></div>
+      </div>
+      <div class="step">
+        <div class="snode">2</div>
+        <div><div class="stitle">Run through the lineage</div>
+          <div class="sbody">Those points pass through a licensed algorithm from the <b>Sri Vidy&#257; and Mantra &#346;&#257;stra</b> tradition, the ancient science of seed sounds <i>(b&#299;ja mantra)</i>.</div></div>
+      </div>
+      <div class="step">
+        <div class="snode">3</div>
+        <div><div class="stitle">Isolate the pure tones</div>
+          <div class="sbody">It draws out the <b>pure frequencies that sit behind those seed sounds</b>, the ones matched to your pattern.</div></div>
+      </div>
+      <div class="step">
+        <div class="snode">4</div>
+        <div><div class="stitle">Tuned to your body</div>
+          <div class="sbody">Each is octave-folded into the <b>250 to 950&nbsp;Hz</b> range the body can receive.</div></div>
+      </div>
+    </div>
+
+    <div class="result">
+      <div class="rhd"><div class="k">The output</div><div class="t">Your four Vibrational Frequencies&#8482;</div></div>
+      <div class="fr"><span class="fdot" style="background:linear-gradient(140deg,#6521C9,#A737C8)"></span><div><div class="fnm">Core</div><div class="fdom">Identity</div></div><div class="fhz"><b>406</b><small>Hz</small></div></div>
+      <div class="fr"><span class="fdot" style="background:linear-gradient(140deg,#B90044,#CF4090)"></span><div><div class="fnm">Love</div><div class="fdom">Connection</div></div><div class="fhz"><b>414</b><small>Hz</small></div></div>
+      <div class="fr"><span class="fdot" style="background:linear-gradient(140deg,#FF9112,#FFC251)"></span><div><div class="fnm">Vitality</div><div class="fdom">Energy</div></div><div class="fhz"><b>554</b><small>Hz</small></div></div>
+      <div class="fr"><span class="fdot" style="background:linear-gradient(140deg,#12A56E,#46D99A)"></span><div><div class="fnm">Abundance</div><div class="fdom">Opportunity</div></div><div class="fhz"><b>596</b><small>Hz</small></div></div>
+    </div>
+
+    <div class="note"><b>Example values.</b> Your four are calculated from your own chart. We hold the algorithm and we know it works from the results; exactly how it lands on your four is our best working model, and we say so.</div>
   </div>
 
   <div id="nav"><div><span class="ic">&#9834;</span>Immersions</div><div class="on"><span class="ic">&#9737;</span>Imprint</div><div><span class="ic">&#9825;</span>Playlist</div></div>
