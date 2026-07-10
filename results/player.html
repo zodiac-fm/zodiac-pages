@@ -3,367 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Player Lab · Tuner</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<title>Player Lab · Versions</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
 <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --serif:'Cormorant Garamond',Georgia,serif;
-    --sans:'Switzer',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-    /* station (JS swaps) */
-    --st:#6521C9; --st-deep:#38007A; --st-soft:#D2C8FF; --st-tint:#EFECFF; --st-text:#6521C9;
-  }
-  html.light{
-    --bg:#FFFFFF; --panel:#FBF8F3; --ink:#1A1620; --dim:rgba(26,22,32,.52); --faint:rgba(26,22,32,.32);
-    --line:rgba(26,22,32,.12); --gold:#B27C10; --gold-glow:rgba(178,124,16,.45);
-    --chip:#F3EFE8; --play-face:linear-gradient(135deg,var(--st),var(--st-deep)); --play-ico:#fff;
-    --st-label:var(--st-text);
-  }
-  html.dark{
-    --bg:#0B0712; --panel:#161020; --ink:#ECE7F2; --dim:rgba(236,231,242,.55); --faint:rgba(236,231,242,.34);
-    --line:rgba(236,231,242,.14); --gold:#D9A32C; --gold-glow:rgba(217,163,44,.5);
-    --chip:#1B1424; --play-face:#FBF8F3; --play-ico:#0B0712;
-    --st-label:var(--st-soft);
-  }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;transition:background .5s}
-  .lab{max-width:480px;min-height:100svh;margin:0 auto;padding:22px 22px 30px;display:flex;flex-direction:column}
-  header{display:flex;align-items:center;justify-content:space-between}
-  header img{height:22px;display:block}
-  .badge{background:var(--chip);border:1px solid var(--line);color:var(--dim);font:700 10.5px/1 var(--sans);letter-spacing:.1em;padding:7px 11px;border-radius:999px}
-
-  /* readout */
-  .readout{text-align:center;margin-top:16px}
-  .readout .num{font-size:76px;font-weight:700;letter-spacing:-.03em;line-height:.9;font-variant-numeric:tabular-nums}
-  .readout .hz{font-size:20px;font-weight:600;color:var(--dim);margin-left:6px}
-  .readout .who{margin-top:12px;font-size:11.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--st-label);transition:color .4s}
-  .readout .role{font-size:12.5px;color:var(--faint);margin-top:5px;letter-spacing:.02em}
-
-  /* dial */
-  .dial{margin-top:20px;position:relative}
-  #dialCv{width:100%;height:68px;display:block}
-
-  /* presets */
-  .presets{display:flex;gap:8px;margin-top:18px}
-  .presets button{flex:1;border:1px solid var(--line);background:transparent;border-radius:14px;padding:10px 2px 9px;cursor:pointer;font-family:var(--sans);transition:all .25s;color:var(--dim)}
-  .presets button .d{display:block;width:9px;height:9px;border-radius:50%;margin:0 auto 7px;background:var(--pc)}
-  .presets button b{display:block;font-size:12.5px;font-weight:600;color:inherit}
-  .presets button span{display:block;font-size:10.5px;color:var(--faint);margin-top:2px;font-variant-numeric:tabular-nums}
-  .presets button.on{border-color:transparent;background:var(--pt);color:var(--pl)}
-  .presets button.on span{color:var(--pl);opacity:.75}
-
-  /* the screen */
-  .screen{margin-top:16px;position:relative;height:216px;border-radius:20px;overflow:hidden;background:var(--panel);border:1px solid var(--line)}
-  #waveCv{position:absolute;inset:0;width:100%;height:100%}
-  #hint{position:absolute;left:0;right:0;bottom:13px;text-align:center;font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--faint);pointer-events:none;transition:opacity .4s}
-  #hint.off{opacity:0}
-
-  /* transport */
-  .transport{display:flex;justify-content:center;margin-top:16px}
-  #play{width:78px;height:78px;border-radius:50%;border:0;cursor:pointer;background:var(--play-face);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.18);transition:transform .15s}
-  #play:active{transform:scale(.96)}
-  #play svg{width:26px;height:26px;fill:var(--play-ico);margin-left:3px}
-  #play.pause svg{margin-left:0}
-  #play.pulse{animation:pp 1.6s ease-in-out infinite}
-  @keyframes pp{0%,100%{box-shadow:0 10px 30px rgba(0,0,0,.18),0 0 0 0 var(--gold-glow)}50%{box-shadow:0 10px 30px rgba(0,0,0,.18),0 0 0 12px rgba(0,0,0,0)}}
-
-  /* sources */
-  .chips{display:flex;gap:8px;justify-content:center;margin-top:16px}
-  .chips button{border:1px solid var(--line);background:transparent;color:var(--dim);border-radius:999px;padding:9px 15px;font-family:var(--sans);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:6px}
-  .chips button.on{background:var(--st);border-color:var(--st);color:#fff}
-  html.dark .chips button.on{color:#0B0712;background:var(--st-soft);border-color:var(--st-soft)}
-  .eq{display:none;gap:2px;height:9px;align-items:flex-end}
-  .eq i{width:2px;background:currentColor;border-radius:2px;animation:eq .9s ease-in-out infinite;height:100%}
-  .eq i:nth-child(2){animation-delay:.25s}.eq i:nth-child(3){animation-delay:.5s}
-  @keyframes eq{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
-  .chips button.on .eq{display:inline-flex}
-
-  .cap{text-align:center;font-size:12px;color:var(--faint);margin-top:auto;padding-top:18px;line-height:1.5}
+  body{background:#FBF8F3;color:#1A1620;font-family:'Switzer',-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:480px;margin:0 auto;padding:26px 22px 60px}
+  header img{height:24px;display:block}
+  h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:34px;margin-top:30px}
+  .sub{font-size:14.5px;line-height:1.55;color:rgba(26,22,32,.6);margin-top:8px}
+  .v{display:block;background:#fff;border-radius:16px;padding:16px 18px;margin-top:14px;text-decoration:none;color:#1A1620;box-shadow:0 1px 3px rgba(56,0,122,.06)}
+  .v b{font-size:16px;font-weight:600}
+  .v .tag{display:inline-block;background:#2A2530;color:#fff;font:700 10px/1 'Switzer',sans-serif;letter-spacing:.08em;padding:5px 9px;border-radius:999px;margin-right:9px;vertical-align:1px}
+  .v p{font-size:13px;line-height:1.5;color:rgba(26,22,32,.6);margin-top:6px}
+  .v .modes{font-size:12.5px;font-weight:600;color:#6521C9;margin-top:8px}
 </style>
 </head>
 <body>
-<div class="lab">
-  <header>
-    <img id="logo" src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
-    <div class="badge" id="badge">PLAYER · LIGHT</div>
-  </header>
+<div class="wrap">
+  <header><img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm"></header>
+  <h1>The Player Lab.</h1>
+  <p class="sub">Every player iteration, versioned and permanent. A version never changes after it ships; new work gets the next number.</p>
 
-  <div class="readout">
-    <div><span class="num" id="num">422</span><span class="hz">Hz</span></div>
-    <div class="who" id="who">Core · your station</div>
-    <div class="role" id="role">Identity</div>
-  </div>
+  <a class="v" href="player-03.html"><span class="tag">03</span><b>Tuner chrome + the ORIGINAL viewer</b>
+    <p>The tuner shell (readout, dial, presets, one play button) around the untouched original: the app's real playing view for songs, the original tone stage with the gold line at true height.</p>
+    <div class="modes">Light · <a href="player-03.html?mode=dark" style="color:#6521C9">Dark</a></div></a>
 
-  <div class="dial"><canvas id="dialCv"></canvas></div>
+  <a class="v" href="player-02.html"><span class="tag">02</span><b>Tuner + recreated true-height screen</b>
+    <p>Same tuner, screen redrawn by hand: true-height gold line, live analyser wave, dark nebula field. Not the original component.</p>
+    <div class="modes">Light · <a href="player-02.html?mode=dark" style="color:#6521C9">Dark</a></div></a>
 
-  <div class="presets" id="presets"></div>
-
-  <div class="screen">
-    <canvas id="waveCv"></canvas>
-    <div id="hint"></div>
-  </div>
-
-  <div class="transport">
-    <button id="play" class="pulse" aria-label="Play or pause"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-  </div>
-
-  <div class="chips" id="chips">
-    <button data-src="tone" class="on"><span class="eq"><i></i><i></i><i></i></span>Pure tone</button>
-    <button data-src="quiet-success"><span class="eq"><i></i><i></i><i></i></span>&#9834; Quiet Success</button>
-    <button data-src="kindred-spirits"><span class="eq"><i></i><i></i><i></i></span>&#9834; Kindred Spirits</button>
-  </div>
-
-  <div class="cap">Four frequencies, measured from your birth chart.<br>Tap a station. The tuner does the rest.</div>
+  <a class="v" href="player-01.html"><span class="tag">01</span><b>The first tuner</b>
+    <p>The radio-tuner concept: giant Hz readout, station presets, gold-needle dial, flat centered wave. Cleaner-not-wow verdict.</p>
+    <div class="modes">Light · <a href="player-01.html?mode=dark" style="color:#6521C9">Dark</a></div></a>
 </div>
-
-<script>
-/* ============ mode ============ */
-const DARK = new URLSearchParams(location.search).get('mode')==='dark';
-document.documentElement.classList.add(DARK?'dark':'light');
-document.getElementById('badge').textContent = DARK?'PLAYER · DARK':'PLAYER · LIGHT';
-document.getElementById('logo').src = DARK?'../inapp/app-assets/logo-cream.svg':'../inapp/app-assets/logo-black.svg';
-
-/* ============ stations (the four frequencies) ============ */
-const ST = [
-  {k:'core',      name:'Core',      role:'Identity',      hz:422, c:'#6521C9', deep:'#38007A', soft:'#D2C8FF', tint:'#EFECFF', text:'#6521C9'},
-  {k:'love',      name:'Love',      role:'Relationships', hz:432, c:'#B90044', deep:'#6E0024', soft:'#FFBDC3', tint:'#FFE8EA', text:'#B90044'},
-  {k:'vitality',  name:'Vitality',  role:'Energy',        hz:579, c:'#FF9112', deep:'#BC6700', soft:'#FFC392', tint:'#FFEADA', text:'#C25500'},
-  {k:'abundance', name:'Abundance', role:'Opportunity',   hz:611, c:'#12A56E', deep:'#0A6B48', soft:'#8FE1BE', tint:'#DCF4E8', text:'#0A7A52'}
-];
-const HZ0=380, HZ1=680;                      // the dial window
-let cur=0;                                    // active station index
-let shownHz=422, needleHz=422;                // animated values
-const $=id=>document.getElementById(id);
-function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
-function rgba(c,a){return 'rgba('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+','+a+')';}
-
-/* preset buttons */
-ST.forEach((s,i)=>{
-  const b=document.createElement('button');
-  b.style.setProperty('--pc',s.c);
-  b.style.setProperty('--pt',DARK?rgba(hx(s.c),.22):s.tint);
-  b.style.setProperty('--pl',DARK?s.soft:s.text);
-  b.innerHTML='<span class="d"></span><b>'+s.name+'</b><span>'+s.hz+' Hz</span>';
-  b.addEventListener('click',()=>tune(i));
-  $('presets').appendChild(b);
-});
-function paintPresets(){[...$('presets').children].forEach((b,i)=>b.classList.toggle('on',i===cur));}
-
-/* ============ audio: one graph, tone + songs through one analyser ============ */
-let actx=null, analyser=null, osc=null, oscGain=null, mediaSrc=null;
-const aud=new Audio(); aud.preload='auto'; aud.crossOrigin='anonymous';
-let source='tone';                            // 'tone' | slug
-let playing=false, everPlayed=false;
-function ctx(){
-  if(!actx){
-    actx=new (window.AudioContext||window.webkitAudioContext)();
-    analyser=actx.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=.85;
-    analyser.connect(actx.destination);
-    mediaSrc=actx.createMediaElementSource(aud); mediaSrc.connect(analyser);
-  }
-  if(actx.state==='suspended')actx.resume();
-  return actx;
-}
-function toneStart(){
-  const c=ctx();
-  osc=c.createOscillator(); oscGain=c.createGain();
-  osc.type='sine'; osc.frequency.value=ST[cur].hz;
-  oscGain.gain.value=0; osc.connect(oscGain); oscGain.connect(analyser);
-  osc.start(); oscGain.gain.setTargetAtTime(.16,c.currentTime,.25);
-}
-function toneStop(){
-  if(osc){ try{oscGain.gain.setTargetAtTime(0,actx.currentTime,.06); osc.stop(actx.currentTime+.3);}catch(e){} osc=null; }
-}
-function play(){
-  ctx(); everPlayed=true;
-  if(source==='tone'){ toneStop(); toneStart(); }
-  else{
-    if(!aud.src || !aud.src.includes(source)) aud.src='../inapp/app-assets/'+source+'.mp3';
-    aud.play();
-  }
-  playing=true; ui();
-}
-function pause(){
-  if(source==='tone') toneStop(); else aud.pause();
-  playing=false; ui();
-}
-$('play').addEventListener('click',()=>{ playing?pause():play(); });
-aud.addEventListener('ended',()=>{ playing=false; ui(); });
-
-/* source chips */
-document.querySelectorAll('#chips button').forEach(b=>b.addEventListener('click',()=>{
-  const s=b.dataset.src;
-  if(s===source){ playing?pause():play(); return; }
-  const was=playing;
-  if(source==='tone')toneStop(); else aud.pause();
-  source=s;
-  document.querySelectorAll('#chips button').forEach(x=>x.classList.toggle('on',x.dataset.src===s));
-  if(was||everPlayed) play();
-}));
-
-/* ============ tune(): the radio move ============ */
-function tune(i){
-  if(i===cur) { if(!playing&&everPlayed) play(); paintPresets(); return; }
-  cur=i;
-  const s=ST[i], r=document.documentElement.style;
-  r.setProperty('--st',s.c); r.setProperty('--st-deep',s.deep);
-  r.setProperty('--st-soft',s.soft); r.setProperty('--st-tint',s.tint); r.setProperty('--st-text',s.text);
-  $('who').textContent=s.name+' · your station';
-  $('role').textContent=s.role;
-  paintPresets();
-  if(source==='tone' && osc){ osc.frequency.setTargetAtTime(s.hz, actx.currentTime, .12); } // the audible re-tune
-}
-paintPresets();
-
-/* number roll + needle glide (spring toward target) */
-setInterval(()=>{},1e9); // noop keepalive placeholder
-function stepAnim(){
-  const t=ST[cur].hz;
-  shownHz += (t-shownHz)*.12; if(Math.abs(t-shownHz)<.5)shownHz=t;
-  needleHz += (t-needleHz)*.09; if(Math.abs(t-needleHz)<.05)needleHz=t;
-  $('num').textContent=Math.round(shownHz);
-}
-
-/* ============ the dial ============ */
-const dcv=$('dialCv'); const dctx=dcv.getContext('2d');
-function dialDraw(){
-  const r=dcv.getBoundingClientRect(), d=Math.min(devicePixelRatio||1,2);
-  const W=Math.round(r.width*d), H=Math.round(r.height*d);
-  if(dcv.width!==W||dcv.height!==H){dcv.width=W;dcv.height=H;}
-  dctx.clearRect(0,0,W,H);
-  const pad=14*d, x0=pad, x1=W-pad, yTick=H*0.52;
-  const X=hz=>x0+(x1-x0)*((hz-HZ0)/(HZ1-HZ0));
-  const ink = DARK?[236,231,242]:[26,22,32];
-  // ticks
-  for(let hz=HZ0; hz<=HZ1; hz+=10){
-    const big=hz%50===0, x=X(hz);
-    dctx.strokeStyle=rgba(ink,big?.34:.14); dctx.lineWidth=1*d;
-    dctx.beginPath(); dctx.moveTo(x,yTick-(big?11:6)*d); dctx.lineTo(x,yTick+(big?11:6)*d); dctx.stroke();
-    if(big){ dctx.fillStyle=rgba(ink,.38); dctx.font='500 '+(8.5*d)+'px Switzer,sans-serif';
-      dctx.textAlign='center'; dctx.textBaseline='top'; dctx.fillText(hz, x, yTick+15*d); }
-  }
-  // baseline
-  dctx.strokeStyle=rgba(ink,.2); dctx.lineWidth=1*d;
-  dctx.beginPath(); dctx.moveTo(x0,yTick); dctx.lineTo(x1,yTick); dctx.stroke();
-  // station dots
-  ST.forEach((s,i)=>{
-    const x=X(s.hz), c=hx(s.c);
-    dctx.fillStyle=rgba(c,i===cur?1:.45);
-    dctx.beginPath(); dctx.arc(x,yTick,(i===cur?4.6:3.4)*d,0,7); dctx.fill();
-  });
-  // the gold needle
-  const nx=X(needleHz), g=DARK?[217,163,44]:[178,124,16];
-  dctx.shadowColor=rgba(g,.7); dctx.shadowBlur=10*d;
-  dctx.strokeStyle=rgba(g,.95); dctx.lineWidth=2*d;
-  dctx.beginPath(); dctx.moveTo(nx,yTick-20*d); dctx.lineTo(nx,yTick+20*d); dctx.stroke();
-  dctx.shadowBlur=0;
-  dctx.fillStyle=rgba(g,1);
-  dctx.beginPath(); dctx.moveTo(nx,yTick-26*d); dctx.lineTo(nx-4*d,yTick-33*d); dctx.lineTo(nx+4*d,yTick-33*d); dctx.closePath(); dctx.fill();
-}
-/* tap the dial = nearest station */
-dcv.addEventListener('click',e=>{
-  const r=dcv.getBoundingClientRect(), frac=(e.clientX-r.left-14)/(r.width-28);
-  const hz=HZ0+(HZ1-HZ0)*Math.max(0,Math.min(1,frac));
-  let best=0,bd=1e9; ST.forEach((s,i)=>{const dd=Math.abs(s.hz-hz); if(dd<bd){bd=dd;best=i;}});
-  tune(best);
-});
-
-/* ============ the screen: sound made visible ============ */
-const wcv=$('waveCv'); const wctx=wcv.getContext('2d');
-const tdata=new Uint8Array(2048);
-function waveDraw(T){
-  const r=wcv.getBoundingClientRect(), d=Math.min(devicePixelRatio||1,2);
-  const W=Math.round(r.width*d), H=Math.round(r.height*d);
-  if(wcv.width!==W||wcv.height!==H){wcv.width=W;wcv.height=H;}
-  wctx.clearRect(0,0,W,H);
-  const s=ST[cur], c=hx(s.c), g=DARK?[217,163,44]:[178,124,16];
-  /* the tone sits at its TRUE height on the 250-950 range (the app's language) */
-  const yTop=H*0.18, yBot=H*0.85;
-  const fr=Math.max(0,Math.min(1,(needleHz-250)/700));
-  const midY=yBot-(yBot-yTop)*fr;
-  const x0=W*0.17, x1=W*0.95;
-  if(DARK){
-    const nb=wctx.createRadialGradient(W*0.5,midY,0,W*0.5,midY,W*0.72);
-    nb.addColorStop(0,rgba(c,playing?0.22:0.11)); nb.addColorStop(1,'rgba(0,0,0,0)');
-    wctx.fillStyle=nb; wctx.fillRect(0,0,W,H);
-    for(let i=0;i<26;i++){
-      const px=((i*137)%100)/100*W;
-      const py=((((i*89)%100)/100 + T*0.008*(1+i%5)) % 1)*H;
-      wctx.fillStyle=rgba(c, 0.10+((i*31)%10)/100);
-      wctx.beginPath(); wctx.arc(px,py,(1+(i%3))*0.7*d,0,7); wctx.fill();
-    }
-  } else {
-    const pg=wctx.createLinearGradient(0,0,0,H);
-    pg.addColorStop(0,'#FBF8F3'); pg.addColorStop(0.55,'#F5EFE6'); pg.addColorStop(1,'#F8F4EC');
-    wctx.fillStyle=pg; wctx.fillRect(0,0,W,H);
-    const rw=wctx.createRadialGradient(W/2,midY,0,W/2,midY,W*0.6);
-    rw.addColorStop(0,rgba(c,playing?0.10:0.05)); rw.addColorStop(1,'rgba(255,255,255,0)');
-    wctx.fillStyle=rw; wctx.fillRect(0,0,W,H);
-  }
-  /* the wave, wrapped around the line */
-  let pts=[]; const N=180;
-  if(playing && analyser){
-    analyser.getByteTimeDomainData(tdata);
-    for(let i=0;i<=N;i++) pts.push((tdata[Math.floor(i/N*(tdata.length-1))]-128)/128);
-  } else {
-    for(let i=0;i<=N;i++) pts.push(Math.sin(i/N*10*Math.PI+T*0.8)*0.14);
-  }
-  const amp=H*0.24;
-  const layers = DARK ? [[1,7,0.16],[1,2.6,0.95],[0.55,5,0.28]] : [[1,2.4,0.85],[0.55,5,0.22]];
-  layers.forEach(([sc,lw,al])=>{
-    wctx.beginPath();
-    pts.forEach((v,i)=>{
-      const xx=x0+(x1-x0)*(i/(pts.length-1));
-      const taper=Math.sin(i/(pts.length-1)*Math.PI);
-      const yy=midY+v*amp*sc*taper;
-      i===0?wctx.moveTo(xx,yy):wctx.lineTo(xx,yy);
-    });
-    wctx.strokeStyle=rgba(c,al); wctx.lineWidth=lw*d; wctx.lineCap='round'; wctx.stroke();
-  });
-  /* the gold line: your tone, dead steady, at its height */
-  wctx.shadowColor=rgba(g,DARK?0.85:0.6); wctx.shadowBlur=(playing?(DARK?18:12):7)*d;
-  wctx.strokeStyle=rgba(g,0.95); wctx.lineWidth=1.9*d;
-  wctx.beginPath(); wctx.moveTo(x0,midY); wctx.lineTo(x1,midY); wctx.stroke(); wctx.shadowBlur=0;
-  /* the 250-950 scale */
-  const ink=DARK?[236,231,242]:[26,22,32];
-  wctx.strokeStyle=rgba(ink,0.15); wctx.lineWidth=1*d;
-  wctx.beginPath(); wctx.moveTo(x0-9*d,yTop); wctx.lineTo(x0-9*d,yBot); wctx.stroke();
-  wctx.font='500 '+(8*d)+'px Switzer,sans-serif'; wctx.textAlign='right'; wctx.textBaseline='middle';
-  wctx.fillStyle=rgba(ink,0.35);
-  wctx.fillText('950', x0-14*d, yTop); wctx.fillText('250', x0-14*d, yBot);
-  wctx.strokeStyle=rgba(g,0.9); wctx.lineWidth=1.6*d;
-  wctx.beginPath(); wctx.moveTo(x0-13*d,midY); wctx.lineTo(x0,midY); wctx.stroke();
-  wctx.font='700 '+(11*d)+'px Switzer,sans-serif';
-  wctx.fillStyle=DARK?rgba(g,0.95):'rgba(122,86,10,0.95)';
-  wctx.fillText(Math.round(shownHz), x0-17*d, midY-1*d);
-  wctx.font='600 '+(7.5*d)+'px Switzer,sans-serif'; wctx.fillStyle=rgba(ink,0.4);
-  wctx.fillText('Hz', x0-17*d, midY+10*d);
-  if(!playing){
-    wctx.textAlign='center'; wctx.textBaseline='bottom';
-    wctx.font='500 '+(10.5*d)+'px Switzer,sans-serif';
-    wctx.fillStyle=DARK?rgba(g,0.9):'rgba(178,124,16,0.9)';
-    wctx.fillText('The gold line is your tone, at its true height.', W/2, H-28*d);
-    wctx.fillStyle=rgba(ink,0.45);
-    wctx.fillText('The music moves around it. Press play.', W/2, H-14*d);
-  }
-}
-
-/* ============ ui + main loop ============ */
-const ICO_PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
-const ICO_PAUSE='<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
-function ui(){
-  $('play').innerHTML=playing?ICO_PAUSE:ICO_PLAY;
-  $('play').classList.toggle('pause',playing);
-  $('play').classList.toggle('pulse',!everPlayed);
-  $('hint').classList.toggle('off',everPlayed);
-}
-(function loop(){
-  stepAnim(); dialDraw(); waveDraw(performance.now()/1000);
-  requestAnimationFrame(loop);
-})();
-ui();
-</script>
 </body>
 </html>
