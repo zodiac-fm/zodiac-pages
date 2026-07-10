@@ -366,18 +366,20 @@
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
-    <div class="barrow"><div class="selall" data-scope="favRows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
     <div class="zbal" id="zbal">
       <div class="zbal-line" id="zbalLine">
         <span class="zbal-lab"><span>Balance</span><span class="zbal-day">Day <b id="zbalDay"></b></span></span>
         <span class="zbal-toks" id="zbalToks"></span>
-        <svg class="zbal-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#6a6470" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg>
+        <span class="zbal-chevbtn"><svg class="zbal-chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
       </div>
       <div class="zbal-panel">
-        <p class="zbal-exp">A balanced week gives each of the four frequencies at least a small share of your listening. Everything you play counts, plus whatever is checked below.</p>
+        <h4 class="zbal-ttl">Frequency Balance Meter</h4>
+        <div class="zbal-sub">Staying above 15% per frequency</div>
+        <p class="zbal-exp">Your balance is calculated every week. This meter shows you the result of pressing Play All. Go ahead and check and uncheck boxes, and you'll see if your list keeps you on the right track.</p>
         <div class="zbal-sug" id="zbalSug"></div>
       </div>
     </div>
+    <div class="barrow"><div class="selall" data-scope="favRows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
     <div class="swrap">
     <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 8 12 4 16 8"/><polyline points="8 16 12 20 16 16"/><line x1="12" y1="4" x2="12" y2="20"/></svg></span>Hold to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
     <div class="rows" id="favRows" style="padding-top:8px"></div>
@@ -958,11 +960,15 @@ applyGraduated();
   .zbal-sent{font-size:11.5px;font-weight:600;color:#6a6470;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .zbal-sent .sep{color:#cfc8ba}
   .zbal-sent .ok{color:#1f9d63;font-style:normal}
-  .zbal-chev{flex:0 0 auto;transition:transform .2s;opacity:.55}
+  .zbal{margin-top:8px}
+  .zbal-chevbtn{flex:0 0 auto;width:24px;height:24px;border-radius:50%;background:#fff;border:1px solid #eadfce;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  .zbal-chev{transition:transform .2s}
   .zbal.open .zbal-chev{transform:rotate(180deg)}
   .zbal-panel{display:none;padding:0 14px 12px;border-top:1px solid rgba(26,22,32,.05)}
   .zbal.open .zbal-panel{display:block}
-  .zbal-exp{font-size:12px;line-height:1.5;color:#6a6470;padding-top:10px}
+  .zbal-ttl{font-size:14px;font-weight:700;letter-spacing:-.01em;padding-top:12px}
+  .zbal-sub{font-size:11px;font-weight:600;color:#8a8290;margin-top:2px}
+  .zbal-exp{font-size:12px;line-height:1.5;color:#6a6470;padding-top:8px}
   .zbal-sug{margin-top:9px;display:flex;flex-wrap:wrap;gap:7px;align-items:center}
   .zbal-sughd{font-size:11px;font-weight:700;color:#8a8290;width:100%}
   .zbal-sughd.done{color:#1f9d63}
@@ -978,6 +984,17 @@ applyGraduated();
   if(!/^[abc]$/.test(V)) V='a';
 
   function fmtMin(sec){ return Math.max(1, Math.ceil(sec/60)); }
+  function fmtTotal(sec){
+    var m=Math.round(sec/60), h=Math.floor(m/60);
+    return h ? h+'h '+(m%60)+'m' : m+'m';
+  }
+  /* Time (top right) runs on the engine: total time played + checked, green in balance, red out. */
+  function paintMinistat(res){
+    document.querySelectorAll('.ministat .ms-txt').forEach(function(t){
+      t.textContent=fmtTotal(res.total);
+      t.classList.toggle('low', !res.balanced);
+    });
+  }
 
   function engine(){
     var rows=[].slice.call(document.querySelectorAll('#favRows .row'));
@@ -996,6 +1013,7 @@ applyGraduated();
     var el=document.getElementById('zbalToks');
     if(!el || !window.ZBalance || typeof CATS==='undefined') return;
     var st=engine(), res=st.res;
+    paintMinistat(res);
     var short={}; res.shortfalls.forEach(function(s){ short[s.freq]=s; });
     var html='';
     if(V==='c'){
@@ -1055,6 +1073,17 @@ applyGraduated();
     if(fr && window.MutationObserver){
       new MutationObserver(function(){ render(); }).observe(fr, { subtree:true, attributes:true, attributeFilter:['class'] });
     }
+    /* review aids: ?open=1 opens the panel; ?demo=balanced checks enough rows to clear the week */
+    var P=new URLSearchParams(location.search);
+    if(P.get('open')) z.classList.add('open');
+    if(P.get('demo')==='balanced'){ setTimeout(function(){
+      ['vitality|astrolith','vitality|kindred-spirits'].forEach(function(k){
+        var p=k.split('|');
+        var row=[].slice.call(document.querySelectorAll('#favRows .row')).filter(function(r){ return r.dataset.ck===p[0]&&r.dataset.slug===p[1]; })[0];
+        var b=row&&row.querySelector('.qbox');
+        if(b && !b.classList.contains('on')) b.click();
+      });
+    },80); }
   }
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
@@ -1068,7 +1097,7 @@ applyGraduated();
   function slim(){ document.querySelectorAll('.ministat').forEach(function(ms){
     var labs=ms.querySelectorAll('.ms-lbl'); if(labs.length>1) labs[1].remove();
     var d=ms.querySelector('.ms-dots'); if(d) d.remove();
-  }); }
+  }); if(window.fbUpd) window.fbUpd(); }
   if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', slim); } else { slim(); }
   window.addEventListener('hashchange', slim);
 })();
