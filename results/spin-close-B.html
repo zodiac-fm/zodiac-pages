@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hear Your Frequencies · B · The Living Page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* tokens.json, locked 2026-06-30 */
+    --cream:#F6F1E8; --bleach:#FFFFFF; --moondust:#FBF8F3; --mist:#EEE9E0; --ink:#1A1620;
+    --control:#2A2530; --track:#EAE4DA; --stage:#0B0712;
+    --core:#6521C9; --core-deep:#38007A; --core-grad:#A737C8;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Switzer',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    /* active frequency (JS swaps these) */
+    --f:#6521C9; --f-deep:#38007A; --f-tint:#EFECFF; --f-grad:#A737C8; --f-accent:#6521C9;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--cream);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:480px;margin:0 auto;padding:0 18px 60px}
+
+  header{padding:20px 0 16px;border-bottom:1px solid rgba(26,22,32,.08)}
+  header img{height:24px;display:block}
+
+  .hero{padding:30px 0 8px}
+  .hero h1{font-family:var(--serif);font-weight:600;font-size:36px;line-height:1.08;letter-spacing:-.01em}
+  .hero h1 .nm{color:var(--core)}
+  .hero p{margin-top:10px;font-size:16px;line-height:1.5;color:rgba(26,22,32,.62)}
+
+  .sect{font-family:var(--serif);font-weight:600;font-size:29px;line-height:1.1;margin:34px 0 14px}
+
+  .card{background:var(--bleach);border-radius:18px;padding:18px 18px;box-shadow:0 1px 3px rgba(56,0,122,.06);margin-bottom:12px}
+
+  /* four frequency cards: soft two-hue gradient orb marks */
+  .fc-head{display:flex;align-items:center;gap:14px}
+  .fmed{width:58px;height:58px;flex:none}
+  .fmed canvas{width:100%;height:100%;display:block;filter:drop-shadow(0 3px 7px rgba(56,0,122,.13))}
+  .fc-name{font-family:var(--serif);font-weight:600;font-size:24px}
+  .fc-hz{font-size:14px;font-weight:600;letter-spacing:.02em;margin-left:auto}
+  .fc-desc{font-size:15px;line-height:1.5;margin-top:11px;color:var(--ink)}
+  .fc-band{font-size:13.5px;line-height:1.5;margin-top:7px;color:rgba(26,22,32,.55)}
+
+  /* THE SPIN, one instrument: frequency toggle ON the player, sources UNDER it */
+  .listen{padding:22px 18px 22px}
+  .listen h2{font-family:var(--serif);font-weight:600;font-size:27px;line-height:1.1}
+  .listen .lead{font-size:15px;line-height:1.55;color:rgba(26,22,32,.62);margin:8px 0 14px}
+  .tn-hl{color:var(--f-accent);font-weight:600}
+
+  .seg{display:flex;background:var(--track);border-radius:22px;padding:4px}
+  .seg button{flex:1;border:0;background:transparent;border-radius:18px;padding:9px 2px;font-family:var(--sans);font-size:12.5px;font-weight:600;color:rgba(26,22,32,.55);cursor:pointer;transition:all .18s}
+  .seg button.on{background:var(--bleach);box-shadow:0 2px 6px rgba(26,22,32,.10);color:var(--f-accent)}
+
+  .unit{margin-top:12px;border-radius:18px;border:1px solid rgba(26,22,32,.10);box-shadow:0 4px 16px rgba(56,0,122,.08);overflow:hidden;background:#FBF8F3}
+  #freqseg{border-radius:0;position:relative;z-index:2}
+  .viewer{position:relative;height:250px;overflow:hidden;background:#FBF8F3;cursor:pointer;border-top:1px solid rgba(26,22,32,.07);border-bottom:1px solid rgba(26,22,32,.07)}
+  .unit .seg.src{border-radius:0;background:var(--track);padding:4px}
+  .unit .seg.src button{font-size:12px;border-radius:14px}
+  .srcnote{background:#F1EBE1;padding:9px 14px 11px;font-size:12px;line-height:1.45;color:rgba(26,22,32,.6);text-align:center}
+  .srcnote b{color:#8a6a13;font-weight:600}
+  .ppb{position:absolute;top:12px;left:12px;width:46px;height:46px;border-radius:50%;border:0;background:#2A2530;color:#fff;z-index:5;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 10px rgba(26,22,32,.3);transition:background .2s}
+  .ppb svg{width:16px;height:16px;fill:#fff;margin-left:2px}
+  .ppb.pause svg{margin-left:0}
+  .ppb.pulse{animation:ppulse 1.5s ease-in-out infinite}
+  @keyframes ppulse{0%,100%{box-shadow:0 3px 10px rgba(26,22,32,.3),0 0 0 0 rgba(178,124,16,.32)}50%{box-shadow:0 3px 10px rgba(26,22,32,.3),0 0 0 8px rgba(178,124,16,0)}}
+  .steps{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 0;font-size:12px;color:rgba(26,22,32,.6)}
+  .steps i{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--core);color:#fff;font-style:normal;font-size:10px;font-weight:700;margin-right:5px;vertical-align:-3px}
+  .viewer iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:none;pointer-events:auto}
+  .viewer.song iframe{display:block}
+  .viewer.song #toneCv{display:none}
+  #toneCv{position:absolute;inset:0;width:100%;height:100%;display:block}
+  #vload{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(251,248,243,.97);z-index:3;color:rgba(26,22,32,.75);font-size:13.5px;text-align:center;padding:0 24px}
+  #vload.on{display:flex}
+  #vload b{color:#8a6a13}
+  #vload .dots{display:flex;gap:6px}
+  #vload .dots i{width:6px;height:6px;border-radius:50%;background:#7B5FCB;animation:vp 1s ease-in-out infinite}
+  #vload .dots i:nth-child(2){animation-delay:.2s}#vload .dots i:nth-child(3){animation-delay:.4s}
+  @keyframes vp{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
+
+  .eqi{display:none;gap:2.5px;height:10px;align-items:flex-end;margin-right:6px;vertical-align:-1px}
+  .eqi i{width:2.5px;background:var(--f-accent);border-radius:2px;transform-origin:bottom;animation:eq .9s ease-in-out infinite;height:100%}
+  .eqi i:nth-child(2){animation-delay:.25s}.eqi i:nth-child(3){animation-delay:.5s}
+  @keyframes eq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+
+  .craft{font-size:14px;line-height:1.55;color:rgba(26,22,32,.6);margin-top:14px}
+  .craft b{color:var(--f-accent)}
+
+  .blk-copy{font-size:14.5px;line-height:1.55;color:rgba(26,22,32,.72)}
+
+  /* library rows, locked editorial treatment */
+  .song{display:flex;align-items:center;gap:14px;margin-top:16px}
+  .thumb{width:52px;height:52px;flex:none;position:relative}
+  .thumb canvas{position:absolute;inset:0;width:100%;height:100%;transform:scale(1.16);filter:drop-shadow(0 3px 7px rgba(56,0,122,.13))}
+  .sx{flex:1;min-width:0}
+  .st{font-size:16.5px;font-weight:600}
+  .sd{font-size:12.5px;line-height:1.45;color:rgba(26,22,32,.55);margin-top:4px}
+  .bubbles{font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:rgba(26,22,32,.45);margin-top:4px}
+
+  .cta{display:block;width:100%;margin-top:20px;border:0;border-radius:14px;padding:17px 0;font-family:var(--sans);font-size:16px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--core),var(--core-deep));cursor:pointer}
+  .cta-sub{text-align:center;font-size:12.5px;color:rgba(26,22,32,.5);margin-top:10px}
+
+  /* silent-phone / blocked-autoplay prompt inside the player */
+  #vhint{position:absolute;left:0;right:0;bottom:14px;display:none;text-align:center;z-index:4;color:#8a6a13;font-size:13px;font-weight:600;letter-spacing:.01em;pointer-events:none}
+  #vhint.on{display:block}
+
+  /* proof + close */
+  .close{padding:24px 20px 26px}
+  .proof{display:flex;flex-direction:column;gap:18px;margin-bottom:22px}
+  .proof figure{border-left:2px solid var(--f-tint);padding-left:15px}
+  .proof blockquote{font-size:16px;line-height:1.5;color:var(--ink);font-weight:400}
+  .proof figcaption{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:rgba(26,22,32,.42);margin-top:7px}
+  .valueline{font-size:15px;line-height:1.5;color:var(--ink)}
+  .guarantee{display:flex;align-items:center;gap:9px;margin-top:14px;font-size:13px;line-height:1.4;color:rgba(26,22,32,.72)}
+  .guarantee svg{width:20px;height:20px;flex:none;color:#0A7A52}
+
+  /* living page */
+  #tint{position:fixed;inset:0;pointer-events:none;z-index:0;background:linear-gradient(180deg,var(--f-tint),rgba(246,241,232,0) 46%);opacity:.6;transition:opacity .5s}
+  .wrap{position:relative;z-index:1}
+  #heroOrb{width:92px;height:92px;display:block;margin-bottom:16px;animation:breathe 6s ease-in-out infinite;filter:drop-shadow(0 6px 16px rgba(56,0,122,.18))}
+  @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+  .unit{transition:box-shadow .6s}
+  .unit.playing{box-shadow:0 6px 30px rgba(56,0,122,.17)}
+  #lbar{position:fixed;left:12px;right:12px;bottom:12px;z-index:30;background:var(--bleach);border-radius:16px;box-shadow:0 6px 26px rgba(26,22,32,.16);padding:12px 14px;display:flex;align-items:center;gap:12px;max-width:456px;margin:0 auto}
+  #lbar[hidden]{display:none}
+  .lb-l{flex:1;min-width:0}
+  .lb-t{display:block;font-size:14px;font-weight:600}
+  .lb-s{display:block;font-size:12px;color:rgba(26,22,32,.55);margin-top:2px}
+  .lb-cta{border:0;border-radius:999px;padding:11px 18px;font-family:var(--sans);font-size:14px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--core),var(--core-deep));cursor:pointer}
+  .closeB{background:linear-gradient(180deg,var(--f-tint),#FFFFFF 70%)}
+</style>
+</head>
+<body>
+<div id="tint"></div>
+<div class="wrap">
+
+  <header><img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm"></header>
+  <div class="hero heroB">
+    <canvas id="heroOrb" width="300" height="300"></canvas>
+    <h1>Hear what your chart <span class="nm">sounds like.</span></h1>
+    <p>Four frequencies, measured from your birth chart. Below they become music. Drive it yourself: every switch re-tunes the song to you.</p>
+  </div>
+
+
+  
+
+  <!-- TAKE THE MUSIC FOR A SPIN, one instrument -->
+  <div class="card listen">
+    <h2>Take the Music for a Spin</h2>
+    <p class="lead" style="margin-bottom:0">Your four numbers are your <span class="tn-hl">tones</span>. Hear them:</p>
+    <div class="steps"><span><i>1</i>Pick a frequency</span><span><i>2</i>Tap a sound. It plays.</span></div>
+
+    <div class="unit">
+      <div class="seg" id="freqseg">
+        <button class="on" data-f="core">Core</button>
+        <button data-f="love">Love</button>
+        <button data-f="vitality">Vitality</button>
+        <button data-f="abundance">Abundance</button>
+      </div>
+
+      <div class="viewer" id="viewer">
+        <canvas id="toneCv"></canvas>
+        <iframe id="vframe" title="Zodiac playing view" allow="autoplay"></iframe>
+        <div id="vload"><div class="dots"><i></i><i></i><i></i></div><div>Tuning <b id="vloadSong">the song</b> to your <b id="vloadHz">422 Hz</b>&hellip;</div></div>
+        <button class="ppb" id="ppb" aria-label="Play or pause"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+        <div id="vhint">Tap play to start</div>
+      </div>
+
+      <div class="seg src" id="srcseg">
+        <button class="on" data-src="tone"><span class="eqi"><i></i><i></i><i></i></span>Tone &middot; <span id="toneHzLbl">422</span> Hz</button>
+        <button data-src="quiet-success" data-title="Quiet Success"><span class="eqi"><i></i><i></i><i></i></span>&#9834; Quiet Success</button>
+        <button data-src="kindred-spirits" data-title="Kindred Spirits"><span class="eqi"><i></i><i></i><i></i></span>&#9834; Kindred Spirits</button>
+      </div>
+      <div class="srcnote" id="srcNote">The pure signal, straight from your chart. <b>Ten seconds.</b></div>
+    </div>
+
+    <p class="craft">A tone on its own gets annoying fast. So we rebuild each composition around your frequency: the gold line is your <b>tone</b>, holding steady while the music moves around it.</p>
+  </div>
+
+  <!-- THE LIBRARY -->
+  <div class="sect" style="font-size:26px">These aren&rsquo;t your only songs.</div>
+  <div class="card lib">
+    <p class="blk-copy">Seven soundscapes so far, every one rebuilt around your frequencies so the harmonics sit right and the music simply sounds good. Besides the two in the player, your library holds:</p>
+
+    <div class="song">
+      <div class="thumb"><canvas data-slug="starseed" width="232" height="232"></canvas></div>
+      <div class="sx">
+        <div class="st">Starseed</div>
+        <div class="bubbles">Meditate &middot; Deep &middot; Dreamy</div>
+        <div class="sd">An otherworldly voice leads you in.</div>
+      </div>
+    </div>
+
+    <div class="song">
+      <div class="thumb"><canvas data-slug="astrolith" width="232" height="232"></canvas></div>
+      <div class="sx">
+        <div class="st">Astrolith</div>
+        <div class="bubbles">Focus &middot; Meditate &middot; Calm</div>
+        <div class="sd">A steady pulse that never distracts.</div>
+      </div>
+    </div>
+
+    <div class="song">
+      <div class="thumb"><canvas data-slug="elysian-surge" width="232" height="232"></canvas></div>
+      <div class="sx">
+        <div class="st">Elysian Surge</div>
+        <div class="bubbles">Energy &middot; Motivate &middot; Build</div>
+        <div class="sd">Starts warm, ends unstoppable.</div>
+      </div>
+    </div>
+
+    <div class="song">
+      <div class="thumb"><canvas data-slug="cosmic-drift" width="232" height="232"></canvas></div>
+      <div class="sx">
+        <div class="st">Cosmic Drift</div>
+        <div class="bubbles">Focus &middot; Meditate &middot; Nap</div>
+        <div class="sd">Slow swells, like rain on a window.</div>
+      </div>
+    </div>
+
+    <div class="song">
+      <div class="thumb"><canvas data-slug="galactic-slumber" width="232" height="232"></canvas></div>
+      <div class="sx">
+        <div class="st">Galactic Deep</div>
+        <div class="bubbles">Sleep &middot; Meditate &middot; Deep</div>
+        <div class="sd">Dark, slow, and bottomless. A full hour, made for sleep.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CLOSE -->
+  <div class="sect" style="font-size:26px">It&rsquo;s already tuned to you.</div>
+  <div class="card close closeB">
+    <p class="valueline" style="margin-bottom:18px">That was ninety seconds of one song. Your library holds seven soundscapes, every one rebuilt around your four frequencies, for work, meditation, and sleep.</p>
+    <div class="proof">
+      <figure><blockquote>&ldquo;I cried a good cry the first time I listened to one of the Core Frequencies... I felt so light and peaceful.&rdquo;</blockquote><figcaption>Karen Schwabe</figcaption></figure>
+      <figure><blockquote>&ldquo;It lets you finally feel the parts of yourself you have only ever read about.&rdquo;</blockquote><figcaption>Zehra</figcaption></figure>
+    </div>
+    <button class="cta">Keep your frequencies</button>
+    <div class="guarantee"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l7 3v6c0 4.5-3 8.4-7 10-4-1.6-7-5.5-7-10V5l7-3z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 12l2.3 2.3L15.5 9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Listen for 90 days. If it&rsquo;s not for you, email us and we send every cent back.</div>
+  </div>
+  </div>
+
+</div>
+
+<script>
+// demo chart (michael): the four frequencies
+const FREQS = {
+  core:{label:'Core',      hz:422, c1:'#6521C9',c2:'#A737C8', deep:'#38007A', tint:'#EFECFF', soft:'#D2C8FF', accent:'#6521C9'},
+  love:{label:'Love',      hz:432, c1:'#B90044',c2:'#CF4090', deep:'#6E0024', tint:'#FFE8EA', soft:'#FFBDC3', accent:'#B90044'},
+  vitality:{label:'Vitality',  hz:579, c1:'#FF9112',c2:'#FFC251', deep:'#BC6700', tint:'#FFEADA', soft:'#FFC392', accent:'#C25500'},
+  abundance:{label:'Abundance', hz:611, c1:'#12A56E',c2:'#46D99A', deep:'#0A6B48', tint:'#DCF4E8', soft:'#8FE1BE', accent:'#0A7A52'}
+};
+let active = 'core';
+const $ = id => document.getElementById(id);
+
+/* ---- zdisc art engine, ported from the app build (app-C engine v4), vivid pass ---- */
+const ZPAL={
+  core:{d:['#6521C9','#A737C8'],s:[['#7A4AE0','#B98AF0'],['#B44FD8','#D07DE8']]},
+  love:{d:['#B90044','#E0559A'],s:[['#F43F6B','#FF7A98'],['#EE3D9C','#FF7EC2']]},
+  vitality:{d:['#FF7A00','#FFC251'],s:[['#FF5426','#FF8A5C'],['#FFB020','#FFE08A']]},
+  abundance:{d:['#0B9159','#2BC47F'],s:[['#0FA98F','#3BC9AD'],['#2FBF6E','#63D992']]}
+};
+const FAM={'quiet-success':'halo','kindred-spirits':'mandala','elysian-surge':'burst',
+           'starseed':'weave','astrolith':'iris','cosmic-drift':'orbit','galactic-slumber':'galaxy'};
+
+/* the frequency marks, LOCKED to option E (Michael 2026-07-06): a clean perfect circle,
+   mesh coloring inside (deep, primary, bright hues blending like a mesh gradient, fine grain),
+   lit from above with the light-tint wash, the shading move kept from the old site.
+   Edge is masked with a hair-thin alpha ramp: canvas clip() leaves jagged edges. */
+let _grainCv=null;
+function _grain(){ if(_grainCv) return _grainCv;
+  const s=128,o=document.createElement('canvas');o.width=o.height=s;
+  const g=o.getContext('2d'),id=g.createImageData(s,s);
+  let seed=48271; const rnd=()=>{ seed=(seed*16807)%2147483647; return seed/2147483647; };
+  for(let i=0;i<id.data.length;i+=4){ const v=170+rnd()*85;
+    id.data[i]=id.data[i+1]=id.data[i+2]=v; id.data[i+3]=rnd()*22; }
+  g.putImageData(id,0,0); _grainCv=o; return o; }
+function drawBlob(cv,catk){
+  const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2,R=Math.min(W,H)*0.44;
+  const f=FREQS[catk]||FREQS.core,c1=hx(f.c1),c2=hx(f.c2),dp=hx(f.deep),lt=hx(f.soft);
+  x.clearRect(0,0,W,H);
+  // the mesh: primary base, deep lower-left, bright hue right, light wash from the top edge
+  x.fillStyle=rgba(c1,1); x.fillRect(0,0,W,H);
+  function field(gx,gy,r,col,a){
+    const g=x.createRadialGradient(gx,gy,0,gx,gy,r);
+    g.addColorStop(0,rgba(col,a)); g.addColorStop(1,rgba(col,0));
+    x.fillStyle=g; x.fillRect(0,0,W,H); }
+  field(cx-R*0.55,cy+R*0.6, R*1.15, dp, 0.85);
+  field(cx+R*0.75,cy-R*0.15,R*1.35, c2, 0.95);
+  field(cx+R*0.35,cy+R*0.75,R*0.9,  c2, 0.5);
+  field(cx-R*0.15,cy-R*0.95,R*1.15, lt, 0.55);
+  x.save(); x.globalAlpha=0.55; x.fillStyle=x.createPattern(_grain(),'repeat'); x.fillRect(0,0,W,H); x.restore();
+  // anti-aliased circle mask
+  const m=x.createRadialGradient(cx,cy,0,cx,cy,R);
+  m.addColorStop(0,'rgba(0,0,0,1)'); m.addColorStop(0.965,'rgba(0,0,0,1)'); m.addColorStop(1,'rgba(0,0,0,0)');
+  x.globalCompositeOperation='destination-in';
+  x.fillStyle=m; x.fillRect(0,0,W,H);
+  x.globalCompositeOperation='source-over';
+}
+function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+function mix(a,b,t){return a.map((v,i)=>v+(b[i]-v)*t);}
+function rgba(c,a){return 'rgba('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+','+a+')';}
+function hash(s){let h=177;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h;}
+function ray(x,x1,y1,x2,y2,cA,cB,al,wd){const g=x.createLinearGradient(x1,y1,x2,y2);
+  g.addColorStop(0,rgba(cA,al));g.addColorStop(0.78,rgba(cB,al*0.9));g.addColorStop(1,rgba(cB,al*0.35));
+  x.strokeStyle=g;x.lineWidth=wd*2.3;x.globalAlpha=0.62;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
+  x.globalAlpha=1;x.lineWidth=wd;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();}
+function drawZ(cv,slug,catk,tt,alive,env){
+  const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2;x.clearRect(0,0,W,H);
+  const P=ZPAL[catk]||ZPAL.core,pr=hx(P.d[0]),en=hx(P.d[1]);
+  const s0a=hx(P.s[0][0]),s0b=hx(P.s[0][1]),s1a=hx(P.s[1][0]),s1b=hx(P.s[1][1]);
+  const seed=hash(slug),rr1=((seed%97)/97),puls=1+(alive?0.11*env:0),bmul=alive?(0.82+0.3*env):1;
+  const R=Math.min(W,H)*0.44,r0=Math.min(W,H)*0.075,rot=(alive?tt*0.06:0.6)+rr1*6.28;
+  const wd=Math.max(2.1,W/240*2.0);
+  x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,R*1.02,0,7);x.fill();
+  const tg=x.createRadialGradient(cx,cy,r0,cx,cy,R*0.95);tg.addColorStop(0,rgba(en,0.34));tg.addColorStop(1,rgba(en,0.05));
+  x.fillStyle=tg;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();
+  x.lineCap='round';
+  const F=FAM[slug]||'burst';
+  function glint(i){return i%6===0?[s0a,s0b,0.75]:(i%9===0?[s1a,s1b,0.72]:[pr,en,1]);}
+  if(F==='burst'){const N=150;for(let i=0;i<N;i++){const a=i/N*6.283+rot;
+    const L=R*(0.86+0.10*Math.sin(a*7+rr1*6))*puls;const[cA,cB,m]=glint(i);
+    ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.85*m*bmul,wd);}}
+  else if(F==='iris'){const N=130;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L=R*0.7*puls;const[cA,cB,m]=glint(i);
+    ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.7*m*bmul,wd);}
+    [[0.5,pr,2.6],[0.84,en,1.9]].forEach(([r2,cc,ww])=>{x.strokeStyle=rgba(cc,0.95*bmul);x.lineWidth=wd*ww;
+    x.beginPath();x.arc(cx,cy,R*r2*puls,0,7);x.stroke();});}
+  else if(F==='orbit'){const RG=[0.36,0.52,0.68,0.84];RG.forEach((rr,k)=>{
+    x.strokeStyle=rgba(k%2?en:pr,(0.8-k*0.08)*bmul);x.lineWidth=wd*1.3;
+    x.beginPath();x.arc(cx,cy,R*rr*puls,0,7);x.stroke();
+    const NB2=3+k;for(let b=0;b<NB2;b++){const a=rot*(k%2?1.4:-1.1)+b/NB2*6.283+k*0.9;
+      const[cA,cB,m]=glint(k*7+b*3);
+      x.fillStyle=rgba(cB,0.95*m*bmul);x.beginPath();
+      x.arc(cx+Math.cos(a)*R*rr*puls,cy+Math.sin(a)*R*rr*puls,wd*2.1,0,7);x.fill();}});}
+  else if(F==='galaxy'){const ARMS=3;for(let ar=0;ar<ARMS;ar++){const a0=ar/ARMS*6.283+rot;
+    for(let i=0;i<34;i++){const t=i/34;const a=a0+t*3.1;const r2=r0*1.2+(R*0.92-r0*1.2)*t*puls;
+      const[cA,cB,m]=glint(ar*34+i);
+      x.fillStyle=rgba(t<0.12?cA:mix(cA,cB,t),(0.95-0.55*t)*m*bmul);x.beginPath();
+      x.arc(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2,wd*(1.9-t*1.1),0,7);x.fill();}}
+    const bg=x.createRadialGradient(cx,cy,0,cx,cy,r0*1.5);bg.addColorStop(0,rgba(en,0.8*bmul));bg.addColorStop(1,rgba(en,0));
+    x.fillStyle=bg;x.beginPath();x.arc(cx,cy,r0*1.5,0,7);x.fill();}
+  else if(F==='mandala'){const Pt=10,N=170;for(let i=0;i<N;i++){const a=i/N*6.283+rot;
+    const lobe=Math.max(0,Math.cos((a-rot)*Pt/2));const L=R*(0.44+0.5*Math.pow(lobe,1.6))*puls;
+    if(L>R*0.45){const[cA,cB,m]=glint(i);
+    ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.8*m*bmul,wd);}}}
+  else if(F==='halo'){const N=36;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L=R*0.88*puls;const[cA,cB,m]=glint(i);
+    ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.8*m*bmul,wd);}
+    x.strokeStyle=rgba(en,0.9*bmul);x.lineWidth=wd*2.6;x.beginPath();x.arc(cx,cy,R*0.88*puls,0,7);x.stroke();}
+  else{const N=130;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L1=R*0.52,L2=R*0.9*puls;const[cA,cB,m]=glint(i);
+    ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L1,cy+Math.sin(a)*L1,pr,pr,0.8*bmul,wd);
+    if(i%2)ray(x,cx+Math.cos(a)*(L1+wd*3),cy+Math.sin(a)*(L1+wd*3),cx+Math.cos(a)*L2,cy+Math.sin(a)*L2,cA,cB,0.7*m*bmul,wd);}}
+  const cp=1+(alive?0.14*env:0),core=x.createRadialGradient(cx,cy,0,cx,cy,r0*1.8*cp);
+  core.addColorStop(0,'rgba(255,255,255,0.96)');core.addColorStop(0.55,rgba(pr,0.10+(alive?0.08*env:0)));core.addColorStop(1,rgba(pr,0));
+  x.fillStyle=core;x.beginPath();x.arc(cx,cy,r0*1.9*cp,0,7);x.fill();
+  x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,r0*0.5,0,7);x.fill();
+}
+function drawAll(){
+  document.querySelectorAll('canvas[data-slug]').forEach(cv => drawZ(cv, cv.dataset.slug, active, 0, false, 0));
+  document.querySelectorAll('canvas[data-fslug]').forEach(cv => drawBlob(cv, cv.dataset.fcat));
+}
+
+/* ================= THE INSTRUMENT ================= */
+let source='tone';                       // 'tone' | song slug
+let currentSong=null, capTimer=null;
+const CAP=90;
+const SRC_NOTES={
+  'tone':'The pure signal, straight from your chart. <b>Ten seconds.</b>',
+  'quiet-success':'A song from your library. Warm, low tones that ring like bowls. <b>First 90 seconds.</b>',
+  'kindred-spirits':'A song from your library. Bright and steady from the first note. <b>First 90 seconds.</b>'
+};
+
+/* ---- tone view: same stage language as the app player (dark, gold line, waves around it) ---- */
+const tcv=$('toneCv'); let tctx=tcv.getContext('2d'), toneRaf=null;
+function tracked(text, cx, y, px, weight, color, track){   // centered, letter-tracked caps in the locked sans
+  tctx.font=weight+' '+px+'px Switzer, -apple-system, sans-serif'; tctx.fillStyle=color;
+  tctx.textAlign='left'; tctx.textBaseline='top';
+  const chs=[...text]; let total=0; const ws=chs.map(c=>{const w=tctx.measureText(c).width; total+=w+track; return w;}); total-=track;
+  let x=cx-total/2;
+  for(let i=0;i<chs.length;i++){ tctx.fillText(chs[i], x, y); x+=ws[i]+track; }
+}
+function toneSize(){ const r=$('viewer').getBoundingClientRect(), d=Math.min(devicePixelRatio||1,2);
+  const w=Math.max(2,Math.round(r.width*d)), h=Math.max(2,Math.round(r.height*d));
+  if (tcv.width!==w||tcv.height!==h){ tcv.width=w; tcv.height=h; } }
+function drawTone(T, playing, prog){
+  const W=tcv.width, H=tcv.height, cx=W/2, d=Math.min(devicePixelRatio||1,2);
+  const f=FREQS[active], col=hx(f.c1);
+  // the tone sits at its TRUE height on the 250-950 range (higher Hz = higher), same idea as the songs
+  const yTop=H*0.34, yBot=H*0.78, fr=Math.max(0,Math.min(1,(f.hz-250)/700));
+  const midY=yBot-(yBot-yTop)*fr;
+  const g=tctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#FBF8F3'); g.addColorStop(0.55,'#F5EFE6'); g.addColorStop(1,'#F8F4EC');
+  tctx.fillStyle=g; tctx.fillRect(0,0,W,H);
+  const rw=tctx.createRadialGradient(cx,midY,0,cx,midY,W*0.6);
+  rw.addColorStop(0,rgba(col, playing?0.10:0.05)); rw.addColorStop(1,'rgba(255,255,255,0)');
+  tctx.fillStyle=rw; tctx.fillRect(0,0,W,H);
+  const x0=W*0.15, x1=W*0.95;
+  // the wave, wrapped around the line (the tone made visible)
+  const amp=(playing? H*0.17*(0.65+0.35*Math.sin(T*2.2)) : H*0.085);
+  tctx.beginPath();
+  for(let xx=x0; xx<=x1; xx+=3*d){
+    const ph=(xx/W)*10*Math.PI + (playing?T*4:0.8);
+    const yy=midY + Math.sin(ph)*amp;
+    xx===x0 ? tctx.moveTo(xx,yy) : tctx.lineTo(xx,yy);
+  }
+  tctx.strokeStyle=rgba(col, playing?0.9:0.55); tctx.lineWidth=2.2*d; tctx.lineCap='round'; tctx.stroke();
+  // soft echo wave
+  tctx.beginPath();
+  for(let xx=x0; xx<=x1; xx+=3*d){
+    const ph=(xx/W)*10*Math.PI + (playing?T*4:0.8) + 1.2;
+    const yy=midY + Math.sin(ph)*amp*0.55;
+    xx===x0 ? tctx.moveTo(xx,yy) : tctx.lineTo(xx,yy);
+  }
+  tctx.strokeStyle=rgba(col, playing?0.30:0.16); tctx.lineWidth=5*d; tctx.stroke();
+  // the gold line: your tone, dead steady
+  tctx.shadowColor='rgba(178,124,16,0.55)'; tctx.shadowBlur=(playing?12:6)*d;
+  tctx.strokeStyle='rgba(178,124,16,0.95)'; tctx.lineWidth=2*d;
+  tctx.beginPath(); tctx.moveTo(x0,midY); tctx.lineTo(x1,midY); tctx.stroke(); tctx.shadowBlur=0;
+  // light 250-950 scale so the line's height reads as real
+  tctx.strokeStyle='rgba(26,22,32,0.12)'; tctx.lineWidth=1*d;
+  tctx.beginPath(); tctx.moveTo(x0-3*d,yTop); tctx.lineTo(x0-3*d,yBot); tctx.stroke();
+  tctx.textAlign='right'; tctx.textBaseline='middle'; tctx.font='500 '+(8*d)+'px Switzer, -apple-system, sans-serif'; tctx.fillStyle='rgba(26,22,32,0.32)';
+  tctx.fillText('950 Hz', x0-9*d, yTop); tctx.fillText('250 Hz', x0-9*d, yBot);
+  // Hz label bold on the gold line + a tick into the scale (Switzer, every number is Switzer)
+  tctx.strokeStyle='rgba(178,124,16,0.9)'; tctx.lineWidth=1.6*d;
+  tctx.beginPath(); tctx.moveTo(x0-7*d,midY); tctx.lineTo(x0,midY); tctx.stroke();
+  tctx.textBaseline='middle'; tctx.textAlign='right';
+  tctx.font='700 '+(11.5*d)+'px Switzer, -apple-system, sans-serif'; tctx.fillStyle='rgba(122,86,10,0.95)';
+  tctx.fillText(f.hz+' Hz', x0-11*d, midY);
+  // header, locked Switzer caps with real tracking
+  tracked('PURE TONE', cx, 19*d, 12*d, '600', 'rgba(26,22,32,0.82)', 3.4*d);
+  tracked('THE SOUND OF YOU', cx, 37*d, 8.5*d, '500', 'rgba(26,22,32,0.4)', 2.1*d);
+  if(playing){
+    tctx.textAlign='center'; tctx.textBaseline='bottom';
+    tctx.font='500 '+(10.5*d)+'px Switzer, -apple-system, sans-serif'; tctx.fillStyle='rgba(26,22,32,0.6)';
+    tctx.fillText('0:0'+Math.max(0,Math.ceil(10-prog))+' / 0:10', cx, H-14*d);
+  } else {
+    // idle: decode the gold line, in the stage's own language (fades out once playing)
+    tctx.textAlign='center'; tctx.textBaseline='bottom';
+    tctx.font='500 '+(11*d)+'px Switzer, -apple-system, sans-serif';
+    tctx.fillStyle='rgba(178,124,16,0.9)'; tctx.fillText('The gold line is your tone.', cx, H-30*d);
+    tctx.fillStyle='rgba(26,22,32,0.5)'; tctx.fillText('The music moves around it.', cx, H-14*d);
+  }
+}
+function toneIdle(){ cancelAnimationFrame(toneRaf); toneSize(); drawTone(0,false,0); $('ppb').classList.add('pulse'); }
+
+/* ---- raw tone audio: WebAudio oscillator at the exact Hz, 10s, soft envelope ---- */
+let actx=null, osc=null, gain=null, toneStart=0;
+const TONE_LEN = 10;
+function audioCtx(){ actx = actx || new (window.AudioContext||window.webkitAudioContext)(); if(actx.state==='suspended')actx.resume(); return actx; }
+function stopTone(){
+  if (osc){ try{ gain.gain.setTargetAtTime(0, actx.currentTime, .08); osc.stop(actx.currentTime + .4);}catch(e){} osc=null; }
+  cancelAnimationFrame(toneRaf);
+  if (source==='tone') toneIdle();
+  setSrcPlaying(null);
+}
+function playTone(){
+  const ctx = audioCtx();
+  osc = ctx.createOscillator(); gain = ctx.createGain();
+  osc.type = 'sine'; osc.frequency.value = FREQS[active].hz;
+  gain.gain.value = 0; osc.connect(gain); gain.connect(ctx.destination);
+  osc.start();
+  gain.gain.setTargetAtTime(.18, ctx.currentTime, .25);
+  gain.gain.setTargetAtTime(0, ctx.currentTime + TONE_LEN - .8, .3);
+  osc.stop(ctx.currentTime + TONE_LEN);
+  const me = osc;
+  osc.onended = () => { if (osc === me) stopTone(); };
+  toneStart = performance.now();
+  setSrcPlaying('tone');
+  $('ppb').classList.remove('pulse');
+  (function loop(){
+    if (!osc) return;
+    const t=(performance.now()-toneStart)/1000;
+    toneSize(); drawTone(performance.now()/1000, true, Math.min(t,TONE_LEN));
+    toneRaf=requestAnimationFrame(loop);
+  })();
+}
+
+/* ---- play/pause: the small button up-left; the canvas itself also toggles ---- */
+const ICO_PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+const ICO_PAUSE='<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+function togglePlay(){
+  if (source==='tone'){ if(osc) stopTone(); else playTone(); return; }
+  try{ const w=$('vframe').contentWindow;
+    if(w&&w.aud){ if(!w.aud.src){ return; }
+      if(w.aud.paused){ if(w.startSound&&!w.aud.currentTime){ w.startSound(); } else { w.aud.play(); } }
+      else { w.aud.pause(); } } }catch(e){}
+}
+$('ppb').addEventListener('click', (e)=>{ e.stopPropagation(); togglePlay(); });
+$('viewer').addEventListener('click', ()=>{ if (source==='tone') togglePlay(); });  // song taps land in the iframe (same behavior)
+setInterval(()=>{  // keep the button honest, whatever is playing
+  let playing=false;
+  if (source==='tone') playing=!!osc;
+  else { try{ const w=$('vframe').contentWindow; playing=!!(w&&w.aud&&w.aud.src&&!w.aud.paused); }catch(e){} }
+  $('ppb').innerHTML = playing?ICO_PAUSE:ICO_PLAY;
+  $('ppb').classList.toggle('pause',playing);
+  document.querySelector('.unit').classList.toggle('playing',playing);
+  if(playing && source!=='tone') lbarSeen=true;
+  const lb=$('lbar');
+  if(lb){ lb.hidden=!lbarSeen;
+    if(lbarSeen){ let ct=0; try{const w=$('vframe').contentWindow; if(w&&w.aud)ct=w.aud.currentTime;}catch(e){}
+      const left=Math.max(0,Math.ceil(90-ct));
+      $('lbS').textContent = playing ? ('Just listen \u00b7 '+left+'s of your free listen left') : 'Your ninety seconds are waiting';
+    } }
+},300);
+
+/* ---- songs: the app's playing view, embedded (center=1 waves wrap the line, minui=1 tap to play/pause) ---- */
+function loadSong(slug,title){
+  const f=FREQS[active];
+  currentSong={slug,title};
+  $('vframe').src='../inapp/frequency-visualizer-embed.html'
+    + '?audio='+encodeURIComponent('./app-assets/'+slug+'.mp3')
+    + '&target='+f.hz + '&title='+encodeURIComponent(title)
+    + '&center=1&minui=1&light=1&wave='+encodeURIComponent(f.c1)+'&r='+(slug.length*10000+f.hz);
+  $('viewer').classList.add('song');
+  $('vload').classList.add('on');
+  $('vloadSong').textContent=title; $('vloadHz').textContent=f.hz+' Hz';
+  clearInterval(capTimer);
+  let ready=false, autoTried=0;
+  capTimer=setInterval(()=>{
+    try{
+      const w=$('vframe').contentWindow;
+      if(!w || !w.aud) return;
+      if(!ready && w.aud.src){ ready=true; $('vload').classList.remove('on'); try{ w.dispatchEvent(new w.Event('resize')); }catch(e){} }
+      if(ready && w.aud.paused && w.aud.currentTime<CAP && autoTried<4){ autoTried++; try{ w.startSound&&w.startSound(); }catch(e){} }
+      if(ready && !w.aud.paused){ setSrcPlaying(slug); $('ppb').classList.remove('pulse'); $('vhint').classList.remove('on'); }
+      if(ready && w.aud.paused){ setSrcPlaying(null); if(autoTried>=4 && !w.aud.currentTime){ $('ppb').classList.add('pulse'); $('vhint').classList.add('on'); } }
+      if(w.aud.currentTime>=CAP && !w.aud.paused){ w.aud.pause(); }
+    }catch(e){}
+  },400);
+}
+function stopSong(){
+  clearInterval(capTimer); currentSong=null;
+  $('vframe').src='about:blank';
+  $('viewer').classList.remove('song');
+  $('vload').classList.remove('on');
+  $('vhint').classList.remove('on');
+}
+
+/* ---- source switcher (part of the unit, right under the player) ---- */
+function setSrcPlaying(which){
+  document.querySelectorAll('#srcseg button').forEach(b=>{
+    const eq=b.querySelector('.eqi');
+    if(eq) eq.style.display = (which && b.dataset.src===which && b.classList.contains('on')) ? 'inline-flex' : 'none';
+  });
+}
+function liveSwitch(slug,title){          // same-document switch: the tap gesture carries into play()
+  try{ const w=$('vframe').contentWindow;
+    if(w && w.zSwitch && w.aud && w.aud.src){
+      const f=FREQS[active];
+      w.zSwitch('./app-assets/'+slug+'.mp3', f.hz, title, f.c1);
+      currentSong={slug,title};
+      return true; } }catch(e){}
+  return false;
+}
+function setSource(src){
+  source=src;
+  document.querySelectorAll('#srcseg button').forEach(b=>b.classList.toggle('on', b.dataset.src===src));
+  $('srcNote').innerHTML=SRC_NOTES[src];
+  if(src==='tone'){ stopSong(); toneIdle(); playTone(); }   // choosing a source means "let me hear it"
+  else { stopTone();
+    const btn=document.querySelector('#srcseg button[data-src="'+src+'"]');
+    $('viewer').classList.add('song');
+    if (!liveSwitch(src, btn.dataset.title)) loadSong(src, btn.dataset.title);
+  }
+}
+document.querySelectorAll('#srcseg button').forEach(b=>b.addEventListener('click', ()=>{
+  if (b.dataset.src===source){                             // same source tapped again: toggle pause/resume
+    if (source==='tone'){ if(osc) stopTone(); else playTone(); return; }
+    try{ const w=$('vframe').contentWindow;
+      if(w&&w.aud&&w.aud.src){ if(w.aud.paused){ w.aud.play(); } else { w.aud.pause(); } return; } }catch(e){}
+    return;
+  }
+  setSource(b.dataset.src);
+}));
+
+/* ---- frequency toggle: the whole instrument re-tunes ---- */
+function setFreq(key){
+  active = key;
+  const f = FREQS[key];
+  const r = document.documentElement.style;
+  r.setProperty('--f', f.c1); r.setProperty('--f-deep', f.deep);
+  r.setProperty('--f-tint', f.tint); r.setProperty('--f-grad', f.c2); r.setProperty('--f-accent', f.accent);
+  $('toneHzLbl').textContent = f.hz;
+  document.querySelectorAll('#freqseg button').forEach(b => b.classList.toggle('on', b.dataset.f === key));
+  drawAll();
+  if (source==='tone'){ if(osc){ stopTone(); playTone(); } else toneIdle(); }   // re-pitch live
+  else if (currentSong){ if(!liveSwitch(currentSong.slug, currentSong.title)) loadSong(currentSong.slug, currentSong.title); }
+}
+document.querySelectorAll('#freqseg button').forEach(b => b.addEventListener('click', () => setFreq(b.dataset.f)));
+
+addEventListener('resize', ()=>{ if(source==='tone' && !osc) toneIdle(); });
+toneIdle(); drawAll();
+
+/* living page: breathing orb + listen bar */
+let lbarSeen=false;
+drawBlob($('heroOrb'),'core');
+document.querySelectorAll('#freqseg button').forEach(b=>b.addEventListener('click',()=>drawBlob($('heroOrb'),b.dataset.f)));
+if($('lbCta'))$('lbCta').addEventListener('click',()=>document.querySelector('.close').scrollIntoView({behavior:'smooth'}));
+</script>
+<div id="lbar" hidden><div class="lb-l"><span class="lb-t">Now just listen.</span><span class="lb-s" id="lbS"></span></div><button class="lb-cta" id="lbCta">Keep this</button></div>
+</body>
+</html>
