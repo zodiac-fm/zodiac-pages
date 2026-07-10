@@ -295,8 +295,11 @@
   .row.playing .thumb{filter:drop-shadow(0 0 14px var(--csoft))}
   /* one large color-carrier: the category title takes the family ramp (deep -> accent passes 3:1 on light) */
   #catTitle2{background:linear-gradient(135deg,var(--cdeep) 10%,var(--cink));-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
-  /* Playlist cards: the lightweight wash, each card in its OWN family's tint (app-A experiment 2026-07-10) */
+  /* Playlist cards: the lightweight wash, each card in its OWN family's tint (approved 2026-07-10) */
   #favRows .row{background:radial-gradient(150% 130% at 100% -30%, var(--ctint) 0%, #fff 58%)}
+  /* playing card: the wash breathes (whole-card action; the standard cink ring + spinning disc ride on top) */
+  #favRows .row.playing{animation:washbreathe 3.4s ease-in-out infinite alternate}
+  @keyframes washbreathe{from{background-size:100% 100%}to{background-size:140% 140%}}
 </style></head><body>
 <!-- INTERACTION · REORDER: the WHOLE card is draggable on click-and-hold (long-press) anywhere on it, not just the grip dots — the grip is only the visual cue. Applies to Immersions + Favourites. Not wired in this prototype; spec for dev. -->
 <div id="app">
@@ -638,7 +641,12 @@ function markAlive(){ const playing=started&&!aud.paused, here=(catKey===playCat
   rows.querySelectorAll('.row').forEach((r,i)=>{ const isThis=here&&!!curSong&&rowSongs[i]===curSong, isP=isThis&&playing; const b=r.querySelector('.cardpp');
     if(b){b.innerHTML=ppSVG(isP);const sv=b.querySelector('svg');if(sv)sv.style.marginLeft=isP?'0':'1px';}
     r.classList.toggle('playing', isP); r.classList.toggle('paused', isThis&&!isP);
-    const cv=r.querySelector('canvas'); const im=r.querySelector('img'); if(!isThis){cv.getContext('2d').clearRect(0,0,cv.width,cv.height); if(im){im.style.transform='';im.style.filter='';}} }); }
+    const cv=r.querySelector('canvas'); const im=r.querySelector('img'); if(!isThis){cv.getContext('2d').clearRect(0,0,cv.width,cv.height); if(im){im.style.transform='';im.style.filter='';}} });
+  // Playlist rows: same playing/paused marking (Michael 2026-07-10: "the songs stays highlighted as we have always done")
+  const fr=document.getElementById('favRows'); if(fr){ fr.querySelectorAll('.row').forEach(r=>{
+    const isThis=!!curSong&&playCat===r.dataset.cat&&curSong.slug===r.dataset.slug, isP=isThis&&playing;
+    r.classList.toggle('playing',isP); r.classList.toggle('paused',isThis&&!isP);
+    const im=r.querySelector('img'); if(!isThis&&im){im.style.transform='';im.style.filter='';} }); } }
 const miniGlow=document.getElementById('miniGlow').getContext('2d');
 // drive the whole-tile motion: scale from centre + a touch of brightness on the beat
 // rot (deg): vivid-layer vinyl-slow spin on the playing row's disc only. While rotating, the img's
@@ -670,6 +678,8 @@ function drawViz(){
   const spinDeg = playing ? (performance.now()/1000)*(360/14) : 0;   // one revolution per 14s
   const ri=(catKey===playCat)?rowSongs.indexOf(curSong):-1;
   if(ri>=0){surgeImg(rows.querySelectorAll('.row')[ri].querySelector('img'),surge,bright,spinDeg);}
+  const fim=document.querySelector('#favRows .row.playing img');
+  if(fim){surgeImg(fim,surge,bright,spinDeg);}
   if(!songEl.classList.contains('open')||!D){return;}
   if(!VW)vrz();
   const tt=clock(),p=D.dur?tt/D.dur:0,T=performance.now()/1000;
@@ -707,14 +717,15 @@ const FAVS=[['core','starseed'],['love','kindred-spirits'],['vitality','astrolit
  ['core','astrolith'],['love','galactic-slumber'],['vitality','kindred-spirits'],['abundance','cosmic-drift']];
 function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
  FAVS.forEach(([ck,slug],i)=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
-  const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);r.style.setProperty('--ctint',cat.ctint);
+  const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);r.style.setProperty('--ctint',cat.ctint);r.dataset.cat=ck;r.dataset.slug=s.slug;
   r.innerHTML=`<div class="lcol"><span class="qbox${(i%3===0)?' on':''}"></span></div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
    <div class="meta mcols">
     <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div></div>
     <div class="mrail"><div class="sic"><span class="dl${(i%2===0)?' on':''}">${DL}</span><span class="heart on" style="color:${cat.cink}">&#9829;</span></div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
    </div>`;
   r.onclick=(ev)=>{playSong(ck,cat.songs.indexOf(s)); splashAt(ev.clientX,ev.clientY,cat.c1);};
-  c.appendChild(r);});}
+  c.appendChild(r);});
+ markAlive();}   /* re-mark on rebuild so returning to the tab restores the playing highlight */
 const navItems=document.querySelectorAll('#nav div');
 function showTab(t){document.getElementById('favs').style.display=(t==='favs')?'flex':'none';
  document.getElementById('progress').style.display=(t==='progress')?'block':'none';
