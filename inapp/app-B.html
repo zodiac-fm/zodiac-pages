@@ -717,7 +717,7 @@ const FAVS=[['core','starseed'],['love','kindred-spirits'],['vitality','astrolit
  ['core','astrolith'],['love','galactic-slumber'],['vitality','kindred-spirits'],['abundance','cosmic-drift']];
 function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
  FAVS.forEach(([ck,slug],i)=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
-  const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);r.style.setProperty('--ctint',cat.ctint);r.dataset.cat=ck;r.dataset.slug=s.slug;
+  const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);r.style.setProperty('--ctint',cat.ctint);r.style.setProperty('--csoft',cat.csoft);r.dataset.cat=ck;r.dataset.slug=s.slug;  /* every action color resolves to THIS row's family, never the app-level (Immersions) one */
   r.innerHTML=`<div class="lcol"><span class="qbox${(i%3===0)?' on':''}"></span></div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
    <div class="meta mcols">
     <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div></div>
