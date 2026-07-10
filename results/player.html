@@ -35,8 +35,8 @@
   .badge{background:var(--chip);border:1px solid var(--line);color:var(--dim);font:700 10.5px/1 var(--sans);letter-spacing:.1em;padding:7px 11px;border-radius:999px}
 
   /* readout */
-  .readout{text-align:center;margin-top:22px}
-  .readout .num{font-size:86px;font-weight:700;letter-spacing:-.03em;line-height:.9;font-variant-numeric:tabular-nums}
+  .readout{text-align:center;margin-top:16px}
+  .readout .num{font-size:76px;font-weight:700;letter-spacing:-.03em;line-height:.9;font-variant-numeric:tabular-nums}
   .readout .hz{font-size:20px;font-weight:600;color:var(--dim);margin-left:6px}
   .readout .who{margin-top:12px;font-size:11.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--st-label);transition:color .4s}
   .readout .role{font-size:12.5px;color:var(--faint);margin-top:5px;letter-spacing:.02em}
@@ -55,13 +55,13 @@
   .presets button.on span{color:var(--pl);opacity:.75}
 
   /* the screen */
-  .screen{margin-top:18px;position:relative;height:170px;border-radius:20px;overflow:hidden;background:var(--panel);border:1px solid var(--line)}
+  .screen{margin-top:16px;position:relative;height:216px;border-radius:20px;overflow:hidden;background:var(--panel);border:1px solid var(--line)}
   #waveCv{position:absolute;inset:0;width:100%;height:100%}
   #hint{position:absolute;left:0;right:0;bottom:13px;text-align:center;font-size:12px;font-weight:600;letter-spacing:.06em;color:var(--faint);pointer-events:none;transition:opacity .4s}
   #hint.off{opacity:0}
 
   /* transport */
-  .transport{display:flex;justify-content:center;margin-top:18px}
+  .transport{display:flex;justify-content:center;margin-top:16px}
   #play{width:78px;height:78px;border-radius:50%;border:0;cursor:pointer;background:var(--play-face);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.18);transition:transform .15s}
   #play:active{transform:scale(.96)}
   #play svg{width:26px;height:26px;fill:var(--play-ico);margin-left:3px}
@@ -70,7 +70,7 @@
   @keyframes pp{0%,100%{box-shadow:0 10px 30px rgba(0,0,0,.18),0 0 0 0 var(--gold-glow)}50%{box-shadow:0 10px 30px rgba(0,0,0,.18),0 0 0 12px rgba(0,0,0,0)}}
 
   /* sources */
-  .chips{display:flex;gap:8px;justify-content:center;margin-top:18px}
+  .chips{display:flex;gap:8px;justify-content:center;margin-top:16px}
   .chips button{border:1px solid var(--line);background:transparent;color:var(--dim);border-radius:999px;padding:9px 15px;font-family:var(--sans);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:6px}
   .chips button.on{background:var(--st);border-color:var(--st);color:#fff}
   html.dark .chips button.on{color:#0B0712;background:var(--st-soft);border-color:var(--st-soft)}
@@ -102,7 +102,7 @@
 
   <div class="screen">
     <canvas id="waveCv"></canvas>
-    <div id="hint">PRESS PLAY · NOTHING TO LEARN</div>
+    <div id="hint"></div>
   </div>
 
   <div class="transport">
@@ -279,26 +279,40 @@ function waveDraw(T){
   if(wcv.width!==W||wcv.height!==H){wcv.width=W;wcv.height=H;}
   wctx.clearRect(0,0,W,H);
   const s=ST[cur], c=hx(s.c), g=DARK?[217,163,44]:[178,124,16];
-  const midY=H*0.52, x0=W*0.06, x1=W*0.94;
-  // ambient tint
-  const rad=wctx.createRadialGradient(W/2,midY,0,W/2,midY,W*0.55);
-  rad.addColorStop(0,rgba(c,playing?(DARK?.16:.09):.04)); rad.addColorStop(1,rgba(c,0));
-  wctx.fillStyle=rad; wctx.fillRect(0,0,W,H);
-  // the wave
-  let pts=[];
-  if(playing && analyser){
-    analyser.getByteTimeDomainData(tdata);
-    const N=180;
-    for(let i=0;i<=N;i++){
-      const v=(tdata[Math.floor(i/N*(tdata.length-1))]-128)/128;
-      pts.push(v);
+  /* the tone sits at its TRUE height on the 250-950 range (the app's language) */
+  const yTop=H*0.18, yBot=H*0.85;
+  const fr=Math.max(0,Math.min(1,(needleHz-250)/700));
+  const midY=yBot-(yBot-yTop)*fr;
+  const x0=W*0.17, x1=W*0.95;
+  if(DARK){
+    const nb=wctx.createRadialGradient(W*0.5,midY,0,W*0.5,midY,W*0.72);
+    nb.addColorStop(0,rgba(c,playing?0.22:0.11)); nb.addColorStop(1,'rgba(0,0,0,0)');
+    wctx.fillStyle=nb; wctx.fillRect(0,0,W,H);
+    for(let i=0;i<26;i++){
+      const px=((i*137)%100)/100*W;
+      const py=((((i*89)%100)/100 + T*0.008*(1+i%5)) % 1)*H;
+      wctx.fillStyle=rgba(c, 0.10+((i*31)%10)/100);
+      wctx.beginPath(); wctx.arc(px,py,(1+(i%3))*0.7*d,0,7); wctx.fill();
     }
   } else {
-    const N=180;
-    for(let i=0;i<=N;i++) pts.push(Math.sin(i/N*10*Math.PI+T*0.8)*0.16);
+    const pg=wctx.createLinearGradient(0,0,0,H);
+    pg.addColorStop(0,'#FBF8F3'); pg.addColorStop(0.55,'#F5EFE6'); pg.addColorStop(1,'#F8F4EC');
+    wctx.fillStyle=pg; wctx.fillRect(0,0,W,H);
+    const rw=wctx.createRadialGradient(W/2,midY,0,W/2,midY,W*0.6);
+    rw.addColorStop(0,rgba(c,playing?0.10:0.05)); rw.addColorStop(1,'rgba(255,255,255,0)');
+    wctx.fillStyle=rw; wctx.fillRect(0,0,W,H);
   }
-  const amp=H*0.30;
-  [[1,2.4,DARK?.95:.85],[0.55,5.5,DARK?.3:.2]].forEach(([sc,lw,al])=>{
+  /* the wave, wrapped around the line */
+  let pts=[]; const N=180;
+  if(playing && analyser){
+    analyser.getByteTimeDomainData(tdata);
+    for(let i=0;i<=N;i++) pts.push((tdata[Math.floor(i/N*(tdata.length-1))]-128)/128);
+  } else {
+    for(let i=0;i<=N;i++) pts.push(Math.sin(i/N*10*Math.PI+T*0.8)*0.14);
+  }
+  const amp=H*0.24;
+  const layers = DARK ? [[1,7,0.16],[1,2.6,0.95],[0.55,5,0.28]] : [[1,2.4,0.85],[0.55,5,0.22]];
+  layers.forEach(([sc,lw,al])=>{
     wctx.beginPath();
     pts.forEach((v,i)=>{
       const xx=x0+(x1-x0)*(i/(pts.length-1));
@@ -308,13 +322,32 @@ function waveDraw(T){
     });
     wctx.strokeStyle=rgba(c,al); wctx.lineWidth=lw*d; wctx.lineCap='round'; wctx.stroke();
   });
-  // the steady gold line: your tone
-  wctx.shadowColor=rgba(g,.6); wctx.shadowBlur=(playing?12:6)*d;
-  wctx.strokeStyle=rgba(g,.95); wctx.lineWidth=1.8*d;
+  /* the gold line: your tone, dead steady, at its height */
+  wctx.shadowColor=rgba(g,DARK?0.85:0.6); wctx.shadowBlur=(playing?(DARK?18:12):7)*d;
+  wctx.strokeStyle=rgba(g,0.95); wctx.lineWidth=1.9*d;
   wctx.beginPath(); wctx.moveTo(x0,midY); wctx.lineTo(x1,midY); wctx.stroke(); wctx.shadowBlur=0;
-  // label
-  wctx.font='600 '+(9.5*d)+'px Switzer,sans-serif'; wctx.textAlign='left'; wctx.textBaseline='middle';
-  wctx.fillStyle=rgba(g,.95); wctx.fillText(Math.round(shownHz)+' Hz', x0, midY-12*d);
+  /* the 250-950 scale */
+  const ink=DARK?[236,231,242]:[26,22,32];
+  wctx.strokeStyle=rgba(ink,0.15); wctx.lineWidth=1*d;
+  wctx.beginPath(); wctx.moveTo(x0-9*d,yTop); wctx.lineTo(x0-9*d,yBot); wctx.stroke();
+  wctx.font='500 '+(8*d)+'px Switzer,sans-serif'; wctx.textAlign='right'; wctx.textBaseline='middle';
+  wctx.fillStyle=rgba(ink,0.35);
+  wctx.fillText('950', x0-14*d, yTop); wctx.fillText('250', x0-14*d, yBot);
+  wctx.strokeStyle=rgba(g,0.9); wctx.lineWidth=1.6*d;
+  wctx.beginPath(); wctx.moveTo(x0-13*d,midY); wctx.lineTo(x0,midY); wctx.stroke();
+  wctx.font='700 '+(11*d)+'px Switzer,sans-serif';
+  wctx.fillStyle=DARK?rgba(g,0.95):'rgba(122,86,10,0.95)';
+  wctx.fillText(Math.round(shownHz), x0-17*d, midY-1*d);
+  wctx.font='600 '+(7.5*d)+'px Switzer,sans-serif'; wctx.fillStyle=rgba(ink,0.4);
+  wctx.fillText('Hz', x0-17*d, midY+10*d);
+  if(!playing){
+    wctx.textAlign='center'; wctx.textBaseline='bottom';
+    wctx.font='500 '+(10.5*d)+'px Switzer,sans-serif';
+    wctx.fillStyle=DARK?rgba(g,0.9):'rgba(178,124,16,0.9)';
+    wctx.fillText('The gold line is your tone, at its true height.', W/2, H-28*d);
+    wctx.fillStyle=rgba(ink,0.45);
+    wctx.fillText('The music moves around it. Press play.', W/2, H-14*d);
+  }
 }
 
 /* ============ ui + main loop ============ */
