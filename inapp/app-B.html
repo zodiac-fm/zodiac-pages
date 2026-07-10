@@ -277,11 +277,14 @@
   .pill{touch-action:manipulation}
   /* ---------- VIVID LAYER (working/vivid-layer-for-app-prototypes.md, recipe from results/player-08) ---------- */
   /* Aurora: color MASS from the active family's three tokens (primary/gradEnd/soft), fixed inside the frame. */
-  #aurora{position:absolute;inset:-20%;z-index:0;pointer-events:none}
+  /* Opacities sit BELOW player-10's (.15/.13/.11): inside the small phone frame all three blob
+     cores overlap the visible area and stack, so the same values read much heavier (Michael 2026-07-10). */
+  #aurora{position:absolute;inset:-20%;z-index:0;pointer-events:none;transition:filter .45s ease}
+  #aurora.kick{filter:brightness(1.45) saturate(1.3)}   /* beat accent = aurora kick, never expanding rings (player-10 verdict) */
   #aurora i{position:absolute;width:130%;aspect-ratio:1;border-radius:50%;filter:blur(72px);transition:background 1.4s ease;will-change:transform}
-  #aurora .b1{background:var(--c1);top:-16%;left:-24%;opacity:.15;animation:dr1 26s ease-in-out infinite alternate}
-  #aurora .b2{background:var(--c2);bottom:-30%;right:-26%;opacity:.13;animation:dr2 32s ease-in-out infinite alternate}
-  #aurora .b3{background:var(--csoft);top:36%;left:48%;width:92%;opacity:.11;animation:dr3 40s ease-in-out infinite alternate}
+  #aurora .b1{background:var(--c1);top:-34%;left:-52%;opacity:.10;animation:dr1 26s ease-in-out infinite alternate}
+  #aurora .b2{background:var(--c2);bottom:-52%;right:-50%;opacity:.09;animation:dr2 32s ease-in-out infinite alternate}
+  #aurora .b3{background:var(--csoft);top:44%;left:66%;width:92%;opacity:.08;animation:dr3 40s ease-in-out infinite alternate}
   @keyframes dr1{to{transform:translate(9%,7%) scale(1.15)}}
   @keyframes dr2{to{transform:translate(-8%,-9%) scale(1.12)}}
   @keyframes dr3{to{transform:translate(-12%,6%) scale(1.2)}}
@@ -506,7 +509,7 @@ let gA='255,180,230', gB='234,17,99';   // glow colors of the PLAYING song's cat
 
 // ---- audio graph (live reactor) ----
 let AC=null,ana=null,td=null,react=0,lastAmp=0,liveBeat=0;
-let glowLevel=0,beatPulse=0,burstImg=null;   // base intensity + beat ignition + the rays mask
+let glowLevel=0,beatPulse=0,burstImg=null,lastKick=0;   // base intensity + beat ignition + the rays mask + aurora-kick cooldown
 function initGraph(){ if(AC)return; try{ AC=new (window.AudioContext||webkitAudioContext)(); ana=AC.createAnalyser(); ana.fftSize=1024; ana.smoothingTimeConstant=0.78; const s=AC.createMediaElementSource(aud); s.connect(ana); ana.connect(AC.destination); td=new Uint8Array(ana.fftSize);}catch(e){ana=null;} }
 // ---- analysis: env / target-presence / beat from the track (or synthetic for placeholders) ----
 async function analyze(url,target){
@@ -656,6 +659,7 @@ function drawViz(){
   const playing=started&&!aud.paused;
   glowLevel+=((playing?Math.min(1,gAmp):0)-glowLevel)*0.15;          // base "alive" level breathing with loudness
   beatPulse=playing?Math.max(beatPulse*0.84,Math.min(1,gBeat)):0;    // beat ignition (rises on the beat, decays)
+  if(playing && gBeat>.55 && performance.now()-lastKick>900){ lastKick=performance.now(); const au=document.getElementById('aurora'); au.classList.add('kick'); setTimeout(()=>au.classList.remove('kick'),450); }
   // WHOLE-THUMBNAIL surge: the tile breathes with loudness and pops on the beat from its centre,
   // so the cymatic rays push outward on the beat. Colour-agnostic (works in every category theme).
   const surge = playing ? 1 + glowLevel*0.045 + beatPulse*0.12 : 1;
