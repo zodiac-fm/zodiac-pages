@@ -275,9 +275,31 @@
 
   .pill,.pills,.tiphead,.qall,#nav div,.legend{user-select:none;-webkit-user-select:none}
   .pill{touch-action:manipulation}
+  /* ---------- VIVID LAYER (working/vivid-layer-for-app-prototypes.md, recipe from results/player-08) ---------- */
+  /* Aurora: color MASS from the active family's three tokens (primary/gradEnd/soft), fixed inside the frame. */
+  /* Opacities sit BELOW player-10's (.15/.13/.11): inside the small phone frame all three blob
+     cores overlap the visible area and stack, so the same values read much heavier (Michael 2026-07-10). */
+  #aurora{position:absolute;inset:-20%;z-index:0;pointer-events:none;transition:filter .45s ease}
+  #aurora.kick{filter:brightness(1.45) saturate(1.3)}   /* beat accent = aurora kick, never expanding rings (player-10 verdict) */
+  #aurora i{position:absolute;width:130%;aspect-ratio:1;border-radius:50%;filter:blur(72px);transition:background 1.4s ease;will-change:transform}
+  #aurora .b1{background:var(--c1);top:-34%;left:-52%;opacity:.10;animation:dr1 26s ease-in-out infinite alternate}
+  #aurora .b2{background:var(--c2);bottom:-52%;right:-50%;opacity:.09;animation:dr2 32s ease-in-out infinite alternate}
+  #aurora .b3{background:var(--csoft);top:44%;left:66%;width:92%;opacity:.08;animation:dr3 40s ease-in-out infinite alternate}
+  @keyframes dr1{to{transform:translate(9%,7%) scale(1.15)}}
+  @keyframes dr2{to{transform:translate(-8%,-9%) scale(1.12)}}
+  @keyframes dr3{to{transform:translate(-12%,6%) scale(1.2)}}
+  #list{background:transparent}   /* the aurora tints the cream ground behind the list */
+  #ripple{position:absolute;z-index:50;width:14px;height:14px;border-radius:50%;pointer-events:none;transform:scale(0);opacity:0}
+  #ripple.go{animation:rip .9s ease-out}
+  @keyframes rip{0%{transform:scale(0);opacity:.8}100%{transform:scale(95);opacity:0}}
+  .row.playing .thumb{filter:drop-shadow(0 0 14px var(--csoft))}
+  /* one large color-carrier: the category title takes the family ramp (deep -> accent passes 3:1 on light) */
+  #catTitle2{background:linear-gradient(135deg,var(--cdeep) 10%,var(--cink));-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
 </style></head><body>
 <!-- INTERACTION · REORDER: the WHOLE card is draggable on click-and-hold (long-press) anywhere on it, not just the grip dots — the grip is only the visual cue. Applies to Immersions + Favourites. Not wired in this prototype; spec for dev. -->
 <div id="app">
+<div id="aurora" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
+<div id="ripple" aria-hidden="true"></div>
 
   <!-- ===================== LIST ===================== -->
   <section class="screen" id="list">
@@ -471,13 +493,13 @@ function fillBandPanel(){ var c=CATS[catKey], bd=bandOf(c.hz);
   document.getElementById('bpLabs').innerHTML=lh;
 }
 const CATS={
- core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
+ core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',csoft:'#D2C8FF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
    title:'Core Vibrational Frequency',desc:'is your identity signal. It turns your sense of self back up, wherever you are.',short:'identity, turned back up.',songs:SONGLIST},
- love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',cdeep:'#6E0024',ctint:'#FFE8EA',cglow:'rgba(185,0,68,.45)',hue:0,filt:'none',gA:'255,150,190',gB:'185,0,68',hz:'432',
+ love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',cdeep:'#6E0024',ctint:'#FFE8EA',csoft:'#FFBDC3',cglow:'rgba(185,0,68,.45)',hue:0,filt:'none',gA:'255,150,190',gB:'185,0,68',hz:'432',
    title:'Love Vibrational Frequency',desc:'tunes your connection, to yourself and everyone else. Warmth stops being work.',short:'connection, tuned.',songs:SONGLIST},
- vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#C25500',cdeep:'#BC6700',ctint:'#FFEADA',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
+ vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#C25500',cdeep:'#BC6700',ctint:'#FFEADA',csoft:'#FFC392',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
    title:'Vitality Vibrational Frequency',desc:'is your energy meter, restored. You feel again what feeds you and what drains you.',short:'energy, restored.',songs:SONGLIST},
- abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',cink:'#0A7A52',cdeep:'#0A6B48',ctint:'#DCF4E8',cglow:'rgba(18,165,110,.5)',hue:0,filt:'none',gA:'143,225,190',gB:'18,165,110',hz:'611',
+ abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',cink:'#0A7A52',cdeep:'#0A6B48',ctint:'#DCF4E8',csoft:'#8FE1BE',cglow:'rgba(18,165,110,.5)',hue:0,filt:'none',gA:'143,225,190',gB:'18,165,110',hz:'611',
    title:'Abundance Vibrational Frequency',desc:'is your timing, restored. Opportunity stops feeling like something to chase.',short:'timing, restored.',songs:SONGLIST},
 };
 let catKey=(['core','love','vitality','abundance'].includes(new URLSearchParams(location.search).get('cat'))?new URLSearchParams(location.search).get('cat'):'core');  // ?cat= opens a category (review aid)
@@ -487,7 +509,7 @@ let gA='255,180,230', gB='234,17,99';   // glow colors of the PLAYING song's cat
 
 // ---- audio graph (live reactor) ----
 let AC=null,ana=null,td=null,react=0,lastAmp=0,liveBeat=0;
-let glowLevel=0,beatPulse=0,burstImg=null;   // base intensity + beat ignition + the rays mask
+let glowLevel=0,beatPulse=0,burstImg=null,lastKick=0;   // base intensity + beat ignition + the rays mask + aurora-kick cooldown
 function initGraph(){ if(AC)return; try{ AC=new (window.AudioContext||webkitAudioContext)(); ana=AC.createAnalyser(); ana.fftSize=1024; ana.smoothingTimeConstant=0.78; const s=AC.createMediaElementSource(aud); s.connect(ana); ana.connect(AC.destination); td=new Uint8Array(ana.fftSize);}catch(e){ana=null;} }
 // ---- analysis: env / target-presence / beat from the track (or synthetic for placeholders) ----
 async function analyze(url,target){
@@ -527,7 +549,7 @@ function buildRows(){
         <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab">&#9679; ${cat.label}</div></div>
         <div class="mrail"><div class="sic"><span class="dl${(i%2===1)?' on':''}">${DL}</span><span class="heart${(i%3===0)?' on':''}">${(i%3===0)?'&#9829;':'&#9825;'}</span></div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
       </div>`;
-    r.onclick=()=>playSong(catKey,i);
+    r.onclick=(ev)=>{playSong(catKey,i); splashAt(ev.clientX,ev.clientY);};
     rows.appendChild(r);
   });
   markAlive();
@@ -535,7 +557,7 @@ function buildRows(){
 
 // ---------- theme / category switch ----------
 function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElementById('app').style;
-  st.setProperty('--c1',c.c1); st.setProperty('--c2',c.c2); st.setProperty('--cink',c.cink); st.setProperty('--cglow',c.cglow); st.setProperty('--cdeep',c.cdeep); st.setProperty('--ctint',c.ctint);
+  st.setProperty('--c1',c.c1); st.setProperty('--c2',c.c2); st.setProperty('--cink',c.cink); st.setProperty('--cglow',c.cglow); st.setProperty('--cdeep',c.cdeep); st.setProperty('--ctint',c.ctint); st.setProperty('--csoft',c.csoft);
   document.querySelectorAll('#pills .pill').forEach(p=>p.classList.toggle('on',p.dataset.cat===key));
   document.getElementById('catTitle').textContent=c.title;
   var bd=bandOf(c.hz), RET=location.hash.indexOf('return')>=0;
@@ -559,7 +581,12 @@ function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElemen
   document.getElementById('catHz').innerHTML=c.hz+'<small> Hz</small>';
   buildRows();
 }
-document.querySelectorAll('#pills .pill').forEach(p=>p.onclick=()=>setCat(p.dataset.cat));
+document.querySelectorAll('#pills .pill').forEach(p=>p.onclick=(ev)=>{setCat(p.dataset.cat); splashAt(ev.clientX,ev.clientY);});
+// vivid layer: color-splash ripple (coords relative to the app frame; color = active family primary)
+function splashAt(x,y){ const rc=document.getElementById('app').getBoundingClientRect(), r=document.getElementById('ripple');
+  r.style.left=(x-rc.left-7)+'px'; r.style.top=(y-rc.top-7)+'px';
+  r.style.background='radial-gradient(circle, var(--c1) 0%, transparent 62%)';
+  r.classList.remove('go'); void r.offsetWidth; r.classList.add('go'); }
 document.getElementById('bsheetOvl').onclick=function(){document.getElementById('bsheetWrap').classList.remove('open');};
 document.getElementById('bpClose').onclick=function(){document.getElementById('bandPanel').classList.remove('open');var t=document.getElementById('hzTap');if(t)t.classList.remove('open');};
 document.getElementById('svBand').onclick=function(){ var prev=catKey; if(typeof playCat==='string'&&playCat){catKey=playCat;} openBandSheet(); catKey=prev; };
@@ -612,7 +639,9 @@ function markAlive(){ const playing=started&&!aud.paused, here=(catKey===playCat
     const cv=r.querySelector('canvas'); const im=r.querySelector('img'); if(!isThis){cv.getContext('2d').clearRect(0,0,cv.width,cv.height); if(im){im.style.transform='';im.style.filter='';}} }); }
 const miniGlow=document.getElementById('miniGlow').getContext('2d');
 // drive the whole-tile motion: scale from centre + a touch of brightness on the beat
-function surgeImg(im,sc,br){ if(!im)return; const base=im.closest('.thumb')?1.16:1; im.style.transform='scale('+(base*sc).toFixed(3)+')'; im.style.filter='brightness('+br.toFixed(3)+')'+(base>1?' drop-shadow(0 3px 7px rgba(56,0,122,.13))':''); im.style.willChange='transform'; }
+// rot (deg): vivid-layer vinyl-slow spin on the playing row's disc only. While rotating, the img's
+// contact shadow comes off (it would orbit with the disc); .row.playing .thumb carries the soft glow instead.
+function surgeImg(im,sc,br,rot){ if(!im)return; const base=im.closest('.thumb')?1.16:1; im.style.transform='scale('+(base*sc).toFixed(3)+')'+(rot?' rotate('+(rot%360).toFixed(1)+'deg)':''); im.style.filter='brightness('+br.toFixed(3)+')'+(base>1&&!rot?' drop-shadow(0 3px 7px rgba(56,0,122,.13))':''); im.style.willChange='transform'; }
 
 // ---------- VISUALIZER (exact vercel style; no play/time baked) ----------
 const vc=document.getElementById('vc'),vx=vc.getContext('2d');let VW,VH,DPR;
@@ -630,13 +659,15 @@ function drawViz(){
   const playing=started&&!aud.paused;
   glowLevel+=((playing?Math.min(1,gAmp):0)-glowLevel)*0.15;          // base "alive" level breathing with loudness
   beatPulse=playing?Math.max(beatPulse*0.84,Math.min(1,gBeat)):0;    // beat ignition (rises on the beat, decays)
+  if(playing && gBeat>.55 && performance.now()-lastKick>900){ lastKick=performance.now(); const au=document.getElementById('aurora'); au.classList.add('kick'); setTimeout(()=>au.classList.remove('kick'),450); }
   // WHOLE-THUMBNAIL surge: the tile breathes with loudness and pops on the beat from its centre,
   // so the cymatic rays push outward on the beat. Colour-agnostic (works in every category theme).
   const surge = playing ? 1 + glowLevel*0.045 + beatPulse*0.12 : 1;
   const bright = playing ? 1 + beatPulse*0.26 : 1;
   surgeImg(miniImg,surge,bright);
+  const spinDeg = playing ? (performance.now()/1000)*(360/14) : 0;   // one revolution per 14s
   const ri=(catKey===playCat)?rowSongs.indexOf(curSong):-1;
-  if(ri>=0){surgeImg(rows.querySelectorAll('.row')[ri].querySelector('img'),surge,bright);}
+  if(ri>=0){surgeImg(rows.querySelectorAll('.row')[ri].querySelector('img'),surge,bright,spinDeg);}
   if(!songEl.classList.contains('open')||!D){return;}
   if(!VW)vrz();
   const tt=clock(),p=D.dur?tt/D.dur:0,T=performance.now()/1000;
