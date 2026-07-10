@@ -413,7 +413,11 @@ setInterval(()=>{
 },300);
 
 /* ---- library rows drive the same stage ---- */
+let _lastPaint='';
 function paintRows(playingSlug){
+  const sig=source+'|'+(playingSlug||'')+'|'+cur;
+  if(sig===_lastPaint) return;
+  _lastPaint=sig;
   document.querySelectorAll('.row[data-src]').forEach(r=>{
     const active = source===r.dataset.src;
     r.classList.toggle('playing', active && playingSlug===r.dataset.src);
@@ -522,19 +526,23 @@ function splashAt(x,y){ const r=$('ripple');
 /* scroll: cascade reveals + aurora parallax */
 const RV=[...document.querySelectorAll('.row,.lib-k,.dots-div,.locknote,.cap')];
 RV.forEach((el,i)=>{ el.classList.add('rv'); el.style.transitionDelay=Math.min(i*55,440)+'ms'; });
-const IO=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); IO.unobserve(e.target); } }),{threshold:0.12});
+const IO=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ const el=e.target; el.classList.add('in'); IO.unobserve(el); setTimeout(()=>{ el.style.transition='none'; }, 1300); } }),{threshold:0.12});
 RV.forEach(el=>IO.observe(el));
 let _sy=0; addEventListener('scroll',()=>{ _sy=scrollY; },{passive:true});
 /* the magic layer: the page listens to the music */
-let react=0, lastAmp=0, lastRing=0;
+let react=0, lastAmp=0, lastRing=0, lastQ=-1;
 function livePulse(){
   let amp=0;
   try{ const z=$('vframe').contentWindow.zLive; if(z && !z.paused) amp=z.amp||0; }catch(e){}
   react += (amp-react)*0.25;
   const glow=Math.min(1,react*2.6);
-  $('viewer').style.filter = glow>0.02 ? 'drop-shadow(0 0 '+(glow*34)+'px var(--st-soft))' : '';
-  document.querySelector('.readout .num').style.filter = glow>0.02 ? 'drop-shadow(0 0 '+(4+glow*30)+'px var(--st-soft))' : '';
-  document.documentElement.style.setProperty('--pulse',(14+glow*60)+'px');
+  const q=Math.round(glow*24);   // write styles ONLY on a visible step change; idle = zero writes
+  if(q!==lastQ){
+    lastQ=q; const g=q/24;
+    $('viewer').style.filter = g>0.03 ? 'drop-shadow(0 0 '+(g*34).toFixed(1)+'px var(--st-soft))' : '';
+    document.querySelector('.readout .num').style.filter = g>0.03 ? 'drop-shadow(0 0 '+(4+g*30).toFixed(1)+'px var(--st-soft))' : '';
+    document.getElementById('lib').style.setProperty('--pulse',(14+g*60).toFixed(1)+'px');
+  }
   const now=performance.now();
   if(amp-lastAmp>0.075 && now-lastRing>650){ lastRing=now;
     const rc=$('viewer').getBoundingClientRect();
