@@ -374,13 +374,18 @@
       </div>
       <div class="zbal-panel">
         <h4 class="zbal-ttl">Frequency Balance Meter</h4>
-        <div class="zbal-sub">Staying above 15% per frequency</div>
-        <p class="zbal-exp">Your balance is always being calculated. Each check below adds that song to your list, and the meter shows whether playing your list keeps all four frequencies in balance. Check and uncheck, and watch it move.</p>
-        <p class="zbal-exp">Each frequency shows its minutes: a green plus is minutes above the line, a red minus means short. Tap a red frequency's <b>+</b> and we'll check songs from your list that clear it.</p>
-        <p class="zbal-exp">Top right: <b>Time now</b> is what you've played this week (it climbs while you listen). <b>With list</b> is where you land after playing what's checked. Green means in balance, red means not yet.</p>
-        <p class="zbal-exp">Want more choices? Go to Immersions and tap the heart on any song to add it here.</p>
+        <div class="zbal-sub">Keep all four frequencies above 15% each week</div>
+        <ol class="zbal-ol">
+          <li>The numbers above show where your week lands if you play everything checked. <b class="g">Green</b> = minutes above the line. <b class="r">Red</b> = minutes short.</li>
+          <li>Tap <b>+</b> on a red frequency to add songs from your list. Tap <b>−</b> on a green one to trim it back.</li>
+          <li>Top right: <b>Time now</b> is what you've played (it climbs while you listen). <b>With list</b> is where you land after playing what's checked. You're set when With list is green.</li>
+          <li>Press <b>Play All</b>. Songs play top to bottom and check themselves off as they finish.</li>
+          <li>Out of songs? Go to <b>Immersions</b> and tap <span class="ph">&#9829;</span> to add more to this list.</li>
+        </ol>
+        <div class="zbal-act"><span class="zbal-bfm" id="zbalBfm">Balance for me</span><span class="zbal-bfmsub">checks your longest balanced list</span></div>
         <div class="zbal-sofar" id="zbalSofar"></div>
       </div>
+      <div class="zbal-pop" id="zbalPop" style="display:none"><span id="zbalPopMsg"></span><span class="zbal-popx" id="zbalPopX">&#10005;</span></div>
     </div>
     <div class="barrow"><div class="selall" data-scope="favRows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
     <div class="swrap">
@@ -974,8 +979,22 @@ applyGraduated();
   .zbal-ttl{font-size:14px;font-weight:700;letter-spacing:-.01em;padding-top:12px}
   .zbal-sub{font-size:11px;font-weight:600;color:#8a8290;margin-top:2px}
   .zbal-exp{font-size:12px;line-height:1.5;color:#6a6470;padding-top:8px}
-  .zbal-sofar{margin-top:10px;font-size:11px;line-height:1.5;color:#8a8290}
+  .zbal-sofar{margin-top:12px;font-size:11px;line-height:1.5;color:#8a8290}
   .zbal-sofar b{font-weight:700;color:#6a6470}
+  .zbal-ol{margin:10px 0 0 17px;padding:0}
+  .zbal-ol li{font-size:12px;line-height:1.55;color:#6a6470;margin-top:7px}
+  .zbal-ol b{color:#3a3542}
+  .zbal-ol b.g{color:#0A7A52}
+  .zbal-ol b.r{color:#B90044}
+  .zbal-ol .ph{color:#2A2530;font-weight:700}
+  .zbal-act{margin-top:13px;display:flex;align-items:center;gap:10px}
+  .zbal-bfm{display:inline-flex;align-items:center;background:#fff;border:1px solid #eadfce;border-radius:16px;padding:8px 16px;font-size:12.5px;font-weight:700;color:#1a1620;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  .zbal-bfmsub{font-size:10.5px;color:#9a93a0}
+  .zbal-pop{position:absolute;top:calc(100% + 6px);left:8px;right:8px;background:#fff;border:1px solid #eadfce;border-radius:14px;padding:12px 38px 12px 14px;box-shadow:0 12px 32px rgba(26,22,32,.16);font-size:12.5px;line-height:1.5;color:#3a3542;z-index:30}
+  .zbal-pop .ph{color:#2A2530;font-weight:700}
+  .zbal-popx{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;background:#F6F1E8;color:#63616F;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+  .zbal{position:relative}
+  .zbal-min{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #d9cfc0;color:#2A2530;font-size:11px;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
   @media (max-width:400px){ .zbal-lab{letter-spacing:.06em} .zbal-t{font-size:9px} }
 </style>
 <script id="zbal-js">
@@ -1041,10 +1060,12 @@ applyGraduated();
             +(sf?'<b class="amt">−'+fmtMin(sf.neededSec)+'m</b>':'')+'</span>';
         } else {
           var canAdd = sf && st.rows.some(function(r){ return r.dataset.ck===f && !r.querySelector('.qbox.on'); });
+          var canTrim = !sf && st.rows.some(function(r){ return r.dataset.ck===f && r.querySelector('.qbox.on'); });
           var overM = sf ? 0 : Math.max(0, Math.floor((res.byFreq[f].sec - 0.15*res.total)/60));
           html+='<span class="zbal-t'+(sf?' short':'')+'" data-freq="'+f+'" style="--tink:'+cat.cink+'">'+cat.label
             +'<span class="zbal-b">'+(sf?'<b class="amt">−'+fmtMin(sf.neededSec)+'m</b>':'<b class="amt plus">+'+overM+'m</b>')
-            +(canAdd?'<i class="zbal-add" title="Add songs to clear it">+</i>':'')+'</span></span>';
+            +(canAdd?'<i class="zbal-add" title="Add songs to clear it">+</i>':'')
+            +(canTrim?'<i class="zbal-min" title="Trim this frequency">−</i>':'')+'</span></span>';
         }
       });
     }
@@ -1084,17 +1105,71 @@ applyGraduated();
     /* the + on a short frequency: check the least-overshoot set of that frequency's
        unchecked playlist songs (engine bestAdditions); cascade dips surface as the
        neighbor's own red + for the next tap */
+    /* the exitable bubble: shows when + can't clear a frequency from the current list */
+    var pop=document.getElementById('zbalPop');
+    function showBubble(f){
+      document.getElementById('zbalPopMsg').innerHTML=
+        'Not enough <b>'+CATS[f].label+'</b> songs in your list to get there. '
+        +'Go to <b>Immersions &rarr; '+CATS[f].label+'</b> and tap <span class="ph">&#9829;</span> to heart more songs.';
+      pop.style.display='block';
+    }
+    document.getElementById('zbalPopX').addEventListener('click', function(){ pop.style.display='none'; });
     document.getElementById('zbalToks').addEventListener('click', function(e){
-      var add=e.target.closest('.zbal-add'); if(!add) return;
+      var add=e.target.closest('.zbal-add'), min=e.target.closest('.zbal-min');
+      var tok=e.target.closest('.zbal-t');
+      if(!add && !min){
+        /* a red frequency with no + left: tapping it explains where more songs live */
+        if(tok && tok.classList.contains('short')){ e.stopPropagation(); showBubble(tok.dataset.freq); }
+        return;
+      }
       e.stopPropagation();
-      var f=add.closest('.zbal-t').dataset.freq;
+      var f=tok.dataset.freq;
       var st=engine();
+      if(min){
+        /* trim: uncheck the largest checked song of this frequency */
+        var checked=st.rows.filter(function(r){ return r.dataset.ck===f && r.querySelector('.qbox.on'); })
+          .sort(function(a,b){ return (parseFloat(b.dataset.min)||0)-(parseFloat(a.dataset.min)||0); });
+        if(checked[0]) checked[0].querySelector('.qbox').click();
+        return;
+      }
       var sf=st.res.shortfalls.filter(function(x){ return x.freq===f; })[0]; if(!sf) return;
       var avail=st.rows.filter(function(r){ return r.dataset.ck===f && !r.querySelector('.qbox.on'); })
         .map(function(r){ return {slug:r.dataset.slug, sec:parseFloat(r.dataset.min)||0, row:r}; });
-      ZBalance.bestAdditions(sf.neededSec, avail).songs.forEach(function(s){
+      var pick=ZBalance.bestAdditions(sf.neededSec, avail);
+      pick.songs.forEach(function(s){
         var b=s.row.querySelector('.qbox'); if(b && !b.classList.contains('on')) b.click();
       });
+      if(!pick.cleared) showBubble(f);
+    });
+    /* BALANCE FOR ME: the longest balanced list — check everything, then trim the fattest
+       surplus one song at a time (preferring cuts that keep that frequency green) until
+       all four hold. If the list can't get there, the bubble points to Immersions. */
+    document.getElementById('zbalBfm').addEventListener('click', function(){
+      var rows=[].slice.call(document.querySelectorAll('#favRows .row'));
+      rows.forEach(function(r){ var b=r.querySelector('.qbox'); if(b && !b.classList.contains('on')) b.click(); });
+      var guard=0;
+      while(guard++<60){
+        var st=engine();
+        if(st.res.balanced || st.res.empty) break;
+        var best=null;
+        ZBalance.FREQS.forEach(function(f){
+          var over=st.res.byFreq[f].sec - 0.15*st.res.total;
+          var checked=st.rows.filter(function(r){ return r.dataset.ck===f && r.querySelector('.qbox.on'); });
+          if(checked.length && (!best || over>best.over)) best={f:f, over:over, checked:checked};
+        });
+        if(!best) break;
+        var T=st.res.total, cur=st.res.byFreq[best.f].sec;
+        var sorted=best.checked.sort(function(a,b){ return (parseFloat(b.dataset.min)||0)-(parseFloat(a.dataset.min)||0); });
+        var pickRow=null;
+        for(var i=0;i<sorted.length;i++){
+          var x=parseFloat(sorted[i].dataset.min)||0;
+          if((cur-x)/(T-x) >= 0.15){ pickRow=sorted[i]; break; }   // biggest cut that keeps it green
+        }
+        if(!pickRow) pickRow=sorted[sorted.length-1];              // else the smallest cut
+        pickRow.querySelector('.qbox').click();
+      }
+      var fin=engine();
+      if(!fin.res.balanced && fin.res.shortfalls[0]) showBubble(fin.res.shortfalls[0].freq);
     });
     render();
     var fr=document.getElementById('favRows');
@@ -1127,9 +1202,11 @@ applyGraduated();
       if(window.zbalQueueOn) window.zbalNext();
       render();
     });
-    /* review aids: ?open=1 opens the panel; ?demo=balanced checks enough rows to clear the week */
+    /* review aids: ?open=1 opens the panel; ?demo=balanced checks enough rows to clear the week;
+       ?bubble=<freq> shows the not-enough-songs bubble */
     var P=new URLSearchParams(location.search);
     if(P.get('open')) z.classList.add('open');
+    if(P.get('bubble') && CATS[P.get('bubble')]) showBubble(P.get('bubble'));
     if(P.get('demo')==='balanced'){ setTimeout(function(){
       ['vitality|astrolith','vitality|kindred-spirits'].forEach(function(k){
         var p=k.split('|');
