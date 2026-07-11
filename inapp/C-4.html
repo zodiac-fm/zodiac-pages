@@ -367,9 +367,9 @@
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
     <div class="zbal" id="zbal">
-      <div class="zbal-line" id="zbalLine">
+      <div class="zbal-line" id="zbalLine" title="Press the arrow to balance it for you">
         <span class="zbal-toks" id="zbalToks"></span>
-        <span class="zbal-chevbtn" title="Balance for me"><svg class="zbal-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
+        <span class="zbal-chevbtn" title="Press the arrow to balance it for you"><svg class="zbal-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
       </div>
       <div class="zbal-panel">
         <div class="zbal-act"><span class="zbal-bfm" id="zbalBfm">Balance for me</span><span class="zbal-bfmsub">checks your longest balanced list</span></div>
@@ -950,7 +950,7 @@ applyGraduated();
 </script>
 <style id="zbal-css">
   .zbal{margin:2px 18px 10px;background:rgba(255,255,255,.42);border:1px solid rgba(26,22,32,.07);border-radius:14px}
-  .zbal-line{display:flex;align-items:center;padding:0 12px;height:46px;cursor:pointer;gap:8px}
+  .zbal-line{display:flex;align-items:center;padding:0 12px;height:46px;gap:8px}
   .zbal-toks{flex:1;display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0;overflow:hidden}
   .zbal-t{display:inline-flex;flex-direction:column;align-items:center;gap:2.5px;font-size:9.5px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9a93a0;white-space:nowrap;line-height:1}
   .zbal-b{display:inline-flex;align-items:center;gap:3px;font-size:10px}
@@ -959,6 +959,9 @@ applyGraduated();
   .zbal-t .amt{font-weight:800;font-variant-numeric:tabular-nums;text-transform:none;color:#B90044}
   .zbal-t .amt.plus{color:#0A7A52;font-weight:700}
   .zbal-add{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #d9cfc0;color:#2A2530;font-size:11px;font-weight:800;line-height:1;margin-left:1px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  /* invisible bigger touch targets for the strip's little buttons (mobile thumbs) */
+  .zbal-add,.zbal-min{position:relative}
+  .zbal-add::after,.zbal-min::after{content:'';position:absolute;inset:-8px}
   .ministat .ms-lbl{white-space:nowrap}
   .zbal-m{display:inline-block;width:22px;height:3px;border-radius:2px;background:rgba(26,22,32,.10);overflow:hidden;position:relative;margin-left:2px}
   .zbal-m i{position:absolute;left:0;top:0;bottom:0;border-radius:2px}
@@ -1083,7 +1086,9 @@ applyGraduated();
   function boot(){
     var z=document.getElementById('zbal'); if(!z) return;
     z.classList.add('v-'+V);
-    document.getElementById('zbalLine').addEventListener('click', function(){ z.classList.toggle('open'); });
+    /* ONLY the arrow opens the panel (round 9): the strip itself is for reading and the
+       +/− buttons, so a stray mobile tap can't yank the drop-down open. */
+    document.querySelector('.zbal-chevbtn').addEventListener('click', function(e){ e.stopPropagation(); z.classList.toggle('open'); });
     /* PLAY ALL on the Playlist: plays the checked queue top to bottom. Each song accrues
        live time, unchecks itself on finish, and the next checked row starts. */
     function playNextChecked(){
