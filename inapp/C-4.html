@@ -377,7 +377,7 @@
         <div class="zbal-sub">Staying above 15% per frequency</div>
         <p class="zbal-exp">Your balance is always being calculated. Each check below adds that song to your list, and the meter shows whether playing your list keeps all four frequencies in balance. Check and uncheck, and watch it move.</p>
         <p class="zbal-exp">A red minus means that frequency is short this week. Tap its <b>+</b> and we'll check songs from your list that clear it.</p>
-        <p class="zbal-exp">Top right: <b>Time now</b> is what you've played this week. <b>With list</b> is where you land after playing what's checked. Green means in balance, red means not yet.</p>
+        <p class="zbal-exp">Top right: <b>Time now</b> is what you've played this week (it climbs while you listen). <b>With list</b> is where you land after playing what's checked. Green means in balance, red means not yet.</p>
         <p class="zbal-exp">Want more choices? Go to Immersions and tap the heart on any song to add it here.</p>
         <div class="zbal-sofar" id="zbalSofar"></div>
       </div>
@@ -981,6 +981,10 @@ applyGraduated();
   var WEEK = { core: 30*60, love: 20*60, vitality: 8*60, abundance: 6*60 };
   var V = (new URLSearchParams(location.search).get('v')||'a').toLowerCase();
   if(!/^[abc]$/.test(V)) V='a';
+  /* LIVE listening: seconds accrue to the playing song's frequency while it plays,
+     so Time now climbs during a session. ?speed=N accelerates for review (default 1x). */
+  var LIVE = { core:0, love:0, vitality:0, abundance:0 };
+  var SPEED = parseFloat(new URLSearchParams(location.search).get('speed'))||1;
 
   function fmtMin(sec){ return Math.max(1, Math.ceil(sec/60)); }
   function fmtTotal(sec){
@@ -1003,7 +1007,7 @@ applyGraduated();
     var projection=[], catalog=[];
     rows.forEach(function(r){ if(r.querySelector('.qbox.on')) projection.push({freq:r.dataset.ck, slug:r.dataset.slug, sec:parseFloat(r.dataset.min)||0}); });
     ZBalance.FREQS.forEach(function(f){ (CATS[f].songs||[]).forEach(function(s){ catalog.push({freq:f, slug:s.slug, name:s.name, sec:ZBalance.toSec(s.dur)}); }); });
-    var events=ZBalance.FREQS.map(function(f){ return {freq:f, sec:WEEK[f]||0}; });
+    var events=ZBalance.FREQS.map(function(f){ return {freq:f, sec:(WEEK[f]||0)+(LIVE[f]||0)}; });
     return {
       rows: rows,
       hasChecks: projection.length>0,
@@ -1079,6 +1083,31 @@ applyGraduated();
     if(fr && window.MutationObserver){
       new MutationObserver(function(){ render(); }).observe(fr, { subtree:true, attributes:true, attributeFilter:['class'] });
     }
+    /* live clock: while a song plays, its seconds land on its frequency and Time now climbs.
+       When a song FINISHES it unchecks itself: its minutes leave With list, the listened
+       seconds stay in Time now (the plan becomes the record). */
+    var lastT=null, lastR=0;
+    function throttled(){ var n=Date.now(); if(n-lastR>1000){ lastR=n; render(); } }
+    aud.addEventListener('timeupdate', function(){
+      var t=aud.currentTime;
+      if(lastT!=null && t>lastT && t-lastT<2){
+        var f=(typeof playCat==='string' && LIVE.hasOwnProperty(playCat))?playCat:null;
+        if(f){ LIVE[f]+=(t-lastT)*SPEED; throttled(); }
+      }
+      lastT=t;
+    });
+    aud.addEventListener('seeked', function(){ lastT=aud.currentTime; });
+    aud.addEventListener('ended', function(){
+      lastT=null;
+      if(curSong && typeof playCat==='string'){
+        [].slice.call(document.querySelectorAll('#favRows .row')).forEach(function(r){
+          if(r.dataset.slug===curSong.slug && r.dataset.ck===playCat){
+            var b=r.querySelector('.qbox'); if(b && b.classList.contains('on')) b.click();
+          }
+        });
+      }
+      render();
+    });
     /* review aids: ?open=1 opens the panel; ?demo=balanced checks enough rows to clear the week */
     var P=new URLSearchParams(location.search);
     if(P.get('open')) z.classList.add('open');
