@@ -1112,9 +1112,17 @@ applyGraduated();
       var box=document.querySelector('#'+scope+' .row .qbox.on');
       var row=box && box.closest('.row');
       if(!row){ window.zbalQueueOn=false; return false; }
-      var ck=row.dataset.ck;
-      var i=CATS[ck].songs.findIndex(function(s){ return s.slug===row.dataset.slug; });
-      if(i<0){ window.zbalQueueOn=false; return false; }
+      var ck, i;
+      if(scope==='rows'){
+        /* Immersions rows carry no data attrs: category = the visible one, index = row position */
+        ck=catKey;
+        i=[].slice.call(document.querySelectorAll('#rows .row')).indexOf(row);
+      } else {
+        ck=row.dataset.ck;
+        i=CATS[ck] ? CATS[ck].songs.findIndex(function(s){ return s.slug===row.dataset.slug; }) : -1;
+      }
+      if(!CATS[ck] || i<0){ window.zbalQueueOn=false; return false; }
+      window.zbalQueueRow=row;
       /* prime the audio SYNCHRONOUSLY (still inside the tap): playSong analyzes the track
          before playing, and mobile Safari revokes the gesture during that wait. Starting
          the element here keeps it unlocked; playSong then drives the same element. */
@@ -1231,6 +1239,11 @@ applyGraduated();
     aud.addEventListener('seeked', function(){ lastT=aud.currentTime; });
     aud.addEventListener('ended', function(){
       lastT=null;
+      if(window.zbalQueueRow){
+        var qr=window.zbalQueueRow; window.zbalQueueRow=null;
+        var qb=qr.isConnected && qr.querySelector('.qbox');
+        if(qb && qb.classList.contains('on')) qb.click();
+      }
       if(curSong && typeof playCat==='string'){
         [].slice.call(document.querySelectorAll('#favRows .row, #rows .row')).forEach(function(r){
           if(r.dataset.slug===curSong.slug && r.dataset.ck===playCat){
