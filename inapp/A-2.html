@@ -361,4 +361,16 @@
     setState(start);
     renderExpect();
   </script>
+<script>if(window.self!==window.top||new URLSearchParams(location.search).has("embed")){
+  /* Embed mode (used by the A/B/C shells' Progress tab): unlock the fixed phone shell so the
+     content flows to natural height and the iframe scrolls it. Standalone is unaffected. */
+  var st=document.createElement("style");
+  st.textContent="html,body{height:auto!important;margin:0!important;background:var(--cream)}"
+    +"#app{height:auto!important;min-height:100%!important;max-width:none!important;width:100%!important;overflow:visible!important;border-radius:0!important;box-shadow:none!important;border:none!important}"
+    +".scroll{height:auto!important;overflow:visible!important;flex:none!important}";
+  document.head.appendChild(st);
+  function _zh(){try{parent.postMessage({zfmH:Math.ceil(document.documentElement.scrollHeight)},"*");}catch(e){}}
+  window.addEventListener("load",_zh);window.addEventListener("resize",_zh);
+  setTimeout(_zh,250);setTimeout(_zh,900);setTimeout(_zh,1800);
+}</script>
 </body></html>
