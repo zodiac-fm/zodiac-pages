@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Zodiac.fm · C-4</title>
+<title>Zodiac.fm · C-4 · r12</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
 <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
 <script src="balance-engine.js"></script>
@@ -29,7 +29,8 @@
   .desc h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;letter-spacing:0;line-height:1.05}
   .desc p{font-size:13.5px;color:#6a6470;margin-top:6px;line-height:1.45}
   .barrow{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 8px}
-  .qall{display:flex;align-items:center;gap:6px;font-size:13px;color:#55505c;background:#fff;border:1px solid #eadfce;border-radius:16px;padding:7px 14px}
+  .qall{display:flex;align-items:center;gap:6px;font-size:13px;color:#55505c;background:#fff;border:1px solid #eadfce;border-radius:16px;padding:7px 14px;cursor:pointer;transition:transform .08s}
+  .qall:active{transform:scale(.95)}
   .rows{flex:1;overflow-y:auto;padding:2px 14px 84px}
   /* scroll region: description + guide scroll away; see per-variant sticky rules */
   .swrap{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-height:0}
@@ -1152,15 +1153,23 @@ applyGraduated();
     /* the + on a short frequency: check the least-overshoot set of that frequency's
        unchecked playlist songs (engine bestAdditions); cascade dips surface as the
        neighbor's own red + for the next tap */
-    /* the exitable bubble: shows when + can't clear a frequency from the current list */
+    /* the exitable bubble: shows when + can't clear a frequency from the current list.
+       It floats OVER the Select all / Play All row, so it must never linger: auto-hides
+       after 8s and dismisses on any click outside it (it was able to sit there
+       indefinitely swallowing Play All presses). */
     var pop=document.getElementById('zbalPop');
     function showBubble(f){
       document.getElementById('zbalPopMsg').innerHTML=
         'Not enough <b>'+CATS[f].label+'</b> songs in your list to get there. '
         +'Go to <b>Immersions &rarr; '+CATS[f].label+'</b> and tap <span class="ph">&#9829;</span> to heart more songs.';
       pop.style.display='block';
+      clearTimeout(window.__zbalPopT);
+      window.__zbalPopT=setTimeout(function(){ pop.style.display='none'; }, 8000);
     }
     document.getElementById('zbalPopX').addEventListener('click', function(){ pop.style.display='none'; });
+    document.addEventListener('click', function(e){
+      if(pop.style.display==='block' && !pop.contains(e.target)) pop.style.display='none';
+    }, true);
     document.getElementById('zbalToks').addEventListener('click', function(e){
       var add=e.target.closest('.zbal-add'), min=e.target.closest('.zbal-min');
       var tok=e.target.closest('.zbal-t');
