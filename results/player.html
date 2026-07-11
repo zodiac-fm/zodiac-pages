@@ -10,44 +10,42 @@
 <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
 <style>
   :root{
+    --st-grad:#A737C8;
     --serif:'Cormorant Garamond',Georgia,serif;
     --sans:'Switzer',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     --st:#6521C9; --st-deep:#38007A; --st-soft:#D2C8FF; --st-tint:#EFECFF; --st-text:#6521C9;
   }
   html.light{
     --bg:#FFFFFF; --panel:#FBF8F3; --ink:#1A1620; --dim:rgba(26,22,32,.52); --faint:rgba(26,22,32,.32);
-    --line:rgba(26,22,32,.12); --chip:#F3EFE8; --row:#FFFFFF; --st-label:var(--st-text);
+    --line:rgba(26,22,32,.12); --chip:#F3EFE8; --row:#FFFFFF; --rowsh:#F1EFF3; --rowline:rgba(26,22,32,.34); --st-label:var(--st-text); --splash:var(--st);
   }
   html.dark{
-    --bg:#0B0712; --panel:#FBF8F3; --ink:#ECE7F2; --dim:rgba(236,231,242,.55); --faint:rgba(236,231,242,.34);
-    --line:rgba(236,231,242,.14); --chip:#1B1424; --row:#14101C; --st-label:var(--st-soft);
+    --bg:#0B0712; --panel:#FBF8F3; --ink:#ECE7F2; --dim:rgba(236,231,242,.68); --faint:rgba(236,231,242,.45);
+    --line:rgba(236,231,242,.20); --chip:#1B1424; --row:#1C1626; --rowsh:#131019; --rowline:rgba(236,231,242,.32); --st-label:var(--st-soft); --splash:var(--st-soft);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
-  .lab{max-width:480px;margin:0 auto;padding:22px 22px 46px}
+  .lab{max-width:480px;margin:0 auto;padding:16px 20px 42px}
   header{display:flex;align-items:center;justify-content:space-between}
   header img{height:22px;display:block}
   .badge{background:var(--chip);border:1px solid var(--line);color:var(--dim);font:700 10.5px/1 var(--sans);letter-spacing:.1em;padding:7px 11px;border-radius:999px}
 
-  .readout{text-align:center;margin-top:14px}
-  .readout .num{font-size:64px;font-weight:700;letter-spacing:-.03em;line-height:.9;font-variant-numeric:tabular-nums}
-  .readout .hz{font-size:17px;font-weight:600;color:var(--dim);margin-left:5px}
-  .readout .who{margin-top:9px;font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--st-label);transition:color .4s}
-
-  .dial{margin-top:12px}
-  #dialCv{width:100%;height:58px;display:block}
-
-  .presets{display:flex;gap:8px;margin-top:12px}
-  .presets button{flex:1;border:1px solid var(--line);background:var(--row);border-radius:13px;padding:10px 2px 9px;cursor:pointer;font-family:var(--sans);transition:all .25s;color:var(--dim);box-shadow:0 1px 2px rgba(26,22,32,.06)}
+  #direct{min-height:20px;margin-top:10px;text-align:center;font:500 13px/1.5 var(--sans);color:var(--dim)}
+  #direct b{color:var(--st-label);font-weight:700}
+  .presets{display:flex;gap:6px;margin-top:10px}
+  .presets button.pinvite{animation:pillp 1.7s ease-in-out infinite}
+  @keyframes pillp{0%,100%{box-shadow:0 0 0 0 var(--st-soft)}55%{box-shadow:0 0 0 9px rgba(0,0,0,0)}}
+  .presets button{flex:1;border:1px solid var(--line);background:var(--row);border-radius:999px;padding:10px 0;font:600 12.5px/1 var(--sans);color:var(--dim);cursor:pointer;transition:all .25s}
   .presets button:active{transform:scale(.97)}
-  .presets button .d{display:block;width:8px;height:8px;border-radius:50%;margin:0 auto 6px;background:var(--pc)}
-  .presets button b{display:block;font-size:12px;font-weight:600;color:inherit}
-  .presets button span{display:block;font-size:10px;color:var(--faint);margin-top:2px;font-variant-numeric:tabular-nums}
-  .presets button.on{border-color:transparent;background:var(--pt);color:var(--pl)}
-  .presets button.on span{color:var(--pl);opacity:.75}
+  .presets button.on{border-color:var(--st);background:var(--pt);color:var(--pl)}
+  html.dark .presets button.on{border-color:var(--st-soft)}
 
   /* THE ONE STAGE: tone and songs, the same instrument, the same place */
-  .screen{margin-top:14px;position:relative;height:212px;border-radius:20px;overflow:hidden;background:#FBF8F3;border:1px solid var(--line);cursor:pointer}
+  .screen{margin-top:16px;position:relative;height:236px;border-radius:22px;overflow:hidden;background:#FBF8F3;border:1.5px solid var(--rowline);cursor:pointer;box-shadow:0 14px 38px rgba(56,0,122,.16)}
+  #smsg{position:absolute;top:20px;left:18px;right:18px;text-align:center;z-index:2;pointer-events:none}
+  #smsg b{display:block;font-family:var(--sans);font-weight:700;font-size:21px;letter-spacing:-.01em;line-height:1.15;color:#1A1620}
+  #smsg span{display:block;margin-top:7px;font:500 12.5px/1.45 var(--sans);color:rgba(26,22,32,.55)}
+  .screen.song #smsg{display:none}
   html.dark .screen{box-shadow:0 0 0 1px rgba(236,231,242,.06),0 14px 40px rgba(0,0,0,.5)}
   .screen iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:none;pointer-events:auto}
   .screen.song iframe{display:block}
@@ -71,72 +69,132 @@
   #vhint.on{display:block}
   .under{display:flex;justify-content:center;margin-top:10px;font-size:12px;color:var(--faint)}
 
-  .lib-k{margin-top:26px;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+  .lib-k{margin-top:18px;font-family:var(--sans);font-weight:700;font-size:19px;letter-spacing:-.01em;line-height:1.2;color:var(--ink)}
+  .lib-sub{margin-top:5px;font-size:12.5px;line-height:1.45;color:var(--dim)}
   .lib{margin-top:10px;display:flex;flex-direction:column;gap:8px}
-  .row{display:flex;align-items:center;gap:12px;background:var(--row);border:1px solid var(--line);border-radius:15px;padding:9px 12px;cursor:pointer;transition:all .25s}
+  .row{display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,var(--row),var(--rowsh));border:1px solid var(--rowline);border-radius:15px;padding:9px 12px;cursor:pointer;transition:all .25s;box-shadow:0 2px 6px rgba(26,22,32,.08)}
   .row .art{width:46px;height:46px;flex:none;position:relative}
   .row .art canvas{position:absolute;inset:0;width:100%;height:100%;transform:scale(1.14);filter:drop-shadow(0 2px 5px rgba(56,0,122,.14))}
   .row .rx{flex:1;min-width:0}
   .row .rx b{display:block;font-size:14.5px;font-weight:600}
   .row .rx span{display:block;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);margin-top:3px}
+  #toneRowHz{color:var(--st-label);font-weight:700}
   .row .test{font:700 9.5px/1 var(--sans);letter-spacing:.09em;color:var(--st-label);border:1px solid currentColor;border-radius:999px;padding:4px 8px;opacity:.85}
-  .row .go{width:30px;height:30px;flex:none;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center}
+  .row .go{width:32px;height:32px;flex:none;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center;transition:background .3s}
   .row .go svg{width:11px;height:11px;fill:var(--dim);margin-left:1px}
+  .row[data-src] .go{background:var(--st);box-shadow:0 3px 9px rgba(26,22,32,.22)}
+  .row[data-src] .go svg{fill:#fff}
+  html.dark .row[data-src] .go{background:var(--st-soft)}
+  html.dark .row[data-src] .go svg{fill:#0B0712}
   .row.playing{border-color:var(--st);background:var(--pt2,var(--row))}
   .row .eq{display:none;gap:2px;height:10px;align-items:flex-end;margin-right:2px}
   .row .eq i{width:2px;background:var(--st-label);border-radius:2px;animation:eq .9s ease-in-out infinite;height:100%}
   .row .eq i:nth-child(2){animation-delay:.25s}.row .eq i:nth-child(3){animation-delay:.5s}
   @keyframes eq{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}
   .row.playing .eq{display:inline-flex}
+  .row.invite{border-color:var(--st)}
+  .row.invite .go{animation:invitep 1.7s ease-in-out infinite}
+  @keyframes invitep{0%,100%{box-shadow:0 0 0 0 var(--st-soft)}55%{box-shadow:0 0 0 10px rgba(0,0,0,0)}}
   .row.locked{cursor:default;opacity:.55}
   .row.locked .art canvas{filter:grayscale(.35) drop-shadow(0 2px 5px rgba(26,22,32,.1))}
   .row.locked .go{background:transparent}
   .row.locked .go svg{width:14px;height:14px;fill:var(--faint);margin:0}
   .locknote{font-size:11.5px;color:var(--faint);text-align:center;margin-top:12px}
-  .dots-div{border-top:2.5px dotted var(--line);margin:16px 12px 0}
+  .dots-div{border-top:2.5px dotted var(--line);margin:18px 12px 0}
   .cap{text-align:center;font-size:12px;color:var(--faint);margin-top:26px;line-height:1.5}
+
+  /* 12: the emergence */
+  #emerge{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity .95s ease;overflow:hidden}
+  #emerge.done{opacity:0;pointer-events:none}
+  #eorb{position:absolute;width:120vmax;height:120vmax;border-radius:50%;
+    background:radial-gradient(circle, var(--st-soft) 0%, var(--st) 18%, var(--st-grad) 36%, rgba(0,0,0,0) 64%);
+    transform:scale(.04);opacity:.85;will-change:transform}
+  html.light #eorb{opacity:.5}
+  #eorb.grow{animation:egrow 5.2s cubic-bezier(.6,.05,.3,1) forwards}
+  @keyframes egrow{0%{transform:scale(.04)}55%{transform:scale(.32)}100%{transform:scale(1.7)}}
+  #ecore{position:absolute;width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 26px 7px var(--st-soft);opacity:.95}
+  #ecore.grow{animation:ecoreg 5.2s ease forwards}
+  @keyframes ecoreg{0%{transform:scale(.4);opacity:.9}70%{transform:scale(1.6);opacity:.95}100%{transform:scale(34);opacity:0}}
+  .emsg{position:absolute;left:26px;right:26px;text-align:center;font-family:var(--serif);font-weight:600;font-size:31px;line-height:1.2;color:var(--ink);opacity:0;z-index:2;text-shadow:0 1px 18px var(--bg),0 0 38px var(--bg)}
+  .emsg.on{animation:emsgk 2s ease forwards}
+  @keyframes emsgk{0%{opacity:0;transform:translateY(12px)}16%{opacity:1;transform:none}76%{opacity:1}100%{opacity:0;transform:translateY(-9px)}}
+  #enum{position:absolute;opacity:0;text-align:center;z-index:2}
+  #enum.on{animation:sup .8s ease forwards}
+  #enum b{display:block;font-size:66px;font-weight:700;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;font-family:var(--sans);background:linear-gradient(135deg,var(--st-deep) 10%,var(--st-text));-webkit-background-clip:text;background-clip:text;color:transparent}
+  html.dark #enum b{background:linear-gradient(135deg,var(--st-soft) 10%,var(--st-grad));-webkit-background-clip:text;background-clip:text;color:transparent}
+  #enum .ehz{font:600 15px/1 var(--sans);color:var(--dim)}
+  #enum .ecap{margin-top:14px;font-family:var(--serif);font-weight:500;font-size:22px;color:var(--ink)}
+  #eskip{position:absolute;bottom:36px;left:0;right:0;text-align:center;font:500 12px/1 var(--sans);color:var(--faint);opacity:0;animation:sup 1s ease 1.8s forwards;z-index:2}
+  @keyframes sup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .lab{opacity:0}
+  .lab.enter{animation:labin .9s ease .05s forwards}
+  @keyframes labin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  /* 08: the living layer */
+  #aurora{position:fixed;inset:0;z-index:0;pointer-events:none;transition:filter .45s ease}
+  #aurora.kick{filter:brightness(1.5) saturate(1.35)}
+  #aurora .halo{position:absolute;inset:0;background:radial-gradient(circle at 50% 320px, var(--st-tint) 0%, rgba(255,255,255,0) 46%);opacity:.8;transition:background 1.4s ease}
+  #aurora .rings{position:absolute;inset:0;background:repeating-radial-gradient(circle at 50% 320px, var(--st) 0 1px, transparent 1px 46px);opacity:.055;transition:background 1.4s ease}
+  html.dark #aurora .halo{background:radial-gradient(circle at 50% 320px, var(--st) 0%, rgba(0,0,0,0) 52%);opacity:.30}
+  html.dark #aurora .rings{background:repeating-radial-gradient(circle at 50% 320px, var(--st-soft) 0 1px, transparent 1px 46px);opacity:.10}
+  .lab{position:relative;z-index:1}
+  #ripple{position:fixed;z-index:50;width:14px;height:14px;border-radius:50%;pointer-events:none;transform:scale(0);opacity:0}
+  #ripple.go{animation:rip .9s ease-out}
+  @keyframes rip{0%{transform:scale(0);opacity:.8}100%{transform:scale(95);opacity:0}}
+  .rv{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.3,1)}
+  .rv.in{opacity:1;transform:none}
+  .dots-div.rv{transform:scaleX(0);transform-origin:left}
+  .dots-div.rv.in{transform:scaleX(1)}
+  .row.playing .art canvas{animation:spin 14s linear infinite}
+  @keyframes spin{from{transform:scale(1.14) rotate(0)}to{transform:scale(1.14) rotate(360deg)}}
+  .row.playing .art{filter:drop-shadow(0 0 var(--pulse,14px) var(--st-soft))}
+  .row.locked .art{animation:bob 7s ease-in-out infinite alternate}
+  .row.locked:nth-child(4) .art{animation-delay:1.2s}
+  .row.locked:nth-child(5) .art{animation-delay:2.4s}
+  .row.locked:nth-child(6) .art{animation-delay:3.1s}
+  .row.locked:nth-child(7) .art{animation-delay:4.3s}
+  @keyframes bob{from{transform:translateY(0)}to{transform:translateY(-3.5px)}}
 </style>
 </head>
 <body>
+<div id="aurora" aria-hidden="true"><i class="halo"></i><i class="rings"></i></div>
+<div id="ripple" aria-hidden="true"></div>
+<div id="emerge">
+  <i id="eorb"></i><i id="ecore"></i>
+  <div class="emsg" id="em1">You already have your signal.</div>
+  <div class="emsg" id="em2">Measured from your birth chart.</div>
+  <div class="emsg" id="em3">Get ready to experience yourself through sound.</div>
+  <div id="eskip">Tap to enter</div>
+</div>
+</div>
 <div class="lab">
   <header>
     <img id="logo" src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
     <div class="badge" id="badge">CONTROL · LIGHT</div>
   </header>
 
-  <div class="readout">
-    <div><span class="num" id="num">422</span><span class="hz">Hz</span></div>
-    <div class="who" id="who">Core · your station</div>
-  </div>
-
-  <div class="presets" id="presets"></div>
-
   <div class="screen" id="viewer">
+    <div id="smsg"><b>Experience the sound of you</b><span>Choose your frequency to hear it.</span></div>
     <canvas id="toneCv"></canvas>
     <iframe id="vframe" title="Zodiac playing view" allow="autoplay"></iframe>
     <div id="vload"><div class="dots"><i></i><i></i><i></i></div><div>Tuning <b id="vloadSong">the tone</b> to your <b id="vloadHz">422 Hz</b>&hellip;</div></div>
     <div id="vhint">Tap play to start</div>
   </div>
-  <div class="lib" style="margin-top:14px">
-    <div class="row" data-src="tone">
-      <div class="art"><canvas id="toneMini" width="120" height="120"></canvas></div>
-      <div class="rx"><b>Pure Tone</b><span id="toneRowHz">422 Hz &middot; The sound of you</span></div>
-      <span class="eq"><i></i><i></i><i></i></span>
-      <span class="go"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-    </div>
-  </div>
 
-  <div class="dots-div" aria-hidden="true"></div>
+  <div id="direct" aria-live="polite"></div>
 
-  <div class="lib-k">Now embedded into music</div>
+  <div class="presets" id="presets"></div>
+
+  <div class="lib-k">Now hear it inside music.</div>
+  <div class="lib-sub">The same tone, carried through the music.</div>
   <div class="lib" id="lib">
-    <div class="row" data-src="quiet-success" data-title="Quiet Success">
+    <div class="row music" data-src="quiet-success" data-title="Quiet Success">
       <div class="art"><canvas data-slug="quiet-success" width="120" height="120"></canvas></div>
       <div class="rx"><b>Quiet Success</b><span>Focus &middot; Work</span></div>
       <span class="eq"><i></i><i></i><i></i></span>
       <span class="go"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
     </div>
-    <div class="row" data-src="kindred-spirits" data-title="Kindred Spirits">
+    <div class="row music" data-src="kindred-spirits" data-title="Kindred Spirits">
       <div class="art"><canvas data-slug="kindred-spirits" width="120" height="120"></canvas></div>
       <div class="rx"><b>Kindred Spirits</b><span>Energy &middot; Morning</span></div>
       <span class="eq"><i></i><i></i><i></i></span>
@@ -182,13 +240,13 @@ document.getElementById('logo').src = DARK?'../inapp/app-assets/logo-cream.svg':
 
 /* ============ the four frequencies ============ */
 const ST = [
-  {k:'core',      name:'Core',      hz:422, c:'#6521C9', deep:'#38007A', soft:'#D2C8FF', tint:'#EFECFF', text:'#6521C9'},
-  {k:'love',      name:'Love',      hz:432, c:'#B90044', deep:'#6E0024', soft:'#FFBDC3', tint:'#FFE8EA', text:'#B90044'},
-  {k:'vitality',  name:'Vitality',  hz:579, c:'#FF9112', deep:'#BC6700', soft:'#FFC392', tint:'#FFEADA', text:'#C25500'},
-  {k:'abundance', name:'Abundance', hz:611, c:'#12A56E', deep:'#0A6B48', soft:'#8FE1BE', tint:'#DCF4E8', text:'#0A7A52'}
+  {k:'core',      name:'Core',      hz:422, c:'#6521C9', grad:'#A737C8', deep:'#38007A', soft:'#D2C8FF', tint:'#EFECFF', text:'#6521C9'},
+  {k:'love',      name:'Love',      hz:432, c:'#B90044', grad:'#CF4090', deep:'#6E0024', soft:'#FFBDC3', tint:'#FFE8EA', text:'#B90044'},
+  {k:'vitality',  name:'Vitality',  hz:579, c:'#FF9112', grad:'#FFC251', deep:'#BC6700', soft:'#FFC392', tint:'#FFEADA', text:'#C25500'},
+  {k:'abundance', name:'Abundance', hz:611, c:'#12A56E', grad:'#46D99A', deep:'#0A6B48', soft:'#8FE1BE', tint:'#DCF4E8', text:'#0A7A52'}
 ];
 const HZ0=380, HZ1=680;
-let cur=0, shownHz=422;
+let cur=0;
 const $=id=>document.getElementById(id);
 function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
 function mix(a,b,t){return a.map((v,i)=>v+(b[i]-v)*t);}
@@ -197,14 +255,14 @@ function hash(s){let h=177;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>
 
 ST.forEach((s,i)=>{
   const b=document.createElement('button');
-  b.style.setProperty('--pc',s.c);
+  b.style.setProperty('--pc',DARK?s.grad:s.c);
   b.style.setProperty('--pt',DARK?rgba(hx(s.c),.22):s.tint);
   b.style.setProperty('--pl',DARK?s.soft:s.text);
-  b.innerHTML='<span class="d"></span><b>'+s.name+'</b><span>'+s.hz+' Hz</span>';
-  b.addEventListener('click',()=>tune(i));
+  b.textContent=s.name;
+  b.addEventListener('click',(ev)=>{ tune(i); splashAt(ev.clientX,ev.clientY); });
   $('presets').appendChild(b);
 });
-function paintPresets(){[...$('presets').children].forEach((b,i)=>b.classList.toggle('on',i===cur));}
+function paintPresets(){[...$('presets').children].forEach((b,i)=>{b.classList.toggle('on',i===cur); b.textContent = i===cur ? ST[i].name+' \u00b7 '+ST[i].hz : ST[i].name;});}
 paintPresets();
 
 /* ============ zdisc art (unchanged) ============ */
@@ -220,14 +278,21 @@ function ray(x,x1,y1,x2,y2,cA,cB,al,wd){const g=x.createLinearGradient(x1,y1,x2,
   g.addColorStop(0,rgba(cA,al));g.addColorStop(0.78,rgba(cB,al*0.9));g.addColorStop(1,rgba(cB,al*0.35));
   x.strokeStyle=g;x.lineWidth=wd*2.3;x.globalAlpha=0.62;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
   x.globalAlpha=1;x.lineWidth=wd;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();}
+const FT={core:[239,236,255],love:[255,232,234],vitality:[255,234,218],abundance:[220,244,232]};
+const FDEEP={core:[56,0,122],love:[110,0,36],vitality:[188,103,0],abundance:[10,107,72]};
+const REG={'quiet-success':0.55,'kindred-spirits':-0.5,'starseed':1,'astrolith':-1,'elysian-surge':0.25,'cosmic-drift':-0.25,'galactic-slumber':0};
 function drawZ(cv,slug,catk){
   const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2;x.clearRect(0,0,W,H);
-  const P=ZPAL[catk]||ZPAL.core,pr=hx(P.d[0]),en=hx(P.d[1]);
+  const P=ZPAL[catk]||ZPAL.core; let pr=hx(P.d[0]),en=hx(P.d[1]);
+  const rg=REG[slug]||0;
+  if(rg>0){ pr=mix(pr,hx(P.s[0][0]),rg*0.45); en=mix(en,hx(P.s[0][1]),rg*0.5); }
+  else if(rg<0){ const dk=FDEEP[catk]||FDEEP.core; pr=mix(pr,dk,-rg*0.55); en=mix(en,mix(pr,dk,0.3),-rg*0.35); }
   const s0a=hx(P.s[0][0]),s0b=hx(P.s[0][1]),s1a=hx(P.s[1][0]),s1b=hx(P.s[1][1]);
   const seed=hash(slug),rr1=((seed%97)/97),puls=1,bmul=1;
   const R=Math.min(W,H)*0.44,r0=Math.min(W,H)*0.075,rot=0.6+rr1*6.28;
   const wd=Math.max(2.1,W/240*2.0);
-  x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,R*1.02,0,7);x.fill();
+  const bgm=Math.max(0.12,Math.min(0.9,0.5-rg*0.35));
+  x.fillStyle=rgba(mix([255,255,255],FT[catk]||FT.core,bgm),1);x.beginPath();x.arc(cx,cy,R*1.02,0,7);x.fill();
   const tg=x.createRadialGradient(cx,cy,r0,cx,cy,R*0.95);tg.addColorStop(0,rgba(en,0.34));tg.addColorStop(1,rgba(en,0.05));
   x.fillStyle=tg;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();
   x.lineCap='round';
@@ -321,13 +386,14 @@ async function toneURL(hz){
 /* ============ the ONE stage loader (tone and songs identical) ============ */
 let source='tone', loaded=false, capLimit=Infinity, capTimer=null, currentAudio=null, currentTitle='Pure Tone';
 function stageLoad(audio,title){
-  $('vframe').src='./lab-embed.html'
+  $('vframe').src='./lab-embed-live.html'
     + '?audio='+encodeURIComponent(audio)
     + '&target='+ST[cur].hz + '&title='+encodeURIComponent(title)
     + '&center=1&minui=1&light=1&wave='+encodeURIComponent(ST[cur].c)
     + '&line='+encodeURIComponent(ST[cur].deep)+'&r='+Math.floor(ST[cur].hz*7+title.length);
 }
 function playInStage(audio,title,cap){
+  document.querySelectorAll('.presets button').forEach(b=>b.classList.remove('pinvite'));
   capLimit=cap; currentAudio=audio; currentTitle=title;
   $('viewer').classList.add('song');
   $('viewer').classList.toggle('insong', source!=='tone');
@@ -369,14 +435,28 @@ function togglePlay(){
 
 const ICO_PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 const ICO_PAUSE='<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+let musicInvited=false, lastDirect='';
 setInterval(()=>{
-  let playing=false;
-  try{ const w=$('vframe').contentWindow; playing=!!(w&&w.aud&&w.aud.src&&!w.aud.paused); }catch(e){}
+  let playing=false, t=0;
+  try{ const w=$('vframe').contentWindow; playing=!!(w&&w.aud&&w.aud.src&&!w.aud.paused); t=(w&&w.aud&&w.aud.currentTime)||0; }catch(e){}
+  if(!musicInvited && source==='tone' && t>8){ musicInvited=true;
+    document.querySelector('.row[data-src="quiet-success"]').classList.add('invite'); }
+  if(source!=='tone' && musicInvited){ document.querySelectorAll('.row.invite').forEach(r=>r.classList.remove('invite')); }
   paintRows(playing ? source : null);
+  const s=ST[cur]; let d='';
+  if(!loaded){ d=''; }
+  else if(source==='tone'){ d = playing ? 'Playing your <b>'+s.name+' tone</b>. Press a song to hear it inside music.'
+                                        : 'Your <b>'+s.name+' tone</b> is paused. Tap the player to resume.'; }
+  else { d = '<b>'+currentTitle+'</b> &middot; tuned to your '+s.name+' '+s.hz+' Hz.'; }
+  if(d!==lastDirect){ lastDirect=d; $('direct').innerHTML=d; }
 },300);
 
 /* ---- library rows drive the same stage ---- */
+let _lastPaint='';
 function paintRows(playingSlug){
+  const sig=source+'|'+(playingSlug||'')+'|'+cur;
+  if(sig===_lastPaint) return;
+  _lastPaint=sig;
   document.querySelectorAll('.row[data-src]').forEach(r=>{
     const active = source===r.dataset.src;
     r.classList.toggle('playing', active && playingSlug===r.dataset.src);
@@ -387,7 +467,8 @@ function paintRows(playingSlug){
       : '<path d="M8 5v14l11-7z"/>';
   });
 }
-document.querySelectorAll('.row[data-src]').forEach(r=>r.addEventListener('click',()=>{
+document.querySelectorAll('.row[data-src]').forEach(r=>r.addEventListener('click',(ev)=>{
+  splashAt(ev.clientX,ev.clientY);
   const slug=r.dataset.src;
   if (slug===source && loaded){ togglePlay(); return; }
   if (slug==='tone'){ playTone(); }
@@ -397,18 +478,16 @@ document.querySelectorAll('.row[data-src]').forEach(r=>r.addEventListener('click
 
 /* ---- station switch: the whole instrument re-tunes, tone re-synthesizes ---- */
 function tune(i){
-  if(i===cur){ paintPresets(); return; }
+  if(i===cur){
+    if(!loaded || source!=='tone'){ playTone(); } else { togglePlay(); }
+    paintPresets(); return; }
   cur=i;
   const s=ST[i], r=document.documentElement.style;
-  r.setProperty('--st',s.c); r.setProperty('--st-deep',s.deep);
+  r.setProperty('--st',s.c); r.setProperty('--st-deep',s.deep); r.setProperty('--st-grad',s.grad);
   r.setProperty('--st-soft',s.soft); r.setProperty('--st-tint',s.tint); r.setProperty('--st-text',s.text);
-  $('who').textContent=s.name+' · your station';
-  $('toneRowHz').innerHTML=s.hz+' Hz &middot; The sound of you';
   paintPresets(); drawDiscs();
-  if(loaded){
-    if(source==='tone'){ playTone(); }
-    else { playInStage(currentAudio,currentTitle,capLimit); }
-  } else { toneIdle(); }
+  if(!loaded || source==='tone'){ playTone(); }
+  else { playInStage(currentAudio,currentTitle,capLimit); }
 }
 
 /* ---- idle art before the first play (the stage's resting face) ---- */
@@ -429,11 +508,12 @@ function toneIdle(T){
   const f=ST[cur], col=hx(f.c), dp=hx(f.deep);
   const yTop=H*0.34, yBot=H*0.78, fr=Math.max(0,Math.min(1,(f.hz-250)/700));
   const midY=yBot-(yBot-yTop)*fr;
+  const tn=hx(f.tint), sf=hx(f.soft);
   const g=tctx.createLinearGradient(0,0,0,H);
-  g.addColorStop(0,'#FBF8F3'); g.addColorStop(0.55,'#F5EFE6'); g.addColorStop(1,'#F8F4EC');
+  g.addColorStop(0,'#FFFFFF'); g.addColorStop(0.5,rgba(tn,0.95)); g.addColorStop(1,rgba(sf,0.4));
   tctx.fillStyle=g; tctx.fillRect(0,0,W,H);
-  const rw=tctx.createRadialGradient(cx,midY,0,cx,midY,W*0.6);
-  rw.addColorStop(0,rgba(col,0.05)); rw.addColorStop(1,'rgba(255,255,255,0)');
+  const rw=tctx.createRadialGradient(cx,midY,0,cx,midY,W*0.62);
+  rw.addColorStop(0,rgba(col,0.10)); rw.addColorStop(1,'rgba(255,255,255,0)');
   tctx.fillStyle=rw; tctx.fillRect(0,0,W,H);
   const x0=W*0.15, x1=W*0.95, amp=H*0.085;
   tctx.beginPath();
@@ -442,7 +522,7 @@ function toneIdle(T){
     const yy=midY + Math.sin(ph)*amp;
     xx===x0 ? tctx.moveTo(xx,yy) : tctx.lineTo(xx,yy);
   }
-  tctx.strokeStyle=rgba(col,0.55); tctx.lineWidth=2.2*d; tctx.lineCap='round'; tctx.stroke();
+  tctx.strokeStyle=rgba(col,0.75); tctx.lineWidth=2.4*d; tctx.lineCap='round'; tctx.stroke();
   const br=0.30;
   tctx.shadowColor=rgba(dp,0.35); tctx.shadowBlur=7*d;
   tctx.strokeStyle=rgba(dp,0.95); tctx.lineWidth=2.1*d;
@@ -463,26 +543,67 @@ function toneIdle(T){
   tctx.beginPath(); tctx.moveTo(x0-7*d,midY); tctx.lineTo(x0,midY); tctx.stroke();
   tctx.font='700 '+(11.5*d)+'px Switzer, -apple-system, sans-serif'; tctx.fillStyle=rgba(dp,0.95);
   tctx.fillText(f.hz+' Hz', x0-11*d, midY);
-  tracked('PURE TONE', cx, 19*d, 12*d, '600', 'rgba(26,22,32,0.82)', 3.4*d);
-  tracked('THE SOUND OF YOU', cx, 37*d, 8.5*d, '500', 'rgba(26,22,32,0.4)', 2.1*d);
-  tctx.textAlign='center'; tctx.textBaseline='bottom';
-  tctx.font='500 '+(11*d)+'px Switzer, -apple-system, sans-serif';
-  tctx.fillStyle=rgba(dp,0.9); tctx.fillText('This line is your tone.', cx, H-30*d);
-  tctx.fillStyle='rgba(26,22,32,0.5)'; tctx.fillText('Press play below to hear it.', cx, H-14*d);
 }
 
 /* ---- the dial ---- */
-function stepAnim(){
-  const t=ST[cur].hz;
-  shownHz += (t-shownHz)*.12; if(Math.abs(t-shownHz)<.5)shownHz=t;
-  $('num').textContent=Math.round(shownHz);
+function splashAt(x,y){ const r=$('ripple');
+  r.style.left=(x-7)+'px'; r.style.top=(y-7)+'px';
+  r.style.background='radial-gradient(circle, var(--splash) 0%, transparent 62%)';
+  r.classList.remove('go'); void r.offsetWidth; r.classList.add('go'); }
+/* scroll: cascade reveals + aurora parallax */
+const RV=[...document.querySelectorAll('.row,.lib-k,.dots-div,.locknote,.cap')];
+RV.forEach((el,i)=>{ el.classList.add('rv'); el.style.transitionDelay=Math.min(i*55,440)+'ms'; });
+const IO=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ const el=e.target; el.classList.add('in'); IO.unobserve(el); setTimeout(()=>{ el.style.transition='none'; }, 1300); } }),{threshold:0.12});
+RV.forEach(el=>IO.observe(el));
+/* ---- the emergence: born behind the glass, grows into the page ---- */
+(function(){
+  const em=document.getElementById('emerge');
+  let edone=false; const timers=[];
+  function at(ms,fn){ timers.push(setTimeout(fn,ms)); }
+  function finish(){ if(edone) return; edone=true;
+    timers.forEach(clearTimeout);
+    em.classList.add('done');
+    const au=document.getElementById('aurora');
+    au.classList.add('kick'); setTimeout(()=>au.classList.remove('kick'),450);
+    setTimeout(()=>{ try{em.remove();}catch(e){} },1000);
+    document.querySelector('.lab').classList.add('enter');
+  }
+  em.addEventListener('click',finish);
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ finish(); return; }
+  document.getElementById('eorb').classList.add('grow');
+  document.getElementById('ecore').classList.add('grow');
+  at(500,()=>document.getElementById('em1').classList.add('on'));
+  at(2750,()=>document.getElementById('em2').classList.add('on'));
+  at(4900,()=>document.getElementById('em3').classList.add('on'));
+  at(6900,finish);
+})();
+let _sy=0; addEventListener('scroll',()=>{ _sy=scrollY; },{passive:true});
+/* the magic layer: the page listens to the music */
+let react=0, lastAmp=0, lastRing=0, lastQ=-1;
+function livePulse(){
+  let amp=0;
+  try{ const z=$('vframe').contentWindow.zLive; if(z && !z.paused) amp=z.amp||0; }catch(e){}
+  react += (amp-react)*0.25;
+  const glow=Math.min(1,react*2.6);
+  const q=Math.round(glow*24);   // write styles ONLY on a visible step change; idle = zero writes
+  if(q!==lastQ){
+    lastQ=q; const g=q/24;
+    $('viewer').style.filter = g>0.03 ? 'drop-shadow(0 0 '+(g*34).toFixed(1)+'px var(--st-soft))' : '';
+    document.getElementById('lib').style.setProperty('--pulse',(14+g*60).toFixed(1)+'px');
+  }
+  const now=performance.now();
+  if(amp-lastAmp>0.075 && now-lastRing>650){ lastRing=now;
+    const au=document.getElementById('aurora');
+    au.classList.add('kick'); setTimeout(()=>au.classList.remove('kick'),450); }
+  lastAmp=amp;
 }
 (function loop(){
-  stepAnim();
   if(!loaded) toneIdle(performance.now()/1000);
+  livePulse();
   requestAnimationFrame(loop);
 })();
 paintRows(null);
+if($('presets').children[0]) $('presets').children[0].classList.add('pinvite');
 </script>
 </body>
 </html>
