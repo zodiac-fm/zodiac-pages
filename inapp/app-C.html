@@ -1,6 +1,7 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Zodiac.fm · A</title>
+<script src="balance-engine.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
 <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
 <style>
@@ -28,7 +29,8 @@
   .desc h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;letter-spacing:0;line-height:1.05}
   .desc p{font-size:13.5px;color:#6a6470;margin-top:6px;line-height:1.45}
   .barrow{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 8px}
-  .qall{display:flex;align-items:center;gap:6px;font-size:13px;color:#55505c;background:#fff;border:1px solid #eadfce;border-radius:16px;padding:7px 14px}
+  .qall{display:flex;align-items:center;gap:6px;font-size:13px;color:#55505c;background:#fff;border:1px solid #eadfce;border-radius:16px;padding:7px 14px;cursor:pointer;transition:transform .08s}
+  .qall:active{transform:scale(.95)}
   .rows{flex:1;overflow-y:auto;padding:2px 14px 84px}
   /* scroll region: description + guide scroll away; see per-variant sticky rules */
   .swrap{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-height:0}
@@ -392,6 +394,26 @@
   <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
+    <div class="zbal" id="zbal">
+      <div class="zbal-line" id="zbalLine" title="Press the arrow to balance it for you">
+        <span class="zbal-toks" id="zbalToks"></span>
+        <span class="zbal-chevbtn" title="Press the arrow to balance it for you"><svg class="zbal-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
+      </div>
+      <div class="zbal-panel">
+        <div class="zbal-act"><span class="zbal-bfm" id="zbalBfm">Balance for me</span><span class="zbal-bfmsub">checks your longest balanced list</span></div>
+        <h4 class="zbal-ttl">Frequency Balance Meter</h4>
+        <div class="zbal-sub">Keep all four frequencies above 15% each week</div>
+        <ol class="zbal-ol">
+          <li>The numbers above show where your week lands if you play everything checked. <b class="g">Green</b> = minutes above the line. <b class="r">Red</b> = minutes short.</li>
+          <li>Tap <b>+</b> on a red frequency to add songs from your list. Tap <b>−</b> on a green one to trim it back.</li>
+          <li>Top right: <b>Time now</b> is what you've played (it climbs while you listen). <b>With list</b> is where you land after playing what's checked. You're set when With list is green.</li>
+          <li>Press <b>Play All</b>. Songs play top to bottom and check themselves off as they finish. Remember: just hold a song card to reorder.</li>
+          <li>Out of songs? Go to <b>Immersions</b> and tap <span class="ph">&#9829;</span> to add more to this list.</li>
+        </ol>
+        <div class="zbal-sofar" id="zbalSofar"></div>
+      </div>
+      <div class="zbal-pop" id="zbalPop" style="display:none"><span id="zbalPopMsg"></span><span class="zbal-popx" id="zbalPopX">&#10005;</span></div>
+    </div>
     <div class="barrow"><div class="selall" data-scope="favRows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
     <div class="swrap">
     <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 8 12 4 16 8"/><polyline points="8 16 12 20 16 16"/><line x1="12" y1="4" x2="12" y2="20"/></svg></span>Hold to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
@@ -717,7 +739,7 @@ const FAVS=[['core','starseed'],['love','kindred-spirits'],['vitality','astrolit
  ['core','astrolith'],['love','galactic-slumber'],['vitality','kindred-spirits'],['abundance','cosmic-drift']];
 function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
  FAVS.forEach(([ck,slug],i)=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
-  const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);r.style.setProperty('--ctint',cat.ctint);r.style.setProperty('--csoft',cat.csoft);r.dataset.cat=ck;r.dataset.slug=s.slug;  /* every action color resolves to THIS row's family, never the app-level (Immersions) one */
+  const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);r.style.setProperty('--ctint',cat.ctint);r.style.setProperty('--csoft',cat.csoft);r.dataset.cat=ck;r.dataset.slug=s.slug;r.dataset.min=(window.ZBalance?ZBalance.toSec(s.dur):0);  /* every action color resolves to THIS row's family, never the app-level (Immersions) one */
   r.innerHTML=`<div class="lcol"><span class="qbox${(i%3===0)?' on':''}"></span></div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
    <div class="meta mcols">
     <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div></div>
@@ -973,5 +995,345 @@ applyGraduated();
 </script>
 <script>/* AUTO-BADGE: single source of truth for the corner badge. Derived from the page filename (app-A -> A), applied to every .appletter so they can never disagree and a cloned page auto-shows its own name. Override with window.APP_BADGE for special names. */
 (function(){function setBadge(){var b=window.APP_BADGE;if(!b){var s=(location.pathname.split("/").pop()||"").replace(/\.html$/,"").replace(/^app-/,"");b=s.toUpperCase();}document.querySelectorAll(".appletter").forEach(function(e){e.textContent=b;});}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setBadge);}else{setBadge();}})();</script>
+<style id="zbal-css">
+  .zbal{margin:2px 18px 10px;background:rgba(255,255,255,.42);border:1px solid rgba(26,22,32,.07);border-radius:14px}
+  .zbal-line{display:flex;align-items:center;padding:0 12px;height:46px;gap:8px}
+  .zbal-toks{flex:1;display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0;overflow:hidden}
+  .zbal-t{display:inline-flex;flex-direction:column;align-items:center;gap:2.5px;font-size:9.5px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9a93a0;white-space:nowrap;line-height:1}
+  .zbal-b{display:inline-flex;align-items:center;gap:3px;font-size:10px}
+  .zbal-t .ok{color:#0A7A52;font-style:normal;font-size:9px}
+  .v-b .zbal-t.short,.v-c .zbal-t.short{color:var(--tink)}
+  .zbal-t .amt{font-weight:800;font-variant-numeric:tabular-nums;text-transform:none;color:#B90044}
+  .zbal-t .amt.plus{color:#0A7A52;font-weight:700}
+  .zbal-add{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #d9cfc0;color:#2A2530;font-size:11px;font-weight:800;line-height:1;margin-left:1px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  /* invisible bigger touch targets for the strip's little buttons (mobile thumbs) */
+  .zbal-add,.zbal-min{position:relative}
+  .zbal-add::after,.zbal-min::after{content:'';position:absolute;inset:-8px}
+  .ministat .ms-lbl{white-space:nowrap}
+  .zbal-m{display:inline-block;width:22px;height:3px;border-radius:2px;background:rgba(26,22,32,.10);overflow:hidden;position:relative;margin-left:2px}
+  .zbal-m i{position:absolute;left:0;top:0;bottom:0;border-radius:2px}
+  .v-b .zbal-t{gap:4px;font-size:8.5px;letter-spacing:0}
+  .v-b .zbal-toks{gap:4px}
+  .v-b .zbal-m{width:15px}
+  .zbal-sent{font-size:11.5px;font-weight:600;color:#6a6470;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .zbal-sent .sep{color:#cfc8ba}
+  .zbal-sent .ok{color:#1f9d63;font-style:normal}
+  .zbal{margin-top:8px}
+  .zbal-chevbtn{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:#fff;border:1px solid #eadfce;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer}
+  .zbal-chev{transition:transform .2s}
+  .zbal.open .zbal-chev{transform:rotate(180deg)}
+  .zbal-panel{display:none;padding:0 14px 12px;border-top:1px solid rgba(26,22,32,.05)}
+  .zbal.open .zbal-panel{display:block}
+  .zbal-ttl{font-size:14px;font-weight:700;letter-spacing:-.01em;padding-top:12px}
+  .zbal-sub{font-size:11px;font-weight:600;color:#8a8290;margin-top:2px}
+  .zbal-exp{font-size:12px;line-height:1.5;color:#6a6470;padding-top:8px}
+  .zbal-sofar{margin-top:12px;font-size:11px;line-height:1.5;color:#8a8290}
+  .zbal-sofar b{font-weight:700;color:#6a6470}
+  .zbal-ol{margin:10px 0 0 17px;padding:0}
+  .zbal-ol li{font-size:12px;line-height:1.55;color:#6a6470;margin-top:7px}
+  .zbal-ol b{color:#3a3542}
+  .zbal-ol b.g{color:#0A7A52}
+  .zbal-ol b.r{color:#B90044}
+  .zbal-ol .ph{color:#2A2530;font-weight:700}
+  .zbal-act{margin-top:13px;display:flex;align-items:center;gap:10px}
+  .zbal-bfm{display:inline-flex;align-items:center;background:#fff;border:1px solid #eadfce;border-radius:16px;padding:8px 16px;font-size:12.5px;font-weight:700;color:#1a1620;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  .zbal-bfmsub{font-size:10.5px;color:#9a93a0}
+  .zbal-pop{position:absolute;top:calc(100% + 6px);left:8px;right:8px;background:#fff;border:1px solid #eadfce;border-radius:14px;padding:12px 38px 12px 14px;box-shadow:0 12px 32px rgba(26,22,32,.16);font-size:12.5px;line-height:1.5;color:#3a3542;z-index:30}
+  .zbal-pop .ph{color:#2A2530;font-weight:700}
+  .zbal-popx{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;background:#F6F1E8;color:#63616F;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+  .zbal{position:relative}
+  .zbal-min{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #d9cfc0;color:#2A2530;font-size:11px;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  .zbal-tip{position:absolute;top:-32px;right:6px;background:#2A2530;color:#fff;font-size:11px;font-weight:600;padding:6px 11px;border-radius:10px;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.18);opacity:0;pointer-events:none;transition:opacity .18s;z-index:31}
+  .zbal-tip.show{opacity:1}
+  .zbal-tip:after{content:'';position:absolute;top:100%;right:16px;border:5px solid transparent;border-top-color:#2A2530}
+  @media (max-width:400px){ .zbal-t{font-size:9px} }
+</style>
+<script id="zbal-js">
+(function(){
+  var WEEK = { core: 30*60, love: 20*60, vitality: 8*60, abundance: 6*60 };
+  var V = (new URLSearchParams(location.search).get('v')||'a').toLowerCase();
+  if(!/^[abc]$/.test(V)) V='a';
+  /* LIVE listening: seconds accrue to the playing song's frequency while it plays,
+     so Time now climbs during a session. ?speed=N accelerates for review (default 1x). */
+  var LIVE = { core:0, love:0, vitality:0, abundance:0 };
+  var SPEED = parseFloat(new URLSearchParams(location.search).get('speed'))||1;
+
+  function fmtMin(sec){ return Math.max(1, Math.ceil(sec/60)); }
+  function fmtTotal(sec){
+    var m=Math.round(sec/60), h=Math.floor(m/60);
+    return h ? h+'h '+(m%60)+'m' : m+'m';
+  }
+  /* Top right runs on the engine, two rows: Time = played so far this week (red/green by
+     its own balance); List = where the week lands after playing what's checked (appears
+     only when something is checked, red/green by the projected balance). */
+  function paintMinistat(played, proj, hasChecks){
+    document.querySelectorAll('.ministat').forEach(function(ms){
+      var h='<span class="ms-lbl">Time now:</span><span class="ms-ind"><i class="ms-txt'+(played.balanced?'':' low')+'">'+fmtTotal(played.total)+'</i></span>';
+      if(hasChecks) h+='<span class="ms-lbl">With list:</span><span class="ms-ind"><i class="ms-txt'+(proj.balanced?'':' low')+'">'+fmtTotal(proj.total)+'</i></span>';
+      ms.innerHTML=h;
+    });
+  }
+
+  function engine(){
+    var rows=[].slice.call(document.querySelectorAll('#favRows .row'));
+    var projection=[], catalog=[];
+    rows.forEach(function(r){ if(r.querySelector('.qbox.on')) projection.push({freq:r.dataset.cat, slug:r.dataset.slug, sec:parseFloat(r.dataset.min)||0}); });
+    ZBalance.FREQS.forEach(function(f){ (CATS[f].songs||[]).forEach(function(s){ catalog.push({freq:f, slug:s.slug, name:s.name, sec:ZBalance.toSec(s.dur)}); }); });
+    var events=ZBalance.FREQS.map(function(f){ return {freq:f, sec:(WEEK[f]||0)+(LIVE[f]||0)}; });
+    return {
+      rows: rows,
+      hasChecks: projection.length>0,
+      played: ZBalance.compute({events:events, window:null, projection:[], catalog:catalog}),
+      res: ZBalance.compute({events:events, window:null, projection:projection, catalog:catalog})
+    };
+  }
+
+  function render(){
+    var el=document.getElementById('zbalToks');
+    if(!el || !window.ZBalance || typeof CATS==='undefined') return;
+    var st=engine(), res=st.res;
+    paintMinistat(st.played, res, st.hasChecks);
+    var short={}; res.shortfalls.forEach(function(s){ short[s.freq]=s; });
+    var html='';
+    if(V==='c'){
+      html = res.shortfalls.length
+        ? '<span class="zbal-sent">'+res.shortfalls.map(function(s){
+            return '<b style="color:'+CATS[s.freq].cink+'">'+CATS[s.freq].label+' −'+fmtMin(s.neededSec)+' min</b>';
+          }).join('<span class="sep"> · </span>')+'</span>'
+        : '<span class="zbal-sent">All four balanced <i class="ok">✓</i></span>';
+    } else {
+      ZBalance.FREQS.forEach(function(f){
+        var cat=CATS[f], sf=short[f];
+        if(V==='b'){
+          var pct=Math.min(100, Math.round(res.byFreq[f].share/0.15*100));
+          html+='<span class="zbal-t'+(sf?' short':'')+'" style="--tink:'+cat.cink+'">'+cat.label
+            +'<span class="zbal-m"><i style="width:'+pct+'%;background:'+(sf?cat.cink:'#1f9d63')+'"></i></span>'
+            +(sf?'<b class="amt">−'+fmtMin(sf.neededSec)+'m</b>':'')+'</span>';
+        } else {
+          var canAdd = sf && st.rows.some(function(r){ return r.dataset.cat===f && !r.querySelector('.qbox.on'); });
+          var canTrim = !sf && st.rows.some(function(r){ return r.dataset.cat===f && r.querySelector('.qbox.on'); });
+          var overM = sf ? 0 : Math.max(0, Math.floor((res.byFreq[f].sec - 0.15*res.total)/60));
+          html+='<span class="zbal-t'+(sf?' short':'')+'" data-freq="'+f+'" style="--tink:'+cat.cink+'">'+cat.label
+            +'<span class="zbal-b">'+(sf?'<b class="amt">−'+fmtMin(sf.neededSec)+'m</b>':'<b class="amt plus">+'+overM+'m</b>')
+            +(canAdd?'<i class="zbal-add" title="Add songs to clear it">+</i>':'')
+            +(canTrim?'<i class="zbal-min" title="Trim this frequency">−</i>':'')+'</span></span>';
+        }
+      });
+    }
+    el.innerHTML=html;
+
+    var sofar=document.getElementById('zbalSofar');
+    if(sofar){
+      var day=Math.min(7, Math.floor((Date.now()-ZBalance.weekWindow(Date.now()).start)/86400000)+1);
+      sofar.innerHTML='Day '+day+' · So far this week: '+ZBalance.FREQS.map(function(f){
+        return '<b>'+CATS[f].label+'</b> '+Math.round(st.played.byFreq[f].sec/60)+'m';
+      }).join(' · ')+'.';
+    }
+  }
+  window.fbUpd = render;
+  if (window.buildFavs){ var _bf = window.buildFavs; window.buildFavs = function(){ _bf.apply(this, arguments); render(); }; }
+
+  function boot(){
+    var z=document.getElementById('zbal'); if(!z) return;
+    z.classList.add('v-'+V);
+    /* ONLY the arrow opens the panel (round 9): the strip itself is for reading and the
+       +/− buttons, so a stray mobile tap can't yank the drop-down open. */
+    /* a REAL tooltip (native title is slow and invisible on touch): instant on hover,
+       and shown once on load so phones get taught too */
+    var tip=document.createElement('div'); tip.className='zbal-tip';
+    tip.textContent='Press the arrow to balance it for you';
+    z.appendChild(tip);
+    function tipShow(){ if(!z.classList.contains('open')) tip.classList.add('show'); }
+    function tipHide(){ tip.classList.remove('show'); }
+    var lineEl=document.getElementById('zbalLine');
+    lineEl.addEventListener('mouseenter', tipShow);
+    lineEl.addEventListener('mouseleave', tipHide);
+    document.querySelector('.zbal-chevbtn').addEventListener('click', function(e){ e.stopPropagation(); tipHide(); z.classList.toggle('open'); });
+    setTimeout(function(){ tipShow(); setTimeout(tipHide, 4000); }, 900);
+    /* PLAY ALL — BOTH views (the Immersions button was a dead button until round 11):
+       plays the checked queue top to bottom in the view it was pressed on; nothing
+       checked = check everything first, then play. Each song accrues live time,
+       unchecks itself on finish, and the next checked row starts. */
+    function playNextChecked(){
+      var scope=window.zbalQueueScope||'favRows';
+      var box=document.querySelector('#'+scope+' .row .qbox.on');
+      var row=box && box.closest('.row');
+      if(!row){ window.zbalQueueOn=false; return false; }
+      var ck, i;
+      if(scope==='rows'){
+        /* Immersions rows carry no data attrs: category = the visible one, index = row position */
+        ck=catKey;
+        i=[].slice.call(document.querySelectorAll('#rows .row')).indexOf(row);
+      } else {
+        ck=row.dataset.cat;
+        i=CATS[ck] ? CATS[ck].songs.findIndex(function(s){ return s.slug===row.dataset.slug; }) : -1;
+      }
+      if(!CATS[ck] || i<0){ window.zbalQueueOn=false; return false; }
+      window.zbalQueueRow=row;
+      /* prime the audio SYNCHRONOUSLY (still inside the tap): playSong analyzes the track
+         before playing, and mobile Safari revokes the gesture during that wait. Starting
+         the element here keeps it unlocked; playSong then drives the same element. */
+      var song=CATS[ck].songs[i];
+      if(song.audio){
+        if(!(aud.src && aud.src.endsWith(song.audio))) aud.src=song.audio;
+        var pr=aud.play(); if(pr && pr.catch) pr.catch(function(){});
+      }
+      playSong(ck,i);
+      return true;
+    }
+    window.zbalNext=playNextChecked;
+    function startQueue(scope){
+      window.zbalQueueScope=scope; window.zbalQueueOn=true;
+      var rows=[].slice.call(document.querySelectorAll('#'+scope+' .row'));
+      if(!rows.some(function(r){ return r.querySelector('.qbox.on'); })){
+        rows.forEach(function(r){ var b=r.querySelector('.qbox'); if(b && !b.classList.contains('on')) b.click(); });
+      }
+      playNextChecked();
+    }
+    var qallF=document.querySelector('#favs .qall');
+    if(qallF) qallF.addEventListener('click', function(){ startQueue('favRows'); });
+    var qallL=document.querySelector('#list .ctarow .qall');
+    if(qallL) qallL.addEventListener('click', function(){ startQueue('rows'); });
+    var qallD=document.getElementById('qallDock');
+    if(qallD) qallD.addEventListener('click', function(){ startQueue('rows'); });
+    /* the + on a short frequency: check the least-overshoot set of that frequency's
+       unchecked playlist songs (engine bestAdditions); cascade dips surface as the
+       neighbor's own red + for the next tap */
+    /* the exitable bubble: shows when + can't clear a frequency from the current list.
+       It floats OVER the Select all / Play All row, so it must never linger: auto-hides
+       after 8s and dismisses on any click outside it (it was able to sit there
+       indefinitely swallowing Play All presses). */
+    var pop=document.getElementById('zbalPop');
+    function showBubble(f){
+      document.getElementById('zbalPopMsg').innerHTML=
+        'Not enough <b>'+CATS[f].label+'</b> songs in your list to get there. '
+        +'Go to <b>Immersions &rarr; '+CATS[f].label+'</b> and tap <span class="ph">&#9829;</span> to heart more songs.';
+      pop.style.display='block';
+      clearTimeout(window.__zbalPopT);
+      window.__zbalPopT=setTimeout(function(){ pop.style.display='none'; }, 8000);
+    }
+    document.getElementById('zbalPopX').addEventListener('click', function(){ pop.style.display='none'; });
+    document.addEventListener('click', function(e){
+      if(pop.style.display==='block' && !pop.contains(e.target)) pop.style.display='none';
+    }, true);
+    document.getElementById('zbalToks').addEventListener('click', function(e){
+      var add=e.target.closest('.zbal-add'), min=e.target.closest('.zbal-min');
+      var tok=e.target.closest('.zbal-t');
+      if(!add && !min){
+        /* a red frequency with no + left: tapping it explains where more songs live */
+        if(tok && tok.classList.contains('short')){ e.stopPropagation(); showBubble(tok.dataset.freq); }
+        return;
+      }
+      e.stopPropagation();
+      var f=tok.dataset.freq;
+      var st=engine();
+      if(min){
+        /* trim: uncheck the largest checked song of this frequency */
+        var checked=st.rows.filter(function(r){ return r.dataset.cat===f && r.querySelector('.qbox.on'); })
+          .sort(function(a,b){ return (parseFloat(b.dataset.min)||0)-(parseFloat(a.dataset.min)||0); });
+        if(checked[0]) checked[0].querySelector('.qbox').click();
+        return;
+      }
+      var sf=st.res.shortfalls.filter(function(x){ return x.freq===f; })[0]; if(!sf) return;
+      var avail=st.rows.filter(function(r){ return r.dataset.cat===f && !r.querySelector('.qbox.on'); })
+        .map(function(r){ return {slug:r.dataset.slug, sec:parseFloat(r.dataset.min)||0, row:r}; });
+      var pick=ZBalance.bestAdditions(sf.neededSec, avail);
+      pick.songs.forEach(function(s){
+        var b=s.row.querySelector('.qbox'); if(b && !b.classList.contains('on')) b.click();
+      });
+      if(!pick.cleared) showBubble(f);
+    });
+    /* BALANCE FOR ME: the longest balanced list — check everything, then trim the fattest
+       surplus one song at a time (preferring cuts that keep that frequency green) until
+       all four hold. If the list can't get there, the bubble points to Immersions. */
+    document.getElementById('zbalBfm').addEventListener('click', function(){
+      var rows=[].slice.call(document.querySelectorAll('#favRows .row'));
+      rows.forEach(function(r){ var b=r.querySelector('.qbox'); if(b && !b.classList.contains('on')) b.click(); });
+      var guard=0;
+      while(guard++<60){
+        var st=engine();
+        if(st.res.balanced || st.res.empty) break;
+        var best=null;
+        ZBalance.FREQS.forEach(function(f){
+          var over=st.res.byFreq[f].sec - 0.15*st.res.total;
+          var checked=st.rows.filter(function(r){ return r.dataset.cat===f && r.querySelector('.qbox.on'); });
+          if(checked.length && (!best || over>best.over)) best={f:f, over:over, checked:checked};
+        });
+        if(!best) break;
+        var T=st.res.total, cur=st.res.byFreq[best.f].sec;
+        var sorted=best.checked.sort(function(a,b){ return (parseFloat(b.dataset.min)||0)-(parseFloat(a.dataset.min)||0); });
+        var pickRow=null;
+        for(var i=0;i<sorted.length;i++){
+          var x=parseFloat(sorted[i].dataset.min)||0;
+          if((cur-x)/(T-x) >= 0.15){ pickRow=sorted[i]; break; }   // biggest cut that keeps it green
+        }
+        if(!pickRow) pickRow=sorted[sorted.length-1];              // else the smallest cut
+        pickRow.querySelector('.qbox').click();
+      }
+      var fin=engine();
+      if(!fin.res.balanced && fin.res.shortfalls[0]) showBubble(fin.res.shortfalls[0].freq);
+    });
+    render();
+    var fr=document.getElementById('favRows');
+    if(fr && window.MutationObserver){
+      new MutationObserver(function(){ render(); }).observe(fr, { subtree:true, attributes:true, attributeFilter:['class'] });
+    }
+    /* live clock: while a song plays, its seconds land on its frequency and Time now climbs.
+       When a song FINISHES it unchecks itself: its minutes leave With list, the listened
+       seconds stay in Time now (the plan becomes the record). */
+    var lastT=null, lastR=0;
+    function throttled(){ var n=Date.now(); if(n-lastR>1000){ lastR=n; render(); } }
+    aud.addEventListener('timeupdate', function(){
+      var t=aud.currentTime;
+      if(lastT!=null && t>lastT && t-lastT<2){
+        var f=(typeof playCat==='string' && LIVE.hasOwnProperty(playCat))?playCat:null;
+        if(f){ LIVE[f]+=(t-lastT)*SPEED; throttled(); }
+      }
+      lastT=t;
+    });
+    aud.addEventListener('seeked', function(){ lastT=aud.currentTime; });
+    aud.addEventListener('ended', function(){
+      lastT=null;
+      if(window.zbalQueueRow){
+        var qr=window.zbalQueueRow; window.zbalQueueRow=null;
+        var qb=qr.isConnected && qr.querySelector('.qbox');
+        if(qb && qb.classList.contains('on')) qb.click();
+      }
+      if(curSong && typeof playCat==='string'){
+        [].slice.call(document.querySelectorAll('#favRows .row, #rows .row')).forEach(function(r){
+          if(r.dataset.slug===curSong.slug && r.dataset.cat===playCat){
+            var b=r.querySelector('.qbox'); if(b && b.classList.contains('on')) b.click();
+          }
+        });
+      }
+      if(window.zbalQueueOn) window.zbalNext();
+      render();
+    });
+    /* review aids: ?open=1 opens the panel; ?demo=balanced checks enough rows to clear the week;
+       ?bubble=<freq> shows the not-enough-songs bubble */
+    var P=new URLSearchParams(location.search);
+    if(P.get('open')) z.classList.add('open');
+    if(P.get('bubble') && CATS[P.get('bubble')]) showBubble(P.get('bubble'));
+    if(P.get('demo')==='balanced'){ setTimeout(function(){
+      ['vitality|astrolith','vitality|kindred-spirits'].forEach(function(k){
+        var p=k.split('|');
+        var row=[].slice.call(document.querySelectorAll('#favRows .row')).filter(function(r){ return r.dataset.cat===p[0]&&r.dataset.slug===p[1]; })[0];
+        var b=row&&row.querySelector('.qbox');
+        if(b && !b.classList.contains('on')) b.click();
+      });
+    },80); }
+  }
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+</script>
 <script src="ministat.js"></script>
+<script>/* ported from C-4: the engine owns the top-right content (Time + List rows), so after ministat.js
+   installs (or re-installs on hashchange) we repaint over its static demo content.
+   Registered after ministat.js so these listeners run after its install. */
+(function(){
+  function repaint(){ if(window.fbUpd) window.fbUpd(); }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', repaint); } else { repaint(); }
+  window.addEventListener('hashchange', repaint);
+})();
+</script>
 </body></html>
