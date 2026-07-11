@@ -368,21 +368,20 @@
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
     <div class="zbal" id="zbal">
       <div class="zbal-line" id="zbalLine">
-        <span class="zbal-lab">Day <b id="zbalDay"></b></span>
         <span class="zbal-toks" id="zbalToks"></span>
-        <span class="zbal-chevbtn"><svg class="zbal-chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
+        <span class="zbal-chevbtn" title="Balance for me"><svg class="zbal-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
       </div>
       <div class="zbal-panel">
+        <div class="zbal-act"><span class="zbal-bfm" id="zbalBfm">Balance for me</span><span class="zbal-bfmsub">checks your longest balanced list</span></div>
         <h4 class="zbal-ttl">Frequency Balance Meter</h4>
         <div class="zbal-sub">Keep all four frequencies above 15% each week</div>
         <ol class="zbal-ol">
           <li>The numbers above show where your week lands if you play everything checked. <b class="g">Green</b> = minutes above the line. <b class="r">Red</b> = minutes short.</li>
           <li>Tap <b>+</b> on a red frequency to add songs from your list. Tap <b>−</b> on a green one to trim it back.</li>
           <li>Top right: <b>Time now</b> is what you've played (it climbs while you listen). <b>With list</b> is where you land after playing what's checked. You're set when With list is green.</li>
-          <li>Press <b>Play All</b>. Songs play top to bottom and check themselves off as they finish.</li>
+          <li>Press <b>Play All</b>. Songs play top to bottom and check themselves off as they finish. Remember: just hold a song card to reorder.</li>
           <li>Out of songs? Go to <b>Immersions</b> and tap <span class="ph">&#9829;</span> to add more to this list.</li>
         </ol>
-        <div class="zbal-act"><span class="zbal-bfm" id="zbalBfm">Balance for me</span><span class="zbal-bfmsub">checks your longest balanced list</span></div>
         <div class="zbal-sofar" id="zbalSofar"></div>
       </div>
       <div class="zbal-pop" id="zbalPop" style="display:none"><span id="zbalPopMsg"></span><span class="zbal-popx" id="zbalPopX">&#10005;</span></div>
@@ -952,8 +951,7 @@ applyGraduated();
 <style id="zbal-css">
   .zbal{margin:2px 18px 10px;background:rgba(255,255,255,.42);border:1px solid rgba(26,22,32,.07);border-radius:14px}
   .zbal-line{display:flex;align-items:center;padding:0 12px;height:46px;cursor:pointer;gap:8px}
-  .zbal-lab{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9a93a0;white-space:nowrap}
-  .zbal-toks{flex:1;display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0;margin-left:6px;overflow:hidden}
+  .zbal-toks{flex:1;display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0;overflow:hidden}
   .zbal-t{display:inline-flex;flex-direction:column;align-items:center;gap:2.5px;font-size:9.5px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9a93a0;white-space:nowrap;line-height:1}
   .zbal-b{display:inline-flex;align-items:center;gap:3px;font-size:10px}
   .zbal-t .ok{color:#0A7A52;font-style:normal;font-size:9px}
@@ -971,7 +969,7 @@ applyGraduated();
   .zbal-sent .sep{color:#cfc8ba}
   .zbal-sent .ok{color:#1f9d63;font-style:normal}
   .zbal{margin-top:8px}
-  .zbal-chevbtn{flex:0 0 auto;width:24px;height:24px;border-radius:50%;background:#fff;border:1px solid #eadfce;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  .zbal-chevbtn{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:#fff;border:1px solid #eadfce;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer}
   .zbal-chev{transition:transform .2s}
   .zbal.open .zbal-chev{transform:rotate(180deg)}
   .zbal-panel{display:none;padding:0 14px 12px;border-top:1px solid rgba(26,22,32,.05)}
@@ -995,7 +993,7 @@ applyGraduated();
   .zbal-popx{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;background:#F6F1E8;color:#63616F;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
   .zbal{position:relative}
   .zbal-min{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #d9cfc0;color:#2A2530;font-size:11px;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-  @media (max-width:400px){ .zbal-lab{letter-spacing:.06em} .zbal-t{font-size:9px} }
+  @media (max-width:400px){ .zbal-t{font-size:9px} }
 </style>
 <script id="zbal-js">
 (function(){
@@ -1073,7 +1071,8 @@ applyGraduated();
 
     var sofar=document.getElementById('zbalSofar');
     if(sofar){
-      sofar.innerHTML='So far this week: '+ZBalance.FREQS.map(function(f){
+      var day=Math.min(7, Math.floor((Date.now()-ZBalance.weekWindow(Date.now()).start)/86400000)+1);
+      sofar.innerHTML='Day '+day+' · So far this week: '+ZBalance.FREQS.map(function(f){
         return '<b>'+CATS[f].label+'</b> '+Math.round(st.played.byFreq[f].sec/60)+'m';
       }).join(' · ')+'.';
     }
@@ -1084,8 +1083,6 @@ applyGraduated();
   function boot(){
     var z=document.getElementById('zbal'); if(!z) return;
     z.classList.add('v-'+V);
-    var day=Math.min(7, Math.floor((Date.now()-ZBalance.weekWindow(Date.now()).start)/86400000)+1);
-    document.getElementById('zbalDay').textContent=day;
     document.getElementById('zbalLine').addEventListener('click', function(){ z.classList.toggle('open'); });
     /* PLAY ALL on the Playlist: plays the checked queue top to bottom. Each song accrues
        live time, unchecks itself on finish, and the next checked row starts. */
