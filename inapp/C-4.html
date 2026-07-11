@@ -376,7 +376,7 @@
         <h4 class="zbal-ttl">Frequency Balance Meter</h4>
         <div class="zbal-sub">Staying above 15% per frequency</div>
         <p class="zbal-exp">Your balance is always being calculated. Each check below adds that song to your list, and the meter shows whether playing your list keeps all four frequencies in balance. Check and uncheck, and watch it move.</p>
-        <p class="zbal-exp">A red minus means that frequency is short this week. Tap its <b>+</b> and we'll check songs from your list that clear it.</p>
+        <p class="zbal-exp">Each frequency shows its minutes: a green plus is minutes above the line, a red minus means short. Tap a red frequency's <b>+</b> and we'll check songs from your list that clear it.</p>
         <p class="zbal-exp">Top right: <b>Time now</b> is what you've played this week (it climbs while you listen). <b>With list</b> is where you land after playing what's checked. Green means in balance, red means not yet.</p>
         <p class="zbal-exp">Want more choices? Go to Immersions and tap the heart on any song to add it here.</p>
         <div class="zbal-sofar" id="zbalSofar"></div>
@@ -946,13 +946,15 @@ applyGraduated();
 </script>
 <style id="zbal-css">
   .zbal{margin:2px 18px 10px;background:rgba(255,255,255,.42);border:1px solid rgba(26,22,32,.07);border-radius:14px}
-  .zbal-line{display:flex;align-items:center;padding:0 12px;height:40px;cursor:pointer;gap:8px}
+  .zbal-line{display:flex;align-items:center;padding:0 12px;height:46px;cursor:pointer;gap:8px}
   .zbal-lab{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9a93a0;white-space:nowrap}
   .zbal-toks{flex:1;display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0;margin-left:6px;overflow:hidden}
-  .zbal-t{display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9a93a0;white-space:nowrap}
+  .zbal-t{display:inline-flex;flex-direction:column;align-items:center;gap:2.5px;font-size:9.5px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9a93a0;white-space:nowrap;line-height:1}
+  .zbal-b{display:inline-flex;align-items:center;gap:3px;font-size:10px}
   .zbal-t .ok{color:#0A7A52;font-style:normal;font-size:9px}
   .v-b .zbal-t.short,.v-c .zbal-t.short{color:var(--tink)}
   .zbal-t .amt{font-weight:800;font-variant-numeric:tabular-nums;text-transform:none;color:#B90044}
+  .zbal-t .amt.plus{color:#0A7A52;font-weight:700}
   .zbal-add{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #d9cfc0;color:#2A2530;font-size:11px;font-weight:800;line-height:1;margin-left:1px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
   .ministat .ms-lbl{white-space:nowrap}
   .zbal-m{display:inline-block;width:22px;height:3px;border-radius:2px;background:rgba(26,22,32,.10);overflow:hidden;position:relative;margin-left:2px}
@@ -1039,9 +1041,10 @@ applyGraduated();
             +(sf?'<b class="amt">−'+fmtMin(sf.neededSec)+'m</b>':'')+'</span>';
         } else {
           var canAdd = sf && st.rows.some(function(r){ return r.dataset.ck===f && !r.querySelector('.qbox.on'); });
+          var overM = sf ? 0 : Math.max(0, Math.floor((res.byFreq[f].sec - 0.15*res.total)/60));
           html+='<span class="zbal-t'+(sf?' short':'')+'" data-freq="'+f+'" style="--tink:'+cat.cink+'">'+cat.label
-            +(sf?' <b class="amt">−'+fmtMin(sf.neededSec)+'m</b>':' <i class="ok">✓</i>')
-            +(canAdd?'<i class="zbal-add" title="Add songs to clear it">+</i>':'')+'</span>';
+            +'<span class="zbal-b">'+(sf?'<b class="amt">−'+fmtMin(sf.neededSec)+'m</b>':'<b class="amt plus">+'+overM+'m</b>')
+            +(canAdd?'<i class="zbal-add" title="Add songs to clear it">+</i>':'')+'</span></span>';
         }
       });
     }
@@ -1063,6 +1066,21 @@ applyGraduated();
     var day=Math.min(7, Math.floor((Date.now()-ZBalance.weekWindow(Date.now()).start)/86400000)+1);
     document.getElementById('zbalDay').textContent=day;
     document.getElementById('zbalLine').addEventListener('click', function(){ z.classList.toggle('open'); });
+    /* PLAY ALL on the Playlist: plays the checked queue top to bottom. Each song accrues
+       live time, unchecks itself on finish, and the next checked row starts. */
+    function playNextChecked(){
+      var box=document.querySelector('#favRows .row .qbox.on');
+      var row=box && box.closest('.row');
+      if(!row){ window.zbalQueueOn=false; return false; }
+      var ck=row.dataset.ck;
+      var i=CATS[ck].songs.findIndex(function(s){ return s.slug===row.dataset.slug; });
+      if(i<0){ window.zbalQueueOn=false; return false; }
+      playSong(ck,i);
+      return true;
+    }
+    window.zbalNext=playNextChecked;
+    var qall=document.querySelector('#favs .qall');
+    if(qall) qall.addEventListener('click', function(){ window.zbalQueueOn=true; playNextChecked(); });
     /* the + on a short frequency: check the least-overshoot set of that frequency's
        unchecked playlist songs (engine bestAdditions); cascade dips surface as the
        neighbor's own red + for the next tap */
@@ -1106,6 +1124,7 @@ applyGraduated();
           }
         });
       }
+      if(window.zbalQueueOn) window.zbalNext();
       render();
     });
     /* review aids: ?open=1 opens the panel; ?demo=balanced checks enough rows to clear the week */
