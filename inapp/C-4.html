@@ -368,15 +368,17 @@
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
     <div class="zbal" id="zbal">
       <div class="zbal-line" id="zbalLine">
-        <span class="zbal-lab"><span>Balance</span><span class="zbal-day">Day <b id="zbalDay"></b></span></span>
+        <span class="zbal-lab">Day <b id="zbalDay"></b></span>
         <span class="zbal-toks" id="zbalToks"></span>
         <span class="zbal-chevbtn"><svg class="zbal-chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
       </div>
       <div class="zbal-panel">
         <h4 class="zbal-ttl">Frequency Balance Meter</h4>
         <div class="zbal-sub">Staying above 15% per frequency</div>
-        <p class="zbal-exp">Your balance is calculated every week. This meter shows you the result of pressing Play All. Go ahead and check and uncheck boxes, and you'll see if your list keeps you on the right track.</p>
-        <div class="zbal-sug" id="zbalSug"></div>
+        <p class="zbal-exp">Your balance is always being calculated. Each check below adds that song to your list, and the meter shows whether playing your list keeps all four frequencies in balance. Check and uncheck, and watch it move.</p>
+        <p class="zbal-exp">Top right: <b>Time</b> is what you've played this week. <b>List</b> is where you land after playing what's checked. Green means in balance, red means not yet.</p>
+        <p class="zbal-exp">Want more choices? Go to Immersions and tap the heart on any song to add it here.</p>
+        <div class="zbal-sofar" id="zbalSofar"></div>
       </div>
     </div>
     <div class="barrow"><div class="selall" data-scope="favRows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
@@ -944,14 +946,12 @@ applyGraduated();
 <style id="zbal-css">
   .zbal{margin:2px 18px 10px;background:rgba(255,255,255,.42);border:1px solid rgba(26,22,32,.07);border-radius:14px}
   .zbal-line{display:flex;align-items:center;padding:0 12px;height:40px;cursor:pointer;gap:8px}
-  .zbal-lab{display:flex;flex-direction:column;gap:2.5px;font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9a93a0;white-space:nowrap;line-height:1}
-  .zbal-day{color:#b0aab8}
-  .zbal-day b{font-weight:700;color:#9a93a0}
-  .zbal-toks{flex:1;display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0;margin-left:4px;overflow:hidden}
+  .zbal-lab{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9a93a0;white-space:nowrap}
+  .zbal-toks{flex:1;display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0;margin-left:6px;overflow:hidden}
   .zbal-t{display:inline-flex;align-items:center;gap:3px;font-size:9.5px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9a93a0;white-space:nowrap}
-  .zbal-t .ok{color:#1f9d63;font-style:normal;font-size:9px}
-  .zbal-t.short{color:var(--tink)}
-  .zbal-t .amt{font-weight:800;font-variant-numeric:tabular-nums;text-transform:none}
+  .zbal-t .ok{color:#0A7A52;font-style:normal;font-size:9px}
+  .v-b .zbal-t.short,.v-c .zbal-t.short{color:var(--tink)}
+  .zbal-t .amt{font-weight:800;font-variant-numeric:tabular-nums;text-transform:none;color:#B90044}
   .zbal-m{display:inline-block;width:22px;height:3px;border-radius:2px;background:rgba(26,22,32,.10);overflow:hidden;position:relative;margin-left:2px}
   .zbal-m i{position:absolute;left:0;top:0;bottom:0;border-radius:2px}
   .v-b .zbal-t{gap:4px;font-size:8.5px;letter-spacing:0}
@@ -969,12 +969,8 @@ applyGraduated();
   .zbal-ttl{font-size:14px;font-weight:700;letter-spacing:-.01em;padding-top:12px}
   .zbal-sub{font-size:11px;font-weight:600;color:#8a8290;margin-top:2px}
   .zbal-exp{font-size:12px;line-height:1.5;color:#6a6470;padding-top:8px}
-  .zbal-sug{margin-top:9px;display:flex;flex-wrap:wrap;gap:7px;align-items:center}
-  .zbal-sughd{font-size:11px;font-weight:700;color:#8a8290;width:100%}
-  .zbal-sughd.done{color:#1f9d63}
-  .zbal-chip{display:inline-flex;align-items:baseline;gap:5px;font-size:11.5px;font-weight:700;border-radius:12px;padding:5px 10px;background:#fff;border:1px solid rgba(26,22,32,.10)}
-  .zbal-chip i{font-style:normal;font-weight:500;font-size:10.5px;color:#8a8290}
-  .zbal-chip.can{cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  .zbal-sofar{margin-top:10px;font-size:11px;line-height:1.5;color:#8a8290}
+  .zbal-sofar b{font-weight:700;color:#6a6470}
   @media (max-width:400px){ .zbal-lab{letter-spacing:.06em} .zbal-t{font-size:9px} }
 </style>
 <script id="zbal-js">
@@ -988,11 +984,14 @@ applyGraduated();
     var m=Math.round(sec/60), h=Math.floor(m/60);
     return h ? h+'h '+(m%60)+'m' : m+'m';
   }
-  /* Time (top right) runs on the engine: total time played + checked, green in balance, red out. */
-  function paintMinistat(res){
-    document.querySelectorAll('.ministat .ms-txt').forEach(function(t){
-      t.textContent=fmtTotal(res.total);
-      t.classList.toggle('low', !res.balanced);
+  /* Top right runs on the engine, two rows: Time = played so far this week (red/green by
+     its own balance); List = where the week lands after playing what's checked (appears
+     only when something is checked, red/green by the projected balance). */
+  function paintMinistat(played, proj, hasChecks){
+    document.querySelectorAll('.ministat').forEach(function(ms){
+      var h='<span class="ms-lbl">Time:</span><span class="ms-ind"><i class="ms-txt'+(played.balanced?'':' low')+'">'+fmtTotal(played.total)+'</i></span>';
+      if(hasChecks) h+='<span class="ms-lbl">List:</span><span class="ms-ind"><i class="ms-txt'+(proj.balanced?'':' low')+'">'+fmtTotal(proj.total)+'</i></span>';
+      ms.innerHTML=h;
     });
   }
 
@@ -1004,8 +1003,9 @@ applyGraduated();
     var events=ZBalance.FREQS.map(function(f){ return {freq:f, sec:WEEK[f]||0}; });
     return {
       rows: rows,
-      res: ZBalance.compute({events:events, window:null, projection:projection, catalog:catalog}),
-      plan: ZBalance.plan({events:events, window:null, projection:projection, catalog:catalog})
+      hasChecks: projection.length>0,
+      played: ZBalance.compute({events:events, window:null, projection:[], catalog:catalog}),
+      res: ZBalance.compute({events:events, window:null, projection:projection, catalog:catalog})
     };
   }
 
@@ -1013,7 +1013,7 @@ applyGraduated();
     var el=document.getElementById('zbalToks');
     if(!el || !window.ZBalance || typeof CATS==='undefined') return;
     var st=engine(), res=st.res;
-    paintMinistat(res);
+    paintMinistat(st.played, res, st.hasChecks);
     var short={}; res.shortfalls.forEach(function(s){ short[s.freq]=s; });
     var html='';
     if(V==='c'){
@@ -1038,17 +1038,11 @@ applyGraduated();
     }
     el.innerHTML=html;
 
-    var sug=document.getElementById('zbalSug');
-    if(sug){
-      if(st.plan.additions.length){
-        sug.innerHTML='<span class="zbal-sughd">To balance the week:</span>'+st.plan.additions.map(function(a){
-          var canQueue=st.rows.some(function(r){ return r.dataset.slug===a.slug && r.dataset.ck===a.freq && !r.querySelector('.qbox.on'); });
-          return '<span class="zbal-chip'+(canQueue?' can':'')+'" data-slug="'+a.slug+'" data-freq="'+a.freq+'" style="color:'+CATS[a.freq].cink+'">'
-            +(canQueue?'+ ':'')+a.name+' <i>'+fmtMin(a.sec)+' min · '+CATS[a.freq].label+'</i></span>';
-        }).join('');
-      } else {
-        sug.innerHTML='<span class="zbal-sughd done">All four are set for this week.</span>';
-      }
+    var sofar=document.getElementById('zbalSofar');
+    if(sofar){
+      sofar.innerHTML='So far this week: '+ZBalance.FREQS.map(function(f){
+        return '<b>'+CATS[f].label+'</b> '+Math.round(st.played.byFreq[f].sec/60)+'m';
+      }).join(' · ')+'.';
     }
   }
   window.fbUpd = render;
@@ -1060,14 +1054,6 @@ applyGraduated();
     var day=Math.min(7, Math.floor((Date.now()-ZBalance.weekWindow(Date.now()).start)/86400000)+1);
     document.getElementById('zbalDay').textContent=day;
     document.getElementById('zbalLine').addEventListener('click', function(){ z.classList.toggle('open'); });
-    document.getElementById('zbalSug').addEventListener('click', function(e){
-      var chip=e.target.closest('.zbal-chip.can'); if(!chip) return;
-      var row=[].slice.call(document.querySelectorAll('#favRows .row')).filter(function(r){
-        return r.dataset.slug===chip.dataset.slug && r.dataset.ck===chip.dataset.freq;
-      })[0];
-      var box=row && row.querySelector('.qbox');
-      if(box && !box.classList.contains('on')) box.click();
-    });
     render();
     var fr=document.getElementById('favRows');
     if(fr && window.MutationObserver){
@@ -1091,15 +1077,13 @@ applyGraduated();
 <script>/* AUTO-BADGE: single source of truth for the corner badge. Derived from the page filename (app-A -> A), applied to every .appletter so they can never disagree and a cloned page auto-shows its own name. Override with window.APP_BADGE for special names. */
 (function(){function setBadge(){var b=window.APP_BADGE;if(!b){var s=(location.pathname.split("/").pop()||"").replace(/\.html$/,"").replace(/^app-/,"");b=s.toUpperCase();}document.querySelectorAll(".appletter").forEach(function(e){e.textContent=b;});}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setBadge);}else{setBadge();}})();</script>
 <script src="ministat.js"></script>
-<script>/* C-4: the balance strip lives on the Playlist now, so the ministat drops its
-   balance dots and carries time only (registered after ministat.js so it runs after its install). */
+<script>/* C-4: the engine owns the top-right content (Time + List rows), so after ministat.js
+   installs (or re-installs on hashchange) we repaint over its static demo content.
+   Registered after ministat.js so these listeners run after its install. */
 (function(){
-  function slim(){ document.querySelectorAll('.ministat').forEach(function(ms){
-    var labs=ms.querySelectorAll('.ms-lbl'); if(labs.length>1) labs[1].remove();
-    var d=ms.querySelector('.ms-dots'); if(d) d.remove();
-  }); if(window.fbUpd) window.fbUpd(); }
-  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', slim); } else { slim(); }
-  window.addEventListener('hashchange', slim);
+  function repaint(){ if(window.fbUpd) window.fbUpd(); }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', repaint); } else { repaint(); }
+  window.addEventListener('hashchange', repaint);
 })();
 </script>
 </body></html>
