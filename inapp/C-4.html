@@ -1103,10 +1103,13 @@ applyGraduated();
     lineEl.addEventListener('mouseleave', tipHide);
     document.querySelector('.zbal-chevbtn').addEventListener('click', function(e){ e.stopPropagation(); tipHide(); z.classList.toggle('open'); });
     setTimeout(function(){ tipShow(); setTimeout(tipHide, 4000); }, 900);
-    /* PLAY ALL on the Playlist: plays the checked queue top to bottom. Each song accrues
-       live time, unchecks itself on finish, and the next checked row starts. */
+    /* PLAY ALL — BOTH views (the Immersions button was a dead button until round 11):
+       plays the checked queue top to bottom in the view it was pressed on; nothing
+       checked = check everything first, then play. Each song accrues live time,
+       unchecks itself on finish, and the next checked row starts. */
     function playNextChecked(){
-      var box=document.querySelector('#favRows .row .qbox.on');
+      var scope=window.zbalQueueScope||'favRows';
+      var box=document.querySelector('#'+scope+' .row .qbox.on');
       var row=box && box.closest('.row');
       if(!row){ window.zbalQueueOn=false; return false; }
       var ck=row.dataset.ck;
@@ -1124,8 +1127,20 @@ applyGraduated();
       return true;
     }
     window.zbalNext=playNextChecked;
-    var qall=document.querySelector('#favs .qall');
-    if(qall) qall.addEventListener('click', function(){ window.zbalQueueOn=true; playNextChecked(); });
+    function startQueue(scope){
+      window.zbalQueueScope=scope; window.zbalQueueOn=true;
+      var rows=[].slice.call(document.querySelectorAll('#'+scope+' .row'));
+      if(!rows.some(function(r){ return r.querySelector('.qbox.on'); })){
+        rows.forEach(function(r){ var b=r.querySelector('.qbox'); if(b && !b.classList.contains('on')) b.click(); });
+      }
+      playNextChecked();
+    }
+    var qallF=document.querySelector('#favs .qall');
+    if(qallF) qallF.addEventListener('click', function(){ startQueue('favRows'); });
+    var qallL=document.querySelector('#list .ctarow .qall');
+    if(qallL) qallL.addEventListener('click', function(){ startQueue('rows'); });
+    var qallD=document.getElementById('qallDock');
+    if(qallD) qallD.addEventListener('click', function(){ startQueue('rows'); });
     /* the + on a short frequency: check the least-overshoot set of that frequency's
        unchecked playlist songs (engine bestAdditions); cascade dips surface as the
        neighbor's own red + for the next tap */
@@ -1217,7 +1232,7 @@ applyGraduated();
     aud.addEventListener('ended', function(){
       lastT=null;
       if(curSong && typeof playCat==='string'){
-        [].slice.call(document.querySelectorAll('#favRows .row')).forEach(function(r){
+        [].slice.call(document.querySelectorAll('#favRows .row, #rows .row')).forEach(function(r){
           if(r.dataset.slug===curSong.slug && r.dataset.ck===playCat){
             var b=r.querySelector('.qbox'); if(b && b.classList.contains('on')) b.click();
           }
