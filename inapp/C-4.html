@@ -996,6 +996,9 @@ applyGraduated();
   .zbal-popx{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;background:#F6F1E8;color:#63616F;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
   .zbal{position:relative}
   .zbal-min{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #d9cfc0;color:#2A2530;font-size:11px;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  .zbal-tip{position:absolute;top:-32px;right:6px;background:#2A2530;color:#fff;font-size:11px;font-weight:600;padding:6px 11px;border-radius:10px;white-space:nowrap;box-shadow:0 6px 18px rgba(0,0,0,.18);opacity:0;pointer-events:none;transition:opacity .18s;z-index:31}
+  .zbal-tip.show{opacity:1}
+  .zbal-tip:after{content:'';position:absolute;top:100%;right:16px;border:5px solid transparent;border-top-color:#2A2530}
   @media (max-width:400px){ .zbal-t{font-size:9px} }
 </style>
 <script id="zbal-js">
@@ -1088,7 +1091,18 @@ applyGraduated();
     z.classList.add('v-'+V);
     /* ONLY the arrow opens the panel (round 9): the strip itself is for reading and the
        +/− buttons, so a stray mobile tap can't yank the drop-down open. */
-    document.querySelector('.zbal-chevbtn').addEventListener('click', function(e){ e.stopPropagation(); z.classList.toggle('open'); });
+    /* a REAL tooltip (native title is slow and invisible on touch): instant on hover,
+       and shown once on load so phones get taught too */
+    var tip=document.createElement('div'); tip.className='zbal-tip';
+    tip.textContent='Press the arrow to balance it for you';
+    z.appendChild(tip);
+    function tipShow(){ if(!z.classList.contains('open')) tip.classList.add('show'); }
+    function tipHide(){ tip.classList.remove('show'); }
+    var lineEl=document.getElementById('zbalLine');
+    lineEl.addEventListener('mouseenter', tipShow);
+    lineEl.addEventListener('mouseleave', tipHide);
+    document.querySelector('.zbal-chevbtn').addEventListener('click', function(e){ e.stopPropagation(); tipHide(); z.classList.toggle('open'); });
+    setTimeout(function(){ tipShow(); setTimeout(tipHide, 4000); }, 900);
     /* PLAY ALL on the Playlist: plays the checked queue top to bottom. Each song accrues
        live time, unchecks itself on finish, and the next checked row starts. */
     function playNextChecked(){
@@ -1098,6 +1112,14 @@ applyGraduated();
       var ck=row.dataset.ck;
       var i=CATS[ck].songs.findIndex(function(s){ return s.slug===row.dataset.slug; });
       if(i<0){ window.zbalQueueOn=false; return false; }
+      /* prime the audio SYNCHRONOUSLY (still inside the tap): playSong analyzes the track
+         before playing, and mobile Safari revokes the gesture during that wait. Starting
+         the element here keeps it unlocked; playSong then drives the same element. */
+      var song=CATS[ck].songs[i];
+      if(song.audio){
+        if(!(aud.src && aud.src.endsWith(song.audio))) aud.src=song.audio;
+        var pr=aud.play(); if(pr && pr.catch) pr.catch(function(){});
+      }
       playSong(ck,i);
       return true;
     }
