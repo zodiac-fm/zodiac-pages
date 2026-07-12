@@ -1015,6 +1015,8 @@ applyGraduated();
   .zbal-add,.zbal-min{position:relative}
   .zbal-add::after,.zbal-min::after{content:'';position:absolute;inset:-8px}
   .ministat .ms-lbl{white-space:nowrap}
+  /* Engine rows (Time now / After list) belong to the Playlist only (Michael 2026-07-11): hide the Immersions header's ministat */
+  section#list .ministat{display:none}
   .zbal-m{display:inline-block;width:22px;height:3px;border-radius:2px;background:rgba(26,22,32,.10);overflow:hidden;position:relative;margin-left:2px}
   .zbal-m i{position:absolute;left:0;top:0;bottom:0;border-radius:2px}
   .v-b .zbal-t{gap:4px;font-size:8.5px;letter-spacing:0}
@@ -1072,7 +1074,8 @@ applyGraduated();
      its own balance); List = where the week lands after playing what's checked (appears
      only when something is checked, red/green by the projected balance). */
   function paintMinistat(played, proj, hasChecks){
-    document.querySelectorAll('.ministat').forEach(function(ms){
+    /* Playlist header only — Immersions carries no time readout (Michael 2026-07-11) */
+    document.querySelectorAll('#favs .ministat').forEach(function(ms){
       var h='<span class="ms-lbl">Time now:</span><span class="ms-ind"><i class="ms-txt'+(played.balanced?'':' low')+'">'+fmtTotal(played.total)+'</i></span>';
       if(hasChecks) h+='<span class="ms-lbl">After list:</span><span class="ms-ind"><i class="ms-txt'+(proj.balanced?'':' low')+'">'+fmtTotal(proj.total)+'</i></span>';
       ms.innerHTML=h;
