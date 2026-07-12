@@ -1158,7 +1158,9 @@ applyGraduated();
     lineEl.addEventListener('mouseenter', tipShow);
     lineEl.addEventListener('mouseleave', tipHide);
     document.querySelector('.zbal-chevbtn').addEventListener('click', function(e){ e.stopPropagation(); tipHide(); z.classList.toggle('open'); });
-    setTimeout(function(){ tipShow(); setTimeout(tipHide, 4000); }, 900);
+    /* review param ?tip=1 pins the tooltip open (for design review screenshots) */
+    if(new URLSearchParams(location.search).get('tip')==='1'){ setTimeout(tipShow, 300); }
+    else { setTimeout(function(){ tipShow(); setTimeout(tipHide, 4000); }, 900); }
     /* PLAY ALL — BOTH views (the Immersions button was a dead button until round 11):
        plays the checked queue top to bottom in the view it was pressed on; nothing
        checked = check everything first, then play. Each song accrues live time,
