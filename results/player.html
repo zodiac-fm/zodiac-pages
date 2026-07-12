@@ -17,11 +17,11 @@
   }
   html.light{
     --bg:#FFFFFF; --panel:#FBF8F3; --ink:#1A1620; --dim:rgba(26,22,32,.52); --faint:rgba(26,22,32,.32);
-    --line:rgba(26,22,32,.12); --chip:#F3EFE8; --row:#FFFFFF; --rowsh:#F1EFF3; --rowline:rgba(26,22,32,.34); --st-label:var(--st-text); --splash:var(--st);
+    --line:rgba(26,22,32,.12); --chip:#F3EFE8; --row:#FFFFFF; --rowsh:#F1EFF3; --rowline:rgba(26,22,32,.34); --st-label:var(--st-text); --splash:var(--st); --gold:#8a6a13; --goldg:rgba(178,124,16,.45); --golddot:rgba(178,124,16,.5);
   }
   html.dark{
     --bg:#0B0712; --panel:#FBF8F3; --ink:#ECE7F2; --dim:rgba(236,231,242,.68); --faint:rgba(236,231,242,.45);
-    --line:rgba(236,231,242,.20); --chip:#1B1424; --row:#1C1626; --rowsh:#131019; --rowline:rgba(236,231,242,.32); --st-label:var(--st-soft); --splash:var(--st-soft);
+    --line:rgba(236,231,242,.20); --chip:#1B1424; --row:#1C1626; --rowsh:#131019; --rowline:rgba(236,231,242,.32); --st-label:var(--st-soft); --splash:var(--st-soft); --gold:#D9A32C; --goldg:rgba(217,163,44,.5); --golddot:rgba(217,163,44,.55);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
@@ -37,11 +37,15 @@
   @keyframes pillp{0%,100%{box-shadow:0 0 0 0 var(--st-soft)}55%{box-shadow:0 0 0 9px rgba(0,0,0,0)}}
   .presets button{flex:1;border:1px solid var(--line);background:var(--row);border-radius:999px;padding:10px 0;font:600 12.5px/1 var(--sans);color:var(--dim);cursor:pointer;transition:all .25s}
   .presets button:active{transform:scale(.97)}
+  .presets button .pd{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;background:var(--pdc)}
   .presets button.on{border-color:var(--st);background:var(--pt);color:var(--pl)}
+  .presets button .phz{font-style:normal;color:var(--pl);font-weight:700}
   html.dark .presets button.on{border-color:var(--st-soft)}
 
   /* THE ONE STAGE: tone and songs, the same instrument, the same place */
   .screen{margin-top:16px;position:relative;height:236px;border-radius:22px;overflow:hidden;background:#FBF8F3;border:1.5px solid var(--rowline);cursor:pointer;box-shadow:0 14px 38px rgba(56,0,122,.16)}
+  .horizon{position:absolute;left:-14px;right:-14px;bottom:-12px;height:46px;pointer-events:none;z-index:1;filter:blur(11px);opacity:.42;background:linear-gradient(90deg,#6521C9 0%,#B90044 33%,#FF9112 66%,#12A56E 100%)}
+  html.dark .horizon{opacity:.5}
   #smsg{position:absolute;top:20px;left:18px;right:18px;text-align:center;z-index:2;pointer-events:none}
   #smsg b{display:block;font-family:var(--sans);font-weight:700;font-size:21px;letter-spacing:-.01em;line-height:1.15;color:#1A1620}
   #smsg span{display:block;margin-top:7px;font:500 12.5px/1.45 var(--sans);color:rgba(26,22,32,.55)}
@@ -67,10 +71,16 @@
   @keyframes vp{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}
   #vhint{position:absolute;left:0;right:0;bottom:12px;display:none;text-align:center;z-index:4;color:var(--st-text);font-size:13px;font-weight:600;pointer-events:none}
   #vhint.on{display:block}
+  #pp2{position:absolute;right:12px;bottom:12px;z-index:6;width:40px;height:40px;border-radius:50%;border:0;background:rgba(42,37,48,.88);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 10px rgba(26,22,32,.3)}
+  #pp2[hidden]{display:none}
+  #pp2 svg{width:14px;height:14px;fill:#FBF8F3;margin-left:1px}
+  #pp2.pause svg{margin-left:0}
   .under{display:flex;justify-content:center;margin-top:10px;font-size:12px;color:var(--faint)}
 
   .lib-k{margin-top:18px;font-family:var(--sans);font-weight:700;font-size:19px;letter-spacing:-.01em;line-height:1.2;color:var(--ink)}
   .lib-sub{margin-top:5px;font-size:12.5px;line-height:1.45;color:var(--dim)}
+  .prism{height:3px;max-width:170px;border-radius:2px;margin-top:11px;background:linear-gradient(90deg,#6521C9,#B90044,#FF9112,#12A56E);opacity:.8}
+  .prism.foot{max-width:none;height:10px;opacity:.18;filter:blur(7px);margin:26px 6px 0}
   .lib{margin-top:10px;display:flex;flex-direction:column;gap:8px}
   .row{display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,var(--row),var(--rowsh));border:1px solid var(--rowline);border-radius:15px;padding:9px 12px;cursor:pointer;transition:all .25s;box-shadow:0 2px 6px rgba(26,22,32,.08)}
   .row .art{width:46px;height:46px;flex:none;position:relative}
@@ -100,7 +110,7 @@
   .row.locked .go{background:transparent}
   .row.locked .go svg{width:14px;height:14px;fill:var(--faint);margin:0}
   .locknote{font-size:11.5px;color:var(--faint);text-align:center;margin-top:12px}
-  .dots-div{border-top:2.5px dotted var(--line);margin:18px 12px 0}
+  .dots-div{border-top:2.5px dotted var(--golddot);margin:18px 12px 0}
   .cap{text-align:center;font-size:12px;color:var(--faint);margin-top:26px;line-height:1.5}
 
   /* 12: the emergence */
@@ -177,8 +187,10 @@
     <div id="smsg"><b>Experience the sound of you</b><span>Choose your frequency to hear it.</span></div>
     <canvas id="toneCv"></canvas>
     <iframe id="vframe" title="Zodiac playing view" allow="autoplay"></iframe>
+    <div class="horizon" aria-hidden="true"></div>
     <div id="vload"><div class="dots"><i></i><i></i><i></i></div><div>Tuning <b id="vloadSong">the tone</b> to your <b id="vloadHz">422 Hz</b>&hellip;</div></div>
     <div id="vhint">Tap play to start</div>
+    <button id="pp2" aria-label="Play or pause" hidden><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
   </div>
 
   <div id="direct" aria-live="polite"></div>
@@ -187,6 +199,7 @@
 
   <div class="lib-k">Now hear it inside music.</div>
   <div class="lib-sub">The same tone, carried through the music.</div>
+  <div class="prism" aria-hidden="true"></div>
   <div class="lib" id="lib">
     <div class="row music" data-src="quiet-success" data-title="Quiet Success">
       <div class="art"><canvas data-slug="quiet-success" width="120" height="120"></canvas></div>
@@ -228,6 +241,7 @@
   </div>
   <div class="locknote">Locked songs open with your full library.</div>
 
+  <div class="prism foot" aria-hidden="true"></div>
   <div class="cap">Four frequencies, measured from your birth chart.</div>
 </div>
 
@@ -255,6 +269,7 @@ function hash(s){let h=177;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>
 
 ST.forEach((s,i)=>{
   const b=document.createElement('button');
+  b.style.setProperty('--pdc',DARK?s.grad:s.c);
   b.style.setProperty('--pc',DARK?s.grad:s.c);
   b.style.setProperty('--pt',DARK?rgba(hx(s.c),.22):s.tint);
   b.style.setProperty('--pl',DARK?s.soft:s.text);
@@ -262,7 +277,7 @@ ST.forEach((s,i)=>{
   b.addEventListener('click',(ev)=>{ tune(i); splashAt(ev.clientX,ev.clientY); });
   $('presets').appendChild(b);
 });
-function paintPresets(){[...$('presets').children].forEach((b,i)=>{b.classList.toggle('on',i===cur); b.textContent = i===cur ? ST[i].name+' \u00b7 '+ST[i].hz : ST[i].name;});}
+function paintPresets(){[...$('presets').children].forEach((b,i)=>{b.classList.toggle('on',i===cur); b.innerHTML = '<i class="pd"></i>'+(i===cur ? ST[i].name+' <i class="phz">\u00b7 '+ST[i].hz+'</i>' : ST[i].name);});}
 paintPresets();
 
 /* ============ zdisc art (unchanged) ============ */
@@ -435,6 +450,7 @@ function togglePlay(){
 
 const ICO_PLAY='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 const ICO_PAUSE='<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+document.getElementById('pp2').addEventListener('click',(e)=>{ e.stopPropagation(); togglePlay(); });
 let musicInvited=false, lastDirect='';
 setInterval(()=>{
   let playing=false, t=0;
@@ -443,6 +459,9 @@ setInterval(()=>{
     document.querySelector('.row[data-src="quiet-success"]').classList.add('invite'); }
   if(source!=='tone' && musicInvited){ document.querySelectorAll('.row.invite').forEach(r=>r.classList.remove('invite')); }
   paintRows(playing ? source : null);
+  const pp2=document.getElementById('pp2');
+  pp2.hidden=!loaded;
+  if(loaded){ pp2.innerHTML = playing?'<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>':'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'; pp2.classList.toggle('pause',playing); }
   const s=ST[cur]; let d='';
   if(!loaded){ d=''; }
   else if(source==='tone'){ d = playing ? 'Playing your <b>'+s.name+' tone</b>. Press a song to hear it inside music.'
