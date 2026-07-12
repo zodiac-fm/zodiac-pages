@@ -50,8 +50,11 @@
   .bpx{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;background:#F6F1E8;color:#63616F;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer}
   .dockbar{position:absolute;left:0;right:0;z-index:4;display:flex;justify-content:flex-end;padding:6px 18px 10px;opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity .22s ease,transform .22s ease}
   .dockbar.show{opacity:1;pointer-events:auto;transform:translateY(0)}
-  /* frosted, not opaque cream: the aurora ground shows through while scrolled rows blur out beneath (clash fix 2026-07-11) */
-  .dockbar{background:rgba(246,241,232,.62);-webkit-backdrop-filter:blur(14px) saturate(1.15);backdrop-filter:blur(14px) saturate(1.15);border-bottom:1px solid rgba(26,22,32,.07)}
+  /* NO fill on the dock — any fill paints a band against the aurora ground (Michael 2026-07-11).
+     Instead the scroll region fades its content out under the dock zone (.docked mask below),
+     so the ground stays one continuous surface and the docked Play All floats on it. */
+  .dockbar{background:transparent;border-bottom:none}
+  #list .swrap.docked{-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 74px);mask-image:linear-gradient(to bottom,transparent 0,#000 74px)}
 
   #app.playing .rows{padding-bottom:150px}
   .row{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid #efe6d6;border-radius:14px;padding:10px;margin-bottom:12px;cursor:pointer}
@@ -973,6 +976,7 @@ document.querySelectorAll('.tiphead').forEach(function(h){h.addEventListener('cl
    var show=main.getBoundingClientRect().bottom < pills.getBoundingClientRect().bottom+8;
    if(show) dq.innerHTML=main.innerHTML;
    dock.classList.toggle('show',show);
+   sw.classList.toggle('docked',show);   // fade scrolled rows out under the dock zone (no band; see .dockbar note)
  },{passive:true});
 })();
 
