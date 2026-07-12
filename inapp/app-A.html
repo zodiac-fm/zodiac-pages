@@ -410,7 +410,7 @@
         <ol class="zbal-ol">
           <li>The numbers above show where your week lands if you play everything checked. <b class="g">Green</b> = minutes above the line. <b class="r">Red</b> = minutes short.</li>
           <li>Tap <b>+</b> on a red frequency to add songs from your list. Tap <b>−</b> on a green one to trim it back.</li>
-          <li>Top right: <b>Time now</b> is what you've played (it climbs while you listen). <b>With list</b> is where you land after playing what's checked. You're set when With list is green.</li>
+          <li>Top right: <b>Time now</b> is what you've played (it climbs while you listen). <b>After list</b> is where you land after playing what's checked. You're set when After list is green.</li>
           <li>Press <b>Play All</b>. Songs play top to bottom and check themselves off as they finish. Remember: just hold a song card to reorder.</li>
           <li>Out of songs? Go to <b>Immersions</b> and tap <span class="ph">&#9829;</span> to add more to this list.</li>
         </ol>
@@ -1074,7 +1074,7 @@ applyGraduated();
   function paintMinistat(played, proj, hasChecks){
     document.querySelectorAll('.ministat').forEach(function(ms){
       var h='<span class="ms-lbl">Time now:</span><span class="ms-ind"><i class="ms-txt'+(played.balanced?'':' low')+'">'+fmtTotal(played.total)+'</i></span>';
-      if(hasChecks) h+='<span class="ms-lbl">With list:</span><span class="ms-ind"><i class="ms-txt'+(proj.balanced?'':' low')+'">'+fmtTotal(proj.total)+'</i></span>';
+      if(hasChecks) h+='<span class="ms-lbl">After list:</span><span class="ms-ind"><i class="ms-txt'+(proj.balanced?'':' low')+'">'+fmtTotal(proj.total)+'</i></span>';
       ms.innerHTML=h;
     });
   }
@@ -1284,7 +1284,7 @@ applyGraduated();
       new MutationObserver(function(){ render(); }).observe(fr, { subtree:true, attributes:true, attributeFilter:['class'] });
     }
     /* live clock: while a song plays, its seconds land on its frequency and Time now climbs.
-       When a song FINISHES it unchecks itself: its minutes leave With list, the listened
+       When a song FINISHES it unchecks itself: its minutes leave After list, the listened
        seconds stay in Time now (the plan becomes the record). */
     var lastT=null, lastR=0;
     function throttled(){ var n=Date.now(); if(n-lastR>1000){ lastR=n; render(); } }
