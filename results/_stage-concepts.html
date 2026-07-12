@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stage Concepts · breaking the monotone</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff;font-family:'Switzer',sans-serif;color:#1A1620}
+.wrap{max-width:480px;margin:0 auto;padding:20px 20px 50px}
+h1{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:27px;margin-bottom:4px}
+.sub{font-size:13px;color:rgba(26,22,32,.55);margin-bottom:18px}
+.c{margin-top:22px}
+.k{font:700 11px/1 'Switzer';letter-spacing:.12em;color:#6521C9;margin-bottom:6px}
+.t{font-size:15px;font-weight:700;margin-bottom:2px}
+.d{font-size:12.5px;line-height:1.5;color:rgba(26,22,32,.6);margin-bottom:10px}
+.stage{position:relative;height:200px;border-radius:20px;overflow:hidden;background:#FBF8F3;border:1.5px solid rgba(26,22,32,.34);box-shadow:0 10px 28px rgba(56,0,122,.13)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.stageD{border:none;padding:2.5px;background:conic-gradient(from 210deg,#D2C8FF,#FFBDC3,#FFC392,#8FE1BE,#D2C8FF)}
+.stageD .inner{position:relative;height:100%;border-radius:18px;overflow:hidden;background:#FBF8F3}
+.stageD .inner canvas{position:absolute;inset:0;width:100%;height:100%}
+.badge{position:fixed;top:10px;right:10px;z-index:99;background:#2A2530;color:#fff;font:700 12px/1 'Switzer';letter-spacing:.08em;padding:7px 12px;border-radius:999px}
+</style></head><body>
+<div class="badge">CONCEPT BOARD</div>
+<div class="wrap">
+<h1>Four ways to break the monotone.</h1>
+<div class="sub">Same stage, four philosophies. The playing frequency stays the hero in all four.</div>
+
+<div class="c"><div class="k">A · THE SWEEP</div><div class="t">Color lives in the transitions.</div>
+<div class="d">The stage stays pure while playing. The moment you switch stations, a four-color wave sweeps through and resolves into the new family (frozen mid-sweep here). Movement, not furniture.</div>
+<div class="stage"><canvas id="cA"></canvas></div></div>
+
+<div class="c"><div class="k">B · THE HORIZON</div><div class="t">One prism gradient, resting under the sound.</div>
+<div class="d">A soft four-color horizon lies along the stage floor, like light through a prism. The wave dances above it, never through it.</div>
+<div class="stage"><canvas id="cB"></canvas></div></div>
+
+<div class="c"><div class="k">C · THE RICH VOICE</div><div class="t">No foreign colors: the active family goes deep.</div>
+<div class="d">The wave itself becomes a living gradient of its own family, deep into bright, with a two-tone glow field. Monotone broken by depth, not by neighbors.</div>
+<div class="stage"><canvas id="cC"></canvas></div></div>
+
+<div class="c"><div class="k">D · THE HALO FRAME</div><div class="t">All four colors hold the player, none enter it.</div>
+<div class="d">The stage wears a fine four-color ring, the one place the whole spectrum touches the player. Inside stays pure for the playing frequency.</div>
+<div class="stage stageD"><div class="inner"><canvas id="cD"></canvas></div></div></div>
+</div>
+<script>
+const P={v:'#6521C9',vd:'#38007A',vs:'#D2C8FF',r:'#B90044',o:'#FF9112',g:'#12A56E'};
+function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+function rgba(c,a){return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')';}
+function base(x,W,H,tint){
+  const g=x.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#FFFFFF'); g.addColorStop(.5,tint||'#EFECFF'); g.addColorStop(1,'#F3EFFA');
+  x.fillStyle=g; x.fillRect(0,0,W,H);
+}
+function wave(x,W,H,midY,col,lw,glow){
+  x.beginPath();
+  for(let xx=W*0.08;xx<=W*0.95;xx+=4){const yy=midY+Math.sin(xx/W*10*Math.PI)*H*0.16; xx<=W*0.08+4?x.moveTo(xx,yy):x.lineTo(xx,yy);}
+  if(glow){x.shadowColor=glow;x.shadowBlur=10;}
+  x.strokeStyle=col;x.lineWidth=lw;x.lineCap='round';x.stroke();x.shadowBlur=0;
+}
+function line(x,W,midY,col){x.strokeStyle=col;x.lineWidth=2.4;x.beginPath();x.moveTo(W*0.08,midY);x.lineTo(W*0.95,midY);x.stroke();}
+function setup(id){const cv=document.getElementById(id);const r=cv.getBoundingClientRect();cv.width=r.width*2;cv.height=r.height*2;return [cv.getContext('2d'),cv.width,cv.height];}
+addEventListener('load',()=>{
+  // A: mid-sweep
+  let [x,W,H]=setup('cA'); base(x,W,H);
+  const sw=x.createLinearGradient(W*0.35,0,W*1.1,0);
+  sw.addColorStop(0,'rgba(101,33,201,0)'); sw.addColorStop(.35,'rgba(185,0,68,.20)');
+  sw.addColorStop(.6,'rgba(255,145,18,.20)'); sw.addColorStop(.8,'rgba(18,165,110,.22)'); sw.addColorStop(1,'rgba(18,165,110,0)');
+  x.fillStyle=sw; x.fillRect(0,0,W,H);
+  line(x,W,H*0.62,P.vd); wave(x,W,H,H*0.62,P.v,4.4,'rgba(101,33,201,.5)');
+  // B: prism horizon
+  [x,W,H]=setup('cB'); base(x,W,H);
+  const hz=x.createLinearGradient(0,0,W,0);
+  hz.addColorStop(0,'rgba(101,33,201,.34)'); hz.addColorStop(.33,'rgba(185,0,68,.30)');
+  hz.addColorStop(.66,'rgba(255,145,18,.30)'); hz.addColorStop(1,'rgba(18,165,110,.32)');
+  x.fillStyle=hz; x.filter='blur(10px)'; x.fillRect(-20,H*0.84,W+40,H*0.16); x.filter='none';
+  line(x,W,H*0.58,P.vd); wave(x,W,H,H*0.58,P.v,4.4,'rgba(101,33,201,.5)');
+  // C: rich voice
+  [x,W,H]=setup('cC'); base(x,W,H);
+  const rw=x.createRadialGradient(W/2,H*0.6,0,W/2,H*0.6,W*0.5);
+  rw.addColorStop(0,'rgba(167,55,200,.16)'); rw.addColorStop(1,'rgba(101,33,201,0)');
+  x.fillStyle=rw; x.fillRect(0,0,W,H);
+  line(x,W,H*0.6,P.vd);
+  const wg=x.createLinearGradient(W*0.08,0,W*0.95,0);
+  wg.addColorStop(0,P.vd); wg.addColorStop(.5,P.v); wg.addColorStop(1,'#B98AF0');
+  x.beginPath();
+  for(let xx=W*0.08;xx<=W*0.95;xx+=4){const yy=H*0.6+Math.sin(xx/W*10*Math.PI)*H*0.16; xx<=W*0.08+4?x.moveTo(xx,yy):x.lineTo(xx,yy);}
+  x.shadowColor='rgba(167,55,200,.55)';x.shadowBlur=12;x.strokeStyle=wg;x.lineWidth=4.6;x.lineCap='round';x.stroke();x.shadowBlur=0;
+  // D: pure inside (frame carries the spectrum via CSS)
+  [x,W,H]=setup('cD'); base(x,W,H);
+  line(x,W,H*0.6,P.vd); wave(x,W,H,H*0.6,P.v,4.4,'rgba(101,33,201,.5)');
+});
+</script></body></html>
