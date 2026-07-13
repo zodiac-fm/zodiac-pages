@@ -35,7 +35,9 @@
   .presets{display:flex;gap:6px;margin-top:10px}
   .presets button.pinvite{animation:pillp 1.7s ease-in-out infinite}
   @keyframes pillp{0%,100%{box-shadow:0 0 0 0 var(--st-soft)}55%{box-shadow:0 0 0 9px rgba(0,0,0,0)}}
-  .presets button{flex:1;border:1px solid var(--line);background:var(--row);border-radius:999px;padding:10px 0;font:600 12.5px/1 var(--sans);color:var(--dim);cursor:pointer;transition:all .25s}
+  .presets button{flex:1 1 auto;min-width:0;white-space:nowrap;border:1px solid var(--line);background:var(--row);border-radius:999px;padding:10px 6px;font:600 12.5px/1 var(--sans);color:var(--dim);cursor:pointer;transition:all .25s}
+  @media (max-width:400px){.presets button{font-size:11.5px;padding:10px 4px}.presets button .pd{margin-right:4px}}
+  @media (max-width:350px){.presets button{font-size:10.5px}}
   .presets button:active{transform:scale(.97)}
   .presets button .pd{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;background:var(--pdc)}
   .presets button.on{border-color:var(--st);background:var(--pt);color:var(--pl)}
