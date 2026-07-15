@@ -381,8 +381,10 @@
     }
     .david-card img {
       width: 164px;
-      height: 164px;
-      object-fit: cover;
+      height: 100%;
+      min-height: 164px;
+      object-fit: contain;
+      background: #EAE4DA;
     }
     .david-quote {
       align-self: center;
@@ -881,7 +883,7 @@
       .hero-grid { grid-template-columns: 1fr; gap: 50px; }
       .instrument { min-height: 470px; }
       .david-card { grid-template-columns: 132px 1fr; }
-      .david-card img { width: 132px; height: 100%; min-height: 184px; }
+      .david-card img { width: 132px; height: 100%; min-height: 184px; object-fit: contain; }
       .david-quote { padding: 24px 28px; }
       .david-meta { grid-column: 1 / -1; min-width: 0; border-top: 1px solid var(--line); border-left: 0; }
       .ritual-grid { grid-template-columns: repeat(2, 1fr); }
@@ -922,7 +924,7 @@
       .instrument-scale { left: 20px; right: 20px; }
       .david-band { margin-top: -42px; }
       .david-card { display: block; border-radius: 22px; }
-      .david-card img { width: 100%; height: 240px; min-height: 0; object-position: center 28%; }
+      .david-card img { width: 100%; height: 240px; min-height: 0; object-fit: contain; }
       .david-quote { padding: 26px 24px; font-size: 26px; }
       .david-meta { padding: 20px 24px; }
       .ticker-section { padding: 30px 0; }
