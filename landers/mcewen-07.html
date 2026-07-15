@@ -1,0 +1,1480 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zodiac.fm | Your birth chart has a sound</title>
+  <meta name="description" content="Your birth chart translated into personal frequencies and embedded into real music. Calculated from 248+ celestial data points and tuned to you.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta property="og:title" content="Your birth chart has a sound.">
+  <meta property="og:description" content="Your birth chart translated into frequencies made personal to you, then embedded into real music.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="reveal-assets/img-dark-logo.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "Switzer";
+      src: url("reveal-assets/Switzer-Regular.otf") format("opentype");
+      font-display: swap;
+      font-style: normal;
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: "Switzer";
+      src: url("reveal-assets/Switzer-Semibold.otf") format("opentype");
+      font-display: swap;
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    :root {
+      --core: #6521C9;
+      --core-deep: #38007A;
+      --core-tint: #EFECFF;
+      --core-soft: #D2C8FF;
+      --love: #B90044;
+      --love-tint: #FFE8EA;
+      --vitality: #C25500;
+      --vitality-primary: #FF9112;
+      --vitality-tint: #FFEADA;
+      --abundance: #0A7A52;
+      --abundance-primary: #12A56E;
+      --abundance-tint: #DCF4E8;
+      --ink: #1A1620;
+      --stage: #0B0712;
+      --cream: #F6F1E8;
+      --moon: #FBF8F3;
+      --mist: #EEE9E0;
+      --white: #FFFFFF;
+      --muted: #69636F;
+      --line: rgba(26, 22, 32, .14);
+      --serif: "Cormorant Garamond", Georgia, serif;
+      --sans: "Switzer", Arial, sans-serif;
+      --shadow: 0 24px 70px rgba(56, 0, 122, .11);
+      --ease: cubic-bezier(.16, 1, .3, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--white);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.65;
+      overflow-x: hidden;
+      text-rendering: optimizeLegibility;
+    }
+    img, svg, canvas { display: block; max-width: 100%; }
+    a { color: inherit; }
+    button, summary { font: inherit; }
+    button { color: inherit; }
+    :focus-visible {
+      outline: 3px solid var(--vitality-primary);
+      outline-offset: 4px;
+    }
+    .skip-link {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 100;
+      padding: 10px 14px;
+      background: var(--ink);
+      color: var(--white);
+      transform: translateY(-150%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .wrap {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+    .narrow { width: min(760px, 100%); }
+    .section {
+      position: relative;
+      padding: 112px 0;
+      border-top: 1px solid var(--line);
+      overflow: clip;
+    }
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 390px);
+      gap: 56px;
+      align-items: end;
+      margin-bottom: 58px;
+    }
+    .kicker {
+      margin: 0 0 18px;
+      color: var(--core);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2 {
+      font-family: var(--serif);
+      font-style: normal;
+      font-weight: 600;
+      text-wrap: balance;
+    }
+    h1 {
+      margin-bottom: 28px;
+      max-width: 850px;
+      font-size: clamp(58px, 7.2vw, 108px);
+      line-height: .93;
+      letter-spacing: -.035em;
+    }
+    h2 {
+      margin-bottom: 0;
+      max-width: 760px;
+      font-size: clamp(44px, 5.4vw, 76px);
+      line-height: 1;
+      letter-spacing: -.025em;
+    }
+    h3 {
+      margin-bottom: 10px;
+      font-size: 20px;
+      line-height: 1.25;
+    }
+    .lede {
+      max-width: 650px;
+      margin-bottom: 34px;
+      color: #4D4752;
+      font-size: clamp(19px, 2vw, 24px);
+      line-height: 1.48;
+      text-wrap: pretty;
+    }
+    .section-copy {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.65;
+      text-wrap: pretty;
+    }
+    .accent { color: var(--core); }
+    .muted { color: #827B88; }
+
+    .site-header {
+      height: 76px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.96);
+    }
+    .header-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .logo { width: 196px; height: auto; }
+    .header-note {
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: .04em;
+    }
+
+    .hero {
+      position: relative;
+      min-height: calc(100svh - 76px);
+      display: flex;
+      align-items: center;
+      padding: 72px 0;
+      background:
+        radial-gradient(circle at 82% 14%, rgba(210,200,255,.46), transparent 28%),
+        linear-gradient(180deg, var(--white), #FDFCFA 70%, var(--moon));
+      overflow: hidden;
+    }
+    .hero:after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--core), var(--vitality-primary), transparent);
+      opacity: .7;
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+    }
+    .hero-copy {
+      max-width: 830px;
+      padding: 10px 0;
+    }
+    .hero-proof {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      color: var(--core-deep);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .hero-proof:before {
+      content: "";
+      width: 32px;
+      height: 1px;
+      background: var(--core);
+    }
+    .hero-path {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      margin: 4px 0 32px;
+      padding: 11px 15px;
+      border: 1px solid rgba(101,33,201,.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,.72);
+      color: var(--core-deep);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .025em;
+    }
+    .hero-path i {
+      color: var(--core);
+      font-style: normal;
+    }
+    .learn-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .learn-link span {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--core);
+      transition: transform .3s var(--ease), border-color .3s ease;
+    }
+    .learn-link:hover span { transform: translateY(3px); border-color: var(--core); }
+    .marked {
+      position: relative;
+      display: inline-block;
+      color: var(--core-deep);
+      white-space: nowrap;
+    }
+    .marked svg {
+      position: absolute;
+      left: -2%;
+      bottom: -12px;
+      width: 104%;
+      height: 14px;
+      overflow: visible;
+      pointer-events: none;
+    }
+    .cta {
+      min-height: 54px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 14px 22px;
+      border: 1px solid var(--core);
+      border-radius: 999px;
+      background: var(--core);
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1;
+      text-decoration: none;
+      box-shadow: 0 14px 34px rgba(101,33,201,.22);
+      transition: transform .35s var(--ease), box-shadow .35s var(--ease), background .2s ease;
+    }
+    .cta:hover {
+      transform: translateY(-3px);
+      background: var(--core-deep);
+      box-shadow: 0 20px 45px rgba(101,33,201,.29);
+    }
+    .cta svg { width: 18px; height: 18px; }
+    .explainer {
+      position: relative;
+      padding: 108px 0;
+      border-top: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 20% 36%, rgba(210,200,255,.28), transparent 32%),
+        var(--moon);
+      overflow: hidden;
+    }
+    .explain-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .88fr) minmax(440px, 1.12fr);
+      gap: 72px;
+      align-items: center;
+    }
+    .explain-copy h2 { margin-bottom: 24px; }
+    .explain-copy > p:not(.kicker) {
+      max-width: 560px;
+      margin-bottom: 34px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.62;
+    }
+    .explain-steps {
+      display: grid;
+      gap: 0;
+      border-top: 1px solid var(--line);
+    }
+    .explain-step {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 16px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .explain-step strong {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--core-tint);
+      color: var(--core);
+      font-size: 12px;
+    }
+    .explain-step b { display: block; margin-bottom: 3px; font-size: 15px; }
+    .explain-step span { display: block; color: var(--muted); font-size: 14px; line-height: 1.45; }
+    .instrument {
+      position: relative;
+      min-height: 540px;
+      border: 1px solid rgba(56,0,122,.17);
+      border-radius: 38px;
+      background: rgba(255,255,255,.82);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .instrument:before {
+      content: "";
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      top: 58px;
+      left: 50%;
+      border-radius: 50%;
+      background: rgba(101,33,201,.10);
+      filter: blur(55px);
+      transform: translateX(-50%);
+      z-index: -1;
+    }
+    .instrument-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 25px 28px 0;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .live-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--abundance);
+      font-weight: 600;
+    }
+    .live-dot:before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--abundance-primary);
+      box-shadow: 0 0 0 5px rgba(18,165,110,.10);
+    }
+    #signal-canvas {
+      position: absolute;
+      inset: 58px 0 142px;
+      width: 100%;
+      height: calc(100% - 200px);
+    }
+    .instrument-center {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      text-align: center;
+      pointer-events: none;
+    }
+    .instrument-center span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .instrument-center strong {
+      display: block;
+      margin-top: 4px;
+      font-family: var(--serif);
+      font-size: 48px;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .instrument-legend {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 63px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-width: 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .legend-item:before {
+      content: "";
+      flex: 0 0 auto;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--legend);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--legend) 12%, transparent);
+    }
+    .instrument-scale {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 23px;
+      display: flex;
+      justify-content: space-between;
+      padding-top: 13px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .04em;
+    }
+    .instrument-note {
+      margin: 16px 8px 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: center;
+    }
+    .david-band {
+      position: relative;
+      z-index: 3;
+      margin-top: -56px;
+    }
+    .david-card {
+      display: grid;
+      grid-template-columns: 164px 1fr auto;
+      min-height: 164px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--white);
+      box-shadow: 0 20px 60px rgba(26,22,32,.10);
+      overflow: hidden;
+    }
+    .david-card img {
+      width: 164px;
+      height: 164px;
+      object-fit: cover;
+    }
+    .david-quote {
+      align-self: center;
+      margin: 0;
+      padding: 28px 36px;
+      font-family: var(--serif);
+      font-size: clamp(24px, 2.6vw, 34px);
+      font-weight: 500;
+      line-height: 1.18;
+    }
+    .david-meta {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 240px;
+      padding: 25px 30px;
+      border-left: 1px solid var(--line);
+      background: var(--moon);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .david-meta strong { margin-bottom: 4px; font-size: 16px; }
+    .david-meta span { color: var(--muted); }
+
+    .ticker-section {
+      padding: 38px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--moon);
+      overflow: hidden;
+    }
+    .ticker-label {
+      margin: 0 auto 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .proof-track {
+      width: max-content;
+      display: flex;
+      gap: 16px;
+      animation: proof-drift 38s linear infinite;
+    }
+    .proof-track:hover { animation-play-state: paused; }
+    .proof-pill {
+      width: 420px;
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 18px;
+      align-items: center;
+      padding: 12px 22px 12px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      box-shadow: 0 8px 22px rgba(26,22,32,.05);
+    }
+    .proof-pill img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .proof-pill blockquote {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.25;
+    }
+    .proof-pill cite {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 11px;
+      font-style: normal;
+      line-height: 1.3;
+    }
+    @keyframes proof-drift { to { transform: translateX(calc(-50% - 8px)); } }
+
+    .ritual { background: var(--white); }
+    .ritual-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-rows: repeat(2, minmax(190px, auto));
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 22px 60px rgba(26,22,32,.06);
+    }
+    .ritual-anchor {
+      grid-column: span 2;
+      grid-row: span 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px;
+      background: var(--stage);
+      color: var(--white);
+      overflow: hidden;
+      position: relative;
+    }
+    .ritual-anchor:after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      right: -100px;
+      bottom: -90px;
+      border-radius: 50%;
+      background: var(--core);
+      filter: blur(80px);
+      opacity: .45;
+    }
+    .nine {
+      position: relative;
+      z-index: 1;
+      font-family: var(--sans);
+      font-size: clamp(96px, 13vw, 180px);
+      font-weight: 600;
+      line-height: .75;
+      letter-spacing: -.07em;
+    }
+    .nine-label {
+      position: relative;
+      z-index: 1;
+      max-width: 300px;
+      margin: 30px 0 0;
+      color: #D7D0DD;
+      font-size: 15px;
+    }
+    .ritual-cell {
+      min-width: 0;
+      padding: 28px;
+      border-left: 1px solid var(--line);
+      background: var(--white);
+    }
+    .ritual-cell:nth-child(2), .ritual-cell:nth-child(3) { border-bottom: 1px solid var(--line); }
+    .ritual-cell svg {
+      width: 28px;
+      height: 28px;
+      margin-bottom: 28px;
+      color: var(--core);
+    }
+    .ritual-cell p { margin-bottom: 0; color: #514B56; font-size: 15px; line-height: 1.55; }
+
+    .domains { background: var(--moon); }
+    .domain-shell {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      min-height: 430px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--white);
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(26,22,32,.06);
+    }
+    .domain-tabs {
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--line);
+      background: #FAF9F7;
+    }
+    .domain-tab {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 16px 1fr;
+      gap: 14px;
+      align-items: center;
+      min-height: 82px;
+      padding: 18px 24px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+      transition: background .25s ease, color .25s ease;
+    }
+    .domain-tab:last-child { border-bottom: 0; }
+    .domain-tab span:first-child {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--tab-color);
+      box-shadow: 0 0 0 5px var(--tab-tint);
+    }
+    .domain-tab strong { display: block; font-size: 16px; }
+    .domain-tab small { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; }
+    .domain-tab[aria-selected="true"] { background: var(--tab-tint); color: var(--tab-color); }
+    .domain-panel {
+      position: relative;
+      padding: 56px 60px;
+      overflow: hidden;
+    }
+    .domain-panel:after {
+      content: "";
+      position: absolute;
+      width: 290px;
+      height: 290px;
+      top: -100px;
+      right: -80px;
+      border-radius: 50%;
+      background: var(--panel-tint);
+      filter: blur(45px);
+      opacity: .8;
+    }
+    .domain-panel > * { position: relative; z-index: 1; }
+    .domain-panel h3 {
+      margin-bottom: 18px;
+      color: var(--panel-color);
+      font-family: var(--serif);
+      font-size: clamp(40px, 5vw, 62px);
+      font-weight: 600;
+      line-height: 1;
+    }
+    .domain-panel .domain-lead { max-width: 560px; margin-bottom: 18px; font-size: 20px; line-height: 1.5; }
+    .domain-panel .domain-body { max-width: 580px; margin-bottom: 0; color: var(--muted); }
+    .beta {
+      background:
+        radial-gradient(circle at 78% 24%, rgba(101,33,201,.32), transparent 28%),
+        var(--stage);
+      color: var(--white);
+    }
+    .beta .kicker { color: var(--core-soft); }
+    .beta .section-copy { color: #C4BDCA; }
+    .metric-rail {
+      display: flex;
+      margin: 0 0 70px;
+      border-top: 1px solid rgba(255,255,255,.22);
+      border-bottom: 1px solid rgba(255,255,255,.22);
+    }
+    .metric {
+      flex: 1 1 0;
+      min-height: 170px;
+      padding: 28px 24px;
+      border-right: 1px solid rgba(255,255,255,.16);
+    }
+    .metric:last-child { border-right: 0; }
+    .metric strong {
+      display: block;
+      margin-bottom: 12px;
+      font-family: var(--sans);
+      font-size: clamp(35px, 4vw, 58px);
+      font-weight: 600;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .metric span { display: block; color: #C4BDCA; font-size: 13px; line-height: 1.4; }
+    .study-note { margin: -52px 0 70px; color: #9F96A7; font-size: 12px; }
+    .proof-feature {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 54px;
+      align-items: stretch;
+    }
+    .proof-feature img {
+      width: 100%;
+      height: 100%;
+      min-height: 390px;
+      border-radius: 24px;
+      object-fit: cover;
+      filter: saturate(.88);
+    }
+    .proof-feature blockquote {
+      align-self: center;
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(34px, 4.6vw, 62px);
+      font-weight: 500;
+      line-height: 1.06;
+      letter-spacing: -.02em;
+    }
+    .proof-feature cite {
+      display: block;
+      margin-top: 28px;
+      color: var(--core-soft);
+      font-family: var(--sans);
+      font-size: 14px;
+      font-style: normal;
+      line-height: 1.4;
+    }
+    .proof-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 68px;
+      padding-top: 34px;
+      border-top: 1px solid rgba(255,255,255,.22);
+    }
+    .proof-cta p {
+      max-width: 420px;
+      margin: 0;
+      color: #D7D0DD;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .proof-cta .cta {
+      flex: 0 0 auto;
+      background: var(--white);
+      border-color: var(--white);
+      color: var(--core-deep);
+      box-shadow: 0 16px 38px rgba(0,0,0,.24);
+    }
+    .proof-cta .cta:hover { background: var(--core-tint); }
+    .proof-cta > span {
+      max-width: 190px;
+      color: #AFA6B7;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    .proof-cta > span strong { color: var(--white); }
+
+    .method { background: var(--white); }
+    .method-list { border-top: 1px solid var(--line); }
+    .method-row {
+      display: grid;
+      grid-template-columns: 72px minmax(260px, .85fr) minmax(0, 1.15fr);
+      gap: 34px;
+      align-items: start;
+      padding: 34px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .method-icon {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--core-tint);
+      color: var(--core);
+    }
+    .method-icon svg { width: 25px; height: 25px; }
+    .method-row h3 { margin: 3px 0 0; font-size: 21px; }
+    .method-row p { margin: 0; color: var(--muted); font-size: 16px; }
+
+    .portrait-proof {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      gap: 36px;
+      align-items: center;
+      margin-top: 70px;
+      padding-top: 54px;
+      border-top: 1px solid var(--line);
+    }
+    .portrait-proof img {
+      width: 210px;
+      height: 210px;
+      border-radius: 20px;
+      object-fit: cover;
+    }
+    .portrait-proof blockquote {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 500;
+      line-height: 1.16;
+    }
+    .portrait-proof cite {
+      display: block;
+      margin-top: 18px;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-style: normal;
+    }
+
+    .frequencies { background: var(--cream); }
+    .frequency-band {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--white);
+      overflow: hidden;
+    }
+    .frequency {
+      min-height: 430px;
+      display: flex;
+      flex-direction: column;
+      padding: 32px 26px;
+      border-right: 1px solid var(--line);
+      background: linear-gradient(180deg, var(--freq-tint), var(--white) 42%);
+    }
+    .frequency:last-child { border-right: 0; }
+    .frequency-disc {
+      width: 48px;
+      height: 48px;
+      margin-bottom: auto;
+      border: 1px solid color-mix(in srgb, var(--freq) 32%, white);
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 32%, white 0 8%, var(--freq-tint) 9% 36%, var(--freq) 37% 40%, white 41%);
+      box-shadow: 0 8px 22px color-mix(in srgb, var(--freq) 18%, transparent);
+    }
+    .frequency h3 {
+      margin: 38px 0 12px;
+      color: var(--freq);
+      font-family: var(--serif);
+      font-size: 34px;
+      font-weight: 600;
+    }
+    .frequency .freq-line { min-height: 66px; margin-bottom: 18px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .frequency p:last-child { margin: 0; font-size: 15px; line-height: 1.55; }
+
+    .final-cta {
+      padding: 128px 0;
+      background: var(--white);
+      text-align: center;
+    }
+    .final-cta-inner {
+      position: relative;
+      padding: 80px 44px;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 50% 115%, rgba(101,33,201,.64), transparent 42%),
+        var(--stage);
+      color: var(--white);
+      overflow: hidden;
+    }
+    .final-cta-inner:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: repeating-linear-gradient(90deg, transparent 0 38px, rgba(255,255,255,.045) 39px 40px);
+      mask-image: linear-gradient(180deg, transparent, black, transparent);
+    }
+    .final-cta-inner > * { position: relative; z-index: 1; }
+    .final-cta h2 { max-width: 820px; margin: 0 auto 24px; }
+    .final-cta p { max-width: 590px; margin: 0 auto 32px; color: #CFC8D4; }
+    .final-cta .cta { background: var(--white); color: var(--core-deep); border-color: var(--white); box-shadow: 0 18px 42px rgba(0,0,0,.25); }
+    .final-cta .cta:hover { background: var(--core-tint); }
+    .final-code { margin: 18px 0 0 !important; color: #AFA6B6 !important; font-size: 13px; }
+
+    .faq { background: var(--moon); }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+      gap: 80px;
+      align-items: start;
+    }
+    .faq h2 { font-size: clamp(44px, 5vw, 68px); }
+    .faq-list { border-top: 1px solid var(--line); }
+    details { border-bottom: 1px solid var(--line); }
+    summary {
+      min-height: 64px;
+      display: grid;
+      grid-template-columns: 1fr 28px;
+      gap: 24px;
+      align-items: center;
+      padding: 19px 0;
+      font-weight: 600;
+      line-height: 1.35;
+      list-style: none;
+      cursor: pointer;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary:after {
+      content: "+";
+      color: var(--core);
+      font-size: 24px;
+      font-weight: 400;
+      text-align: center;
+      transition: transform .25s ease;
+    }
+    details[open] summary:after { transform: rotate(45deg); }
+    .faq-answer { max-width: 680px; padding: 0 42px 22px 0; color: var(--muted); font-size: 15px; }
+    .faq-answer p { margin-bottom: 12px; }
+
+    .site-footer {
+      padding: 48px 0;
+      border-top: 1px solid var(--line);
+      background: var(--white);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      gap: 54px;
+      align-items: start;
+    }
+    .footer-logo { width: 170px; height: auto; margin-bottom: 14px; }
+    .footer-grid p { max-width: 330px; color: var(--muted); font-size: 13px; }
+    .footer-grid h3 { margin: 0 0 12px; font-size: 13px; }
+    .footer-grid nav { display: flex; flex-direction: column; gap: 8px; }
+    .footer-grid a { color: var(--muted); font-size: 13px; text-decoration: none; }
+    .footer-grid a:hover { color: var(--core); }
+    .copyright {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-top: 42px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      color: #918A96;
+      font-size: 11px;
+    }
+
+    .signal-spine {
+      position: fixed;
+      z-index: 20;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: var(--scroll-progress, 0%);
+      background: var(--core);
+      pointer-events: none;
+    }
+    .reveal { transition: transform .8s var(--ease); }
+    .js .reveal:not(.is-seen) { transform: translateY(18px); }
+
+    @media (max-width: 980px) {
+      .wrap { width: min(100% - 36px, 760px); }
+      .section { padding: 86px 0; }
+      .section-head { grid-template-columns: 1fr; gap: 22px; margin-bottom: 42px; }
+      .hero { min-height: calc(100svh - 76px); padding: 64px 0; }
+      .explain-grid { grid-template-columns: 1fr; gap: 52px; }
+      .instrument { min-height: 470px; }
+      .david-card { grid-template-columns: 132px 1fr; }
+      .david-card img { width: 132px; height: 100%; min-height: 184px; }
+      .david-quote { padding: 24px 28px; }
+      .david-meta { grid-column: 1 / -1; min-width: 0; border-top: 1px solid var(--line); border-left: 0; }
+      .ritual-grid { grid-template-columns: repeat(2, 1fr); }
+      .ritual-anchor { grid-column: span 2; grid-row: auto; min-height: 330px; }
+      .ritual-cell { border-left: 0; border-top: 1px solid var(--line); }
+      .ritual-cell:nth-child(even) { border-right: 1px solid var(--line); }
+      .domain-shell { grid-template-columns: 240px 1fr; }
+      .domain-panel { padding: 46px 38px; }
+      .metric-rail { display: grid; grid-template-columns: repeat(3, 1fr); }
+      .metric:nth-child(3) { border-right: 0; }
+      .metric:nth-child(n+4) { border-top: 1px solid rgba(255,255,255,.16); }
+      .proof-feature { grid-template-columns: 300px 1fr; gap: 38px; }
+      .proof-cta { flex-wrap: wrap; }
+      .method-row { grid-template-columns: 60px 1fr; }
+      .method-row p { grid-column: 2; }
+      .frequency-band { grid-template-columns: 1fr 1fr; }
+      .frequency:nth-child(2) { border-right: 0; }
+      .frequency:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .faq-grid { grid-template-columns: 1fr; gap: 38px; }
+    }
+
+    @media (max-width: 640px) {
+      body { font-size: 16px; }
+      .wrap { width: calc(100% - 32px); }
+      .section { padding: 72px 0; }
+      .site-header { height: 60px; }
+      .logo { width: 148px; }
+      .header-note { display: none; }
+      h1 { margin-bottom: 22px; font-size: clamp(48px, 14.2vw, 56px); line-height: .96; letter-spacing: -.03em; }
+      h2 { font-size: clamp(39px, 12vw, 52px); line-height: 1.02; }
+      .lede { margin-bottom: 24px; font-size: 18px; line-height: 1.46; }
+      .hero { min-height: calc(100svh - 60px); padding: 42px 0 46px; }
+      .hero-copy { padding: 0; }
+      .hero-proof { margin-bottom: 20px; font-size: 11px; }
+      .marked { white-space: normal; }
+      .hero-path { gap: 7px; margin: 0 0 28px; padding: 9px 11px; font-size: 10px; }
+      .learn-link { font-size: 13px; }
+      .cta { width: 100%; min-height: 56px; }
+      .explainer { padding: 76px 0 70px; }
+      .explain-grid { gap: 42px; }
+      .explain-copy > p:not(.kicker) { margin-bottom: 28px; font-size: 16px; }
+      .explain-step { grid-template-columns: 30px 1fr; gap: 13px; padding: 16px 0; }
+      .instrument { min-height: 430px; border-radius: 28px; }
+      .instrument-top { padding: 20px 20px 0; }
+      .instrument-top span:first-child { max-width: 150px; line-height: 1.35; }
+      #signal-canvas { inset: 64px 0 150px; height: calc(100% - 214px); }
+      .instrument-center strong { font-size: 43px; }
+      .instrument-legend { left: 20px; right: 20px; bottom: 65px; grid-template-columns: 1fr 1fr; row-gap: 8px; }
+      .legend-item { justify-content: flex-start; padding-left: 18px; }
+      .instrument-scale { left: 20px; right: 20px; }
+      .instrument-note { margin: 14px 5px 0; text-align: left; }
+      .david-band { margin-top: -42px; }
+      .david-card { display: block; border-radius: 22px; }
+      .david-card img { width: 100%; height: auto; min-height: 0; aspect-ratio: 1; object-fit: contain; object-position: center; }
+      .david-quote { padding: 26px 24px; font-size: 26px; }
+      .david-meta { padding: 20px 24px; }
+      .ticker-section { padding: 30px 0; }
+      .proof-pill { width: 340px; grid-template-columns: 58px 1fr; }
+      .proof-pill img { width: 58px; height: 58px; }
+      .proof-pill blockquote { font-size: 15px; }
+      .ritual-grid { display: block; border-radius: 22px; }
+      .ritual-anchor { min-height: 300px; padding: 30px; }
+      .ritual-cell { padding: 26px; border-right: 0 !important; }
+      .domain-shell { display: block; border-radius: 22px; }
+      .domain-tabs { display: grid; grid-template-columns: 1fr 1fr; border-right: 0; border-bottom: 1px solid var(--line); }
+      .domain-tab { min-height: 78px; padding: 14px; border-right: 1px solid var(--line); }
+      .domain-tab:nth-child(even) { border-right: 0; }
+      .domain-tab small { display: none; }
+      .domain-panel { min-height: 360px; padding: 38px 26px; }
+      .metric-rail { grid-template-columns: 1fr 1fr; }
+      .metric { min-height: 150px; padding: 24px 18px; }
+      .metric:nth-child(2), .metric:nth-child(4) { border-right: 0; }
+      .metric:nth-child(3) { border-right: 1px solid rgba(255,255,255,.16); }
+      .metric:nth-child(n+3) { border-top: 1px solid rgba(255,255,255,.16); }
+      .metric:last-child { grid-column: span 2; border-top: 1px solid rgba(255,255,255,.16); }
+      .proof-feature { grid-template-columns: 1fr; }
+      .proof-feature img { height: 320px; min-height: 0; }
+      .proof-feature blockquote { font-size: 36px; }
+      .proof-cta { display: block; margin-top: 50px; padding-top: 28px; }
+      .proof-cta p { margin-bottom: 22px; }
+      .proof-cta > span { display: block; max-width: none; margin-top: 14px; text-align: center; }
+      .method-row { grid-template-columns: 52px 1fr; gap: 18px; padding: 28px 0; }
+      .method-icon { width: 48px; height: 48px; }
+      .portrait-proof { grid-template-columns: 96px 1fr; gap: 20px; }
+      .portrait-proof img { width: 96px; height: 126px; border-radius: 16px; }
+      .portrait-proof blockquote { font-size: 25px; }
+      .frequency-band { display: block; border-radius: 22px; }
+      .frequency { min-height: 330px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .frequency:last-child { border-bottom: 0; }
+      .final-cta { padding: 72px 0; }
+      .final-cta-inner { padding: 60px 24px; border-radius: 24px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+      .copyright { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *:before, *:after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+      .proof-track { transform: none !important; }
+      .signal-spine { display: none; }
+    }
+  </style>
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="signal-spine" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <img class="logo" src="reveal-assets/img-dark-logo.webp" width="850" height="253" alt="Zodiac.fm">
+      <span class="header-note">Personal frequencies inside real music</span>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="wrap hero-inner">
+        <div class="hero-copy reveal">
+          <div class="hero-proof">For David McEwen's community</div>
+          <h1>Your birth chart<br><span class="marked">has a sound.<svg viewBox="0 0 400 16" aria-hidden="true"><path d="M4 11C78 3 128 15 202 8C270 2 326 7 396 4" fill="none" stroke="#6521C9" stroke-width="3.2" stroke-linecap="round"/></svg></span></h1>
+          <p class="lede">Zodiac calculates four frequencies from your birth moment, then puts them inside real music.</p>
+          <div class="hero-path" aria-label="Birth moment becomes four frequencies inside music"><span>Birth moment</span><i aria-hidden="true">→</i><span>Four frequencies</span><i aria-hidden="true">→</i><span>Music</span></div>
+          <div><a class="learn-link" href="#how-zodiac-works">See what gets calculated <span aria-hidden="true">↓</span></a></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="explainer" id="how-zodiac-works">
+      <div class="wrap explain-grid">
+        <div class="explain-copy reveal">
+          <p class="kicker">What Zodiac calculates</p>
+          <h2>Your birth moment becomes four numbers in Hz.</h2>
+          <p>Each number guides one part of your life. Zodiac embeds all four inside personalized music, so you can listen instead of studying another chart.</p>
+          <div class="explain-steps" aria-label="How Zodiac creates personalized music">
+            <div class="explain-step"><strong>1</strong><div><b>You enter your birth details.</b><span>Date, exact time, and location establish the birth moment.</span></div></div>
+            <div class="explain-step"><strong>2</strong><div><b>Zodiac calculates four frequency values.</b><span>248+ celestial data points become Core, Love, Vitality, and Abundance frequencies.</span></div></div>
+            <div class="explain-step"><strong>3</strong><div><b>Your values go inside real music.</b><span>Each track carries the frequencies calculated for you.</span></div></div>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="instrument" id="frequency-illustration" role="img" aria-label="Illustration showing four personal frequency values, Core, Love, Vitality, and Abundance, along one sound spectrum">
+            <div class="instrument-top"><span>What the calculation returns</span><span class="live-dot">Illustration</span></div>
+            <canvas id="signal-canvas" aria-hidden="true"></canvas>
+            <div class="instrument-center"><span>Four personal values</span><strong>in Hz</strong></div>
+            <div class="instrument-legend" aria-hidden="true">
+              <span class="legend-item" style="--legend:#6521C9">Core</span>
+              <span class="legend-item" style="--legend:#B90044">Love</span>
+              <span class="legend-item" style="--legend:#C25500">Vitality</span>
+              <span class="legend-item" style="--legend:#0A7A52">Abundance</span>
+            </div>
+            <div class="instrument-scale" aria-hidden="true"><span>250 Hz</span><span>Personal spectrum</span><span>950 Hz</span></div>
+          </div>
+          <p class="instrument-note">The moving points show the four kinds of results, not your values. Your exact positions appear after you enter your birth details.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap david-band reveal" id="david-proof">
+      <div class="david-card">
+        <img src="reveal-assets/img-images_testimonials_david-mcewen-d2c.png" width="500" height="500" alt="David McEwen">
+        <blockquote class="david-quote">“This is one that will calibrate itself to essentially your energetic structure.”</blockquote>
+        <div class="david-meta"><strong>David McEwen</strong><span>Transformation Thought Leader</span><span>Over 12 Million YouTube Views</span><span>Uses Zodiac every day</span></div>
+      </div>
+    </div>
+
+    <section class="ticker-section" aria-label="Listener proof">
+      <p class="ticker-label">People who pressed play</p>
+      <div class="proof-track">
+        <article class="proof-pill"><img src="reveal-assets/img-images_testimonials_leanne-ely-d2c.png" width="500" height="500" alt="Leanne Ely"><div><blockquote>“I have received multiple unexpected new very lucrative opportunities.”</blockquote><cite>Leanne Ely · Best-selling author</cite></div></article>
+        <article class="proof-pill"><img src="reveal-assets/img-images_testimonials_jennifer-k-hill-d2c.png" width="500" height="500" alt="Jennifer K. Hill"><div><blockquote>“Instead of 10 paid members, I got 30 paid members in 30 days.”</blockquote><cite>Jennifer K. Hill · Global Wellness Leader</cite></div></article>
+        <article class="proof-pill"><img src="reveal-assets/img-images_testimonials_summer-phoenix-d2c.png" width="500" height="500" alt="Summer Phoenix"><div><blockquote>“Instead of just studying your blueprint, you begin resonating with it.”</blockquote><cite>Summer Phoenix · Human Design and Gene Keys Practitioner</cite></div></article>
+        <article class="proof-pill"><img src="reveal-assets/img-images_testimonials_amber-hedrick-d2c.png" width="500" height="500" alt="Amber Hedrick"><div><blockquote>“I feel like the person I've been trying to get back to for so long.”</blockquote><cite>Amber Hedrick · Zodiac listener</cite></div></article>
+        <article class="proof-pill"><img src="reveal-assets/img-images_testimonials_leanne-ely-d2c.png" width="500" height="500" alt=""><div><blockquote>“I have received multiple unexpected new very lucrative opportunities.”</blockquote><cite>Leanne Ely · Best-selling author</cite></div></article>
+        <article class="proof-pill"><img src="reveal-assets/img-images_testimonials_jennifer-k-hill-d2c.png" width="500" height="500" alt=""><div><blockquote>“Instead of 10 paid members, I got 30 paid members in 30 days.”</blockquote><cite>Jennifer K. Hill · Global Wellness Leader</cite></div></article>
+        <article class="proof-pill"><img src="reveal-assets/img-images_testimonials_summer-phoenix-d2c.png" width="500" height="500" alt=""><div><blockquote>“Instead of just studying your blueprint, you begin resonating with it.”</blockquote><cite>Summer Phoenix · Human Design and Gene Keys Practitioner</cite></div></article>
+        <article class="proof-pill"><img src="reveal-assets/img-images_testimonials_amber-hedrick-d2c.png" width="500" height="500" alt=""><div><blockquote>“I feel like the person I've been trying to get back to for so long.”</blockquote><cite>Amber Hedrick · Zodiac listener</cite></div></article>
+      </div>
+    </section>
+
+    <section class="section ritual">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><p class="kicker">All you have to do is listen</p><h2>Listen for just <span class="accent">9 minutes</span> a day.</h2></div>
+          <p class="section-copy">The music does the holding. Put it on while you walk, work, cook, visualize, or drive.</p>
+        </div>
+        <div class="ritual-grid reveal">
+          <div class="ritual-anchor"><div class="nine">9</div><p class="nine-label">Minutes inside music made to carry your exact frequencies.</p></div>
+          <article class="ritual-cell"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16M7 8l-3 4 3 4M17 8l3 4-3 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><h3>Leave the noise</h3><p>Get off the station of fear, drama, and noise without white-knuckling your mental diet.</p></article>
+          <article class="ritual-cell"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18V9m7 9V5m7 13v-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><h3>Raise the signal</h3><p>Raise your dominant vibration by listening, not forcing. The music does the holding.</p></article>
+          <article class="ritual-cell"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.3-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.7-7 10-7 10Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><h3>Change the pattern</h3><p>Stop attracting the wrong people by breaking your repeating relationship loops.</p></article>
+          <article class="ritual-cell"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14c3-7 5 3 8-4s5 3 8-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="4" cy="14" r="1.5" fill="currentColor"/><circle cx="20" cy="6" r="1.5" fill="currentColor"/></svg><h3>Give it a soundtrack</h3><p>Your visualizations, your exact frequencies, inside real music.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section domains" id="domains">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><p class="kicker">Water one seed</p><h2>What are you <span class="accent">manifesting first?</span></h2></div>
+          <p class="section-copy">Your frequencies cover four domains. Start where you want movement. You will have all four.</p>
+        </div>
+        <div class="domain-shell reveal">
+          <div class="domain-tabs" role="tablist" aria-label="Four frequency domains">
+            <button class="domain-tab" id="domain-tab-abundance" role="tab" aria-controls="domain-panel" aria-selected="true" tabindex="0" data-domain="abundance" style="--tab-color:#0A7A52;--tab-tint:#DCF4E8"><span></span><span><strong>Abundance</strong><small>Work, money, timing</small></span></button>
+            <button class="domain-tab" id="domain-tab-love" role="tab" aria-controls="domain-panel" aria-selected="false" tabindex="-1" data-domain="love" style="--tab-color:#B90044;--tab-tint:#FFE8EA"><span></span><span><strong>Love</strong><small>Who you draw in</small></span></button>
+            <button class="domain-tab" id="domain-tab-vitality" role="tab" aria-controls="domain-panel" aria-selected="false" tabindex="-1" data-domain="vitality" style="--tab-color:#C25500;--tab-tint:#FFEADA"><span></span><span><strong>Vitality</strong><small>Fuel for your life</small></span></button>
+            <button class="domain-tab" id="domain-tab-core" role="tab" aria-controls="domain-panel" aria-selected="false" tabindex="-1" data-domain="core" style="--tab-color:#6521C9;--tab-tint:#EFECFF"><span></span><span><strong>Core</strong><small>Living as yourself</small></span></button>
+          </div>
+          <div class="domain-panel" id="domain-panel" role="tabpanel" aria-labelledby="domain-tab-abundance" aria-live="polite" style="--panel-color:#0A7A52;--panel-tint:#DCF4E8">
+            <p class="kicker" id="domain-kicker">Opportunity · work · money · timing</p>
+            <h3 id="domain-title">Abundance</h3>
+            <p class="domain-lead" id="domain-lead">Your exchange frequency. The internal reference signal for action, exchange, and material result.</p>
+            <p class="domain-body" id="domain-body">Over time, you notice openings and timing more clearly, including where your effort belongs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section beta" id="beta">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><p class="kicker">Twelve months of listening</p><h2>300 started. <span class="muted">278 completed.</span></h2></div>
+          <p class="section-copy">In a 52-week study, 300 people started and 278 completed. They answered open-ended questions every two weeks while Zodiac recorded their listening.</p>
+        </div>
+        <div class="metric-rail reveal" aria-label="Beta study results">
+          <div class="metric"><strong>98.6%</strong><span>Would recommend to a friend</span></div>
+          <div class="metric"><strong>84%</strong><span>Said it was life-changing</span></div>
+          <div class="metric"><strong>94%</strong><span>Reported deeper self-access</span></div>
+          <div class="metric"><strong>91%</strong><span>Reported sharper instincts</span></div>
+          <div class="metric"><strong>90%</strong><span>Reported better relationships and love</span></div>
+        </div>
+        <p class="study-note">Among listeners who used Zodiac as designed: at least nine minutes a day on average, balanced across all four frequencies with each at 15% or more.</p>
+        <div class="proof-feature reveal">
+          <img src="reveal-assets/img-images_testimonials_jennifer-k-hill-d2c.png" width="500" height="500" loading="lazy" alt="Jennifer K. Hill">
+          <blockquote>“Instead of 10 paid members, I got 30 paid members in 30 days. Within 45 days, we had almost 40 paid members. It felt like the floodgates of abundance, prosperity, and purpose opened.”<cite>Jennifer K. Hill · Global Wellness Leader, Founder of OptiMatch</cite></blockquote>
+        </div>
+        <div class="proof-cta reveal">
+          <p>Now see the four frequencies calculated from your birth moment.</p>
+          <a class="cta" href="https://staging.zodiac.fm/begin">Reveal my frequencies <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M14 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <span>David's code <strong>MCEWEN</strong> takes 20% off at checkout</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section method" id="method">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><p class="kicker">From birth moment to music</p><h2>What happens after you enter your birth details.</h2></div>
+          <p class="section-copy">You are less than five minutes from seeing the exact frequencies calculated for you.</p>
+        </div>
+        <div class="method-list reveal">
+          <article class="method-row"><div class="method-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 4v16M4 12h16" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></div><h3>Discover your four unique frequencies in Hz.</h3><p>The four frequencies that guide Identity, Love, Vitality, and Abundance are calculated using 248+ celestial data points.</p></article>
+          <article class="method-row"><div class="method-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15V9m4 9V6m4 15V3m4 15V6m4 9V9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div><h3>Hear how each frequency sounds in music.</h3><p>Each track is tuned precisely to your frequencies. Real composers. Real production. Not generic meditation drones.</p></article>
+          <article class="method-row"><div class="method-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3 0 5 2 5 5v3c0 2 2 3 2 5H5c0-2 2-3 2-5V8c0-3 2-5 5-5Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 20h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div><h3>Learn where your frequencies land in the spectrum.</h3><p>Your four frequencies arrive in separate bands. The band changes how each frequency expresses in your pattern.</p></article>
+          <article class="method-row"><div class="method-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="2" fill="white" stroke="currentColor" stroke-width="1.6"/><circle cx="15" cy="12" r="2" fill="white" stroke="currentColor" stroke-width="1.6"/><circle cx="11" cy="17" r="2" fill="white" stroke="currentColor" stroke-width="1.6"/></svg></div><h3>Learn how to combine frequencies.</h3><p>Our research indicates that balance matters over time. You will learn how to build effective playlists for your week.</p></article>
+          <article class="method-row"><div class="method-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19C7 12 10 8 19 5M8 9c3 0 5 2 5 5M5 14c3 0 5 2 5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div><h3>Combine listening with what you already practice.</h3><p>Meditation, breathwork, yoga, chanting, Qi Gong, and prayer all quiet the noise. Zodiac adds your personal signal to the experience.</p></article>
+        </div>
+        <div class="portrait-proof reveal">
+          <img src="reveal-assets/img-images_testimonials_summer-phoenix-d2c.png" width="500" height="500" loading="lazy" alt="Summer Phoenix">
+          <blockquote>“You can know your Human Design. You can contemplate your Gene Keys. You can understand your shadow to gift pathway perfectly…But you can still feel stuck. As a practitioner, I see this all the time. Insight is powerful. But insight alone does not create integration.”<cite>Summer Phoenix · Human Design and Gene Keys Practitioner</cite></blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section class="section frequencies" id="frequencies">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><p class="kicker">One chart. Four directions.</p><h2>How your frequencies guide you.</h2></div>
+          <p class="section-copy">From your birth time and location, Zodiac calculates four distinct frequency signals.</p>
+        </div>
+        <div class="frequency-band reveal">
+          <article class="frequency" style="--freq:#6521C9;--freq-tint:#EFECFF"><div class="frequency-disc" aria-hidden="true"></div><h3>Core</h3><p class="freq-line">The internal reference signal for who you are and what is yours to do.</p><p>Over time, you notice what is genuinely yours and what is noise.</p></article>
+          <article class="frequency" style="--freq:#B90044;--freq-tint:#FFE8EA"><div class="frequency-disc" aria-hidden="true"></div><h3>Love</h3><p class="freq-line">The internal reference signal for connection within yourself and with others.</p><p>Over time, you notice what is happening between you and other people.</p></article>
+          <article class="frequency" style="--freq:#C25500;--freq-tint:#FFEADA"><div class="frequency-disc" aria-hidden="true"></div><h3>Vitality</h3><p class="freq-line">The internal reference signal for energy, tension, and recovery.</p><p>Over time, you notice what deserves your energy and what drains it.</p></article>
+          <article class="frequency" style="--freq:#0A7A52;--freq-tint:#DCF4E8"><div class="frequency-disc" aria-hidden="true"></div><h3>Abundance</h3><p class="freq-line">Your exchange frequency for action, opportunity, and material result.</p><p>Over time, you notice openings and timing more clearly.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <div class="wrap final-cta-inner reveal">
+        <p class="kicker">Your birth moment is already there</p>
+        <h2>Experience your personalized music now.</h2>
+        <p>Listen anywhere: walking, driving, cooking, working. You do not rearrange your life. The music carries you.</p>
+        <a class="cta" href="https://staging.zodiac.fm/begin">Reveal my frequencies <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M14 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <p class="final-code">David's code <strong>MCEWEN</strong> takes 20% off at checkout</p>
+      </div>
+    </section>
+
+    <section class="section faq" id="faq">
+      <div class="wrap faq-grid">
+        <div class="reveal"><p class="kicker">Before you press play</p><h2>Frequently asked.</h2></div>
+        <div class="faq-list reveal">
+          <details><summary>What if I do not know my exact birth time?</summary><div class="faq-answer"><p>Your birth time affects the calculation. If you have no idea, choose 12:00 noon. Once you are a member, we will provide ways to help you find or refine it.</p></div></details>
+          <details><summary>How does it work?</summary><div class="faq-answer"><p>You enter your birth details. We calculate four frequencies from 248+ celestial data points, then embed those frequencies into music tuned precisely to you.</p></div></details>
+          <details><summary>How much time does it take?</summary><div class="faq-answer"><p>Our beta showed that listening for a minimum of nine minutes a day produced results. Many people listen longer because the music fits into ordinary life.</p><p>Play it at home. In the car. At the gym. While you work. Build playlists. Loop your favorites. Fall asleep to it.</p></div></details>
+          <details><summary>What if I already know my chart really well?</summary><div class="faq-answer"><p>Good. This is not about learning more information. Knowing your chart cognitively is different from living it automatically.</p></div></details>
+          <details><summary>Will this work with my other practices?</summary><div class="faq-answer"><p>Yes. Many listeners combine Zodiac with meditation, breathwork, yoga, chanting, Qi Gong, prayer, and manifestation.</p></div></details>
+          <details><summary>Can I cancel anytime?</summary><div class="faq-answer"><p>Yes. No contracts, no hassle. Cancel in the app, or email <a href="mailto:support@zodiac.fm">support@zodiac.fm</a> and a real human will help.</p></div></details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div><img class="footer-logo" src="reveal-assets/img-dark-logo.webp" width="850" height="253" loading="lazy" alt="Zodiac.fm"><p>Your birth chart translated into personal frequencies and embedded into music.</p></div>
+        <div><h3>Explore</h3><nav aria-label="Explore"><a href="#domains">The four domains</a><a href="#beta">Beta results</a><a href="#method">How it works</a><a href="#faq">FAQ</a></nav></div>
+        <div><h3>Company</h3><nav aria-label="Company"><a href="https://staging.zodiac.fm/partners">Affiliates</a><a href="https://staging.zodiac.fm/privacy">Privacy</a><a href="https://staging.zodiac.fm/terms">Terms</a><a href="mailto:support@zodiac.fm">Support</a></nav></div>
+      </div>
+      <div class="copyright"><span>© 2026 Zodiac.fm</span><span>For David McEwen's community · Code MCEWEN</span></div>
+    </div>
+  </footer>
+
+  <script>
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const domainData = {
+      abundance: {
+        color: '#0A7A52', tint: '#DCF4E8', kicker: 'Opportunity · work · money · timing',
+        title: 'Abundance',
+        lead: 'Your exchange frequency. The internal reference signal for action, exchange, and material result.',
+        body: 'Over time, you notice openings and timing more clearly, including where your effort belongs.'
+      },
+      love: {
+        color: '#B90044', tint: '#FFE8EA', kicker: 'Relationships · connection · magnetism',
+        title: 'Love',
+        lead: 'The internal reference signal for connection within yourself and with others.',
+        body: 'Over time, you notice what is happening between you and other people, and what connection asks of you.'
+      },
+      vitality: {
+        color: '#C25500', tint: '#FFEADA', kicker: 'Energy · fuel · discernment',
+        title: 'Vitality',
+        lead: 'The internal reference signal for energy, tension, and recovery.',
+        body: 'Over time, you notice what deserves your energy, what drains it, and when recovery matters.'
+      },
+      core: {
+        color: '#6521C9', tint: '#EFECFF', kicker: 'Identity · wisdom · self-knowledge',
+        title: 'Core',
+        lead: 'The internal reference signal for who you are and what is yours to do.',
+        body: 'Over time, you notice what is genuinely yours and what is noise.'
+      }
+    };
+
+    const tabs = [...document.querySelectorAll('.domain-tab')];
+    const panel = document.querySelector('.domain-panel');
+    tabs.forEach((tab) => tab.addEventListener('click', () => {
+      tabs.forEach((item) => {
+        const selected = item === tab;
+        item.setAttribute('aria-selected', String(selected));
+        item.tabIndex = selected ? 0 : -1;
+      });
+      const next = domainData[tab.dataset.domain];
+      panel.setAttribute('aria-labelledby', tab.id);
+      panel.style.setProperty('--panel-color', next.color);
+      panel.style.setProperty('--panel-tint', next.tint);
+      document.getElementById('domain-kicker').textContent = next.kicker;
+      document.getElementById('domain-title').textContent = next.title;
+      document.getElementById('domain-lead').textContent = next.lead;
+      document.getElementById('domain-body').textContent = next.body;
+    }));
+    document.querySelector('.domain-tabs').addEventListener('keydown', (event) => {
+      const current = tabs.indexOf(document.activeElement);
+      if (current < 0) return;
+      let next = current;
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (current + 1) % tabs.length;
+      else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (current - 1 + tabs.length) % tabs.length;
+      else if (event.key === 'Home') next = 0;
+      else if (event.key === 'End') next = tabs.length - 1;
+      else return;
+      event.preventDefault();
+      tabs[next].focus();
+      tabs[next].click();
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('is-seen');
+      });
+    }, { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach((item) => revealObserver.observe(item));
+
+    const updateProgress = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+      document.documentElement.style.setProperty('--scroll-progress', `${pct}%`);
+    };
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+
+    const canvas = document.getElementById('signal-canvas');
+    const ctx = canvas.getContext('2d');
+    let frame = 0;
+    const colors = ['#6521C9', '#B90044', '#FF9112', '#12A56E'];
+
+    function sizeCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function drawSignal(time = 0) {
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      const cx = w / 2;
+      const cy = h / 2;
+
+      for (let ring = 0; ring < 6; ring++) {
+        const radius = 55 + ring * 34 + Math.sin(time / 1800 + ring) * 4;
+        ctx.beginPath();
+        for (let a = 0; a <= Math.PI * 2 + .05; a += .05) {
+          const wobble = Math.sin(a * (3 + ring) + time / 1500) * (3 + ring * .6);
+          const x = cx + Math.cos(a) * (radius + wobble);
+          const y = cy + Math.sin(a) * (radius * .73 + wobble);
+          if (a === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = `rgba(101,33,201,${.20 - ring * .022})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      ctx.beginPath();
+      for (let x = 16; x < w - 16; x += 2) {
+        const t = x / w;
+        const y = cy + Math.sin(t * 23 + time / 900) * (22 - t * 12) + Math.sin(t * 47 - time / 1300) * 5;
+        if (x === 16) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      const gradient = ctx.createLinearGradient(0, 0, w, 0);
+      gradient.addColorStop(0, '#38007A');
+      gradient.addColorStop(.36, '#6521C9');
+      gradient.addColorStop(.65, '#A737C8');
+      gradient.addColorStop(1, '#FF9112');
+      ctx.strokeStyle = gradient;
+      ctx.lineWidth = 2.4;
+      ctx.stroke();
+
+      const resultPositions = [.21, .39, .62, .81];
+      colors.forEach((color, i) => {
+        const x = 16 + (w - 32) * resultPositions[i];
+        const t = x / w;
+        const y = cy + Math.sin(t * 23 + time / 900) * (22 - t * 12) + Math.sin(t * 47 - time / 1300) * 5;
+        ctx.beginPath();
+        ctx.arc(x, y, 5.5, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 18;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      if (!reducedMotion) frame = requestAnimationFrame(drawSignal);
+    }
+
+    sizeCanvas();
+    drawSignal();
+    window.addEventListener('resize', sizeCanvas);
+    window.addEventListener('pagehide', () => cancelAnimationFrame(frame));
+  </script>
+</body>
+</html>
