@@ -1,0 +1,1300 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zodiac.fm | Personalized frequency music for manifesting</title>
+  <meta name="description" content="The personalized frequency music David McEwen uses every day, calculated from your exact birth moment.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta property="og:title" content="Personalized frequency music for the life you're manifesting.">
+  <meta property="og:description" content="See why David uses Zodiac every day and what listeners say changed.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="reveal-assets/img-dark-logo.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="mcewen-12-tokens.css">
+  <style>
+    /*
+      Hallmark · pre-emit critique:
+      mcewen-09 repeated the same rounded quote-card grammar until strong people became tiny metadata.
+      This build makes portrait proof the layout system, removes decorative card repetition, and gives
+      desktop its own alternating composition while preserving the approved CRO argument.
+    */
+    /*
+      Hallmark · genre: editorial · macrostructure: Split Studio · theme: Zodiac Portrait Studio
+      enrichment: E8 real portrait photography · nav: N9 · footer: Ft5
+    */
+    /* Hallmark · pre-emit critique: P5 H5 E4 S5 R4 V5 · contrast: pass (40–41) · nav: N9 · footer: Ft5 · slop: pass (42–45) · honest: pass (46) · chrome: pass (47) · tokens: pass (48) · responsive: pass (49) · icons: pass (30) · mobile: pass (34, 49, 50–57) */
+    @font-face {
+      font-family: "Switzer";
+      src: url("reveal-assets/Switzer-Regular.otf") format("opentype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Switzer";
+      src: url("reveal-assets/Switzer-Semibold.otf") format("opentype");
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+    }
+    * { box-sizing: border-box; }
+    html {
+      overflow-x: clip;
+      scroll-behavior: smooth;
+    }
+    body {
+      margin: 0;
+      overflow-x: clip;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 17px;
+      line-height: 1.58;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; width: 100%; height: auto; }
+    a { color: inherit; }
+    h1, h2 {
+      min-width: 0;
+      margin: 0;
+      font-family: var(--display);
+      font-weight: 600;
+      line-height: .96;
+      letter-spacing: -.035em;
+      text-wrap: balance;
+      overflow-wrap: anywhere;
+    }
+    h1 { font-size: clamp(52px, 6.2vw, 86px); }
+    h2 { font-size: clamp(44px, 5vw, 70px); }
+    h3, p, blockquote, figure { margin: 0; }
+    blockquote { text-wrap: pretty; }
+    .skip {
+      position: fixed;
+      inset: 10px auto auto 10px;
+      z-index: 100;
+      padding: 9px 13px;
+      background: var(--stage);
+      color: var(--bleach);
+      transform: translateY(-160%);
+    }
+    .skip:focus { transform: none; }
+    .site {
+      max-width: 1540px;
+      margin: 0 auto;
+      overflow: hidden;
+      background: var(--bleach);
+      box-shadow: 0 0 80px var(--page-shadow);
+    }
+    .shell {
+      width: min(1240px, calc(100% - 80px));
+      margin-inline: auto;
+    }
+    .measure { max-width: 720px; }
+    .accent { color: var(--core); }
+    .result {
+      color: var(--abundance-text);
+      font-weight: 600;
+    }
+    .site-header {
+      position: relative;
+      z-index: 5;
+      border-bottom: 1px solid var(--hairline);
+      background: var(--header-wash);
+    }
+    .header-row {
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .logo { width: 160px; }
+    .affiliate {
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: .02em;
+    }
+    .affiliate strong { color: var(--ink); }
+
+    .hero {
+      min-height: 580px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(390px, .95fr);
+      border-bottom: 1px solid var(--hairline);
+    }
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px clamp(44px, 6vw, 100px) 68px max(40px, calc((100vw - 1240px) / 2));
+      background: var(--bleach);
+    }
+    .for-david {
+      margin-bottom: 22px;
+      color: var(--core-deep);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .hero-lede {
+      max-width: 610px;
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: clamp(18px, 1.7vw, 22px);
+      line-height: 1.5;
+    }
+    .hero-proof {
+      position: relative;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      overflow: hidden;
+      background: var(--mist);
+    }
+    .hero-portrait {
+      position: relative;
+      min-height: 400px;
+      align-self: end;
+      object-fit: contain;
+      object-position: center bottom;
+      animation: settle .7s ease-out both;
+    }
+    .hero-quote {
+      position: relative;
+      padding: 28px clamp(28px, 4vw, 54px) 34px;
+      background: var(--stage);
+      color: var(--bleach);
+    }
+    .hero-quote blockquote {
+      max-width: 560px;
+      font-size: clamp(20px, 2vw, 28px);
+      line-height: 1.32;
+      letter-spacing: -.02em;
+    }
+    .hero-byline {
+      margin-top: 16px;
+      color: var(--dark-copy-soft);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .hero-quote strong {
+      display: block;
+      color: var(--bleach);
+      font-size: 15px;
+    }
+
+    .proof-opening {
+      padding: 110px 0 126px;
+      background: var(--cream);
+    }
+    .proof-heading {
+      max-width: 900px;
+      margin-bottom: 74px;
+    }
+    .proof-heading p {
+      max-width: 610px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+    .story {
+      display: grid;
+      grid-template-columns: minmax(340px, .82fr) minmax(0, 1.18fr);
+      align-items: center;
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+      background: var(--bleach);
+    }
+    .story + .story { margin-top: 44px; }
+    .story.reverse { grid-template-columns: minmax(0, 1.18fr) minmax(340px, .82fr); }
+    .story.reverse .story-photo { order: 2; }
+    .story-photo {
+      min-height: 0;
+      aspect-ratio: 1 / 1;
+      align-self: center;
+      background: var(--moon-dust);
+      object-fit: contain;
+    }
+    .story-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(42px, 6vw, 86px);
+    }
+    .story-number {
+      margin-bottom: 22px;
+      color: var(--abundance-text);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .story blockquote {
+      font-size: clamp(25px, 2.8vw, 42px);
+      line-height: 1.22;
+      letter-spacing: -.025em;
+    }
+    .story cite,
+    .type-quote cite {
+      display: block;
+      margin-top: 28px;
+      color: var(--muted);
+      font-style: normal;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .story cite strong,
+    .type-quote cite strong {
+      display: block;
+      color: var(--ink);
+      font-size: 16px;
+    }
+    .type-quote {
+      position: relative;
+      max-width: 1030px;
+      margin: 76px auto 0;
+      padding: 54px 0 0 110px;
+    }
+    .type-quote:before {
+      content: "“";
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: var(--core-soft);
+      font-family: var(--display);
+      font-size: 150px;
+      line-height: 1;
+    }
+    .type-quote blockquote {
+      font-family: var(--display);
+      font-size: clamp(34px, 4vw, 58px);
+      font-weight: 500;
+      line-height: 1.06;
+      letter-spacing: -.03em;
+    }
+
+    .cta-band {
+      padding: 44px 0;
+      background: var(--stage);
+      color: var(--bleach);
+    }
+    .cta-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 40px;
+    }
+    .cta-row h2 {
+      max-width: 720px;
+      font-size: clamp(34px, 4vw, 54px);
+    }
+    .cta-row p {
+      margin-top: 12px;
+      color: var(--dark-copy-soft);
+    }
+    .button {
+      display: inline-flex;
+      min-height: 58px;
+      align-items: center;
+      justify-content: center;
+      padding: 15px 26px;
+      border: 1px solid var(--core);
+      background: var(--core);
+      color: var(--bleach);
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .2s ease, background .2s ease;
+    }
+    .button:hover {
+      transform: translateY(-2px);
+      background: var(--core-deep);
+    }
+    .button:focus-visible,
+    summary:focus-visible {
+      outline: 3px solid var(--vitality-text);
+      outline-offset: 3px;
+    }
+    .button:active {
+      transform: translateY(0);
+      background: var(--core-deep);
+    }
+    .button[aria-disabled="true"] {
+      cursor: not-allowed;
+      opacity: .55;
+      pointer-events: none;
+    }
+    .button { white-space: nowrap; }
+    .cta-meta {
+      display: block;
+      margin-top: 10px;
+      color: var(--dark-copy-muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .mechanism {
+      padding: 110px 0 118px;
+      background: var(--bleach);
+    }
+    .mechanism-head {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(320px, .6fr);
+      align-items: end;
+      gap: 70px;
+    }
+    .mechanism-head p {
+      color: var(--muted);
+      font-size: 18px;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 72px;
+      border-block: 1px solid var(--hairline);
+    }
+    .step {
+      min-height: 230px;
+      padding: 34px 34px 38px 0;
+    }
+    .step + .step {
+      padding-left: 34px;
+      border-left: 1px solid var(--hairline);
+    }
+    .step-index {
+      display: block;
+      margin-bottom: 44px;
+      color: var(--core);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .step h3 {
+      max-width: 290px;
+      font-size: 21px;
+      line-height: 1.25;
+    }
+    .step p {
+      max-width: 320px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .hz {
+      display: flex;
+      gap: 5px;
+      margin: -4px 0 22px;
+    }
+    .hz i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--core);
+    }
+    .hz i:nth-child(2) { background: var(--love); }
+    .hz i:nth-child(3) { background: var(--vitality-text); }
+    .hz i:nth-child(4) { background: var(--abundance-text); }
+
+    .recognition {
+      padding: 116px 0 126px;
+      background: var(--stage);
+      color: var(--bleach);
+    }
+    .recognition-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 380px;
+      align-items: end;
+      gap: 70px;
+      margin-bottom: 70px;
+    }
+    .recognition-head h2 { max-width: 780px; }
+    .recognition-head p { color: var(--dark-copy-soft); }
+    .portrait-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--dark-rule-soft);
+      border: 1px solid var(--dark-rule-soft);
+    }
+    .portrait-proof {
+      display: grid;
+      background: var(--stage-card);
+    }
+    .portrait-proof.large {
+      grid-column: span 12;
+      grid-template-columns: minmax(360px, .85fr) minmax(0, 1.15fr);
+    }
+    .portrait-proof.tall,
+    .portrait-proof.third {
+      grid-column: span 4;
+      grid-template-rows: auto auto;
+      align-content: start;
+    }
+    .portrait-proof.wide {
+      grid-column: span 8;
+      grid-template-columns: 320px minmax(0, 1fr);
+      align-items: start;
+    }
+    .portrait-proof.anonymous {
+      grid-column: span 4;
+      padding: 38px;
+      align-content: center;
+      background: var(--control);
+    }
+    .portrait-proof img {
+      width: 100%;
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 1 / 1;
+      align-self: start;
+      object-fit: contain;
+      background: var(--moon-dust);
+    }
+    .portrait-copy {
+      display: flex;
+      min-height: 0;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: clamp(28px, 4vw, 48px);
+    }
+    .portrait-copy blockquote,
+    .portrait-proof.anonymous blockquote {
+      font-size: clamp(19px, 2vw, 27px);
+      line-height: 1.35;
+      letter-spacing: -.018em;
+    }
+    .portrait-copy cite,
+    .portrait-proof.anonymous cite {
+      display: block;
+      margin-top: 28px;
+      color: var(--dark-copy-muted);
+      font-style: normal;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .portrait-copy cite strong,
+    .portrait-proof.anonymous cite strong {
+      display: block;
+      color: var(--bleach);
+      font-size: 14px;
+    }
+    .portrait-proof.third .portrait-copy blockquote { font-size: 19px; }
+
+    .practice {
+      padding: 54px 0;
+      background: var(--core-tint);
+      border-bottom: 1px solid var(--hairline);
+    }
+    .practice-row {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 60px;
+      align-items: center;
+    }
+    .practice-time {
+      color: var(--core-deep);
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+    .practice-time strong {
+      display: block;
+      font-size: 50px;
+      line-height: 1;
+    }
+    .practice-copy h2 {
+      font-size: clamp(36px, 4vw, 52px);
+    }
+    .practice-copy p {
+      max-width: 850px;
+      margin-top: 12px;
+      color: var(--muted);
+    }
+
+    .outer-proof {
+      padding: 112px 0 122px;
+      background: var(--moon-dust);
+    }
+    .outer-head {
+      max-width: 860px;
+      margin-bottom: 66px;
+    }
+    .outer-head p {
+      max-width: 620px;
+      margin-top: 20px;
+      color: var(--muted);
+    }
+    .outcome-list {
+      border-top: 1px solid var(--hairline);
+    }
+    .outcome {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 50px;
+      padding: 34px 0;
+      border-bottom: 1px solid var(--hairline);
+    }
+    .outcome cite {
+      color: var(--muted);
+      font-style: normal;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .outcome cite strong {
+      display: block;
+      color: var(--ink);
+      font-size: 15px;
+    }
+    .outcome blockquote {
+      max-width: 830px;
+      font-size: clamp(21px, 2.2vw, 31px);
+      line-height: 1.32;
+      letter-spacing: -.02em;
+    }
+
+    .daily-proof {
+      padding: 116px 0 126px;
+      background: var(--bleach);
+    }
+    .daily-head {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(320px, .55fr);
+      gap: 70px;
+      align-items: end;
+      margin-bottom: 64px;
+    }
+    .daily-head p { color: var(--muted); }
+    .daily-gallery {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .daily-item {
+      border-top: 3px solid var(--core);
+      background: var(--cream);
+    }
+    .daily-item:nth-child(2) { border-color: var(--abundance-text); }
+    .daily-item:nth-child(3) { border-color: var(--vitality-text); }
+    .daily-item:nth-child(4) { border-color: var(--love); }
+    .daily-item img {
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+      background: var(--moon-dust);
+    }
+    .daily-copy {
+      padding: 25px 23px 28px;
+    }
+    .daily-copy blockquote {
+      font-size: 17px;
+      line-height: 1.48;
+    }
+    .daily-copy cite {
+      display: block;
+      margin-top: 20px;
+      color: var(--muted);
+      font-style: normal;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .daily-copy cite strong {
+      display: block;
+      color: var(--ink);
+      font-size: 14px;
+    }
+    .last-quote {
+      max-width: 900px;
+      margin: 76px auto 0;
+      text-align: center;
+    }
+    .last-quote blockquote {
+      font-family: var(--display);
+      font-size: clamp(38px, 4.5vw, 62px);
+      font-weight: 500;
+      line-height: 1.08;
+      letter-spacing: -.03em;
+    }
+    .last-quote cite {
+      display: block;
+      margin-top: 22px;
+      color: var(--muted);
+      font-style: normal;
+      font-size: 13px;
+    }
+
+    .study {
+      padding: 94px 0 100px;
+      background: var(--core-deep);
+      color: var(--bleach);
+    }
+    .study-layout {
+      display: grid;
+      grid-template-columns: minmax(300px, .75fr) minmax(0, 1.25fr);
+      gap: 90px;
+      align-items: start;
+    }
+    .study h2 { font-size: clamp(44px, 5vw, 66px); }
+    .study-intro {
+      margin-top: 20px;
+      color: var(--dark-copy);
+    }
+    .study-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      border-top: 1px solid var(--dark-rule);
+      border-left: 1px solid var(--dark-rule);
+    }
+    .stat {
+      padding: 26px;
+      border-right: 1px solid var(--dark-rule);
+      border-bottom: 1px solid var(--dark-rule);
+    }
+    .stat strong {
+      display: block;
+      font-size: clamp(30px, 3vw, 44px);
+      line-height: 1;
+    }
+    .stat span {
+      display: block;
+      margin-top: 8px;
+      color: var(--dark-copy);
+      font-size: 13px;
+    }
+    .study-note {
+      grid-column: 2;
+      margin-top: -55px;
+      color: var(--dark-copy-note);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .final {
+      padding: 120px 0;
+      text-align: center;
+      background: var(--cream);
+    }
+    .final h2 {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .final p {
+      max-width: 620px;
+      margin: 24px auto 30px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+    .final .cta-meta { color: var(--muted); }
+
+    .faq {
+      padding: 94px 0 110px;
+      background: var(--bleach);
+    }
+    .faq h2 { font-size: clamp(40px, 4vw, 54px); }
+    .faq-list {
+      margin-top: 46px;
+      border-top: 1px solid var(--hairline);
+    }
+    details { border-bottom: 1px solid var(--hairline); }
+    summary {
+      position: relative;
+      padding: 24px 48px 24px 0;
+      cursor: pointer;
+      font-weight: 600;
+      list-style: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary:after {
+      content: "+";
+      position: absolute;
+      right: 2px;
+      top: 20px;
+      color: var(--core);
+      font-size: 26px;
+      font-weight: 400;
+    }
+    details[open] summary:after { content: "−"; }
+    .answer {
+      max-width: 760px;
+      padding: 0 0 26px;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 48px 0 54px;
+      background: var(--stage);
+      color: var(--bleach);
+    }
+    .footer-row {
+      display: grid;
+      grid-template-columns: 190px 1fr auto;
+      gap: 48px;
+      align-items: end;
+    }
+    .footer .logo {
+      width: 150px;
+      filter: invert(1);
+    }
+    .footer-statement {
+      max-width: 540px;
+      color: var(--dark-copy-soft);
+      font-size: 14px;
+    }
+    .footer small {
+      color: var(--dark-copy-faint);
+      font-size: 11px;
+      text-align: right;
+    }
+
+    @keyframes settle {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 1040px) {
+      .shell { width: min(100% - 56px, 1240px); }
+      .hero { grid-template-columns: 1fr 44%; }
+      .hero-copy { padding-left: 40px; padding-right: 40px; }
+      .story,
+      .story.reverse { grid-template-columns: minmax(280px, .8fr) minmax(0, 1.2fr); }
+      .daily-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .portrait-proof.large { grid-column: span 12; }
+      .portrait-proof.tall,
+      .portrait-proof.third { grid-column: span 4; }
+      .portrait-proof.large { grid-template-columns: minmax(280px, .85fr) minmax(0, 1.15fr); }
+      .portrait-proof.wide {
+        grid-column: span 8;
+        grid-template-columns: 220px minmax(0, 1fr);
+      }
+      .portrait-proof.anonymous { grid-column: span 4; }
+      .study-layout { gap: 54px; }
+    }
+    @media (max-width: 768px) {
+      body { font-size: 16px; }
+      .shell { width: calc(100% - 40px); }
+      .header-row { min-height: 64px; }
+      .logo { width: 142px; }
+      .affiliate { font-size: 11px; text-align: right; }
+      .hero {
+        min-height: 0;
+        display: block;
+      }
+      .hero-copy {
+        padding: 32px 20px 44px;
+      }
+      .for-david { margin-bottom: 15px; font-size: 11px; }
+      .hero-lede { margin-top: 20px; font-size: 17px; }
+      .hero-proof {
+        grid-template-columns: 41% 59%;
+        grid-template-rows: minmax(0, 1fr);
+        min-height: 190px;
+      }
+      .hero-portrait {
+        min-height: 190px;
+        height: 100%;
+        object-fit: contain;
+        object-position: center top;
+      }
+      .hero-quote {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 22px 20px;
+      }
+      .hero-quote blockquote { font-size: 16px; line-height: 1.35; }
+      .hero-byline { margin-top: 11px; font-size: 10px; }
+      .hero-quote strong { font-size: 12px; }
+      .proof-opening,
+      .mechanism,
+      .recognition,
+      .outer-proof,
+      .daily-proof { padding: 78px 0 84px; }
+      .proof-heading { margin-bottom: 44px; }
+      .proof-heading p { margin-top: 18px; font-size: 16px; }
+      .story,
+      .story.reverse {
+        display: flex;
+        flex-direction: column;
+      }
+      .story.reverse .story-photo { order: 0; }
+      .story + .story { margin-top: 28px; }
+      .story-photo { min-height: 0; aspect-ratio: 1 / 1; }
+      .story-copy { padding: 32px 24px 36px; }
+      .story-number { margin-bottom: 14px; font-size: 11px; }
+      .story blockquote { font-size: 24px; }
+      .story cite { margin-top: 22px; }
+      .type-quote {
+        margin-top: 54px;
+        padding: 42px 0 0 0;
+      }
+      .type-quote:before {
+        top: -6px;
+        font-size: 90px;
+      }
+      .type-quote blockquote { font-size: 35px; }
+      .cta-band { padding: 38px 0 42px; }
+      .cta-row {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .button { width: 100%; }
+      .mechanism-head,
+      .recognition-head,
+      .daily-head {
+        grid-template-columns: 1fr;
+        gap: 22px;
+      }
+      .steps {
+        grid-template-columns: 1fr;
+        margin-top: 46px;
+      }
+      .step {
+        display: grid;
+        min-height: 0;
+        grid-template-columns: 44px 1fr;
+        padding: 25px 0;
+      }
+      .step + .step {
+        padding: 25px 0;
+        border-top: 1px solid var(--hairline);
+        border-left: 0;
+      }
+      .step-index { grid-row: 1 / span 2; margin: 4px 0 0; }
+      .step p { margin-top: 7px; }
+      .hz { display: none; }
+      .recognition-head { margin-bottom: 42px; }
+      .portrait-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+        border: 0;
+        background: transparent;
+      }
+      .portrait-proof,
+      .portrait-proof.large,
+      .portrait-proof.tall,
+      .portrait-proof.third,
+      .portrait-proof.wide {
+        display: block;
+        grid-column: auto;
+        margin: 0;
+        border: 1px solid var(--dark-rule);
+        background: var(--stage-card);
+      }
+      .portrait-proof:nth-child(even) { display: block; }
+      .portrait-proof:nth-child(even) img { order: initial; }
+      .portrait-proof img,
+      .portrait-proof.tall img {
+        width: 100%;
+        min-height: 0;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        align-self: start;
+        object-fit: contain;
+        border-bottom: 1px solid var(--dark-rule);
+      }
+      .portrait-copy { min-height: 0; padding: 26px 24px 30px; }
+      .portrait-copy blockquote,
+      .portrait-proof.third .portrait-copy blockquote { font-size: 18px; }
+      .portrait-copy cite { margin-top: 20px; font-size: 11px; }
+      .portrait-copy cite strong { font-size: 13px; }
+      .portrait-proof.anonymous {
+        display: block;
+        grid-column: auto;
+        margin: 0;
+        padding: 30px 24px;
+        border: 1px solid var(--dark-rule);
+      }
+      .practice { padding: 42px 0; }
+      .practice-row {
+        grid-template-columns: 90px 1fr;
+        gap: 24px;
+        align-items: start;
+      }
+      .practice-time strong { font-size: 38px; }
+      .outer-head { margin-bottom: 42px; }
+      .outcome {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 28px 0;
+      }
+      .outcome blockquote { font-size: 22px; }
+      .daily-head { margin-bottom: 42px; }
+      .daily-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .daily-copy { padding: 20px 16px 23px; }
+      .daily-copy blockquote { font-size: 14px; }
+      .daily-copy cite { font-size: 10px; }
+      .last-quote { margin-top: 58px; }
+      .study { padding: 76px 0 82px; }
+      .study-layout { grid-template-columns: 1fr; gap: 40px; }
+      .study-note { grid-column: auto; margin-top: 18px; }
+      .final { padding: 84px 0; }
+      .faq { padding: 76px 0 84px; }
+      .footer-row { grid-template-columns: 1fr; gap: 24px; }
+      .footer small { text-align: left; }
+    }
+    @media (max-width: 430px) {
+      .shell { width: calc(100% - 32px); }
+      h1 { font-size: 43px; }
+      h2 { font-size: 40px; }
+      .header-row { min-height: 58px; }
+      .logo { width: 126px; }
+      .affiliate { max-width: 145px; line-height: 1.25; }
+      .hero-copy { padding: 28px 16px 40px; }
+      .hero-lede { font-size: 16px; line-height: 1.46; }
+      .hero-proof { min-height: 174px; }
+      .hero-portrait { min-height: 174px; }
+      .hero-quote { padding: 18px 15px; }
+      .hero-quote blockquote { font-size: 15px; }
+      .proof-opening,
+      .mechanism,
+      .recognition,
+      .outer-proof,
+      .daily-proof { padding: 68px 0 74px; }
+      .story-copy { padding: 28px 20px 32px; }
+      .story blockquote { font-size: 22px; }
+      .type-quote blockquote { font-size: 32px; }
+      .portrait-proof,
+      .portrait-proof.large,
+      .portrait-proof.tall,
+      .portrait-proof.third,
+      .portrait-proof.wide,
+      .portrait-proof:nth-child(even) {
+        display: block;
+      }
+      .portrait-proof img,
+      .portrait-proof.tall img { min-height: 0; }
+      .portrait-grid { gap: 16px; }
+      .portrait-copy { min-height: 0; padding: 22px 20px 26px; }
+      .portrait-copy blockquote,
+      .portrait-proof.third .portrait-copy blockquote { font-size: 17px; }
+      .portrait-proof.anonymous { padding: 26px 20px; }
+      .practice-row { grid-template-columns: 72px 1fr; gap: 18px; }
+      .practice-time { font-size: 11px; }
+      .practice-time strong { font-size: 32px; }
+      .practice-copy h2 { font-size: 32px; }
+      .practice-copy p { font-size: 14px; }
+      .daily-gallery { display: block; }
+      .daily-item {
+        display: grid;
+        grid-template-columns: 42% 58%;
+        margin-bottom: 12px;
+      }
+      .daily-item img { height: 100%; }
+      .study-stats { grid-template-columns: 1fr 1fr; }
+      .stat { padding: 20px 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *:before, *:after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="site">
+    <header class="site-header">
+      <div class="shell header-row">
+        <img class="logo" src="reveal-assets/img-dark-logo.webp" width="850" height="253" alt="Zodiac.fm">
+        <span class="affiliate">David's code <strong>MCEWEN</strong> · 20% off</span>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="for-david">For David McEwen's community</p>
+          <h1>Personalized frequency music for the life you're <span class="accent">manifesting.</span></h1>
+          <p class="hero-lede">Zodiac turns the exact moment you were born into music for meditation, visualization, and the manifestation practice you already have.</p>
+        </div>
+        <figure class="hero-proof">
+          <img class="hero-portrait" src="reveal-assets/img-images_testimonials_david-mcewen-d2c.png" width="500" height="500" alt="David McEwen">
+          <figcaption class="hero-quote">
+            <blockquote>“I don't usually plug anything. But this is something I use every single day.”</blockquote>
+            <div class="hero-byline"><strong>David McEwen</strong>Transformation Thought Leader · Over 12 Million YouTube Views</div>
+          </figcaption>
+        </figure>
+      </section>
+
+      <section class="proof-opening">
+        <div class="shell">
+          <header class="proof-heading">
+            <h2>See what listeners say <span class="accent">changed.</span></h2>
+            <p>These are specific listener outcomes, not guarantees. They are what happened after these people made Zodiac part of their lives.</p>
+          </header>
+
+          <article class="story">
+            <img class="story-photo" src="reveal-assets/img-images_testimonials_jennifer-k-hill-d2c.png" width="500" height="500" alt="Jennifer K. Hill">
+            <div class="story-copy">
+              <span class="story-number">30 paid members in 30 days</span>
+              <blockquote>“Instead of 10 paid members, I got <span class="result">30 paid members in 30 days.</span> Within 45 days, we had almost 40 paid members. It felt like the floodgates of abundance, prosperity, and purpose opened.”</blockquote>
+              <cite><strong>Jennifer K. Hill</strong>Global Wellness Leader · Founder, OptiMatch</cite>
+            </div>
+          </article>
+
+          <article class="story reverse">
+            <img class="story-photo" src="reveal-assets/img-images_testimonials_leanne-ely-d2-lg.jpg" width="800" height="800" alt="Leanne Ely">
+            <div class="story-copy">
+              <span class="story-number">Unexpected opportunities</span>
+              <blockquote>“I have received multiple unexpected <span class="result">new very lucrative opportunities</span> since I began tuning in.”</blockquote>
+              <cite><strong>Leanne Ely</strong>Best-Selling Author · Founder, Saving Dinner</cite>
+            </div>
+          </article>
+
+          <figure class="type-quote">
+            <blockquote>When I listen to Zodiac, <span class="result">the abundance is through the roof!!!</span> Especially with work (paying projects)... I listened to the new tracks this morning. I went to the gym. I came back. I had a new project waiting for me in my emails. Perfect!</blockquote>
+            <cite><strong>Patricia Brigidi</strong>Zodiac listener</cite>
+          </figure>
+        </div>
+      </section>
+
+      <section class="cta-band">
+        <div class="shell cta-row">
+          <div>
+            <h2>Now hear the frequencies calculated for you.</h2>
+            <p>Enter your birth details. Your reveal takes less than five minutes.</p>
+          </div>
+          <div>
+            <a class="button" href="https://staging.zodiac.fm/begin">Reveal my frequencies&nbsp; →</a>
+            <span class="cta-meta">Code <strong>MCEWEN</strong> · 20% off</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="mechanism">
+        <div class="shell">
+          <header class="mechanism-head">
+            <h2>Your birth moment becomes music in <span class="accent">three steps.</span></h2>
+            <p>This is the whole mechanism: your inputs, the calculation, and music you can press play on.</p>
+          </header>
+          <div class="steps" aria-label="Your birth moment becomes music in three steps">
+            <article class="step">
+              <span class="step-index">01</span>
+              <div>
+                <h3>Your exact birth moment</h3>
+                <p>Date, time, and place give Zodiac the starting coordinates.</p>
+              </div>
+            </article>
+            <article class="step">
+              <span class="step-index">02</span>
+              <div>
+                <div class="hz" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+                <h3>Four personal values in Hz</h3>
+                <p>Core, Love, Vitality, and Abundance. Each one is calculated for you.</p>
+              </div>
+            </article>
+            <article class="step">
+              <span class="step-index">03</span>
+              <div>
+                <h3>Real music you press play on</h3>
+                <p>Your frequencies are embedded inside tracks for daily listening.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="recognition" id="recognition">
+        <div class="shell">
+          <header class="recognition-head">
+            <h2>Then people started sounding more like <span style="color:var(--core-soft)">themselves.</span></h2>
+            <p>The repeated language is recognition: more like me, more present, more able to live from what I already knew.</p>
+          </header>
+
+          <div class="portrait-grid">
+            <article class="portrait-proof large">
+              <img src="reveal-assets/img-images_testimonials_zehra-ashary-d2c.png" width="500" height="500" alt="Zehra Ashary">
+              <div class="portrait-copy">
+                <blockquote>“I started listening every day, sometimes for hours, because quietly everything in my life responded... my meditations, my breathwork, my emotional processing. It lets you finally feel the parts of yourself you have only ever read about.”</blockquote>
+                <cite><strong>Zehra Ashary</strong>Entrepreneur and Wellness Leader</cite>
+              </div>
+            </article>
+
+            <article class="portrait-proof tall">
+              <img src="reveal-assets/img-images_testimonials_amber-hedrick-d2c.png" width="500" height="500" alt="Amber Hedrick">
+              <div class="portrait-copy">
+                <blockquote>“I feel like ME. I feel like the person I've been trying to get back to for so long without forcing anything.”</blockquote>
+                <cite><strong>Amber Hedrick</strong>Zodiac listener</cite>
+              </div>
+            </article>
+
+            <article class="portrait-proof third">
+              <img src="reveal-assets/img-images_testimonials_amy-wilcox-d2c.png" width="500" height="500" alt="Amy Wilcox">
+              <div class="portrait-copy">
+                <blockquote>“I am seeing a huge difference in how much more loving I am. I'm more affectionate, more grounded.”</blockquote>
+                <cite><strong>Amy Wilcox</strong>Zodiac listener</cite>
+              </div>
+            </article>
+
+            <article class="portrait-proof third joey" id="joey-proof">
+              <img src="reveal-assets/img-images_testimonials_joey-vaillancourt-d2c.png" width="500" height="500" alt="Joey Vaillancourt">
+              <div class="portrait-copy">
+                <blockquote>“Without doing anything but listening, I become a different person. I shift into the version of me I actually want to be.”</blockquote>
+                <cite><strong>Joey Vaillancourt</strong>Founder and CEO</cite>
+              </div>
+            </article>
+
+            <article class="portrait-proof wide" id="rhonda-proof">
+              <img src="reveal-assets/img-images_testimonials_rhonda-britten-d2c.png" width="500" height="500" alt="Rhonda Britten">
+              <div class="portrait-copy">
+                <blockquote>“If you're tired of living out of tune with yourself, this is your invitation home.”</blockquote>
+                <cite><strong>Rhonda Britten</strong>Emmy Award Winner · Best-Selling Author</cite>
+              </div>
+            </article>
+
+            <article class="portrait-proof anonymous">
+              <blockquote>“From the first 631 Hz tonal ring in my ears, it's as if my soul comes alive... everything comes together and CONNECTS WITHIN me the second the Elysian Surge track starts!”</blockquote>
+              <cite><strong>Zodiac listener</strong>Name withheld pending publishing permission</cite>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="practice">
+        <div class="shell practice-row">
+          <div class="practice-time"><strong>9</strong>minutes a day</div>
+          <div class="practice-copy">
+            <h2>Add it to the practice you already have.</h2>
+            <p>David uses Zodiac during meditation, visualization, and ordinary moments when he wants to reset what he is feeding his attention. Nine minutes was the average daily minimum used in Zodiac's year-long study.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="outer-proof">
+        <div class="shell">
+          <header class="outer-head">
+            <h2>The pattern also showed up in work, timing, and how people were <span class="accent">seen.</span></h2>
+            <p>Static, specific proof from listeners. Names remain withheld where publishing permission is still open.</p>
+          </header>
+          <div class="outcome-list">
+            <figure class="outcome">
+              <cite><strong>Alexander Molina II</strong>Zodiac listener</cite>
+              <blockquote>“The frequencies helped me center more efficiently. It can aid in manifesting or anything that you do by <span class="result">tuning yourself to your Divine frequency.</span>”</blockquote>
+            </figure>
+            <figure class="outcome">
+              <cite><strong>Zodiac listener</strong>Name withheld pending publishing permission</cite>
+              <blockquote>“Friends and family noticed the change in my presence. In week one, I was <span class="result">offered a dream position.</span>”</blockquote>
+            </figure>
+            <figure class="outcome">
+              <cite><strong>Zodiac listener</strong>Name withheld pending publishing permission</cite>
+              <blockquote>“I felt like I came home to myself.”</blockquote>
+            </figure>
+            <figure class="outcome">
+              <cite><strong>Debra Silverman</strong>Astrologer to Sting, Jennifer Aniston, and More</cite>
+              <blockquote>“This music tickled my soul and reminded me that there's such a connection between vibration, the stars and the sounds that are coordinated by higher intelligence.”</blockquote>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="daily-proof">
+        <div class="shell">
+          <header class="daily-head">
+            <h2>It became part of <span class="accent">ordinary days.</span></h2>
+            <p>This is not another set of instructions. It is music people kept on while they worked, journaled, reflected, and lived.</p>
+          </header>
+
+          <div class="daily-gallery">
+            <article class="daily-item">
+              <img src="reveal-assets/img-images_testimonials_summer-phoenix-d2c.png" width="500" height="500" alt="Summer Phoenix">
+              <div class="daily-copy">
+                <blockquote>“Instead of just studying your blueprint, you begin resonating with it. So if you are serious about embodying your work instead of just analyzing it, this is the missing layer.”</blockquote>
+                <cite><strong>Summer Phoenix</strong>Human Design and Gene Keys Practitioner</cite>
+              </div>
+            </article>
+            <article class="daily-item">
+              <img src="reveal-assets/img-images_testimonials_pam-kinzinger-d2c.png" width="500" height="500" alt="Pam Kinzinger">
+              <div class="daily-copy">
+                <blockquote>“Zodiac.fm is like a birth note on steroids.”</blockquote>
+                <cite><strong>Pam Kinzinger</strong>Frequency professional</cite>
+              </div>
+            </article>
+            <article class="daily-item">
+              <img src="reveal-assets/img-images_testimonials_alex-kikel-d2c.png" width="500" height="500" alt="Alex Kikel">
+              <div class="daily-copy">
+                <blockquote>“Having it on in the background while I work has allowed me to slip into my flow state MUCH easier while having a greater sense of calm and ease.”</blockquote>
+                <cite><strong>Alex Kikel</strong>Trainer to Olympians and Professional Athletes</cite>
+              </div>
+            </article>
+            <article class="daily-item">
+              <img src="reveal-assets/img-images_testimonials_tangie-nadimi-d2c.png" width="500" height="500" alt="Tangie Nadimi">
+              <div class="daily-copy">
+                <blockquote>“I went from ranting and complaining in my pages to writing in a way that felt hopeful and solutions oriented in only 9 minutes.”</blockquote>
+                <cite><strong>Tangie Nadimi</strong>Founder · Feel Good Human Design</cite>
+              </div>
+            </article>
+          </div>
+
+          <figure class="last-quote">
+            <blockquote>“Literally felt something shift within the first ten seconds of listening. Thank you for bringing this into my awareness.”</blockquote>
+            <cite>Zodiac listener · Name withheld pending publishing permission</cite>
+          </figure>
+        </div>
+      </section>
+
+      <section class="study">
+        <div class="shell study-layout">
+          <div>
+            <h2>A full year of listening, measured honestly.</h2>
+            <p class="study-intro">Three hundred people began Zodiac's internal 52-week study. They answered open-ended questions every two weeks while the app recorded what they listened to.</p>
+          </div>
+          <div class="study-stats" aria-label="Internal study results">
+            <div class="stat"><strong>300</strong><span>people started</span></div>
+            <div class="stat"><strong>278</strong><span>people completed</span></div>
+            <div class="stat"><strong>98.6%</strong><span>would recommend it</span></div>
+            <div class="stat"><strong>84%</strong><span>called it life-changing</span></div>
+          </div>
+          <p class="study-note">The recommendation and life-changing figures are from people who used Zodiac as designed: at least nine minutes a day on average, balanced across all four frequencies with each receiving at least 15% of listening time. This was an internal study, not a clinical trial.</p>
+        </div>
+      </section>
+
+      <section class="final">
+        <div class="shell">
+          <h2>Hear what your birth moment <span class="accent">sounds like.</span></h2>
+          <p>Enter your birth date, exact time, and place. Zodiac will calculate your four Orientation Frequencies and play back the first samples.</p>
+          <a class="button" href="https://staging.zodiac.fm/begin">Reveal my frequencies&nbsp; →</a>
+          <span class="cta-meta">David's code <strong>MCEWEN</strong> takes 20% off at checkout</span>
+        </div>
+      </section>
+
+      <section class="faq">
+        <div class="shell measure">
+          <h2>Frequently asked.</h2>
+          <div class="faq-list">
+            <details>
+              <summary>What if I do not know my exact birth time?</summary>
+              <div class="answer"><p>Your birth time affects the calculation, so exact is best. If you do not know it, choose noon as a starting point. Members can update their birth time as better information becomes available.</p></div>
+            </details>
+            <details>
+              <summary>How does Zodiac calculate the music?</summary>
+              <div class="answer"><p>You enter your birth details. Zodiac calculates the exact planetary positions at that moment. An algorithm derived from the Sri Vidya sound lineage turns those inputs into four personal frequency values, which Zodiac embeds inside real music.</p></div>
+            </details>
+            <details>
+              <summary>How much time does it take?</summary>
+              <div class="answer"><p>About nine minutes a day was the minimum used in the study. You can listen while working, walking, visualizing, meditating, driving, or winding down.</p></div>
+            </details>
+            <details>
+              <summary>Will it work with my current manifestation practice?</summary>
+              <div class="answer"><p>Zodiac is additive. Use it inside the meditation, visualization, journaling, prayer, or manifestation practice you already trust.</p></div>
+            </details>
+            <details>
+              <summary>What happens after I enter my birth details?</summary>
+              <div class="answer"><p>You will see your four frequencies in exact Hz and hear short samples before the membership decision.</p></div>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="shell footer-row">
+        <img class="logo" src="reveal-assets/img-dark-logo.webp" width="850" height="253" alt="Zodiac.fm">
+        <p class="footer-statement">Your birth moment, translated into personal frequency music for the life you are already creating.</p>
+        <small>David McEwen is a Zodiac affiliate.<br>Results shown are individual experiences, not guarantees.</small>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

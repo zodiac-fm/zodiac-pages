@@ -1,0 +1,33 @@
+:root {
+  --bleach: #FFFFFF;
+  --cream: #F6F1E8;
+  --moon-dust: #FBF8F3;
+  --mist: #EEE9E0;
+  --ink: #1A1620;
+  --stage: #0B0712;
+  --control: #2A2530;
+  --muted: #625B66;
+  --hairline: rgba(26, 22, 32, 0.14);
+  --header-wash: rgba(255, 255, 255, 0.94);
+  --page-shadow: rgba(26, 22, 32, 0.07);
+  --dark-rule: rgba(255, 255, 255, 0.20);
+  --dark-rule-soft: rgba(255, 255, 255, 0.15);
+  --stage-card: #17121D;
+  --dark-copy: #CEC4D4;
+  --dark-copy-soft: #B9B2C0;
+  --dark-copy-muted: #AAA3AF;
+  --dark-copy-faint: #827A88;
+  --dark-copy-note: #B8ADBF;
+  --core: #6521C9;
+  --core-deep: #38007A;
+  --core-tint: #EFECFF;
+  --core-soft: #D2C8FF;
+  --love: #B90044;
+  --love-tint: #FFE8EA;
+  --vitality-text: #C25500;
+  --vitality-tint: #FFEADA;
+  --abundance-text: #0A7A52;
+  --abundance-tint: #DCF4E8;
+  --display: "Cormorant Garamond", Georgia, serif;
+  --body: "Switzer", Arial, sans-serif;
+}
