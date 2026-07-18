@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:,">
+  <title>David McEwen Plain-Language Review Map · Zodiac.fm</title>
+  <meta name="description" content="Compare McEwen 18 directions, choose section designs, and collect them into one final-page plan.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --canvas: #efece6;
+      --paper: #ffffff;
+      --ink: #17131c;
+      --muted: #625b68;
+      --line: rgba(23, 19, 28, .15);
+      --line-strong: rgba(23, 19, 28, .32);
+      --purple: #6521c9;
+      --purple-soft: #eee8f8;
+      --green: #0a7a52;
+      --green-soft: #e5f5ee;
+      --display: "Cormorant Garamond", Georgia, serif;
+      --body: "Switzer", Helvetica, sans-serif;
+      --shadow: 0 22px 60px rgba(23, 19, 28, .10);
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    .sr-only {
+      position: fixed;
+      left: -10000px;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: 0;
+      overflow: visible;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, select, a { font: inherit; }
+    button, select { min-height: 44px; }
+    button:focus-visible, select:focus-visible, a:focus-visible {
+      outline: 3px solid #ff9112;
+      outline-offset: 3px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1; text-wrap: balance; }
+    a { color: inherit; }
+
+    .review-layout {
+      width: min(100% - 24px, 1320px);
+      margin-inline: auto;
+    }
+
+    .toolbar-wrap {
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(239, 236, 230, .97);
+      backdrop-filter: blur(14px);
+    }
+    .toolbar {
+      width: min(100% - 24px, 1320px);
+      margin-inline: auto;
+      padding: 9px 0 10px;
+      display: grid;
+      gap: 8px;
+    }
+    .primary-controls,
+    .review-controls { display: grid; gap: 8px; }
+    .field { min-width: 0; display: grid; gap: 4px; }
+    .field-label { color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    select {
+      width: 100%;
+      padding: 0 34px 0 11px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    #page-select { padding-right: 26px; font-size: 14px; }
+    .segments { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--line); background: var(--paper); }
+    .segments button {
+      min-width: 0;
+      padding: 0 9px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      line-height: 1.1;
+    }
+    .segments button:last-child { border-right: 0; }
+    .segments button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+    #mode-controls button { position: relative; padding-inline: 5px; font-size: 11px; }
+    #viewport-controls button { padding-inline: 3px; font-size: 10px; white-space: normal; }
+    .recipe-count { position: absolute; top: 3px; right: 3px; min-width: 15px; padding: 1px 3px; background: var(--purple-soft); color: var(--purple); font-size: 8px; line-height: 12px; }
+    #mode-controls button[aria-pressed="true"] .recipe-count { background: var(--paper); color: var(--ink); }
+    .open-page {
+      min-height: 44px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--purple);
+      color: var(--paper);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .toolbar-actions { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 8px; }
+    .help-toggle {
+      padding: 0 12px;
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .primer {
+      position: fixed;
+      z-index: 100;
+      inset: 0;
+      padding: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(23, 19, 28, .58);
+      backdrop-filter: blur(6px);
+    }
+    .primer-card {
+      width: min(100%, 760px);
+      max-height: calc(100vh - 24px);
+      overflow: auto;
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+      box-shadow: 0 28px 90px rgba(23, 19, 28, .32);
+    }
+    .primer-head { padding: 18px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: start; }
+    .primer-kicker { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .primer-head h2 { margin-top: 5px; font-size: clamp(31px, 7vw, 44px); }
+    .primer-head p { margin-top: 7px; color: var(--muted); font-size: 12px; }
+    .primer-close { width: 44px; padding: 0; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-size: 20px; cursor: pointer; }
+    .primer-steps { display: grid; }
+    .primer-step { padding: 16px 18px; border-bottom: 1px solid var(--line); }
+    .primer-step span { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .primer-step h3 { margin-top: 5px; font-size: 25px; }
+    .primer-step p { margin-top: 6px; color: var(--muted); font-size: 12px; }
+    .primer-words { padding: 16px 18px 18px; display: grid; gap: 8px; background: #faf9f7; }
+    .primer-words p { color: var(--muted); font-size: 12px; }
+    .primer-words strong { color: var(--ink); }
+
+    .review-layout { padding: 10px 0 52px; display: grid; gap: 18px; }
+    .directory {
+      order: 2;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .directory-head { padding: 17px 18px 14px; border-bottom: 1px solid var(--line); }
+    .directory h2 { font-size: 29px; }
+    .directory-head p { margin-top: 6px; color: var(--muted); font-size: 12px; }
+    .section-list { margin: 0; padding: 0; list-style: none; }
+    .section-list button {
+      width: 100%;
+      padding: 10px 14px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 27px minmax(0, 1fr) auto;
+      gap: 7px;
+      align-items: center;
+      background: transparent;
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .section-list li:last-child button { border-bottom: 0; }
+    .section-list button:hover { background: #f8f6f2; }
+    .section-list button[aria-current="true"] { background: var(--purple-soft); color: var(--purple); }
+    .section-number { color: var(--muted); font-family: var(--display); font-size: 18px; }
+    .section-list button[aria-current="true"] .section-number { color: var(--purple); }
+    .section-name { font-size: 12px; font-weight: 600; line-height: 1.2; }
+    .section-status { color: var(--muted); font-size: 9px; font-weight: 600; white-space: nowrap; }
+    .section-status.has-diffs { color: var(--purple); }
+
+    .workbench { min-width: 0; order: 1; display: grid; gap: 14px; align-content: start; }
+    .stage { min-width: 0; }
+    .stage-head {
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-bottom: 0;
+      display: grid;
+      gap: 7px;
+      background: var(--paper);
+    }
+    .stage-summary { min-width: 0; display: grid; gap: 2px; }
+    .stage-count { flex: 0 0 auto; color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+    .stage-section-select {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 28px 0 0;
+      border: 0;
+      background-color: transparent;
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: clamp(22px, 4vw, 29px);
+      font-weight: 600;
+      line-height: 1.05;
+      text-overflow: ellipsis;
+    }
+    .variant-note { justify-self: start; padding: 6px 9px; border-left: 2px solid var(--purple); background: var(--purple-soft); }
+    .variant-note strong { display: block; font-size: 11px; }
+    .stage-tools { display: flex; align-items: center; gap: 7px; }
+    .pin-toggle {
+      min-height: 34px;
+      padding: 0 10px;
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .pin-toggle[aria-pressed="true"] { border-color: var(--purple); background: var(--purple-soft); color: var(--purple); }
+
+    .frame-outer {
+      min-height: 500px;
+      padding: 20px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(rgba(23, 19, 28, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 19, 28, .045) 1px, transparent 1px),
+        #dcd7cf;
+      background-size: 24px 24px;
+    }
+    .frame-shell,
+    .compare-shell {
+      position: relative;
+      margin-inline: auto;
+      overflow: hidden;
+      background: var(--paper);
+      box-shadow: 0 20px 60px rgba(23, 19, 28, .20);
+    }
+    .compare-preview { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; align-items: start; }
+    .compare-item { min-width: 0; }
+    .compare-label {
+      min-height: 30px;
+      padding: 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 2px solid var(--purple);
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: 0;
+      display: block;
+      background: var(--paper);
+      transform-origin: top left;
+    }
+
+    .mode-panel { border: 1px solid var(--line); background: var(--paper); }
+    .direction-reference {
+      width: min(100% - 24px, 1320px);
+      margin: 0 auto 52px;
+    }
+    .panel-head { padding: 18px; border-bottom: 1px solid var(--line); }
+    .panel-head h2 { font-size: clamp(31px, 5vw, 44px); }
+    .panel-head p { max-width: 720px; margin-top: 8px; color: var(--muted); font-size: 13px; }
+    .fact-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-bottom: 1px solid var(--line); }
+    .fact-strip span { padding: 10px 14px; color: var(--muted); font-size: 11px; }
+    .fact-strip span + span { border-left: 1px solid var(--line); }
+    .fact-strip strong { color: var(--ink); }
+
+    .direction-grid { display: grid; }
+    .direction-card {
+      min-height: 0;
+      padding: 18px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      display: block;
+      background: var(--paper);
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .direction-card:last-child { border-bottom: 0; }
+    .direction-card[aria-pressed="true"] { background: var(--purple-soft); }
+    .direction-card[data-variant="a"] { box-shadow: inset 4px 0 #12a56e; }
+    .direction-card[data-variant="b"] { box-shadow: inset 4px 0 var(--purple); }
+    .direction-card[data-variant="c"] { box-shadow: inset 4px 0 var(--ink); }
+    .direction-label { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .direction-card h3 { margin-top: 7px; font-size: 27px; }
+    .direction-card p { margin-top: 8px; color: var(--muted); font-size: 13px; }
+    .direction-card small { display: block; margin-top: 10px; color: var(--ink); font-size: 11px; font-weight: 600; }
+
+    .section-choice { padding: 14px 16px; border-bottom: 1px solid var(--line); background: #faf9f7; }
+    .section-choice-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 7px 12px; }
+    .section-choice-head strong { font-size: 13px; }
+    .section-choice-head span { color: var(--muted); font-size: 10px; }
+    .section-choice .segments { margin-top: 10px; }
+    .section-choice .segments button { font-size: 11px; }
+    .shared-note { padding: 11px 16px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    .shared-note strong { color: var(--ink); }
+    .decision-ledger { display: grid; }
+    .decision-row { border-bottom: 1px solid var(--line); scroll-margin-top: 12px; }
+    .decision-row:last-child { border-bottom: 0; }
+    .decision-row.is-located { animation: ledger-pulse 1.35s ease; }
+    .decision-meta { padding: 15px 16px 10px; }
+    .decision-code { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+    .decision-meta h3 { margin-top: 5px; font-family: var(--body); font-size: 15px; line-height: 1.25; }
+    .locate-change {
+      min-height: 34px;
+      margin-top: 10px;
+      padding: 0 9px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--purple);
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .decision-options { display: grid; }
+    .decision-option {
+      min-height: 0;
+      padding: 12px 16px;
+      border: 0;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) auto;
+      gap: 9px;
+      align-items: center;
+      background: var(--paper);
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .decision-option[aria-pressed="true"] { background: var(--green-soft); }
+    .option-variant { font-family: var(--display); font-size: 21px; font-weight: 600; }
+    .option-copy strong { display: block; font-size: 12px; line-height: 1.2; }
+    .option-copy small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; line-height: 1.3; }
+    .option-state { color: var(--muted); font-size: 9px; font-weight: 700; text-transform: uppercase; }
+    .decision-option[aria-pressed="true"] .option-state { color: var(--green); }
+    .no-differences { padding: 28px 18px 30px; }
+    .no-differences strong { display: block; font-family: var(--display); font-size: 27px; }
+    .no-differences p { margin-top: 8px; color: var(--muted); font-size: 13px; }
+
+    @keyframes ledger-pulse {
+      0%, 100% { background: var(--paper); box-shadow: none; }
+      24%, 72% { background: var(--purple-soft); box-shadow: inset 4px 0 var(--purple); }
+    }
+
+    .recipe-intro { padding: 16px 18px; border-bottom: 1px solid var(--line); display: grid; gap: 12px; background: var(--purple-soft); }
+    .recipe-base-label { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .recipe-base-title { margin-top: 3px; font-family: var(--display); font-size: 29px; font-weight: 600; line-height: 1; }
+    .recipe-intro p { color: var(--muted); font-size: 11px; }
+    .recipe-list { margin: 0; padding: 0; list-style: none; }
+    .recipe-item { padding: 13px 16px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+    .recipe-item-scope { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .recipe-item strong { display: block; margin-top: 3px; font-size: 12px; }
+    .recipe-item small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; }
+    .remove-choice { min-height: 44px; padding: 0 10px; border: 1px solid var(--line); background: var(--paper); color: var(--muted); font-size: 10px; cursor: pointer; }
+    .recipe-empty { padding: 22px 18px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+    .brief-wrap { padding: 17px 18px; background: #faf9f7; }
+    .brief-label { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .recipe-brief { margin-top: 8px; color: var(--ink); font-size: 13px; line-height: 1.55; white-space: pre-line; }
+    .recipe-actions { padding: 14px 18px 18px; display: grid; gap: 8px; }
+    .recipe-actions button {
+      padding: 0 14px;
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .recipe-actions .primary-action { border-color: var(--purple); background: var(--purple); color: var(--paper); }
+    .recipe-actions .clear-action { color: var(--muted); }
+
+    @media (min-width: 360px) {
+      .primary-controls { grid-template-columns: minmax(0, .86fr) minmax(0, 1.14fr); }
+    }
+
+    @media (min-width: 700px) {
+      #page-select { font-size: 16px; }
+      .toolbar { grid-template-columns: 1fr; }
+      .primary-controls { grid-template-columns: minmax(250px, 1.1fr) minmax(250px, 1fr); }
+      .review-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #viewport-controls button { padding-inline: 7px; font-size: 12px; }
+      .stage-head { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+      .stage-summary { display: flex; align-items: baseline; gap: 11px; }
+      .direction-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .primer-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .primer-step { border-right: 1px solid var(--line); }
+      .primer-step:last-child { border-right: 0; }
+      .direction-card { border-right: 1px solid var(--line); border-bottom: 0; }
+      .direction-card:last-child { border-right: 0; }
+      .decision-row { display: grid; grid-template-columns: 180px minmax(0, 1fr); }
+      .decision-meta { padding: 16px; border-right: 1px solid var(--line); }
+      .decision-options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .decision-option { min-height: 108px; padding: 13px; border-top: 0; border-right: 1px solid var(--line); display: block; }
+      .decision-option:last-child { border-right: 0; }
+      .option-variant { display: block; }
+      .option-copy { display: block; margin-top: 7px; }
+      .option-state { display: block; margin-top: 9px; }
+      .recipe-intro { grid-template-columns: minmax(0, 1fr) minmax(240px, .7fr); align-items: end; }
+      .recipe-actions { grid-template-columns: repeat(3, auto); justify-content: start; }
+    }
+
+    @media (min-width: 1040px) {
+      .toolbar { grid-template-columns: minmax(430px, 1.2fr) minmax(430px, 1fr) auto; align-items: end; }
+      .primary-controls,
+      .review-controls { display: contents; }
+      .toolbar .field:nth-child(1) { grid-column: 1; }
+      .toolbar .field:nth-child(2) { grid-column: 2; }
+      .review-controls .field:nth-child(1) { grid-column: 3; }
+      .review-controls .field:nth-child(2) { grid-column: 4; }
+      .toolbar { grid-template-columns: minmax(230px, 1.1fr) minmax(260px, 1.15fr) minmax(180px, .75fr) minmax(280px, 1fr) auto; }
+      .toolbar-actions { grid-column: 5; }
+      .review-layout { grid-template-columns: 270px minmax(0, 1fr); align-items: start; }
+      .directory { order: 1; grid-column: 1; grid-row: 1; }
+      .workbench { order: 2; grid-column: 2; grid-row: 1; }
+      .frame-outer { padding: 32px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <h1 class="sr-only">David McEwen landing-page comparison and final-page builder</h1>
+
+  <div class="toolbar-wrap">
+    <div class="toolbar">
+      <div class="primary-controls">
+        <label class="field">
+          <span class="field-label">Page</span>
+          <select id="page-select" aria-label="Choose page to review">
+            <option value="mcewen-18">David McEwen</option>
+          </select>
+        </label>
+
+        <div class="field">
+          <span class="field-label">Mode</span>
+          <div class="segments" id="mode-controls" aria-label="Choose review mode">
+            <button type="button" data-mode="directions" aria-pressed="true">Directions</button>
+            <button type="button" data-mode="differences" aria-pressed="false">Differences</button>
+            <button type="button" data-mode="recipe" aria-pressed="false">Final Page <span class="recipe-count" id="recipe-count">0</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-controls">
+        <div class="field" id="choice-field">
+          <span class="field-label" id="choice-label">Direction</span>
+          <div class="segments" id="variant-controls" aria-label="Choose direction">
+            <button type="button" data-variant="a" aria-pressed="true">18-A</button>
+            <button type="button" data-variant="b" aria-pressed="false">18-B</button>
+            <button type="button" data-variant="c" aria-pressed="false">18-C</button>
+          </div>
+          <div class="segments" id="pair-controls" aria-label="Choose two directions" hidden>
+            <button type="button" data-pair="ab" aria-pressed="true">A + B</button>
+            <button type="button" data-pair="ac" aria-pressed="false">A + C</button>
+            <button type="button" data-pair="bc" aria-pressed="false">B + C</button>
+          </div>
+          <div class="segments" id="base-controls" aria-label="Choose starting page" hidden>
+            <button type="button" data-base="a" aria-pressed="true">18-A</button>
+            <button type="button" data-base="b" aria-pressed="false">18-B</button>
+            <button type="button" data-base="c" aria-pressed="false">18-C</button>
+          </div>
+        </div>
+
+        <div class="field" id="viewport-field">
+          <span class="field-label">Viewport</span>
+          <div class="segments" id="viewport-controls" aria-label="Choose viewport">
+            <button type="button" data-viewport="mobile" aria-pressed="true">iPhone mini</button>
+            <button type="button" data-viewport="compare" aria-pressed="false">2 iPhones</button>
+            <button type="button" data-viewport="tablet" aria-pressed="false">Tablet</button>
+            <button type="button" data-viewport="desktop" aria-pressed="false">Desktop</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar-actions">
+        <button class="help-toggle" type="button" id="help-toggle" aria-expanded="false" aria-controls="primer">How it works</button>
+        <a class="open-page" id="open-page" href="mcewen-18-a" target="_blank" rel="noopener">Open full page ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="review-layout">
+    <aside class="directory" aria-label="Page section directory">
+      <div class="directory-head">
+        <h2>Page directory</h2>
+        <p>Choose a chapter. Each chapter names what changes.</p>
+      </div>
+      <ol class="section-list" id="section-list"></ol>
+    </aside>
+
+    <div class="workbench">
+      <section class="stage" aria-live="polite">
+        <div class="stage-head">
+          <div class="stage-summary">
+            <span class="stage-count" id="stage-count">01 / 14</span>
+            <label class="sr-only" for="section-select">Choose page section</label>
+            <select class="stage-section-select" id="section-select" aria-label="Choose page section"></select>
+            <h2 class="sr-only" id="stage-title">Hero and David</h2>
+          </div>
+          <div class="stage-tools">
+            <button class="pin-toggle" type="button" id="pin-toggle" aria-pressed="true" hidden>Change pins: On</button>
+            <div class="variant-note"><strong id="variant-title">18-A · Semantic Signal</strong></div>
+          </div>
+        </div>
+        <div class="frame-outer" id="frame-outer">
+          <div id="single-preview">
+            <div class="frame-shell" id="frame-shell">
+              <iframe id="review-frame" title="Selected McEwen 18 landing-page section" loading="eager"></iframe>
+            </div>
+          </div>
+          <div class="compare-preview" id="compare-preview" hidden>
+            <div class="compare-item">
+              <span class="compare-label" id="compare-label-1">18-A</span>
+              <div class="compare-shell" id="compare-shell-1">
+                <iframe id="compare-frame-1" title="First selected landing-page section comparison" loading="eager"></iframe>
+              </div>
+            </div>
+            <div class="compare-item">
+              <span class="compare-label" id="compare-label-2">18-B</span>
+              <div class="compare-shell" id="compare-shell-2">
+                <iframe id="compare-frame-2" title="Second selected landing-page section comparison" loading="eager"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mode-panel" id="differences-panel" hidden>
+        <div class="panel-head">
+          <h2 id="difference-title">Decisions in Hero and David.</h2>
+          <p id="difference-intro">Compare the same section above, then choose a complete section treatment or one specific element.</p>
+        </div>
+        <div id="difference-content"></div>
+      </section>
+
+      <section class="mode-panel" id="recipe-panel" hidden>
+        <div class="panel-head">
+          <h2>Your final page.</h2>
+          <p>Start with one complete page, then add the section and detail choices you made in Differences.</p>
+        </div>
+        <div class="recipe-intro">
+          <div>
+            <span class="recipe-base-label">Starting page</span>
+            <div class="recipe-base-title" id="recipe-base-title">18-A · Semantic Signal</div>
+          </div>
+          <p>Use Differences to choose changes. Every selected change is listed below.</p>
+        </div>
+        <ul class="recipe-list" id="recipe-list"></ul>
+        <div class="recipe-empty" id="recipe-empty">No selected changes yet. Your final page currently matches 18-A exactly.</div>
+        <div class="brief-wrap">
+          <span class="brief-label">Build instructions</span>
+          <p class="recipe-brief" id="recipe-brief"></p>
+        </div>
+        <div class="recipe-actions">
+          <button class="primary-action" type="button" id="copy-brief">Copy build instructions</button>
+          <button type="button" id="copy-link">Copy this setup</button>
+          <button class="clear-action" type="button" id="clear-recipe">Reset all changes</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <section class="mode-panel direction-reference" id="directions-panel">
+    <div class="panel-head">
+      <h2>What changes between these directions.</h2>
+      <p>A, B, and C are complete creative directions. They are not controlled CRO tests because several treatments change together.</p>
+    </div>
+    <div class="fact-strip">
+      <span><strong>Identical:</strong> copy, images, and page structure</span>
+      <span><strong>Variable:</strong> CSS treatments in 8 of 14 sections</span>
+    </div>
+    <div class="direction-grid" id="direction-grid"></div>
+  </section>
+
+  <div class="primer" id="primer" role="dialog" aria-modal="true" aria-labelledby="primer-title" hidden>
+    <div class="primer-card">
+      <div class="primer-head">
+        <div>
+          <span class="primer-kicker">Quick primer</span>
+          <h2 id="primer-title">Three tabs. One final page.</h2>
+          <p>Your section and viewport stay in place while you move between tabs.</p>
+        </div>
+        <button class="primer-close" type="button" id="primer-close" aria-label="Close primer">×</button>
+      </div>
+      <div class="primer-steps">
+        <article class="primer-step"><span>01</span><h3>Directions</h3><p>Look through the complete A, B, and C pages.</p></article>
+        <article class="primer-step"><span>02</span><h3>Differences</h3><p>Compare one section and select the design you prefer.</p></article>
+        <article class="primer-step"><span>03</span><h3>Final Page</h3><p>See every selected change collected into one build plan.</p></article>
+      </div>
+      <div class="primer-words">
+        <p><strong>Starting Page:</strong> the complete A, B, or C page you begin with.</p>
+        <p><strong>Selected Change:</strong> a section or detail you chose from another page.</p>
+        <p><strong>Reset All Changes:</strong> return to the untouched Starting Page. Nothing is deleted.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sections = [
+      { id: 'hero', name: 'Hero and David', selector: '.hero' },
+      { id: 'practice', name: 'David\'s 30, 60, and 90-day practice', selector: '#david-method' },
+      { id: 'early-proof', name: 'Early listener proof', selector: '#opening-proof' },
+      { id: 'first-cta', name: 'First earned invitation', selector: '.cta-band' },
+      { id: 'result', name: 'Birth chart, values, and bands', selector: '#mechanism' },
+      { id: 'domains', name: 'Four life domains', selector: '#domains' },
+      { id: 'study', name: '52-week study', selector: '#study' },
+      { id: 'recognition', name: 'Self-recognition proof', selector: '#recognition-proof' },
+      { id: 'mid-cta', name: 'Midpage invitation', selector: '#recognition-proof + .mid-cta' },
+      { id: 'world-proof', name: 'Love, work, and opportunity proof', selector: '#world-proof' },
+      { id: 'daily', name: 'Daily-use proof', selector: '#daily-proof' },
+      { id: 'daily-cta', name: 'Nine-minute invitation', selector: '#daily-proof + .mid-cta' },
+      { id: 'final', name: 'Final invitation', selector: '.final' },
+      { id: 'faq', name: 'FAQ and disclosures', selector: '.faq' }
+    ];
+
+    const variants = {
+      a: { title: '18-A · Semantic Signal', short: 'Semantic Signal', summary: 'Green guidance, meaningful frequency borders, and a dark aubergine domain chapter.', best: 'Color actively guides the scan.' },
+      b: { title: '18-B · Violet Current', short: 'Violet Current', summary: 'One violet family, a numbered hero path, and a calm light domain chapter.', best: 'Consistency stays quieter than contrast.' },
+      c: { title: '18-C · Light Gallery', short: 'Light Gallery', summary: 'Larger early-proof portraits, bright surfaces, and light four-color domain fields.', best: 'Human proof and visual ease lead.' }
+    };
+
+    const decisions = {
+      hero: [
+        { id: 'hero-surface', code: '01.1', type: 'Surface', target: '.hero', pinTarget: '.hero-inner', name: 'Hero background', options: { a: ['Warm cream foundation', 'The shared base surface'], b: ['Soft violet glow', 'Radial violet light over cream'], c: ['Bright cream wash', 'White gallery light over cream'] } },
+        { id: 'hero-path', code: '01.2', type: 'Flow', target: '.hero-cues', name: '“How it becomes yours” path', options: { a: ['Semantic color rules', 'Three frequency-colored top rules'], b: ['Numbered violet cards', '01, 02, and 03 create the sequence'], c: ['Black label and arrows', 'A connected white strip reads as a flow'] } }
+      ],
+      'early-proof': [
+        { id: 'early-proof-surface', code: '03.1', type: 'Surface', target: '#opening-proof', pinTarget: '#opening-proof .section-head', name: 'Proof chapter surface', options: { a: ['Green-tinted signal', 'Soft green wash with a green top rule'], b: ['Quiet violet wash', 'Pale violet settles into cream'], c: ['Bright gallery field', 'Flat light surface with no color wash'] } },
+        { id: 'early-proof-cards', code: '03.2', type: 'Cards', target: '.opening-grid', name: 'Proof card treatment', options: { a: ['Semantic top borders', 'Green and core-purple identify outcomes'], b: ['Violet restraint', 'Quiet violet borders on shared cards'], c: ['Light gallery cards', 'Tighter gaps, added padding, soft shadow, and slightly larger portraits'] } }
+      ],
+      result: [
+        { id: 'result-values', code: '05.1', type: 'Color', target: '.frequency-values', name: 'Frequency value color', options: { a: ['Four domain colors', 'Shared semantic value colors'], b: ['One violet value color', 'Every frequency value uses violet'], c: ['Four domain colors', 'Same semantic value colors as A'] } },
+        { id: 'result-panel', code: '05.2', type: 'Card', target: '.result-preview', name: 'Result card treatment', options: { a: ['Shared foundation', 'Base border and profile-note treatment'], b: ['Violet definition', 'Violet border with a pale profile note'], c: ['Light gallery card', 'White surface with a soft gallery shadow'] } }
+      ],
+      domains: [
+        { id: 'domains-surface', code: '06.1', type: 'Surface', target: '#domains', pinTarget: '#domains .section-head', name: 'Chapter background', options: { a: ['Dark aubergine', 'Soft red and green glows create depth'], b: ['Pale violet field', 'Light violet with a restrained glow'], c: ['Flat bright field', 'Light neutral with no dark interruption'] } },
+        { id: 'domains-cards', code: '06.2', type: 'Cards', target: '.domain-grid', name: 'Four-domain cards', options: { a: ['Dark cards and color rules', 'Each domain receives its frequency color'], b: ['Translucent violet system', 'White cards and one violet label color'], c: ['Four tinted fields', 'Each card carries its own light domain tint'] } }
+      ],
+      study: [
+        { id: 'study-accents', code: '07.1', type: 'Stats', target: '.study-primary', name: 'Statistic accent system', options: { a: ['Four color rules', 'One domain color above each statistic'], b: ['Single violet structure', 'A violet border holds the statistics together'], c: ['Shared neutral foundation', 'No variant-specific color accent'] } }
+      ],
+      recognition: [
+        { id: 'recognition-accents', code: '08.1', type: 'Accents', target: '#recognition-proof .portrait-grid', name: 'Portrait card accent', options: { a: ['Core-purple top rules', 'Every portrait card receives a semantic rule'], b: ['Shared neutral cards', 'No variant-specific accent'], c: ['Shared neutral cards', 'Same treatment as B'] } }
+      ],
+      'world-proof': [
+        { id: 'world-proof-accents', code: '10.1', type: 'Accents', target: '#world-proof .portrait-grid', name: 'Proof card accent', options: { a: ['Love, Core, and Abundance rules', 'Color identifies each proof type'], b: ['Shared neutral cards', 'No variant-specific accent'], c: ['Shared neutral cards', 'Same treatment as B'] } }
+      ],
+      daily: [
+        { id: 'daily-accents', code: '11.1', type: 'Accents', target: '#daily-proof .daily-feature', name: 'Daily-use card accent', options: { a: ['Four semantic rules', 'Core, Love, Vitality, and Abundance identify cards'], b: ['Shared neutral cards', 'No variant-specific accent'], c: ['Shared neutral cards', 'Same treatment as B'] } }
+      ]
+    };
+
+    const viewports = {
+      mobile: { width: 375, height: 812 },
+      compare: { width: 375, height: 812 },
+      tablet: { width: 768, height: 1024 },
+      desktop: { width: 1440, height: 1000 }
+    };
+    const pairs = { ab: ['a', 'b'], ac: ['a', 'c'], bc: ['b', 'c'] };
+    const validModes = ['directions', 'differences', 'recipe'];
+    const state = {
+      mode: 'directions',
+      variant: 'a',
+      pair: 'ab',
+      section: 'hero',
+      viewport: 'mobile',
+      base: 'a',
+      pins: true,
+      sectionOverrides: {},
+      elementOverrides: {}
+    };
+
+    const select = document.getElementById('section-select');
+    const list = document.getElementById('section-list');
+    const frame = document.getElementById('review-frame');
+    const frameOuter = document.getElementById('frame-outer');
+    const frameShell = document.getElementById('frame-shell');
+    const singlePreview = document.getElementById('single-preview');
+    const comparePreview = document.getElementById('compare-preview');
+    const compareFrames = [document.getElementById('compare-frame-1'), document.getElementById('compare-frame-2')];
+    const compareShells = [document.getElementById('compare-shell-1'), document.getElementById('compare-shell-2')];
+
+    function sectionDecisions(id) { return decisions[id] || []; }
+    function selectedSection() { return sections.find(section => section.id === state.section) || sections[0]; }
+    function recipeSize() { return Object.keys(state.sectionOverrides).length + Object.keys(state.elementOverrides).length; }
+    function effectiveViewport() {
+      return state.viewport === 'compare' ? 'mobile' : state.viewport;
+    }
+    function effectiveVariant() { return state.mode === 'recipe' ? state.base : state.variant; }
+    function isComparing() { return state.mode === 'differences' || (state.mode === 'directions' && state.viewport === 'compare'); }
+
+    function buildDirectory() {
+      sections.forEach((section, index) => {
+        const option = document.createElement('option');
+        option.value = section.id;
+        option.textContent = section.name;
+        select.append(option);
+
+        const item = document.createElement('li');
+        const button = document.createElement('button');
+        const sectionChanges = sectionDecisions(section.id);
+        const count = sectionChanges.length;
+        button.type = 'button';
+        button.dataset.section = section.id;
+        const changeTypes = sectionChanges.map(decision => decision.type).join(' · ');
+        button.innerHTML = `<span class="section-number">${String(index + 1).padStart(2, '0')}</span><span class="section-name">${section.name}</span><span class="section-status ${count ? 'has-diffs' : ''}">${count ? changeTypes : 'same'}</span>`;
+        button.addEventListener('click', () => setSection(section.id));
+        item.append(button);
+        list.append(item);
+      });
+
+      Object.entries(variants).forEach(([id, variant]) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'direction-card';
+        button.dataset.variant = id;
+        button.setAttribute('aria-pressed', id === state.variant ? 'true' : 'false');
+        button.innerHTML = `<span class="direction-label">18-${id.toUpperCase()}</span><h3>${variant.short}</h3><p>${variant.summary}</p><small>${variant.best}</small>`;
+        button.addEventListener('click', () => setVariant(id));
+        document.getElementById('direction-grid').append(button);
+      });
+    }
+
+    function parseMap(value, validKeys) {
+      const map = {};
+      if (!value) return map;
+      value.split(',').forEach(entry => {
+        const [key, choice] = entry.split(':');
+        if (validKeys.has(key) && variants[choice]) map[key] = choice;
+      });
+      return map;
+    }
+
+    function serializeMap(map) {
+      return Object.entries(map).map(([key, value]) => `${key}:${value}`).join(',');
+    }
+
+    function updateQuery() {
+      const url = new URL(window.location.href);
+      url.searchParams.set('mode', state.mode);
+      url.searchParams.set('variant', state.variant);
+      url.searchParams.set('pair', state.pair);
+      url.searchParams.set('section', state.section);
+      url.searchParams.set('viewport', state.viewport);
+      url.searchParams.set('base', state.base);
+      url.searchParams.set('pins', state.pins ? '1' : '0');
+      const sectionMap = serializeMap(state.sectionOverrides);
+      const elementMap = serializeMap(state.elementOverrides);
+      sectionMap ? url.searchParams.set('so', sectionMap) : url.searchParams.delete('so');
+      elementMap ? url.searchParams.set('eo', elementMap) : url.searchParams.delete('eo');
+      history.replaceState(null, '', url);
+    }
+
+    function inheritedChoice(decision) {
+      return state.sectionOverrides[state.section] || state.base;
+    }
+
+    function resolvedChoice(decision) {
+      return state.elementOverrides[decision.id] || state.sectionOverrides[state.section] || state.base;
+    }
+
+    function renderDifferences() {
+      const section = selectedSection();
+      const items = sectionDecisions(section.id);
+      const content = document.getElementById('difference-content');
+      document.getElementById('difference-title').textContent = `Decisions in ${section.name}.`;
+      document.getElementById('difference-intro').textContent = items.length
+        ? `The content and images are identical. These ${items.length} ${items.length === 1 ? 'treatment changes' : 'treatments change'} between A, B, and C.`
+        : 'This section is identical across A, B, and C.';
+
+      if (!items.length) {
+        content.innerHTML = `<div class="no-differences"><strong>No design difference here.</strong><p>Copy, imagery, layout, and styling are shared across all three directions. There is nothing to choose for this section.</p></div>`;
+        return;
+      }
+
+      const explicitSectionChoice = state.sectionOverrides[section.id];
+      content.innerHTML = `
+        <div class="section-choice">
+          <div class="section-choice-head"><strong>Choose one complete section design</strong><span>Detail choices below can replace part of it.</span></div>
+          <div class="segments" id="section-choice-controls">
+            ${Object.keys(variants).map(id => `<button type="button" data-section-choice="${id}" aria-pressed="${explicitSectionChoice === id}">Use all 18-${id.toUpperCase()}</button>`).join('')}
+            <button type="button" data-section-choice="inherit" aria-pressed="${!explicitSectionChoice}">Keep Starting Page</button>
+          </div>
+        </div>
+        <p class="shared-note"><strong>Shared across all three:</strong> customer-facing words, testimonial names, and image files.</p>
+        <div class="decision-ledger">
+          ${items.map((decision, index) => {
+            const selected = resolvedChoice(decision);
+            return `<article class="decision-row" id="decision-${decision.id}" data-decision-row="${decision.id}">
+              <div class="decision-meta"><span class="decision-code">${decision.code} · ${decision.type}</span><h3>${decision.name}</h3><button class="locate-change" type="button" data-locate="${decision.id}">Show on page ↑</button></div>
+              <div class="decision-options">
+                ${Object.entries(decision.options).map(([id, copy]) => `<button class="decision-option" type="button" data-decision="${decision.id}" data-choice="${id}" aria-pressed="${selected === id}"><span class="option-variant">18-${id.toUpperCase()}</span><span class="option-copy"><strong>${copy[0]}</strong><small>${copy[1]}</small></span><span class="option-state">${selected === id ? 'Selected' : 'Use this'}</span></button>`).join('')}
+              </div>
+            </article>`;
+          }).join('')}
+        </div>`;
+
+      document.getElementById('section-choice-controls').addEventListener('click', event => {
+        const button = event.target.closest('[data-section-choice]');
+        if (button) setSectionChoice(button.dataset.sectionChoice);
+      });
+      content.querySelectorAll('[data-decision]').forEach(button => button.addEventListener('click', () => setElementChoice(button.dataset.decision, button.dataset.choice)));
+      content.querySelectorAll('[data-locate]').forEach(button => button.addEventListener('click', () => locateChangeOnPage(button.dataset.locate)));
+    }
+
+    function buildBrief() {
+      const lines = [`Start with ${variants[state.base].title}.`];
+      sections.forEach(section => {
+        const sectionChoice = state.sectionOverrides[section.id];
+        if (sectionChoice) lines.push(`Use the complete ${section.name} treatment from 18-${sectionChoice.toUpperCase()}.`);
+        sectionDecisions(section.id).forEach(decision => {
+          const choice = state.elementOverrides[decision.id];
+          if (choice) {
+            const prefix = sectionChoice ? `Within ${section.name}` : `In ${section.name}`;
+            lines.push(`${prefix}, use ${decision.name.toLowerCase()} from 18-${choice.toUpperCase()}: ${decision.options[choice][0]}.`);
+          }
+        });
+      });
+      lines.push(`Keep every other design decision from 18-${state.base.toUpperCase()}.`);
+      return lines.join(' ');
+    }
+
+    function renderRecipe() {
+      document.getElementById('recipe-base-title').textContent = variants[state.base].title;
+      const listItems = [];
+      sections.forEach(section => {
+        const sectionChoice = state.sectionOverrides[section.id];
+        if (sectionChoice) listItems.push({ type: 'section', key: section.id, scope: 'Selected section', title: section.name, detail: `Use 18-${sectionChoice.toUpperCase()} · ${variants[sectionChoice].short}` });
+        sectionDecisions(section.id).forEach(decision => {
+          const choice = state.elementOverrides[decision.id];
+          if (choice) listItems.push({ type: 'element', key: decision.id, scope: 'Selected detail', title: `${section.name} · ${decision.name}`, detail: `Use 18-${choice.toUpperCase()} · ${decision.options[choice][0]}` });
+        });
+      });
+
+      const list = document.getElementById('recipe-list');
+      list.innerHTML = listItems.map(item => `<li class="recipe-item"><div><span class="recipe-item-scope">${item.scope}</span><strong>${item.title}</strong><small>${item.detail}</small></div><button class="remove-choice" type="button" data-remove-type="${item.type}" data-remove-key="${item.key}">Remove</button></li>`).join('');
+      document.getElementById('recipe-empty').hidden = listItems.length > 0;
+      document.getElementById('recipe-empty').textContent = `No selected changes yet. Your final page currently matches 18-${state.base.toUpperCase()} exactly.`;
+      document.getElementById('recipe-brief').textContent = buildBrief();
+      document.getElementById('recipe-count').textContent = recipeSize();
+      list.querySelectorAll('[data-remove-key]').forEach(button => button.addEventListener('click', () => removeChoice(button.dataset.removeType, button.dataset.removeKey)));
+    }
+
+    function updateControls() {
+      select.value = state.section;
+      const comparing = isComparing();
+      const activeVariant = effectiveVariant();
+      const activeVariants = comparing ? pairs[state.pair] : [activeVariant];
+      const [firstVariant, secondVariant = firstVariant] = activeVariants;
+
+      document.getElementById('variant-controls').hidden = state.mode !== 'directions' || state.viewport === 'compare';
+      document.getElementById('pair-controls').hidden = !(state.mode === 'differences' || (state.mode === 'directions' && state.viewport === 'compare'));
+      document.getElementById('base-controls').hidden = state.mode !== 'recipe';
+      document.getElementById('viewport-field').hidden = false;
+      document.getElementById('choice-label').textContent = state.mode === 'recipe' ? 'Starting Page' : (comparing ? 'Compare' : 'Direction');
+      const mobileViewportButton = document.querySelector('[data-viewport="mobile"]');
+      const compareViewportButton = document.querySelector('[data-viewport="compare"]');
+      const tabletViewportButton = document.querySelector('[data-viewport="tablet"]');
+      const desktopViewportButton = document.querySelector('[data-viewport="desktop"]');
+      mobileViewportButton.hidden = state.mode === 'differences';
+      compareViewportButton.hidden = state.mode === 'recipe';
+      tabletViewportButton.textContent = state.mode === 'differences' ? '2 Tablets' : 'Tablet';
+      desktopViewportButton.textContent = state.mode === 'differences' ? '2 Desktops' : 'Desktop';
+      singlePreview.hidden = comparing;
+      comparePreview.hidden = !comparing;
+
+      document.querySelectorAll('[data-mode]').forEach(button => button.setAttribute('aria-pressed', button.dataset.mode === state.mode ? 'true' : 'false'));
+      document.querySelectorAll('[data-section]').forEach(button => button.setAttribute('aria-current', button.dataset.section === state.section ? 'true' : 'false'));
+      document.querySelectorAll('#variant-controls [data-variant], .direction-card[data-variant]').forEach(button => button.setAttribute('aria-pressed', button.dataset.variant === state.variant ? 'true' : 'false'));
+      document.querySelectorAll('#pair-controls [data-pair]').forEach(button => button.setAttribute('aria-pressed', button.dataset.pair === state.pair ? 'true' : 'false'));
+      document.querySelectorAll('#base-controls [data-base]').forEach(button => button.setAttribute('aria-pressed', button.dataset.base === state.base ? 'true' : 'false'));
+      document.querySelectorAll('#viewport-controls [data-viewport]').forEach(button => button.setAttribute('aria-pressed', button.dataset.viewport === state.viewport ? 'true' : 'false'));
+
+      const section = selectedSection();
+      const index = sections.indexOf(section) + 1;
+      document.getElementById('stage-count').textContent = `${String(index).padStart(2, '0')} / ${sections.length}`;
+      document.getElementById('stage-title').textContent = section.name;
+      document.getElementById('variant-title').textContent = state.mode === 'recipe'
+        ? `Starting Page · ${variants[state.base].title}`
+        : (comparing ? activeVariants.map(id => `18-${id.toUpperCase()}`).join(' + ') : variants[state.variant].title);
+      document.getElementById('compare-label-1').textContent = `18-${firstVariant.toUpperCase()}`;
+      document.getElementById('compare-label-2').textContent = `18-${secondVariant.toUpperCase()}`;
+
+      document.getElementById('directions-panel').hidden = state.mode !== 'directions';
+      document.getElementById('differences-panel').hidden = state.mode !== 'differences';
+      document.getElementById('recipe-panel').hidden = state.mode !== 'recipe';
+
+      const pinToggle = document.getElementById('pin-toggle');
+      const canShowPins = state.mode === 'differences' && sectionDecisions(state.section).length > 0;
+      pinToggle.hidden = !canShowPins;
+      pinToggle.setAttribute('aria-pressed', state.pins ? 'true' : 'false');
+      pinToggle.textContent = `Change pins: ${state.pins ? 'On' : 'Off'}`;
+
+      const openPage = document.getElementById('open-page');
+      openPage.href = `mcewen-18-${firstVariant}`;
+      openPage.textContent = comparing ? `Open 18-${firstVariant.toUpperCase()} full page ↗` : 'Open full page ↗';
+      renderDifferences();
+      renderRecipe();
+      updateQuery();
+      requestAnimationFrame(refreshPins);
+    }
+
+    function removePinsFromFrame(activeFrame) {
+      try {
+        const doc = activeFrame.contentDocument;
+        doc.querySelectorAll('.z-review-pin').forEach(pin => pin.remove());
+        doc.querySelectorAll('[data-z-review-target]').forEach(target => {
+          target.removeAttribute('data-z-review-target');
+          target.classList.remove('z-review-target-pulse');
+          if (target.dataset.zReviewPosition === 'static') target.style.position = '';
+          delete target.dataset.zReviewPosition;
+        });
+        doc.querySelectorAll('[data-z-review-host]').forEach(host => {
+          host.removeAttribute('data-z-review-host');
+          if (host.dataset.zReviewHostPosition === 'static') host.style.position = '';
+          delete host.dataset.zReviewHostPosition;
+        });
+      } catch (error) {
+        console.warn('Change pins could not be cleared.', error);
+      }
+    }
+
+    function ensurePinStyles(doc) {
+      if (doc.getElementById('z-review-pin-styles')) return;
+      const style = doc.createElement('style');
+      style.id = 'z-review-pin-styles';
+      style.textContent = `
+        .z-review-pin {
+          position: absolute;
+          z-index: 2147483647;
+          top: 10px;
+          left: 10px;
+          min-height: 0;
+          padding: 7px 9px 6px;
+          border: 2px solid #fff;
+          border-radius: 2px;
+          background: #17131c;
+          color: #fff;
+          box-shadow: 0 5px 18px rgba(23,19,28,.30);
+          font-family: Arial, sans-serif;
+          font-size: 15px;
+          font-weight: 800;
+          line-height: 1;
+          letter-spacing: .04em;
+          text-transform: uppercase;
+          cursor: pointer;
+        }
+        .z-review-pin:hover, .z-review-pin:focus-visible { background: #6521c9; outline: 3px solid #ff9112; outline-offset: 2px; }
+        [data-z-review-target] { outline: 2px dashed rgba(101,33,201,.72); outline-offset: -4px; }
+        .z-review-target-pulse { animation: z-review-target-pulse 1.45s ease; }
+        @keyframes z-review-target-pulse {
+          0%, 100% { box-shadow: none; }
+          25%, 72% { box-shadow: inset 0 0 0 7px rgba(101,33,201,.30); }
+        }
+        @media (prefers-reduced-motion: reduce) { .z-review-target-pulse { animation: none; } }
+      `;
+      doc.head.append(style);
+    }
+
+    function injectPins(activeFrame) {
+      removePinsFromFrame(activeFrame);
+      if (state.mode !== 'differences' || !state.pins) return;
+      const items = sectionDecisions(state.section);
+      if (!items.length) return;
+      try {
+        const doc = activeFrame.contentDocument;
+        ensurePinStyles(doc);
+        items.forEach(decision => {
+          const target = doc.querySelector(decision.target);
+          if (!target) return;
+          const host = doc.querySelector(decision.pinTarget || decision.target) || target;
+          const position = activeFrame.contentWindow.getComputedStyle(host).position;
+          if (position === 'static') {
+            host.dataset.zReviewHostPosition = 'static';
+            host.style.position = 'relative';
+          }
+          host.dataset.zReviewHost = decision.id;
+          target.dataset.zReviewTarget = decision.id;
+          const pin = doc.createElement('button');
+          pin.type = 'button';
+          pin.className = 'z-review-pin';
+          pin.dataset.decisionId = decision.id;
+          pin.setAttribute('aria-label', `Find ${decision.name} in the decision ledger`);
+          pin.textContent = `${decision.code} · ${decision.type}`;
+          pin.addEventListener('click', () => window.postMessage({ type: 'z-review-pin', decisionId: decision.id }, window.location.origin));
+          host.append(pin);
+        });
+      } catch (error) {
+        console.warn('Change pins could not be added.', error);
+      }
+    }
+
+    function refreshPins() {
+      const activeFrames = isComparing() ? compareFrames : [frame];
+      activeFrames.forEach(injectPins);
+    }
+
+    function highlightLedgerRow(decisionId) {
+      const row = document.querySelector(`[data-decision-row="${decisionId}"]`);
+      if (!row) return;
+      row.classList.remove('is-located');
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      requestAnimationFrame(() => row.classList.add('is-located'));
+      setTimeout(() => row.classList.remove('is-located'), 1500);
+    }
+
+    function locateChangeOnPage(decisionId) {
+      if (!state.pins) {
+        state.pins = true;
+        updateControls();
+      } else {
+        refreshPins();
+      }
+      const activeFrames = isComparing() ? compareFrames : [frame];
+      activeFrames.forEach(activeFrame => {
+        try {
+          const target = activeFrame.contentDocument.querySelector(`[data-z-review-target="${decisionId}"]`);
+          if (!target) return;
+          target.classList.remove('z-review-target-pulse');
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          requestAnimationFrame(() => target.classList.add('z-review-target-pulse'));
+        } catch (error) {
+          console.warn('The selected change could not be located.', error);
+        }
+      });
+    }
+
+    function sizeFrame() {
+      const available = Math.max(264, frameOuter.clientWidth - (window.innerWidth >= 1040 ? 64 : 40));
+      if (isComparing()) {
+        const viewport = viewports[effectiveViewport()];
+        const gap = 9;
+        const columnWidth = Math.max(112, (available - gap) / 2);
+        const scale = Math.min(1, columnWidth / viewport.width);
+        compareFrames.forEach((activeFrame, index) => {
+          activeFrame.width = viewport.width;
+          activeFrame.height = viewport.height;
+          activeFrame.style.width = `${viewport.width}px`;
+          activeFrame.style.height = `${viewport.height}px`;
+          activeFrame.style.transform = `scale(${scale})`;
+          compareShells[index].style.width = `${viewport.width * scale}px`;
+          compareShells[index].style.height = `${viewport.height * scale}px`;
+        });
+        return;
+      }
+
+      const viewport = viewports[effectiveViewport()];
+      const scale = Math.min(1, available / viewport.width);
+      frame.width = viewport.width;
+      frame.height = viewport.height;
+      frame.style.width = `${viewport.width}px`;
+      frame.style.height = `${viewport.height}px`;
+      frame.style.transform = `scale(${scale})`;
+      frameShell.style.width = `${viewport.width * scale}px`;
+      frameShell.style.height = `${viewport.height * scale}px`;
+    }
+
+    function scrollOneFrameToSection(activeFrame) {
+      try {
+        const target = activeFrame.contentDocument.querySelector(selectedSection().selector);
+        if (target) {
+          const top = target.getBoundingClientRect().top + activeFrame.contentWindow.scrollY;
+          const scroller = activeFrame.contentDocument.scrollingElement || activeFrame.contentDocument.documentElement;
+          scroller.scrollTop = top;
+        }
+      } catch (error) {
+        console.warn('Section preview could not be positioned.', error);
+      }
+    }
+
+    function scrollFrameToSection() {
+      const activeFrames = isComparing() ? compareFrames : [frame];
+      activeFrames.forEach(scrollOneFrameToSection);
+    }
+
+    function syncFrameWhenReady(activeFrame, variant) {
+      let attempts = 0;
+      const expectedPath = `mcewen-18-${variant}`;
+      const attempt = () => {
+        let settled = false;
+        try {
+          const loadedPath = activeFrame.contentWindow.location.pathname.replace(/\.html$/, '');
+          const correctPage = loadedPath.endsWith(expectedPath);
+          const target = activeFrame.contentDocument.querySelector(selectedSection().selector);
+          if (correctPage && target) {
+            scrollOneFrameToSection(activeFrame);
+            injectPins(activeFrame);
+            const scroller = activeFrame.contentDocument.scrollingElement || activeFrame.contentDocument.documentElement;
+            const atPageEnd = Math.abs(scroller.scrollTop - (scroller.scrollHeight - scroller.clientHeight)) < 3;
+            settled = Math.abs(target.getBoundingClientRect().top) < 3 || atPageEnd;
+          }
+        } catch (error) {
+          settled = false;
+        }
+        attempts += 1;
+        if (!settled && attempts < 800) setTimeout(attempt, 25);
+      };
+      attempt();
+    }
+
+    function loadPreview() {
+      if (isComparing()) {
+        pairs[state.pair].forEach((variant, index) => {
+          compareFrames[index].onload = () => syncFrameWhenReady(compareFrames[index], variant);
+          compareFrames[index].src = `mcewen-18-${variant}.html`;
+          syncFrameWhenReady(compareFrames[index], variant);
+        });
+      } else {
+        const variant = effectiveVariant();
+        frame.onload = () => syncFrameWhenReady(frame, variant);
+        frame.src = `mcewen-18-${variant}.html`;
+        syncFrameWhenReady(frame, variant);
+      }
+    }
+
+    function setSection(id) {
+      state.section = id;
+      updateControls();
+      scrollFrameToSection();
+      refreshPins();
+    }
+
+    function setMode(mode) {
+      state.mode = mode;
+      if (mode === 'differences' && state.viewport === 'mobile') state.viewport = 'compare';
+      if (mode === 'recipe' && state.viewport === 'compare') state.viewport = 'mobile';
+      updateControls();
+      sizeFrame();
+      loadPreview();
+    }
+
+    function setVariant(id) {
+      state.variant = id;
+      updateControls();
+      loadPreview();
+    }
+
+    function setPair(id) {
+      state.pair = id;
+      updateControls();
+      loadPreview();
+    }
+
+    function setViewport(id) {
+      state.viewport = id;
+      updateControls();
+      sizeFrame();
+      loadPreview();
+    }
+
+    function setBase(id) {
+      state.base = id;
+      state.variant = id;
+      normalizeRecipe();
+      updateControls();
+      loadPreview();
+    }
+
+    function normalizeRecipe() {
+      Object.entries(state.sectionOverrides).forEach(([sectionId, choice]) => {
+        if (choice === state.base) delete state.sectionOverrides[sectionId];
+      });
+      sections.forEach(section => {
+        const inherited = state.sectionOverrides[section.id] || state.base;
+        sectionDecisions(section.id).forEach(decision => {
+          if (state.elementOverrides[decision.id] === inherited) delete state.elementOverrides[decision.id];
+        });
+      });
+    }
+
+    function comparisonPair(first, second) {
+      if (first === second) return null;
+      const key = [first, second].sort().join('');
+      return pairs[key] ? key : null;
+    }
+
+    function setSectionChoice(choice) {
+      const id = state.section;
+      const previous = state.sectionOverrides[id] || state.base;
+      const next = choice === 'inherit' ? state.base : choice;
+      const nextPair = state.mode === 'differences' && !pairs[state.pair].includes(next) ? comparisonPair(previous, next) : null;
+      sectionDecisions(id).forEach(decision => delete state.elementOverrides[decision.id]);
+      if (choice === 'inherit' || choice === state.base) delete state.sectionOverrides[id];
+      else state.sectionOverrides[id] = choice;
+      if (nextPair) state.pair = nextPair;
+      updateControls();
+      if (nextPair) loadPreview();
+    }
+
+    function setElementChoice(id, choice) {
+      const decision = sectionDecisions(state.section).find(item => item.id === id);
+      if (!decision) return;
+      const previous = resolvedChoice(decision);
+      const nextPair = state.mode === 'differences' && !pairs[state.pair].includes(choice) ? comparisonPair(previous, choice) : null;
+      if (choice === inheritedChoice(decision)) delete state.elementOverrides[id];
+      else state.elementOverrides[id] = choice;
+      if (nextPair) state.pair = nextPair;
+      updateControls();
+      if (nextPair) loadPreview();
+    }
+
+    function removeChoice(type, key) {
+      if (type === 'section') {
+        delete state.sectionOverrides[key];
+        sectionDecisions(key).forEach(decision => delete state.elementOverrides[decision.id]);
+      } else {
+        delete state.elementOverrides[key];
+      }
+      updateControls();
+    }
+
+    function clearRecipe() {
+      state.sectionOverrides = {};
+      state.elementOverrides = {};
+      updateControls();
+    }
+
+    async function copyText(text, button, successLabel) {
+      const original = button.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = successLabel;
+      } catch (error) {
+        const area = document.createElement('textarea');
+        area.value = text;
+        document.body.append(area);
+        area.select();
+        document.execCommand('copy');
+        area.remove();
+        button.textContent = successLabel;
+      }
+      setTimeout(() => { button.textContent = original; }, 1600);
+    }
+
+    select.addEventListener('change', event => setSection(event.target.value));
+    document.getElementById('mode-controls').addEventListener('click', event => {
+      const button = event.target.closest('[data-mode]');
+      if (button) setMode(button.dataset.mode);
+    });
+    document.getElementById('variant-controls').addEventListener('click', event => {
+      const button = event.target.closest('[data-variant]');
+      if (button) setVariant(button.dataset.variant);
+    });
+    document.getElementById('pair-controls').addEventListener('click', event => {
+      const button = event.target.closest('[data-pair]');
+      if (button) setPair(button.dataset.pair);
+    });
+    document.getElementById('base-controls').addEventListener('click', event => {
+      const button = event.target.closest('[data-base]');
+      if (button) setBase(button.dataset.base);
+    });
+    document.getElementById('viewport-controls').addEventListener('click', event => {
+      const button = event.target.closest('[data-viewport]');
+      if (button) setViewport(button.dataset.viewport);
+    });
+    document.getElementById('copy-brief').addEventListener('click', event => copyText(buildBrief(), event.currentTarget, 'Instructions copied'));
+    document.getElementById('copy-link').addEventListener('click', event => copyText(window.location.href, event.currentTarget, 'Setup copied'));
+    document.getElementById('clear-recipe').addEventListener('click', clearRecipe);
+    const primer = document.getElementById('primer');
+    const helpToggle = document.getElementById('help-toggle');
+    const primerClose = document.getElementById('primer-close');
+    function setPrimer(open) {
+      primer.hidden = !open;
+      helpToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) primerClose.focus();
+      else helpToggle.focus();
+    }
+    helpToggle.addEventListener('click', () => setPrimer(true));
+    primerClose.addEventListener('click', () => setPrimer(false));
+    primer.addEventListener('click', event => { if (event.target === primer) setPrimer(false); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && !primer.hidden) setPrimer(false); });
+    document.getElementById('pin-toggle').addEventListener('click', () => {
+      state.pins = !state.pins;
+      updateControls();
+    });
+    window.addEventListener('message', event => {
+      if (event.origin !== window.location.origin || event.data?.type !== 'z-review-pin') return;
+      highlightLedgerRow(event.data.decisionId);
+    });
+    window.addEventListener('resize', sizeFrame);
+
+    const params = new URLSearchParams(window.location.search);
+    if (validModes.includes(params.get('mode'))) state.mode = params.get('mode');
+    if (variants[params.get('variant')]) state.variant = params.get('variant');
+    if (pairs[params.get('pair')]) state.pair = params.get('pair');
+    if (sections.some(section => section.id === params.get('section'))) state.section = params.get('section');
+    if (viewports[params.get('viewport')]) state.viewport = params.get('viewport');
+    if (variants[params.get('base')]) state.base = params.get('base');
+    if (params.get('pins') === '0') state.pins = false;
+    if (state.mode === 'differences' && state.viewport === 'mobile') state.viewport = 'compare';
+    if (state.mode === 'recipe' && state.viewport === 'compare') state.viewport = 'mobile';
+    const sectionIds = new Set(sections.filter(section => sectionDecisions(section.id).length).map(section => section.id));
+    const decisionIds = new Set(Object.values(decisions).flat().map(decision => decision.id));
+    state.sectionOverrides = parseMap(params.get('so'), sectionIds);
+    state.elementOverrides = parseMap(params.get('eo'), decisionIds);
+
+    buildDirectory();
+    updateControls();
+    sizeFrame();
+    loadPreview();
+  </script>
+</body>
+</html>
