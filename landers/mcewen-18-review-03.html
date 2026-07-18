@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:,">
+  <title>McEwen 18 Compact Review Bar · Zodiac.fm</title>
+  <meta name="description" content="A section-by-section review directory for the McEwen 18 A, B, and C landing-page variants.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --canvas: #efece6;
+      --paper: #ffffff;
+      --ink: #17131c;
+      --muted: #625b68;
+      --line: rgba(23, 19, 28, .15);
+      --purple: #6521c9;
+      --purple-soft: #eee8f8;
+      --green: #0a7a52;
+      --display: "Cormorant Garamond", Georgia, serif;
+      --body: "Switzer", Helvetica, sans-serif;
+      --shadow: 0 22px 60px rgba(23, 19, 28, .10);
+    }
+
+    * { box-sizing: border-box; }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, select, a { font: inherit; }
+    button, select { min-height: 44px; }
+    button:focus-visible, select:focus-visible, a:focus-visible {
+      outline: 3px solid #ff9112;
+      outline-offset: 3px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1; text-wrap: balance; }
+    a { color: inherit; }
+
+    .review-layout,
+    .comparison {
+      width: min(100% - 32px, 1320px);
+      margin-inline: auto;
+    }
+
+    .toolbar-wrap {
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(239, 236, 230, .96);
+      backdrop-filter: blur(14px);
+    }
+    .toolbar {
+      width: min(100% - 32px, 1320px);
+      margin-inline: auto;
+      padding: 12px 0;
+      display: grid;
+      gap: 10px;
+    }
+    .control-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    .field { display: grid; gap: 5px; }
+    .field-label { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    select {
+      width: 100%;
+      padding: 0 38px 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    .segments { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--line); background: var(--paper); }
+    .segments button {
+      padding: 0 12px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+    .segments button:last-child { border-right: 0; }
+    .segments button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+    .open-page {
+      min-height: 44px;
+      padding: 0 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--purple);
+      color: var(--paper);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .review-layout { padding: 12px 0 48px; display: grid; gap: 24px; }
+    .stage { order: 1; }
+    .directory {
+      order: 2;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .directory-head { padding: 20px 20px 17px; border-bottom: 1px solid var(--line); }
+    .directory h2 { font-size: 31px; }
+    .directory-head p { margin-top: 8px; color: var(--muted); font-size: 13px; }
+    .section-list { margin: 0; padding: 0; list-style: none; }
+    .section-list button {
+      width: 100%;
+      padding: 12px 16px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+      background: transparent;
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .section-list li:last-child button { border-bottom: 0; }
+    .section-list button:hover { background: #f8f6f2; }
+    .section-list button[aria-current="true"] { background: var(--purple-soft); color: var(--purple); }
+    .section-number { color: var(--muted); font-family: var(--display); font-size: 19px; }
+    .section-list button[aria-current="true"] .section-number { color: var(--purple); }
+    .section-name { font-size: 13px; font-weight: 600; line-height: 1.25; }
+
+    .stage { min-width: 0; }
+    .stage-head {
+      padding: 11px 14px;
+      border: 1px solid var(--line);
+      border-bottom: 0;
+      display: grid;
+      gap: 8px;
+      background: var(--paper);
+    }
+    .stage-summary { min-width: 0; display: grid; gap: 3px; }
+    .stage-count { color: var(--purple); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .stage h2 { font-size: clamp(23px, 4vw, 30px); line-height: 1.05; }
+    .variant-note { justify-self: start; padding: 7px 10px; border-left: 2px solid var(--purple); background: var(--purple-soft); }
+    .variant-note strong { display: block; font-size: 12px; }
+
+    .frame-outer {
+      min-height: 500px;
+      padding: 22px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(rgba(23, 19, 28, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 19, 28, .045) 1px, transparent 1px),
+        #dcd7cf;
+      background-size: 24px 24px;
+    }
+    .frame-shell {
+      position: relative;
+      margin-inline: auto;
+      overflow: hidden;
+      background: var(--paper);
+      box-shadow: 0 24px 70px rgba(23, 19, 28, .22);
+    }
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: 0;
+      display: block;
+      background: var(--paper);
+      transform-origin: top left;
+    }
+
+    .comparison { padding: 0 0 60px; }
+    .comparison-head { max-width: 680px; }
+    .comparison h2 { font-size: clamp(38px, 6vw, 56px); }
+    .comparison-head p { margin-top: 11px; color: var(--muted); }
+    .matrix { margin-top: 24px; display: grid; gap: 10px; }
+    .matrix article { padding: 22px; border: 1px solid var(--line); background: var(--paper); }
+    .matrix article[data-variant="a"] { border-top: 4px solid #12a56e; }
+    .matrix article[data-variant="b"] { border-top: 4px solid var(--purple); }
+    .matrix article[data-variant="c"] { border-top: 4px solid var(--ink); }
+    .matrix-label { color: var(--purple); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .matrix h3 { margin-top: 9px; font-size: 30px; }
+    .matrix p { margin-top: 10px; color: var(--muted); font-size: 14px; }
+    .matrix small { display: block; margin-top: 15px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--ink); font-size: 12px; }
+
+    @media (min-width: 720px) {
+      .toolbar { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; }
+      .control-row { display: contents; }
+      .toolbar .field:first-child,
+      .open-page { grid-column: 1 / -1; }
+      .stage-head { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+      .stage-summary { display: flex; align-items: baseline; gap: 12px; }
+      .matrix { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (min-width: 1040px) {
+      .toolbar { grid-template-columns: minmax(260px, 1.25fr) minmax(190px, .8fr) minmax(270px, 1fr) auto; }
+      .toolbar .field:first-child,
+      .open-page { grid-column: auto; }
+      .review-layout { grid-template-columns: 270px minmax(0, 1fr); align-items: start; }
+      .directory { order: 1; grid-column: 1; grid-row: 1; }
+      .stage { order: 2; grid-column: 2; grid-row: 1; }
+      .frame-outer { padding: 34px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <h1 class="sr-only">McEwen 18 section review</h1>
+  <div class="toolbar-wrap">
+    <div class="toolbar">
+      <div class="control-row">
+        <label class="field">
+          <span class="field-label">Section</span>
+          <select id="section-select" aria-label="Choose page section"></select>
+        </label>
+
+        <div class="field">
+          <span class="field-label">Variant</span>
+          <div class="segments" id="variant-controls" aria-label="Choose variant">
+            <button type="button" data-variant="a" aria-pressed="true">18-A</button>
+            <button type="button" data-variant="b" aria-pressed="false">18-B</button>
+            <button type="button" data-variant="c" aria-pressed="false">18-C</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-label">Viewport</span>
+          <div class="segments" id="viewport-controls" aria-label="Choose viewport">
+            <button type="button" data-viewport="mobile" aria-pressed="true">iPhone mini</button>
+            <button type="button" data-viewport="tablet" aria-pressed="false">Tablet</button>
+            <button type="button" data-viewport="desktop" aria-pressed="false">Desktop</button>
+          </div>
+        </div>
+      </div>
+      <a class="open-page" id="open-page" href="mcewen-18-a" target="_blank" rel="noopener">Open full page ↗</a>
+    </div>
+  </div>
+
+  <main class="review-layout">
+    <aside class="directory" aria-label="Page section directory">
+      <div class="directory-head">
+        <h2>Page directory</h2>
+        <p>Fourteen chapters, in the exact order a visitor sees them.</p>
+      </div>
+      <ol class="section-list" id="section-list"></ol>
+    </aside>
+
+    <section class="stage" aria-live="polite">
+      <div class="stage-head">
+        <div class="stage-summary">
+          <span class="stage-count" id="stage-count">01 / 14</span>
+          <h2 id="stage-title">Hero and David</h2>
+        </div>
+        <div class="variant-note">
+          <strong id="variant-title">18-A · Semantic Signal</strong>
+        </div>
+      </div>
+      <div class="frame-outer" id="frame-outer">
+        <div class="frame-shell" id="frame-shell">
+          <iframe id="review-frame" title="Selected McEwen 18 landing-page section" loading="eager"></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="comparison">
+    <div class="comparison-head">
+      <h2>What each version is testing.</h2>
+      <p>The content corrections are identical. The design system is the variable.</p>
+    </div>
+    <div class="matrix">
+      <article data-variant="a">
+        <span class="matrix-label">18-A</span>
+        <h3>Semantic Signal</h3>
+        <p>Green results chapter, meaningful frequency borders, and a softened aubergine domain section.</p>
+        <small>Best if color should guide the scan.</small>
+      </article>
+      <article data-variant="b">
+        <span class="matrix-label">18-B</span>
+        <h3>Violet Current</h3>
+        <p>One violet family, numbered hero path, and a light domain chapter with no multicolor system.</p>
+        <small>Best if calm consistency matters most.</small>
+      </article>
+      <article data-variant="c">
+        <span class="matrix-label">18-C</span>
+        <h3>Light Gallery</h3>
+        <p>Larger proof portraits, bright surfaces, and light four-color domain fields with no dark interruption.</p>
+        <small>Best if human proof and visual ease should lead.</small>
+      </article>
+    </div>
+  </section>
+
+  <script>
+    const sections = [
+      { id: 'hero', name: 'Hero and David', selector: '.hero', description: 'The promise, David-specific framing, chart-to-music path, and David\'s complete endorsement.' },
+      { id: 'practice', name: 'David\'s 30, 60, and 90-day practice', selector: '#david-method', description: 'The manifestation bridge that turns David\'s daily use into a clear progression.' },
+      { id: 'early-proof', name: 'Early listener proof', selector: '#opening-proof', description: 'Jennifer, Leanne, and Todd establish specific outcomes before the first invitation.' },
+      { id: 'first-cta', name: 'First earned invitation', selector: '.cta-band', description: 'The first reveal action, placed only after David and three named proof units.' },
+      { id: 'result', name: 'Birth chart, values, and bands', selector: '#mechanism', description: 'The complete explanation of what happens after birth details are entered.' },
+      { id: 'domains', name: 'Four life domains', selector: '#domains', description: 'Core, Love, Vitality, and Abundance, including the largest background-treatment difference.' },
+      { id: 'study', name: '52-week study', selector: '#study', description: 'The evidence chapter with participation, recommendation, life-changing, and outcome statistics.' },
+      { id: 'recognition', name: 'Self-recognition proof', selector: '#recognition-proof', description: 'Four portrait-led stories about feeling more like yourself.' },
+      { id: 'mid-cta', name: 'Midpage invitation', selector: '#recognition-proof + .mid-cta', description: 'The reveal action after the self-recognition proof chapter.' },
+      { id: 'world-proof', name: 'Love, work, and opportunity proof', selector: '#world-proof', description: 'The next proof chapter, extending the outcome beyond identity.' },
+      { id: 'daily', name: 'Daily-use proof', selector: '#daily-proof', description: 'How nine minutes fits meditation, work, journaling, and ordinary routines.' },
+      { id: 'daily-cta', name: 'Nine-minute invitation', selector: '#daily-proof + .mid-cta', description: 'The practical reveal action after daily-use proof.' },
+      { id: 'final', name: 'Final invitation', selector: '.final', description: 'The strongest final reveal treatment before objections.' },
+      { id: 'faq', name: 'FAQ and disclosures', selector: '.faq', description: 'Birth-time, astrology, headphone, and starting-frequency questions, followed by disclosures.' }
+    ];
+
+    const variants = {
+      a: { title: '18-A · Semantic Signal', description: 'Color guides the scan. Green leads results; frequency borders identify subject.' },
+      b: { title: '18-B · Violet Current', description: 'One violet family creates the quietest and most consistent system.' },
+      c: { title: '18-C · Light Gallery', description: 'Larger portraits and bright domain fields remove the dark interruption.' }
+    };
+
+    const viewports = {
+      mobile: { width: 375, height: 812 },
+      tablet: { width: 768, height: 1024 },
+      desktop: { width: 1440, height: 1000 }
+    };
+
+    const state = { variant: 'a', section: 'hero', viewport: 'mobile' };
+    const select = document.getElementById('section-select');
+    const list = document.getElementById('section-list');
+    const frame = document.getElementById('review-frame');
+    const frameOuter = document.getElementById('frame-outer');
+    const frameShell = document.getElementById('frame-shell');
+
+    function buildDirectory() {
+      sections.forEach((section, index) => {
+        const option = document.createElement('option');
+        option.value = section.id;
+        option.textContent = `${String(index + 1).padStart(2, '0')} · ${section.name}`;
+        select.append(option);
+
+        const item = document.createElement('li');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.dataset.section = section.id;
+        button.innerHTML = `<span class="section-number">${String(index + 1).padStart(2, '0')}</span><span class="section-name">${section.name}</span>`;
+        button.addEventListener('click', () => setSection(section.id));
+        item.append(button);
+        list.append(item);
+      });
+    }
+
+    function selectedSection() {
+      return sections.find(section => section.id === state.section) || sections[0];
+    }
+
+    function updateQuery() {
+      const url = new URL(window.location.href);
+      url.searchParams.set('variant', state.variant);
+      url.searchParams.set('section', state.section);
+      url.searchParams.set('viewport', state.viewport);
+      history.replaceState(null, '', url);
+    }
+
+    function updateControls() {
+      select.value = state.section;
+      document.querySelectorAll('[data-section]').forEach(button => button.setAttribute('aria-current', button.dataset.section === state.section ? 'true' : 'false'));
+      document.querySelectorAll('#variant-controls [data-variant]').forEach(button => button.setAttribute('aria-pressed', button.dataset.variant === state.variant ? 'true' : 'false'));
+      document.querySelectorAll('#viewport-controls [data-viewport]').forEach(button => button.setAttribute('aria-pressed', button.dataset.viewport === state.viewport ? 'true' : 'false'));
+
+      const section = selectedSection();
+      const index = sections.indexOf(section) + 1;
+      document.getElementById('stage-count').textContent = `${String(index).padStart(2, '0')} / ${sections.length}`;
+      document.getElementById('stage-title').textContent = section.name;
+      document.getElementById('variant-title').textContent = variants[state.variant].title;
+      document.getElementById('open-page').href = `mcewen-18-${state.variant}`;
+      updateQuery();
+    }
+
+    function sizeFrame() {
+      const viewport = viewports[state.viewport];
+      const available = Math.max(280, frameOuter.clientWidth - (window.innerWidth >= 1040 ? 68 : 44));
+      const scale = Math.min(1, available / viewport.width);
+      frame.width = viewport.width;
+      frame.height = viewport.height;
+      frame.style.width = `${viewport.width}px`;
+      frame.style.height = `${viewport.height}px`;
+      frame.style.transform = `scale(${scale})`;
+      frameShell.style.width = `${viewport.width * scale}px`;
+      frameShell.style.height = `${viewport.height * scale}px`;
+    }
+
+    function scrollFrameToSection() {
+      try {
+        const target = frame.contentDocument.querySelector(selectedSection().selector);
+        if (target) {
+          const top = target.getBoundingClientRect().top + frame.contentWindow.scrollY;
+          frame.contentWindow.scrollTo({ top, behavior: 'auto' });
+        }
+      } catch (error) {
+        console.warn('Section preview could not be positioned.', error);
+      }
+    }
+
+    function loadVariant() {
+      frame.onload = () => requestAnimationFrame(scrollFrameToSection);
+      frame.src = `mcewen-18-${state.variant}.html`;
+    }
+
+    function setSection(id) {
+      state.section = id;
+      updateControls();
+      scrollFrameToSection();
+    }
+
+    function setVariant(id) {
+      state.variant = id;
+      updateControls();
+      loadVariant();
+    }
+
+    function setViewport(id) {
+      state.viewport = id;
+      updateControls();
+      sizeFrame();
+      requestAnimationFrame(scrollFrameToSection);
+    }
+
+    select.addEventListener('change', event => setSection(event.target.value));
+    document.getElementById('variant-controls').addEventListener('click', event => {
+      const button = event.target.closest('[data-variant]');
+      if (button) setVariant(button.dataset.variant);
+    });
+    document.getElementById('viewport-controls').addEventListener('click', event => {
+      const button = event.target.closest('[data-viewport]');
+      if (button) setViewport(button.dataset.viewport);
+    });
+    window.addEventListener('resize', sizeFrame);
+
+    const params = new URLSearchParams(window.location.search);
+    if (variants[params.get('variant')]) state.variant = params.get('variant');
+    if (sections.some(section => section.id === params.get('section'))) state.section = params.get('section');
+    if (viewports[params.get('viewport')]) state.viewport = params.get('viewport');
+
+    buildDirectory();
+    updateControls();
+    sizeFrame();
+    loadVariant();
+  </script>
+</body>
+</html>
