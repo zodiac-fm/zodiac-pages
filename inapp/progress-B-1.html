@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>Progress B-1 · Milestone First</title><link rel="stylesheet" href="progress-b-shared.css"></head><body>
+<div class="review-toggle"><button>All four in</button><button class="on">1 to top up</button><button>2 to top up</button></div>
+<main class="app">
+  <header class="top"><img class="logo" src="app-assets/logo-black.svg" alt="zodiac.fm"><div class="ham">&#9776;</div></header>
+  <div class="utility"><div class="week">Week 3 <span>&middot; Day 4 of 7</span></div><div class="how">How this works &#9662;</div></div>
+  <div class="stack">
+    <section class="card journey-card">
+      <div class="journey-main">
+        <div class="section-head"><div class="eyebrow">Milestone 02 of 25</div><span class="pill good">Reached</span></div>
+        <h1 class="journey-title">Frequency Fluency</h1>
+        <div class="journey-degree">Differentiation</div>
+        <p class="journey-summary">The same music may be starting to meet you differently as you listen across your four frequencies.</p>
+        <div class="path" aria-label="Last, current, and next milestone">
+          <div class="path-stop done"><div class="path-dot">&#10003;</div><div class="path-name">First Week<br>in Balance</div></div><div class="path-line"></div>
+          <div class="path-stop now"><div class="path-dot">02</div><div class="path-name">Frequency<br>Fluency</div></div><div class="path-line"></div>
+          <div class="path-stop"><div class="path-dot">03</div><div class="path-name">A Reason<br>to Return</div></div>
+        </div>
+      </div>
+      <button class="open-button" type="button" onclick="toggleDetail(this)"><span>Open milestone</span><span class="chev">&#9662;</span></button>
+      <div class="milestone-detail" id="detail">
+        <p>You have reached the point where distinctions between your four frequencies may begin to become noticeable.</p>
+        <p>The same song may feel familiar with one, neutral with another, or more intense and harder to place with another. The difference may show up through attention, preference, mood, energy, or what stays with you afterward.</p>
+        <p>Every response gives you something to compare. The progress here is noticing the contrast, even when it is subtle.</p>
+        <p class="try">Try one familiar song with two frequencies and notice what changes.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head"><h2>This week</h2><span class="pill wait">1 to top up</span></div>
+      <div class="metric-grid"><div class="metric"><div class="label">Listening</div><div class="value num">88 min</div><div class="sub">over 4 days</div></div><div class="metric"><div class="label">Balance</div><div class="value num">3 of 4</div><div class="sub">at 15% or more</div></div></div>
+      <div class="balance-note"><b>Vitality is at 11%.</b> Bring it to 15% and this week adds to your journey. Every minute still stays in your lifetime total.</div>
+    </section>
+
+    <section class="card">
+      <div class="section-head"><h2>What comes next</h2></div>
+      <div class="next-card"><div class="next-number">03</div><div class="next-copy"><div class="next-label">Next milestone</div><div class="next-title">A Reason to Return</div><div class="next-desc">A response begins becoming a personal reference point, not only a one-time moment.</div></div></div>
+    </section>
+
+    <section class="card">
+      <div class="section-head"><h2>Your listening</h2></div>
+      <div class="compact-total"><span class="big num">5h 40m</span><span class="unit">lifetime under frequency</span></div>
+      <p class="rule-note">Every minute remains part of your listening record. Weeks that meet both the minimum and balance also move the journey forward.</p>
+    </section>
+
+    <section class="card"><div class="section-head"><h2>Your weeks</h2></div>
+      <div class="week-row"><div class="week-copy"><span class="week-title">Week 3</span><span class="week-sub">In progress &middot; Vitality to top up</span></div><span class="week-state">This week</span></div>
+      <div class="week-row"><div class="week-copy"><span class="week-title">Week 2</span><span class="week-sub">All four in balance &middot; 2h 20m</span></div><span class="week-state good">Counted</span></div>
+      <div class="week-row"><div class="week-copy"><span class="week-title">Week 1</span><span class="week-sub">Vitality remained under 15%</span></div><span class="week-state">Listening saved</span></div>
+    </section>
+  </div>
+</main>
+<script>function toggleDetail(b){b.classList.toggle('open');var d=document.getElementById('detail');d.classList.toggle('open');b.querySelector('span:first-child').textContent=d.classList.contains('open')?'Close milestone':'Open milestone';setTimeout(sendHeight,20)}function sendHeight(){try{parent.postMessage({zfmH:Math.ceil(document.documentElement.scrollHeight)},'*')}catch(e){}}if(self!==top||new URLSearchParams(location.search).has('embed')){document.head.insertAdjacentHTML('beforeend','<style>.review-toggle{display:none}.app{min-height:100%;padding-bottom:10px}</style>');addEventListener('load',sendHeight);addEventListener('resize',sendHeight);setTimeout(sendHeight,300);setTimeout(sendHeight,1000)}</script>
+</body></html>

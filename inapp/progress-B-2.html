@@ -1,0 +1,52 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>Progress B-2 · Week Into Journey</title><link rel="stylesheet" href="progress-b-shared.css"></head><body>
+<div class="review-toggle"><button>All four in</button><button class="on">1 to top up</button><button>2 to top up</button></div>
+<main class="app">
+  <header class="top"><img class="logo" src="app-assets/logo-black.svg" alt="zodiac.fm"><div class="ham">&#9776;</div></header>
+  <div class="utility"><div class="week">Week 3 <span>&middot; Day 4 of 7</span></div><div class="how">How this works &#9662;</div></div>
+  <div class="stack">
+    <section class="card week-hero">
+      <div class="week-hero-top"><div class="eyebrow">This week</div><div class="week-hero-title"><span class="big num">88 min</span><span class="unit">over 4 days</span></div><div class="sub">You have passed the 63-minute minimum.</div></div>
+      <div class="week-hero-status"><span class="status-dot"></span><span><b>One frequency still needs attention.</b> Vitality is at 11%; the week moves your journey when all four reach 15%.</span></div>
+    </section>
+
+    <section class="card">
+      <div class="section-head"><h2>Balance</h2><span class="pill wait">3 of 4 ready</span></div>
+      <div class="balance-list">
+        <div class="balance-row"><span class="balance-name">Core</span><div class="track"><div class="fill" style="width:100%;background:linear-gradient(90deg,#6521C9,#A737C8)"></div></div><span class="pct num">38%</span></div>
+        <div class="balance-row"><span class="balance-name">Love</span><div class="track"><div class="fill" style="width:63%;background:linear-gradient(90deg,#B90044,#CF4090)"></div></div><span class="pct num">24%</span></div>
+        <div class="balance-row"><span class="balance-name">Vitality</span><div class="track"><div class="fill" style="width:29%;background:#FFC392"></div></div><span class="pct num" style="color:#C25500">11%</span></div>
+        <div class="balance-row"><span class="balance-name">Abundance</span><div class="track"><div class="fill" style="width:71%;background:linear-gradient(90deg,#12A56E,#46D99A)"></div></div><span class="pct num">27%</span></div>
+      </div>
+    </section>
+
+    <section class="card" style="padding:0;overflow:hidden">
+      <div style="padding:18px 20px 5px"><div class="section-head"><h2>This week and your journey</h2></div></div>
+      <div class="bridge">
+        <div class="bridge-row done"><div class="bridge-dot"></div><div><div class="bridge-label">Last milestone</div><div class="bridge-title">First Week in Balance</div><div class="bridge-desc">A full week in balance gave the journey a real beginning.</div></div></div>
+        <div class="bridge-row current"><div class="bridge-dot"></div><div><div class="bridge-label">Current milestone &middot; reached</div><div class="bridge-title">Frequency Fluency: Differentiation</div><div class="bridge-desc">This is where distinctions between your four frequencies may begin to become noticeable.</div></div></div>
+        <div class="bridge-row next"><div class="bridge-dot"></div><div><div class="bridge-label">Next milestone</div><div class="bridge-title">A Reason to Return</div><div class="bridge-desc">A response begins becoming a personal reference point.</div></div></div>
+      </div>
+      <button class="open-button" type="button" onclick="toggleDetail(this)"><span>Open current milestone</span><span class="chev">&#9662;</span></button>
+      <div class="milestone-detail" id="detail">
+        <p>You have reached the point where distinctions between your four frequencies may begin to become noticeable.</p>
+        <p>The same song may feel familiar with one, neutral with another, or more intense and harder to place with another. The difference may show up through attention, preference, mood, energy, or what stays with you afterward.</p>
+        <p>Every response gives you something to compare. The progress here is noticing the contrast, even when it is subtle.</p>
+        <p class="try">Try one familiar song with two frequencies and notice what changes.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head"><h2>Your listening</h2></div>
+      <div class="compact-total"><span class="big num">5h 40m</span><span class="unit">lifetime under frequency</span></div>
+      <p class="rule-note">Every minute remains part of your listening record. When a week qualifies, it also moves this journey forward.</p>
+    </section>
+
+    <section class="card"><div class="section-head"><h2>Your weeks</h2></div>
+      <div class="week-row"><div class="week-copy"><span class="week-title">Week 3</span><span class="week-sub">In progress &middot; Vitality to top up</span></div><span class="week-state">This week</span></div>
+      <div class="week-row"><div class="week-copy"><span class="week-title">Week 2</span><span class="week-sub">All four in balance &middot; 2h 20m</span></div><span class="week-state good">Counted</span></div>
+      <div class="week-row"><div class="week-copy"><span class="week-title">Week 1</span><span class="week-sub">Vitality remained under 15%</span></div><span class="week-state">Listening saved</span></div>
+    </section>
+  </div>
+</main>
+<script>function toggleDetail(b){b.classList.toggle('open');var d=document.getElementById('detail');d.classList.toggle('open');b.querySelector('span:first-child').textContent=d.classList.contains('open')?'Close current milestone':'Open current milestone';setTimeout(sendHeight,20)}function sendHeight(){try{parent.postMessage({zfmH:Math.ceil(document.documentElement.scrollHeight)},'*')}catch(e){}}if(self!==top||new URLSearchParams(location.search).has('embed')){document.head.insertAdjacentHTML('beforeend','<style>.review-toggle{display:none}.app{min-height:100%;padding-bottom:10px}</style>');addEventListener('load',sendHeight);addEventListener('resize',sendHeight);setTimeout(sendHeight,300);setTimeout(sendHeight,1000)}</script>
+</body></html>
