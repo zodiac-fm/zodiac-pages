@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:,">
+  <title>David McEwen 20 A/B Fitted Review · Zodiac.fm</title>
+  <meta name="description" content="Compare every meaningful McEwen 20 change inside one fitted review viewport.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --canvas: #efece6;
+      --paper: #fff;
+      --ink: #17131c;
+      --muted: #625b68;
+      --line: rgba(23,19,28,.15);
+      --purple: #6521c9;
+      --purple-soft: #eee8f8;
+      --green: #0a7a52;
+      --display: "Cormorant Garamond", Georgia, serif;
+      --body: "Switzer", Helvetica, sans-serif;
+      --shadow: 0 18px 50px rgba(23,19,28,.1);
+    }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { scroll-behavior: auto; }
+    body { margin: 0; color: var(--ink); background: var(--canvas); font-family: var(--body); line-height: 1.45; }
+    button, select, a { font: inherit; }
+    button, select { min-height: 44px; }
+    button:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid #ff9112; outline-offset: 3px; }
+    h1, h2, h3, p { margin: 0; }
+    h1, h2, h3 { font-family: var(--display); line-height: 1; }
+
+    .toolbar-wrap { border-bottom: 1px solid var(--line); background: rgba(239,236,230,.97); }
+    .toolbar { width: min(100% - 20px, 1380px); margin: auto; padding: 8px 0; display: grid; grid-template-columns: minmax(170px,1fr) auto auto; gap: 8px; align-items: end; }
+    .field { min-width: 0; display: grid; gap: 3px; }
+    .field-label { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .page-name { min-height: 44px; padding: 0 12px; border: 1px solid var(--line); display: flex; align-items: center; background: var(--paper); font-weight: 700; }
+    .segments { display: grid; grid-auto-flow: column; border: 1px solid var(--line); background: var(--paper); }
+    .segments button { padding: 0 13px; border: 0; border-right: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; font-weight: 700; }
+    .segments button:last-child { border-right: 0; }
+    .segments button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+    .layout { width: min(100% - 20px, 1380px); margin: 10px auto 48px; display: grid; grid-template-columns: 250px minmax(0,1fr); gap: 12px; align-items: start; }
+    .directory { border: 1px solid var(--line); background: var(--paper); box-shadow: var(--shadow); }
+    .directory-head { padding: 15px 14px 12px; border-bottom: 1px solid var(--line); }
+    .directory h1 { font-size: 29px; }
+    .directory p { margin-top: 5px; color: var(--muted); font-size: 11px; }
+    .section-list { margin: 0; padding: 0; list-style: none; }
+    .section-list button { width: 100%; padding: 9px 11px; border: 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 25px minmax(0,1fr) auto; gap: 6px; align-items: center; background: transparent; color: var(--ink); text-align: left; cursor: pointer; }
+    .section-list li:last-child button { border-bottom: 0; }
+    .section-list button:hover { background: #f8f6f2; }
+    .section-list button[aria-current="true"] { background: var(--purple-soft); color: var(--purple); }
+    .num { color: var(--muted); font-family: var(--display); font-size: 17px; }
+    .name { font-size: 11px; font-weight: 700; line-height: 1.15; }
+    .status { color: var(--muted); font-size: 8px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+    .status.meaningful { color: var(--green); }
+    .status.minor { color: #95630f; }
+
+    .workspace { min-width: 0; display: grid; grid-template-columns: minmax(0,1fr); gap: 12px; }
+    .workspace > * { min-width: 0; }
+    .stage-head { min-height: 58px; padding: 8px 12px; border: 1px solid var(--line); display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; align-items: center; background: var(--paper); }
+    .stage-count { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .stage-title { margin-top: 2px; font-family: var(--display); font-size: 25px; font-weight: 600; line-height: 1; }
+    .stage-change { margin-top: 4px; color: var(--muted); font-size: 10px; }
+    .open-links { display: flex; gap: 6px; }
+    .open-links a { min-height: 40px; padding: 0 11px; display: inline-flex; align-items: center; background: var(--purple); color: var(--paper); font-size: 10px; font-weight: 800; text-decoration: none; white-space: nowrap; }
+
+    .compare-stage { width: 100%; min-width: 0; max-width: 100%; overflow: auto; border: 1px solid var(--line); background: #d9d4cc; box-shadow: var(--shadow); }
+    .compare-grid { min-width: 790px; padding: 14px; display: grid; grid-template-columns: repeat(2, 375px); gap: 12px; justify-content: center; }
+    .frame-card { min-width: 0; }
+    .frame-label { min-height: 42px; padding: 7px 10px; border: 1px solid var(--line); border-bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; background: var(--paper); }
+    .frame-label strong { font-size: 11px; }
+    .frame-label span { color: var(--muted); font-size: 9px; }
+    .frame-shell { width: 375px; height: 1180px; overflow: hidden; border: 1px solid rgba(23,19,28,.25); background: var(--paper); }
+    iframe { width: 375px; height: 1180px; border: 0; display: block; background: var(--paper); }
+    .compare-stage.desktop .compare-grid { min-width: 1570px; grid-template-columns: repeat(2,760px); }
+    .compare-stage.desktop .frame-shell,
+    .compare-stage.desktop iframe { width: 760px; height: 1380px; }
+    .compare-stage.desktop .frame-shell { width: 760px; height: 1380px; }
+    .compare-stage.full .frame-shell,
+    .compare-stage.full iframe { height: 780px; }
+
+    .orientation { grid-column: 1 / -1; border: 1px solid var(--line); background: var(--paper); }
+    .orientation-head { padding: 14px 16px 11px; border-bottom: 1px solid var(--line); }
+    .orientation h2 { font-size: 29px; }
+    .orientation-head p { margin-top: 5px; color: var(--muted); font-size: 11px; }
+    .direction-grid { display: grid; grid-template-columns: repeat(2,1fr); }
+    .direction { padding: 16px; }
+    .direction + .direction { border-left: 1px solid var(--line); }
+    .direction-code { color: var(--purple); font-size: 10px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .direction h3 { margin-top: 5px; font-size: 25px; }
+    .direction p { margin-top: 7px; color: var(--muted); font-size: 12px; }
+    .direction strong { display: block; margin-top: 9px; color: var(--ink); font-size: 11px; }
+
+    @media (max-width: 820px) {
+      .toolbar { grid-template-columns: minmax(0,1fr) auto; }
+      .toolbar .field:first-child { grid-column: 1 / -1; }
+      .layout { grid-template-columns: 1fr; }
+      .directory { order: 2; }
+      .workspace { order: 1; }
+      .orientation { order: 3; }
+      .compare-grid { min-width: 0; grid-template-columns: repeat(2, 375px); justify-content: start; transform-origin: top left; }
+      .direction-grid { grid-template-columns: 1fr; }
+      .direction + .direction { border-top: 1px solid var(--line); border-left: 0; }
+    }
+    @media (max-width: 520px) {
+      .toolbar { grid-template-columns: 1fr 1fr; }
+      .segments button { padding-inline: 8px; font-size: 9px; }
+      .stage-head { grid-template-columns: 1fr; }
+      .open-links { display: grid; grid-template-columns: 1fr 1fr; }
+      .open-links a { justify-content: center; }
+      .compare-stage { overflow: hidden; }
+      .compare-stage.mobile .compare-grid {
+        width: 790px;
+        min-width: 790px;
+        padding: 10px;
+        gap: 10px;
+        transform: scale(var(--phone-scale, .44));
+      }
+      .compare-stage.mobile { height: calc(1244px * var(--phone-scale, .44)); }
+      .compare-stage.desktop { overflow: auto; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header class="toolbar-wrap">
+    <div class="toolbar">
+      <div class="field">
+        <span class="field-label">Page we are reviewing</span>
+        <div class="page-name">David McEwen · 20 A/B fitted review</div>
+      </div>
+      <div class="field">
+        <span class="field-label">Review</span>
+        <div class="segments" id="mode-controls">
+          <button type="button" data-mode="section" aria-pressed="true">Same section</button>
+          <button type="button" data-mode="full" aria-pressed="false">Full pages</button>
+        </div>
+      </div>
+      <div class="field">
+        <span class="field-label">Viewport</span>
+        <div class="segments" id="viewport-controls">
+          <button type="button" data-viewport="mobile" aria-pressed="true">iPhone mini</button>
+          <button type="button" data-viewport="desktop" aria-pressed="false">Desktop</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="directory">
+      <div class="directory-head">
+        <h1>Page directory</h1>
+        <p>Choose a chapter. The complete review area fits inside both frames.</p>
+      </div>
+      <ol class="section-list" id="section-list"></ol>
+    </aside>
+
+    <div class="workspace">
+      <section>
+        <div class="stage-head">
+          <div>
+            <div class="stage-count" id="stage-count">Section 01 of 14</div>
+            <div class="stage-title" id="stage-title">Hero and David</div>
+            <div class="stage-change" id="stage-change">Meaningful: manifestation promise versus literal product clarity.</div>
+          </div>
+          <div class="open-links">
+            <a href="mcewen-20-a" target="_blank" rel="noopener">Open 20-A ↗</a>
+            <a href="mcewen-20-b" target="_blank" rel="noopener">Open 20-B ↗</a>
+          </div>
+        </div>
+
+        <div class="compare-stage mobile" id="compare-stage">
+          <div class="compare-grid">
+            <article class="frame-card">
+              <div class="frame-label"><strong>20-A · Control</strong><span>complete fitted area</span></div>
+              <div class="frame-shell"><iframe id="frame-a" src="mcewen-20-a.html" title="McEwen 20-A control"></iframe></div>
+            </article>
+            <article class="frame-card">
+              <div class="frame-label"><strong>20-B · Research direction</strong><span>complete fitted area</span></div>
+              <div class="frame-shell"><iframe id="frame-b" src="mcewen-20-b.html" title="McEwen 20-B research direction"></iframe></div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="orientation">
+        <div class="orientation-head">
+          <h2>What changes between these pages</h2>
+          <p>A stays untouched. The directory distinguishes meaningful choices from minor polish and unchanged chapters.</p>
+        </div>
+        <div class="direction-grid">
+          <article class="direction">
+            <div class="direction-code">20-A</div>
+            <h3>Control</h3>
+            <p>The selected 19-A recipe exactly as reviewed: manifestation-led promise, equal study stats, existing proof typography, and semantic band borders.</p>
+            <strong>Use this to protect the last approved page.</strong>
+          </article>
+          <article class="direction">
+            <div class="direction-code">20-B</div>
+            <h3>Research direction</h3>
+            <p>Literal product H1, centered mobile proof cards with exact-source scan lines, minor pill-action polish, physical band metaphors, and a dominant 98.6% study ring.</p>
+            <strong>Use this to judge the Google Notes advice as one coherent direction.</strong>
+          </article>
+        </div>
+    </section>
+  </main>
+
+  <script>
+    const sections = [
+      { name: 'Hero and David', target: '.hero', status: 'meaningful', change: 'Meaningful: manifestation promise versus literal product clarity.' },
+      { name: "David's practice", target: '#david-method', status: 'same', change: 'Same: copy and composition are unchanged.' },
+      { name: 'Early listener proof', target: '.opening-grid .feature-proof:first-child', status: 'meaningful', change: 'Meaningful: side-by-side editorial proof versus centered portrait and outcome-first scan line.' },
+      { name: 'First invitation', target: '.cta-band .cta-panel', status: 'minor', change: 'Minor polish only: the same action receives a pill radius and soft lift.' },
+      { name: 'Birth chart, values, and bands', target: '.band-overview', status: 'meaningful', change: 'Meaningful: semantic border rows versus four distinct physical band metaphors.' },
+      { name: 'Four life domains', target: '.domains .domain-grid', status: 'same', change: 'Same: the complete four-domain gallery is unchanged.' },
+      { name: '52-week study', target: '#study .study-primary', status: 'meaningful', change: 'Meaningful: four equal stat cards versus a dominant 98.6% recommendation ring.' },
+      { name: 'Self-recognition proof', target: '#recognition-proof .portrait-card:first-child', status: 'meaningful', change: 'Meaningful: side-by-side editorial proof versus centered portrait and outcome-first scan line.' },
+      { name: 'Midpage invitation', target: '#recognition-proof + .mid-cta .cta-panel', status: 'minor', change: 'Minor polish only: the same action receives a pill radius and soft lift.' },
+      { name: 'Love, work, and opportunity', target: '#world-proof .portrait-card:first-child', status: 'meaningful', change: 'Meaningful: side-by-side editorial proof versus centered portrait and outcome-first scan line.' },
+      { name: 'Daily-use proof', target: '#daily-proof .daily-feature', status: 'meaningful', change: 'Meaningful: compact side-by-side proof versus centered portrait and outcome-first scan line.' },
+      { name: 'Nine-minute invitation', target: '#daily-proof + .mid-cta .cta-panel', status: 'minor', change: 'Minor polish only: the same action receives a pill radius and soft lift.' },
+      { name: 'Final invitation', target: '.final .narrow', status: 'minor', change: 'Minor polish only: the same action receives a pill radius and soft lift.' },
+      { name: 'FAQ and disclosures', target: '.faq', status: 'same', change: 'Same: objections, disclosures, and close are unchanged.' }
+    ];
+
+    const list = document.getElementById('section-list');
+    const frames = [document.getElementById('frame-a'), document.getElementById('frame-b')];
+    const stage = document.getElementById('compare-stage');
+    const count = document.getElementById('stage-count');
+    const title = document.getElementById('stage-title');
+    const change = document.getElementById('stage-change');
+    let activeSection = 0;
+    let mode = 'section';
+
+    function renderDirectory() {
+      list.innerHTML = sections.map((section, index) => `
+        <li><button type="button" data-index="${index}" aria-current="${index === activeSection}">
+          <span class="num">${String(index + 1).padStart(2, '0')}</span>
+          <span class="name">${section.name}</span>
+          <span class="status ${section.status}">${section.status}</span>
+        </button></li>`).join('');
+      list.querySelectorAll('button').forEach(button => button.addEventListener('click', () => selectSection(Number(button.dataset.index))));
+    }
+
+    function showSelectedArea() {
+      if (mode !== 'section') return;
+      const target = sections[activeSection].target;
+      const visibleHeight = stage.classList.contains('desktop') ? 1380 : 1180;
+      const audit = [];
+      frames.forEach(frame => {
+        const node = frame.contentDocument.querySelector(target);
+        if (!node) {
+          audit.push({ frame: frame.id, found: false, fits: false });
+          return;
+        }
+        const top = node.getBoundingClientRect().top + frame.contentWindow.scrollY;
+        frame.contentWindow.scrollTo({ top, behavior: 'auto' });
+        audit.push({ frame: frame.id, found: true, height: Math.round(node.getBoundingClientRect().height), visibleHeight, fits: node.getBoundingClientRect().height <= visibleHeight });
+      });
+      window.__reviewAudit = { section: activeSection + 1, target, audit };
+      stage.dataset.audit = JSON.stringify(window.__reviewAudit);
+    }
+
+    function selectSection(index) {
+      activeSection = index;
+      const section = sections[index];
+      count.textContent = `Section ${String(index + 1).padStart(2, '0')} of ${sections.length}`;
+      title.textContent = section.name;
+      change.textContent = section.change;
+      renderDirectory();
+      if (mode === 'section') requestAnimationFrame(showSelectedArea);
+      document.querySelector('.workspace').scrollIntoView({ block: 'start', behavior: 'auto' });
+    }
+
+    document.getElementById('mode-controls').addEventListener('click', event => {
+      const button = event.target.closest('button[data-mode]');
+      if (!button) return;
+      mode = button.dataset.mode;
+      document.querySelectorAll('[data-mode]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      stage.classList.toggle('full', mode === 'full');
+      if (mode === 'full') frames.forEach(frame => {
+        frame.contentWindow.scrollTo({ top: 0, behavior: 'auto' });
+      });
+      else selectSection(activeSection);
+      updatePhoneScale();
+    });
+
+    document.getElementById('viewport-controls').addEventListener('click', event => {
+      const button = event.target.closest('button[data-viewport]');
+      if (!button) return;
+      const viewport = button.dataset.viewport;
+      document.querySelectorAll('[data-viewport]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      stage.classList.toggle('mobile', viewport === 'mobile');
+      stage.classList.toggle('desktop', viewport === 'desktop');
+      requestAnimationFrame(() => {
+        updatePhoneScale();
+        if (mode === 'section') showSelectedArea();
+      });
+    });
+
+    function updatePhoneScale() {
+      if (!stage.classList.contains('mobile') || window.innerWidth > 520) {
+        stage.style.height = '';
+        return;
+      }
+      const available = stage.clientWidth;
+      const scale = Math.min(.48, Math.max(.36, available / 790));
+      const naturalHeight = mode === 'full' ? 844 : 1244;
+      stage.style.setProperty('--phone-scale', scale.toFixed(3));
+      stage.style.height = `${naturalHeight * scale}px`;
+    }
+
+    frames.forEach(frame => frame.addEventListener('load', () => {
+      if (mode === 'section' && frames.every(item => item.contentDocument?.readyState === 'complete')) showSelectedArea();
+    }));
+    window.addEventListener('resize', updatePhoneScale);
+    renderDirectory();
+    updatePhoneScale();
+  </script>
+</body>
+</html>
