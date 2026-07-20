@@ -1,0 +1,288 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>Progress B2-22 · On Track / Off Track</title><link rel="stylesheet" href="progress-B2-card-shared.css">
+<style>
+/* B2-22 (app-B-24). Round 18 (Michael's three changes): (1) "(63 minutes minimum)"
+   small gray beside the This-week headline; (2) the 63-min label stays on the time bar
+   even when met (check joins it); (3) the corner pill is now On Track (green) /
+   Off Track · time|balance (red) — never "counts", because mid-week later listening
+   can always tip balance. Time-on-track is pace-aware (63 hit, or >= 9 x days elapsed).
+   Demo states as before. PLACEHOLDER data. */
+:root{--love:#B90044;--love-ink:#B90044;--vit-bar:#FF9112;--vit-ink:#C25500;--ab-bar:#12A56E;--ab-ink:#0A7A52}
+html.embed .app{min-height:auto}
+/* one header layer: identical on every section card, loudest in its section */
+.section-head h2{font:700 20px/1.15 Suisse,Switzer,-apple-system,sans-serif;color:var(--ink);letter-spacing:-.012em}
+.quiet-pill{font-size:10px;padding:5px 10px}
+/* numbers are NEVER the serif (locked type law) */
+.this-week strong{font:700 16px/1 Suisse,Switzer,-apple-system,sans-serif;color:var(--ink);letter-spacing:-.01em}
+/* the now-card: same headline size as every card; COLOR carries the difference */
+.experience-lead{background:radial-gradient(150% 130% at 100% -30%, var(--tint) 0%, #fff 58%)}
+.experience-lead .experience-top{background:transparent;padding:20px 21px 0}
+.experience-lead .title{font:700 20px/1.15 Suisse,Switzer,-apple-system,sans-serif;color:var(--ink);letter-spacing:-.012em;margin-top:0}
+.experience-lead .meaning{margin-top:9px}
+.experience-lead .copy{background:transparent}
+.fbars{margin-top:13px;display:flex;flex-direction:column;gap:8px}
+.fbar{display:grid;grid-template-columns:64px 1fr 34px;align-items:center;gap:9px}
+.fbar .fname{font-size:10.5px;font-weight:700;letter-spacing:.02em}
+.fbar .ftrack{position:relative;height:7px;border-radius:999px;background:var(--mist)}
+.fbar .ffill{position:absolute;left:0;top:0;bottom:0;border-radius:inherit}
+.fbar .fmin{position:absolute;top:-2.5px;bottom:-2.5px;width:1.5px;background:rgba(26,22,32,.28)}
+.fbar .fpct{font-size:10.5px;font-weight:700;text-align:right}
+.fbar.core .fname,.fbar.core .fpct{color:var(--purple)}.fbar.core .ffill{background:var(--purple)}
+.fbar.love .fname,.fbar.love .fpct{color:var(--love-ink)}.fbar.love .ffill{background:var(--love)}
+.fbar.vit .fname,.fbar.vit .fpct{color:var(--vit-ink)}.fbar.vit .ffill{background:var(--vit-bar)}
+.fbar.ab .fname,.fbar.ab .fpct{color:var(--ab-ink)}.fbar.ab .ffill{background:var(--ab-bar)}
+.fgap{position:absolute;top:0;bottom:0;border-radius:inherit}
+.fbar.core .fgap{background:#EFECFF}.fbar.love .fgap{background:#FFE8EA}.fbar.vit .fgap{background:#FFEADA}.fbar.ab .fgap{background:#DCF4E8}
+.fpct.short{justify-self:end;border-radius:999px;padding:3px 8px;background:#FFE8EA;color:#B90044!important}
+.fpct .okc{color:#0A7A52;font-size:10px;margin-left:3px}
+.quiet-pill.counts{background:#DCF4E8;border-color:#bfe8d5;color:#0A7A52}
+.quiet-pill.hide{display:none}
+.quiet-pill.ontrack{background:#DCF4E8;border-color:#bfe8d5;color:#0A7A52}
+.quiet-pill.offtrack{background:#FFE8EA;border-color:#f3cdd3;color:#B90044}
+.section-head .hmin{font:500 11px/1 Suisse,Switzer,-apple-system,sans-serif;color:var(--muted);letter-spacing:0;white-space:nowrap}
+.timebar{position:relative;height:8px;border-radius:999px;background:var(--mist);margin:22px 0 4px}
+.timebar .tfill{position:absolute;left:0;top:0;bottom:0;border-radius:inherit;background:var(--purple)}
+.timebar .ttick{position:absolute;top:-2.5px;bottom:-2.5px;width:1.5px;background:rgba(26,22,32,.28)}
+.timebar .tlab{position:absolute;top:-16px;font-size:9px;font-weight:700;letter-spacing:.02em;color:#a39ca8;white-space:nowrap;transform:translateX(-50%)}
+.timebar .tok{position:absolute;top:-19px;font-size:11px;color:#0A7A52;transform:translateX(-50%)}
+.zone-div{border-top:1px solid var(--line);margin:16px 0 2px}
+.lowline{display:flex;align-items:center;gap:7px;margin-top:11px;font-size:12px;font-weight:600;color:var(--vit-ink)}
+.lowline .lowmark{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:var(--vit-bar)}
+.jlist{margin-top:2px}
+.map-card{overflow:hidden;padding:0}
+.map-card .signal{height:5px;background:linear-gradient(90deg,var(--purple) 0 26%,var(--love) 26% 47%,var(--vit-bar) 47% 66%,var(--ab-bar) 66%)}
+.map-card .map-inner{padding:20px 20px 21px}
+.jstage{font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#a39ca8;margin:20px 0 6px}
+.jstage:first-child{margin-top:18px}
+.jstage.live{color:var(--purple)}
+.jrow{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:12px;color:var(--muted)}
+.jrow .jdot{width:16px;height:16px;flex:0 0 16px;border-radius:50%;background:var(--moon);border:1px solid var(--line);display:grid;place-items:center;font-size:8px;font-weight:700;color:#948e98}
+.jrow .jname{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jrow .jwk{margin-left:auto;flex:0 0 auto;font-size:10px;color:#a39ca8;font-variant-numeric:tabular-nums}
+.jrow.passed .jdot{background:var(--purple);border-color:var(--purple);color:#fff}
+.jrow.passed .jname{color:var(--control)}
+.jrow.passed .jwk{color:var(--muted)}
+.jrow.current{background:var(--tint);border-radius:11px;margin:1px -9px;padding:6.5px 9px}
+.jrow.current .jdot{background:#fff;border:2px solid var(--purple);color:var(--deep)}
+.jrow.current .jname{color:var(--deep);font-weight:700;font-size:12.5px}
+.jrow.current .jwk{color:var(--purple);font-weight:700}
+.jrow.next-up .jdot{background:var(--tint);border-color:var(--soft);color:var(--deep)}
+.jrow.next-up .jname{color:var(--control);font-weight:600}
+.jfoot{font-size:10px;line-height:1.45;color:#a39ca8;margin-top:11px}
+/* detailed listening stats: quiet, plain rows + a lifetime by-frequency split */
+.statrows{margin-top:11px}
+.statrow{display:flex;align-items:baseline;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+.statrow:last-child{border-bottom:0}
+.statrow b{font-size:13px;font-weight:600;color:var(--control)}
+.splitlab{font-size:10.5px;font-weight:700;letter-spacing:.02em;color:var(--muted);margin-top:14px}
+.splitbar{display:flex;height:9px;border-radius:999px;overflow:hidden;margin-top:8px}
+.splitbar i{display:block;height:100%}
+.splitbar .sc{background:var(--purple)}.splitbar .sl{background:var(--love)}.splitbar .sv{background:var(--vit-bar)}.splitbar .sa{background:var(--ab-bar)}
+.splitkey{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:11px}
+.splitkey div{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}
+.splitkey i{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+.splitkey b{margin-left:auto;font-weight:600;color:var(--control);font-variant-numeric:tabular-nums}
+.splitkey .kc i{background:var(--purple)}.splitkey .kl i{background:var(--love)}.splitkey .kv i{background:var(--vit-bar)}.splitkey .ka i{background:var(--ab-bar)}
+
+/* round-5 breathing: nothing floats between cards, more air everywhere */
+.stack{gap:18px;padding:15px 17px 32px}
+.quiet-card{padding:20px 20px 19px}
+.experience-lead .experience-top{padding:22px 21px 19px}
+.experience-lead .copy{padding:17px 21px 20px}
+/* Next lives INSIDE the experience card, with space and presence */
+.nextblock{margin:2px 19px 20px;padding:15px 17px 16px;border-radius:15px;background:var(--tint)}
+.nextblock .nlab{font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#7a6fa0}
+.nextblock .nname{font:600 15px/1.25 Suisse,Switzer,-apple-system,sans-serif;color:var(--deep);margin-top:5px}
+.nextblock .ndesc{font-size:12px;line-height:1.5;color:#55506a;margin-top:6px}
+/* weekly bars */
+.fbars{position:relative;margin-top:24px;display:flex;flex-direction:column;gap:10px}
+.fbar{display:grid;grid-template-columns:64px 1fr 44px;align-items:center;gap:9px}
+.fbar .fname{font-size:10.5px;font-weight:700;letter-spacing:.02em}
+.fbar .ftrack{position:relative;height:7px;border-radius:999px;background:var(--mist)}
+.fbar .ffill{position:absolute;left:0;top:0;bottom:0;border-radius:inherit}
+.fbar .fmin{position:absolute;top:-2.5px;bottom:-2.5px;width:1.5px;background:rgba(26,22,32,.28)}
+.fbar .fpct{font-size:10.5px;font-weight:700;text-align:right}
+.fbar.core .fname,.fbar.core .fpct{color:var(--purple)}.fbar.core .ffill{background:var(--purple)}
+.fbar.love .fname,.fbar.love .fpct{color:var(--love-ink)}.fbar.love .ffill{background:var(--love)}
+.fbar.vit .fname,.fbar.vit .fpct{color:var(--vit-ink)}.fbar.vit .ffill{background:var(--vit-bar)}
+.fbar.ab .fname,.fbar.ab .fpct{color:var(--ab-ink)}.fbar.ab .ffill{background:var(--ab-bar)}
+.fgap{position:absolute;top:0;bottom:0;border-radius:inherit}
+.fbar.core .fgap{background:#EFECFF}.fbar.love .fgap{background:#FFE8EA}.fbar.vit .fgap{background:#FFEADA}.fbar.ab .fgap{background:#DCF4E8}
+.fpct.short{justify-self:end;border-radius:999px;padding:3px 8px;background:#FFE8EA;color:#B90044!important}
+.fpct .okc{color:#0A7A52;font-size:10px;margin-left:3px}
+.quiet-pill.counts{background:#DCF4E8;border-color:#bfe8d5;color:#0A7A52}
+.quiet-pill.hide{display:none}
+.quiet-pill.ontrack{background:#DCF4E8;border-color:#bfe8d5;color:#0A7A52}
+.quiet-pill.offtrack{background:#FFE8EA;border-color:#f3cdd3;color:#B90044}
+.section-head .hmin{font:500 11px/1 Suisse,Switzer,-apple-system,sans-serif;color:var(--muted);letter-spacing:0;white-space:nowrap}
+.timebar{position:relative;height:8px;border-radius:999px;background:var(--mist);margin:22px 0 4px}
+.timebar .tfill{position:absolute;left:0;top:0;bottom:0;border-radius:inherit;background:var(--purple)}
+.timebar .ttick{position:absolute;top:-2.5px;bottom:-2.5px;width:1.5px;background:rgba(26,22,32,.28)}
+.timebar .tlab{position:absolute;top:-16px;font-size:9px;font-weight:700;letter-spacing:.02em;color:#a39ca8;white-space:nowrap;transform:translateX(-50%)}
+.timebar .tok{position:absolute;top:-19px;font-size:11px;color:#0A7A52;transform:translateX(-50%)}
+.zone-div{border-top:1px solid var(--line);margin:16px 0 2px}
+.timenote{font-size:11.5px;line-height:1.5;color:var(--muted);margin-top:7px}
+
+/* B2-8 device: labeled 15% line + an actionable chip on the short frequency + lifetime row in-card */
+.minlab{position:absolute;top:-16px;left:15%;font-size:9px;font-weight:700;letter-spacing:.02em;color:#a39ca8;white-space:nowrap}
+.vlow{justify-self:end;background:var(--vitality-tint);border-radius:999px;padding:3px 8px}
+.liferow{display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid var(--line);margin-top:16px;padding-top:13px;font-size:12px;color:var(--muted)}
+.liferow b{font-size:13px;font-weight:600;color:var(--control);font-variant-numeric:tabular-nums}
+
+/* How-this-works dropdown (ported from A-2, the control) */
+.question{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.question .qchev{font-size:10px;transition:transform .2s;opacity:.8}
+.question.open .qchev{transform:rotate(180deg)}
+.lpanel{display:none;margin:8px 17px 0;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 17px 17px;box-shadow:0 6px 20px rgba(26,22,32,.06)}
+.lpanel.open{display:block}
+.lpanel .lp-lead{font-size:13px;line-height:1.5;color:var(--control)}
+.lpanel .lp-lead b{font-weight:700}
+.lprow{display:flex;gap:11px;align-items:baseline;margin-top:13px}
+.lprow .lpdot{flex:0 0 9px;height:9px;border-radius:50%;background:var(--soft)}
+.lprow .lpn{font-size:13px;font-weight:700;color:var(--ink)}
+.lprow .lpn .lpm{font-weight:600;color:var(--purple);font-variant-numeric:lining-nums;white-space:nowrap}
+.lprow .lpd{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.4}
+.lp-foot{border-top:1px solid var(--line);margin-top:14px;padding-top:12px;font-size:12.5px;line-height:1.5;color:var(--control)}
+.lp-foot2b{margin-top:10px;font-size:12.5px;line-height:1.5;color:var(--control)}
+.lp-foot2{margin-top:10px;font-size:12px;line-height:1.5;color:var(--muted)}
+/* one accent per zone: the action line is ink; the Next panel owns the purple moment */
+.listen-for{font-weight:700;color:var(--ink)}
+</style></head><body>
+<main class="app">
+  <header class="top"><img class="logo" src="app-assets/logo-black.svg" alt="zodiac.fm"><div class="ham">&#9776;</div></header>
+  <div class="utility"><div class="week">Week 3 <span>&middot; Day 4 of 7</span></div><div class="question" id="howTrigger">How this works <span class="qchev">&#9662;</span></div></div>
+  <div class="lpanel" id="howPanel">
+    <div class="lp-lead"><b>Making the week count:</b></div>
+    <div class="lprow"><div class="lpdot"></div><div><div class="lpn">9 minutes a day <span class="lpm">on average</span></div><div class="lpd">skipping days is fine, simply hit 63 minutes a week or more.</div></div></div>
+    <div class="lprow"><div class="lpdot"></div><div><div class="lpn">Balance frequencies <span class="lpm">15% minimum</span></div><div class="lpd">each frequency needs at least 15% of your week's listening time.</div></div></div>
+    <div class="lp-foot">Hit both and your week counts. It also puts you at the minimum where our research participants started to get the Zodiac Experience.</div>
+    <div class="lp-foot2b">That's the floor, not the ceiling. The more time you spend under frequency in balance, the more profound your experience becomes.</div>
+    <div class="lp-foot2">And if a week slips, nothing is lost. Every minute still counts, and next week is right there.</div>
+  </div>
+  <div class="stack">
+    <section class="card quiet-card">
+      <div class="section-head"><h2>This week <span class="hmin">(63 minutes minimum)</span></h2><span class="quiet-pill" id="twPill">Still building</span></div>
+      <div class="this-week"><strong class="num" id="twMin">88 min</strong><span id="twLabel">under frequency across 4 days</span></div>
+      <div class="timebar" id="timebar"></div>
+      <div class="zone-div"></div>
+      <div class="fbars" id="fbars"></div>
+      <div class="liferow"><span>Lifetime in balance</span><b class="num">2h 20m</b></div>
+    </section>
+
+    <section class="card experience-lead">
+      <div class="experience-top">
+        <h1 class="title">Noticing the Difference</h1>
+        <p class="meaning">Your four frequencies may be starting to meet you differently.</p>
+      </div>
+      <div class="copy">
+        <p>The same song may feel familiar with one frequency, neutral with another, or more intense and harder to place with another. The difference may show up through attention, preference, mood, energy, or what stays with you afterward.</p>
+        <p>Every response gives you something to compare. What matters now is noticing the contrast, even when it is subtle.</p>
+        <p class="listen-for" style="margin-top:15px">Try one familiar song with two frequencies and notice what changes.</p>
+      </div>
+      <div class="nextblock"><div class="nlab">Next</div><div class="nname">What Matters Gets Clearer</div><p class="ndesc">As life gives you more information, your own preferences and priorities may stand out more clearly.</p></div>
+    </section>
+
+    <section class="card map-card">
+      <div class="signal"></div>
+      <div class="map-inner">
+      <div class="section-head"><h2>Your journey</h2><span class="quiet-pill">2 of 25</span></div>
+      <div class="jlist">
+        <div class="jstage live">The first exhale</div>
+        <div class="jrow passed"><span class="jdot">&#10003;</span><span class="jname">First Week in Balance</span><span class="jwk">week 1</span></div>
+        <div class="jrow current"><span class="jdot">2</span><span class="jname">Noticing the Difference</span><span class="jwk">now</span></div>
+        <div class="jrow next-up"><span class="jdot">3</span><span class="jname">What Matters Gets Clearer</span><span class="jwk">next</span></div>
+        <div class="jstage">A place you can return to</div>
+        <div class="jrow"><span class="jdot">4</span><span class="jname">This Feels Like Me</span><span class="jwk">&asymp; wk 7</span></div>
+        <div class="jrow"><span class="jdot">5</span><span class="jname">Familiar Ground</span><span class="jwk">&asymp; wk 9</span></div>
+        <div class="jrow"><span class="jdot">6</span><span class="jname">Frequency Fluency: Recognition</span><span class="jwk">&asymp; wk 11</span></div>
+        <div class="jstage">It follows you into life</div>
+        <div class="jrow"><span class="jdot">7</span><span class="jname">Someone Else Notices</span><span class="jwk">&asymp; wk 13</span></div>
+        <div class="jrow"><span class="jdot">8</span><span class="jname">What Has Your Attention</span><span class="jwk">&asymp; wk 15</span></div>
+        <div class="jrow"><span class="jdot">9</span><span class="jname">What Fits Better</span><span class="jwk">&asymp; wk 17</span></div>
+        <div class="jrow"><span class="jdot">10</span><span class="jname">Where It Shows Up</span><span class="jwk">&asymp; wk 19</span></div>
+        <div class="jrow"><span class="jdot">11</span><span class="jname">What Keeps Returning</span><span class="jwk">&asymp; wk 21</span></div>
+        <div class="jstage">Your inner compass gets clearer</div>
+        <div class="jrow"><span class="jdot">12</span><span class="jname">Your Own Read</span><span class="jwk">&asymp; wk 23</span></div>
+        <div class="jrow"><span class="jdot">13</span><span class="jname">Signal From Noise</span><span class="jwk">&asymp; wk 25</span></div>
+        <div class="jrow"><span class="jdot">14</span><span class="jname">A Clearer Choice</span><span class="jwk">&asymp; wk 27</span></div>
+        <div class="jrow"><span class="jdot">15</span><span class="jname">The World Responds</span><span class="jwk">&asymp; wk 30</span></div>
+        <div class="jstage">You see yourself while it is happening</div>
+        <div class="jrow"><span class="jdot">16</span><span class="jname">The Pattern Becomes Visible</span><span class="jwk">&asymp; wk 32</span></div>
+        <div class="jrow"><span class="jdot">17</span><span class="jname">Room to Respond</span><span class="jwk">&asymp; wk 34</span></div>
+        <div class="jrow"><span class="jdot">18</span><span class="jname">Yourself in Motion</span><span class="jwk">&asymp; wk 36</span></div>
+        <div class="jstage">The world meets more of you</div>
+        <div class="jrow"><span class="jdot">19</span><span class="jname">Frequency Fluency: Navigation</span><span class="jwk">&asymp; wk 38</span></div>
+        <div class="jrow"><span class="jdot">20</span><span class="jname">Relationships Get Truer</span><span class="jwk">&asymp; wk 40</span></div>
+        <div class="jrow"><span class="jdot">21</span><span class="jname">Participation Gets Clearer</span><span class="jwk">&asymp; wk 42</span></div>
+        <div class="jstage">More of you has somewhere to go</div>
+        <div class="jrow"><span class="jdot">22</span><span class="jname">Frequency Fluency: Integration</span><span class="jwk">&asymp; wk 45</span></div>
+        <div class="jrow"><span class="jdot">23</span><span class="jname">More Room to Play</span><span class="jwk">&asymp; wk 47</span></div>
+        <div class="jrow"><span class="jdot">24</span><span class="jname">Shared Connection</span><span class="jwk">&asymp; wk 50</span></div>
+        <div class="jrow"><span class="jdot">25</span><span class="jname">Chosen Contribution</span><span class="jwk">&asymp; wk 52</span></div>
+      </div>
+      <p class="jfoot">Arrival marks are estimates at your current listening pace. More balanced listening can bring them closer.</p>
+      </div>
+    </section>
+
+    <section class="card quiet-card">
+      <div class="section-head"><h2>Listening stats</h2></div>
+      <div class="statrows">
+        <div class="statrow"><span>Total listening</span><b class="num">5h 10m</b></div>
+        <div class="statrow"><span>In balance</span><b class="num">2h 20m</b></div>
+        <div class="statrow"><span>Days listened</span><b class="num">11 of 18</b></div>
+        <div class="statrow"><span>Balanced weeks</span><b class="num">1</b></div>
+      </div>
+      <div class="splitlab">By frequency, all time</div>
+      <div class="splitbar"><i class="sc" style="width:37%"></i><i class="sl" style="width:27%"></i><i class="sv" style="width:15%"></i><i class="sa" style="width:21%"></i></div>
+      <div class="splitkey">
+        <div class="kc"><i></i>Core<b class="num">1h 55m</b></div>
+        <div class="kl"><i></i>Love<b class="num">1h 25m</b></div>
+        <div class="kv"><i></i>Vitality<b class="num">45m</b></div>
+        <div class="ka"><i></i>Abundance<b class="num">1h 5m</b></div>
+      </div>
+    </section>
+  </div>
+</main>
+<script>
+(function(){
+var SC={
+ 'day1':      {min:'15 min', mins:15, days:1, label:'under frequency across 1 day',  p:[100,0,0,0]},
+ 'one-short': {min:'88 min', mins:88, days:4, label:'under frequency across 4 days', p:[34,29,11,26]},
+ 'three-short':{min:'70 min',mins:70, days:3, label:'under frequency across 3 days', p:[60,14,12,14]},
+ 'minutes':   {min:'40 min', mins:40, days:6, label:'under frequency across 6 days', p:[30,25,20,25]},
+ 'counts':    {min:'96 min', mins:96, days:5, label:'under frequency across 5 days', p:[30,24,20,26]}
+};
+var q='';try{q=top.location.search}catch(e){q=location.search}
+var demo=(new URLSearchParams(q).get('demo'))||'one-short';
+var sc=SC[demo]||SC['one-short'];
+var balanced=sc.p.every(function(v){return v>=15});
+var enough=sc.mins>=63;
+var timeOK=enough||sc.mins>=9*sc.days;
+document.getElementById('twMin').textContent=sc.min;
+document.getElementById('twLabel').textContent=sc.label;
+var pill=document.getElementById('twPill');
+if(timeOK&&balanced){pill.textContent='On Track';pill.classList.add('ontrack');}
+else{var why=(!timeOK&&!balanced)?'':(!timeOK?' \u00b7 time':' \u00b7 balance');pill.textContent='Off Track'+why;pill.classList.add('offtrack');}
+var tmax=Math.max(sc.mins,78), tick=63/tmax*100, tfill=Math.min(sc.mins/tmax*100,100);
+document.getElementById('timebar').innerHTML=
+ '<span class="tfill" style="width:'+tfill+'%"></span>'+
+ '<span class="ttick" style="left:'+tick+'%"></span>'+
+ '<span class="tlab" style="left:'+tick+'%">63 min'+(enough?' <span style="color:#0A7A52">\u2713</span>':'')+'</span>';
+var FAM=[['core','Core'],['love','Love'],['vit','Vitality'],['ab','Abundance']];
+var h='';
+FAM.forEach(function(f,i){
+ var v=sc.p[i], low=v<15;
+ var fill=v>0?'<span class="ffill" style="width:'+Math.min(v,100)+'%"></span>':'';
+ var gap=low?'<span class="fgap" style="left:'+v+'%;width:'+(15-v)+'%"></span>':'';
+ var lab=(i===0)?'<span class="minlab">15% to count</span>':'';
+ var pct=low?'<span class="fpct num short">'+v+'%</span>':'<span class="fpct num">'+v+'%<span class="okc">\u2713</span></span>';
+ h+='<div class="fbar '+f[0]+'"><span class="fname">'+f[1]+'</span><span class="ftrack">'+fill+gap+'<span class="fmin" style="left:15%"></span>'+lab+'</span>'+pct+'</div>';
+});
+document.getElementById('fbars').innerHTML=h;
+})();
+if(self!==top||new URLSearchParams(location.search).has('embed')){document.documentElement.classList.add('embed')}
+var _lastH=0;
+function sendHeight(){try{var h=Math.ceil(document.documentElement.scrollHeight);if(h!==_lastH){_lastH=h;parent.postMessage({zfmH:h},'*')}}catch(e){}}
+if(document.documentElement.classList.contains('embed')){addEventListener('load',sendHeight);addEventListener('resize',sendHeight);setTimeout(sendHeight,300);setTimeout(sendHeight,1000)}
+document.getElementById('howTrigger').addEventListener('click',function(){document.getElementById('howPanel').classList.toggle('open');this.classList.toggle('open');setTimeout(sendHeight,50)});
+</script>
+</body></html>
