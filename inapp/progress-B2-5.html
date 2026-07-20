@@ -1,0 +1,133 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>Progress B2-5 · Lifetime line, experience, fine next</title><link rel="stylesheet" href="progress-B2-card-shared.css">
+<style>
+/* B2-5 (app-B-7). Michael's round-3 order: flat lifetime line under the week row, the
+   experience card, a fine line for Next, This week with a plain low-frequency indicator
+   (no fine print), then the staged journey from B2-4.
+   Journey names are WORKING TITLES from working/expectation-engine-milestone-build-v2.md
+   ("titles not final"); week marks are PLACEHOLDER estimates pending the timing engine. */
+:root{--love:#B90044;--love-ink:#B90044;--vit-bar:#FF9112;--vit-ink:#C25500;--ab-bar:#12A56E;--ab-ink:#0A7A52}
+html.embed .app{min-height:auto}
+/* flat lifetime strip: on the ground, no card */
+.lifeline{display:flex;align-items:baseline;gap:8px;padding:10px 20px 2px}
+.lifeline .num{font:500 21px/1 Canela,Georgia,serif;color:var(--deep)}
+.lifeline span{font-size:11px;color:var(--muted)}
+/* fine line for the next experience: flat on the ground, one line */
+.nextline{display:flex;align-items:center;gap:9px;padding:3px 20px}
+.nextline .ndot{width:13px;height:13px;flex:0 0 13px;border-radius:50%;background:radial-gradient(circle at 34% 28%,#fff,rgba(255,255,255,0) 32%),linear-gradient(145deg,var(--purple),#A737C8)}
+.nextline .nlab{font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.nextline .nname{font:500 15px/1.1 Canela,Georgia,serif;color:var(--deep)}
+.nextline .nchev{margin-left:auto;color:#a39ca8;font-size:14px}
+/* weekly bars: four frequencies in their own colors against the 15% line */
+.fbars{margin-top:13px;display:flex;flex-direction:column;gap:8px}
+.fbar{display:grid;grid-template-columns:64px 1fr 34px;align-items:center;gap:9px}
+.fbar .fname{font-size:10.5px;font-weight:700;letter-spacing:.02em}
+.fbar .ftrack{position:relative;height:7px;border-radius:999px;background:var(--mist)}
+.fbar .ffill{position:absolute;left:0;top:0;bottom:0;border-radius:inherit}
+.fbar .fmin{position:absolute;top:-2.5px;bottom:-2.5px;width:1.5px;background:rgba(26,22,32,.28)}
+.fbar .fpct{font-size:10.5px;font-weight:700;text-align:right}
+.fbar.core .fname,.fbar.core .fpct{color:var(--purple)}.fbar.core .ffill{background:var(--purple)}
+.fbar.love .fname,.fbar.love .fpct{color:var(--love-ink)}.fbar.love .ffill{background:var(--love)}
+.fbar.vit .fname,.fbar.vit .fpct{color:var(--vit-ink)}.fbar.vit .ffill{background:var(--vit-bar)}
+.fbar.ab .fname,.fbar.ab .fpct{color:var(--ab-ink)}.fbar.ab .ffill{background:var(--ab-bar)}
+/* the low indicator: plain, colored, no fine print */
+.lowline{display:flex;align-items:center;gap:7px;margin-top:11px;font-size:12px;font-weight:600;color:var(--vit-ink)}
+.lowline .lowmark{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:var(--vit-bar)}
+/* staged journey (from B2-4) */
+.jlist{margin-top:6px}
+.jstage{font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#a39ca8;margin:15px 0 4px}
+.jstage:first-child{margin-top:10px}
+.jstage.live{color:var(--purple)}
+.jrow{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:12px;color:var(--muted)}
+.jrow .jdot{width:16px;height:16px;flex:0 0 16px;border-radius:50%;background:var(--moon);border:1px solid var(--line);display:grid;place-items:center;font-size:8px;font-weight:700;color:#948e98}
+.jrow .jname{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jrow .jwk{margin-left:auto;flex:0 0 auto;font-size:10px;color:#a39ca8;font-variant-numeric:tabular-nums}
+.jrow.passed .jdot{background:var(--purple);border-color:var(--purple);color:#fff}
+.jrow.passed .jname{color:var(--control)}
+.jrow.passed .jwk{color:var(--muted)}
+.jrow.current{background:var(--tint);border-radius:11px;margin:1px -9px;padding:6.5px 9px}
+.jrow.current .jdot{background:#fff;border:2px solid var(--purple);color:var(--deep)}
+.jrow.current .jname{color:var(--deep);font-weight:700;font-size:12.5px}
+.jrow.current .jwk{color:var(--purple);font-weight:700}
+.jrow.next-up .jdot{background:var(--tint);border-color:var(--soft);color:var(--deep)}
+.jrow.next-up .jname{color:var(--control);font-weight:600}
+.jfoot{font-size:10px;line-height:1.45;color:#a39ca8;margin-top:11px}
+</style></head><body>
+<main class="app">
+  <header class="top"><img class="logo" src="app-assets/logo-black.svg" alt="zodiac.fm"><div class="ham">&#9776;</div></header>
+  <div class="utility"><div class="week">Week 3 <span>&middot; Day 4 of 7</span></div><div class="question">How this works &#9662;</div></div>
+  <div class="lifeline"><span class="num">2h 20m</span><span>lifetime frequency in balance</span></div>
+  <div class="stack">
+    <section class="card experience-lead">
+      <div class="experience-top">
+        <div class="eyebrow">Your frequency fluency &middot; now</div>
+        <h1 class="title">Noticing the Difference</h1>
+        <p class="meaning">Your four frequencies may be starting to meet you differently.</p>
+      </div>
+      <div class="copy" style="padding:15px 19px 18px">
+        <p>The same song may feel familiar with one frequency, neutral with another, or more intense and harder to place with another. The difference may show up through attention, preference, mood, energy, or what stays with you afterward.</p>
+        <p>Every response gives you something to compare. What matters now is noticing the contrast, even when it is subtle.</p>
+        <p class="listen-for">Try one familiar song with two frequencies and notice what changes.</p>
+      </div>
+    </section>
+
+    <div class="nextline"><span class="ndot"></span><span class="nlab">Next</span><span class="nname">Your Go-To Frequency</span><span class="nchev">&#8250;</span></div>
+
+    <section class="card quiet-card">
+      <div class="section-head"><h2>This week</h2><span class="quiet-pill">Still building</span></div>
+      <div class="this-week"><strong class="num">88 min</strong><span>under frequency across 4 days</span></div>
+      <div class="fbars">
+        <div class="fbar core"><span class="fname">Core</span><span class="ftrack"><span class="ffill" style="width:34%"></span><span class="fmin" style="left:15%"></span></span><span class="fpct num">34%</span></div>
+        <div class="fbar love"><span class="fname">Love</span><span class="ftrack"><span class="ffill" style="width:29%"></span><span class="fmin" style="left:15%"></span></span><span class="fpct num">29%</span></div>
+        <div class="fbar vit"><span class="fname">Vitality</span><span class="ftrack"><span class="ffill" style="width:11%"></span><span class="fmin" style="left:15%"></span></span><span class="fpct num">11%</span></div>
+        <div class="fbar ab"><span class="fname">Abundance</span><span class="ftrack"><span class="ffill" style="width:26%"></span><span class="fmin" style="left:15%"></span></span><span class="fpct num">26%</span></div>
+      </div>
+      <p class="lowline"><span class="lowmark"></span>Vitality is under the 15% line this week.</p>
+    </section>
+
+    <section class="card map-card">
+      <div class="section-head"><h2>Your journey</h2><span class="quiet-pill">2 of 25</span></div>
+      <div class="jlist">
+        <div class="jstage live">The first exhale</div>
+        <div class="jrow passed"><span class="jdot">&#10003;</span><span class="jname">First Week in Balance</span><span class="jwk">week 1</span></div>
+        <div class="jrow current"><span class="jdot">2</span><span class="jname">Noticing the Difference</span><span class="jwk">now</span></div>
+        <div class="jrow next-up"><span class="jdot">3</span><span class="jname">Your Go-To Frequency</span><span class="jwk">next</span></div>
+        <div class="jstage">A place you can return to</div>
+        <div class="jrow"><span class="jdot">4</span><span class="jname">This Feels Like Me</span><span class="jwk">&asymp; wk 7</span></div>
+        <div class="jrow"><span class="jdot">5</span><span class="jname">Familiar Ground</span><span class="jwk">&asymp; wk 9</span></div>
+        <div class="jrow"><span class="jdot">6</span><span class="jname">Frequency Fluency: Recognition</span><span class="jwk">&asymp; wk 11</span></div>
+        <div class="jstage">It follows you into life</div>
+        <div class="jrow"><span class="jdot">7</span><span class="jname">Someone Else Notices</span><span class="jwk">&asymp; wk 13</span></div>
+        <div class="jrow"><span class="jdot">8</span><span class="jname">What Has Your Attention</span><span class="jwk">&asymp; wk 15</span></div>
+        <div class="jrow"><span class="jdot">9</span><span class="jname">What Fits Better</span><span class="jwk">&asymp; wk 17</span></div>
+        <div class="jrow"><span class="jdot">10</span><span class="jname">Where It Shows Up</span><span class="jwk">&asymp; wk 19</span></div>
+        <div class="jrow"><span class="jdot">11</span><span class="jname">What Keeps Returning</span><span class="jwk">&asymp; wk 21</span></div>
+        <div class="jstage">Your inner compass gets clearer</div>
+        <div class="jrow"><span class="jdot">12</span><span class="jname">Your Own Read</span><span class="jwk">&asymp; wk 23</span></div>
+        <div class="jrow"><span class="jdot">13</span><span class="jname">Signal From Noise</span><span class="jwk">&asymp; wk 25</span></div>
+        <div class="jrow"><span class="jdot">14</span><span class="jname">A Clearer Choice</span><span class="jwk">&asymp; wk 27</span></div>
+        <div class="jrow"><span class="jdot">15</span><span class="jname">The World Responds</span><span class="jwk">&asymp; wk 30</span></div>
+        <div class="jstage">You see yourself while it is happening</div>
+        <div class="jrow"><span class="jdot">16</span><span class="jname">The Pattern Becomes Visible</span><span class="jwk">&asymp; wk 32</span></div>
+        <div class="jrow"><span class="jdot">17</span><span class="jname">Room to Respond</span><span class="jwk">&asymp; wk 34</span></div>
+        <div class="jrow"><span class="jdot">18</span><span class="jname">Yourself in Motion</span><span class="jwk">&asymp; wk 36</span></div>
+        <div class="jstage">The world meets more of you</div>
+        <div class="jrow"><span class="jdot">19</span><span class="jname">Frequency Fluency: Navigation</span><span class="jwk">&asymp; wk 38</span></div>
+        <div class="jrow"><span class="jdot">20</span><span class="jname">Relationships Get Truer</span><span class="jwk">&asymp; wk 40</span></div>
+        <div class="jrow"><span class="jdot">21</span><span class="jname">Participation Gets Clearer</span><span class="jwk">&asymp; wk 42</span></div>
+        <div class="jstage">More of you has somewhere to go</div>
+        <div class="jrow"><span class="jdot">22</span><span class="jname">Frequency Fluency: Integration</span><span class="jwk">&asymp; wk 45</span></div>
+        <div class="jrow"><span class="jdot">23</span><span class="jname">More Room to Play</span><span class="jwk">&asymp; wk 47</span></div>
+        <div class="jrow"><span class="jdot">24</span><span class="jname">Shared Connection</span><span class="jwk">&asymp; wk 50</span></div>
+        <div class="jrow"><span class="jdot">25</span><span class="jname">Chosen Contribution</span><span class="jwk">&asymp; wk 52</span></div>
+      </div>
+      <p class="jfoot">Arrival marks are estimates at your current listening pace. More balanced listening can bring them closer.</p>
+    </section>
+  </div>
+</main>
+<script>
+if(self!==top||new URLSearchParams(location.search).has('embed')){document.documentElement.classList.add('embed')}
+var _lastH=0;
+function sendHeight(){try{var h=Math.ceil(document.documentElement.scrollHeight);if(h!==_lastH){_lastH=h;parent.postMessage({zfmH:h},'*')}}catch(e){}}
+if(document.documentElement.classList.contains('embed')){addEventListener('load',sendHeight);addEventListener('resize',sendHeight);setTimeout(sendHeight,300);setTimeout(sendHeight,1000)}
+</script>
+</body></html>
