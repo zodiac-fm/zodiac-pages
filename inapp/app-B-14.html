@@ -1,0 +1,1350 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Zodiac.fm · B-14</title>
+<script src="balance-engine.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  :root{--cream:#F6F1E8;--card:#FFFFFF;--ink:#1a1620;--mut:#7a7480;--c1:#B90044;--c2:#CF4090;--cink:#B90044;--cglow:rgba(185,0,68,.45);--cdeep:#6E0024;--ctint:#FFE8EA;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;background:#e7e2d8;font-family:'Switzer',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ink);overflow:hidden}
+  body{display:flex;align-items:center;justify-content:center}
+  .serif{font-family:'Cormorant Garamond',Georgia,serif}
+  #app{position:relative;width:min(420px,100vw);height:min(880px,100dvh);overflow:hidden;background:var(--cream)}
+  @media (min-width:440px) and (min-height:900px){ #app{border-radius:30px;box-shadow:0 30px 80px rgba(0,0,0,.22);border:1px solid rgba(0,0,0,.05)} }
+  @media (max-width:439px),(max-height:899px){ body{align-items:flex-start} #app{width:100vw;height:100dvh} }
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column}
+  /* ---------- LIST ---------- */
+  #list{background:var(--cream)}
+  .top{padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 6px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-size:21px;font-weight:700}.logo .d{color:var(--cink)}
+  .ham{font-size:20px;color:#2A2530}
+  .pills{display:flex;gap:8px;padding:8px 18px 6px;overflow-x:auto}
+  .pill{flex:0 0 auto;padding:7px 16px;border-radius:18px;background:#fff;border:1px solid #eadfce;font-size:13px;color:#6a6470;cursor:pointer}
+  .pill.on{color:#fff;border:none;background:linear-gradient(90deg,var(--c1),var(--c2))}
+  .freqcard{margin:10px 18px;background:#fff;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 18px rgba(0,0,0,.04)}
+  .blob{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.6),rgba(255,255,255,0) 46%),linear-gradient(140deg,var(--c1),var(--c2));box-shadow:0 3px 12px var(--cglow)}
+  .hz{font-size:24px;font-weight:700}.hz small{font-size:13px;color:var(--mut);font-weight:600;margin-left:2px}
+  .desc{padding:4px 22px 2px}
+  .desc h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;letter-spacing:0;line-height:1.05}
+  .desc p{font-size:13.5px;color:#6a6470;margin-top:6px;line-height:1.45}
+  .barrow{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 8px}
+  .qall{display:flex;align-items:center;gap:6px;font-size:13px;color:#55505c;background:#fff;border:1px solid #eadfce;border-radius:16px;padding:7px 14px;cursor:pointer;transition:transform .08s}
+  .qall:active{transform:scale(.95)}
+  .rows{flex:1;overflow-y:auto;padding:2px 14px 84px}
+  /* scroll region: description + guide scroll away; see per-variant sticky rules */
+  .swrap{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-height:0}
+  .swrap .rows{flex:none;overflow:visible}
+  .catey{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9a93a0}
+  .desc h2.serif2{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;line-height:1.08;margin:6px 0 13px;white-space:nowrap}
+  .hznum{font-family:'Switzer',-apple-system,sans-serif;font-weight:700;font-size:23px;letter-spacing:-.01em;color:var(--cink);font-variant-numeric:lining-nums}
+  #list .ctarow{justify-content:space-between}
+  .hztap{color:var(--cink);font-weight:700;cursor:pointer;white-space:nowrap}
+  .hztap .hzchev{display:inline-block;font-size:10px;vertical-align:1px;margin-left:3px;transition:transform .2s;opacity:.75}
+  .hztap.open .hzchev{transform:rotate(180deg)}
+  .bandpanel{position:relative;display:none;margin:12px 22px 2px;background:#fff;border:1px solid #efe6d6;border-radius:16px;padding:16px 18px 18px;box-shadow:0 6px 20px rgba(26,22,32,.06)}
+  .bandpanel.open{display:block}
+  .bandpanel h4{font-size:16px;font-weight:700;letter-spacing:-.01em}
+  .bandpanel .hzr2{font-size:12px;font-weight:600;color:var(--cink);margin-top:2px}
+  .bandpanel p{font-size:13px;line-height:1.5;color:#3a3542;margin-top:10px}
+  .bpx{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;background:#F6F1E8;color:#63616F;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer}
+  .dockbar{position:absolute;left:0;right:0;z-index:4;display:flex;justify-content:flex-end;padding:6px 18px 10px;opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity .22s ease,transform .22s ease}
+  .dockbar.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+  /* NO fill on the dock — any fill paints a band against the aurora ground (Michael 2026-07-11).
+     Instead the scroll region fades its content out under the dock zone (.docked mask below),
+     so the ground stays one continuous surface and the docked Play All floats on it. */
+  .dockbar{background:transparent;border-bottom:none}
+  #list .swrap.docked{-webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 74px);mask-image:linear-gradient(to bottom,transparent 0,#000 74px)}
+
+  #app.playing .rows{padding-bottom:150px}
+  .row{display:flex;gap:13px;align-items:center;background:#fff;border:1px solid #efe6d6;border-radius:14px;padding:10px;margin-bottom:12px;cursor:pointer}
+  .thumb{position:relative;width:79px;height:79px;border-radius:13px;overflow:visible;flex:0 0 auto;background:transparent;margin-left:-4px}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.16);filter:drop-shadow(0 3px 7px rgba(56,0,122,.13))}
+  .thumb canvas{position:absolute;inset:0}
+  .meta{flex:1;min-width:0}
+  .meta h3{font-size:16px;font-weight:600;font-family:'Switzer',-apple-system,sans-serif;line-height:1.12}
+  .meta p{font-size:12px;color:#8a8590;margin:3px 0 7px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .meta .lab{font-size:11px;color:var(--cink);font-weight:700}
+  .rt{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+  .heart{font-size:17px;color:var(--cink)}
+  .dur{font-size:11px;color:#a8a2ad}
+  .freqline{display:flex;align-items:center;gap:9px}
+  .freqline .blob{width:22px;height:22px;box-shadow:0 0 12px var(--cglow)}
+  .hzsm{font-size:18px;font-weight:700}.hzsm small{font-size:11px;color:var(--mut);font-weight:600}
+  .botrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .cardpp{width:26px;height:26px;margin-right:16px;border-radius:50%;border:none;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:#2A2530;box-shadow:0 1px 4px rgba(0,0,0,.18);cursor:pointer}
+  .cardpp svg{width:11px;height:11px;fill:#fff}
+  .row.playing{border-color:var(--cink);box-shadow:0 0 0 1.5px var(--cink)}
+  /* ---------- pinned player ---------- */
+  #mini{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 56px);background:#FFFFFF;border-top:1px solid #ece3d3;padding:9px 14px;display:none;align-items:center;gap:11px;box-shadow:0 -4px 18px rgba(0,0,0,.06);cursor:pointer;z-index:20}
+  #app.playing #mini{display:flex}
+  #mini .mt{width:42px;height:42px;border-radius:9px;overflow:hidden;flex:0 0 auto;position:relative;background:#FFFFFF}
+  #mini .mt img{width:100%;height:100%;object-fit:cover}
+  #mini .mi{flex:1;min-width:0}
+  #mini .mi b{font-size:13.5px;color:#1a1620;font-family:'Switzer',-apple-system,sans-serif;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #mini .mi span{font-size:11px;color:var(--cink);font-weight:600}
+  #mini .pp{width:36px;height:36px;border-radius:50%;border:none;color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto;background:linear-gradient(135deg,var(--c1),var(--cdeep))}
+  #mini .pp svg{width:16px;height:16px;fill:currentColor}
+  /* ---------- bottom nav ---------- */
+  #nav{position:absolute;left:0;right:0;bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #EFE6D6;display:flex;justify-content:space-around;align-items:center;z-index:15}
+  #nav div{font-size:11px;text-align:center;color:#9a95a0}#nav div.on{color:#1A1620;font-weight:700}
+  #nav .ic{font-size:16px;display:block;margin-bottom:2px}
+  /* ---------- SONG VIEW (matches the app player) ---------- */
+  #song{background:#FFFFFF;color:#1a1620;transform:translateY(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:40}
+  #song.open{transform:translateY(0)}
+  .sv-top{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 16px) 22px 6px}
+  .sv-top .back{width:40px;height:40px;margin:-8px;display:flex;align-items:center;justify-content:center;border-radius:50%;cursor:pointer;color:#2A2530}
+  .sv-top .back svg{width:24px;height:24px;stroke:currentColor;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .sv-top .back:active{background:rgba(0,0,0,.06)}
+  .sv-head{text-align:center}.sv-head .sf{font-size:11px;color:#9a95a0}.sv-head .sl{font-size:14px;font-weight:600}
+  .sv-top .sq{font-size:17px;color:#2A2530}
+  .sv-art{padding:20px 26px 0;display:flex;justify-content:center}
+  #viz{position:relative;width:100%;aspect-ratio:1/1;border-radius:18px;overflow:hidden;background:#0b0712;box-shadow:0 18px 44px rgba(0,0,0,.20)}
+  #vc{position:absolute;inset:0;width:100%;height:100%}
+  .sv-meta{display:flex;align-items:flex-start;justify-content:space-between;padding:24px 30px 2px}
+  .sv-meta h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;line-height:1.02}
+  .sv-meta .f{font-size:13px;color:var(--cink);font-weight:700;margin-top:3px}
+  .svfreq{display:inline-flex;align-items:center;gap:7px;margin-top:11px;font-size:13.5px;font-weight:600}
+  .svfreq .fdot{width:9px;height:9px;border-radius:50%;background:var(--cink);flex:0 0 auto}
+  .svfreq #svCat{color:var(--cink);font-weight:700}
+  .svfreq .svsep{color:#cfc8ba;font-weight:500}
+  .svfreq .svhz{color:#2A2530;font-weight:600;font-variant-numeric:lining-nums}
+  .svfreq .svhz b{font-weight:700;color:#2A2530}
+  .svfreq #svBand{display:inline-flex;align-items:center;gap:4px;color:var(--cink);font-weight:600;cursor:pointer;background:var(--ctint);border:1px solid color-mix(in srgb,var(--cink) 26%,transparent);border-radius:12px;padding:2.5px 9px;font-size:12.5px}
+  .svfreq #svBand:after{content:'\25BE';font-size:11px;opacity:.85}
+  .sv-meta .heart{font-size:23px;color:var(--cink)}
+  .player{padding:8px 30px calc(env(safe-area-inset-bottom,0px) + 24px)}
+  .scrub{height:4px;background:#e7e2ea;border-radius:3px;position:relative;cursor:pointer;margin:12px 0 6px}
+  .scrub .fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:3px;background:linear-gradient(90deg,var(--c1),var(--cdeep))}
+  .scrub .knob{position:absolute;top:50%;width:13px;height:13px;border-radius:50%;background:var(--cink);transform:translate(-50%,-50%);left:0;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+  .times{display:flex;justify-content:space-between;font-size:11px;color:#9a93a0;font-variant-numeric:tabular-nums}
+  .ctrls{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding:0 2px}
+  .ctrls .sk{font-size:21px;color:#a8a2ad}
+  .ctrls .skb{font-size:30px;color:#2a2530}
+  .bigpp{width:64px;height:64px;border-radius:50%;background:linear-gradient(160deg,var(--c1),var(--cdeep));border:none;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.20);cursor:pointer}
+  .bigpp svg{width:27px;height:27px;fill:#fff}
+
+  .rtic{display:flex;align-items:center;gap:11px}.dl{display:flex;color:#a8a2ad}.grip{display:flex;align-items:center;color:#c2bdc7;flex:0 0 auto;padding-right:2px;cursor:grab}
+  /* ---- CALM / RATIONED overrides: purple structure, frequency only as small accents ---- */
+  .row.playing{border-color:#6521C9!important;box-shadow:0 0 0 1.5px #6521C9!important}
+  .cardpp{background:transparent!important;border:1.5px solid var(--cink)!important;box-shadow:none!important}
+  .cardpp svg{fill:var(--cink)!important}
+  /* premium segmented control for the frequency toggle */
+  .pills{background:#EAE4DA!important;border-radius:22px!important;padding:4px!important;gap:0!important;overflow:visible!important;margin:8px 18px 8px!important}
+  .pill{flex:1!important;text-align:center!important;justify-content:center!important;border:none!important;background:transparent!important;color:#8a8590!important;border-radius:18px!important;padding:8px 2px!important;font-size:12px!important}
+  .pill.on{background:#fff!important;color:var(--cink)!important;box-shadow:0 1px 5px rgba(0,0,0,.13)!important;font-weight:700!important}
+  /* .fm tints to the active frequency (logo no longer locked to purple) */
+  #favs .logo .d{color:#1A1620!important}
+  /* GREYSCALE-CARD experiment: only the tile carries colour */
+
+  .cardpp{width:23px!important;height:23px!important}
+  .cardpp svg{width:9px!important;height:9px!important}
+  /* Hz readout instead of the frequency word: thin, cool font, paired with the play outline */
+  .lab{font-size:11px!important;font-weight:700!important;color:var(--cink)!important;letter-spacing:.2px!important}
+  .hzu{font-size:12px!important;opacity:.6!important;font-weight:400!important}
+  .botrow{align-items:center!important;padding-top:4px!important}
+  .cardpp{margin-right:0!important}
+  /* tap-anywhere play: subtle play triangle on the tile idle; equaliser + lift when playing */
+  .pov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:transparent}
+  .pcirc{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 7px rgba(0,0,0,.28)}
+  .mtop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .sic{display:flex;gap:12px;align-items:center;flex:0 0 auto;padding-top:3px}
+  .sic .dl{color:#c2bdc7;display:flex}
+  .sic .dl.on{color:var(--cink)}
+  .sic .heart{color:#c9c4cf!important;font-size:16px;line-height:1}
+  .sic .heart.on{color:var(--cink)!important}
+  .pplay{width:0;height:0;border-style:solid;border-width:6px 0 6px 10px;border-color:transparent transparent transparent var(--cink);margin-left:2px}
+  .ppause{display:none;align-items:flex-end;gap:2px;height:12px}
+  .ppause i{width:2.5px;height:100%;background:var(--cink);border-radius:2px;transform-origin:bottom;animation:eq .9s ease-in-out infinite}
+  .ppause i:nth-child(1){animation-delay:0s}.ppause i:nth-child(2){animation-delay:.25s}.ppause i:nth-child(3){animation-delay:.5s}
+  @keyframes eq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+  .row.playing .pov{background:radial-gradient(circle at 50% 50%,rgba(0,0,0,.30),rgba(0,0,0,.12))}
+  .row.playing .pplay,.row.paused .pplay{display:none}.row.playing .ppause,.row.paused .ppause{display:flex}.row.paused .ppause i{animation-play-state:paused}
+  .row.playing{box-shadow:0 0 0 2px var(--cink),0 8px 20px rgba(0,0,0,.08)!important;border-color:transparent!important}
+  .dur{font-size:12px!important}
+  .logo .logoimg{height:19px;width:auto;display:block}
+  /* play button back to small + WHITE (no coloured circle); white equaliser, frozen when paused */
+  .pov{background:transparent!important}
+  .pcirc{background:transparent!important;box-shadow:none!important;width:auto!important;height:auto!important}
+  .pplay{border-color:transparent transparent transparent #fff!important;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))!important}
+  .ppause i{background:#fff!important;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))!important}
+  /* time bold black; heart+download bold BLACK when clicked (filled), grey when empty */
+  .dur{color:#1A1620!important;font-weight:700!important}
+  .sic .dl.on{color:#1A1620!important}
+  .sic .heart.on{color:#1A1620!important;font-weight:700!important}
+  .draghint{font-size:11px;color:#a8a2ad;font-weight:600;display:flex;align-items:center;gap:5px;padding-left:2px}
+  .draghint .dharr{font-size:15px;line-height:1}
+  .lcol{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;flex:0 0 auto;padding-left:2px}
+  .qbox{width:17px;height:17px;border:1.5px solid #c2bdc7;border-radius:4px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-sizing:border-box}
+  .qbox.on{background:transparent;border-color:#948f9a}
+  .qbox.on::after{content:'';width:5px;height:9px;border:solid #1A1620;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-2px}
+  .selall{display:flex;align-items:center;gap:8px;cursor:pointer;-webkit-user-select:none;user-select:none;padding-left:2px}
+  .selall .qbox{cursor:pointer}
+  .qbox.dash{border-color:#948f9a}
+  .qbox.dash::after{content:'';width:9px;height:0;border:0;border-top:2px solid #1A1620;transform:none;margin:0;border-radius:1px}
+  .selall-lbl{font-size:12.5px;color:#7a7580;font-weight:500;letter-spacing:.01em}
+  .hzsm{color:var(--cink)!important}
+  .qbox{width:14px!important;height:14px!important;border-radius:3px!important;border-width:1.5px!important}
+  .qbox.on::after{width:4px!important;height:8px!important;border-width:0 2px 2px 0!important;margin-top:-2px!important}
+  .grip{color:#948f9a!important}
+  .grip svg{width:18px;height:18px}
+
+  .appletter{display:inline-block;font-family:'Switzer',-apple-system,sans-serif;font-size:14px;font-weight:700;color:#6a6470;background:#fff;border:1px solid #e6ddce;border-radius:9px;padding:1px 9px;margin-left:10px;letter-spacing:.05em;white-space:nowrap}
+  .logo{display:flex!important;align-items:center!important;white-space:nowrap}
+
+  .bubs{display:flex;align-items:baseline;gap:0;row-gap:4px;margin:7px 0 8px;flex-wrap:wrap;line-height:1.1;max-height:27px;overflow:hidden}
+  .bub{white-space:nowrap}
+  .bub{font-size:9.5px;font-weight:600;letter-spacing:.09em;color:#8a8390}
+  .sep{font-size:9.5px;color:#cfc8ba}
+  .oneline{font-size:11.5px;color:#8a8590}
+
+  /* two-column card anatomy: text | rail (icons + minutes). Text can never cross the rail. */
+  .mcols{display:flex;gap:10px;align-items:stretch}
+  .mtext{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:flex-start}
+  .mtext .lab{margin-top:auto}
+  .mrail{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;padding:2px 0 1px}
+
+  .legend{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:#8a8390;padding:0 22px 10px}
+  .legend .lgbox{width:13px;height:13px;border:1.5px solid #c2bdc7;border-radius:3.5px;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;color:#8a8390}
+  .legend .lgheart{color:#1A1620;font-size:12px;line-height:1}
+  .legend .lgsep{color:#cfc8ba;margin:0 2px}
+  .qbox,.sic .heart{cursor:pointer}
+  .grip{cursor:grab;touch-action:none}
+  .row,.row *{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+  .row{transition:transform .12s ease}
+  #rows .row.dragging,#favRows .row.dragging{opacity:1!important;transform:scale(1.045) rotate(-.5deg)!important;box-shadow:0 18px 38px rgba(26,22,32,.30)!important;border-color:#efe6d6!important;z-index:9!important}
+  #dragHint{position:fixed;transform:translate(-50%,0);background:#ffffff;color:#1A1620;font:600 11px/1 'Switzer',-apple-system,sans-serif;letter-spacing:.03em;padding:6px 11px;border-radius:8px;border:1px solid rgba(26,22,32,.08);pointer-events:none;opacity:0;transition:opacity .12s ease;z-index:30;white-space:nowrap;box-shadow:0 6px 16px rgba(26,22,32,.16)}
+  #dragHint.show{opacity:1}
+  #favRows .row.dragging,#rows .row.dragging{opacity:.95;box-shadow:0 12px 26px rgba(56,0,122,.20);transform:scale(1.015);position:relative;z-index:6}
+  .legend2{flex-direction:column;align-items:flex-start;gap:7px;padding-bottom:12px}
+  .legend3{align-items:flex-start;justify-content:space-between;gap:10px;padding-bottom:12px}
+  .legend3 .lgleft{display:flex;flex-direction:column;gap:7px}
+  .legend3 .lgright{flex:0 0 auto;white-space:nowrap}
+  .legimm{flex-direction:column;align-items:flex-start;gap:7px}
+  #catTitle{display:none}
+  .desc{padding-top:8px}
+  .desc p{font-size:15px;color:#55505c;margin-top:0}
+  .pill{background:rgba(255,255,255,.55)!important;margin:0 2px!important;color:#7b7580!important}
+  .pill.on{background:#fff!important;color:var(--cink)!important;box-shadow:0 1px 5px rgba(0,0,0,.13)!important;font-weight:700!important}
+  .desc{padding-top:10px}
+  .desc p{line-height:1.5}
+  .ctarow{display:flex;justify-content:space-between;align-items:center;padding:14px 22px 0}
+  .bandchip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--cink);background:var(--ctint);border:1px solid color-mix(in srgb,var(--cink) 25%,transparent);border-radius:20px;padding:6px 12px;cursor:pointer}
+  .bandchip:after{content:'\203A';font-size:14px;line-height:1;opacity:.7}
+  .bsheet-wrap{position:absolute;inset:0;z-index:60;display:none}
+  .bsheet-wrap.open{display:block}
+  .bsheet-ovl{position:absolute;inset:0;background:rgba(26,22,32,.34)}
+  .bsheet{position:absolute;left:16px;right:16px;top:50%;transform:translateY(-50%);max-height:calc(100% - 116px);overflow-y:auto;background:#fff;border-radius:22px;padding:20px 22px 22px;box-shadow:0 18px 50px rgba(26,22,32,.28)}
+  .bsx{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#F6F1E8;color:#63616F;font-size:19px;line-height:1;cursor:pointer}
+  .bscale{margin-top:16px}
+  .bstrack{position:relative;display:flex;height:12px;border-radius:7px;overflow:hidden}
+  .bseg{flex:1 1 0;background:#EEE9E0;border-right:2px solid #fff}
+  .bseg:last-child{border-right:none}
+  .bseg.act{background:var(--ctint)}
+  .bdotm{position:absolute;top:50%;transform:translate(-50%,-50%);width:15px;height:15px;border-radius:50%;background:var(--cink);border:2.5px solid #fff;box-shadow:0 1px 5px rgba(26,22,32,.3)}
+  .bslabs{display:flex;margin-top:7px}
+  .bslabs span{flex:1 1 0;text-align:center;font-size:10px;font-weight:600;letter-spacing:.02em;color:#a8a2ad}
+  .bslabs em.vb{display:block;font-style:normal;font-weight:500;font-size:10px;margin-top:2px;opacity:.8}
+  .bslabs span.act{color:var(--cink)}
+  .bsheet h3{font-family:inherit;font-size:21px;font-weight:700;letter-spacing:-.01em;color:var(--ink,#1a1620)}
+  .bsheet .hzr{font-size:12.5px;font-weight:600;color:var(--cink);margin-top:3px}
+  .bsheet p{font-size:14px;line-height:1.55;color:#3a3542;margin-top:12px}
+  .bsheet p b{font-weight:700}
+  .bsheet .cage{font-size:12.5px;color:#7a7480;margin-top:14px}
+  .barhints{justify-content:space-between;padding-top:14px;padding-bottom:12px}
+  .immleg{padding-top:14px}
+  .qall{background:var(--cink);border-color:var(--cink);color:#fff}
+  #favs .qall{background:#2A2530;border:1px solid #2A2530;color:#fff;font-weight:700}
+  .lgline{display:flex;align-items:center;gap:6px}
+  .lgico{width:13px;display:inline-flex;justify-content:center;flex:0 0 auto}
+  .lgdown{font-size:13px;color:#a8a2ad;line-height:1}
+  .lggrip{color:#a8a2ad;display:inline-flex;align-items:center}
+  .legend4{flex-direction:column;align-items:stretch;gap:7px;padding-bottom:12px}
+  .legend4 .lgrow{display:flex;justify-content:space-between}
+  .lgdlh{color:#a8a2ad;display:inline-flex;align-items:center}
+  .scrtitle{font-family:'Cormorant Garamond',Georgia,serif;font-size:28px;font-weight:600;line-height:1;color:var(--ink)}
+
+  /* SYNTHESIS (Michael 2026-07-03): A's air + B's card, subtler, minimizable */
+  .desc{padding-top:18px}
+  #catDesc{font-size:16px;line-height:1.55}
+  .ctarow{padding:16px 22px 2px}
+  .barrow{padding:16px 22px 2px}
+  .tipcard{background:rgba(255,255,255,.42);border:1px solid rgba(230,221,206,.5);border-radius:14px;margin:14px 18px 12px;padding:9px 14px 12px}
+  .tiphead{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:2px 0 8px;color:#a8a2ad}
+  .tiplab{font-size:9px;font-weight:700;letter-spacing:.16em}
+  .tipchev{transition:transform .2s}
+  .tipcard.min{padding-bottom:9px}
+  .tipcard.min .legend4{display:none}
+  .tipcard.min .tiphead{padding-bottom:2px}
+  .tipcard.min .tipchev{transform:rotate(180deg)}
+  .legend.legend4{padding:0;margin:0;gap:8px}
+
+  .pill,.pills,.tiphead,.qall,#nav div,.legend{user-select:none;-webkit-user-select:none}
+  .pill{touch-action:manipulation}
+  /* ---------- VIVID LAYER (working/vivid-layer-for-app-prototypes.md, recipe from results/player-08) ---------- */
+  /* Aurora: color MASS from the active family's three tokens (primary/gradEnd/soft), fixed inside the frame. */
+  /* Opacities sit BELOW player-10's (.15/.13/.11): inside the small phone frame all three blob
+     cores overlap the visible area and stack, so the same values read much heavier (Michael 2026-07-10). */
+  #aurora{position:absolute;inset:-20%;z-index:0;pointer-events:none;transition:filter .45s ease}
+  #aurora.kick{filter:brightness(1.45) saturate(1.3)}   /* beat accent = aurora kick, never expanding rings (player-10 verdict) */
+  #aurora i{position:absolute;width:130%;aspect-ratio:1;border-radius:50%;filter:blur(72px);transition:background 1.4s ease;will-change:transform}
+  #aurora .b1{background:var(--c1);top:-34%;left:-52%;opacity:.10;animation:dr1 26s ease-in-out infinite alternate}
+  #aurora .b2{background:var(--c2);bottom:-52%;right:-50%;opacity:.09;animation:dr2 32s ease-in-out infinite alternate}
+  #aurora .b3{background:var(--csoft);top:44%;left:66%;width:92%;opacity:.08;animation:dr3 40s ease-in-out infinite alternate}
+  @keyframes dr1{to{transform:translate(9%,7%) scale(1.15)}}
+  @keyframes dr2{to{transform:translate(-8%,-9%) scale(1.12)}}
+  @keyframes dr3{to{transform:translate(-12%,6%) scale(1.2)}}
+  #list{background:transparent}   /* the aurora tints the cream ground behind the list */
+  #ripple{position:absolute;z-index:50;width:14px;height:14px;border-radius:50%;pointer-events:none;transform:scale(0);opacity:0}
+  #ripple.go{animation:rip .9s ease-out}
+  @keyframes rip{0%{transform:scale(0);opacity:.8}100%{transform:scale(95);opacity:0}}
+  .row.playing .thumb{filter:drop-shadow(0 0 14px var(--csoft))}
+  /* one large color-carrier: the category title takes the family ramp (deep -> accent passes 3:1 on light) */
+  #catTitle2{background:linear-gradient(135deg,var(--cdeep) 10%,var(--cink));-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
+  /* Playlist cards: the lightweight wash, each card in its OWN family's tint (approved 2026-07-10) */
+  #favRows .row{background:radial-gradient(150% 130% at 100% -30%, var(--ctint) 0%, #fff 58%)}
+  /* playing card: the wash breathes (whole-card action; the standard cink ring + spinning disc ride on top) */
+  #favRows .row.playing{animation:washbreathe 3.4s ease-in-out infinite alternate}
+  @keyframes washbreathe{from{background-size:100% 100%}to{background-size:140% 140%}}
+</style></head><body>
+<!-- INTERACTION · REORDER: the WHOLE card is draggable on click-and-hold (long-press) anywhere on it, not just the grip dots — the grip is only the visual cue. Applies to Immersions + Favourites. Not wired in this prototype; spec for dev. -->
+<div id="app">
+<div id="aurora" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
+<div id="ripple" aria-hidden="true"></div>
+
+  <!-- ===================== LIST ===================== -->
+  <section class="screen" id="list">
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
+    <div class="pills" id="pills">
+      <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
+    </div>
+    <div class="dockbar" id="dockbar"><div class="qall" id="qallDock"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All</div></div>
+    <div class="swrap">
+    <div class="desc"><h2 class="serif" id="catTitle" style="display:none">Love Vibrational Frequency</h2>
+      <h2 class="serif2" id="catTitle2">Your connection frequency</h2>
+      <p id="catDesc">tunes your connection, to yourself and everyone else. Warmth stops being work.</p>
+      <div class="bandpanel" id="bandPanel">
+        <div class="bpx" id="bpClose">&#10005;</div>
+        <h4 id="bpTitle"></h4><div class="hzr2" id="bpRange"></div>
+        <div class="bscale"><div class="bstrack" id="bpTrack"></div><div class="bslabs" id="bpLabs"></div></div>
+        <p id="bpWhat"></p><p id="bpYours"></p>
+      </div></div>
+    <div class="ctarow"><span style="display:none" id="catHz"></span><div class="selall" data-scope="rows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn"></span></div></div>
+    <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 8 12 4 16 8"/><polyline points="8 16 12 20 16 16"/><line x1="12" y1="4" x2="12" y2="20"/></svg></span>Hold to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
+    <div class="rows" id="rows"></div>
+    </div>
+  </section>
+
+  <!-- band sheet (tap the band chip) -->
+  <div class="bsheet-wrap" id="bsheetWrap"><div class="bsheet-ovl" id="bsheetOvl"></div>
+    <div class="bsheet">
+      <div class="bsx" id="bsClose">&#10005;</div>
+      <h3 id="bsTitle">Solar Plexus band</h3>
+      <div class="hzr" id="bsRange">425 to 600 Hz</div>
+      <div class="bscale"><div class="bstrack" id="bsTrack"></div><div class="bslabs" id="bsLabs"></div></div>
+      <p id="bsWhat"></p>
+      <p id="bsYours"></p>
+      <p id="bsYours2"></p>
+
+    </div>
+  </div>
+
+  <!-- pinned mini player -->
+  <div id="mini">
+    <div class="mt"><img id="miniImg" alt=""><canvas id="miniGlow" width="80" height="80" style="position:absolute;inset:0"></canvas></div>
+    <div class="mi"><b id="miniName">—</b><span id="miniSub">Love Infusion</span></div>
+    <div class="pp" id="miniPP"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+  </div>
+
+  <!-- Progress screen: the A-2 Progress build (inapp/A-2, promoted to control 2026-07-10) shown inline; auto-embeds when framed, iframe auto-sized via postMessage, panel scrolls; URL stays on the shell -->
+  <section class="screen" id="progress" style="display:none;z-index:6;background:var(--cream);bottom:calc(56px + env(safe-area-inset-bottom,0px));overflow-y:auto;-webkit-overflow-scrolling:touch">
+    <iframe id="progressFrame" src="progress-B2-12.html" title="Progress B2-12" scrolling="no" style="display:block;flex:0 0 auto;width:100%;height:820px;border:0;background:var(--cream)"></iframe>
+  </section>
+
+  <!-- bottom nav -->
+  <div id="nav">
+    <div class="on"><span class="ic">&#9835;</span>Immersions</div>
+    <div><span class="ic">&#9776;</span>Progress</div>
+    <div><span class="ic">&#9825;</span>Playlist</div>
+  </div>
+
+  <!-- ===================== SONG VIEW (app player layout) ===================== -->
+  <section class="screen" id="song">
+    <div class="sv-top">
+      <div class="back" id="svBack" aria-label="Back to all songs"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+      <div class="sv-head"><div class="sf">Playing from</div><div class="sl">Your Library</div></div>
+      <div class="sq">&#9776;</div>
+    </div>
+    <div class="sv-art"><div id="viz"><canvas id="vc"></canvas></div></div>
+    <div class="sv-meta">
+      <div><h2 class="serif" id="svName">&mdash;</h2>
+        <div class="svfreq"><span class="fdot"></span><span id="svCat">Love</span><span class="svsep">·</span><span class="svhz"><b id="svHz">432</b> Hz</span><span class="svsep">·</span><span id="svBand">Solar Plexus</span></div><div id="svFeel" style="margin-top:7px;font-size:12.5px;line-height:1.45;color:var(--mut)">You may feel something high in your stomach, just under the ribs.</div><div style="display:none"></div>
+      </div>
+      <div class="heart">&#9825;</div>
+    </div>
+    <div class="player">
+      <div class="scrub" id="scrub"><div class="fill" id="scrubFill"></div><div class="knob" id="scrubKnob"></div></div>
+      <div class="times"><span id="tCur">0:00</span><span id="tTot">0:00</span></div>
+      <div class="ctrls">
+        <div class="sk" id="shuf"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg></div>
+        <div class="skb" id="prev">&#9198;</div>
+        <button class="bigpp" id="bigPP"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+        <div class="skb" id="next">&#9197;</div>
+        <div class="sk" id="rep"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FAVORITES (mixed frequencies) ===================== -->
+  <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
+    <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
+    <div class="zbal" id="zbal">
+      <div class="zbal-line" id="zbalLine" title="Press the arrow to balance it for you">
+        <span class="zbal-toks" id="zbalToks"></span>
+        <span class="zbal-chevbtn" title="Press the arrow to balance it for you"><svg class="zbal-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
+      </div>
+      <div class="zbal-panel">
+        <div class="zbal-act"><span class="zbal-bfm" id="zbalBfm">Balance for me</span><span class="zbal-bfmsub">checks your longest balanced list</span></div>
+        <h4 class="zbal-ttl">Frequency Balance Meter</h4>
+        <div class="zbal-sub">Keep all four frequencies above 15% each week</div>
+        <ol class="zbal-ol">
+          <li>The numbers above show where your week lands if you play everything checked. <b class="g">Green</b> = minutes above the line. <b class="r">Red</b> = minutes short.</li>
+          <li>Tap <b>+</b> on a red frequency to add songs from your list. Tap <b>−</b> on a green one to trim it back.</li>
+          <li>Top right: <b>Time now</b> is what you've played (it climbs while you listen). <b>After list</b> is where you land after playing what's checked. You're set when After list is green.</li>
+          <li>Press <b>Play All</b>. Songs play top to bottom and check themselves off as they finish. Remember: just hold a song card to reorder.</li>
+          <li>Out of songs? Go to <b>Immersions</b> and tap <span class="ph">&#9829;</span> to add more to this list.</li>
+        </ol>
+        <div class="zbal-sofar" id="zbalSofar"></div>
+      </div>
+      <div class="zbal-pop" id="zbalPop" style="display:none"><span id="zbalPopMsg"></span><span class="zbal-popx" id="zbalPopX">&#10005;</span></div>
+    </div>
+    <div class="barrow"><div class="selall" data-scope="favRows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qnf"></span></div></div>
+    <div class="swrap">
+    <div class="tipcard"><div class="tiphead"><span class="tiplab">GUIDE</span><svg class="tipchev" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 14 12 8 18 14"/></svg></div><div class="legend legend4"><div class="lgrow"><div class="lgline"><span class="lgico lggrip"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 8 12 4 16 8"/><polyline points="8 16 12 20 16 16"/><line x1="12" y1="4" x2="12" y2="20"/></svg></span>Hold to reorder</div><div class="lgline"><span class="lgico lgdlh"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></span>Listen offline</div></div><div class="lgrow"><div class="lgline"><span class="lgico"><span class="lgbox">&#10003;</span></span>Add to queue</div><div class="lgline"><span class="lgheart">&#9829;</span>Save to playlist</div></div></div></div>
+    <div class="rows" id="favRows" style="padding-top:8px"></div>
+    </div>
+  </section>
+</div>
+
+<audio id="aud" crossorigin="anonymous"></audio>
+<script>
+// ---------------- DATA: four frequency categories ----------------
+const SIG=n=>'app-assets/'+n+'.png';
+const LIVE1='app-assets/kindred-spirits.mp3', LIVE2='app-assets/elysian-surge.mp3';
+function mk(name,freq,sub,dur,slug,audio){return {name,freq,sub,dur,slug,audio:audio||null};}
+const tileSrc=(cat,s)=>'app-assets-ring-white/sig-'+cat+'-'+s.slug+'.png';
+const DL='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+const GRIP='<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><circle cx="9" cy="5" r="1.6"/><circle cx="15" cy="5" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="19" r="1.6"/><circle cx="15" cy="19" r="1.6"/></svg>';
+// One real song list (same names, order by length, and per-song tiles) shared across every category.
+// Only the frequency (Hz) and the colour change per category. Descriptions are the current Core copy
+// (the real set we have) — per-category wording can be swapped in when provided.
+const SONGLIST=[
+ mk('Quiet Success',0,'An immediate energetic self reset, come back home now.','3 min','quiet-success','app-assets/quiet-success.mp3'),
+ mk('Kindred Spirits',0,'Allow your authentic self to deepen with the beat.','5 min','kindred-spirits',LIVE1),
+ mk('Elysian Surge',0,'Feel your core energy build on this energetic ride.','5 min','elysian-surge',LIVE2),
+ mk('Starseed',0,'Let your authentic self interact with your deepest energetic levels.','9 min','starseed','app-assets/starseed.mp3'),
+ mk('Astrolith',0,'Create resonance with your true self, develop authentic magnetism.','9 min','astrolith','app-assets/astrolith.mp3'),
+ mk('Cosmic Drift',0,'Access profound authentic energy through deep frequency work.','25 min','cosmic-drift','app-assets/cosmic-drift.mp3'),
+ mk('Galactic Deep',0,'Find your true self as deep sleep restores your inner resonance.','1 hour','galactic-slumber','app-assets/galactic-slumber.m4a'),
+];
+
+// APPROVED song catalog (copy/song-catalog.md, Michael 2026-07-01): 4 purpose bubbles + one-liner
+const SONGMETA={
+ 'quiet-success':{b:['RESET','CALM','DE-STRESS','UNWIND','GROUND'],l:'Warm, low tones that ring like bowls.'},
+ 'kindred-spirits':{b:['ENERGY','HAPPY','BRIGHT','FLOW','MOTIVATE'],l:'Bright and steady from the first note.'},
+ 'elysian-surge':{b:['ENERGY','MOTIVATE','BUILD','DRIVE','FLOW'],l:'Starts warm, ends unstoppable.'},
+ 'starseed':{b:['MEDITATE','DEEP','DREAMY','CALM','UNWIND'],l:'An otherworldly voice leads you in.'},
+ 'astrolith':{b:['FOCUS','MEDITATE','CALM','DEEP','FLOW'],l:'A steady pulse that never distracts.'},
+ 'cosmic-drift':{b:['FOCUS','MEDITATE','NAP','CALM','DREAMY'],l:'Slow swells, like rain on a window.'},
+ 'galactic-slumber':{b:['SLEEP','FOCUS','MEDITATE','UNWIND','DEEP'],l:'Dark, slow, and bottomless.'}};
+function bubs(s){const b=(SONGMETA[s.slug]||{b:[]}).b;return '<div class="bubs">'+b.map((w,i)=>'<span class="bub">'+w+(i<b.length-1?'<span class="sep"> · </span>':'')+'</span>').join('')+'</div>';}
+
+// ---- band location (experiment C) ----
+// Bands per the deep reference: Root 250-425 Feel it / Solar Plexus 425-600 Do it /
+// Throat 600-775 Say it / Crown 775-950 See it. Place phrase = position within the band
+// (thirds), since most frequencies sit between anchors (a bodygraph does this properly later).
+const BANDS=[
+ {name:'Root',verb:'Ground',lo:250,hi:425,places:['deep at the base of your spine','low in your belly, below the navel','just below your navel']},
+ {name:'Solar Plexus',verb:'Action',lo:425,hi:600,places:['just above your navel','in the pit of your stomach','high in your stomach, just under the ribs']},
+ {name:'Throat',verb:'Articulation',lo:600,hi:775,places:['at the base of your throat, where chest meets voice','in the center of your throat','high in your throat, up behind the jaw']},
+ {name:'Crown',verb:'Big picture',lo:775,hi:950,places:['where the back of your head rises to the crown','at the very top of your head','just above the top of your head']}
+];
+function bandOf(hz){ hz=parseInt(hz,10);
+  const b=BANDS.find(b=>hz>=b.lo&&hz<b.hi)||BANDS[BANDS.length-1];
+  const t=Math.min(2,Math.floor((hz-b.lo)/(b.hi-b.lo)*3));
+  return {name:b.name,lo:b.lo,hi:b.hi,place:b.places[t]};
+}
+const BANDMEANING={
+ 'Root':'<b>Root is the grounding band.</b> Understanding arrives through steadiness: things become clear once you feel settled, solid, grounded.',
+ 'Solar Plexus':'<b>Solar Plexus is the action band.</b> Understanding arrives through motion and motivation: clarity tends to come once you are already moving on it.',
+ 'Throat':'<b>Throat is the articulation band.</b> Understanding arrives through words: thinking it in language, talking it through, writing it down.',
+ 'Crown':'<b>Crown is the big-picture band.</b> Understanding arrives through systems and perspective: things make sense once you can see the whole pattern.'
+};
+const BANDWAY={
+ 'Root':'groundedness',
+ 'Solar Plexus':'action',
+ 'Throat':'articulation',
+ 'Crown':'the big picture'
+};
+const BANDWAY2={
+ 'Root':'steadiness tends to be',
+ 'Solar Plexus':'motion tends to be',
+ 'Throat':'words tend to be',
+ 'Crown':'perspective tends to be'
+};
+const DOMAINPHRASE={
+ 'Core':'who you are',
+ 'Love':'connection',
+ 'Vitality':'your energy',
+ 'Abundance':'exchange, timing, and opportunity'
+};
+const BANDPOS=['near the base of the band','in the middle of the band','in the upper part of the band'];
+function openBandSheet(){ var c=CATS[catKey], bd=bandOf(c.hz);
+  var t=Math.min(2,Math.floor((parseInt(c.hz,10)-bd.lo)/(bd.hi-bd.lo)*3));
+  document.getElementById('bsTitle').textContent=bd.name+' band';
+  document.getElementById('bsRange').textContent=bd.lo+' to '+bd.hi+' Hz';
+  document.getElementById('bsWhat').innerHTML=BANDMEANING[bd.name];
+  document.getElementById('bsYours').innerHTML='By design, the easier way for you to process '+DOMAINPHRASE[c.label]+' is through '+BANDWAY[bd.name]+'. You can use all four ways, but '+BANDWAY2[bd.name]+' easier and more effective for you.';
+  document.getElementById('bsYours2').innerHTML='Your '+c.label+' sits at <b>'+c.hz+' Hz</b>, '+bd.place+'. As it plays, you may feel something there.';
+  var hz=parseInt(c.hz,10), pct=(hz-250)/(950-250)*100;
+  var th=''; BANDS.forEach(function(b){ th+='<div class="bseg'+(b.name===bd.name?' act':'')+'"></div>'; });
+  document.getElementById('bsTrack').innerHTML=th+'<div class="bdotm" style="left:'+pct+'%"></div>';
+  var lh=''; BANDS.forEach(function(b){ lh+='<span class="'+(b.name===bd.name?'act':'')+'">'+b.name+'<em class="vb">'+b.verb+'</em></span>'; });
+  document.getElementById('bsLabs').innerHTML=lh;
+  document.getElementById('bsheetWrap').classList.add('open');
+}
+function fillBandPanel(){ var c=CATS[catKey], bd=bandOf(c.hz);
+  document.getElementById('bpTitle').textContent=bd.name+' band';
+  document.getElementById('bpRange').textContent=bd.lo+' to '+bd.hi+' Hz';
+  document.getElementById('bpWhat').innerHTML=BANDMEANING[bd.name];
+  document.getElementById('bpYours').innerHTML='By design, the easier way for you to process '+DOMAINPHRASE[c.label]+' is through '+BANDWAY[bd.name]+'. You can use all four ways, but '+BANDWAY2[bd.name]+' easier and more effective for you. Your '+c.label+' sits at <b>'+c.hz+' Hz</b>, '+bd.place+'. As it plays, you may feel something there.';
+  var th=''; BANDS.forEach(function(b){ th+='<div class="bseg'+(b.name===bd.name?' act':'')+'"></div>'; });
+  document.getElementById('bpTrack').innerHTML=th+'<div class="bdotm" style="left:'+((parseInt(c.hz,10)-250)/700*100)+'%"></div>';
+  var lh=''; BANDS.forEach(function(b){ lh+='<span class="'+(b.name===bd.name?'act':'')+'">'+b.name+'<em class="vb">'+b.verb+'</em></span>'; });
+  document.getElementById('bpLabs').innerHTML=lh;
+}
+const CATS={
+ core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',cdeep:'#38007A',ctint:'#EFECFF',csoft:'#D2C8FF',cglow:'rgba(101,33,201,.45)',hue:0,filt:'none',gA:'210,150,245',gB:'101,33,201',hz:'422',
+   title:'Core Vibrational Frequency',desc:'is your identity signal. It turns your sense of self back up, wherever you are.',short:'identity, turned back up.',songs:SONGLIST},
+ love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',cdeep:'#6E0024',ctint:'#FFE8EA',csoft:'#FFBDC3',cglow:'rgba(185,0,68,.45)',hue:0,filt:'none',gA:'255,150,190',gB:'185,0,68',hz:'432',
+   title:'Love Vibrational Frequency',desc:'tunes your connection, to yourself and everyone else. Warmth stops being work.',short:'connection, tuned.',songs:SONGLIST},
+ vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#C25500',cdeep:'#BC6700',ctint:'#FFEADA',csoft:'#FFC392',cglow:'rgba(255,145,18,.5)',hue:0,filt:'none',gA:'255,205,130',gB:'255,145,18',hz:'579',
+   title:'Vitality Vibrational Frequency',desc:'is your energy meter, restored. You feel again what feeds you and what drains you.',short:'energy, restored.',songs:SONGLIST},
+ abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',cink:'#0A7A52',cdeep:'#0A6B48',ctint:'#DCF4E8',csoft:'#8FE1BE',cglow:'rgba(18,165,110,.5)',hue:0,filt:'none',gA:'143,225,190',gB:'18,165,110',hz:'611',
+   title:'Abundance Vibrational Frequency',desc:'is your timing, restored. Opportunity stops feeling like something to chase.',short:'timing, restored.',songs:SONGLIST},
+};
+let catKey=(['core','love','vitality','abundance'].includes(new URLSearchParams(location.search).get('cat'))?new URLSearchParams(location.search).get('cat'):'core');  // ?cat= opens a category (review aid)
+const aud=document.getElementById('aud');
+let curSong=null, playCat=null, D=null, started=false, playHz=432;
+let gA='255,180,230', gB='234,17,99';   // glow colors of the PLAYING song's category
+
+// ---- audio graph (live reactor) ----
+let AC=null,ana=null,td=null,react=0,lastAmp=0,liveBeat=0;
+let glowLevel=0,beatPulse=0,burstImg=null,lastKick=0;   // base intensity + beat ignition + the rays mask + aurora-kick cooldown
+function initGraph(){ if(AC)return; try{ AC=new (window.AudioContext||webkitAudioContext)(); ana=AC.createAnalyser(); ana.fftSize=1024; ana.smoothingTimeConstant=0.78; const s=AC.createMediaElementSource(aud); s.connect(ana); ana.connect(AC.destination); td=new Uint8Array(ana.fftSize);}catch(e){ana=null;} }
+// ---- analysis: env / target-presence / beat from the track (or synthetic for placeholders) ----
+async function analyze(url,target){
+  if(!url){ const N=900,env=[],e6=[],bt=[]; let v=.4; for(let i=0;i<N;i++){v=Math.max(.05,Math.min(1,v+(Math.random()-.5)*.25)); env.push(v); e6.push(.45+.2*Math.sin(i/40)); bt.push(Math.random()<.04?Math.random():0);} return {dur:180,n:N,env,e600:e6,beat:bt,synthetic:true}; }
+  let buf;
+  try{
+    const resp=await fetch(url,{headers:{'Range':'bytes=0-8388607'}});
+    buf=await AC.decodeAudioData(await resp.arrayBuffer());
+  }catch(e){ return analyze(null,target); }   // undecodable slice (e.g. long m4a) -> synthetic visuals, playback unaffected
+  const sr=buf.sampleRate,dur=buf.duration; let ch=buf.getChannelData(0);
+  if(buf.numberOfChannels>1){const c2=buf.getChannelData(1),m=new Float32Array(ch.length);for(let i=0;i<ch.length;i++)m[i]=(ch[i]+c2[i])*.5;ch=m;}
+  const N=Math.max(8,Math.floor(dur*45)),win=Math.max(1,Math.floor(ch.length/N));
+  const env=new Float32Array(N),e6=new Float32Array(N),beat=new Float32Array(N);
+  const w=2*Math.PI*target/sr,cw=2*Math.cos(w);let prev=0;
+  for(let k=0;k<N;k++){const a=k*win,b=Math.min(ch.length,a+win),len=Math.max(1,b-a);let sum=0,s0=0,s1=0,s2=0;
+    for(let i=a;i<b;i++){const v=ch[i];sum+=v*v;s0=v+cw*s1-s2;s2=s1;s1=s0;}
+    const rms=Math.sqrt(sum/len);env[k]=rms;e6[k]=Math.sqrt(Math.max(0,s1*s1+s2*s2-cw*s1*s2))/len;beat[k]=Math.max(0,rms-prev);prev=rms;}
+  const pct=(a,q)=>{const s=Float32Array.from(a).sort();return s[Math.floor((s.length-1)*q)]||1;};
+  const ne=pct(env,.99),be=pct(beat,.95),ee=pct(e6,.97);let mx=0;
+  for(let i=0;i<N;i++){env[i]=Math.min(1.2,env[i]/ne);beat[i]=Math.min(1.6,beat[i]/be);e6[i]=Math.min(1.3,e6[i]/ee);if(e6[i]>mx)mx=e6[i];}
+  const pres=new Float32Array(N);for(let i=0;i<N;i++)pres[i]=Math.max(.18,Math.min(1,.32+.68*(e6[i]/(mx||1))));
+  return {dur,n:N,env:Array.from(env),e600:Array.from(pres),beat:Array.from(beat)};
+}
+function at(arr,p){p=Math.min(1,Math.max(0,p||0));const L=arr.length,f=p*(L-1),i=Math.floor(f),g=f-i;return arr[i]*(1-g)+arr[Math.min(i+1,L-1)]*g;}
+function clock(){ if(!started)return 0; return D&&D.synthetic ? ((performance.now()/1000-synT)%D.dur) : aud.currentTime; }
+let synT=0;
+
+// ---------- LIST (rebuilds per category) ----------
+const rows=document.getElementById('rows');
+let rowSongs=[];
+function buildRows(){
+  const cat=CATS[catKey]; rows.innerHTML=''; rowSongs=cat.songs;
+  cat.songs.forEach((s,i)=>{
+    const r=document.createElement('div');r.className='row';r.innerHTML=
+     `<div class="lcol"><span class="qbox${(i%4===0)?' on':''}"></span></div><div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
+      <div class="meta mcols">
+        <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab">&#9679; ${cat.label}</div></div>
+        <div class="mrail"><div class="sic"><span class="dl${(i%2===1)?' on':''}">${DL}</span><span class="heart${(i%3===0)?' on':''}">${(i%3===0)?'&#9829;':'&#9825;'}</span></div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
+      </div>`;
+    r.onclick=(ev)=>{playSong(catKey,i); splashAt(ev.clientX,ev.clientY);};
+    rows.appendChild(r);
+  });
+  markAlive();
+}
+
+// ---------- theme / category switch ----------
+function setCat(key){ catKey=key; const c=CATS[key]; const st=document.getElementById('app').style;
+  st.setProperty('--c1',c.c1); st.setProperty('--c2',c.c2); st.setProperty('--cink',c.cink); st.setProperty('--cglow',c.cglow); st.setProperty('--cdeep',c.cdeep); st.setProperty('--ctint',c.ctint); st.setProperty('--csoft',c.csoft);
+  document.querySelectorAll('#pills .pill').forEach(p=>p.classList.toggle('on',p.dataset.cat===key));
+  document.getElementById('catTitle').textContent=c.title;
+  var bd=bandOf(c.hz), RET=location.hash.indexOf('return')>=0;
+  var ROLE={'Core':'identity','Love':'connection','Vitality':'energy','Abundance':'opportunity'};
+  var t2=document.getElementById('catTitle2'); t2.style.display=RET?'none':'block';
+  var FLIP=location.hash.indexOf('flip')>=0;
+  t2.innerHTML = FLIP
+    ? 'Your '+ROLE[c.label]+' frequency <span class="hznum">= '+c.hz+'</span>'
+    : '<span class="hznum">'+c.hz+'</span> is Your '+c.label+' Tone';
+  if(RET){
+    document.getElementById('catDesc').innerHTML='<b class="hztap" id="hzTap">'+c.hz+' Hz \u00b7 '+bd.name+'<span class="hzchev">\u25BC</span></b>';
+  } else {
+    document.getElementById('catDesc').innerHTML='Located in your <b class="hztap" id="hzTap">'+bd.name+' band<span class="hzchev">\u25BC</span></b>. This '+c.desc;
+  }
+  document.getElementById('bandPanel').classList.remove('open');
+  document.getElementById('hzTap').onclick=function(){
+    var p=document.getElementById('bandPanel'), open=!p.classList.contains('open');
+    if(open) fillBandPanel();
+    p.classList.toggle('open',open); this.classList.toggle('open',open);
+  };
+  document.getElementById('catHz').innerHTML=c.hz+'<small> Hz</small>';
+  buildRows();
+}
+document.querySelectorAll('#pills .pill').forEach(p=>p.onclick=(ev)=>{setCat(p.dataset.cat); splashAt(ev.clientX,ev.clientY);});
+// vivid layer: color-splash ripple (coords relative to the app frame; color = active family primary)
+function splashAt(x,y,col){ const rc=document.getElementById('app').getBoundingClientRect(), r=document.getElementById('ripple');
+  r.style.left=(x-rc.left-7)+'px'; r.style.top=(y-rc.top-7)+'px';
+  r.style.background='radial-gradient(circle, '+(col||'var(--c1)')+' 0%, transparent 62%)';
+  r.classList.remove('go'); void r.offsetWidth; r.classList.add('go'); }
+document.getElementById('bsheetOvl').onclick=function(){document.getElementById('bsheetWrap').classList.remove('open');};
+document.getElementById('bpClose').onclick=function(){document.getElementById('bandPanel').classList.remove('open');var t=document.getElementById('hzTap');if(t)t.classList.remove('open');};
+document.getElementById('svBand').onclick=function(){ var prev=catKey; if(typeof playCat==='string'&&playCat){catKey=playCat;} openBandSheet(); catKey=prev; };
+document.getElementById('bsClose').onclick=function(){document.getElementById('bsheetWrap').classList.remove('open');};
+
+// ---------- play control ----------
+const miniImg=document.getElementById('miniImg'),miniName=document.getElementById('miniName'),miniPP=document.getElementById('miniPP');
+const bigPP=document.getElementById('bigPP'),svName=document.getElementById('svName');
+function ppSVG(p){return p?'<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>':'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';}
+function setIcons(){const p=started&&!aud.paused;miniPP.innerHTML=ppSVG(p);bigPP.innerHTML=ppSVG(p);markAlive();}
+function loadBurst(src){burstImg=null;const im=new Image();im.onload=()=>{burstImg=im;};im.src=src;}
+async function playSong(ck,i){
+  const cat=CATS[ck], s=cat.songs[i];
+  if(s===curSong && ck===playCat){ initGraph(); if(AC){try{await AC.resume();}catch(e){}} if(s.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } setIcons(); markAlive(); return; }   // same song + same frequency → just play/pause
+  const prev=curSong;
+  curSong=s; playCat=ck; gA=cat.gA; gB=cat.gB; playHz=parseInt(cat.hz,10)||432; started=true;
+  document.getElementById('app').classList.add('playing');
+  miniImg.src=tileSrc(ck,s); miniImg.style.filter='none'; loadBurst(tileSrc(ck,s));
+  miniName.textContent=s.name; document.getElementById('miniSub').textContent=cat.label+' Infusion'; document.getElementById('miniSub').style.color=cat.cink;
+  svName.textContent=s.name; document.getElementById('svHz').textContent=cat.hz; document.getElementById('svCat').textContent=cat.label; var pb=bandOf(cat.hz); document.getElementById('svBand').textContent=pb.name; document.getElementById('svFeel').textContent='You may feel something '+pb.place+'.';
+  ['song','mini'].forEach(function(id){var el=document.getElementById(id);el.style.setProperty('--c1',cat.c1);el.style.setProperty('--c2',cat.c2);el.style.setProperty('--cink',cat.cink);el.style.setProperty('--cdeep',cat.cdeep);el.style.setProperty('--cglow',cat.cglow);});
+  initGraph(); if(AC){try{await AC.resume();}catch(e){}}
+  if(s!==prev||!D) D=await analyze(s.audio,playHz);   // re-analyze only when the track changes (snappy restart)
+  synT=performance.now()/1000;                        // restart the (synthetic) playhead at 0
+  // ALWAYS start from the beginning — a row press restarts even the same song, in the viewed frequency
+  if(s.audio){ if(aud.src&&aud.src.endsWith(s.audio)) aud.currentTime=0; else aud.src=s.audio; try{await aud.play();}catch(e){} }
+  else { aud.pause(); aud.removeAttribute('src'); }
+  setIcons(); markAlive();
+}
+function togglePP(){ if(!curSong){playSong(catKey,1);return;} if(curSong.audio){ aud.paused?aud.play():aud.pause(); } else { started=!started; } setIcons(); }
+function step(d){ const ck=playCat||catKey,c=CATS[ck]; let i=c.songs.indexOf(curSong); if(i<0)i=0; i=(i+d+c.songs.length)%c.songs.length; playSong(ck,i); }
+miniPP.onclick=(e)=>{e.stopPropagation();togglePP();};
+bigPP.onclick=togglePP;
+aud.addEventListener('play',setIcons);aud.addEventListener('pause',setIcons);
+document.getElementById('next').onclick=()=>step(1);
+document.getElementById('prev').onclick=()=>step(-1);
+
+// the now-playing bar stays hidden until a song is actually started
+
+// open / close song view
+const songEl=document.getElementById('song');
+document.getElementById('mini').onclick=()=>{ if(!curSong)playSong(catKey,1); songEl.classList.add('open'); setTimeout(vrz,40); };
+document.getElementById('svBack').onclick=()=>songEl.classList.remove('open');
+
+// alive thumbnails (the playing row + mini) — light from centre to the beat
+function markAlive(){ const playing=started&&!aud.paused, here=(catKey===playCat);
+  rows.querySelectorAll('.row').forEach((r,i)=>{ const isThis=here&&!!curSong&&rowSongs[i]===curSong, isP=isThis&&playing; const b=r.querySelector('.cardpp');
+    if(b){b.innerHTML=ppSVG(isP);const sv=b.querySelector('svg');if(sv)sv.style.marginLeft=isP?'0':'1px';}
+    r.classList.toggle('playing', isP); r.classList.toggle('paused', isThis&&!isP);
+    const cv=r.querySelector('canvas'); const im=r.querySelector('img'); if(!isThis){cv.getContext('2d').clearRect(0,0,cv.width,cv.height); if(im){im.style.transform='';im.style.filter='';}} });
+  // Playlist rows: same playing/paused marking (Michael 2026-07-10: "the songs stays highlighted as we have always done")
+  const fr=document.getElementById('favRows'); if(fr){ fr.querySelectorAll('.row').forEach(r=>{
+    const isThis=!!curSong&&playCat===r.dataset.cat&&curSong.slug===r.dataset.slug, isP=isThis&&playing;
+    r.classList.toggle('playing',isP); r.classList.toggle('paused',isThis&&!isP);
+    const im=r.querySelector('img'); if(!isThis&&im){im.style.transform='';im.style.filter='';} }); } }
+const miniGlow=document.getElementById('miniGlow').getContext('2d');
+// drive the whole-tile motion: scale from centre + a touch of brightness on the beat
+// rot (deg): vivid-layer vinyl-slow spin on the playing row's disc only. While rotating, the img's
+// contact shadow comes off (it would orbit with the disc); .row.playing .thumb carries the soft glow instead.
+function surgeImg(im,sc,br,rot){ if(!im)return; const base=im.closest('.thumb')?1.16:1; im.style.transform='scale('+(base*sc).toFixed(3)+')'+(rot?' rotate('+(rot%360).toFixed(1)+'deg)':''); im.style.filter='brightness('+br.toFixed(3)+')'+(base>1&&!rot?' drop-shadow(0 3px 7px rgba(56,0,122,.13))':''); im.style.willChange='transform'; }
+
+// ---------- VISUALIZER (exact vercel style; no play/time baked) ----------
+const vc=document.getElementById('vc'),vx=vc.getContext('2d');let VW,VH,DPR;
+function vrz(){DPR=Math.min(devicePixelRatio||1,2);const r=document.getElementById('viz').getBoundingClientRect();VW=vc.width=r.width*DPR;VH=vc.height=r.height*DPR;}
+addEventListener('resize',vrz);
+
+function liveRead(){ if(started&&ana&&!aud.paused){ana.getByteTimeDomainData(td);let s=0;for(let i=0;i<td.length;i++){const d=(td[i]-128)/128;s+=d*d;}const amp=Math.sqrt(s/td.length);react+=(amp-react)*.5;liveBeat=Math.max(liveBeat*.82,Math.max(0,amp-lastAmp)*5.5);lastAmp=amp;}else{react*=.9;liveBeat*=.9;} }
+
+function drawViz(){
+  requestAnimationFrame(drawViz);
+  liveRead();
+  // the track's own loudness + beat at the current position (synced), plus the live analyser
+  let gAmp=react,gBeat=liveBeat;
+  if(D&&started&&!aud.paused){const tt=clock(),p=D.dur?tt/D.dur:0;gAmp=Math.max(gAmp,at(D.env,p));gBeat=Math.max(gBeat,at(D.beat,p));}
+  const playing=started&&!aud.paused;
+  glowLevel+=((playing?Math.min(1,gAmp):0)-glowLevel)*0.15;          // base "alive" level breathing with loudness
+  beatPulse=playing?Math.max(beatPulse*0.84,Math.min(1,gBeat)):0;    // beat ignition (rises on the beat, decays)
+  if(playing && gBeat>.55 && performance.now()-lastKick>900){ lastKick=performance.now(); const au=document.getElementById('aurora'); au.classList.add('kick'); setTimeout(()=>au.classList.remove('kick'),450); }
+  // WHOLE-THUMBNAIL surge: the tile breathes with loudness and pops on the beat from its centre,
+  // so the cymatic rays push outward on the beat. Colour-agnostic (works in every category theme).
+  const surge = playing ? 1 + glowLevel*0.045 + beatPulse*0.12 : 1;
+  const bright = playing ? 1 + beatPulse*0.26 : 1;
+  surgeImg(miniImg,surge,bright);
+  const spinDeg = playing ? (performance.now()/1000)*(360/14) : 0;   // one revolution per 14s
+  const ri=(catKey===playCat)?rowSongs.indexOf(curSong):-1;
+  if(ri>=0){surgeImg(rows.querySelectorAll('.row')[ri].querySelector('img'),surge,bright,spinDeg);}
+  const fim=document.querySelector('#favRows .row.playing img');
+  if(fim){surgeImg(fim,surge,bright,spinDeg);}
+  if(!songEl.classList.contains('open')||!D){return;}
+  if(!VW)vrz();
+  const tt=clock(),p=D.dur?tt/D.dur:0,T=performance.now()/1000;
+  const midY=VH*0.5,halfMax=VH*0.24,cx=VW/2,WV=gB,WL=gA;
+  vx.clearRect(0,0,VW,VH);
+  let bg=vx.createLinearGradient(0,0,0,VH);bg.addColorStop(0,'#0c0913');bg.addColorStop(1,'#0a0710');vx.fillStyle=bg;vx.fillRect(0,0,VW,VH);
+  const x0=VW*0.15,x1=VW*0.96,span=x1-x0;
+  const FMIN=250,FMAX=950,FMID=600,FH=350,TARGET=playHz;
+  const yOf=f=>midY-halfMax*((f-FMID)/FH);const lineY=yOf(Math.max(FMIN,Math.min(FMAX,TARGET)));const wmid=lineY;
+  const WIN=180,STEP=60,tper=D.dur/(D.n-1),winStart=Math.max(0,(Math.floor(tt/STEP)-1)*STEP),winEnd=winStart+WIN;
+  const tx=ti=>x0+span*((ti-winStart)/WIN),px=tx(tt);
+  const iLo=Math.max(0,Math.ceil(winStart/tper)),iHi=Math.min(D.n-1,Math.floor(Math.min(winEnd,D.dur)/tper)),iNow=Math.min(iHi,Math.max(iLo,Math.round(tt/tper)));
+  const e6=at(D.e600,p),env=at(D.env,p);let flash=at(D.beat,p);flash=Math.max(flash,Math.min(1,gBeat));const fl=Math.min(1,flash);
+  function wpr(a,b){vx.beginPath();for(let i=a;i<=b;i++){const xx=tx(i*tper),v=D.env[i]*halfMax*.92;i===a?vx.moveTo(xx,wmid-v):vx.lineTo(xx,wmid-v);}for(let i=b;i>=a;i--){const xx=tx(i*tper),v=D.env[i]*halfMax*.92;vx.lineTo(xx,wmid+v);}vx.closePath();}
+  if(iHi>iNow){wpr(iNow,iHi);vx.fillStyle='rgba('+WV+',0.20)';vx.fill();vx.lineWidth=1*DPR;vx.strokeStyle='rgba('+WL+',0.30)';vx.stroke();}
+  if(iNow>iLo){wpr(iLo,iNow);let wf=vx.createLinearGradient(0,wmid-halfMax,0,wmid+halfMax);wf.addColorStop(0,'rgba('+WV+',0.68)');wf.addColorStop(.5,'rgba('+WV+',0.34)');wf.addColorStop(1,'rgba('+WV+',0.68)');vx.fillStyle=wf;vx.fill();vx.lineWidth=1.4*DPR;vx.strokeStyle='rgba('+WL+',0.78)';vx.stroke();}
+  const aN=Math.min(1,env*.5+glowLevel*1.0)*halfMax*.96;
+  let nb=vx.createLinearGradient(0,wmid-aN,0,wmid+aN);nb.addColorStop(0,'rgba('+WL+',.95)');nb.addColorStop(.5,'rgba('+WV+',.25)');nb.addColorStop(1,'rgba('+WL+',.95)');
+  vx.strokeStyle=nb;vx.lineWidth=2.2*DPR;vx.lineCap='round';vx.shadowColor='rgba('+WL+',.9)';vx.shadowBlur=14*DPR;vx.beginPath();vx.moveTo(px,wmid-aN);vx.lineTo(px,wmid+aN);vx.stroke();vx.shadowBlur=0;
+  if(glowLevel>.01){const pr=(12+glowLevel*40+fl*16)*DPR;const rg=vx.createRadialGradient(px,lineY,0,px,lineY,pr);rg.addColorStop(0,'rgba('+WL+','+Math.min(.7,.18+glowLevel*1.05)+')');rg.addColorStop(1,'rgba('+WL+',0)');vx.fillStyle=rg;vx.beginPath();vx.arc(px,lineY,pr,0,7);vx.fill();}
+  vx.textBaseline='middle';vx.font=(8.5*DPR)+'px Georgia,serif';vx.lineCap='butt';
+  vx.strokeStyle='rgba(180,165,210,.12)';vx.lineWidth=1*DPR;vx.beginPath();vx.moveTo(x0,yOf(FMAX));vx.lineTo(x0,yOf(FMIN));vx.stroke();
+  [300,400,500,600,700,800,900].forEach(f=>{const yy=yOf(f),isT=Math.abs(f-TARGET)<25;vx.strokeStyle=isT?'rgba(255,248,233,.7)':'rgba(190,175,220,.4)';vx.lineWidth=(isT?1.6:1)*DPR;vx.beginPath();vx.moveTo(x0-(isT?9:7)*DPR,yy);vx.lineTo(x0,yy);vx.stroke();vx.textAlign='right';vx.fillStyle=isT?'rgba(255,248,233,.95)':'rgba(214,205,232,.7)';vx.fillText(isT?(f+' Hz'):(''+f),x0-11*DPR,yy);});
+  let lg=vx.createLinearGradient(x0,0,px,0);lg.addColorStop(0,'rgba(240,231,214,.06)');lg.addColorStop(1,'rgba(240,231,214,'+(.45+e6*.3)+')');vx.strokeStyle=lg;vx.lineWidth=1.2*DPR;vx.beginPath();vx.moveTo(x0,lineY);vx.lineTo(px,lineY);vx.stroke();
+  const hg=vx.createRadialGradient(px,lineY,0,px,lineY,22*DPR);hg.addColorStop(0,'rgba(255,248,233,'+(.45+e6*.4)+')');hg.addColorStop(1,'rgba(255,248,233,0)');vx.fillStyle=hg;vx.beginPath();vx.arc(px,lineY,22*DPR,0,7);vx.fill();
+  const cu=tt,to=D.dur;document.getElementById('scrubFill').style.width=(100*cu/to)+'%';document.getElementById('scrubKnob').style.left=(100*cu/to)+'%';
+  const f=s=>{s=isFinite(s)?s:0;return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');};
+  document.getElementById('tCur').textContent=f(cu);document.getElementById('tTot').textContent=f(to);
+}
+document.getElementById('scrub').onclick=(e)=>{if(!D)return;const r=e.currentTarget.getBoundingClientRect();const fr=(e.clientX-r.left)/r.width;if(curSong&&curSong.audio){aud.currentTime=fr*D.dur;}else{synT=performance.now()/1000-fr*D.dur;}};
+
+// ---------- FAVORITES (saved songs from every frequency) ----------
+const FAVS=[['core','starseed'],['love','kindred-spirits'],['vitality','astrolith'],['abundance','cosmic-drift'],
+ ['core','galactic-slumber'],['love','starseed'],['vitality','elysian-surge'],['abundance','quiet-success'],
+ ['core','astrolith'],['love','galactic-slumber'],['vitality','kindred-spirits'],['abundance','cosmic-drift']];
+function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
+ FAVS.forEach(([ck,slug],i)=>{const cat=CATS[ck];const s=cat.songs.find(x=>x.slug===slug);if(!s)return;
+  const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);r.style.setProperty('--ctint',cat.ctint);r.style.setProperty('--csoft',cat.csoft);r.dataset.cat=ck;r.dataset.slug=s.slug;r.dataset.min=(window.ZBalance?ZBalance.toSec(s.dur):0);  /* every action color resolves to THIS row's family, never the app-level (Immersions) one */
+  r.innerHTML=`<div class="lcol"><span class="qbox${(i%3===0)?' on':''}"></span></div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
+   <div class="meta mcols">
+    <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div></div>
+    <div class="mrail"><div class="sic"><span class="dl${(i%2===0)?' on':''}">${DL}</span><span class="heart on" style="color:${cat.cink}">&#9829;</span></div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
+   </div>`;
+  r.onclick=(ev)=>{playSong(ck,cat.songs.indexOf(s)); splashAt(ev.clientX,ev.clientY,cat.c1);};
+  c.appendChild(r);});
+ markAlive();}   /* re-mark on rebuild so returning to the tab restores the playing highlight */
+const navItems=document.querySelectorAll('#nav div');
+function showTab(t){document.getElementById('favs').style.display=(t==='favs')?'flex':'none';
+ document.getElementById('progress').style.display=(t==='progress')?'block':'none';
+ var idx=(t==='favs')?2:(t==='progress')?1:0;
+ navItems.forEach((n,i)=>n.classList.toggle('on',i===idx));
+ if(t==='favs')buildFavs();}
+navItems[0].onclick=()=>showTab('list');
+navItems[1].onclick=()=>showTab('progress');
+navItems[2].onclick=()=>showTab('favs');
+window.addEventListener('message',function(e){if(e&&e.data&&e.data.zfmH){var f=document.getElementById('progressFrame');if(f)f.style.height=e.data.zfmH+'px';}});
+buildFavs();
+
+setCat(catKey);vrz();drawViz();setIcons();
+{const sp=new URLSearchParams(location.search).get('song');
+ if(sp!==null){try{playSong(catKey,parseInt(sp)||0);document.getElementById('song').classList.add('open');setTimeout(vrz,80);}catch(e){}}}
+</script>
+<!-- ===== ZDISC: fine-ray song-design layer (app-C experiment, 2026-07-02) =====
+     C = app-A's locked surface (white free disc, scale 1.16, contact shadow) with the
+     fine-ray per-song signature engine as the ART. PNG tiles hidden, canvases drawn live.
+     Families are the exploration mapping; production would derive them from audio DNA. -->
+<style id="zdisc-css">
+  .thumb img{display:none!important}
+  .thumb canvas.zdisc{position:absolute;inset:0;width:100%;height:100%;transform:scale(1.16);filter:drop-shadow(0 3px 7px rgba(56,0,122,.13))}
+  .row.playing .pplay{border-color:transparent transparent transparent currentColor!important;filter:drop-shadow(0 1px 2px rgba(255,255,255,.8))!important}
+  .row.playing .ppause i{background:currentColor!important;filter:drop-shadow(0 1px 2px rgba(255,255,255,.8))!important}
+  #mini .mt img{display:none!important}
+  #mini .mt canvas.zdisc{position:absolute;inset:0;width:100%;height:100%}
+</style>
+<script id="zdisc-js">
+(function(){
+  // day-mode palette per category: deep in-range tones + two subtle glint pairs
+  const ZPAL={
+    core:{d:['#6521C9','#A737C8'],s:[['#7A4AE0','#B98AF0'],['#B44FD8','#D07DE8']]},
+    love:{d:['#B90044','#E0559A'],s:[['#F43F6B','#FF7A98'],['#EE3D9C','#FF7EC2']]},
+    vitality:{d:['#FF7A00','#FFC251'],s:[['#FF5426','#FF8A5C'],['#FFB020','#FFE08A']]},
+    abundance:{d:['#0B9159','#2BC47F'],s:[['#0FA98F','#3BC9AD'],['#2FBF6E','#63D992']]}
+  };
+  const FAM={'quiet-success':'halo','kindred-spirits':'mandala','elysian-surge':'burst',
+             'starseed':'weave','astrolith':'iris','cosmic-drift':'orbit','galactic-slumber':'galaxy'};
+  function hx(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+  function mix(a,b,t){return a.map((v,i)=>v+(b[i]-v)*t);}
+  function rgba(c,a){return 'rgba('+(c[0]|0)+','+(c[1]|0)+','+(c[2]|0)+','+a+')';}
+  function hash(s){let h=177;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h;}
+  function ray(x,x1,y1,x2,y2,cA,cB,al,wd){const g=x.createLinearGradient(x1,y1,x2,y2);
+    g.addColorStop(0,rgba(cA,al));g.addColorStop(0.78,rgba(cB,al*0.9));g.addColorStop(1,rgba(cB,al*0.35));
+    x.strokeStyle=g;x.lineWidth=wd*2.3;x.globalAlpha=0.45;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();
+    x.globalAlpha=1;x.lineWidth=wd;x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.stroke();}
+  function drawZ(cv,slug,catk,tt,alive,env){
+    const x=cv.getContext('2d'),W=cv.width,H=cv.height,cx=W/2,cy=H/2;x.clearRect(0,0,W,H);
+    const P=ZPAL[catk]||ZPAL.core,pr=hx(P.d[0]),en=hx(P.d[1]);
+    const s0a=hx(P.s[0][0]),s0b=hx(P.s[0][1]),s1a=hx(P.s[1][0]),s1b=hx(P.s[1][1]);
+    const seed=hash(slug),rr1=((seed%97)/97),puls=1+(alive?0.11*env:0),bmul=alive?(0.82+0.3*env):1;
+    const R=Math.min(W,H)*0.44,r0=Math.min(W,H)*0.075,rot=(alive?tt*0.06:0.6)+rr1*6.28;
+    const wd=Math.max(1.35,W/240*1.3);
+    // white interior disc (the locked A surface) so it reads as a solid white disc, not floaty lines
+    x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,R*1.02,0,7);x.fill();
+    const tg=x.createRadialGradient(cx,cy,r0,cx,cy,R*0.95);tg.addColorStop(0,rgba(en,0.18));tg.addColorStop(1,rgba(en,0.02));
+    x.fillStyle=tg;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();
+    x.lineCap='round';
+    const F=FAM[slug]||'burst';
+    function glint(i){return i%6===0?[s0a,s0b,0.75]:(i%9===0?[s1a,s1b,0.72]:[pr,en,1]);}
+    if(F==='burst'){const N=150;for(let i=0;i<N;i++){const a=i/N*6.283+rot;
+      const L=R*(0.86+0.10*Math.sin(a*7+rr1*6))*puls;const[cA,cB,m]=glint(i);
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.85*m*bmul,wd);}}
+    else if(F==='iris'){const N=130;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L=R*0.7*puls;const[cA,cB,m]=glint(i);
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.7*m*bmul,wd);}
+      [[0.5,pr,2.6],[0.84,en,1.9]].forEach(([r2,cc,ww])=>{x.strokeStyle=rgba(cc,0.95*bmul);x.lineWidth=wd*ww;
+      x.beginPath();x.arc(cx,cy,R*r2*puls,0,7);x.stroke();});}
+    else if(F==='orbit'){const RG=[0.36,0.52,0.68,0.84];RG.forEach((rr,k)=>{
+      x.strokeStyle=rgba(k%2?en:pr,(0.8-k*0.08)*bmul);x.lineWidth=wd*1.3;
+      x.beginPath();x.arc(cx,cy,R*rr*puls,0,7);x.stroke();
+      const NB2=3+k;for(let b=0;b<NB2;b++){const a=rot*(k%2?1.4:-1.1)+b/NB2*6.283+k*0.9;
+        const[cA,cB,m]=glint(k*7+b*3);
+        x.fillStyle=rgba(cB,0.95*m*bmul);x.beginPath();
+        x.arc(cx+Math.cos(a)*R*rr*puls,cy+Math.sin(a)*R*rr*puls,wd*2.1,0,7);x.fill();}});}
+    else if(F==='galaxy'){const ARMS=3;for(let ar=0;ar<ARMS;ar++){const a0=ar/ARMS*6.283+rot;
+      for(let i=0;i<34;i++){const t=i/34;const a=a0+t*3.1;const r2=r0*1.2+(R*0.92-r0*1.2)*t*puls;
+        const[cA,cB,m]=glint(ar*34+i);
+        x.fillStyle=rgba(t<0.12?cA:mix(cA,cB,t),(0.95-0.55*t)*m*bmul);x.beginPath();
+        x.arc(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2,wd*(1.9-t*1.1),0,7);x.fill();}}
+      const bg=x.createRadialGradient(cx,cy,0,cx,cy,r0*1.5);bg.addColorStop(0,rgba(en,0.8*bmul));bg.addColorStop(1,rgba(en,0));
+      x.fillStyle=bg;x.beginPath();x.arc(cx,cy,r0*1.5,0,7);x.fill();}
+    else if(F==='mandala'){const Pt=10,N=170;for(let i=0;i<N;i++){const a=i/N*6.283+rot;
+      const lobe=Math.max(0,Math.cos((a-rot)*Pt/2));const L=R*(0.44+0.5*Math.pow(lobe,1.6))*puls;
+      if(L>R*0.45){const[cA,cB,m]=glint(i);
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.8*m*bmul,wd);}}}
+    else if(F==='halo'){const N=36;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L=R*0.88*puls;const[cA,cB,m]=glint(i);
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L,cy+Math.sin(a)*L,cA,cB,0.8*m*bmul,wd);}
+      x.strokeStyle=rgba(en,0.9*bmul);x.lineWidth=wd*2.6;x.beginPath();x.arc(cx,cy,R*0.88*puls,0,7);x.stroke();}
+    else{const N=130;for(let i=0;i<N;i++){const a=i/N*6.283+rot;const L1=R*0.52,L2=R*0.9*puls;const[cA,cB,m]=glint(i);
+      ray(x,cx+Math.cos(a)*r0,cy+Math.sin(a)*r0,cx+Math.cos(a)*L1,cy+Math.sin(a)*L1,pr,pr,0.8*bmul,wd);
+      if(i%2)ray(x,cx+Math.cos(a)*(L1+wd*3),cy+Math.sin(a)*(L1+wd*3),cx+Math.cos(a)*L2,cy+Math.sin(a)*L2,cA,cB,0.7*m*bmul,wd);}}
+    const cp=1+(alive?0.14*env:0),core=x.createRadialGradient(cx,cy,0,cx,cy,r0*1.8*cp);
+    core.addColorStop(0,'rgba(255,255,255,0.96)');core.addColorStop(0.55,rgba(pr,0.10+(alive?0.08*env:0)));core.addColorStop(1,rgba(pr,0));
+    x.fillStyle=core;x.beginPath();x.arc(cx,cy,r0*1.9*cp,0,7);x.fill();
+    x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,r0*0.5,0,7);x.fill();
+  }
+  // adopt thumbs: hide img, ensure a zdisc canvas, tag slug+cat
+  function adopt(){
+    document.querySelectorAll('.thumb').forEach(th=>{
+      if(th.querySelector('canvas.zdisc'))return;
+      const img=th.querySelector('img'); if(!img)return;
+      const m=(img.getAttribute('src')||'').match(/sig-([a-z]+)-([a-z-]+)\.png/); if(!m)return;
+      let cvs=document.createElement('canvas'); cvs.width=190;cvs.height=190; cvs.className='zdisc';
+      th.insertBefore(cvs, th.querySelector('.pov'));
+      cvs.dataset.cat=m[1]; cvs.dataset.slug=m[2]; cvs.dataset.drawn='';
+      const pov=th.querySelector('.pov'); if(pov){const ck=m[1], ink=(typeof CATS!=='undefined'&&CATS[ck])?CATS[ck].cink:'#1a1620'; pov.style.color=ink;}
+    });
+  }
+  const mo=new MutationObserver(adopt); mo.observe(document.body,{childList:true,subtree:true});
+  adopt();
+  let zt0=performance.now();
+  function beatEnv(){ // ride A's live beat vars when playing real audio; fall back to a clock
+    try{ if(typeof beatPulse!=='undefined'&&typeof glowLevel!=='undefined') return Math.min(1,glowLevel*0.6+beatPulse); }catch(e){}
+    const p=((performance.now()-zt0)/1000*1.7)%1; return p<0.11?p/0.11:Math.pow(1-(p-0.11)/0.89,1.7);
+  }
+  function loop(){
+    const tt=(performance.now()-zt0)/1000, env=beatEnv();
+    document.querySelectorAll('canvas.zdisc').forEach(cv=>{
+      const inMini=!!cv.closest('#mini');
+      const row=cv.closest('.row');
+      const alive=inMini ? (typeof started!=='undefined'&&started&&!document.getElementById('aud').paused)
+                         : !!(row&&row.classList.contains('playing'));
+      if(alive){ drawZ(cv,cv.dataset.slug,cv.dataset.cat,tt,true,env); cv.dataset.drawn=''; }
+      else if(cv.dataset.drawn!=='1'){ drawZ(cv,cv.dataset.slug,cv.dataset.cat,0,false,0); cv.dataset.drawn='1'; }
+    });
+    // mini: keep its canvas synced to the playing song
+    const mt=document.querySelector('#mini .mt');
+    if(mt&&!mt.querySelector('canvas.zdisc')){
+      const img=document.getElementById('miniImg');
+      const m=(img&&img.getAttribute('src')||'').match(/sig-([a-z]+)-([a-z-]+)\.png/);
+      if(m){const c=document.createElement('canvas');c.width=110;c.height=110;c.className='zdisc';mt.appendChild(c);
+        c.dataset.cat=m[1];c.dataset.slug=m[2];c.dataset.drawn='';}
+    } else if(mt){
+      const img=document.getElementById('miniImg'), c=mt.querySelector('canvas.zdisc');
+      const m=(img&&img.getAttribute('src')||'').match(/sig-([a-z]+)-([a-z-]+)\.png/);
+      if(m&&c&&(c.dataset.slug!==m[2]||c.dataset.cat!==m[1])){c.dataset.slug=m[2];c.dataset.cat=m[1];c.dataset.drawn='';}
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+</script>
+
+<script>
+// B EXPERIMENT (2026-07-02, dev's idea + Michael's spec): checkbox = build the queue (live count in
+// Play All), heart = save to Favorites, drag-to-reorder on Favorites ONLY (frequency pages keep list order).
+(function(){
+ const qn=document.getElementById('qn'),qnf=document.getElementById('qnf');let sup=false;
+ function upd(){
+  document.querySelectorAll('.selall').forEach(function(sa){
+   var box=sa.querySelector('.qbox'),scope=sa.dataset.scope;
+   var boxes=document.querySelectorAll('#'+scope+' .qbox');
+   var t=boxes.length,c=0;boxes.forEach(function(b){if(b.classList.contains('on'))c++;});
+   box.classList.toggle('on',t>0&&c===t);
+   box.classList.toggle('dash',c>0&&c<t);
+   var lbl=sa.querySelector('.selall-lbl');if(lbl)lbl.textContent=c>0?'Clear':'Select all';
+  });
+  const n=document.querySelectorAll('#rows .qbox.on').length;qn.textContent=n?' ('+n+')':'';
+  const m=document.querySelectorAll('#favRows .qbox.on').length;qnf.textContent=m?' ('+m+')':'';}
+ function wire(id){document.getElementById(id).addEventListener('click',function(e){
+  if(sup){sup=false;e.stopPropagation();e.preventDefault();return;}
+  const q=e.target.closest('.qbox');if(q){e.stopPropagation();q.classList.toggle('on');upd();return;}
+  const h=e.target.closest('.heart');if(h){e.stopPropagation();h.classList.toggle('on');}
+ },true);}
+ wire('rows');wire('favRows');
+ document.querySelectorAll('.selall').forEach(function(sa){sa.addEventListener('click',function(e){e.stopPropagation();var scope=sa.dataset.scope,boxes=document.querySelectorAll('#'+scope+' .qbox');var any=false;boxes.forEach(function(b){if(b.classList.contains('on'))any=true;});boxes.forEach(function(b){b.classList.toggle('on',!any);});upd();});});
+ {var _t=new URLSearchParams(location.search).get('tab');if(_t==='favs')showTab('favs');else if(_t==='progress')showTab('progress');}
+ const _sc=window.setCat;window.setCat=function(k){_sc(k);upd();};
+ const _bf=window.buildFavs;window.buildFavs=function(){_bf();upd();};
+ upd();
+ let drag=null,moved=false,holdT=null,hintT=null,armed=null,sy=0,sx=0,dragSW=null,dragHintEl=null,hintAt=0,hintHideT=null;
+ var HINT_MIN=1400,lastY=0,autoRAF=null;   // hint min-visible; lastY/autoRAF drive edge auto-scroll
+ function navH(){var n=document.getElementById('nav');return n?n.offsetHeight:56;}
+ function reorderAt(y){if(!drag)return;var c=drag.parentElement,sibs=[...c.querySelectorAll('.row')].filter(r=>r!==drag);for(var i=0;i<sibs.length;i++){var r=sibs[i].getBoundingClientRect();if(y<r.top+r.height/2){c.insertBefore(drag,sibs[i]);return;}}c.appendChild(drag);}
+ function autoScroll(){autoRAF=null;if(!drag||!dragSW)return;var rect=dragSW.getBoundingClientRect(),EDGE=72,bot=rect.bottom-navH(),step=0,f;if(lastY<rect.top+EDGE){f=Math.min(1,(rect.top+EDGE-lastY)/EDGE);step=-Math.ceil(3+f*15);}else if(lastY>bot-EDGE){f=Math.min(1,(lastY-(bot-EDGE))/EDGE);step=Math.ceil(3+f*15);}if(step){var b=dragSW.scrollTop;dragSW.scrollTop+=step;if(dragSW.scrollTop!==b)reorderAt(lastY);autoRAF=requestAnimationFrame(autoScroll);}}
+ function stopDrag(){if(autoRAF){cancelAnimationFrame(autoRAF);autoRAF=null;}if(dragSW){dragSW.style.touchAction='';dragSW.style.overflowY='';dragSW=null;}document.body.style.overflow='';if(drag){drag.classList.remove('dragging');drag=null;sup=true;setTimeout(function(){sup=false;},150);}}
+ function posHint(row){if(!dragHintEl)return;var r=row.getBoundingClientRect();dragHintEl.style.left=(r.left+r.width/2)+'px';var t=r.top-34;if(t<66)t=r.bottom+8;dragHintEl.style.top=t+'px';}
+ function showHint(row){if(!dragHintEl)return;if(hintHideT){clearTimeout(hintHideT);hintHideT=null;}posHint(row);dragHintEl.classList.add('show');hintAt=performance.now();}
+ function hideHint(){if(!dragHintEl)return;var el=dragHintEl,wait=Math.max(0,HINT_MIN-(performance.now()-hintAt));if(hintHideT)clearTimeout(hintHideT);hintHideT=setTimeout(function(){el.classList.remove('show');},wait);}
+ function beginDrag(row){drag=row;moved=false;row.classList.add('dragging');if(dragHintEl&&dragHintEl.classList.contains('show'))posHint(row);
+  var sw=row.closest('.swrap'); if(sw){dragSW=sw;sw.style.touchAction='none';sw.style.overflowY='hidden';} document.body.style.overflow='hidden';
+  if(navigator.vibrate)navigator.vibrate(14);}
+ function endHold(){if(holdT){clearTimeout(holdT);holdT=null;} if(hintT){clearTimeout(hintT);hintT=null;} armed=null;}
+ function dragify(c){c.addEventListener('pointerdown',function(e){
+   if(e.target.closest('.qbox,.heart,.dl'))return;      // let the row's own controls act
+   var row=e.target.closest('.row'); if(!row)return;
+   armed=row;sy=e.clientY;sx=e.clientX;
+   hintT=setTimeout(function(){hintT=null;if(armed)showHint(armed);},60);
+   holdT=setTimeout(function(){holdT=null;if(armed)beginDrag(armed);},240);
+ });}
+ dragify(document.getElementById('favRows'));dragify(document.getElementById('rows'));
+ dragHintEl=document.createElement('div');dragHintEl.id='dragHint';dragHintEl.textContent='Hold to reorder';document.body.appendChild(dragHintEl);
+ document.addEventListener('pointermove',function(e){
+  if(!drag){ if((holdT||hintT)&&(Math.abs(e.clientY-sy)>10||Math.abs(e.clientX-sx)>10)){endHold();hideHint();} return; }
+  moved=true;e.preventDefault();
+  lastY=e.clientY;
+  if(dragHintEl&&dragHintEl.classList.contains('show'))posHint(drag);   // hint follows the card while dragging
+  reorderAt(e.clientY);
+  if(!autoRAF)autoRAF=requestAnimationFrame(autoScroll);                // auto-scroll near an edge (self-stops)
+ },{passive:false});
+ document.addEventListener('pointerup',function(){endHold();hideHint();stopDrag();});
+ document.addEventListener('pointercancel',function(){endHold();hideHint();stopDrag();});
+})();
+</script>
+<script>
+// GUIDE card: open on the very first visit, minimized on every return (per-device memory)
+// GUIDE rule (Michael 2026-07-03): Immersions + Playlist guides start OPEN by default, every visit.
+// Any guide added elsewhere in future starts closed. (Real-app spec: open until after the first PWA session.)
+document.querySelectorAll('.tiphead').forEach(function(h){h.addEventListener('click',function(){h.parentElement.classList.toggle('min');});});
+
+// dock-into-header Play All: nothing sticks inside the list; when the in-flow Play All
+// scrolls away, a compact one fades into the header under the pills (z-4, below #favs's 5)
+(function(){
+ var sw=document.querySelector('#list .swrap'), dock=document.getElementById('dockbar'),
+     dq=document.getElementById('qallDock'), main=document.querySelector('#list .ctarow .qall'),
+     pills=document.getElementById('pills');
+ if(!sw||!dock||!main) return;
+ function place(){ dock.style.top=(pills.offsetTop+pills.offsetHeight+2)+'px'; }
+ place(); window.addEventListener('resize',place);
+ sw.addEventListener('scroll',function(){
+   var show=main.getBoundingClientRect().bottom < pills.getBoundingClientRect().bottom+8;
+   if(show) dq.innerHTML=main.innerHTML;
+   dock.classList.toggle('show',show);
+   sw.classList.toggle('docked',show);   // fade scrolled rows out under the dock zone (no band; see .dockbar note)
+ },{passive:true});
+})();
+
+// LABELED STATE "#graduated" (Michael 2026-07-04): the banked guide-goes-down layout.
+// Default = guide up top (first experience). Add #graduated to the URL to render the
+// after-a-few-sessions layout: guide below the song list. (#return still = bare headline;
+// hashes combine, e.g. #return-graduated.)
+function applyGraduated(){
+  [['#list .swrap .tipcard','rows'],['#favs .swrap .tipcard','favRows']].forEach(function(p){
+    var tip=document.querySelector(p[0]), rows=document.getElementById(p[1]);
+    if(!tip||!rows) return;
+    if(tip.compareDocumentPosition(rows) & Node.DOCUMENT_POSITION_FOLLOWING){
+      rows.parentNode.insertBefore(tip, rows.nextSibling);
+    }
+    tip.style.marginBottom='96px'; rows.style.paddingBottom='10px';
+  });
+}
+window.addEventListener('hashchange',applyGraduated);
+window.addEventListener('DOMContentLoaded',applyGraduated);
+applyGraduated();
+</script>
+<script>/* AUTO-BADGE: single source of truth for the corner badge. Derived from the page filename (app-A -> A), applied to every .appletter so they can never disagree and a cloned page auto-shows its own name. Override with window.APP_BADGE for special names. */
+(function(){function setBadge(){var b=window.APP_BADGE;if(!b){var s=(location.pathname.split("/").pop()||"").replace(/\.html$/,"").replace(/^app-/,"");b=s.toUpperCase();}document.querySelectorAll(".appletter").forEach(function(e){e.textContent=b;});}if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",setBadge);}else{setBadge();}})();</script>
+<style id="zbal-css">
+  .zbal{margin:2px 18px 10px;background:rgba(255,255,255,.42);border:1px solid rgba(26,22,32,.07);border-radius:14px}
+  .zbal-line{display:flex;align-items:center;padding:0 12px;height:46px;gap:8px}
+  .zbal-toks{flex:1;display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0;overflow:hidden}
+  .zbal-t{display:inline-flex;flex-direction:column;align-items:center;gap:2.5px;font-size:9.5px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9a93a0;white-space:nowrap;line-height:1}
+  .zbal-b{display:inline-flex;align-items:center;gap:3px;font-size:10px}
+  .zbal-t .ok{color:#0A7A52;font-style:normal;font-size:9px}
+  .v-b .zbal-t.short,.v-c .zbal-t.short{color:var(--tink)}
+  .zbal-t .amt{font-weight:800;font-variant-numeric:tabular-nums;text-transform:none;color:#B90044}
+  .zbal-t .amt.plus{color:#0A7A52;font-weight:700}
+  .zbal-add{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #d9cfc0;color:#2A2530;font-size:11px;font-weight:800;line-height:1;margin-left:1px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  /* invisible bigger touch targets for the strip's little buttons (mobile thumbs) */
+  .zbal-add,.zbal-min{position:relative}
+  .zbal-add::after,.zbal-min::after{content:'';position:absolute;inset:-8px}
+  .ministat .ms-lbl{white-space:nowrap}
+  /* Engine rows (Time now / After list) belong to the Playlist only (Michael 2026-07-11): hide the Immersions header's ministat */
+  section#list .ministat{display:none}
+  .zbal-m{display:inline-block;width:22px;height:3px;border-radius:2px;background:rgba(26,22,32,.10);overflow:hidden;position:relative;margin-left:2px}
+  .zbal-m i{position:absolute;left:0;top:0;bottom:0;border-radius:2px}
+  .v-b .zbal-t{gap:4px;font-size:8.5px;letter-spacing:0}
+  .v-b .zbal-toks{gap:4px}
+  .v-b .zbal-m{width:15px}
+  .zbal-sent{font-size:11.5px;font-weight:600;color:#6a6470;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .zbal-sent .sep{color:#cfc8ba}
+  .zbal-sent .ok{color:#1f9d63;font-style:normal}
+  .zbal{margin-top:8px}
+  .zbal-chevbtn{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:#fff;border:1px solid #eadfce;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer}
+  .zbal-chev{transition:transform .2s}
+  .zbal.open .zbal-chev{transform:rotate(180deg)}
+  .zbal-panel{display:none;padding:0 14px 12px;border-top:1px solid rgba(26,22,32,.05)}
+  .zbal.open .zbal-panel{display:block}
+  .zbal-ttl{font-size:14px;font-weight:700;letter-spacing:-.01em;padding-top:12px}
+  .zbal-sub{font-size:11px;font-weight:600;color:#8a8290;margin-top:2px}
+  .zbal-exp{font-size:12px;line-height:1.5;color:#6a6470;padding-top:8px}
+  .zbal-sofar{margin-top:12px;font-size:11px;line-height:1.5;color:#8a8290}
+  .zbal-sofar b{font-weight:700;color:#6a6470}
+  .zbal-ol{margin:10px 0 0 17px;padding:0}
+  .zbal-ol li{font-size:12px;line-height:1.55;color:#6a6470;margin-top:7px}
+  .zbal-ol b{color:#3a3542}
+  .zbal-ol b.g{color:#0A7A52}
+  .zbal-ol b.r{color:#B90044}
+  .zbal-ol .ph{color:#2A2530;font-weight:700}
+  .zbal-act{margin-top:13px;display:flex;align-items:center;gap:10px}
+  .zbal-bfm{display:inline-flex;align-items:center;background:#fff;border:1px solid #eadfce;border-radius:16px;padding:8px 16px;font-size:12.5px;font-weight:700;color:#1a1620;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+  .zbal-bfmsub{font-size:10.5px;color:#9a93a0}
+  .zbal-pop{position:absolute;top:calc(100% + 6px);left:8px;right:8px;background:#fff;border:1px solid #eadfce;border-radius:14px;padding:12px 38px 12px 14px;box-shadow:0 12px 32px rgba(26,22,32,.16);font-size:12.5px;line-height:1.5;color:#3a3542;z-index:30}
+  .zbal-pop .ph{color:#2A2530;font-weight:700}
+  .zbal-popx{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;background:#F6F1E8;color:#63616F;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+  .zbal{position:relative}
+  .zbal-min{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #d9cfc0;color:#2A2530;font-size:11px;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  /* quiet chip, not a black flag (Michael 2026-07-11: it competed with Play All) — the guide-card language: near-white, hairline border, gray ink */
+  .zbal-tip{position:absolute;top:-32px;right:6px;background:rgba(255,255,255,.94);color:#6b6572;font-size:10.5px;font-weight:600;padding:5px 10px;border-radius:10px;border:1px solid rgba(26,22,32,.10);white-space:nowrap;box-shadow:0 3px 10px rgba(26,22,32,.08);opacity:0;pointer-events:none;transition:opacity .18s;z-index:31}
+  .zbal-tip.show{opacity:1}
+  .zbal-tip:after{content:'';position:absolute;top:100%;right:16px;border:5px solid transparent;border-top-color:rgba(255,255,255,.96)}
+  @media (max-width:400px){ .zbal-t{font-size:9px} }
+</style>
+<script id="zbal-js">
+(function(){
+  var WEEK = { core: 30*60, love: 20*60, vitality: 8*60, abundance: 6*60 };
+  var V = (new URLSearchParams(location.search).get('v')||'a').toLowerCase();
+  if(!/^[abc]$/.test(V)) V='a';
+  /* LIVE listening: seconds accrue to the playing song's frequency while it plays,
+     so Time now climbs during a session. ?speed=N accelerates for review (default 1x). */
+  var LIVE = { core:0, love:0, vitality:0, abundance:0 };
+  var SPEED = parseFloat(new URLSearchParams(location.search).get('speed'))||1;
+
+  function fmtMin(sec){ return Math.max(1, Math.ceil(sec/60)); }
+  function fmtTotal(sec){
+    var m=Math.round(sec/60), h=Math.floor(m/60);
+    return h ? h+'h '+(m%60)+'m' : m+'m';
+  }
+  /* Top right runs on the engine, two rows: Time = played so far this week (red/green by
+     its own balance); List = where the week lands after playing what's checked (appears
+     only when something is checked, red/green by the projected balance). */
+  function paintMinistat(played, proj, hasChecks){
+    /* Playlist header only — Immersions carries no time readout (Michael 2026-07-11) */
+    document.querySelectorAll('#favs .ministat').forEach(function(ms){
+      var h='<span class="ms-lbl">Time now:</span><span class="ms-ind"><i class="ms-txt'+(played.balanced?'':' low')+'">'+fmtTotal(played.total)+'</i></span>';
+      if(hasChecks) h+='<span class="ms-lbl">After list:</span><span class="ms-ind"><i class="ms-txt'+(proj.balanced?'':' low')+'">'+fmtTotal(proj.total)+'</i></span>';
+      ms.innerHTML=h;
+    });
+  }
+
+  function engine(){
+    var rows=[].slice.call(document.querySelectorAll('#favRows .row'));
+    var projection=[], catalog=[];
+    rows.forEach(function(r){ if(r.querySelector('.qbox.on')) projection.push({freq:r.dataset.cat, slug:r.dataset.slug, sec:parseFloat(r.dataset.min)||0}); });
+    ZBalance.FREQS.forEach(function(f){ (CATS[f].songs||[]).forEach(function(s){ catalog.push({freq:f, slug:s.slug, name:s.name, sec:ZBalance.toSec(s.dur)}); }); });
+    var events=ZBalance.FREQS.map(function(f){ return {freq:f, sec:(WEEK[f]||0)+(LIVE[f]||0)}; });
+    return {
+      rows: rows,
+      hasChecks: projection.length>0,
+      played: ZBalance.compute({events:events, window:null, projection:[], catalog:catalog}),
+      res: ZBalance.compute({events:events, window:null, projection:projection, catalog:catalog})
+    };
+  }
+
+  function render(){
+    var el=document.getElementById('zbalToks');
+    if(!el || !window.ZBalance || typeof CATS==='undefined') return;
+    var st=engine(), res=st.res;
+    paintMinistat(st.played, res, st.hasChecks);
+    var short={}; res.shortfalls.forEach(function(s){ short[s.freq]=s; });
+    var html='';
+    if(V==='c'){
+      html = res.shortfalls.length
+        ? '<span class="zbal-sent">'+res.shortfalls.map(function(s){
+            return '<b style="color:'+CATS[s.freq].cink+'">'+CATS[s.freq].label+' −'+fmtMin(s.neededSec)+' min</b>';
+          }).join('<span class="sep"> · </span>')+'</span>'
+        : '<span class="zbal-sent">All four balanced <i class="ok">✓</i></span>';
+    } else {
+      ZBalance.FREQS.forEach(function(f){
+        var cat=CATS[f], sf=short[f];
+        if(V==='b'){
+          var pct=Math.min(100, Math.round(res.byFreq[f].share/0.15*100));
+          html+='<span class="zbal-t'+(sf?' short':'')+'" style="--tink:'+cat.cink+'">'+cat.label
+            +'<span class="zbal-m"><i style="width:'+pct+'%;background:'+(sf?cat.cink:'#1f9d63')+'"></i></span>'
+            +(sf?'<b class="amt">−'+fmtMin(sf.neededSec)+'m</b>':'')+'</span>';
+        } else {
+          var canAdd = sf && st.rows.some(function(r){ return r.dataset.cat===f && !r.querySelector('.qbox.on'); });
+          var canTrim = !sf && st.rows.some(function(r){ return r.dataset.cat===f && r.querySelector('.qbox.on'); });
+          var overM = sf ? 0 : Math.max(0, Math.floor((res.byFreq[f].sec - 0.15*res.total)/60));
+          html+='<span class="zbal-t'+(sf?' short':'')+'" data-freq="'+f+'" style="--tink:'+cat.cink+'">'+cat.label
+            +'<span class="zbal-b">'+(sf?'<b class="amt">−'+fmtMin(sf.neededSec)+'m</b>':'<b class="amt plus">+'+overM+'m</b>')
+            +(canAdd?'<i class="zbal-add" title="Add songs to clear it">+</i>':'')
+            +(canTrim?'<i class="zbal-min" title="Trim this frequency">−</i>':'')+'</span></span>';
+        }
+      });
+    }
+    el.innerHTML=html;
+
+    var sofar=document.getElementById('zbalSofar');
+    if(sofar){
+      var day=Math.min(7, Math.floor((Date.now()-ZBalance.weekWindow(Date.now()).start)/86400000)+1);
+      sofar.innerHTML='Day '+day+' · So far this week: '+ZBalance.FREQS.map(function(f){
+        return '<b>'+CATS[f].label+'</b> '+Math.round(st.played.byFreq[f].sec/60)+'m';
+      }).join(' · ')+'.';
+    }
+  }
+  window.fbUpd = render;
+  if (window.buildFavs){ var _bf = window.buildFavs; window.buildFavs = function(){ _bf.apply(this, arguments); render(); }; }
+
+  function boot(){
+    var z=document.getElementById('zbal'); if(!z) return;
+    z.classList.add('v-'+V);
+    /* ONLY the arrow opens the panel (round 9): the strip itself is for reading and the
+       +/− buttons, so a stray mobile tap can't yank the drop-down open. */
+    /* a REAL tooltip (native title is slow and invisible on touch): instant on hover,
+       and shown once on load so phones get taught too */
+    var tip=document.createElement('div'); tip.className='zbal-tip';
+    tip.textContent='Press the arrow to balance it for you';
+    z.appendChild(tip);
+    function tipShow(){ if(!z.classList.contains('open')) tip.classList.add('show'); }
+    function tipHide(){ tip.classList.remove('show'); }
+    var lineEl=document.getElementById('zbalLine');
+    lineEl.addEventListener('mouseenter', tipShow);
+    lineEl.addEventListener('mouseleave', tipHide);
+    document.querySelector('.zbal-chevbtn').addEventListener('click', function(e){ e.stopPropagation(); tipHide(); z.classList.toggle('open'); });
+    /* review param ?tip=1 pins the tooltip open (for design review screenshots) */
+    if(new URLSearchParams(location.search).get('tip')==='1'){ setTimeout(tipShow, 300); }
+    else { setTimeout(function(){ tipShow(); setTimeout(tipHide, 4000); }, 900); }
+    /* PLAY ALL — BOTH views (the Immersions button was a dead button until round 11):
+       plays the checked queue top to bottom in the view it was pressed on; nothing
+       checked = check everything first, then play. Each song accrues live time,
+       unchecks itself on finish, and the next checked row starts. */
+    function playNextChecked(){
+      var scope=window.zbalQueueScope||'favRows';
+      var box=document.querySelector('#'+scope+' .row .qbox.on');
+      var row=box && box.closest('.row');
+      if(!row){ window.zbalQueueOn=false; return false; }
+      var ck, i;
+      if(scope==='rows'){
+        /* Immersions rows carry no data attrs: category = the visible one, index = row position */
+        ck=catKey;
+        i=[].slice.call(document.querySelectorAll('#rows .row')).indexOf(row);
+      } else {
+        ck=row.dataset.cat;
+        i=CATS[ck] ? CATS[ck].songs.findIndex(function(s){ return s.slug===row.dataset.slug; }) : -1;
+      }
+      if(!CATS[ck] || i<0){ window.zbalQueueOn=false; return false; }
+      window.zbalQueueRow=row;
+      /* prime the audio SYNCHRONOUSLY (still inside the tap): playSong analyzes the track
+         before playing, and mobile Safari revokes the gesture during that wait. Starting
+         the element here keeps it unlocked; playSong then drives the same element. */
+      var song=CATS[ck].songs[i];
+      if(song.audio){
+        if(!(aud.src && aud.src.endsWith(song.audio))) aud.src=song.audio;
+        var pr=aud.play(); if(pr && pr.catch) pr.catch(function(){});
+      }
+      playSong(ck,i);
+      return true;
+    }
+    window.zbalNext=playNextChecked;
+    function startQueue(scope){
+      window.zbalQueueScope=scope; window.zbalQueueOn=true;
+      var rows=[].slice.call(document.querySelectorAll('#'+scope+' .row'));
+      if(!rows.some(function(r){ return r.querySelector('.qbox.on'); })){
+        rows.forEach(function(r){ var b=r.querySelector('.qbox'); if(b && !b.classList.contains('on')) b.click(); });
+      }
+      playNextChecked();
+    }
+    var qallF=document.querySelector('#favs .qall');
+    if(qallF) qallF.addEventListener('click', function(){ startQueue('favRows'); });
+    var qallL=document.querySelector('#list .ctarow .qall');
+    if(qallL) qallL.addEventListener('click', function(){ startQueue('rows'); });
+    var qallD=document.getElementById('qallDock');
+    if(qallD) qallD.addEventListener('click', function(){ startQueue('rows'); });
+    /* the + on a short frequency: check the least-overshoot set of that frequency's
+       unchecked playlist songs (engine bestAdditions); cascade dips surface as the
+       neighbor's own red + for the next tap */
+    /* the exitable bubble: shows when + can't clear a frequency from the current list.
+       It floats OVER the Select all / Play All row, so it must never linger: auto-hides
+       after 8s and dismisses on any click outside it (it was able to sit there
+       indefinitely swallowing Play All presses). */
+    var pop=document.getElementById('zbalPop');
+    function showBubble(f){
+      document.getElementById('zbalPopMsg').innerHTML=
+        'Not enough <b>'+CATS[f].label+'</b> songs in your list to get there. '
+        +'Go to <b>Immersions &rarr; '+CATS[f].label+'</b> and tap <span class="ph">&#9829;</span> to heart more songs.';
+      pop.style.display='block';
+      clearTimeout(window.__zbalPopT);
+      window.__zbalPopT=setTimeout(function(){ pop.style.display='none'; }, 8000);
+    }
+    document.getElementById('zbalPopX').addEventListener('click', function(){ pop.style.display='none'; });
+    document.addEventListener('click', function(e){
+      if(pop.style.display==='block' && !pop.contains(e.target)) pop.style.display='none';
+    }, true);
+    document.getElementById('zbalToks').addEventListener('click', function(e){
+      var add=e.target.closest('.zbal-add'), min=e.target.closest('.zbal-min');
+      var tok=e.target.closest('.zbal-t');
+      if(!add && !min){
+        /* a red frequency with no + left: tapping it explains where more songs live */
+        if(tok && tok.classList.contains('short')){ e.stopPropagation(); showBubble(tok.dataset.freq); }
+        return;
+      }
+      e.stopPropagation();
+      var f=tok.dataset.freq;
+      var st=engine();
+      if(min){
+        /* trim: uncheck the largest checked song of this frequency */
+        var checked=st.rows.filter(function(r){ return r.dataset.cat===f && r.querySelector('.qbox.on'); })
+          .sort(function(a,b){ return (parseFloat(b.dataset.min)||0)-(parseFloat(a.dataset.min)||0); });
+        if(checked[0]) checked[0].querySelector('.qbox').click();
+        return;
+      }
+      var sf=st.res.shortfalls.filter(function(x){ return x.freq===f; })[0]; if(!sf) return;
+      var avail=st.rows.filter(function(r){ return r.dataset.cat===f && !r.querySelector('.qbox.on'); })
+        .map(function(r){ return {slug:r.dataset.slug, sec:parseFloat(r.dataset.min)||0, row:r}; });
+      var pick=ZBalance.bestAdditions(sf.neededSec, avail);
+      pick.songs.forEach(function(s){
+        var b=s.row.querySelector('.qbox'); if(b && !b.classList.contains('on')) b.click();
+      });
+      if(!pick.cleared) showBubble(f);
+    });
+    /* BALANCE FOR ME: the longest balanced list — check everything, then trim the fattest
+       surplus one song at a time (preferring cuts that keep that frequency green) until
+       all four hold. If the list can't get there, the bubble points to Immersions. */
+    document.getElementById('zbalBfm').addEventListener('click', function(){
+      var rows=[].slice.call(document.querySelectorAll('#favRows .row'));
+      rows.forEach(function(r){ var b=r.querySelector('.qbox'); if(b && !b.classList.contains('on')) b.click(); });
+      var guard=0;
+      while(guard++<60){
+        var st=engine();
+        if(st.res.balanced || st.res.empty) break;
+        var best=null;
+        ZBalance.FREQS.forEach(function(f){
+          var over=st.res.byFreq[f].sec - 0.15*st.res.total;
+          var checked=st.rows.filter(function(r){ return r.dataset.cat===f && r.querySelector('.qbox.on'); });
+          if(checked.length && (!best || over>best.over)) best={f:f, over:over, checked:checked};
+        });
+        if(!best) break;
+        var T=st.res.total, cur=st.res.byFreq[best.f].sec;
+        var sorted=best.checked.sort(function(a,b){ return (parseFloat(b.dataset.min)||0)-(parseFloat(a.dataset.min)||0); });
+        var pickRow=null;
+        for(var i=0;i<sorted.length;i++){
+          var x=parseFloat(sorted[i].dataset.min)||0;
+          if((cur-x)/(T-x) >= 0.15){ pickRow=sorted[i]; break; }   // biggest cut that keeps it green
+        }
+        if(!pickRow) pickRow=sorted[sorted.length-1];              // else the smallest cut
+        pickRow.querySelector('.qbox').click();
+      }
+      var fin=engine();
+      if(!fin.res.balanced && fin.res.shortfalls[0]) showBubble(fin.res.shortfalls[0].freq);
+    });
+    render();
+    var fr=document.getElementById('favRows');
+    if(fr && window.MutationObserver){
+      new MutationObserver(function(){ render(); }).observe(fr, { subtree:true, attributes:true, attributeFilter:['class'] });
+    }
+    /* live clock: while a song plays, its seconds land on its frequency and Time now climbs.
+       When a song FINISHES it unchecks itself: its minutes leave After list, the listened
+       seconds stay in Time now (the plan becomes the record). */
+    var lastT=null, lastR=0;
+    function throttled(){ var n=Date.now(); if(n-lastR>1000){ lastR=n; render(); } }
+    aud.addEventListener('timeupdate', function(){
+      var t=aud.currentTime;
+      if(lastT!=null && t>lastT && t-lastT<2){
+        var f=(typeof playCat==='string' && LIVE.hasOwnProperty(playCat))?playCat:null;
+        if(f){ LIVE[f]+=(t-lastT)*SPEED; throttled(); }
+      }
+      lastT=t;
+    });
+    aud.addEventListener('seeked', function(){ lastT=aud.currentTime; });
+    aud.addEventListener('ended', function(){
+      lastT=null;
+      if(window.zbalQueueRow){
+        var qr=window.zbalQueueRow; window.zbalQueueRow=null;
+        var qb=qr.isConnected && qr.querySelector('.qbox');
+        if(qb && qb.classList.contains('on')) qb.click();
+      }
+      if(curSong && typeof playCat==='string'){
+        [].slice.call(document.querySelectorAll('#favRows .row, #rows .row')).forEach(function(r){
+          if(r.dataset.slug===curSong.slug && r.dataset.cat===playCat){
+            var b=r.querySelector('.qbox'); if(b && b.classList.contains('on')) b.click();
+          }
+        });
+      }
+      if(window.zbalQueueOn) window.zbalNext();
+      render();
+    });
+    /* review aids: ?open=1 opens the panel; ?demo=balanced checks enough rows to clear the week;
+       ?bubble=<freq> shows the not-enough-songs bubble */
+    var P=new URLSearchParams(location.search);
+    if(P.get('open')) z.classList.add('open');
+    if(P.get('bubble') && CATS[P.get('bubble')]) showBubble(P.get('bubble'));
+    if(P.get('demo')==='balanced'){ setTimeout(function(){
+      ['vitality|astrolith','vitality|kindred-spirits'].forEach(function(k){
+        var p=k.split('|');
+        var row=[].slice.call(document.querySelectorAll('#favRows .row')).filter(function(r){ return r.dataset.cat===p[0]&&r.dataset.slug===p[1]; })[0];
+        var b=row&&row.querySelector('.qbox');
+        if(b && !b.classList.contains('on')) b.click();
+      });
+    },80); }
+  }
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+</script>
+<script src="ministat.js"></script>
+<script>/* ported from C-4: the engine owns the top-right content (Time + List rows), so after ministat.js
+   installs (or re-installs on hashchange) we repaint over its static demo content.
+   Registered after ministat.js so these listeners run after its install. */
+(function(){
+  function repaint(){ if(window.fbUpd) window.fbUpd(); }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', repaint); } else { repaint(); }
+  window.addEventListener('hashchange', repaint);
+})();
+</script>
+</body></html>
