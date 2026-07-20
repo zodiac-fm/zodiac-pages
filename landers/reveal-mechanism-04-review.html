@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Phone-first control versus challenger review for the live reveal mechanism section.">
+  <title>Mobile message-transfer test</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, Arial, sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #18151b; color: #f9f6ef; }
+    header {
+      border-bottom: 1px solid rgba(255,255,255,.13);
+      background: #18151b;
+    }
+    .header-inner { max-width: 940px; margin: 0 auto; padding: 15px 18px 13px; }
+    h1 { margin: 0; font-size: 16px; font-weight: 680; }
+    .question {
+      max-width: 760px;
+      margin: 7px 0 0;
+      color: #d7d1da;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .question strong { color: #fff; }
+    .stage {
+      display: grid;
+      grid-template-columns: repeat(2, 375px);
+      justify-content: center;
+      gap: 28px;
+      padding: 24px 18px 36px;
+    }
+    .column { min-width: 0; }
+    .variant-label {
+      display: flex;
+      min-height: 32px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      color: #aaa3ad;
+      font: 400 9px/1.2 monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .variant-label b { color: #fff; font-weight: 650; }
+    .phone {
+      width: 375px;
+      height: 812px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 13px;
+      background: white;
+      box-shadow: 0 24px 70px rgba(0,0,0,.28);
+    }
+    iframe { width: 375px; height: 812px; border: 0; }
+    .open {
+      display: block;
+      min-height: 44px;
+      margin-top: 10px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      color: #f9f6ef;
+      font-size: 12px;
+      text-align: center;
+      text-decoration: none;
+    }
+    .open:focus-visible { outline: 3px solid #d2c8ff; outline-offset: 2px; }
+    .note {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 18px 36px;
+      color: #9f98a2;
+      font-size: 11px;
+      line-height: 1.45;
+      text-align: center;
+    }
+    @media (max-width: 820px) {
+      .stage { grid-template-columns: 375px; }
+    }
+    @media (max-width: 410px) {
+      .stage {
+        --scale: calc((100vw - 24px) / 375);
+        grid-template-columns: calc(375px * var(--scale));
+        padding-inline: 12px;
+      }
+      .phone {
+        width: calc(375px * var(--scale));
+        height: calc(812px * var(--scale));
+        border-radius: 10px;
+      }
+      iframe { transform: scale(var(--scale)); transform-origin: top left; }
+      .variant-label, .open { width: calc(375px * var(--scale)); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>Live reveal mechanism · phone test</h1>
+      <p class="question"><strong>The only decision:</strong> Can you see quickly what all the control copy says, get the point faster, and feel and understand it more clearly?</p>
+    </div>
+  </header>
+
+  <main class="stage">
+    <section class="column" aria-label="Control">
+      <div class="variant-label"><b>A · Current control</b><span>prose-first</span></div>
+      <div class="phone"><iframe title="Current control at 375 pixels wide" src="reveal-mechanism-04-control.html?variant=control"></iframe></div>
+      <a class="open" href="reveal-mechanism-04-control.html?variant=control" target="_blank" rel="noreferrer">Open control by itself</a>
+    </section>
+
+    <section class="column" aria-label="Challenger">
+      <div class="variant-label"><b>B · Test 04</b><span>message-first</span></div>
+      <div class="phone"><iframe title="Test 04 challenger at 375 pixels wide" src="reveal-mechanism-04.html"></iframe></div>
+      <a class="open" href="reveal-mechanism-04.html" target="_blank" rel="noreferrer">Open challenger by itself</a>
+    </section>
+  </main>
+
+  <p class="note">Desktop is deliberately absent. This direction does not earn a desktop treatment unless the phone version wins the message-transfer test.</p>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Mobile-first non-canon challenger for the live Zodiac reveal mechanism section.">
+  <title>Your chart is also a sound</title>
+  <style>
+    @font-face {
+      font-family: "Playfair Display";
+      src: url("reveal-mechanism-04-assets/playfair.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400 900;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: Inter;
+      src: url("reveal-mechanism-04-assets/inter.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Space Mono";
+      src: url("reveal-mechanism-04-assets/space-mono.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    :root {
+      --paper: #fbf8f1;
+      --paper-deep: #f1eadf;
+      --white: #fffefa;
+      --ink: #1a1620;
+      --quiet: #66616b;
+      --rule: rgba(26, 22, 32, 0.14);
+      --rule-strong: rgba(26, 22, 32, 0.28);
+      --core: #6521c9;
+      --love: #b90044;
+      --vitality: #c25500;
+      --abundance: #0a7a52;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: #e8e2d9; }
+    body {
+      width: min(100%, 430px);
+      min-height: 100vh;
+      margin: 0 auto;
+      overflow-x: hidden;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .test-label {
+      height: 25px;
+      padding: 7px 14px 0;
+      border-bottom: 1px solid var(--rule);
+      color: #827c84;
+      font: 400 8px/1 "Space Mono", monospace;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      min-height: 787px;
+      padding: 14px 14px 11px;
+    }
+
+    .hero-copy { padding: 0 2px 11px; }
+    .eyebrow {
+      margin: 0 0 5px;
+      color: var(--core);
+      font: 600 9px/1.2 Inter, sans-serif;
+      letter-spacing: 0.115em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 350px;
+      margin: 0;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(28px, 8.2vw, 34px);
+      font-weight: 600;
+      letter-spacing: -0.032em;
+      line-height: 0.98;
+    }
+    .gold-line {
+      margin: 7px 0 0;
+      color: #4e4852;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+    .gold-line strong { color: var(--ink); font-weight: 650; }
+
+    .mechanism {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--rule-strong);
+      border-radius: 13px;
+      background:
+        linear-gradient(90deg, transparent 49.8%, rgba(26,22,32,.065) 50%, transparent 50.2%),
+        var(--white);
+      box-shadow: 0 17px 45px rgba(56, 0, 122, 0.075);
+    }
+    .mechanism::before {
+      position: absolute;
+      top: 14px;
+      bottom: 12px;
+      left: 20px;
+      width: 1px;
+      background: var(--rule-strong);
+      content: "";
+    }
+    .plate-step {
+      position: relative;
+      padding: 11px 10px 10px 34px;
+    }
+    .plate-step + .plate-step { border-top: 1px solid var(--rule); }
+    .step-marker {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      width: 13px;
+      height: 13px;
+      border: 1px solid var(--rule-strong);
+      border-radius: 50%;
+      background: var(--white);
+      color: #655f68;
+      font: 400 7.5px/11px "Space Mono", monospace;
+      text-align: center;
+    }
+    .plate-label {
+      margin: 0 0 3px;
+      color: #6d6770;
+      font: 400 8px/1.15 "Space Mono", monospace;
+      letter-spacing: 0.105em;
+      text-transform: uppercase;
+    }
+    .plate-title {
+      margin: 0;
+      font-size: 13.5px;
+      font-weight: 690;
+      letter-spacing: -0.018em;
+      line-height: 1.2;
+    }
+    .plate-note {
+      margin: 2px 0 0;
+      color: var(--quiet);
+      font-size: 10px;
+      line-height: 1.25;
+    }
+    .plate-note strong { color: var(--ink); font-weight: 650; }
+
+    .source-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 88px;
+      gap: 8px;
+      align-items: center;
+    }
+    .data-field { width: 88px; height: 42px; }
+    .data-field circle { fill: #8d8490; opacity: 0.34; }
+    .data-field path { fill: none; stroke: var(--core); stroke-width: 1.2; }
+    .data-field .end { fill: var(--core); opacity: 1; }
+
+    .domain-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 4px;
+      margin-top: 7px;
+    }
+    .domain {
+      position: relative;
+      min-width: 0;
+      padding-top: 5px;
+      border-top: 2px solid currentColor;
+    }
+    .domain strong {
+      display: block;
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 10.5px;
+      font-weight: 680;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .domain.core { color: var(--core); }
+    .domain.love { color: var(--love); }
+    .domain.vitality { color: var(--vitality); }
+    .domain.abundance { color: var(--abundance); }
+
+    .music-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 112px;
+      gap: 8px;
+      align-items: center;
+    }
+    .score-lines { width: 112px; height: 47px; }
+    .score-lines .staff { stroke: rgba(26,22,32,.13); stroke-width: 1; }
+    .score-lines .core { stroke: var(--core); }
+    .score-lines .love { stroke: var(--love); }
+    .score-lines .vitality { stroke: var(--vitality); }
+    .score-lines .abundance { stroke: var(--abundance); }
+    .score-lines .signal { fill: none; stroke-width: 1.5; }
+
+    .bands-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 5px;
+    }
+    .bands-head .plate-title { flex: 1; }
+    .bands-head span {
+      color: #756f78;
+      font-size: 8.5px;
+      white-space: nowrap;
+    }
+    .band-stack {
+      overflow: hidden;
+      border: 1px solid var(--rule);
+      border-radius: 7px;
+    }
+    .band {
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr) 94px;
+      min-height: 30px;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 7px;
+      background: rgba(255,255,255,.67);
+    }
+    .band + .band { border-top: 1px solid var(--rule); }
+    .band .range {
+      font: 400 8.5px/1.1 "Space Mono", monospace;
+      white-space: nowrap;
+    }
+    .band strong { font-size: 10.5px; line-height: 1.1; }
+    .band span:last-child {
+      color: var(--quiet);
+      font-size: 8.5px;
+      line-height: 1.1;
+      text-align: right;
+    }
+    .band.root .range { color: var(--abundance); }
+    .band.solar .range { color: var(--vitality); }
+    .band.throat .range { color: var(--love); }
+    .band.crown .range { color: var(--core); }
+
+    .use-grid {
+      display: grid;
+      grid-template-columns: 0.86fr 1.14fr;
+      gap: 8px;
+    }
+    .use-card { min-width: 0; }
+    .use-card + .use-card {
+      padding-left: 9px;
+      border-left: 1px solid var(--rule);
+    }
+    .use-card strong {
+      display: block;
+      font-size: 11.5px;
+      line-height: 1.15;
+    }
+    .use-card span {
+      display: block;
+      margin-top: 2px;
+      color: var(--quiet);
+      font-size: 9px;
+      line-height: 1.2;
+    }
+
+    .detail {
+      padding: 42px 20px 64px;
+      border-top: 1px solid var(--rule);
+      background: var(--paper-deep);
+    }
+    .detail-kicker {
+      margin: 0 0 7px;
+      color: var(--core);
+      font: 400 8px/1.2 "Space Mono", monospace;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+    .detail h2 {
+      margin: 0 0 25px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 30px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.02;
+    }
+    .detail-block {
+      padding: 18px 0;
+      border-top: 1px solid var(--rule-strong);
+    }
+    .detail-block:last-child { border-bottom: 1px solid var(--rule-strong); }
+    .detail-block h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+    .detail-block p {
+      margin: 0;
+      color: #514b54;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .detail-block p + p { margin-top: 10px; }
+
+    @media (max-width: 345px) {
+      .hero { padding-inline: 10px; }
+      .hero-copy { padding-inline: 2px; }
+      h1 { font-size: 27px; }
+      .plate-step { padding-right: 7px; padding-left: 31px; }
+      .mechanism::before { left: 18px; }
+      .step-marker { left: 12px; }
+      .band { grid-template-columns: 79px minmax(0, 1fr) 84px; gap: 4px; padding-inline: 5px; }
+      .band .range { font-size: 8px; }
+      .band span:last-child { font-size: 8px; }
+    }
+
+    @media (min-width: 431px) {
+      body { border-inline: 1px solid var(--rule); box-shadow: 0 14px 50px rgba(26,22,32,.12); }
+    }
+  </style>
+</head>
+<body>
+  <div class="test-label">Page B · mobile comprehension test</div>
+
+  <main>
+    <section class="hero" aria-labelledby="section-title">
+      <header class="hero-copy">
+        <p class="eyebrow">After you fill out your birth chart</p>
+        <h1 id="section-title">Your chart isn't only information. It's also a sound.</h1>
+        <p class="gold-line">Here is how your birth moment becomes <strong>music made for you.</strong></p>
+      </header>
+
+      <div class="mechanism" aria-label="Your birth chart becomes four personal frequencies, which are built into music and mapped to four body bands.">
+        <section class="plate-step source-step">
+          <span class="step-marker" aria-hidden="true">1</span>
+          <div class="source-row">
+            <div>
+              <p class="plate-label">Your exact birth moment</p>
+              <p class="plate-title">248+ celestial data points</p>
+              <p class="plate-note">A method derived from the <strong>Sri Vidyā sound lineage</strong></p>
+            </div>
+            <svg class="data-field" viewBox="0 0 88 42" role="img" aria-label="Many data points resolve into four lines">
+              <g>
+                <circle cx="5" cy="6" r="1.1"/><circle cx="14" cy="4" r="1"/><circle cx="23" cy="8" r="1.2"/><circle cx="32" cy="5" r="1"/><circle cx="41" cy="9" r="1.1"/>
+                <circle cx="8" cy="15" r="1"/><circle cx="18" cy="18" r="1.1"/><circle cx="29" cy="14" r="1"/><circle cx="39" cy="18" r="1.2"/><circle cx="48" cy="14" r="1"/>
+                <circle cx="5" cy="27" r="1.2"/><circle cx="15" cy="24" r="1"/><circle cx="25" cy="29" r="1.1"/><circle cx="35" cy="25" r="1"/><circle cx="45" cy="30" r="1.1"/>
+                <circle cx="10" cy="37" r="1"/><circle cx="21" cy="34" r="1.2"/><circle cx="31" cy="38" r="1"/><circle cx="41" cy="35" r="1.1"/>
+              </g>
+              <path d="M6 6C35 6 48 9 61 15M8 16C36 17 48 18 61 18M5 27C34 27 48 24 61 23M10 37C37 36 49 31 61 27"/>
+              <circle class="end" cx="66" cy="15" r="1.8"/><circle class="end" cx="66" cy="19" r="1.8"/><circle class="end" cx="66" cy="23" r="1.8"/><circle class="end" cx="66" cy="27" r="1.8"/>
+            </svg>
+          </div>
+        </section>
+
+        <section class="plate-step domains-step">
+          <span class="step-marker" aria-hidden="true">2</span>
+          <p class="plate-label">The result</p>
+          <p class="plate-title">Four personal frequencies in Hz</p>
+          <div class="domain-grid" aria-label="Identity, Love, Vitality, and Abundance">
+            <div class="domain core"><strong>Identity</strong></div>
+            <div class="domain love"><strong>Love</strong></div>
+            <div class="domain vitality"><strong>Vitality</strong></div>
+            <div class="domain abundance"><strong>Abundance</strong></div>
+          </div>
+        </section>
+
+        <section class="plate-step music-step">
+          <span class="step-marker" aria-hidden="true">3</span>
+          <div class="music-row">
+            <div>
+              <p class="plate-label">Then you hear them</p>
+              <p class="plate-title">Built into real music, not meditation drones</p>
+              <p class="plate-note"><strong>Real composers.</strong> Each track is remastered up to <strong>700 times</strong> by audio engineers.</p>
+            </div>
+            <svg class="score-lines" viewBox="0 0 112 47" role="img" aria-label="Four personal signals embedded in a musical waveform">
+              <path class="staff" d="M1 8H111M1 18H111M1 28H111M1 38H111"/>
+              <path class="signal core" d="M1 8C12 8 16 2 25 8S39 15 48 8S63 1 72 8S89 16 111 8"/>
+              <path class="signal love" d="M1 18C13 18 17 11 27 18S42 25 52 18S68 11 78 18S94 26 111 18"/>
+              <path class="signal vitality" d="M1 28C12 28 18 22 27 28S42 34 51 28S67 21 77 28S94 35 111 28"/>
+              <path class="signal abundance" d="M1 38C14 38 18 32 28 38S42 44 52 38S67 31 78 38S94 45 111 38"/>
+            </svg>
+          </div>
+        </section>
+
+        <section class="plate-step bands-step">
+          <span class="step-marker" aria-hidden="true">4</span>
+          <p class="plate-label">Where each frequency is felt</p>
+          <div class="bands-head">
+            <p class="plate-title">Each one lands in a body band</p>
+            <span>The band shapes how you experience it.</span>
+          </div>
+          <div class="band-stack" aria-label="Four frequency bands and their body locations">
+            <div class="band crown"><span class="range">775–950 Hz</span><strong>Crown</strong><span>Toward the crown</span></div>
+            <div class="band throat"><span class="range">600–775 Hz</span><strong>Throat</strong><span>Chest + throat</span></div>
+            <div class="band solar"><span class="range">425–600 Hz</span><strong>Solar plexus</strong><span>Solar plexus</span></div>
+            <div class="band root"><span class="range">250–425 Hz</span><strong>Root</strong><span>Belly</span></div>
+          </div>
+        </section>
+
+        <section class="plate-step use-step">
+          <span class="step-marker" aria-hidden="true">5</span>
+          <p class="plate-label">How you use it</p>
+          <div class="use-grid">
+            <div class="use-card">
+              <strong>Balance all four.</strong>
+              <span>Build playlists that balance all four for compounding results.</span>
+            </div>
+            <div class="use-card">
+              <strong>Add it to what already works.</strong>
+              <span>Zodiac amplifies the same self. Use it with meditation, breathwork, yoga, prayer, and more.</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="detail" aria-labelledby="detail-title">
+      <p class="detail-kicker">The complete explanation</p>
+      <h2 id="detail-title">What the score means</h2>
+
+      <article class="detail-block">
+        <h3>Four frequencies, calculated for you</h3>
+        <p>Your four distinct frequencies guide you in the domains of Identity, Love, Vitality, and Abundance. They are calculated from 248+ celestial data points using a method derived from the Sri Vidyā sound lineage.</p>
+      </article>
+
+      <article class="detail-block">
+        <h3>Each one is built into music</h3>
+        <p>Each track is remastered up to 700 times by audio engineers to embed and tune it precisely to each of your four frequencies.</p>
+        <p>Real composers. Real production. Not generic meditation drones.</p>
+      </article>
+
+      <article class="detail-block">
+        <h3>Your bands show where you experience them</h3>
+        <p>Your four frequencies arrive in four separate bands. The band determines where you experience each one in your body and affects the flavor of its amplification. You will get a complete description on the other side.</p>
+      </article>
+
+      <article class="detail-block">
+        <h3>Balance the four</h3>
+        <p>Our research shows that compounding results require frequency balance. You will learn how it works and how to build effective playlists for the week.</p>
+      </article>
+
+      <article class="detail-block">
+        <h3>Add Zodiac to what already works</h3>
+        <p>Meditation, mindfulness, breathwork, chanting, yoga, Qi Gong, and prayer quiet you down and provide access to your deeper self. Zodiac amplifies the same self.</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Non-canon comparison of the live reveal mechanism section and a visual translation pilot.">
+  <title>Reveal mechanism visual translation test</title>
+  <style>
+    @font-face {
+      font-family: "Playfair Display";
+      src: url("reveal-mechanism-04-assets/playfair.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400 900;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: Inter;
+      src: url("reveal-mechanism-04-assets/inter.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Space Mono";
+      src: url("reveal-mechanism-04-assets/space-mono.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    :root {
+      --soot: #141414;
+      --smoke: #555555;
+      --fog: #888888;
+      --accent: #5b4cd4;
+      --accent-deep: #38007a;
+      --accent-bright: #a737c8;
+      --stock: #f8f7f5;
+      --hairline: rgba(0, 0, 0, 0.08);
+      --hairline-strong: rgba(0, 0, 0, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+    html { background: #efece6; }
+    body {
+      margin: 0 auto;
+      min-height: 100vh;
+      max-width: 760px;
+      background: var(--stock);
+      color: var(--soot);
+      font-family: Inter, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      border-inline: 1px solid var(--hairline);
+      box-shadow: 0 2px 40px rgba(20, 20, 20, 0.07);
+    }
+
+    .test-label {
+      position: relative;
+      z-index: 4;
+      padding: 7px 20px;
+      border-bottom: 1px solid var(--hairline);
+      background: rgba(255, 255, 255, 0.96);
+      color: var(--fog);
+      font: 400 10px/1.2 "Space Mono", monospace;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .section {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      margin: 8px 0 28px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.08;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4px;
+      padding: 24px 0;
+      border-top: 1px solid var(--hairline);
+    }
+
+    .step:last-child { border-bottom: 1px solid var(--hairline); }
+    .step-no {
+      color: var(--accent);
+      font: 400 10px/1.2 "Space Mono", monospace;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 650;
+      line-height: 1.22;
+    }
+    p {
+      margin: 0 0 6px;
+      color: var(--smoke);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    p + p { margin-top: 16px; }
+    .exact-underline {
+      text-decoration: underline;
+      text-decoration-color: var(--accent);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 8px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--hairline);
+      color: var(--smoke);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-align: left;
+      text-transform: uppercase;
+    }
+    td {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--hairline);
+      text-align: left;
+    }
+    td:first-child { width: 40%; color: var(--accent); }
+
+    .visual {
+      display: none;
+      min-height: 118px;
+      overflow: hidden;
+      border: 1px solid var(--hairline-strong);
+      border-radius: 10px;
+      background:
+        radial-gradient(circle at 18% 15%, rgba(91, 76, 212, 0.12), transparent 45%),
+        #ffffff;
+    }
+    .visual svg { display: block; width: 100%; height: 100%; }
+
+    .variant-pilot .step {
+      gap: 14px;
+      padding: 22px 0 26px;
+    }
+    .variant-pilot .visual { display: block; }
+    .variant-pilot .step-copy { min-width: 0; }
+
+    .signal-line { stroke: var(--accent); stroke-width: 2; fill: none; }
+    .signal-soft { stroke: rgba(91, 76, 212, 0.28); stroke-width: 1; fill: none; }
+    .signal-fill { fill: rgba(91, 76, 212, 0.12); }
+    .signal-solid { fill: var(--accent); }
+    .signal-ink { fill: var(--soot); }
+    .signal-label {
+      fill: var(--smoke);
+      font: 500 8px Inter, Arial, sans-serif;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    @media (min-width: 700px) {
+      .variant-pilot .step {
+        grid-template-columns: 158px minmax(0, 1fr);
+        column-gap: 22px;
+        align-items: start;
+      }
+      .variant-pilot .step-no { grid-column: 2; grid-row: 1; }
+      .variant-pilot .visual {
+        position: static;
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        width: auto;
+        height: auto;
+        min-height: 138px;
+        border: 1px solid var(--hairline-strong);
+        background: radial-gradient(circle at 18% 15%, rgba(91, 76, 212, 0.12), transparent 45%), #ffffff;
+      }
+      .variant-pilot .step-copy { grid-column: 2; grid-row: 2; }
+      .variant-pilot .step.no-visual { grid-template-columns: 1fr; }
+      .variant-pilot .step.no-visual .step-no { grid-column: 1; grid-row: 1; }
+      .variant-pilot .step.no-visual .step-copy { grid-column: 1; grid-row: 2; }
+    }
+
+    @media (max-width: 699px) {
+      body { border: 0; box-shadow: none; }
+      .test-label { padding-inline: 20px; }
+      .section { padding: 20px; }
+      h1 { margin-top: 8px; font-size: 28px; line-height: 1.12; }
+      .step { padding: 20px 0; }
+      h2 { font-size: 17px; }
+      p { font-size: 15px; line-height: 1.48; }
+      .variant-pilot .step { position: relative; }
+      .variant-pilot .step-no,
+      .variant-pilot h2 { padding-right: 82px; }
+      .variant-pilot .visual {
+        position: absolute;
+        top: 18px;
+        right: 0;
+        width: 68px;
+        height: 68px;
+        min-height: 68px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="test-label" id="test-label">Variant</div>
+  <main class="section" aria-labelledby="section-title">
+    <h1 id="section-title">What happens after you fill out your birth chart</h1>
+
+    <article class="step">
+      <div class="step-no">/01</div>
+      <div class="visual" aria-hidden="true">
+        <svg viewBox="0 0 160 112" role="presentation">
+          <g class="signal-soft">
+            <path d="M22 20L46 34L24 58L48 82"/><path d="M22 20L82 24L122 18L139 42L122 72L140 91"/>
+            <path d="M46 34L82 24L99 52L122 72L82 92L48 82"/>
+          </g>
+          <g class="signal-solid"><circle cx="22" cy="20" r="3"/><circle cx="46" cy="34" r="3"/><circle cx="24" cy="58" r="3"/><circle cx="48" cy="82" r="3"/><circle cx="82" cy="24" r="3"/><circle cx="99" cy="52" r="3"/><circle cx="82" cy="92" r="3"/><circle cx="122" cy="18" r="3"/><circle cx="139" cy="42" r="3"/><circle cx="122" cy="72" r="3"/><circle cx="140" cy="91" r="3"/></g>
+          <path class="signal-line" d="M17 99H143"/>
+          <g class="signal-solid"><rect x="29" y="96" width="18" height="6" rx="3"/><rect x="57" y="96" width="18" height="6" rx="3"/><rect x="85" y="96" width="18" height="6" rx="3"/><rect x="113" y="96" width="18" height="6" rx="3"/></g>
+        </svg>
+      </div>
+      <div class="step-copy">
+        <h2>Discover your four unique frequencies in Hz.</h2>
+        <p>The four distinct frequencies that guide you in the domains of Identity, Love, Vitality, and Abundance are calculated for you using 248+ Celestial data points derived from Sri Vidyā mantra tradition.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-no">/02</div>
+      <div class="visual" aria-hidden="true">
+        <svg viewBox="0 0 160 112" role="presentation">
+          <g class="signal-soft"><path d="M17 76C31 30 43 30 57 76S83 122 97 76S123 30 143 76"/><path d="M17 65C31 42 43 42 57 65S83 88 97 65S123 42 143 65"/></g>
+          <g class="signal-line"><path d="M17 55H143"/><path d="M17 48H143"/><path d="M17 62H143"/><path d="M17 69H143"/></g>
+          <g class="signal-solid"><circle cx="37" cy="55" r="3"/><circle cx="66" cy="48" r="3"/><circle cx="96" cy="62" r="3"/><circle cx="126" cy="69" r="3"/></g>
+        </svg>
+      </div>
+      <div class="step-copy">
+        <h2>Hear how each frequency sounds in music.</h2>
+        <p>Each track is remastered up to 700 times by audio engineers to embed and tune it <span class="exact-underline">precisely to each of your four frequencies</span>. Real composers. Real production. Not generic meditation drones.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-no">/03</div>
+      <div class="visual" aria-hidden="true">
+        <svg viewBox="0 0 160 112" role="presentation">
+          <rect class="signal-fill" x="28" y="28" width="104" height="64" rx="8"/>
+          <rect class="signal-solid" x="28" y="76" width="104" height="16" rx="0" opacity=".35"/>
+          <rect class="signal-solid" x="28" y="60" width="104" height="16" opacity=".52"/>
+          <rect class="signal-solid" x="28" y="44" width="104" height="16" opacity=".7"/>
+          <rect class="signal-solid" x="28" y="28" width="104" height="16" rx="8" opacity=".9"/>
+          <path d="M28 44H132M28 60H132M28 76H132" stroke="#fff" stroke-width="1" opacity=".8"/>
+          <text x="18" y="91" class="signal-label">250</text><text x="134" y="35" class="signal-label">950</text>
+        </svg>
+      </div>
+      <div class="step-copy">
+        <h2>Learn where your frequencies resonate in your body.</h2>
+        <p>Your four frequencies arrive in four separate bands. The band determines where you experience each one in your body.</p>
+        <table>
+          <thead><tr><th scope="col">Band</th><th scope="col">Body location</th></tr></thead>
+          <tbody>
+            <tr><td>250 — 425 Hz</td><td>Belly</td></tr>
+            <tr><td>425 — 600 Hz</td><td>Solar plexus</td></tr>
+            <tr><td>600 — 775 Hz</td><td>Chest and throat</td></tr>
+            <tr><td>775 — 950 Hz</td><td>Toward the crown</td></tr>
+          </tbody>
+        </table>
+        <p>The location affects the flavor of each frequency’s amplification. If your Vitality frequency lands in band three, your nervous system clears through expression.</p>
+        <p>You will get a complete description on the other side and discover where and how you experience the four domains of your pattern.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-no">/04</div>
+      <div class="visual" aria-hidden="true">
+        <svg viewBox="0 0 160 112" role="presentation">
+          <g class="signal-soft"><path d="M24 34H142"/><path d="M24 53H142"/><path d="M24 72H142"/><path d="M24 91H142"/></g>
+          <g class="signal-line"><path d="M24 34H103"/><path d="M24 53H123"/><path d="M24 72H88"/><path d="M24 91H111"/></g>
+          <g class="signal-solid"><circle cx="103" cy="34" r="4"/><circle cx="123" cy="53" r="4"/><circle cx="88" cy="72" r="4"/><circle cx="111" cy="91" r="4"/></g>
+        </svg>
+      </div>
+      <div class="step-copy">
+        <h2>Learn how to combine frequencies for maximum effect.</h2>
+        <p>Our research shows that compounding results require frequency balance. You will learn how it works and how to build effective playlists for the week.</p>
+      </div>
+    </article>
+
+    <article class="step no-visual">
+      <div class="step-no">/05</div>
+      <div class="step-copy">
+        <h2>Discover how to exponentially enhance your other practices.</h2>
+        <p>Practices like meditation, mindfulness, breathwork, chanting, yoga, Qi Gong, and prayer all provide access to your deeper self by quieting you down.</p>
+        <p>Learn how combining them with Zodiac, which amplifies the same self, produces exponential effects.</p>
+      </div>
+    </article>
+  </main>
+
+  <script>
+    const variant = new URLSearchParams(location.search).get("variant") === "pilot" ? "pilot" : "control";
+    document.body.classList.add(`variant-${variant}`);
+    document.getElementById("test-label").textContent = variant === "pilot" ? "Page B" : "Page A";
+  </script>
+</body>
+</html>
