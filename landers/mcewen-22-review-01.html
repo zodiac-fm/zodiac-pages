@@ -1,0 +1,1405 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:,">
+  <title>David McEwen 22 Pick A/B Review · Zodiac.fm</title>
+  <meta name="description" content="Open a changed section, pick 22-A or 22-B above the previews, and collect every explicit pick in one clear list.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --canvas: #efece6;
+      --paper: #ffffff;
+      --ink: #17131c;
+      --muted: #625b68;
+      --line: rgba(23, 19, 28, .15);
+      --line-strong: rgba(23, 19, 28, .32);
+      --purple: #6521c9;
+      --purple-soft: #eee8f8;
+      --green: #0a7a52;
+      --green-soft: #e5f5ee;
+      --display: "Cormorant Garamond", Georgia, serif;
+      --body: "Switzer", Helvetica, sans-serif;
+      --shadow: 0 22px 60px rgba(23, 19, 28, .10);
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    .sr-only {
+      position: fixed;
+      left: -10000px;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: 0;
+      overflow: visible;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, select, a { font: inherit; }
+    button, select { min-height: 44px; }
+    button:focus-visible, select:focus-visible, a:focus-visible {
+      outline: 3px solid #ff9112;
+      outline-offset: 3px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1; text-wrap: balance; }
+    a { color: inherit; }
+
+    .review-layout {
+      width: min(100% - 24px, 1320px);
+      margin-inline: auto;
+    }
+
+    .toolbar-wrap {
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(239, 236, 230, .97);
+      backdrop-filter: blur(14px);
+    }
+    .toolbar {
+      width: min(100% - 24px, 1320px);
+      margin-inline: auto;
+      padding: 9px 0 10px;
+      display: grid;
+      gap: 8px;
+    }
+    .primary-controls,
+    .review-controls { display: grid; gap: 8px; }
+    .field { min-width: 0; display: grid; gap: 4px; }
+    .field-label { color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    select {
+      width: 100%;
+      padding: 0 34px 0 11px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    #page-select { padding-right: 26px; font-size: 14px; }
+    .segments { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--line); background: var(--paper); }
+    .segments button {
+      min-width: 0;
+      padding: 0 9px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      line-height: 1.1;
+    }
+    .segments button:last-child { border-right: 0; }
+    .segments button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+    #mode-controls button { position: relative; padding-inline: 5px; font-size: 11px; }
+    #viewport-controls button { padding-inline: 3px; font-size: 10px; white-space: normal; }
+    .recipe-count { position: absolute; top: 3px; right: 3px; min-width: 15px; padding: 1px 3px; background: var(--purple-soft); color: var(--purple); font-size: 8px; line-height: 12px; }
+    #mode-controls button[aria-pressed="true"] .recipe-count { background: var(--paper); color: var(--ink); }
+    .open-page {
+      min-height: 44px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--purple);
+      color: var(--paper);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .toolbar-actions { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 8px; }
+    .help-toggle {
+      padding: 0 12px;
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .primer {
+      position: fixed;
+      z-index: 100;
+      inset: 0;
+      padding: 12px;
+      display: grid;
+      place-items: center;
+      background: rgba(23, 19, 28, .58);
+      backdrop-filter: blur(6px);
+    }
+    .primer-card {
+      width: min(100%, 760px);
+      max-height: calc(100vh - 24px);
+      overflow: auto;
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+      box-shadow: 0 28px 90px rgba(23, 19, 28, .32);
+    }
+    .primer-head { padding: 18px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: start; }
+    .primer-kicker { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .primer-head h2 { margin-top: 5px; font-size: clamp(31px, 7vw, 44px); }
+    .primer-head p { margin-top: 7px; color: var(--muted); font-size: 12px; }
+    .primer-close { width: 44px; padding: 0; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font-size: 20px; cursor: pointer; }
+    .primer-steps { display: grid; }
+    .primer-step { padding: 16px 18px; border-bottom: 1px solid var(--line); }
+    .primer-step span { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .primer-step h3 { margin-top: 5px; font-size: 25px; }
+    .primer-step p { margin-top: 6px; color: var(--muted); font-size: 12px; }
+    .primer-words { padding: 16px 18px 18px; display: grid; gap: 8px; background: #faf9f7; }
+    .primer-words p { color: var(--muted); font-size: 12px; }
+    .primer-words strong { color: var(--ink); }
+
+    .review-layout { padding: 10px 0 52px; display: grid; gap: 18px; }
+    .directory {
+      order: 2;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .directory-head { padding: 17px 18px 14px; border-bottom: 1px solid var(--line); }
+    .directory h2 { font-size: 29px; }
+    .directory-head p { margin-top: 6px; color: var(--muted); font-size: 12px; }
+    .section-list { margin: 0; padding: 0; list-style: none; }
+    .section-list button {
+      width: 100%;
+      padding: 10px 14px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 27px minmax(0, 1fr) auto;
+      gap: 7px;
+      align-items: center;
+      background: transparent;
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .section-list li:last-child button { border-bottom: 0; }
+    .section-list button:hover { background: #f8f6f2; }
+    .section-list button[aria-current="true"] { background: var(--purple-soft); color: var(--purple); }
+    .section-number { color: var(--muted); font-family: var(--display); font-size: 18px; }
+    .section-list button[aria-current="true"] .section-number { color: var(--purple); }
+    .section-name { font-size: 12px; font-weight: 600; line-height: 1.2; }
+    .section-status { color: var(--muted); font-size: 9px; font-weight: 600; white-space: nowrap; }
+    .section-status.has-diffs { color: var(--purple); }
+
+    .workbench { min-width: 0; order: 1; display: grid; gap: 14px; align-content: start; }
+    .stage { min-width: 0; }
+    .stage-head {
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-bottom: 0;
+      display: grid;
+      gap: 7px;
+      background: var(--paper);
+    }
+    .stage-summary { min-width: 0; display: grid; gap: 2px; }
+    .stage-count { flex: 0 0 auto; color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+    .stage-section-select {
+      width: 100%;
+      min-height: 44px;
+      padding: 0 28px 0 0;
+      border: 0;
+      background-color: transparent;
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: clamp(22px, 4vw, 29px);
+      font-weight: 600;
+      line-height: 1.05;
+      text-overflow: ellipsis;
+    }
+    .variant-note { justify-self: start; padding: 6px 9px; border-left: 2px solid var(--purple); background: var(--purple-soft); }
+    .variant-note strong { display: block; font-size: 11px; }
+    .stage-tools { display: flex; align-items: center; gap: 7px; }
+    .pin-toggle {
+      min-height: 44px;
+      padding: 0 10px;
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .pin-toggle[aria-pressed="true"] { border-color: var(--purple); background: var(--purple-soft); color: var(--purple); }
+
+    .frame-outer {
+      min-height: 500px;
+      padding: 20px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(rgba(23, 19, 28, .045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 19, 28, .045) 1px, transparent 1px),
+        #dcd7cf;
+      background-size: 24px 24px;
+    }
+    .frame-shell,
+    .compare-shell {
+      position: relative;
+      margin-inline: auto;
+      overflow: hidden;
+      background: var(--paper);
+      box-shadow: 0 20px 60px rgba(23, 19, 28, .20);
+    }
+    .compare-preview { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; align-items: start; }
+    .compare-item { min-width: 0; }
+    .compare-label {
+      min-height: 30px;
+      padding: 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 2px solid var(--purple);
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border: 0;
+      display: block;
+      background: var(--paper);
+      transform-origin: top left;
+    }
+
+    .mode-panel { border: 1px solid var(--line); background: var(--paper); }
+    .direction-reference {
+      width: min(100% - 24px, 1320px);
+      margin: 0 auto 52px;
+    }
+    .panel-head { padding: 18px; border-bottom: 1px solid var(--line); }
+    .panel-head h2 { font-size: clamp(31px, 5vw, 44px); }
+    .panel-head p { max-width: 720px; margin-top: 8px; color: var(--muted); font-size: 13px; }
+    .fact-strip { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-bottom: 1px solid var(--line); }
+    .fact-strip span { padding: 10px 14px; color: var(--muted); font-size: 11px; }
+    .fact-strip span + span { border-left: 1px solid var(--line); }
+    .fact-strip strong { color: var(--ink); }
+
+    .direction-grid { display: grid; }
+    .direction-card {
+      min-height: 0;
+      padding: 18px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      display: block;
+      background: var(--paper);
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .stage-pickbar {
+      border: 1px solid var(--line);
+      border-bottom: 0;
+      display: grid;
+      background: #faf9f7;
+    }
+    .pick-context { padding: 11px 12px 10px; border-bottom: 1px solid var(--line); }
+    .pick-context strong { display: block; font-size: 13px; line-height: 1.25; }
+    .pick-context span { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .pick-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pick-button {
+      min-height: 78px;
+      padding: 10px 12px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      display: grid;
+      gap: 2px;
+      align-content: center;
+      background: var(--paper);
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .pick-button:last-child { border-right: 0; }
+    .pick-button:hover { background: #f5f1fb; }
+    .pick-button[data-picked="true"] { background: var(--green-soft); box-shadow: inset 0 -4px var(--green); }
+    .pick-button b { font-family: var(--display); font-size: 23px; line-height: 1; }
+    .pick-button small { color: var(--muted); font-size: 9px; line-height: 1.25; }
+    .pick-button em { margin-top: 3px; color: var(--purple); font-size: 9px; font-style: normal; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .pick-button[data-picked="true"] em { color: var(--green); }
+    .pick-none { padding: 13px 12px; color: var(--muted); font-size: 11px; }
+    .direction-card:last-child { border-bottom: 0; }
+    .direction-card[aria-pressed="true"] { background: var(--purple-soft); }
+    .direction-card[data-variant="a"] { box-shadow: inset 4px 0 #12a56e; }
+    .direction-card[data-variant="b"] { box-shadow: inset 4px 0 var(--purple); }
+    .direction-card[data-variant="c"] { box-shadow: inset 4px 0 var(--ink); }
+    .direction-label { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .direction-card h3 { margin-top: 7px; font-size: 27px; }
+    .direction-card p { margin-top: 8px; color: var(--muted); font-size: 13px; }
+    .direction-card small { display: block; margin-top: 10px; color: var(--ink); font-size: 11px; font-weight: 600; }
+
+    .section-choice { padding: 14px 16px; border-bottom: 1px solid var(--line); background: #faf9f7; }
+    .section-choice-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 7px 12px; }
+    .section-choice-head strong { font-size: 13px; }
+    .section-choice-head span { color: var(--muted); font-size: 10px; }
+    .section-choice .segments { margin-top: 10px; }
+    .section-choice .segments button { font-size: 11px; }
+    .shared-note { padding: 11px 16px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    .shared-note strong { color: var(--ink); }
+    .decision-ledger { display: grid; }
+    .decision-row { border-bottom: 1px solid var(--line); scroll-margin-top: 12px; }
+    .decision-row:last-child { border-bottom: 0; }
+    .decision-row.is-located { animation: ledger-pulse 1.35s ease; }
+    .decision-meta { padding: 15px 16px 10px; }
+    .decision-code { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+    .decision-meta h3 { margin-top: 5px; font-family: var(--body); font-size: 15px; line-height: 1.25; }
+    .locate-change {
+      min-height: 44px;
+      margin-top: 10px;
+      padding: 0 9px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--purple);
+      font-size: 9px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .decision-options { display: grid; }
+    .decision-option {
+      min-height: 0;
+      padding: 12px 16px;
+      border: 0;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) auto;
+      gap: 9px;
+      align-items: center;
+      background: var(--paper);
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .decision-option[data-saved="true"] { background: var(--green-soft); }
+    .option-variant { font-family: var(--display); font-size: 21px; font-weight: 600; }
+    .option-copy strong { display: block; font-size: 12px; line-height: 1.2; }
+    .option-copy small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; line-height: 1.3; }
+    .option-state { color: var(--muted); font-size: 9px; font-weight: 700; text-transform: uppercase; }
+    .decision-option[data-saved="true"] .option-state { color: var(--green); }
+    .save-confirmation {
+      min-height: 44px;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      background: var(--green-soft);
+      color: #075d3f;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .save-confirmation.is-fresh { animation: saved-pulse .55s ease; }
+    @keyframes saved-pulse {
+      0% { box-shadow: inset 0 0 0 999px rgba(255,255,255,.74); }
+      100% { box-shadow: inset 0 0 0 999px rgba(255,255,255,0); }
+    }
+    .simple-choice { background: var(--paper); }
+    .simple-choice-head { padding: 17px 18px 14px; border-bottom: 1px solid var(--line); }
+    .simple-choice-head h3 { font-size: 29px; }
+    .simple-choice-head p { margin-top: 6px; color: var(--muted); font-size: 12px; }
+    .simple-options { display: grid; }
+    .simple-option {
+      min-height: 96px;
+      padding: 15px 17px;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr) auto;
+      gap: 11px;
+      align-items: center;
+      background: var(--paper);
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+    }
+    .simple-option:last-child { border-bottom: 0; }
+    .simple-option[data-saved="true"] { background: var(--green-soft); box-shadow: inset 4px 0 var(--green); }
+    .simple-option .option-state { min-width: 62px; text-align: right; }
+    .simple-option[data-saved="true"] .option-state { color: var(--green); }
+    @media (min-width: 700px) {
+      .simple-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .simple-option { min-height: 116px; border-right: 1px solid var(--line); border-bottom: 0; display: block; }
+      .simple-option:last-child { border-right: 0; }
+      .simple-option .option-copy { display: block; margin-top: 8px; }
+      .simple-option .option-state { display: block; margin-top: 10px; min-width: 0; text-align: left; }
+    }
+    .no-differences { padding: 28px 18px 30px; }
+    .no-differences strong { display: block; font-family: var(--display); font-size: 27px; }
+    .no-differences p { margin-top: 8px; color: var(--muted); font-size: 13px; }
+
+    @keyframes ledger-pulse {
+      0%, 100% { background: var(--paper); box-shadow: none; }
+      24%, 72% { background: var(--purple-soft); box-shadow: inset 4px 0 var(--purple); }
+    }
+
+    .recipe-intro { padding: 16px 18px; border-bottom: 1px solid var(--line); display: grid; gap: 12px; background: var(--purple-soft); }
+    .recipe-base-label { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .recipe-base-title { margin-top: 3px; font-family: var(--display); font-size: 29px; font-weight: 600; line-height: 1; }
+    .recipe-intro p { color: var(--muted); font-size: 11px; }
+    .recipe-list { margin: 0; padding: 0; list-style: none; }
+    .recipe-item { padding: 13px 16px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+    .recipe-item-scope { color: var(--purple); font-size: 9px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .recipe-item strong { display: block; margin-top: 3px; font-size: 12px; }
+    .recipe-item small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; }
+    .remove-choice { min-height: 44px; padding: 0 10px; border: 1px solid var(--line); background: var(--paper); color: var(--muted); font-size: 10px; cursor: pointer; }
+    .recipe-empty { padding: 22px 18px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+    .brief-wrap { padding: 17px 18px; background: #faf9f7; }
+    .brief-label { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .recipe-brief { margin-top: 8px; color: var(--ink); font-size: 13px; line-height: 1.55; white-space: pre-line; }
+    .recipe-actions { padding: 14px 18px 18px; display: grid; gap: 8px; }
+    .recipe-actions button {
+      padding: 0 14px;
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .recipe-actions .primary-action { border-color: var(--purple); background: var(--purple); color: var(--paper); }
+    .recipe-actions .clear-action { color: var(--muted); }
+
+    @media (min-width: 360px) {
+      .primary-controls { grid-template-columns: minmax(0, .86fr) minmax(0, 1.14fr); }
+    }
+
+    @media (min-width: 700px) {
+      #page-select { font-size: 16px; }
+      .toolbar { grid-template-columns: 1fr; }
+      .primary-controls { grid-template-columns: minmax(250px, 1.1fr) minmax(250px, 1fr); }
+      .review-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #viewport-controls button { padding-inline: 7px; font-size: 12px; }
+      .stage-head { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+      .stage-pickbar { grid-template-columns: minmax(210px, .58fr) minmax(0, 1fr); align-items: stretch; }
+      .pick-context { border-right: 1px solid var(--line); border-bottom: 0; display: grid; align-content: center; }
+      .pick-button { min-height: 74px; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: 10px; }
+      .pick-button em { margin-top: 0; text-align: right; }
+      .stage-summary { display: flex; align-items: baseline; gap: 11px; }
+      .direction-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .primer-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .primer-step { border-right: 1px solid var(--line); }
+      .primer-step:last-child { border-right: 0; }
+      .direction-card { border-right: 1px solid var(--line); border-bottom: 0; }
+      .direction-card:last-child { border-right: 0; }
+      .decision-row { display: grid; grid-template-columns: 180px minmax(0, 1fr); }
+      .decision-meta { padding: 16px; border-right: 1px solid var(--line); }
+      .decision-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .decision-option { min-height: 108px; padding: 13px; border-top: 0; border-right: 1px solid var(--line); display: block; }
+      .decision-option:last-child { border-right: 0; }
+      .option-variant { display: block; }
+      .option-copy { display: block; margin-top: 7px; }
+      .option-state { display: block; margin-top: 9px; }
+      .recipe-intro { grid-template-columns: minmax(0, 1fr) minmax(240px, .7fr); align-items: end; }
+      .recipe-actions { grid-template-columns: repeat(3, auto); justify-content: start; }
+    }
+
+    @media (min-width: 1040px) {
+      .toolbar { grid-template-columns: minmax(430px, 1.2fr) minmax(430px, 1fr) auto; align-items: end; }
+      .primary-controls,
+      .review-controls { display: contents; }
+      .toolbar .field:nth-child(1) { grid-column: 1; }
+      .toolbar .field:nth-child(2) { grid-column: 2; }
+      .review-controls .field:nth-child(1) { grid-column: 3; }
+      .review-controls .field:nth-child(2) { grid-column: 4; }
+      .toolbar { grid-template-columns: minmax(230px, 1.1fr) minmax(260px, 1.15fr) minmax(180px, .75fr) minmax(280px, 1fr) auto; }
+      .toolbar-actions { grid-column: 5; }
+      .review-layout { grid-template-columns: 270px minmax(0, 1fr); align-items: start; }
+      .directory { order: 1; grid-column: 1; grid-row: 1; }
+      .workbench { order: 2; grid-column: 2; grid-row: 1; }
+      .frame-outer { padding: 32px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <h1 class="sr-only">David McEwen landing-page comparison and final-page builder</h1>
+
+  <div class="toolbar-wrap">
+    <div class="toolbar">
+      <div class="primary-controls">
+        <label class="field">
+          <span class="field-label">Page</span>
+          <select id="page-select" aria-label="Choose page to review">
+            <option value="mcewen-22">David McEwen · 22 A/B</option>
+          </select>
+        </label>
+
+        <div class="field">
+          <span class="field-label">Mode</span>
+          <div class="segments" id="mode-controls" aria-label="Choose review mode">
+            <button type="button" data-mode="directions" aria-pressed="true">Directions</button>
+            <button type="button" data-mode="differences" aria-pressed="false">Differences</button>
+            <button type="button" data-mode="recipe" aria-pressed="false">My Picks <span class="recipe-count" id="recipe-count">0</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-controls">
+        <div class="field" id="choice-field">
+          <span class="field-label" id="choice-label">Direction</span>
+          <div class="segments" id="variant-controls" aria-label="Choose direction">
+            <button type="button" data-variant="a" aria-pressed="true">22-A</button>
+            <button type="button" data-variant="b" aria-pressed="false">22-B</button>
+          </div>
+          <div id="pair-controls" hidden></div>
+          <div class="segments" id="base-controls" hidden></div>
+        </div>
+
+        <div class="field" id="viewport-field">
+          <span class="field-label">Viewport</span>
+          <div class="segments" id="viewport-controls" aria-label="Choose viewport">
+            <button type="button" data-viewport="mobile" aria-pressed="true">iPhone mini</button>
+            <button type="button" data-viewport="tablet" aria-pressed="false">Tablet</button>
+            <button type="button" data-viewport="desktop" aria-pressed="false">Desktop</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar-actions">
+        <button class="help-toggle" type="button" id="help-toggle" aria-expanded="false" aria-controls="primer">How it works</button>
+        <a class="open-page" id="open-page" href="mcewen-22-a" target="_blank" rel="noopener">Open full page ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="review-layout">
+    <aside class="directory" aria-label="Page section directory">
+      <div class="directory-head">
+        <h2>Page directory</h2>
+        <p>Choose a chapter. Each chapter names what changes.</p>
+      </div>
+      <ol class="section-list" id="section-list"></ol>
+    </aside>
+
+    <div class="workbench">
+      <section class="stage" aria-live="polite">
+        <div class="stage-head">
+          <div class="stage-summary">
+            <span class="stage-count" id="stage-count">01 / 14</span>
+            <label class="sr-only" for="section-select">Choose page section</label>
+            <select class="stage-section-select" id="section-select" aria-label="Choose page section"></select>
+            <h2 class="sr-only" id="stage-title">Hero and David</h2>
+          </div>
+          <div class="stage-tools">
+            <button class="pin-toggle" type="button" id="pin-toggle" aria-pressed="true" hidden>Change pins: On</button>
+            <div class="variant-note"><strong id="variant-title">22-A · Selected Control</strong></div>
+          </div>
+        </div>
+        <div class="stage-pickbar" id="stage-pickbar" hidden>
+          <div class="pick-context">
+            <strong id="pick-question">Pick the version you want for this section.</strong>
+            <span id="pick-progress" role="status" aria-live="polite">0 of 1 decision picked.</span>
+          </div>
+          <div class="pick-actions" id="pick-actions"></div>
+        </div>
+        <div class="frame-outer" id="frame-outer">
+          <div id="single-preview">
+            <div class="frame-shell" id="frame-shell">
+              <iframe id="review-frame" title="Selected McEwen 22 landing-page section" loading="eager"></iframe>
+            </div>
+          </div>
+          <div class="compare-preview" id="compare-preview" hidden>
+            <div class="compare-item">
+              <span class="compare-label" id="compare-label-1">22-A</span>
+              <div class="compare-shell" id="compare-shell-1">
+                <iframe id="compare-frame-1" title="First selected landing-page section comparison" loading="eager"></iframe>
+              </div>
+            </div>
+            <div class="compare-item">
+              <span class="compare-label" id="compare-label-2">22-B</span>
+              <div class="compare-shell" id="compare-shell-2">
+                <iframe id="compare-frame-2" title="Second selected landing-page section comparison" loading="eager"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mode-panel" id="differences-panel" hidden>
+        <div class="panel-head">
+          <h2 id="difference-title">Decisions in Hero and David.</h2>
+          <p id="difference-intro">Compare the same section above, then choose A or B.</p>
+        </div>
+        <div id="difference-content"></div>
+      </section>
+
+      <section class="mode-panel" id="recipe-panel" hidden>
+        <div class="panel-head">
+          <h2>My picks.</h2>
+          <p>Every A or B button you picked in Differences is listed here.</p>
+        </div>
+        <div class="recipe-intro">
+          <div>
+            <span class="recipe-base-label">Control</span>
+            <div class="recipe-base-title" id="recipe-base-title">22-A · Selected Control</div>
+          </div>
+          <p>Sections you did not pick stay exactly as they are in 22-A.</p>
+        </div>
+        <ul class="recipe-list" id="recipe-list"></ul>
+        <div class="recipe-empty" id="recipe-empty">No picks yet. Go to Differences and press PICK A or PICK B for a changed section.</div>
+        <div class="brief-wrap">
+          <span class="brief-label">Build instructions</span>
+          <p class="recipe-brief" id="recipe-brief"></p>
+        </div>
+        <div class="recipe-actions">
+          <button class="primary-action" type="button" id="copy-brief">Copy my picks</button>
+          <button type="button" id="copy-link">Copy this setup</button>
+          <button class="clear-action" type="button" id="clear-recipe">Reset all picks</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <section class="mode-panel direction-reference" id="directions-panel">
+    <div class="panel-head">
+      <h2>What changes between these directions.</h2>
+        <p>A is your selected page. B tests one clear question: should the first invitation appear immediately after David explains the practice?</p>
+    </div>
+    <div class="fact-strip">
+      <span><strong>One real test:</strong> first invitation after listener proof versus directly after David's practice</span>
+      <span><strong>Locked:</strong> every word, portrait, claim, CTA treatment, and later invitation</span>
+    </div>
+    <div class="direction-grid" id="direction-grid"></div>
+  </section>
+
+  <div class="primer" id="primer" role="dialog" aria-modal="true" aria-labelledby="primer-title" hidden>
+    <div class="primer-card">
+      <div class="primer-head">
+        <div>
+          <span class="primer-kicker">Quick primer</span>
+          <h2 id="primer-title">Three tabs. One simple decision.</h2>
+          <p>Your section and viewport stay in place while you move between tabs.</p>
+        </div>
+        <button class="primer-close" type="button" id="primer-close" aria-label="Close primer">×</button>
+      </div>
+      <div class="primer-steps">
+        <article class="primer-step"><span>01</span><h3>Directions</h3><p>Look through the complete A or B page.</p></article>
+        <article class="primer-step"><span>02</span><h3>Differences</h3><p>Press PICK A or PICK B above the previews.</p></article>
+        <article class="primer-step"><span>03</span><h3>My Picks</h3><p>See every section you explicitly picked.</p></article>
+      </div>
+      <div class="primer-words">
+        <p><strong>Control:</strong> 22-A is the page underneath every unchosen section.</p>
+        <p><strong>Your Pick:</strong> the A or B button you pressed for one section.</p>
+        <p><strong>Reset All Picks:</strong> clear the list and return every section to 22-A. Nothing is deleted.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sections = [
+      { id: 'hero', name: 'Hero and David', selector: '.hero', status: 'same', change: 'The complete hero is identical.' },
+      { id: 'practice', name: 'David\'s practice', selector: '#david-method', status: 'same', change: 'The practice chapter itself is identical.' },
+      { id: 'early-proof', name: 'Early listener proof', selector: '#opening-proof', status: 'same', change: 'All three listener stories and their treatment are identical.' },
+      { id: 'first-cta', name: 'First invitation placement', selector: '.cta-band', offset: 360, status: 'meaningful', change: 'A earns the first invitation after three listener stories. B places the same invitation directly after David explains his practice.' },
+      { id: 'result', name: 'Birth chart, values, and bands', selector: '.band-overview', status: 'same', change: 'The full result explanation is identical.' },
+      { id: 'domains', name: 'Four life domains', selector: '.domains .domain-grid', status: 'same', change: 'The four-domain gallery is identical.' },
+      { id: 'study', name: '52-week study', selector: '#study .study-primary', status: 'same', change: 'The complete study treatment is identical.' },
+      { id: 'recognition', name: 'Self-recognition proof', selector: '#recognition-proof .portrait-card:first-child', status: 'same', change: 'Copy, portraits, and treatment are identical.' },
+      { id: 'mid-cta', name: 'Midpage invitation', selector: '#recognition-proof + .mid-cta .cta-panel', status: 'same', change: 'Offer, placement, and treatment are identical.' },
+      { id: 'world-proof', name: 'Love, work, and opportunity', selector: '#world-proof .portrait-card:first-child', status: 'same', change: 'Copy, portraits, and treatment are identical.' },
+      { id: 'daily', name: 'Daily-use proof', selector: '#daily-proof .daily-feature', status: 'same', change: 'Copy, portraits, and treatment are identical.' },
+      { id: 'daily-cta', name: 'Nine-minute invitation', selector: '#daily-proof + .mid-cta .cta-panel', status: 'same', change: 'Offer, placement, and treatment are identical.' },
+      { id: 'final', name: 'Final invitation', selector: '.final .narrow', status: 'same', change: 'Offer, placement, and treatment are identical.' },
+      { id: 'faq', name: 'FAQ and disclosures', selector: '.faq', status: 'same', change: 'Objections, disclosures, and close are identical.' }
+    ];
+
+    const variants = {
+      a: { title: '22-A · Selected Control', short: 'Selected Control', summary: 'Your exact 22-A page. The first invitation arrives after David\'s practice and three listener stories.', best: 'Protects the exact page you selected.' },
+      b: { title: '22-B · Earlier First Invitation', short: 'Earlier First Invitation', summary: 'The identical invitation moves directly after David\'s practice, before the three listener stories.', best: 'Tests whether David has already earned the first invitation.' }
+    };
+
+    const decisions = {
+      'first-cta': [{ id: 'first-invitation-placement', code: '04.1', type: 'CTA placement', target: '.cta-band', name: 'First invitation placement', options: { a: ['After listener proof', 'David explains the practice, three listeners show what changed, then the first invitation appears.'], b: ['After David\'s practice', 'The same invitation appears directly after David explains the practice, before the three listener stories.'] } }]
+    };
+
+    const viewports = {
+      mobile: { width: 375, height: 1700 },
+      tablet: { width: 768, height: 1500 },
+      desktop: { width: 760, height: 1900 }
+    };
+    const directionReviewHeights = { mobile: 1700, tablet: 1500, desktop: 1900 };
+    const pairs = { ab: ['a', 'b'] };
+    const validModes = ['directions', 'differences', 'recipe'];
+    const state = {
+      mode: 'directions',
+      variant: 'a',
+      pair: 'ab',
+      section: 'hero',
+      viewport: 'mobile',
+      base: 'a',
+      pins: true,
+      sectionOverrides: {},
+      elementOverrides: {}
+    };
+
+    const select = document.getElementById('section-select');
+    const list = document.getElementById('section-list');
+    const frame = document.getElementById('review-frame');
+    const frameOuter = document.getElementById('frame-outer');
+    const frameShell = document.getElementById('frame-shell');
+    const singlePreview = document.getElementById('single-preview');
+    const comparePreview = document.getElementById('compare-preview');
+    const compareFrames = [document.getElementById('compare-frame-1'), document.getElementById('compare-frame-2')];
+    const compareShells = [document.getElementById('compare-shell-1'), document.getElementById('compare-shell-2')];
+
+    function sectionDecisions(id) { return decisions[id] || []; }
+    function selectedSection() { return sections.find(section => section.id === state.section) || sections[0]; }
+    function recipeSize() { return Object.keys(state.sectionOverrides).length; }
+    function effectiveViewport() { return state.viewport; }
+    function effectiveVariant() { return state.mode === 'recipe' ? state.base : state.variant; }
+    function isComparing() { return state.mode === 'differences'; }
+
+    function buildDirectory() {
+      sections.forEach((section, index) => {
+        const option = document.createElement('option');
+        option.value = section.id;
+        option.textContent = section.name;
+        select.append(option);
+
+        const item = document.createElement('li');
+        const button = document.createElement('button');
+        const sectionChanges = sectionDecisions(section.id);
+        const count = sectionChanges.length;
+        button.type = 'button';
+        button.dataset.section = section.id;
+        const changeTypes = sectionChanges.map(decision => decision.type).join(' · ');
+        button.innerHTML = `<span class="section-number">${String(index + 1).padStart(2, '0')}</span><span class="section-name">${section.name}</span><span class="section-status ${section.status !== 'same' ? 'has-diffs' : ''}">${section.status}</span>`;
+        button.addEventListener('click', () => setSection(section.id));
+        item.append(button);
+        list.append(item);
+      });
+
+      Object.entries(variants).forEach(([id, variant]) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'direction-card';
+        button.dataset.variant = id;
+        button.setAttribute('aria-pressed', id === state.variant ? 'true' : 'false');
+        button.innerHTML = `<span class="direction-label">22-${id.toUpperCase()}</span><h3>${variant.short}</h3><p>${variant.summary}</p><small>${variant.best}</small>`;
+        button.addEventListener('click', () => setVariant(id));
+        document.getElementById('direction-grid').append(button);
+      });
+    }
+
+    function parseMap(value, validKeys) {
+      const map = {};
+      if (!value) return map;
+      value.split(',').forEach(entry => {
+        const [key, choice] = entry.split(':');
+        if (validKeys.has(key) && variants[choice]) map[key] = choice;
+      });
+      return map;
+    }
+
+    function serializeMap(map) {
+      return Object.entries(map).map(([key, value]) => `${key}:${value}`).join(',');
+    }
+
+    function updateQuery() {
+      const url = new URL(window.location.href);
+      url.searchParams.set('mode', state.mode);
+      url.searchParams.set('variant', state.variant);
+      url.searchParams.set('section', state.section);
+      url.searchParams.set('viewport', state.viewport);
+      url.searchParams.delete('base');
+      url.searchParams.set('pins', state.pins ? '1' : '0');
+      const sectionMap = serializeMap(state.sectionOverrides);
+      sectionMap ? url.searchParams.set('so', sectionMap) : url.searchParams.delete('so');
+      url.searchParams.delete('eo');
+      history.replaceState(null, '', url);
+      try {
+        localStorage.setItem('mcewen-22-review-01', JSON.stringify({
+          mode: state.mode,
+          variant: state.variant,
+          section: state.section,
+          viewport: state.viewport,
+          pins: state.pins,
+          sectionOverrides: state.sectionOverrides
+        }));
+      } catch (error) {
+        console.warn('The pick record could not be written in this browser.', error);
+      }
+    }
+
+    function announcePicked(choice) {
+      const progress = document.getElementById('pick-progress');
+      const changedCount = sections.filter(item => sectionDecisions(item.id).length).length;
+      progress.textContent = `YOUR PICK: 22-${choice.toUpperCase()} for ${selectedSection().name}. ${recipeSize()} of ${changedCount} decision picked.`;
+    }
+
+    function renderPickBar() {
+      const bar = document.getElementById('stage-pickbar');
+      const actions = document.getElementById('pick-actions');
+      const progress = document.getElementById('pick-progress');
+      const section = selectedSection();
+      const items = sectionDecisions(section.id);
+      const picked = state.sectionOverrides[section.id];
+      const changedCount = sections.filter(item => sectionDecisions(item.id).length).length;
+      bar.hidden = state.mode !== 'differences';
+      if (bar.hidden) return;
+      document.getElementById('pick-question').textContent = items.length
+        ? `Which ${section.name} design do you want?`
+        : `${section.name} is identical in A and B.`;
+      progress.textContent = items.length
+        ? picked
+          ? `YOUR PICK: 22-${picked.toUpperCase()}. ${recipeSize()} of ${changedCount} sections picked.`
+          : `NO PICK YET. ${recipeSize()} of ${changedCount} sections picked.`
+        : `Nothing to pick here. ${recipeSize()} of ${changedCount} sections picked.`;
+      if (!items.length) {
+        actions.innerHTML = '<p class="pick-none">Continue to the next changed section.</p>';
+        return;
+      }
+      const decision = items[0];
+      actions.innerHTML = Object.entries(decision.options).map(([id, copy]) => `
+        <button class="pick-button" type="button" data-pick="${id}" data-picked="${picked === id}" aria-pressed="${picked === id}">
+          <b>22-${id.toUpperCase()}</b>
+          <small>${copy[0]}</small>
+          <em>${picked === id ? 'YOUR PICK' : `PICK ${id.toUpperCase()}`}</em>
+        </button>`).join('');
+      actions.querySelectorAll('[data-pick]').forEach(button => button.addEventListener('click', () => {
+        const choice = button.dataset.pick;
+        setSectionChoice(choice);
+        announcePicked(choice);
+      }));
+    }
+
+    function renderDifferences() {
+      const section = selectedSection();
+      const items = sectionDecisions(section.id);
+      const content = document.getElementById('difference-content');
+      document.getElementById('difference-title').textContent = items.length ? `What changes in ${section.name}.` : `${section.name} is the same in A and B.`;
+      document.getElementById('difference-intro').textContent = items.length
+        ? `${section.status === 'minor' ? 'Minor polish only.' : 'One visible treatment changes.'} ${section.change}`
+        : 'There is no decision to make in this section.';
+      if (!items.length) {
+        content.innerHTML = `<div class="no-differences"><strong>No design difference here.</strong><p>Copy, imagery, layout, and styling are shared across A and B. There is nothing to choose for this section.</p></div>`;
+        return;
+      }
+      const decision = items[0];
+      content.innerHTML = `<div class="no-differences"><strong>22-A: ${decision.options.a[0]}</strong><p>${decision.options.a[1]}</p><strong style="margin-top:18px">22-B: ${decision.options.b[0]}</strong><p>${decision.options.b[1]}</p></div>`;
+    }
+
+    function buildBrief() {
+      const lines = [`Start with ${variants[state.base].title}.`];
+      sections.forEach(section => {
+        const sectionChoice = state.sectionOverrides[section.id];
+        if (sectionChoice) lines.push(`Use the complete ${section.name} treatment from 22-${sectionChoice.toUpperCase()}.`);
+      });
+      lines.push(`Keep every section without a pick from 22-${state.base.toUpperCase()}.`);
+      return lines.join(' ');
+    }
+
+    function renderRecipe() {
+      document.getElementById('recipe-base-title').textContent = '22-A · Selected Control';
+      const listItems = [];
+      sections.forEach(section => {
+        const sectionChoice = state.sectionOverrides[section.id];
+        if (sectionChoice) listItems.push({ type: 'section', key: section.id, scope: 'Your pick', title: section.name, detail: `Use 22-${sectionChoice.toUpperCase()} · ${variants[sectionChoice].short}` });
+      });
+
+      const list = document.getElementById('recipe-list');
+      list.innerHTML = listItems.map(item => `<li class="recipe-item"><div><span class="recipe-item-scope">${item.scope}</span><strong>${item.title}</strong><small>${item.detail}</small></div><button class="remove-choice" type="button" data-remove-type="${item.type}" data-remove-key="${item.key}">Remove</button></li>`).join('');
+      document.getElementById('recipe-empty').hidden = listItems.length > 0;
+      document.getElementById('recipe-empty').textContent = 'No picks yet. Go to Differences and press PICK A or PICK B for a changed section.';
+      document.getElementById('recipe-brief').textContent = buildBrief();
+      document.getElementById('recipe-count').textContent = recipeSize();
+      list.querySelectorAll('[data-remove-key]').forEach(button => button.addEventListener('click', () => removeChoice(button.dataset.removeType, button.dataset.removeKey)));
+    }
+
+    function updateControls() {
+      select.value = state.section;
+      const comparing = isComparing();
+      const activeVariant = effectiveVariant();
+      const activeVariants = comparing ? ['a', 'b'] : [activeVariant];
+      const [firstVariant, secondVariant = firstVariant] = activeVariants;
+
+      document.getElementById('variant-controls').hidden = state.mode !== 'directions';
+      document.getElementById('pair-controls').hidden = true;
+      document.getElementById('base-controls').hidden = true;
+      document.getElementById('choice-field').hidden = state.mode !== 'directions';
+      document.getElementById('viewport-field').hidden = false;
+      document.getElementById('choice-label').textContent = comparing ? 'Compare' : 'Direction';
+      const mobileViewportButton = document.querySelector('[data-viewport="mobile"]');
+      const tabletViewportButton = document.querySelector('[data-viewport="tablet"]');
+      const desktopViewportButton = document.querySelector('[data-viewport="desktop"]');
+      mobileViewportButton.hidden = false;
+      tabletViewportButton.textContent = state.mode === 'differences' ? '2 Tablets' : 'Tablet';
+      desktopViewportButton.textContent = state.mode === 'differences' ? '2 Desktops' : 'Desktop';
+      singlePreview.hidden = comparing;
+      comparePreview.hidden = !comparing;
+
+      document.querySelectorAll('[data-mode]').forEach(button => button.setAttribute('aria-pressed', button.dataset.mode === state.mode ? 'true' : 'false'));
+      document.querySelectorAll('[data-section]').forEach(button => {
+        const sectionId = button.dataset.section;
+        const sectionData = sections.find(item => item.id === sectionId);
+        const picked = state.sectionOverrides[sectionId];
+        button.setAttribute('aria-current', sectionId === state.section ? 'true' : 'false');
+        const status = button.querySelector('.section-status');
+        if (status && sectionData) {
+          status.textContent = picked ? `Picked ${picked.toUpperCase()}` : sectionData.status;
+          status.classList.toggle('has-diffs', Boolean(picked) || sectionData.status !== 'same');
+        }
+      });
+      Array.from(select.options).forEach(option => {
+        const sectionData = sections.find(item => item.id === option.value);
+        if (!sectionData) return;
+        const picked = state.sectionOverrides[option.value];
+        option.textContent = picked ? `${sectionData.name} · Picked ${picked.toUpperCase()}` : sectionData.name;
+      });
+      document.querySelectorAll('#variant-controls [data-variant], .direction-card[data-variant]').forEach(button => button.setAttribute('aria-pressed', button.dataset.variant === state.variant ? 'true' : 'false'));
+      document.querySelectorAll('#base-controls [data-base]').forEach(button => button.setAttribute('aria-pressed', button.dataset.base === state.base ? 'true' : 'false'));
+      document.querySelectorAll('#viewport-controls [data-viewport]').forEach(button => button.setAttribute('aria-pressed', button.dataset.viewport === state.viewport ? 'true' : 'false'));
+
+      const section = selectedSection();
+      const index = sections.indexOf(section) + 1;
+      document.getElementById('stage-count').textContent = `${String(index).padStart(2, '0')} / ${sections.length}`;
+      document.getElementById('stage-title').textContent = section.name;
+      const pickedSectionChoice = state.sectionOverrides[section.id];
+      document.getElementById('variant-title').textContent = state.mode === 'recipe'
+        ? 'Control · 22-A'
+        : (comparing ? (pickedSectionChoice ? `Your pick · 22-${pickedSectionChoice.toUpperCase()}` : 'No pick yet') : variants[state.variant].title);
+      document.getElementById('compare-label-1').textContent = `22-${firstVariant.toUpperCase()}`;
+      document.getElementById('compare-label-2').textContent = `22-${secondVariant.toUpperCase()}`;
+
+      document.getElementById('directions-panel').hidden = state.mode !== 'directions';
+      document.getElementById('differences-panel').hidden = state.mode !== 'differences';
+      document.getElementById('recipe-panel').hidden = state.mode !== 'recipe';
+
+      const pinToggle = document.getElementById('pin-toggle');
+      const canShowPins = state.mode === 'differences' && sectionDecisions(state.section).length > 0;
+      pinToggle.hidden = !canShowPins;
+      pinToggle.setAttribute('aria-pressed', state.pins ? 'true' : 'false');
+      pinToggle.textContent = `Change pins: ${state.pins ? 'On' : 'Off'}`;
+
+      const openPage = document.getElementById('open-page');
+      openPage.href = `mcewen-22-${firstVariant}`;
+      openPage.textContent = comparing ? `Open 22-${firstVariant.toUpperCase()} full page ↗` : 'Open full page ↗';
+      renderPickBar();
+      renderDifferences();
+      renderRecipe();
+      updateQuery();
+      requestAnimationFrame(refreshPins);
+    }
+
+    function removePinsFromFrame(activeFrame) {
+      try {
+        const doc = activeFrame.contentDocument;
+        doc.querySelectorAll('.z-review-pin').forEach(pin => pin.remove());
+        doc.querySelectorAll('[data-z-review-target]').forEach(target => {
+          target.removeAttribute('data-z-review-target');
+          target.classList.remove('z-review-target-pulse');
+          if (target.dataset.zReviewPosition === 'static') target.style.position = '';
+          delete target.dataset.zReviewPosition;
+        });
+        doc.querySelectorAll('[data-z-review-host]').forEach(host => {
+          host.removeAttribute('data-z-review-host');
+          if (host.dataset.zReviewHostPosition === 'static') host.style.position = '';
+          delete host.dataset.zReviewHostPosition;
+        });
+      } catch (error) {
+        console.warn('Change pins could not be cleared.', error);
+      }
+    }
+
+    function ensurePinStyles(doc) {
+      if (doc.getElementById('z-review-pin-styles')) return;
+      const style = doc.createElement('style');
+      style.id = 'z-review-pin-styles';
+      style.textContent = `
+        .z-review-pin {
+          position: absolute;
+          z-index: 2147483647;
+          top: 10px;
+          left: 10px;
+          min-height: 0;
+          padding: 7px 9px 6px;
+          border: 2px solid #fff;
+          border-radius: 2px;
+          background: #17131c;
+          color: #fff;
+          box-shadow: 0 5px 18px rgba(23,19,28,.30);
+          font-family: Arial, sans-serif;
+          font-size: 15px;
+          font-weight: 800;
+          line-height: 1;
+          letter-spacing: .04em;
+          text-transform: uppercase;
+          cursor: pointer;
+        }
+        .z-review-pin:hover, .z-review-pin:focus-visible { background: #6521c9; outline: 3px solid #ff9112; outline-offset: 2px; }
+        [data-z-review-target] { outline: 2px dashed rgba(101,33,201,.72); outline-offset: -4px; }
+        .z-review-target-pulse { animation: z-review-target-pulse 1.45s ease; }
+        @keyframes z-review-target-pulse {
+          0%, 100% { box-shadow: none; }
+          25%, 72% { box-shadow: inset 0 0 0 7px rgba(101,33,201,.30); }
+        }
+        @media (prefers-reduced-motion: reduce) { .z-review-target-pulse { animation: none; } }
+      `;
+      doc.head.append(style);
+    }
+
+    function injectPins(activeFrame) {
+      removePinsFromFrame(activeFrame);
+      if (state.mode !== 'differences' || !state.pins) return;
+      const items = sectionDecisions(state.section);
+      if (!items.length) return;
+      try {
+        const doc = activeFrame.contentDocument;
+        ensurePinStyles(doc);
+        items.forEach(decision => {
+          const target = doc.querySelector(decision.target);
+          if (!target) return;
+          const host = doc.querySelector(decision.pinTarget || decision.target) || target;
+          const position = activeFrame.contentWindow.getComputedStyle(host).position;
+          if (position === 'static') {
+            host.dataset.zReviewHostPosition = 'static';
+            host.style.position = 'relative';
+          }
+          host.dataset.zReviewHost = decision.id;
+          target.dataset.zReviewTarget = decision.id;
+          const pin = doc.createElement('button');
+          pin.type = 'button';
+          pin.className = 'z-review-pin';
+          pin.dataset.decisionId = decision.id;
+          pin.setAttribute('aria-label', `Review the choice for ${decision.name}`);
+          pin.textContent = `${decision.code} · ${decision.type}`;
+          pin.addEventListener('click', () => window.postMessage({ type: 'z-review-pin', decisionId: decision.id }, window.location.origin));
+          host.append(pin);
+        });
+      } catch (error) {
+        console.warn('Change pins could not be added.', error);
+      }
+    }
+
+    function refreshPins() {
+      const activeFrames = isComparing() ? compareFrames : [frame];
+      activeFrames.forEach(injectPins);
+    }
+
+    function highlightChoicePanel() {
+      const panel = document.getElementById('stage-pickbar');
+      if (!panel) return;
+      panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function locateChangeOnPage(decisionId) {
+      if (!state.pins) {
+        state.pins = true;
+        updateControls();
+      } else {
+        refreshPins();
+      }
+      const activeFrames = isComparing() ? compareFrames : [frame];
+      activeFrames.forEach(activeFrame => {
+        try {
+          const target = activeFrame.contentDocument.querySelector(`[data-z-review-target="${decisionId}"]`);
+          if (!target) return;
+          target.classList.remove('z-review-target-pulse');
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          requestAnimationFrame(() => target.classList.add('z-review-target-pulse'));
+        } catch (error) {
+          console.warn('The selected change could not be located.', error);
+        }
+      });
+    }
+
+    function sizeFrame() {
+      const available = Math.max(264, frameOuter.clientWidth - (window.innerWidth >= 1040 ? 64 : 40));
+      if (isComparing()) {
+        const viewport = viewports[effectiveViewport()];
+        const gap = 9;
+        const columnWidth = Math.max(112, (available - gap) / 2);
+        const scale = Math.min(1, columnWidth / viewport.width);
+        compareFrames.forEach((activeFrame, index) => {
+          activeFrame.width = viewport.width;
+          activeFrame.height = viewport.height;
+          activeFrame.style.width = `${viewport.width}px`;
+          activeFrame.style.height = `${viewport.height}px`;
+          activeFrame.style.transform = `scale(${scale})`;
+          compareShells[index].style.width = `${viewport.width * scale}px`;
+          compareShells[index].style.height = `${viewport.height * scale}px`;
+        });
+        return;
+      }
+
+      const viewport = viewports[effectiveViewport()];
+      const reviewHeight = state.mode === 'directions'
+        ? directionReviewHeights[effectiveViewport()]
+        : viewport.height;
+      const scale = Math.min(1, available / viewport.width);
+      frame.width = viewport.width;
+      frame.height = reviewHeight;
+      frame.style.width = `${viewport.width}px`;
+      frame.style.height = `${reviewHeight}px`;
+      frame.style.transform = `scale(${scale})`;
+      frameShell.style.width = `${viewport.width * scale}px`;
+      frameShell.style.height = `${reviewHeight * scale}px`;
+    }
+
+    function scrollOneFrameToSection(activeFrame) {
+      try {
+        const target = activeFrame.contentDocument.querySelector(selectedSection().selector);
+        if (target) {
+          const top = target.getBoundingClientRect().top + activeFrame.contentWindow.scrollY;
+          activeFrame.contentWindow.scrollTo({ top: Math.max(0, top - (selectedSection().offset || 0)), behavior: 'instant' });
+        }
+      } catch (error) {
+        console.warn('Section preview could not be positioned.', error);
+      }
+    }
+
+    function syncDirectionTailBuffer(activeFrame) {
+      try {
+        const doc = activeFrame.contentDocument;
+        if (!doc?.body) return;
+        let buffer = doc.getElementById('z-review-tail-buffer');
+        if (!buffer) {
+          buffer = doc.createElement('div');
+          buffer.id = 'z-review-tail-buffer';
+          buffer.setAttribute('aria-hidden', 'true');
+          doc.body.appendChild(buffer);
+        }
+        const viewport = viewports[effectiveViewport()];
+        const height = activeFrame === frame && state.mode === 'directions'
+          ? directionReviewHeights[effectiveViewport()] - viewport.height
+          : 0;
+        buffer.style.cssText = `height:${Math.max(0, height)}px;min-height:0;margin:0;padding:0;border:0;pointer-events:none;`;
+      } catch (error) {
+        console.warn('The review tail buffer could not be synchronized.', error);
+      }
+    }
+
+    function scrollFrameToSection() {
+      const activeFrames = isComparing() ? compareFrames : [frame];
+      activeFrames.forEach(scrollOneFrameToSection);
+    }
+
+    function syncFrameWhenReady(activeFrame, variant) {
+      let attempts = 0;
+      const expectedPath = `mcewen-22-${variant}`;
+      const attempt = () => {
+        let settled = false;
+        try {
+          const loadedPath = activeFrame.contentWindow.location.pathname.replace(/\.html$/, '');
+          const correctPage = loadedPath.endsWith(expectedPath);
+          const target = activeFrame.contentDocument.querySelector(selectedSection().selector);
+          if (correctPage && target) {
+            syncDirectionTailBuffer(activeFrame);
+            scrollOneFrameToSection(activeFrame);
+            injectPins(activeFrame);
+            const scroller = activeFrame.contentDocument.scrollingElement || activeFrame.contentDocument.documentElement;
+            const atPageEnd = Math.abs(scroller.scrollTop - (scroller.scrollHeight - scroller.clientHeight)) < 3;
+            const expectedTop = selectedSection().offset || 0;
+            settled = Math.abs(target.getBoundingClientRect().top - expectedTop) < 3 || atPageEnd;
+          }
+        } catch (error) {
+          settled = false;
+        }
+        attempts += 1;
+        if (!settled && attempts < 800) setTimeout(attempt, 25);
+      };
+      attempt();
+    }
+
+    function loadPreview() {
+      if (isComparing()) {
+        pairs[state.pair].forEach((variant, index) => {
+          compareFrames[index].onload = () => syncFrameWhenReady(compareFrames[index], variant);
+          compareFrames[index].src = `mcewen-22-${variant}.html`;
+          syncFrameWhenReady(compareFrames[index], variant);
+        });
+      } else {
+        const variant = effectiveVariant();
+        frame.onload = () => syncFrameWhenReady(frame, variant);
+        frame.src = `mcewen-22-${variant}.html`;
+        syncFrameWhenReady(frame, variant);
+      }
+    }
+
+    function setSection(id) {
+      state.section = id;
+      updateControls();
+      scrollFrameToSection();
+      refreshPins();
+      document.querySelector('.workbench').scrollIntoView({ block: 'start', behavior: 'auto' });
+    }
+
+    function setMode(mode) {
+      state.mode = mode;
+      updateControls();
+      sizeFrame();
+      loadPreview();
+    }
+
+    function setVariant(id) {
+      state.variant = id;
+      updateControls();
+      loadPreview();
+    }
+
+    function setPair(id) {
+      state.pair = id;
+      updateControls();
+      loadPreview();
+    }
+
+    function setViewport(id) {
+      state.viewport = id;
+      updateControls();
+      sizeFrame();
+      loadPreview();
+    }
+
+    function setBase(id) {
+      state.base = id;
+      state.variant = id;
+      updateControls();
+      loadPreview();
+    }
+
+    function comparisonPair(first, second) {
+      if (first === second) return null;
+      const key = [first, second].sort().join('');
+      return pairs[key] ? key : null;
+    }
+
+    function setSectionChoice(choice) {
+      const id = state.section;
+      if (!variants[choice] || !sectionDecisions(id).length) return;
+      state.sectionOverrides[id] = choice;
+      state.elementOverrides = {};
+      updateControls();
+    }
+
+    function removeChoice(type, key) {
+      if (type === 'section') delete state.sectionOverrides[key];
+      updateControls();
+    }
+
+    function clearRecipe() {
+      state.sectionOverrides = {};
+      state.elementOverrides = {};
+      updateControls();
+    }
+
+    async function copyText(text, button, successLabel) {
+      const original = button.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = successLabel;
+      } catch (error) {
+        const area = document.createElement('textarea');
+        area.value = text;
+        document.body.append(area);
+        area.select();
+        document.execCommand('copy');
+        area.remove();
+        button.textContent = successLabel;
+      }
+      setTimeout(() => { button.textContent = original; }, 1600);
+    }
+
+    select.addEventListener('change', event => setSection(event.target.value));
+    document.getElementById('mode-controls').addEventListener('click', event => {
+      const button = event.target.closest('[data-mode]');
+      if (button) setMode(button.dataset.mode);
+    });
+    document.getElementById('variant-controls').addEventListener('click', event => {
+      const button = event.target.closest('[data-variant]');
+      if (button) setVariant(button.dataset.variant);
+    });
+    document.getElementById('base-controls').addEventListener('click', event => {
+      const button = event.target.closest('[data-base]');
+      if (button) setBase(button.dataset.base);
+    });
+    document.getElementById('viewport-controls').addEventListener('click', event => {
+      const button = event.target.closest('[data-viewport]');
+      if (button) setViewport(button.dataset.viewport);
+    });
+    document.getElementById('copy-brief').addEventListener('click', event => copyText(buildBrief(), event.currentTarget, 'Instructions copied'));
+    document.getElementById('copy-link').addEventListener('click', event => copyText(window.location.href, event.currentTarget, 'Setup copied'));
+    document.getElementById('clear-recipe').addEventListener('click', clearRecipe);
+    const primer = document.getElementById('primer');
+    const helpToggle = document.getElementById('help-toggle');
+    const primerClose = document.getElementById('primer-close');
+    function setPrimer(open) {
+      primer.hidden = !open;
+      helpToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) primerClose.focus();
+      else helpToggle.focus();
+    }
+    helpToggle.addEventListener('click', () => setPrimer(true));
+    primerClose.addEventListener('click', () => setPrimer(false));
+    primer.addEventListener('click', event => { if (event.target === primer) setPrimer(false); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && !primer.hidden) setPrimer(false); });
+    document.getElementById('pin-toggle').addEventListener('click', () => {
+      state.pins = !state.pins;
+      updateControls();
+    });
+    window.addEventListener('message', event => {
+      if (event.origin !== window.location.origin || event.data?.type !== 'z-review-pin') return;
+      highlightChoicePanel();
+    });
+    window.addEventListener('resize', sizeFrame);
+
+    const sectionIds = new Set(sections.filter(section => sectionDecisions(section.id).length).map(section => section.id));
+    const params = new URLSearchParams(window.location.search);
+    const hasSharedState = ['mode', 'variant', 'section', 'viewport', 'pins', 'so'].some(key => params.has(key));
+    if (!hasSharedState) {
+      try {
+        const saved = JSON.parse(localStorage.getItem('mcewen-22-review-01') || 'null');
+        if (saved) {
+          if (validModes.includes(saved.mode)) state.mode = saved.mode;
+          if (variants[saved.variant]) state.variant = saved.variant;
+          if (sections.some(section => section.id === saved.section)) state.section = saved.section;
+          if (viewports[saved.viewport]) state.viewport = saved.viewport;
+          if (typeof saved.pins === 'boolean') state.pins = saved.pins;
+          state.sectionOverrides = Object.fromEntries(Object.entries(saved.sectionOverrides || {}).filter(([key, choice]) => sectionIds.has(key) && variants[choice]));
+          state.elementOverrides = {};
+        }
+      } catch (error) {
+        console.warn('The pick record could not be restored.', error);
+      }
+    }
+    if (validModes.includes(params.get('mode'))) state.mode = params.get('mode');
+    if (variants[params.get('variant')]) state.variant = params.get('variant');
+    if (sections.some(section => section.id === params.get('section'))) state.section = params.get('section');
+    if (viewports[params.get('viewport')]) state.viewport = params.get('viewport');
+    if (params.get('pins') === '0') state.pins = false;
+    if (params.has('so')) state.sectionOverrides = parseMap(params.get('so'), sectionIds);
+    state.elementOverrides = {};
+
+    buildDirectory();
+    updateControls();
+    sizeFrame();
+    loadPreview();
+  </script>
+</body>
+</html>
