@@ -26,6 +26,8 @@
     .card p { margin:0; color:var(--muted); font-size:13px; line-height:1.5; }
     .open { margin-top:22px; color:var(--ink); font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
     .note { margin:30px 0 0; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; line-height:1.55; }
+    .direction { grid-column:1 / -1; min-height:176px; border-color:rgba(101,33,201,.34); background:linear-gradient(135deg,#fff 0%,#faf7ff 100%); }
+    .direction h2 { margin-top:24px; }
     @media (prefers-reduced-motion:reduce) { .card { transition:none; } }
     @media (max-width:680px) { main { width:min(100% - 24px,560px); padding:32px 0 52px; } h1 { font-size:48px; } .lede { margin:20px 0 28px; font-size:15px; } .grid { grid-template-columns:1fr; } .card { min-height:180px; } }
   </style>
@@ -54,6 +56,15 @@
           <p>The current Reveal birth-chart entry page at zodiac.fm/begin.</p>
         </div>
         <span class="open">Open editing view →</span>
+      </a>
+
+      <a class="card direction" href="/funnel/mcewen-edit/02-birth-time-01-review">
+        <div>
+          <div class="top"><span class="num">02.01</span><span class="tag">New design direction</span></div>
+          <h2>Birth Time · Easy Mobile Entry</h2>
+          <p>Generous thumb-safe spacing, visible birth-time uncertainty handling, and optional SMS framed as a useful delivery choice. The current live source remains unchanged.</p>
+        </div>
+        <span class="open">Review direction 01 →</span>
       </a>
 
       <a class="card" href="/funnel/mcewen-edit/03-results">
