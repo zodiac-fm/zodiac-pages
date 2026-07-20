@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Internal directory for reviewing the four stages of the McEwen Reveal funnel.">
+  <title>McEwen Funnel Editing Set</title>
+  <style>
+    :root { color-scheme: light; --paper:#f4f1eb; --ink:#17131c; --violet:#6521c9; --line:rgba(23,19,28,.14); --muted:#675f6d; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { width:min(980px,calc(100% - 32px)); margin:0 auto; padding:54px 0 72px; }
+    .kicker { margin:0 0 14px; color:var(--violet); font-size:11px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; }
+    h1 { max-width:760px; margin:0; font-family:Georgia,"Times New Roman",serif; font-size:clamp(42px,7vw,78px); font-weight:500; letter-spacing:-.045em; line-height:.95; }
+    .lede { max-width:690px; margin:24px 0 38px; color:var(--muted); font-size:17px; line-height:1.55; }
+    .control { display:inline-flex; align-items:center; gap:8px; margin-bottom:34px; padding:9px 12px; border:1px solid rgba(101,33,201,.24); border-radius:999px; background:rgba(101,33,201,.07); color:#4d179d; font-size:11px; font-weight:780; letter-spacing:.06em; text-transform:uppercase; }
+    .control::before { width:7px; height:7px; border-radius:50%; background:var(--violet); content:""; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .card { position:relative; min-height:210px; display:flex; flex-direction:column; justify-content:space-between; padding:22px; border:1px solid var(--line); border-radius:16px; background:#fff; box-shadow:0 12px 34px rgba(23,19,28,.05); color:inherit; text-decoration:none; transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease; }
+    .card:hover,.card:focus-visible { transform:translateY(-2px); border-color:rgba(101,33,201,.48); box-shadow:0 17px 38px rgba(23,19,28,.09); outline:none; }
+    .top { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .num { color:var(--violet); font-size:12px; font-weight:850; letter-spacing:.12em; }
+    .tag { padding:5px 8px; border-radius:999px; background:#eee9f8; color:#5420a7; font-size:9px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    h2 { margin:32px 0 8px; font-family:Georgia,"Times New Roman",serif; font-size:31px; font-weight:500; letter-spacing:-.025em; }
+    .card p { margin:0; color:var(--muted); font-size:13px; line-height:1.5; }
+    .open { margin-top:22px; color:var(--ink); font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .note { margin:30px 0 0; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; line-height:1.55; }
+    @media (prefers-reduced-motion:reduce) { .card { transition:none; } }
+    @media (max-width:680px) { main { width:min(100% - 24px,560px); padding:32px 0 52px; } h1 { font-size:48px; } .lede { margin:20px 0 28px; font-size:15px; } .grid { grid-template-columns:1fr; } .card { min-height:180px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="kicker">Zodiac.fm · Internal review</p>
+    <h1>McEwen Funnel<br>Editing Set</h1>
+    <p class="lede">One labeled place for the complete Reveal path. Each stage opens in its own Vercel review frame while preserving the exact current source underneath.</p>
+    <div class="control">Lander control: McEwen 25</div>
+
+    <section class="grid" aria-label="McEwen funnel stages">
+      <a class="card" href="/funnel/mcewen-edit/01-lander">
+        <div>
+          <div class="top"><span class="num">01</span><span class="tag">Locked control</span></div>
+          <h2>Lander</h2>
+          <p>David McEwen’s approved manifestation landing page. This is the design and copy control.</p>
+        </div>
+        <span class="open">Open editing view →</span>
+      </a>
+
+      <a class="card" href="/funnel/mcewen-edit/02-birth-time">
+        <div>
+          <div class="top"><span class="num">02</span><span class="tag">Live source</span></div>
+          <h2>Birth Time</h2>
+          <p>The current Reveal birth-chart entry page at zodiac.fm/begin.</p>
+        </div>
+        <span class="open">Open editing view →</span>
+      </a>
+
+      <a class="card" href="/funnel/mcewen-edit/03-results">
+        <div>
+          <div class="top"><span class="num">03</span><span class="tag">Live source</span></div>
+          <h2>Results</h2>
+          <p>The current pre-filled Reveal results page, ready to review without entering birth data.</p>
+        </div>
+        <span class="open">Open editing view →</span>
+      </a>
+
+      <a class="card" href="/funnel/mcewen-edit/04-join">
+        <div>
+          <div class="top"><span class="num">04</span><span class="tag">Live source</span></div>
+          <h2>Join</h2>
+          <p>The current Reveal checkout page with the yearly plan and safe test identity pre-filled.</p>
+        </div>
+        <span class="open">Open editing view →</span>
+      </a>
+    </section>
+
+    <p class="note">Editing rule: never alter McEwen 25. Each approved change becomes a new numbered file, and the live zodiac.fm funnel remains untouched until a separate dev handoff is approved.</p>
+  </main>
+</body>
+</html>
