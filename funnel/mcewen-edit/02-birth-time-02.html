@@ -1,0 +1,881 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="McEwen Birth Time design direction 02. The easy mobile-entry form with fully credentialed proof and Rhonda Britten in the lead authority position.">
+  <title>McEwen Birth Time 02 · Authority Made Visible</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --white: #fff;
+      --paper: #f7f2e9;
+      --outer: #efece6;
+      --ink: #17121d;
+      --muted: #615a65;
+      --quiet: #817984;
+      --line: rgba(23, 18, 29, .14);
+      --line-strong: rgba(23, 18, 29, .24);
+      --purple: #6521c9;
+      --purple-deep: #3e087f;
+      --purple-wash: #f1ebfa;
+      --green: #08714d;
+      --display: "Cormorant Garamond", Georgia, serif;
+      --body: "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --shadow: 0 2px 40px rgba(20, 20, 20, .07);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--white);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    body.sheet-open { overflow: hidden; }
+    img { display: block; max-width: 100%; }
+    button, input, select { font: inherit; }
+    button { color: inherit; }
+    h1, h2, h3, p, blockquote, figure, fieldset, legend { margin: 0; }
+    fieldset { min-width: 0; padding: 0; border: 0; }
+    h1, h2, h3 { font-family: var(--display); font-weight: 600; }
+    a { color: inherit; }
+
+    .page {
+      min-height: 100vh;
+      background: var(--white);
+    }
+    .site-head {
+      height: 58px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .97);
+    }
+    .head-inner {
+      width: min(100% - 28px, 710px);
+      height: 100%;
+      margin-inline: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .brand { width: 104px; height: auto; }
+    .offer-note {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.2;
+      text-align: right;
+    }
+    .offer-note strong {
+      display: block;
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .intro {
+      position: relative;
+      overflow: hidden;
+      padding: 28px 0 30px;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 92% 28%, rgba(101, 33, 201, .11), transparent 31%),
+        var(--paper);
+    }
+    .intro::after {
+      position: absolute;
+      right: -62px;
+      bottom: -88px;
+      width: 190px;
+      height: 190px;
+      border: 1px solid rgba(101, 33, 201, .13);
+      border-radius: 50%;
+      box-shadow: 0 0 0 34px rgba(101, 33, 201, .035), 0 0 0 68px rgba(101, 33, 201, .02);
+      content: "";
+    }
+    .intro-inner {
+      position: relative;
+      z-index: 1;
+      width: min(100% - 36px, 680px);
+      margin-inline: auto;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 12px;
+      color: var(--purple);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 21px; height: 1px; background: currentColor; content: ""; }
+    h1 {
+      max-width: 640px;
+      font-size: clamp(41px, 12vw, 57px);
+      letter-spacing: -.043em;
+      line-height: .96;
+      text-wrap: balance;
+    }
+    .accent { color: var(--purple); }
+    .lede {
+      max-width: 560px;
+      margin-top: 14px;
+      color: #433c47;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .process {
+      display: grid;
+      grid-template-columns: 1fr 46px 1fr;
+      align-items: center;
+      gap: 9px;
+      margin-top: 22px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+    .process-step strong {
+      display: block;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .process-step span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.35;
+    }
+    .process-line {
+      position: relative;
+      height: 1px;
+      background: rgba(101, 33, 201, .38);
+    }
+    .process-line::after {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 6px;
+      height: 6px;
+      border-top: 1px solid var(--purple);
+      border-right: 1px solid var(--purple);
+      transform: translateY(-50%) rotate(45deg);
+      content: "";
+    }
+
+    .form-wrap {
+      width: min(100% - 36px, 680px);
+      margin-inline: auto;
+      padding: 34px 0 48px;
+    }
+    .form-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .form-head h2 {
+      font-size: 34px;
+      letter-spacing: -.025em;
+      line-height: 1;
+    }
+    .required-note { color: var(--quiet); font-size: 10px; white-space: nowrap; }
+    .form-section {
+      position: relative;
+      padding: 0 0 34px;
+      border-bottom: 1px solid var(--line);
+    }
+    .form-section + .form-section { padding-top: 34px; }
+    .section-number {
+      display: inline-grid;
+      place-items: center;
+      width: 29px;
+      height: 29px;
+      margin-bottom: 0;
+      border: 1px solid rgba(101, 33, 201, .3);
+      border-radius: 50%;
+      color: var(--purple);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .form-section > legend,
+    .section-title {
+      width: 100%;
+      display: grid;
+      gap: 10px;
+      font-family: var(--display);
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -.02em;
+      line-height: 1;
+    }
+    .section-help {
+      max-width: 520px;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.48;
+    }
+    .fields { display: grid; gap: 21px; margin-top: 22px; }
+    .field { display: grid; gap: 8px; }
+    .field label,
+    .field-label {
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.25;
+    }
+    .optional { color: var(--quiet); font-size: 11px; font-weight: 500; }
+    .hint { color: var(--quiet); font-size: 11px; line-height: 1.4; }
+    input,
+    select {
+      width: 100%;
+      min-height: 58px;
+      padding: 0 15px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      outline: 0;
+      background: var(--white);
+      color: var(--ink);
+      font-size: 16px;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    input::placeholder { color: #9a929d; opacity: 1; }
+    input:focus,
+    select:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 4px rgba(101, 33, 201, .12);
+    }
+    select {
+      appearance: none;
+      padding-right: 44px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, var(--purple) 50%),
+        linear-gradient(135deg, var(--purple) 50%, transparent 50%);
+      background-position: calc(100% - 20px) 26px, calc(100% - 14px) 26px;
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+    }
+    .date-grid { display: grid; gap: 16px; }
+    .choice-grid { display: grid; gap: 10px; }
+    .choice {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 10px 14px;
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: var(--white);
+      cursor: pointer;
+      text-align: left;
+    }
+    .choice:hover { border-color: rgba(101, 33, 201, .52); }
+    .choice:focus { outline: 3px solid rgba(101, 33, 201, .22); outline-offset: 3px; }
+    .choice[aria-pressed="true"] {
+      border-color: var(--purple);
+      background: var(--purple-wash);
+      box-shadow: inset 4px 0 0 var(--purple);
+    }
+    .choice-dot {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 20px;
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      background: var(--white);
+    }
+    .choice[aria-pressed="true"] .choice-dot {
+      border: 6px solid var(--purple);
+    }
+    .choice-copy strong { display: block; font-size: 13px; font-weight: 700; }
+    .choice-copy span { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; line-height: 1.3; }
+    .time-reveal,
+    .noon-reveal,
+    .sms-fields { display: none; }
+    .time-reveal.is-visible,
+    .noon-reveal.is-visible,
+    .sms-fields.is-visible { display: grid; }
+    .time-reveal,
+    .noon-reveal { gap: 11px; margin-top: 16px; }
+    .noon-reveal {
+      padding: 17px;
+      border-left: 3px solid var(--green);
+      background: #edf6f1;
+    }
+    .noon-reveal strong { color: #075c40; font-size: 13px; }
+    .noon-reveal p { color: #315c4c; font-size: 12px; line-height: 1.48; }
+    .help-button {
+      min-height: 44px;
+      justify-self: start;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--purple-deep);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+    .help-button:focus { outline: 3px solid rgba(101, 33, 201, .22); outline-offset: 3px; }
+
+    .sms-choice {
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 12px;
+      align-items: start;
+      margin-top: 22px;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper);
+      cursor: pointer;
+    }
+    .sms-choice input {
+      width: 24px;
+      min-height: 24px;
+      height: 24px;
+      margin: 1px 0 0;
+      accent-color: var(--purple);
+    }
+    .sms-choice strong { display: block; font-size: 13px; }
+    .sms-choice span { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; line-height: 1.42; }
+    .sms-fields { gap: 19px; margin-top: 18px; }
+
+    .submit-area { padding-top: 34px; }
+    .submit-button {
+      width: 100%;
+      min-height: 58px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0 20px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--purple);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s ease, transform .15s ease, box-shadow .15s ease;
+    }
+    .submit-button:hover { background: var(--purple-deep); box-shadow: 0 12px 30px rgba(62, 8, 127, .2); transform: translateY(-1px); }
+    .submit-button:focus-visible { outline: 4px solid rgba(101, 33, 201, .22); outline-offset: 3px; }
+    .submit-arrow { font-size: 12px; }
+    .assurances {
+      display: grid;
+      gap: 6px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.42;
+      text-align: center;
+    }
+    .assurances strong { color: var(--ink); }
+    .demo-message {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border: 1px solid rgba(8, 113, 77, .28);
+      border-radius: 8px;
+      background: #edf6f1;
+      color: #075c40;
+      font-size: 12px;
+      text-align: center;
+    }
+    .demo-message.is-visible { display: block; }
+
+    .proof {
+      padding: 54px 0 62px;
+      border-top: 1px solid var(--line);
+      background: var(--paper);
+    }
+    .proof-inner { width: min(100% - 36px, 680px); margin-inline: auto; }
+    .proof-kicker {
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .proof h2 {
+      max-width: 560px;
+      margin-top: 9px;
+      font-size: clamp(37px, 10.5vw, 50px);
+      letter-spacing: -.035em;
+      line-height: .98;
+    }
+    .proof-grid { display: grid; gap: 14px; margin-top: 28px; }
+    .proof-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--white);
+    }
+    .proof-person {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .proof-person img {
+      width: 92px;
+      height: 92px;
+      object-fit: contain;
+      background: #e8e1d8;
+    }
+    .proof-person strong { display: block; font-size: 13px; }
+    .proof-person cite { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; font-style: normal; line-height: 1.4; }
+    .proof-person cite strong { display: block; color: var(--ink); font-size: 13px; }
+    .proof-card blockquote {
+      padding: 19px 17px 21px;
+      font-family: var(--display);
+      font-size: 21px;
+      line-height: 1.12;
+    }
+    .proof-card blockquote::before { color: var(--purple); content: "“"; }
+    .proof-card.is-lead {
+      border-color: rgba(101, 33, 201, .34);
+      box-shadow: inset 4px 0 0 var(--purple);
+    }
+    .proof-card.is-lead .proof-person {
+      background: var(--purple-wash);
+    }
+    .proof-card.is-lead blockquote {
+      font-size: 25px;
+      line-height: 1.08;
+    }
+
+    .footer {
+      padding: 24px 18px;
+      border-top: 1px solid var(--line);
+      background: var(--white);
+      color: var(--quiet);
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: end;
+      justify-content: center;
+      padding: 0;
+      background: rgba(11, 7, 18, .62);
+    }
+    .sheet-backdrop.is-open { display: flex; }
+    .sheet {
+      width: 100%;
+      max-height: min(84vh, 680px);
+      overflow: auto;
+      padding: 8px 22px 28px;
+      border-radius: 18px 18px 0 0;
+      background: var(--white);
+      box-shadow: 0 -22px 60px rgba(11, 7, 18, .22);
+    }
+    .sheet-handle { width: 44px; height: 4px; margin: 3px auto 18px; border-radius: 999px; background: #d8d0dc; }
+    .sheet-top { display: flex; align-items: start; justify-content: space-between; gap: 18px; }
+    .sheet h2 { max-width: 460px; font-size: 34px; line-height: 1; }
+    .close-sheet {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      display: grid;
+      place-items: center;
+      margin-top: -6px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--white);
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .close-sheet:focus { border-color: var(--purple); outline: 3px solid rgba(101, 33, 201, .22); outline-offset: 2px; }
+    .sheet-lead { margin-top: 16px; color: var(--purple-deep); font-size: 15px; font-weight: 700; }
+    .sheet-copy { display: grid; gap: 13px; margin-top: 14px; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .sheet-copy strong { color: var(--ink); }
+
+    @media (min-width: 700px) {
+      body { background: var(--outer); }
+      .page {
+        width: min(100%, 760px);
+        margin-inline: auto;
+        border-right: 1px solid var(--line);
+        border-left: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+      .intro { padding: 42px 0 38px; }
+      .form-wrap { padding: 44px 0 58px; }
+      .date-grid { grid-template-columns: 1.55fr .72fr .9fr; }
+      .choice-grid { grid-template-columns: 1fr 1fr; }
+      .proof-grid { grid-template-columns: 1fr 1fr; }
+      .proof-card.is-lead {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 250px 1fr;
+      }
+      .proof-card.is-lead .proof-person {
+        grid-template-columns: 112px 1fr;
+        border-right: 1px solid var(--line);
+        border-bottom: 0;
+      }
+      .proof-card.is-lead .proof-person img {
+        width: 112px;
+        height: 112px;
+      }
+      .proof-card.is-lead blockquote {
+        display: flex;
+        align-items: center;
+      }
+      .proof-card:last-child {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 250px 1fr;
+      }
+      .proof-card:last-child .proof-person {
+        border-right: 1px solid var(--line);
+        border-bottom: 0;
+      }
+      .proof-card:last-child blockquote {
+        display: flex;
+        align-items: center;
+      }
+      .sheet-backdrop { align-items: center; padding: 28px; }
+      .sheet { max-width: 610px; padding: 24px 30px 30px; border-radius: 14px; }
+      .sheet-handle { display: none; }
+      .sheet h2 { font-size: 39px; }
+    }
+
+    @media (max-width: 430px) {
+      .form-head { display: none; }
+      .required-note { white-space: normal; }
+    }
+
+    @media (max-width: 360px) {
+      .head-inner { width: min(100% - 22px, 710px); }
+      .brand { width: 94px; }
+      .offer-note { font-size: 9px; }
+      .offer-note strong { font-size: 10px; }
+      .intro-inner,
+      .form-wrap,
+      .proof-inner { width: min(100% - 28px, 680px); }
+      h1 { font-size: 39px; }
+      .process { grid-template-columns: 1fr 32px 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="site-head">
+      <div class="head-inner">
+        <img class="brand" src="../../landers/reveal-assets/img-dark-logo.webp" alt="Zodiac.fm" width="424" height="128">
+        <p class="offer-note"><strong>David’s discount is applied</strong>automatically at checkout</p>
+      </div>
+    </header>
+
+    <section class="intro" aria-labelledby="page-title">
+      <div class="intro-inner">
+        <p class="eyebrow">Your personalized result</p>
+        <h1 id="page-title">Reveal the frequencies from your <span class="accent">exact birth moment.</span></h1>
+        <p class="lede">Enter the details below and Zodiac will calculate the four frequencies personalized to you.</p>
+        <div class="process" aria-label="Birth details become your personalized frequencies">
+          <div class="process-step">
+            <strong>Your birth moment</strong>
+            <span>Date, time, and place</span>
+          </div>
+          <span class="process-line" aria-hidden="true"></span>
+          <div class="process-step">
+            <strong>Your frequencies</strong>
+            <span>Calculated and ready to hear</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-wrap" aria-labelledby="form-title">
+      <div class="form-head">
+        <h2 id="form-title">Your birth information</h2>
+        <p class="required-note">All fields required unless marked optional</p>
+      </div>
+
+      <form id="birth-form" novalidate>
+        <fieldset class="form-section">
+          <legend><span class="section-number" aria-hidden="true">01</span><span>Where should we send your results?</span></legend>
+          <p class="section-help">This keeps your personalized calculation connected to you.</p>
+          <div class="fields">
+            <div class="field">
+              <label for="full-name">Full name</label>
+              <input id="full-name" name="name" type="text" autocomplete="name" enterkeyhint="next" placeholder="Your full name" required>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" inputmode="email" enterkeyhint="next" placeholder="you@example.com" required>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+          <legend><span class="section-number" aria-hidden="true">02</span><span>Your exact birth moment</span></legend>
+          <p class="section-help">These details are the raw inputs used to calculate your frequencies.</p>
+          <div class="fields">
+            <fieldset class="field">
+              <legend class="field-label">Date of birth</legend>
+              <p class="hint">Enter the date you already know. Each field stays large and easy to select.</p>
+              <div class="date-grid">
+                <div class="field">
+                  <label for="birth-month">Month</label>
+                  <select id="birth-month" name="birth-month" autocomplete="bday-month" required>
+                    <option value="">Choose month</option>
+                    <option>January</option><option>February</option><option>March</option><option>April</option>
+                    <option>May</option><option>June</option><option>July</option><option>August</option>
+                    <option>September</option><option>October</option><option>November</option><option>December</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="birth-day">Day</label>
+                  <input id="birth-day" name="birth-day" type="text" inputmode="numeric" autocomplete="bday-day" maxlength="2" placeholder="DD" required>
+                </div>
+                <div class="field">
+                  <label for="birth-year">Year</label>
+                  <input id="birth-year" name="birth-year" type="text" inputmode="numeric" autocomplete="bday-year" maxlength="4" placeholder="YYYY" required>
+                </div>
+              </div>
+            </fieldset>
+
+            <div class="field">
+              <label for="birth-location">Birth location</label>
+              <input id="birth-location" name="birth-location" type="text" autocomplete="off" enterkeyhint="next" placeholder="Start typing your city" required>
+              <p class="hint">Choose the city from the matching location list.</p>
+            </div>
+
+            <fieldset class="field">
+              <legend class="field-label">Do you know your exact birth time?</legend>
+              <div class="choice-grid" role="group" aria-label="Do you know your exact birth time?">
+                <button class="choice" id="time-known" type="button" aria-pressed="false">
+                  <span class="choice-dot" aria-hidden="true"></span>
+                  <span class="choice-copy"><strong>Yes, I know it</strong><span>I can enter the time shown on my birth record.</span></span>
+                </button>
+                <button class="choice" id="time-unknown" type="button" aria-pressed="false">
+                  <span class="choice-dot" aria-hidden="true"></span>
+                  <span class="choice-copy"><strong>I’m not sure</strong><span>Use 12:00 noon as a starting point.</span></span>
+                </button>
+              </div>
+
+              <div class="time-reveal" id="time-reveal">
+                <label for="birth-time">Time of birth</label>
+                <input id="birth-time" name="birth-time" type="time" autocomplete="bday" aria-describedby="time-hint">
+                <p class="hint" id="time-hint">Your phone will open its familiar time picker.</p>
+              </div>
+
+              <div class="noon-reveal" id="noon-reveal">
+                <strong>We’ll begin with 12:00 noon.</strong>
+                <p>Because the calculation uses well over 248 data points, noon can be close enough to begin experiencing your frequencies. Our support team can help you refine the time later.</p>
+                <button class="help-button" type="button" data-open-sheet>Why noon is a useful starting point</button>
+              </div>
+            </fieldset>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+          <legend><span class="section-number" aria-hidden="true">03</span><span>Would you like the link by text too?</span></legend>
+          <p class="section-help">Optional. Add your number if you want your frequency link and personalized updates by SMS.</p>
+
+          <label class="sms-choice" for="sms-opt-in">
+            <input id="sms-opt-in" name="sms-opt-in" type="checkbox" aria-controls="sms-fields" aria-expanded="false">
+            <span>
+              <strong>Yes, text me my frequency link too</strong>
+              <span>Message and data rates may apply. Reply STOP to unsubscribe at any time.</span>
+            </span>
+          </label>
+
+          <div class="sms-fields" id="sms-fields">
+            <div class="field">
+              <label for="country">Country or region</label>
+              <select id="country" name="country" autocomplete="country">
+                <option value="US">United States (+1)</option>
+                <option value="CA">Canada (+1)</option>
+                <option value="GB">United Kingdom (+44)</option>
+                <option value="AU">Australia (+61)</option>
+                <option value="other">Other / International</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="phone">Mobile number</label>
+              <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="Mobile number">
+              <p class="hint">By adding your number, you agree to receive personalized frequency updates, tips, and exclusive offers via SMS.</p>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="submit-area">
+          <button class="submit-button" type="submit">Reveal My Frequencies <span class="submit-arrow" aria-hidden="true">▶</span></button>
+          <div class="assurances">
+            <p><strong>David’s discount is automatically applied.</strong></p>
+            <p>Your birth data is encrypted and never sold or shared.</p>
+          </div>
+          <p class="demo-message" id="demo-message" role="status">This review page demonstrates the design and interactions. It does not submit personal information.</p>
+        </div>
+      </form>
+    </section>
+
+    <section class="proof" aria-labelledby="proof-title">
+      <div class="proof-inner">
+        <p class="proof-kicker">Real transformations</p>
+        <h2 id="proof-title">What listeners noticed after they began.</h2>
+        <div class="proof-grid">
+          <figure class="proof-card is-lead">
+            <figcaption class="proof-person">
+              <img src="../../landers/reveal-assets/img-images_testimonials_rhonda-britten-d2c.png" alt="Rhonda Britten" width="200" height="200">
+              <cite><strong>Rhonda Britten</strong>Author of “Fearless Living”<br>Emmy Award-Winner<br>Founder, Fearless Living Institute</cite>
+            </figcaption>
+            <blockquote>If you’re tired of living out of tune with yourself, this is your invitation home.”</blockquote>
+          </figure>
+
+          <figure class="proof-card">
+            <figcaption class="proof-person">
+              <img src="../../landers/reveal-assets/img-images_testimonials_joey-vaillancourt-d2c.png" alt="Joey Vaillancourt" width="200" height="200">
+              <cite><strong>Joey Vaillancourt</strong>Founder &amp; CEO<br>BiOptimizers VP Marketing</cite>
+            </figcaption>
+            <blockquote>Without doing anything but listening, I become a different person. I shift into the version of me I actually want to be. I can tap into different frequencies based on what I need.”</blockquote>
+          </figure>
+
+          <figure class="proof-card">
+            <figcaption class="proof-person">
+              <img src="../../landers/reveal-assets/img-images_testimonials_paul-tribe-d2c.png" alt="Paul Tribe" width="200" height="200">
+              <cite><strong>Paul Tribe</strong>Addictions Counselor</cite>
+            </figcaption>
+            <blockquote>I haven’t had anything quite so profoundly powerful and transformative as Zodiac.fm in such a short amount of practice. A friend said my frequency had changed. And I know this to be true.”</blockquote>
+          </figure>
+
+          <figure class="proof-card">
+            <figcaption class="proof-person">
+              <img src="../../landers/reveal-assets/img-images_testimonials_hilary-dimassimo-d2c.png" alt="Hilary DiMassimo" width="200" height="200">
+              <cite><strong>Hilary DiMassimo</strong>Dream position offered in week one</cite>
+            </figcaption>
+            <blockquote>While listening, I’ve had otherworldly visualizations and felt real shifts in my life from the very first week. Friends and family noticed the change in my presence. In week one, I was offered a dream position.”</blockquote>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">© 2026 Zodiac.fm · Privacy · Terms</footer>
+  </main>
+
+  <div class="sheet-backdrop" id="birth-time-sheet" aria-hidden="true">
+    <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+      <div class="sheet-handle" aria-hidden="true"></div>
+      <div class="sheet-top">
+        <h2 id="sheet-title">Unknown Birth Time?</h2>
+        <button class="close-sheet" type="button" aria-label="Close birth time help">×</button>
+      </div>
+      <p class="sheet-lead">4 out of 5 people who use 12:00 noon report getting amazing results.</p>
+      <div class="sheet-copy">
+        <p>Because we calculate your frequencies based on <strong>well over 248 data points</strong>, your frequencies will be close enough for you to experience resonance benefits you’ve never felt before.</p>
+        <p>Our support team will help you find your exact time later. When we update it, you’ll have an even more powerful experience.</p>
+        <p><strong>There’s no risk in trying</strong> &mdash; you have a full money-back guarantee to find out if your frequencies work for you.</p>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (() => {
+      const known = document.getElementById('time-known');
+      const unknown = document.getElementById('time-unknown');
+      const timeReveal = document.getElementById('time-reveal');
+      const noonReveal = document.getElementById('noon-reveal');
+      const timeInput = document.getElementById('birth-time');
+      const smsOptIn = document.getElementById('sms-opt-in');
+      const smsFields = document.getElementById('sms-fields');
+      const phone = document.getElementById('phone');
+      const sheet = document.getElementById('birth-time-sheet');
+      const closeSheet = sheet.querySelector('.close-sheet');
+      const form = document.getElementById('birth-form');
+      const demoMessage = document.getElementById('demo-message');
+      let lastFocus = null;
+
+      function setTimeChoice(choice) {
+        const knowsTime = choice === 'known';
+        known.setAttribute('aria-pressed', String(knowsTime));
+        unknown.setAttribute('aria-pressed', String(!knowsTime));
+        timeReveal.classList.toggle('is-visible', knowsTime);
+        noonReveal.classList.toggle('is-visible', !knowsTime);
+        timeInput.required = knowsTime;
+        if (!knowsTime) timeInput.value = '12:00';
+      }
+
+      known.addEventListener('click', () => {
+        setTimeChoice('known');
+      });
+      unknown.addEventListener('click', () => setTimeChoice('unknown'));
+
+      smsOptIn.addEventListener('change', () => {
+        const enabled = smsOptIn.checked;
+        smsFields.classList.toggle('is-visible', enabled);
+        smsOptIn.setAttribute('aria-expanded', String(enabled));
+        phone.required = enabled;
+      });
+
+      function openHelp(opener) {
+        lastFocus = opener;
+        sheet.classList.add('is-open');
+        sheet.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('sheet-open');
+        closeSheet.focus({ preventScroll: true });
+      }
+
+      function closeHelp() {
+        sheet.classList.remove('is-open');
+        sheet.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('sheet-open');
+        if (lastFocus) lastFocus.focus({ preventScroll: true });
+      }
+
+      document.querySelectorAll('[data-open-sheet]').forEach((button) => {
+        button.addEventListener('click', () => openHelp(button));
+      });
+      closeSheet.addEventListener('click', closeHelp);
+      sheet.addEventListener('click', (event) => {
+        if (event.target === sheet) closeHelp();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && sheet.classList.contains('is-open')) closeHelp();
+      });
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const hasTimeChoice = known.getAttribute('aria-pressed') === 'true' || unknown.getAttribute('aria-pressed') === 'true';
+        if (!hasTimeChoice) {
+          unknown.focus();
+          return;
+        }
+        if (!form.reportValidity()) return;
+        demoMessage.classList.add('is-visible');
+        demoMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    })();
+  </script>
+</body>
+</html>

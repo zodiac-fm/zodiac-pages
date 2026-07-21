@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="McEwen Results direction 01. A clear four-frequency reveal built from the current prefilled Results source.">
+  <title>McEwen Results 01 · Four-Frequency Reveal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --white: #fff;
+      --cream: #f6f1e8;
+      --moon: #fbf8f3;
+      --mist: #eee9e0;
+      --outer: #efece6;
+      --ink: #1a1620;
+      --muted: #615a65;
+      --quiet: #817984;
+      --line: rgba(26, 22, 32, .14);
+      --purple: #6521c9;
+      --purple-deep: #38007a;
+      --purple-tint: #efecff;
+      --love: #b90044;
+      --love-tint: #ffe8ea;
+      --vitality: #c25500;
+      --vitality-tint: #ffeada;
+      --abundance: #0a7a52;
+      --abundance-tint: #dcf4e8;
+      --display: "Cormorant Garamond", Georgia, serif;
+      --body: "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --shadow: 0 2px 40px rgba(20, 20, 20, .07);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--white);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    h1, h2, h3, p, figure, blockquote { margin: 0; }
+    h1, h2 { font-family: var(--display); font-weight: 600; }
+    a { color: inherit; }
+
+    .page { min-height: 100vh; background: var(--white); }
+    .site-head {
+      height: 58px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .97);
+    }
+    .head-inner {
+      width: min(100% - 28px, 710px);
+      height: 100%;
+      margin-inline: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .brand { width: 104px; height: auto; }
+    .offer-note {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.2;
+      text-align: right;
+    }
+    .offer-note strong { display: block; color: var(--ink); font-size: 11px; }
+
+    .reveal {
+      position: relative;
+      overflow: hidden;
+      padding: 28px 0 38px;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 95% 7%, rgba(101, 33, 201, .10), transparent 28%),
+        var(--cream);
+    }
+    .reveal::after {
+      position: absolute;
+      top: -90px;
+      right: -110px;
+      width: 250px;
+      height: 250px;
+      border: 1px solid rgba(101, 33, 201, .12);
+      border-radius: 50%;
+      box-shadow: 0 0 0 44px rgba(101, 33, 201, .028), 0 0 0 88px rgba(101, 33, 201, .016);
+      content: "";
+    }
+    .reveal-inner {
+      position: relative;
+      z-index: 1;
+      width: min(100% - 32px, 680px);
+      margin-inline: auto;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 10px;
+      color: var(--purple);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 21px; height: 1px; background: currentColor; content: ""; }
+    h1 {
+      max-width: 650px;
+      font-size: clamp(42px, 12vw, 59px);
+      letter-spacing: -.043em;
+      line-height: .98;
+      text-wrap: balance;
+    }
+    .accent { color: var(--purple); }
+    .lede {
+      max-width: 620px;
+      margin-top: 12px;
+      color: #433c47;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .lede strong { color: var(--ink); }
+
+    .frequency-grid { display: grid; gap: 11px; margin-top: 22px; }
+    .frequency-card {
+      position: relative;
+      overflow: hidden;
+      padding: 17px;
+      border: 1px solid var(--line);
+      background: var(--white);
+    }
+    .frequency-card::before {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--tone);
+      content: "";
+    }
+    .frequency-card.core { --tone: var(--purple); --tint: var(--purple-tint); }
+    .frequency-card.love { --tone: var(--love); --tint: var(--love-tint); }
+    .frequency-card.vitality { --tone: var(--vitality); --tint: var(--vitality-tint); }
+    .frequency-card.abundance { --tone: var(--abundance); --tint: var(--abundance-tint); }
+    .frequency-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .frequency-name {
+      color: var(--tone);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+    .hz {
+      font-family: var(--body);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -.04em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .hz span { color: var(--quiet); font-size: 12px; letter-spacing: 0; }
+    .band {
+      display: inline-flex;
+      align-items: center;
+      min-height: 27px;
+      margin-top: 11px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background: var(--tint);
+      color: var(--tone);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .frequency-copy { margin-top: 10px; color: #433c47; font-size: 13px; line-height: 1.45; }
+    .frequency-copy strong { color: var(--ink); }
+
+    .action-block { margin-top: 18px; }
+    .primary-action {
+      width: 100%;
+      min-height: 58px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 18px;
+      border-radius: 8px;
+      background: var(--purple);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background .15s ease, box-shadow .15s ease, transform .15s ease;
+    }
+    .primary-action:hover { background: var(--purple-deep); box-shadow: 0 12px 30px rgba(56, 0, 122, .2); transform: translateY(-1px); }
+    .primary-action:focus-visible { outline: 4px solid rgba(101, 33, 201, .22); outline-offset: 3px; }
+    .action-note { margin-top: 9px; color: var(--muted); font-size: 10px; text-align: center; }
+
+    .authority {
+      padding: 42px 0;
+      border-bottom: 1px solid var(--line);
+      background: var(--white);
+    }
+    .authority-inner,
+    .bands-inner,
+    .close-inner { width: min(100% - 36px, 680px); margin-inline: auto; }
+    .authority-card {
+      overflow: hidden;
+      border: 1px solid rgba(101, 33, 201, .28);
+      background: var(--moon);
+      box-shadow: inset 4px 0 0 var(--purple);
+    }
+    .authority-person {
+      display: grid;
+      grid-template-columns: 94px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 13px;
+      border-bottom: 1px solid var(--line);
+      background: var(--purple-tint);
+    }
+    .authority-person img {
+      width: 94px;
+      height: 94px;
+      object-fit: contain;
+      background: #e8e1d8;
+    }
+    .authority-person strong { display: block; font-size: 13px; }
+    .authority-person cite { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; font-style: normal; line-height: 1.4; }
+    .authority-person cite strong { display: block; color: var(--ink); font-size: 13px; }
+    .authority-card blockquote {
+      padding: 20px 18px 22px;
+      font-family: var(--display);
+      font-size: 27px;
+      line-height: 1.08;
+    }
+    .authority-card blockquote::before { color: var(--purple); content: "“"; }
+
+    .bands { padding: 48px 0; background: var(--moon); }
+    h2 { font-size: clamp(36px, 10vw, 50px); letter-spacing: -.035em; line-height: 1; }
+    .section-lede { max-width: 610px; margin-top: 13px; color: var(--muted); font-size: 15px; line-height: 1.55; }
+    .band-rules { display: grid; gap: 10px; margin-top: 24px; }
+    .band-rule {
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: var(--white);
+    }
+    .band-rule strong { display: block; color: var(--purple-deep); font-size: 13px; }
+    .band-rule p { margin-top: 5px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+    .close { padding: 48px 0 52px; background: var(--ink); color: var(--white); }
+    .close h2 { max-width: 620px; color: var(--white); }
+    .close p { max-width: 570px; margin-top: 12px; color: #d8d2dd; font-size: 15px; line-height: 1.55; }
+    .close .primary-action { margin-top: 22px; background: var(--white); color: var(--purple-deep); }
+    .close .primary-action:hover { background: var(--purple-tint); }
+    .footer { padding: 24px 18px; border-top: 1px solid var(--line); color: var(--quiet); font-size: 10px; text-align: center; }
+
+    @media (min-width: 700px) {
+      body { background: var(--outer); }
+      .page {
+        width: min(100%, 760px);
+        margin-inline: auto;
+        border-right: 1px solid var(--line);
+        border-left: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+      .reveal { padding: 34px 0 42px; }
+      .frequency-grid { grid-template-columns: 1fr 1fr; }
+      .frequency-card { min-height: 184px; }
+      .authority-card { display: grid; grid-template-columns: 260px 1fr; }
+      .authority-person { grid-template-columns: 112px 1fr; border-right: 1px solid var(--line); border-bottom: 0; }
+      .authority-person img { width: 112px; height: 112px; }
+      .authority-card blockquote { display: flex; align-items: center; }
+      .band-rules { grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    @media (max-width: 360px) {
+      .head-inner { width: min(100% - 22px, 710px); }
+      .brand { width: 94px; }
+      .offer-note { font-size: 9px; }
+      .offer-note strong { font-size: 10px; }
+      .reveal-inner,
+      .authority-inner,
+      .bands-inner,
+      .close-inner { width: min(100% - 28px, 680px); }
+      h1 { font-size: 39px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="site-head">
+      <div class="head-inner">
+        <img class="brand" src="../../inapp/app-assets/logo-black.svg" alt="Zodiac.fm" width="424" height="128">
+        <p class="offer-note"><strong>David’s discount is applied</strong>automatically at checkout</p>
+      </div>
+    </header>
+
+    <section class="reveal" aria-labelledby="page-title">
+      <div class="reveal-inner">
+        <p class="eyebrow">Calculated from your birth moment</p>
+        <h1 id="page-title">Michael, these are your <span class="accent">four frequencies.</span></h1>
+        <p class="lede"><strong>The frequency is your signal.</strong> The band shows the way you most naturally process that part of life.</p>
+
+        <div class="frequency-grid" aria-label="Michael's four personalized frequencies">
+          <article class="frequency-card core">
+            <div class="frequency-top">
+              <h3 class="frequency-name">Core · Identity and purpose</h3>
+              <p class="hz">422 <span>Hz</span></p>
+            </div>
+            <p class="band">Root Band · 250 to 425 Hz</p>
+            <p class="frequency-copy"><strong>Identity becomes clearer from a steady, grounded place.</strong> Near the band’s edge, motion can add a light current after steadiness leads.</p>
+          </article>
+
+          <article class="frequency-card love">
+            <div class="frequency-top">
+              <h3 class="frequency-name">Love · Connection</h3>
+              <p class="hz">432 <span>Hz</span></p>
+            </div>
+            <p class="band">Solar Plexus Band · 425 to 600 Hz</p>
+            <p class="frequency-copy"><strong>Connection becomes clearer when you move on the question.</strong> At the lower edge of the band, that motion begins with a grounded current.</p>
+          </article>
+
+          <article class="frequency-card vitality">
+            <div class="frequency-top">
+              <h3 class="frequency-name">Vitality · Energy</h3>
+              <p class="hz">579 <span>Hz</span></p>
+            </div>
+            <p class="band">Solar Plexus Band · 425 to 600 Hz</p>
+            <p class="frequency-copy"><strong>Energy questions become clearer in motion.</strong> Near the upper edge of the band, words may finish what movement begins.</p>
+          </article>
+
+          <article class="frequency-card abundance">
+            <div class="frequency-top">
+              <h3 class="frequency-name">Abundance · Opportunity</h3>
+              <p class="hz">611 <span>Hz</span></p>
+            </div>
+            <p class="band">Throat Band · 600 to 775 Hz</p>
+            <p class="frequency-copy"><strong>Opportunity becomes clearer when you name, write, or speak the opening.</strong> Near the lower edge, momentum supports the articulation.</p>
+          </article>
+        </div>
+
+        <div class="action-block">
+          <a class="primary-action cta" href="/funnel/mcewen-edit/04-join">Hear My Frequencies <span aria-hidden="true">▶</span></a>
+          <p class="action-note">Continue to the current Join stage. This Results direction does not change production.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="authority" aria-label="Rhonda Britten testimonial">
+      <div class="authority-inner">
+        <figure class="authority-card">
+          <figcaption class="authority-person">
+            <img src="../../landers/reveal-assets/img-images_testimonials_rhonda-britten-d2c.png" alt="Rhonda Britten" width="200" height="200">
+            <cite><strong>Rhonda Britten</strong>Author of “Fearless Living”<br>Emmy Award-Winner<br>Founder, Fearless Living Institute</cite>
+          </figcaption>
+          <blockquote>If you’re tired of living out of tune with yourself, this is your invitation home.”</blockquote>
+        </figure>
+      </div>
+    </section>
+
+    <section class="bands" aria-labelledby="bands-title">
+      <div class="bands-inner">
+        <h2 id="bands-title">Your band shows how you naturally process each part of life.</h2>
+        <p class="section-lede">The bands sit on one continuous range. They describe your easiest channel for understanding a question, not the answer you should reach.</p>
+        <div class="band-rules">
+          <article class="band-rule">
+            <strong>A channel, not a verdict</strong>
+            <p>Your band describes how clarity tends to form. It does not tell you yes or no.</p>
+          </article>
+          <article class="band-rule">
+            <strong>A preference, not a cage</strong>
+            <p>You use grounding, motion, words, and perspective. One is simply easier by design.</p>
+          </article>
+          <article class="band-rule">
+            <strong>A continuum, not a ladder</strong>
+            <p>Higher is not better. Your exact position adds nuance without changing your home band.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="close" aria-labelledby="close-title">
+      <div class="close-inner">
+        <h2 id="close-title">Now hear the frequencies made from your birth moment.</h2>
+        <p>Your four numbers are built into the music. Listening is where the result becomes an experience.</p>
+        <a class="primary-action cta" href="/funnel/mcewen-edit/04-join">Hear My Frequencies <span aria-hidden="true">▶</span></a>
+      </div>
+    </section>
+
+    <footer class="footer">© 2026 Zodiac.fm · Privacy · Terms</footer>
+  </main>
+</body>
+</html>
