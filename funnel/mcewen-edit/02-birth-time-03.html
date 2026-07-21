@@ -14,18 +14,17 @@
   <style>
     :root {
       color-scheme: light;
-      --white: #fff;
-      --paper: #f7f2e9;
-      --outer: #efece6;
-      --ink: #17121d;
-      --muted: #615a65;
-      --quiet: #817984;
-      --line: rgba(23, 18, 29, .14);
-      --line-strong: rgba(23, 18, 29, .24);
+      --white: #ffffff;
+      --paper: #f6f1e8;
+      --outer: #eee9e0;
+      --ink: #1a1620;
+      --muted: #2a2530;
+      --quiet: #63616f;
+      --line: rgba(26, 22, 32, .14);
+      --line-strong: rgba(26, 22, 32, .24);
       --purple: #6521c9;
-      --purple-deep: #3e087f;
-      --purple-wash: #f1ebfa;
-      --green: #08714d;
+      --purple-deep: #38007a;
+      --purple-wash: #efecff;
       --display: "Cormorant Garamond", Georgia, serif;
       --body: "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --shadow: 0 2px 40px rgba(20, 20, 20, .07);
@@ -139,30 +138,29 @@
     }
     .lead-proof {
       display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 13px;
+      grid-template-columns: 86px 1fr;
+      gap: 16px;
       align-items: center;
       margin-top: 16px;
-      padding: 12px;
-      border: 1px solid rgba(10, 122, 82, .28);
-      border-left: 4px solid #0a7a52;
-      background: rgba(220, 244, 232, .68);
+      padding: 14px;
+      border: 1px solid var(--line-strong);
+      background: var(--white);
     }
     .lead-proof img {
-      width: 80px;
-      height: 96px;
+      width: 86px;
+      height: 86px;
       object-fit: contain;
-      background: #e8e1d8;
+      background: var(--outer);
     }
     .lead-proof blockquote {
-      color: #163b2d;
+      color: var(--ink);
       font-size: 14px;
       font-weight: 600;
       line-height: 1.35;
     }
     .lead-proof figcaption {
       margin-top: 7px;
-      color: #315c4c;
+      color: var(--quiet);
       font-size: 9px;
       line-height: 1.35;
     }
@@ -349,11 +347,11 @@
     .noon-reveal { gap: 11px; margin-top: 16px; }
     .noon-reveal {
       padding: 17px;
-      border-left: 3px solid var(--green);
-      background: #edf6f1;
+      border: 1px solid var(--line-strong);
+      background: var(--paper);
     }
-    .noon-reveal strong { color: #075c40; font-size: 13px; }
-    .noon-reveal p { color: #315c4c; font-size: 12px; line-height: 1.48; }
+    .noon-reveal strong { color: var(--ink); font-size: 13px; }
+    .noon-reveal p { color: var(--muted); font-size: 12px; line-height: 1.48; }
     .help-button {
       min-height: 44px;
       justify-self: start;
@@ -427,10 +425,10 @@
       display: none;
       margin-top: 14px;
       padding: 12px 14px;
-      border: 1px solid rgba(8, 113, 77, .28);
+      border: 1px solid var(--line-strong);
       border-radius: 8px;
-      background: #edf6f1;
-      color: #075c40;
+      background: var(--paper);
+      color: var(--ink);
       font-size: 12px;
       text-align: center;
     }
@@ -439,11 +437,11 @@
     .proof {
       padding: 54px 0 62px;
       border-top: 1px solid var(--line);
-      background: var(--paper);
+      background: var(--white);
     }
     .proof-inner { width: min(100% - 36px, 680px); margin-inline: auto; }
     .proof-kicker {
-      color: var(--green);
+      color: var(--quiet);
       font-size: 10px;
       font-weight: 700;
       letter-spacing: .14em;
@@ -456,10 +454,17 @@
       letter-spacing: -.035em;
       line-height: .98;
     }
-    .proof-grid { display: grid; gap: 14px; margin-top: 28px; }
+    .proof-grid {
+      display: grid;
+      gap: 0;
+      margin-top: 30px;
+      border-top: 1px solid var(--line-strong);
+    }
     .proof-card {
-      overflow: hidden;
-      border: 1px solid var(--line);
+      display: grid;
+      gap: 18px;
+      padding: 22px 0 24px;
+      border-bottom: 1px solid var(--line);
       background: var(--white);
     }
     .proof-person {
@@ -467,30 +472,29 @@
       grid-template-columns: 92px 1fr;
       gap: 14px;
       align-items: center;
-      padding: 12px;
-      border-bottom: 1px solid var(--line);
+      padding: 0;
     }
     .proof-person img {
       width: 92px;
       height: 92px;
       object-fit: contain;
-      background: #e8e1d8;
+      background: var(--outer);
     }
     .proof-person strong { display: block; font-size: 13px; }
     .proof-person cite { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; font-style: normal; line-height: 1.4; }
     .proof-person cite strong { display: block; color: var(--ink); font-size: 13px; }
     .proof-card blockquote {
-      padding: 19px 17px 21px;
+      padding: 0;
       font-family: var(--display);
       font-size: 21px;
       line-height: 1.12;
     }
-    .proof-card blockquote::before { color: var(--purple); content: "“"; }
+    .proof-card blockquote::before { color: var(--ink); content: "“"; }
     .proof-card.is-lead {
-      border-color: rgba(101, 33, 201, .34);
-      box-shadow: inset 4px 0 0 var(--purple);
+      padding-top: 26px;
     }
-    .proof-card.is-lead .proof-person { background: var(--purple-wash); }
+    .proof-card.is-lead .proof-person { grid-template-columns: 112px 1fr; }
+    .proof-card.is-lead .proof-person img { width: 112px; height: 112px; }
     .proof-card.is-lead blockquote { font-size: 25px; line-height: 1.08; }
 
     .footer {
@@ -556,29 +560,30 @@
       .form-wrap { padding: 34px 0 58px; }
       .date-grid { grid-template-columns: 1.55fr .72fr .9fr; }
       .choice-grid { grid-template-columns: 1fr 1fr; }
-      .proof-grid { grid-template-columns: 1fr 1fr; }
+      .proof-grid { grid-template-columns: 1fr; }
+      .proof-card,
       .proof-card.is-lead {
-        grid-column: 1 / -1;
         display: grid;
-        grid-template-columns: 250px 1fr;
+        grid-template-columns: 244px 1fr;
+        gap: 0;
+        padding: 28px 0;
       }
+      .proof-card .proof-person,
       .proof-card.is-lead .proof-person {
         grid-template-columns: 112px 1fr;
+        padding-right: 24px;
         border-right: 1px solid var(--line);
-        border-bottom: 0;
       }
       .proof-card.is-lead .proof-person img { width: 112px; height: 112px; }
-      .proof-card.is-lead blockquote { display: flex; align-items: center; }
+      .proof-card blockquote,
+      .proof-card.is-lead blockquote {
+        display: flex;
+        align-items: center;
+        padding-left: 30px;
+      }
       .proof-card:last-child {
-        grid-column: 1 / -1;
-        display: grid;
-        grid-template-columns: 250px 1fr;
+        grid-template-columns: 244px 1fr;
       }
-      .proof-card:last-child .proof-person {
-        border-right: 1px solid var(--line);
-        border-bottom: 0;
-      }
-      .proof-card:last-child blockquote { display: flex; align-items: center; }
       .sheet-backdrop { align-items: center; padding: 28px; }
       .sheet { max-width: 610px; padding: 24px 30px 30px; border-radius: 14px; }
       .sheet-handle { display: none; }
