@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>McEwen Results · Friend Review A/B/C</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#211f1c; --muted:#6b665e; --paper:#fbfaf7; --line:#d7d1c7; --violet:#4d397b; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:#ede9e2; font-family:Manrope,sans-serif; }
+    header { position:sticky; top:0; z-index:3; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:15px 22px; background:rgba(251,250,247,.96); border-bottom:1px solid var(--line); backdrop-filter:blur(12px); }
+    h1 { margin:0; font-size:18px; }
+    header p { margin:3px 0 0; color:var(--muted); font-size:12px; }
+    .choice { display:flex; align-items:center; gap:7px; }
+    .choice span { color:var(--muted); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
+    button { min-width:40px; min-height:38px; color:var(--ink); background:#fff; border:1px solid var(--line); font:800 13px Manrope,sans-serif; cursor:pointer; }
+    button:hover, button[aria-pressed="true"] { color:#fff; background:var(--violet); border-color:var(--violet); }
+    main { padding:18px; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(300px,1fr)); gap:14px; max-width:1500px; margin:0 auto; }
+    article { overflow:hidden; background:var(--paper); border:1px solid var(--line); box-shadow:0 12px 32px rgba(43,36,28,.08); }
+    .label { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 14px; border-bottom:1px solid var(--line); }
+    .letter { display:inline-grid; place-items:center; width:30px; height:30px; color:#fff; background:var(--violet); font-weight:800; }
+    .label strong { flex:1; font-size:13px; }
+    .label a { color:var(--violet); font-size:11px; font-weight:800; text-decoration:none; text-transform:uppercase; }
+    .frame { height:calc(100vh - 128px); min-height:620px; background:#fff; }
+    iframe { width:100%; height:100%; border:0; }
+    .status { display:none; position:fixed; right:20px; bottom:20px; z-index:5; padding:12px 16px; color:#fff; background:var(--violet); box-shadow:0 10px 30px rgba(0,0,0,.2); font-size:13px; font-weight:700; }
+    .status.show { display:block; }
+    @media(max-width:980px) { header { align-items:flex-start; flex-direction:column; } .grid { grid-template-columns:1fr; } .frame { height:720px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div><h1>Which Results direction should Michael build from?</h1><p>Scroll each page, then pick the strongest starting idea. This is a rough concept review.</p></div>
+    <div class="choice"><span>Your pick</span><button data-pick="A">A</button><button data-pick="B">B</button><button data-pick="C">C</button></div>
+  </header>
+  <main><div class="grid">
+    <article><div class="label"><span class="letter">A</span><strong>Editorial profile</strong><a href="03-results-06-a.html" target="_blank">Open full page</a></div><div class="frame"><iframe src="03-results-06-a.html" title="Direction A, Editorial profile"></iframe></div></article>
+    <article><div class="label"><span class="letter">B</span><strong>Frequency instrument</strong><a href="03-results-06-b.html" target="_blank">Open full page</a></div><div class="frame"><iframe src="03-results-06-b.html" title="Direction B, Frequency instrument"></iframe></div></article>
+    <article><div class="label"><span class="letter">C</span><strong>Guided personal reading</strong><a href="03-results-06-c.html" target="_blank">Open full page</a></div><div class="frame"><iframe src="03-results-06-c.html" title="Direction C, Guided personal reading"></iframe></div></article>
+  </div></main>
+  <div class="status" role="status" aria-live="polite"></div>
+  <script>
+    const buttons=[...document.querySelectorAll('[data-pick]')];
+    const status=document.querySelector('.status');
+    const params=new URLSearchParams(location.search);
+    const setPick=pick=>{ buttons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.pick===pick))); params.set('pick',pick); history.replaceState(null,'',`${location.pathname}?${params}`); localStorage.setItem('mcewen-results-06-pick',pick); status.textContent=`Your pick: ${pick}. This URL now includes the choice.`; status.classList.add('show'); setTimeout(()=>status.classList.remove('show'),2600); };
+    buttons.forEach(button=>button.addEventListener('click',()=>setPick(button.dataset.pick)));
+    const saved=params.get('pick')||localStorage.getItem('mcewen-results-06-pick'); if(saved&&['A','B','C'].includes(saved)) buttons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.pick===saved)));
+  </script>
+</body>
+</html>
