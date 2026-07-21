@@ -1089,7 +1089,7 @@
           pin.setAttribute('aria-pressed', selected ? 'true' : 'false');
           pin.setAttribute('aria-label', `Choose ${decision.name} from 06-${variant.toUpperCase()}`);
           pin.textContent = `${selected ? 'Chosen' : 'Choose'} · ${decision.code} · 06-${variant.toUpperCase()}`;
-          pin.addEventListener('click', () => window.postMessage({ type: 'z-review-choose-detail', decisionId: decision.id, variant }, window.location.origin));
+          pin.addEventListener('click', () => setElementChoice(decision.id, variant));
           host.append(pin);
         });
       } catch (error) {
