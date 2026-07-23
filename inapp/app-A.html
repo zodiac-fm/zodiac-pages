@@ -356,9 +356,9 @@
     <div class="pp" id="miniPP"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
   </div>
 
-  <!-- Progress screen: the A-2 Progress build (inapp/A-2, promoted to control 2026-07-10) shown inline; auto-embeds when framed, iframe auto-sized via postMessage, panel scrolls; URL stays on the shell -->
-  <section class="screen" id="progress" style="display:none;z-index:6;background:var(--cream);bottom:calc(56px + env(safe-area-inset-bottom,0px));overflow-y:auto;-webkit-overflow-scrolling:touch">
-    <iframe id="progressFrame" src="progress-B2-26.html" title="Progress" scrolling="no" style="display:block;flex:0 0 auto;width:100%;height:820px;border:0;background:var(--cream)"></iframe>
+  <!-- Progress screen: accepted pre-milestone orientation; iframe auto-sized via postMessage, panel scrolls, URL stays on the shell -->
+  <section class="screen" id="progress" style="display:none;z-index:6;background:var(--cream);bottom:calc(56px + env(safe-area-inset-bottom,0px));overflow-y:auto;overflow-anchor:none;-webkit-overflow-scrolling:touch">
+    <iframe id="progressFrame" src="progress-C-entry-1.html" title="Progress" scrolling="no" style="display:block;flex:0 0 auto;width:100%;height:820px;border:0;background:var(--cream)"></iframe>
   </section>
 
   <!-- bottom nav -->
@@ -757,6 +757,7 @@ function showTab(t){document.getElementById('favs').style.display=(t==='favs')?'
  document.getElementById('progress').style.display=(t==='progress')?'block':'none';
  var idx=(t==='favs')?2:(t==='progress')?1:0;
  navItems.forEach((n,i)=>n.classList.toggle('on',i===idx));
+ if(t==='progress')document.getElementById('progress').scrollTop=0;
  if(t==='favs')buildFavs();}
 navItems[0].onclick=()=>showTab('list');
 navItems[1].onclick=()=>showTab('progress');
