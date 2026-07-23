@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <title>Progress · Your Amplification Begins</title>
+  <link rel="stylesheet" href="progress-B2-card-shared.css">
+  <style>
+    :root{
+      --love:#B90044;
+      --love-ink:#B90044;
+      --vit-bar:#FF9112;
+      --vit-ink:#C25500;
+      --ab-bar:#12A56E;
+      --ab-ink:#0A7A52;
+    }
+    html.embed .app{min-height:auto}
+    .app{padding-bottom:34px}
+    .utility{padding-top:9px;padding-bottom:4px}
+    .utility strong{font-size:12px;color:var(--ink)}
+    .utility .stage{font-size:12px;color:var(--purple);font-weight:700}
+    .stack{gap:18px;padding:14px 17px 31px}
+
+    .milestone-ping{
+      position:relative;
+      overflow:hidden;
+      padding:19px 19px 19px 18px;
+      border:1px solid #d7c2ef;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at 18% 15%,rgba(167,55,200,.13),transparent 37%),
+        linear-gradient(135deg,#fff 0%,#fbf7ff 100%);
+      box-shadow:0 15px 38px rgba(56,0,122,.12);
+    }
+    .milestone-ping:before{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      height:5px;
+      background:linear-gradient(90deg,var(--purple) 0 25%,var(--love) 25% 50%,var(--vit-bar) 50% 75%,var(--ab-bar) 75%);
+    }
+    .ping-layout{display:grid;grid-template-columns:56px 1fr;align-items:center;gap:15px}
+    .ping-mark{
+      position:relative;
+      width:54px;
+      height:54px;
+      display:grid;
+      place-items:center;
+    }
+    .ping-mark:before,.ping-mark:after{
+      content:"";
+      position:absolute;
+      inset:5px;
+      border-radius:50%;
+      border:1px solid rgba(101,33,201,.26);
+      animation:signal-ping 2.2s ease-out infinite;
+    }
+    .ping-mark:after{animation-delay:1.1s}
+    .ping-core{
+      position:relative;
+      z-index:1;
+      width:32px;
+      height:32px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      color:#fff;
+      background:
+        radial-gradient(circle at 34% 26%,rgba(255,255,255,.65),transparent 34%),
+        conic-gradient(var(--purple) 0 25%,var(--love) 0 50%,var(--vit-bar) 0 75%,var(--ab-bar) 0);
+      box-shadow:0 5px 15px rgba(56,0,122,.25);
+      font:700 15px/1 Suisse,-apple-system,sans-serif;
+    }
+    .ping-copy .eyebrow{
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.14em;
+      color:var(--purple);
+    }
+    .ping-copy h1{
+      margin-top:5px;
+      font:700 21px/1.08 Suisse,-apple-system,sans-serif;
+      letter-spacing:-.025em;
+      color:var(--ink);
+    }
+    .ping-copy p{
+      margin-top:6px;
+      font-size:12.5px;
+      line-height:1.4;
+      color:var(--control);
+    }
+    @keyframes signal-ping{
+      0%{transform:scale(.62);opacity:.72}
+      70%,100%{transform:scale(1.34);opacity:0}
+    }
+
+    .progress-card{padding:20px 20px 18px}
+    .section-head h2{
+      font:700 20px/1.15 Suisse,-apple-system,sans-serif;
+      color:var(--ink);
+      letter-spacing:-.012em;
+    }
+    .quiet-pill{
+      padding:5px 10px;
+      border-color:#cbe3d8;
+      background:#eaf7f1;
+      color:var(--green);
+    }
+    .this-week{margin-top:15px}
+    .this-week strong{
+      font:700 27px/1 Suisse,-apple-system,sans-serif;
+      color:var(--ink);
+      letter-spacing:-.02em;
+    }
+    .overall{
+      position:relative;
+      height:8px;
+      margin:15px 0 22px;
+      overflow:hidden;
+      border-radius:999px;
+      background:var(--mist);
+    }
+    .overall span{
+      display:block;
+      width:100%;
+      height:100%;
+      border-radius:inherit;
+      background:linear-gradient(90deg,var(--deep),var(--purple));
+    }
+    .fbars{display:flex;flex-direction:column;gap:9px}
+    .fbar{display:grid;grid-template-columns:61px 1fr 36px;align-items:center;gap:9px}
+    .fname,.fpct{font-size:10.5px;font-weight:700}
+    .fpct{text-align:right;font-variant-numeric:tabular-nums}
+    .ftrack{position:relative;height:7px;border-radius:999px;background:var(--mist)}
+    .ftrack:after{
+      content:"";
+      position:absolute;
+      left:15%;
+      top:-3px;
+      bottom:-3px;
+      width:1px;
+      background:rgba(26,22,32,.34);
+    }
+    .ffill{display:block;height:100%;border-radius:inherit}
+    .core .fname,.core .fpct{color:var(--purple)}.core .ffill{width:27%;background:var(--purple)}
+    .love .fname,.love .fpct{color:var(--love-ink)}.love .ffill{width:25%;background:var(--love)}
+    .vitality .fname,.vitality .fpct{color:var(--vit-ink)}.vitality .ffill{width:21%;background:var(--vit-bar)}
+    .abundance .fname,.abundance .fpct{color:var(--ab-ink)}.abundance .ffill{width:27%;background:var(--ab-bar)}
+    .balance-status{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:15px;
+      padding-top:13px;
+      border-top:1px solid var(--line);
+      font-size:11px;
+      color:var(--muted);
+    }
+    .balance-status strong{color:var(--green)}
+
+    .milestone-card{overflow:hidden;border-color:#ded3ef;box-shadow:0 13px 34px rgba(56,0,122,.08)}
+    .signal{
+      height:5px;
+      background:linear-gradient(90deg,var(--purple) 0 25%,var(--love) 25% 50%,var(--vit-bar) 50% 75%,var(--ab-bar) 75%);
+    }
+    .milestone-head{
+      padding:23px 21px 19px;
+      background:linear-gradient(135deg,#fbf8ff 0%,#fff 72%);
+    }
+    .milestone-head .eyebrow{
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.13em;
+      color:var(--purple);
+    }
+    .milestone-head h2{
+      margin-top:7px;
+      font:700 27px/1.08 Suisse,-apple-system,sans-serif;
+      color:var(--ink);
+      letter-spacing:-.035em;
+    }
+    .milestone-head p{
+      margin-top:9px;
+      font-size:14px;
+      line-height:1.45;
+      font-weight:600;
+      color:var(--control);
+    }
+    .milestone-copy{padding:20px 21px 7px}
+    .milestone-copy p{
+      margin-bottom:16px;
+      font-size:14px;
+      line-height:1.58;
+      color:var(--control);
+    }
+    .milestone-copy .lead{font-weight:600;color:var(--ink)}
+    .next-card{
+      margin:3px 19px 20px;
+      padding:16px 17px 17px;
+      border-radius:16px;
+      color:#fff;
+      background:
+        radial-gradient(circle at 88% 5%,rgba(200,145,255,.5),transparent 47%),
+        linear-gradient(135deg,var(--deep),var(--purple));
+    }
+    .next-card .eyebrow{color:#dbc7ef}
+    .next-card strong{
+      display:block;
+      margin-top:6px;
+      font:700 16px/1.25 Suisse,-apple-system,sans-serif;
+      color:#fff;
+    }
+    @media(max-width:350px){
+      .stack{padding-left:13px;padding-right:13px}
+      .ping-layout{grid-template-columns:48px 1fr;gap:12px}
+      .ping-mark{width:48px;height:48px}
+      .ping-copy h1{font-size:19px}
+      .milestone-head h2{font-size:25px}
+      .milestone-head,.milestone-copy{padding-left:18px;padding-right:18px}
+      .fbar{grid-template-columns:56px 1fr 33px;gap:7px}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .ping-mark:before,.ping-mark:after{animation:none}
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <img class="logo" src="app-assets/logo-black.svg" alt="zodiac.fm">
+      <div class="ham" aria-label="Menu">&#9776;</div>
+    </header>
+
+    <div class="utility">
+      <strong>Your progress</strong>
+      <span class="stage">Milestone 1</span>
+    </div>
+
+    <div class="stack">
+      <section class="milestone-ping" role="status" aria-live="polite">
+        <div class="ping-layout">
+          <div class="ping-mark" aria-hidden="true"><span class="ping-core">&#10003;</span></div>
+          <div class="ping-copy">
+            <div class="eyebrow">Milestone reached</div>
+            <h1>Your Amplification Begins</h1>
+            <p>You reached your first balanced milestone.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="card progress-card">
+        <div class="section-head">
+          <h2>Your first milestone is complete</h2>
+          <span class="quiet-pill">Reached</span>
+        </div>
+        <div class="this-week">
+          <strong class="num">4 of 4</strong>
+          <span>frequencies amplified together</span>
+        </div>
+        <div class="overall" aria-hidden="true"><span></span></div>
+        <div class="fbars" aria-label="Listening balance by frequency">
+          <div class="fbar core"><span class="fname">Core</span><span class="ftrack"><span class="ffill"></span></span><span class="fpct">27%</span></div>
+          <div class="fbar love"><span class="fname">Love</span><span class="ftrack"><span class="ffill"></span></span><span class="fpct">25%</span></div>
+          <div class="fbar vitality"><span class="fname">Vitality</span><span class="ftrack"><span class="ffill"></span></span><span class="fpct">21%</span></div>
+          <div class="fbar abundance"><span class="fname">Abundance</span><span class="ftrack"><span class="ffill"></span></span><span class="fpct">27%</span></div>
+        </div>
+        <div class="balance-status">
+          <span>All four frequencies in balance</span>
+          <strong>In balance</strong>
+        </div>
+      </section>
+
+      <section class="card milestone-card">
+        <div class="signal"></div>
+        <div class="milestone-head">
+          <div class="eyebrow">Your first milestone</div>
+          <h2>Your Amplification Begins</h2>
+          <p>Your first four-frequency milestone is here.</p>
+        </div>
+
+        <div class="milestone-copy">
+          <p class="lead">Congratulations. You have reached your first milestone in balance. All four parts of your signal have now been amplified together. Something is already happening in your system, even if you cannot define it yet.</p>
+
+          <p>A lot of people do not feel anything dramatic while listening at this stage. You might feel more settled, more at home with yourself, or notice something subtle that is hard to name. However, some people feel something powerful right away.</p>
+
+          <p>What is really happening is that the experience begins showing up in everyday life. And the best part is that it compounds as you keep listening.</p>
+
+          <p>As you continue, you may start noticing differences in how you show up in conversations, how people respond to you, the decisions you make, your energy, or another moment when your own signal comes through more clearly.</p>
+
+          <p>That is where the journey goes next. We are going to help you recognize those moments as they begin to appear.</p>
+        </div>
+
+        <div class="next-card">
+          <div class="eyebrow">Next</div>
+          <strong>The Difference Begins to Show</strong>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    if(self!==top||new URLSearchParams(location.search).has('embed')){
+      document.documentElement.classList.add('embed');
+    }
+    let lastHeight=0;
+    function sendHeight(){
+      try{
+        const height=Math.ceil(document.documentElement.scrollHeight);
+        if(height!==lastHeight){
+          lastHeight=height;
+          parent.postMessage({zfmH:height},'*');
+        }
+      }catch(error){}
+    }
+    addEventListener('load',sendHeight);
+    addEventListener('resize',sendHeight);
+    if('ResizeObserver' in window){
+      new ResizeObserver(sendHeight).observe(document.body);
+    }
+    setTimeout(sendHeight,250);
+    setTimeout(sendHeight,900);
+  </script>
+</body>
+</html>
