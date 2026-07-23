@@ -1,327 +1,387 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-  <title>Progress · Your Amplification Begins</title>
-  <link rel="stylesheet" href="progress-B2-card-shared.css">
-  <style>
-    :root{
-      --love:#B90044;
-      --love-ink:#B90044;
-      --vit-bar:#FF9112;
-      --vit-ink:#C25500;
-      --ab-bar:#12A56E;
-      --ab-ink:#0A7A52;
-    }
-    html.embed .app{min-height:auto}
-    .app{padding-bottom:34px}
-    .utility{padding-top:9px;padding-bottom:4px}
-    .utility strong{font-size:12px;color:var(--ink)}
-    .utility .stage{font-size:12px;color:var(--purple);font-weight:700}
-    .stack{gap:18px;padding:14px 17px 31px}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>Progress C · Your Amplification Begins</title><link rel="stylesheet" href="progress-B2-card-shared.css">
+<style>
+/* B2-26 (app-B-28). Round 22: a super-fine line above the minutes. The header block
+   (headline, pill, rule line) and the data zone now separate on a hairline, same
+   grammar as the card's other zone breaks but lighter. Everything else = B-27.
+   PLACEHOLDER data. */
+:root{--love:#B90044;--love-ink:#B90044;--vit-bar:#FF9112;--vit-ink:#C25500;--ab-bar:#12A56E;--ab-ink:#0A7A52}
+html.embed .app{min-height:auto}
+/* one header layer: identical on every section card, loudest in its section */
+.section-head h2{font:700 20px/1.15 Suisse,Switzer,-apple-system,sans-serif;color:var(--ink);letter-spacing:-.012em}
+.quiet-pill{font-size:10px;padding:5px 10px}
+/* numbers are NEVER the serif (locked type law) */
+.this-week strong{font:700 16px/1 Suisse,Switzer,-apple-system,sans-serif;color:var(--ink);letter-spacing:-.01em}
+/* the now-card: same headline size as every card; COLOR carries the difference */
+.experience-lead{background:radial-gradient(150% 130% at 100% -30%, var(--tint) 0%, #fff 58%)}
+.experience-lead .experience-top{background:transparent;padding:20px 21px 0}
+.experience-lead .title{font:700 20px/1.15 Suisse,Switzer,-apple-system,sans-serif;color:var(--ink);letter-spacing:-.012em;margin-top:0}
+.experience-lead .meaning{margin-top:9px}
+.experience-lead .copy{background:transparent}
+.fbars{margin-top:13px;display:flex;flex-direction:column;gap:8px}
+.fbar{display:grid;grid-template-columns:64px 1fr 34px;align-items:center;gap:9px}
+.fbar .fname{font-size:10.5px;font-weight:700;letter-spacing:.02em}
+.fbar .ftrack{position:relative;height:7px;border-radius:999px;background:var(--mist)}
+.fbar .ffill{position:absolute;left:0;top:0;bottom:0;border-radius:inherit}
+.fbar .fmin{position:absolute;top:-2.5px;bottom:-2.5px;width:1.5px;background:rgba(26,22,32,.28)}
+.fbar .fpct{font-size:10.5px;font-weight:700;text-align:right}
+.fbar.core .fname,.fbar.core .fpct{color:var(--purple)}.fbar.core .ffill{background:var(--purple)}
+.fbar.love .fname,.fbar.love .fpct{color:var(--love-ink)}.fbar.love .ffill{background:var(--love)}
+.fbar.vit .fname,.fbar.vit .fpct{color:var(--vit-ink)}.fbar.vit .ffill{background:var(--vit-bar)}
+.fbar.ab .fname,.fbar.ab .fpct{color:var(--ab-ink)}.fbar.ab .ffill{background:var(--ab-bar)}
+.fgap{position:absolute;top:0;bottom:0;border-radius:inherit}
+.fbar.core .fgap{background:#EFECFF}.fbar.love .fgap{background:#FFE8EA}.fbar.vit .fgap{background:#FFEADA}.fbar.ab .fgap{background:#DCF4E8}
+.fpct.short{justify-self:end;border-radius:999px;padding:3px 8px;background:#FFE8EA;color:#B90044!important}
+.fpct .okc{color:#0A7A52;font-size:10px;margin-left:3px}
+.quiet-pill.counts{background:#DCF4E8;border-color:#bfe8d5;color:#0A7A52}
+.quiet-pill.hide{display:none}
+.quiet-pill.ontrack{background:#DCF4E8;border-color:#bfe8d5;color:#0A7A52;white-space:nowrap}
+.quiet-pill.offtrack{background:#FFE8EA;border-color:#f3cdd3;color:#B90044;white-space:nowrap}
+.quiet-card .section-head{align-items:center}
+.hsub{font-size:11.5px;color:var(--muted);margin-top:4px}
+.quiet-card .this-week{margin-top:16px}
+.head-div{border-top:1px solid rgba(235,227,214,.6);margin-top:16px}
+.timebar{position:relative;height:8px;border-radius:999px;background:var(--mist);margin:22px 0 4px}
+.timebar .tfill{position:absolute;left:0;top:0;bottom:0;border-radius:inherit;background:var(--purple)}
+.timebar .ttick{position:absolute;top:-2.5px;bottom:-2.5px;width:1.5px;background:rgba(26,22,32,.28)}
+.timebar .tlab{position:absolute;top:-16px;font-size:9px;font-weight:700;letter-spacing:.02em;color:#a39ca8;white-space:nowrap;transform:translateX(-50%)}
+.timebar .tok{position:absolute;top:-19px;font-size:11px;color:#0A7A52;transform:translateX(-50%)}
+.zone-div{border-top:1px solid var(--line);margin:16px 0 2px}
+.lowline{display:flex;align-items:center;gap:7px;margin-top:11px;font-size:12px;font-weight:600;color:var(--vit-ink)}
+.lowline .lowmark{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:var(--vit-bar)}
+.jlist{margin-top:2px}
+.map-card{overflow:hidden;padding:0}
+.map-card .signal{height:5px;background:linear-gradient(90deg,var(--purple) 0 26%,var(--love) 26% 47%,var(--vit-bar) 47% 66%,var(--ab-bar) 66%)}
+.map-card .map-inner{padding:20px 20px 21px}
+.jstage{font-size:9.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#a39ca8;margin:20px 0 6px}
+.jstage:first-child{margin-top:18px}
+.jstage.live{color:var(--purple)}
+.jrow{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:12px;color:var(--muted)}
+.jrow .jdot{width:16px;height:16px;flex:0 0 16px;border-radius:50%;background:var(--moon);border:1px solid var(--line);display:grid;place-items:center;font-size:8px;font-weight:700;color:#948e98}
+.jrow .jname{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jrow .jwk{margin-left:auto;flex:0 0 auto;font-size:10px;color:#a39ca8;font-variant-numeric:tabular-nums}
+.jrow.passed .jdot{background:var(--purple);border-color:var(--purple);color:#fff}
+.jrow.passed .jname{color:var(--control)}
+.jrow.passed .jwk{color:var(--muted)}
+.jrow.current{background:var(--tint);border-radius:11px;margin:1px -9px;padding:6.5px 9px}
+.jrow.current .jdot{background:#fff;border:2px solid var(--purple);color:var(--deep)}
+.jrow.current .jname{color:var(--deep);font-weight:700;font-size:12.5px}
+.jrow.current .jwk{color:var(--purple);font-weight:700}
+.jrow.next-up .jdot{background:var(--tint);border-color:var(--soft);color:var(--deep)}
+.jrow.next-up .jname{color:var(--control);font-weight:600}
+.jfoot{font-size:10px;line-height:1.45;color:#a39ca8;margin-top:11px}
+/* detailed listening stats: quiet, plain rows + a lifetime by-frequency split */
+.statrows{margin-top:11px}
+.statrow{display:flex;align-items:baseline;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+.statrow:last-child{border-bottom:0}
+.statrow b{font-size:13px;font-weight:600;color:var(--control)}
+.splitlab{font-size:10.5px;font-weight:700;letter-spacing:.02em;color:var(--muted);margin-top:14px}
+.splitbar{display:flex;height:9px;border-radius:999px;overflow:hidden;margin-top:8px}
+.splitbar i{display:block;height:100%}
+.splitbar .sc{background:var(--purple)}.splitbar .sl{background:var(--love)}.splitbar .sv{background:var(--vit-bar)}.splitbar .sa{background:var(--ab-bar)}
+.splitkey{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin-top:11px}
+.splitkey div{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}
+.splitkey i{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+.splitkey b{margin-left:auto;font-weight:600;color:var(--control);font-variant-numeric:tabular-nums}
+.splitkey .kc i{background:var(--purple)}.splitkey .kl i{background:var(--love)}.splitkey .kv i{background:var(--vit-bar)}.splitkey .ka i{background:var(--ab-bar)}
 
-    .milestone-ping{
-      position:relative;
-      overflow:hidden;
-      padding:19px 19px 19px 18px;
-      border:1px solid #d7c2ef;
-      border-radius:18px;
-      background:
-        radial-gradient(circle at 18% 15%,rgba(167,55,200,.13),transparent 37%),
-        linear-gradient(135deg,#fff 0%,#fbf7ff 100%);
-      box-shadow:0 15px 38px rgba(56,0,122,.12);
-    }
-    .milestone-ping:before{
-      content:"";
-      position:absolute;
-      left:0;
-      right:0;
-      top:0;
-      height:5px;
-      background:linear-gradient(90deg,var(--purple) 0 25%,var(--love) 25% 50%,var(--vit-bar) 50% 75%,var(--ab-bar) 75%);
-    }
-    .ping-layout{display:grid;grid-template-columns:56px 1fr;align-items:center;gap:15px}
-    .ping-mark{
-      position:relative;
-      width:54px;
-      height:54px;
-      display:grid;
-      place-items:center;
-    }
-    .ping-mark:before,.ping-mark:after{
-      content:"";
-      position:absolute;
-      inset:5px;
-      border-radius:50%;
-      border:1px solid rgba(101,33,201,.26);
-      animation:signal-ping 2.2s ease-out infinite;
-    }
-    .ping-mark:after{animation-delay:1.1s}
-    .ping-core{
-      position:relative;
-      z-index:1;
-      width:32px;
-      height:32px;
-      display:grid;
-      place-items:center;
-      border-radius:50%;
-      color:#fff;
-      background:
-        radial-gradient(circle at 34% 26%,rgba(255,255,255,.65),transparent 34%),
-        conic-gradient(var(--purple) 0 25%,var(--love) 0 50%,var(--vit-bar) 0 75%,var(--ab-bar) 0);
-      box-shadow:0 5px 15px rgba(56,0,122,.25);
-      font:700 15px/1 Suisse,-apple-system,sans-serif;
-    }
-    .ping-copy .eyebrow{
-      font-size:10px;
-      font-weight:800;
-      letter-spacing:.14em;
-      color:var(--purple);
-    }
-    .ping-copy h1{
-      margin-top:5px;
-      font:700 21px/1.08 Suisse,-apple-system,sans-serif;
-      letter-spacing:-.025em;
-      color:var(--ink);
-    }
-    .ping-copy p{
-      margin-top:6px;
-      font-size:12.5px;
-      line-height:1.4;
-      color:var(--control);
-    }
-    @keyframes signal-ping{
-      0%{transform:scale(.62);opacity:.72}
-      70%,100%{transform:scale(1.34);opacity:0}
-    }
+/* round-5 breathing: nothing floats between cards, more air everywhere */
+.stack{gap:18px;padding:15px 17px 32px}
+.quiet-card{padding:20px 20px 19px}
+.experience-lead .experience-top{padding:22px 21px 19px}
+.experience-lead .copy{padding:17px 21px 20px}
+/* Next lives INSIDE the experience card, with space and presence */
+.nextblock{margin:2px 19px 20px;padding:15px 17px 16px;border-radius:15px;background:var(--tint)}
+.nextblock .nlab{font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#7a6fa0}
+.nextblock .nname{font:600 15px/1.25 Suisse,Switzer,-apple-system,sans-serif;color:var(--deep);margin-top:5px}
+.nextblock .ndesc{font-size:12px;line-height:1.5;color:#55506a;margin-top:6px}
+/* weekly bars */
+.fbars{position:relative;margin-top:24px;display:flex;flex-direction:column;gap:10px}
+.fbar{display:grid;grid-template-columns:64px 1fr 44px;align-items:center;gap:9px}
+.fbar .fname{font-size:10.5px;font-weight:700;letter-spacing:.02em}
+.fbar .ftrack{position:relative;height:7px;border-radius:999px;background:var(--mist)}
+.fbar .ffill{position:absolute;left:0;top:0;bottom:0;border-radius:inherit}
+.fbar .fmin{position:absolute;top:-2.5px;bottom:-2.5px;width:1.5px;background:rgba(26,22,32,.28)}
+.fbar .fpct{font-size:10.5px;font-weight:700;text-align:right}
+.fbar.core .fname,.fbar.core .fpct{color:var(--purple)}.fbar.core .ffill{background:var(--purple)}
+.fbar.love .fname,.fbar.love .fpct{color:var(--love-ink)}.fbar.love .ffill{background:var(--love)}
+.fbar.vit .fname,.fbar.vit .fpct{color:var(--vit-ink)}.fbar.vit .ffill{background:var(--vit-bar)}
+.fbar.ab .fname,.fbar.ab .fpct{color:var(--ab-ink)}.fbar.ab .ffill{background:var(--ab-bar)}
+.fgap{position:absolute;top:0;bottom:0;border-radius:inherit}
+.fbar.core .fgap{background:#EFECFF}.fbar.love .fgap{background:#FFE8EA}.fbar.vit .fgap{background:#FFEADA}.fbar.ab .fgap{background:#DCF4E8}
+.fpct.short{justify-self:end;border-radius:999px;padding:3px 8px;background:#FFE8EA;color:#B90044!important}
+.fpct .okc{color:#0A7A52;font-size:10px;margin-left:3px}
+.quiet-pill.counts{background:#DCF4E8;border-color:#bfe8d5;color:#0A7A52}
+.quiet-pill.hide{display:none}
+.quiet-pill.ontrack{background:#DCF4E8;border-color:#bfe8d5;color:#0A7A52;white-space:nowrap}
+.quiet-pill.offtrack{background:#FFE8EA;border-color:#f3cdd3;color:#B90044;white-space:nowrap}
+.quiet-card .section-head{align-items:center}
+.hsub{font-size:11.5px;color:var(--muted);margin-top:4px}
+.quiet-card .this-week{margin-top:16px}
+.head-div{border-top:1px solid rgba(235,227,214,.6);margin-top:16px}
+.timebar{position:relative;height:8px;border-radius:999px;background:var(--mist);margin:22px 0 4px}
+.timebar .tfill{position:absolute;left:0;top:0;bottom:0;border-radius:inherit;background:var(--purple)}
+.timebar .ttick{position:absolute;top:-2.5px;bottom:-2.5px;width:1.5px;background:rgba(26,22,32,.28)}
+.timebar .tlab{position:absolute;top:-16px;font-size:9px;font-weight:700;letter-spacing:.02em;color:#a39ca8;white-space:nowrap;transform:translateX(-50%)}
+.timebar .tok{position:absolute;top:-19px;font-size:11px;color:#0A7A52;transform:translateX(-50%)}
+.zone-div{border-top:1px solid var(--line);margin:16px 0 2px}
+.timenote{font-size:11.5px;line-height:1.5;color:var(--muted);margin-top:7px}
 
-    .progress-card{padding:20px 20px 18px}
-    .section-head h2{
-      font:700 20px/1.15 Suisse,-apple-system,sans-serif;
-      color:var(--ink);
-      letter-spacing:-.012em;
-    }
-    .quiet-pill{
-      padding:5px 10px;
-      border-color:#cbe3d8;
-      background:#eaf7f1;
-      color:var(--green);
-    }
-    .this-week{margin-top:15px}
-    .this-week strong{
-      font:700 27px/1 Suisse,-apple-system,sans-serif;
-      color:var(--ink);
-      letter-spacing:-.02em;
-    }
-    .overall{
-      position:relative;
-      height:8px;
-      margin:15px 0 22px;
-      overflow:hidden;
-      border-radius:999px;
-      background:var(--mist);
-    }
-    .overall span{
-      display:block;
-      width:100%;
-      height:100%;
-      border-radius:inherit;
-      background:linear-gradient(90deg,var(--deep),var(--purple));
-    }
-    .fbars{display:flex;flex-direction:column;gap:9px}
-    .fbar{display:grid;grid-template-columns:61px 1fr 36px;align-items:center;gap:9px}
-    .fname,.fpct{font-size:10.5px;font-weight:700}
-    .fpct{text-align:right;font-variant-numeric:tabular-nums}
-    .ftrack{position:relative;height:7px;border-radius:999px;background:var(--mist)}
-    .ftrack:after{
-      content:"";
-      position:absolute;
-      left:15%;
-      top:-3px;
-      bottom:-3px;
-      width:1px;
-      background:rgba(26,22,32,.34);
-    }
-    .ffill{display:block;height:100%;border-radius:inherit}
-    .core .fname,.core .fpct{color:var(--purple)}.core .ffill{width:27%;background:var(--purple)}
-    .love .fname,.love .fpct{color:var(--love-ink)}.love .ffill{width:25%;background:var(--love)}
-    .vitality .fname,.vitality .fpct{color:var(--vit-ink)}.vitality .ffill{width:21%;background:var(--vit-bar)}
-    .abundance .fname,.abundance .fpct{color:var(--ab-ink)}.abundance .ffill{width:27%;background:var(--ab-bar)}
-    .balance-status{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-top:15px;
-      padding-top:13px;
-      border-top:1px solid var(--line);
-      font-size:11px;
-      color:var(--muted);
-    }
-    .balance-status strong{color:var(--green)}
+/* B2-8 device: labeled 15% line + an actionable chip on the short frequency + lifetime row in-card */
+.minlab{position:absolute;top:-16px;left:15%;font-size:9px;font-weight:700;letter-spacing:.02em;color:#a39ca8;white-space:nowrap}
+.vlow{justify-self:end;background:var(--vitality-tint);border-radius:999px;padding:3px 8px}
+.liferow{display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid var(--line);margin-top:16px;padding-top:13px;font-size:12px;color:var(--muted)}
+.liferow b{font-size:13px;font-weight:600;color:var(--control);font-variant-numeric:tabular-nums}
 
-    .milestone-card{overflow:hidden;border-color:#ded3ef;box-shadow:0 13px 34px rgba(56,0,122,.08)}
-    .signal{
-      height:5px;
-      background:linear-gradient(90deg,var(--purple) 0 25%,var(--love) 25% 50%,var(--vit-bar) 50% 75%,var(--ab-bar) 75%);
-    }
-    .milestone-head{
-      padding:23px 21px 19px;
-      background:linear-gradient(135deg,#fbf8ff 0%,#fff 72%);
-    }
-    .milestone-head .eyebrow{
-      font-size:10px;
-      font-weight:800;
-      letter-spacing:.13em;
-      color:var(--purple);
-    }
-    .milestone-head h2{
-      margin-top:7px;
-      font:700 27px/1.08 Suisse,-apple-system,sans-serif;
-      color:var(--ink);
-      letter-spacing:-.035em;
-    }
-    .milestone-head p{
-      margin-top:9px;
-      font-size:14px;
-      line-height:1.45;
-      font-weight:600;
-      color:var(--control);
-    }
-    .milestone-copy{padding:20px 21px 7px}
-    .milestone-copy p{
-      margin-bottom:16px;
-      font-size:14px;
-      line-height:1.58;
-      color:var(--control);
-    }
-    .milestone-copy .lead{font-weight:600;color:var(--ink)}
-    .next-card{
-      margin:3px 19px 20px;
-      padding:16px 17px 17px;
-      border-radius:16px;
-      color:#fff;
-      background:
-        radial-gradient(circle at 88% 5%,rgba(200,145,255,.5),transparent 47%),
-        linear-gradient(135deg,var(--deep),var(--purple));
-    }
-    .next-card .eyebrow{color:#dbc7ef}
-    .next-card strong{
-      display:block;
-      margin-top:6px;
-      font:700 16px/1.25 Suisse,-apple-system,sans-serif;
-      color:#fff;
-    }
-    @media(max-width:350px){
-      .stack{padding-left:13px;padding-right:13px}
-      .ping-layout{grid-template-columns:48px 1fr;gap:12px}
-      .ping-mark{width:48px;height:48px}
-      .ping-copy h1{font-size:19px}
-      .milestone-head h2{font-size:25px}
-      .milestone-head,.milestone-copy{padding-left:18px;padding-right:18px}
-      .fbar{grid-template-columns:56px 1fr 33px;gap:7px}
-    }
-    @media(prefers-reduced-motion:reduce){
-      .ping-mark:before,.ping-mark:after{animation:none}
-    }
-  </style>
-</head>
-<body>
-  <main class="app">
-    <header class="top">
-      <img class="logo" src="app-assets/logo-black.svg" alt="zodiac.fm">
-      <div class="ham" aria-label="Menu">&#9776;</div>
-    </header>
+/* How-this-works dropdown (ported from A-2, the control) */
+.question{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.question .qchev{font-size:10px;transition:transform .2s;opacity:.8}
+.question.open .qchev{transform:rotate(180deg)}
+.lpanel{display:none;margin:8px 17px 0;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 17px 17px;box-shadow:0 6px 20px rgba(26,22,32,.06)}
+.lpanel.open{display:block}
+.lpanel .lp-lead{font-size:13px;line-height:1.5;color:var(--control)}
+.lpanel .lp-lead b{font-weight:700}
+.lprow{display:flex;gap:11px;align-items:baseline;margin-top:13px}
+.lprow .lpdot{flex:0 0 9px;height:9px;border-radius:50%;background:var(--soft)}
+.lprow .lpn{font-size:13px;font-weight:700;color:var(--ink)}
+.lprow .lpn .lpm{font-weight:600;color:var(--purple);font-variant-numeric:lining-nums;white-space:nowrap}
+.lprow .lpd{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.4}
+.lp-foot{border-top:1px solid var(--line);margin-top:14px;padding-top:12px;font-size:12.5px;line-height:1.5;color:var(--control)}
+.lp-foot2b{margin-top:10px;font-size:12.5px;line-height:1.5;color:var(--control)}
+.lp-foot2{margin-top:10px;font-size:12px;line-height:1.5;color:var(--muted)}
+/* one accent per zone: the action line is ink; the Next panel owns the purple moment */
+.listen-for{font-weight:700;color:var(--ink)}
+/* C milestone state: preserve the complete Progress control and isolate the arrival layer. */
+.milestone-ping{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-height:58px;
+  padding:11px 15px 11px 13px;
+  border:1px solid #ded3ef;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 6px 18px rgba(56,0,122,.06);
+  overflow:hidden;
+}
+.milestone-ping:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:4px;
+  background:linear-gradient(180deg,var(--purple) 0 25%,var(--love) 25% 50%,var(--vit-bar) 50% 75%,var(--ab-bar) 75%);
+}
+.ping-mark{
+  position:relative;
+  width:30px;
+  height:30px;
+  flex:0 0 30px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  color:#fff;
+  background:var(--purple);
+  font:700 12px/1 Suisse,Switzer,-apple-system,sans-serif;
+}
+.ping-mark:after{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  border:1px solid rgba(101,33,201,.38);
+  border-radius:50%;
+  animation:ping-once 1.7s ease-out 2;
+}
+.ping-copy{min-width:0}
+.ping-copy .plabel{
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--purple);
+}
+.ping-copy .pname{
+  margin-top:2px;
+  font:700 13.5px/1.2 Suisse,Switzer,-apple-system,sans-serif;
+  color:var(--ink);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+@keyframes ping-once{
+  0%{transform:scale(.78);opacity:.75}
+  100%{transform:scale(1.42);opacity:0}
+}
+.experience-lead{overflow:hidden}
+.experience-lead .signal{height:5px;background:linear-gradient(90deg,var(--purple) 0 25%,var(--love) 25% 50%,var(--vit-bar) 50% 75%,var(--ab-bar) 75%)}
+.experience-lead .milestone-label{
+  margin-bottom:7px;
+  font-size:9.5px;
+  font-weight:800;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--purple);
+}
+.experience-lead .copy p{font-size:14px;line-height:1.58}
+.experience-lead .copy p+p{margin-top:16px}
+.experience-lead .copy .lead{font-weight:600;color:var(--ink)}
+.experience-lead .nextblock .nname{font-weight:700}
+.jrow{align-items:flex-start}
+.jrow .jname{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25}
+.jrow .jwk{padding-top:2px}
+@media(prefers-reduced-motion:reduce){.ping-mark:after{animation:none}}
+</style></head><body>
+<main class="app">
+  <header class="top"><img class="logo" src="app-assets/logo-black.svg" alt="zodiac.fm"><div class="ham">&#9776;</div></header>
+  <div class="utility"><div class="week">Week 3 <span>&middot; Day 4 of 7</span></div><div class="question" id="howTrigger">How this works <span class="qchev">&#9662;</span></div></div>
+  <div class="lpanel" id="howPanel">
+    <div class="lp-lead"><b>Making the week count:</b></div>
+    <div class="lprow"><div class="lpdot"></div><div><div class="lpn">9 minutes a day <span class="lpm">on average</span></div><div class="lpd">skipping days is fine, simply hit 63 minutes a week or more.</div></div></div>
+    <div class="lprow"><div class="lpdot"></div><div><div class="lpn">Balance frequencies <span class="lpm">15% minimum</span></div><div class="lpd">each frequency needs at least 15% of your week's listening time.</div></div></div>
+    <div class="lp-foot">Hit both and your week counts. It also puts you at the minimum where our research participants started to get the Zodiac Experience.</div>
+    <div class="lp-foot2b">That's the floor, not the ceiling. The more time you spend under frequency in balance, the more profound your experience becomes.</div>
+    <div class="lp-foot2">And if a week slips, nothing is lost. Every minute still counts, and next week is right there.</div>
+  </div>
+  <div class="stack">
+    <section class="card quiet-card">
+      <div class="section-head"><h2>This week</h2><span class="quiet-pill" id="twPill">Still building</span></div>
+      <div class="hsub">63 minutes minimum</div>
+      <div class="head-div"></div>
+      <div class="this-week"><strong class="num" id="twMin">88 min</strong><span id="twLabel">under frequency across 4 days</span></div>
+      <div class="timebar" id="timebar"></div>
+      <div class="zone-div"></div>
+      <div class="fbars" id="fbars"></div>
+      <div class="liferow"><span>Lifetime in balance</span><b class="num">2h 20m</b></div>
+    </section>
 
-    <div class="utility">
-      <strong>Your progress</strong>
-      <span class="stage">Milestone 1</span>
-    </div>
+    <section class="milestone-ping" role="status" aria-live="polite">
+      <span class="ping-mark" aria-hidden="true">&#10003;</span>
+      <div class="ping-copy">
+        <div class="plabel">Milestone reached</div>
+        <div class="pname">Your Amplification Begins</div>
+      </div>
+    </section>
 
-    <div class="stack">
-      <section class="milestone-ping" role="status" aria-live="polite">
-        <div class="ping-layout">
-          <div class="ping-mark" aria-hidden="true"><span class="ping-core">&#10003;</span></div>
-          <div class="ping-copy">
-            <div class="eyebrow">Milestone reached</div>
-            <h1>Your Amplification Begins</h1>
-            <p>You reached your first balanced milestone.</p>
-          </div>
-        </div>
-      </section>
+    <section class="card experience-lead">
+      <div class="signal"></div>
+      <div class="experience-top">
+        <div class="milestone-label">Your first milestone</div>
+        <h1 class="title">Your Amplification Begins</h1>
+      </div>
+      <div class="copy">
+        <p class="lead">Congratulations. You have reached your first milestone in balance. All four parts of your signal have now been amplified together. Something is already happening in your system, even if you cannot define it yet.</p>
+        <p>A lot of people do not feel anything dramatic while listening at this stage. You might feel more settled, more at home with yourself, or notice something subtle that is hard to name. However, some people feel something powerful right away.</p>
+        <p>What is really happening is that the experience begins showing up in everyday life. And the best part is that it compounds as you keep listening.</p>
+        <p>As you continue, you may start noticing differences in how you show up in conversations, how people respond to you, the decisions you make, your energy, or another moment when your own signal comes through more clearly.</p>
+        <p>That is where the journey goes next. We are going to help you recognize those moments as they begin to appear.</p>
+      </div>
+      <div class="nextblock"><div class="nlab">Next</div><div class="nname">The Difference Begins to Show</div></div>
+    </section>
 
-      <section class="card progress-card">
-        <div class="section-head">
-          <h2>Your first milestone is complete</h2>
-          <span class="quiet-pill">Reached</span>
-        </div>
-        <div class="this-week">
-          <strong class="num">4 of 4</strong>
-          <span>frequencies amplified together</span>
-        </div>
-        <div class="overall" aria-hidden="true"><span></span></div>
-        <div class="fbars" aria-label="Listening balance by frequency">
-          <div class="fbar core"><span class="fname">Core</span><span class="ftrack"><span class="ffill"></span></span><span class="fpct">27%</span></div>
-          <div class="fbar love"><span class="fname">Love</span><span class="ftrack"><span class="ffill"></span></span><span class="fpct">25%</span></div>
-          <div class="fbar vitality"><span class="fname">Vitality</span><span class="ftrack"><span class="ffill"></span></span><span class="fpct">21%</span></div>
-          <div class="fbar abundance"><span class="fname">Abundance</span><span class="ftrack"><span class="ffill"></span></span><span class="fpct">27%</span></div>
-        </div>
-        <div class="balance-status">
-          <span>All four frequencies in balance</span>
-          <strong>In balance</strong>
-        </div>
-      </section>
+    <section class="card map-card">
+      <div class="signal"></div>
+      <div class="map-inner">
+      <div class="section-head"><h2>Your journey</h2><span class="quiet-pill">1 of 25</span></div>
+      <div class="jlist">
+        <div class="jstage live">Receive</div>
+        <div class="jrow current"><span class="jdot">1</span><span class="jname">Your Amplification Begins</span><span class="jwk">now</span></div>
+        <div class="jstage">Recognize</div>
+        <div class="jrow next-up"><span class="jdot">2</span><span class="jname">The Difference Begins to Show</span><span class="jwk">next</span></div>
+        <div class="jrow"><span class="jdot">3</span><span class="jname">A Place to Return To</span><span class="jwk">&asymp; wk 5</span></div>
+        <div class="jrow"><span class="jdot">4</span><span class="jname">Oh, There You Are</span><span class="jwk">&asymp; wk 7</span></div>
+        <div class="jrow"><span class="jdot">5</span><span class="jname">You, Without Forcing It</span><span class="jwk">&asymp; wk 9</span></div>
+        <div class="jrow"><span class="jdot">6</span><span class="jname">Someone Else Notices</span><span class="jwk">&asymp; wk 11</span></div>
+        <div class="jstage">Choose</div>
+        <div class="jrow"><span class="jdot">7</span><span class="jname">What Matters Gets Louder</span><span class="jwk">&asymp; wk 13</span></div>
+        <div class="jrow"><span class="jdot">8</span><span class="jname">Who Meets the Real You</span><span class="jwk">&asymp; wk 15</span></div>
+        <div class="jrow"><span class="jdot">9</span><span class="jname">What Deserves Your Energy</span><span class="jwk">&asymp; wk 17</span></div>
+        <div class="jrow"><span class="jdot">10</span><span class="jname">When to Move, When to Wait</span><span class="jwk">&asymp; wk 19</span></div>
+        <div class="jrow"><span class="jdot">11</span><span class="jname">More of You Stays in the Room</span><span class="jwk">&asymp; wk 21</span></div>
+        <div class="jrow"><span class="jdot">12</span><span class="jname">The Pattern Gives Itself Away</span><span class="jwk">&asymp; wk 23</span></div>
+        <div class="jrow"><span class="jdot">13</span><span class="jname">The Reflex Loses the Last Word</span><span class="jwk">&asymp; wk 25</span></div>
+        <div class="jrow"><span class="jdot">14</span><span class="jname">The Way Back Gets Shorter</span><span class="jwk">&asymp; wk 27</span></div>
+        <div class="jstage">Use your routes</div>
+        <div class="jrow"><span class="jdot">15</span><span class="jname">The Map Meets Your Life</span><span class="jwk">&asymp; wk 30</span></div>
+        <div class="jrow"><span class="jdot">16</span><span class="jname">Another Way Through Is Already Yours</span><span class="jwk">&asymp; wk 32</span></div>
+        <div class="jstage">Stay yourself in motion</div>
+        <div class="jrow"><span class="jdot">17</span><span class="jname">When Life Gets Loud, Your Signal Holds</span><span class="jwk">&asymp; wk 34</span></div>
+        <div class="jrow"><span class="jdot">18</span><span class="jname">Life Starts Taking Your Shape</span><span class="jwk">&asymp; wk 36</span></div>
+        <div class="jstage">Play, create, connect, and contribute</div>
+        <div class="jrow"><span class="jdot">19</span><span class="jname">Play Without a Verdict</span><span class="jwk">&asymp; wk 38</span></div>
+        <div class="jrow"><span class="jdot">20</span><span class="jname">What You Make Sounds Like You</span><span class="jwk">&asymp; wk 40</span></div>
+        <div class="jrow"><span class="jdot">21</span><span class="jname">Belonging Without Disappearing</span><span class="jwk">&asymp; wk 42</span></div>
+        <div class="jrow"><span class="jdot">22</span><span class="jname">What You Have to Give Finds a Place</span><span class="jwk">&asymp; wk 45</span></div>
+        <div class="jrow"><span class="jdot">23</span><span class="jname">The Part You Choose to Play</span><span class="jwk">&asymp; wk 47</span></div>
+        <div class="jrow"><span class="jdot">24</span><span class="jname">You Let Yourself Be Met</span><span class="jwk">&asymp; wk 50</span></div>
+        <div class="jstage">Year-one integration</div>
+        <div class="jrow"><span class="jdot">25</span><span class="jname">At Home in Your Own Life</span><span class="jwk">&asymp; wk 52</span></div>
+      </div>
+      <p class="jfoot">Arrival marks are estimates at your current listening pace. More balanced listening can bring them closer.</p>
+      </div>
+    </section>
 
-      <section class="card milestone-card">
-        <div class="signal"></div>
-        <div class="milestone-head">
-          <div class="eyebrow">Your first milestone</div>
-          <h2>Your Amplification Begins</h2>
-          <p>Your first four-frequency milestone is here.</p>
-        </div>
-
-        <div class="milestone-copy">
-          <p class="lead">Congratulations. You have reached your first milestone in balance. All four parts of your signal have now been amplified together. Something is already happening in your system, even if you cannot define it yet.</p>
-
-          <p>A lot of people do not feel anything dramatic while listening at this stage. You might feel more settled, more at home with yourself, or notice something subtle that is hard to name. However, some people feel something powerful right away.</p>
-
-          <p>What is really happening is that the experience begins showing up in everyday life. And the best part is that it compounds as you keep listening.</p>
-
-          <p>As you continue, you may start noticing differences in how you show up in conversations, how people respond to you, the decisions you make, your energy, or another moment when your own signal comes through more clearly.</p>
-
-          <p>That is where the journey goes next. We are going to help you recognize those moments as they begin to appear.</p>
-        </div>
-
-        <div class="next-card">
-          <div class="eyebrow">Next</div>
-          <strong>The Difference Begins to Show</strong>
-        </div>
-      </section>
-    </div>
-  </main>
-
-  <script>
-    if(self!==top||new URLSearchParams(location.search).has('embed')){
-      document.documentElement.classList.add('embed');
-    }
-    let lastHeight=0;
-    function sendHeight(){
-      try{
-        const height=Math.ceil(document.documentElement.scrollHeight);
-        if(height!==lastHeight){
-          lastHeight=height;
-          parent.postMessage({zfmH:height},'*');
-        }
-      }catch(error){}
-    }
-    addEventListener('load',sendHeight);
-    addEventListener('resize',sendHeight);
-    if('ResizeObserver' in window){
-      new ResizeObserver(sendHeight).observe(document.body);
-    }
-    setTimeout(sendHeight,250);
-    setTimeout(sendHeight,900);
-  </script>
-</body>
-</html>
+    <section class="card quiet-card">
+      <div class="section-head"><h2>Listening stats</h2></div>
+      <div class="statrows">
+        <div class="statrow"><span>Total listening</span><b class="num">5h 10m</b></div>
+        <div class="statrow"><span>In balance</span><b class="num">2h 20m</b></div>
+        <div class="statrow"><span>Days listened</span><b class="num">11 of 18</b></div>
+        <div class="statrow"><span>Balanced weeks</span><b class="num">1</b></div>
+      </div>
+      <div class="splitlab">By frequency, all time</div>
+      <div class="splitbar"><i class="sc" style="width:37%"></i><i class="sl" style="width:27%"></i><i class="sv" style="width:15%"></i><i class="sa" style="width:21%"></i></div>
+      <div class="splitkey">
+        <div class="kc"><i></i>Core<b class="num">1h 55m</b></div>
+        <div class="kl"><i></i>Love<b class="num">1h 25m</b></div>
+        <div class="kv"><i></i>Vitality<b class="num">45m</b></div>
+        <div class="ka"><i></i>Abundance<b class="num">1h 5m</b></div>
+      </div>
+    </section>
+  </div>
+</main>
+<script>
+(function(){
+var SC={
+ 'day1':      {min:'15 min', mins:15, days:1, label:'under frequency across 1 day',  p:[100,0,0,0]},
+ 'one-short': {min:'88 min', mins:88, days:4, label:'under frequency across 4 days', p:[34,29,11,26]},
+ 'three-short':{min:'70 min',mins:70, days:3, label:'under frequency across 3 days', p:[60,14,12,14]},
+ 'minutes':   {min:'40 min', mins:40, days:6, label:'under frequency across 6 days', p:[30,25,20,25]},
+ 'both':      {min:'30 min', mins:30, days:5, label:'under frequency across 5 days', p:[70,10,10,10]},
+ 'counts':    {min:'96 min', mins:96, days:5, label:'under frequency across 5 days', p:[30,24,20,26]}
+};
+var q='';try{q=top.location.search}catch(e){q=location.search}
+var demo=(new URLSearchParams(q).get('demo'))||'one-short';
+var sc=SC[demo]||SC['one-short'];
+var balanced=sc.p.every(function(v){return v>=15});
+var enough=sc.mins>=63;
+var timeOK=enough||sc.mins>=9*sc.days;
+document.getElementById('twMin').textContent=sc.min;
+document.getElementById('twLabel').textContent=sc.label;
+var pill=document.getElementById('twPill');
+if(timeOK&&balanced){pill.textContent='On Track';pill.classList.add('ontrack');}
+else{var why=(!timeOK&&!balanced)?' \u00b7 time & balance':(!timeOK?' \u00b7 time':' \u00b7 balance');pill.textContent='Off Track'+why;pill.classList.add('offtrack');}
+var tmax=Math.max(sc.mins,78), tick=63/tmax*100, tfill=Math.min(sc.mins/tmax*100,100);
+document.getElementById('timebar').innerHTML=
+ '<span class="tfill" style="width:'+tfill+'%"></span>'+
+ '<span class="ttick" style="left:'+tick+'%"></span>'+
+ '<span class="tlab" style="left:'+tick+'%">63 min'+(enough?' <span style="color:#0A7A52">\u2713</span>':'')+'</span>';
+var FAM=[['core','Core'],['love','Love'],['vit','Vitality'],['ab','Abundance']];
+var h='';
+FAM.forEach(function(f,i){
+ var v=sc.p[i], low=v<15;
+ var fill=v>0?'<span class="ffill" style="width:'+Math.min(v,100)+'%"></span>':'';
+ var gap=low?'<span class="fgap" style="left:'+v+'%;width:'+(15-v)+'%"></span>':'';
+ var lab=(i===0)?'<span class="minlab">15% to count</span>':'';
+ var pct=low?'<span class="fpct num short">'+v+'%</span>':'<span class="fpct num">'+v+'%<span class="okc">\u2713</span></span>';
+ h+='<div class="fbar '+f[0]+'"><span class="fname">'+f[1]+'</span><span class="ftrack">'+fill+gap+'<span class="fmin" style="left:15%"></span>'+lab+'</span>'+pct+'</div>';
+});
+document.getElementById('fbars').innerHTML=h;
+})();
+if(self!==top||new URLSearchParams(location.search).has('embed')){document.documentElement.classList.add('embed')}
+var _lastH=0;
+function sendHeight(){try{var h=Math.ceil(document.documentElement.scrollHeight);if(h!==_lastH){_lastH=h;parent.postMessage({zfmH:h},'*')}}catch(e){}}
+if(document.documentElement.classList.contains('embed')){addEventListener('load',sendHeight);addEventListener('resize',sendHeight);setTimeout(sendHeight,300);setTimeout(sendHeight,1000)}
+document.getElementById('howTrigger').addEventListener('click',function(){document.getElementById('howPanel').classList.toggle('open');this.classList.toggle('open');setTimeout(sendHeight,50)});
+</script>
+</body></html>
