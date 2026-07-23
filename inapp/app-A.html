@@ -757,12 +757,12 @@ function showTab(t){document.getElementById('favs').style.display=(t==='favs')?'
  document.getElementById('progress').style.display=(t==='progress')?'block':'none';
  var idx=(t==='favs')?2:(t==='progress')?1:0;
  navItems.forEach((n,i)=>n.classList.toggle('on',i===idx));
- if(t==='progress')document.getElementById('progress').scrollTop=0;
+ if(t==='progress'){var p=document.getElementById('progress');p.scrollTop=0;p.dataset.resetTop='1';}
  if(t==='favs')buildFavs();}
 navItems[0].onclick=()=>showTab('list');
 navItems[1].onclick=()=>showTab('progress');
 navItems[2].onclick=()=>showTab('favs');
-window.addEventListener('message',function(e){if(e&&e.data&&e.data.zfmH){var f=document.getElementById('progressFrame');if(f)f.style.height=e.data.zfmH+'px';}});
+window.addEventListener('message',function(e){if(e&&e.data&&e.data.zfmH){var f=document.getElementById('progressFrame');if(f){f.style.height=e.data.zfmH+'px';var p=document.getElementById('progress');if(p&&p.dataset.resetTop==='1'){p.scrollTop=0;p.dataset.resetTop='0';}}}});
 buildFavs();
 
 setCat(catKey);vrz();drawViz();setIcons();
