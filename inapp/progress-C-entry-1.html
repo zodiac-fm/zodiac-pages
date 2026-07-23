@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <title>Progress · You're On Your Way</title>
+  <link rel="stylesheet" href="progress-B2-card-shared.css">
+  <style>
+    :root{
+      --love:#B90044;
+      --love-ink:#B90044;
+      --vit-bar:#FF9112;
+      --vit-ink:#C25500;
+      --ab-bar:#12A56E;
+      --ab-ink:#0A7A52;
+    }
+    html.embed .app{min-height:auto}
+    .app{padding-bottom:34px}
+    .utility{padding-top:9px;padding-bottom:4px}
+    .utility strong{font-size:12px;color:var(--ink)}
+    .utility .stage{font-size:12px;color:var(--muted);font-weight:600}
+    .stack{gap:18px;padding:14px 17px 31px}
+
+    .progress-card{padding:20px 20px 18px}
+    .section-head h2{
+      font:700 20px/1.15 Suisse,-apple-system,sans-serif;
+      color:var(--ink);
+      letter-spacing:-.012em;
+    }
+    .quiet-pill{
+      padding:5px 10px;
+      border-color:#d9c8ee;
+      background:#f3ebfb;
+      color:var(--deep);
+    }
+    .this-week{margin-top:15px}
+    .this-week strong{
+      font:700 27px/1 Suisse,-apple-system,sans-serif;
+      color:var(--ink);
+      letter-spacing:-.02em;
+    }
+    .overall{
+      position:relative;
+      height:8px;
+      margin:15px 0 22px;
+      overflow:hidden;
+      border-radius:999px;
+      background:var(--mist);
+    }
+    .overall span{
+      display:block;
+      width:29%;
+      height:100%;
+      border-radius:inherit;
+      background:linear-gradient(90deg,var(--deep),var(--purple));
+    }
+    .fbars{display:flex;flex-direction:column;gap:9px}
+    .fbar{display:grid;grid-template-columns:61px 1fr 36px;align-items:center;gap:9px}
+    .fname,.fpct{font-size:10.5px;font-weight:700}
+    .fpct{text-align:right;font-variant-numeric:tabular-nums}
+    .ftrack{position:relative;height:7px;border-radius:999px;background:var(--mist)}
+    .ftrack:after{
+      content:"";
+      position:absolute;
+      left:15%;
+      top:-3px;
+      bottom:-3px;
+      width:1px;
+      background:rgba(26,22,32,.34);
+    }
+    .ffill{display:block;height:100%;border-radius:inherit}
+    .core .fname,.core .fpct{color:var(--purple)}.core .ffill{width:27%;background:var(--purple)}
+    .love .fname,.love .fpct{color:var(--love-ink)}.love .ffill{width:25%;background:var(--love)}
+    .vitality .fname,.vitality .fpct{color:var(--vit-ink)}.vitality .ffill{width:21%;background:var(--vit-bar)}
+    .abundance .fname,.abundance .fpct{color:var(--ab-ink)}.abundance .ffill{width:27%;background:var(--ab-bar)}
+    .balance-status{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:15px;
+      padding-top:13px;
+      border-top:1px solid var(--line);
+      font-size:11px;
+      color:var(--muted);
+    }
+    .balance-status strong{color:var(--green)}
+
+    .entry-card{overflow:hidden;border-color:#ded3ef;box-shadow:0 13px 34px rgba(56,0,122,.08)}
+    .signal{
+      height:5px;
+      background:linear-gradient(90deg,var(--purple) 0 25%,var(--love) 25% 50%,var(--vit-bar) 50% 75%,var(--ab-bar) 75%);
+    }
+    .entry-head{
+      padding:24px 21px 20px;
+      background:linear-gradient(135deg,#fbf8ff 0%,#fff 72%);
+    }
+    .entry-head h1{
+      font:700 28px/1.08 Suisse,-apple-system,sans-serif;
+      color:var(--ink);
+      letter-spacing:-.035em;
+    }
+    .entry-head p{
+      margin-top:9px;
+      font-size:14px;
+      line-height:1.45;
+      font-weight:600;
+      color:var(--control);
+    }
+    .entry-copy{padding:20px 21px 7px}
+    .entry-copy>p{
+      margin-bottom:16px;
+      font-size:14px;
+      line-height:1.58;
+      color:var(--control);
+    }
+    .balance-guide{
+      margin:1px 0 19px;
+      padding:16px 16px 15px;
+      border:1px solid #e2d4f3;
+      border-radius:16px;
+      background:var(--tint);
+    }
+    .balance-guide h2{
+      font:700 13px/1.35 Suisse,-apple-system,sans-serif;
+      color:var(--deep);
+      letter-spacing:0;
+    }
+    .balance-guide p{
+      margin-top:9px;
+      font-size:13.5px;
+      line-height:1.52;
+      color:var(--control);
+    }
+    .path{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      flex-wrap:wrap;
+      margin-top:13px;
+      color:var(--deep);
+      font-size:10.5px;
+      font-weight:700;
+    }
+    .path span{
+      padding:5px 8px;
+      border:1px solid #ddd0ed;
+      border-radius:8px;
+      background:#fff;
+      box-shadow:0 2px 7px rgba(56,0,122,.03);
+    }
+    .path b{font-size:12px;color:#8d81a0}
+    .emphasis{font-weight:700;color:var(--ink)}
+    .horizon{
+      margin:3px 19px 20px;
+      padding:16px 17px 17px;
+      border:0;
+      border-radius:16px;
+      color:#fff;
+      background:
+        radial-gradient(circle at 88% 5%,rgba(200,145,255,.5),transparent 47%),
+        linear-gradient(135deg,var(--deep),var(--purple));
+    }
+    .horizon .eyebrow{color:#dbc7ef}
+    .horizon strong{
+      display:block;
+      margin-top:6px;
+      font:700 16px/1.25 Suisse,-apple-system,sans-serif;
+      color:#fff;
+    }
+    .horizon p{
+      margin-top:7px;
+      font-size:12px;
+      line-height:1.45;
+      color:#eadff5;
+    }
+    @media(max-width:350px){
+      .stack{padding-left:13px;padding-right:13px}
+      .entry-head h1{font-size:26px}
+      .entry-head,.entry-copy{padding-left:18px;padding-right:18px}
+      .fbar{grid-template-columns:56px 1fr 33px;gap:7px}
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <img class="logo" src="app-assets/logo-black.svg" alt="zodiac.fm">
+      <div class="ham" aria-label="Menu">&#9776;</div>
+    </header>
+
+    <div class="utility">
+      <strong>Your progress</strong>
+      <span class="stage">First milestone ahead</span>
+    </div>
+
+    <div class="stack">
+      <section class="card progress-card">
+        <div class="section-head">
+          <h2>Your listening is building</h2>
+          <span class="quiet-pill">On your way</span>
+        </div>
+        <div class="this-week">
+          <strong class="num">24 min</strong>
+          <span>under frequency</span>
+        </div>
+        <div class="overall" aria-hidden="true"><span></span></div>
+        <div class="fbars" aria-label="Listening balance by frequency">
+          <div class="fbar core"><span class="fname">Core</span><span class="ftrack"><span class="ffill"></span></span><span class="fpct">27%</span></div>
+          <div class="fbar love"><span class="fname">Love</span><span class="ftrack"><span class="ffill"></span></span><span class="fpct">25%</span></div>
+          <div class="fbar vitality"><span class="fname">Vitality</span><span class="ftrack"><span class="ffill"></span></span><span class="fpct">21%</span></div>
+          <div class="fbar abundance"><span class="fname">Abundance</span><span class="ftrack"><span class="ffill"></span></span><span class="fpct">27%</span></div>
+        </div>
+        <div class="balance-status">
+          <span>15% minimum for each frequency</span>
+          <strong>In balance</strong>
+        </div>
+      </section>
+
+      <section class="card entry-card">
+        <div class="signal"></div>
+        <div class="entry-head">
+          <h1>You're On Your Way</h1>
+          <p>Your first Zodiac milestone is already getting closer.</p>
+        </div>
+
+        <div class="entry-copy">
+          <p>Welcome to the first part of your Zodiac journey. Every completed song adds to your listening time. Your first milestone arrives as balanced time accumulates across all four frequencies.</p>
+
+          <div class="balance-guide">
+            <h2>Let Zodiac keep the mix balanced for you.</h2>
+            <p>Core, Love, Vitality, and Abundance each need at least 15% of your listening. The other 40% can go anywhere you like.</p>
+            <p>Heart music you like from all four frequencies. Then open Playlist and choose <strong>Balance for me</strong>. Zodiac will select the longest balanced list it can from the music you saved.</p>
+            <div class="path" aria-label="Playlist, then Balance for me, then Play All">
+              <span>Playlist</span><b>&rsaquo;</b><span>Balance for me</span><b>&rsaquo;</b><span>Play All</span>
+            </div>
+          </div>
+
+          <p>You do not have to listen every day. Missing a day does not erase anything.</p>
+
+          <p>Once you start listening, the next question is usually: what should you expect? You might feel more settled, energized, stirred up, or like something in the music feels strangely familiar. You might not feel anything you can name yet. <span class="emphasis">However, some people feel something powerful right away.</span></p>
+
+          <p>Here is the important part. Zodiac is not about having a dramatic experience during one song. The bigger experience begins showing up as listening accumulates and you return to everyday life.</p>
+
+          <p>That is the journey ahead. We will help you recognize your signal in your decisions, relationships, energy, timing, creativity, and the way you move through the world. There is a lot to discover. For now, listen, stay balanced, and enjoy the beginning.</p>
+        </div>
+
+        <div class="horizon">
+          <div class="eyebrow">Your first milestone</div>
+          <strong>Your Amplification Begins</strong>
+          <p>It opens as your balanced time under frequency accumulates.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    if(self!==top||new URLSearchParams(location.search).has('embed')){
+      document.documentElement.classList.add('embed');
+    }
+    let lastHeight=0;
+    function sendHeight(){
+      try{
+        const height=Math.ceil(document.documentElement.scrollHeight);
+        if(height!==lastHeight){
+          lastHeight=height;
+          parent.postMessage({zfmH:height},'*');
+        }
+      }catch(error){}
+    }
+    addEventListener('load',sendHeight);
+    addEventListener('resize',sendHeight);
+    if('ResizeObserver' in window){
+      new ResizeObserver(sendHeight).observe(document.body);
+    }
+    setTimeout(sendHeight,250);
+    setTimeout(sendHeight,900);
+  </script>
+</body>
+</html>
