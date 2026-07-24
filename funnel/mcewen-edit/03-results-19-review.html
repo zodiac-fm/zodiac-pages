@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="A two-page McEwen Results comparison between the assembled new control and one premium editorial challenger.">
+  <title>McEwen Results 19 · Control vs Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "Switzer";
+      src: url("../../landers/reveal-assets/Switzer-Regular.otf") format("opentype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Switzer";
+      src: url("../../landers/reveal-assets/Switzer-Semibold.otf") format("opentype");
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+    }
+    :root {
+      --paper: #fbf8f3;
+      --white: #ffffff;
+      --ink: #1a1620;
+      --muted: #625b67;
+      --line: rgba(26, 22, 32, .18);
+      --purple: #6521c9;
+      --display: "Cormorant Garamond", Georgia, serif;
+      --body: "Switzer", Helvetica, sans-serif;
+      --source-width: 375px;
+      --source-height: 1180px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #eee9e0; color: var(--ink); font-family: var(--body); }
+    button, a { font: inherit; }
+    .toolbar {
+      padding: 13px 16px;
+      display: grid;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(251, 248, 243, .97);
+      backdrop-filter: blur(14px);
+    }
+    .toolbar-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; }
+    .toolbar h1 { margin: 0; font-family: var(--display); font-size: clamp(26px, 4vw, 38px); font-weight: 600; line-height: .95; }
+    .toolbar p { max-width: 560px; margin: 6px 0 0; color: var(--muted); font-size: 11px; }
+    .segments { display: grid; grid-template-columns: repeat(3, 1fr); min-width: 260px; border: 1px solid var(--line); }
+    .segments button {
+      min-height: 38px;
+      padding: 0 10px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .segments button:last-child { border-right: 0; }
+    .segments button[aria-pressed="true"] { background: var(--ink); color: var(--white); }
+    .comparison {
+      width: min(100% - 24px, 1380px);
+      margin: 20px auto 48px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .page-panel { min-width: 0; }
+    .page-label {
+      min-height: 58px;
+      padding: 11px 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--ink);
+      color: var(--white);
+    }
+    .page-label span { color: rgba(255, 255, 255, .68); font-size: 8px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
+    .page-label strong { display: block; margin-top: 3px; font-family: var(--display); font-size: 18px; font-weight: 600; line-height: 1; }
+    .page-label a {
+      flex: none;
+      color: var(--white);
+      font-size: 9px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .device-stage {
+      position: relative;
+      width: 100%;
+      height: 600px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      border: 1px solid var(--line);
+      border-top: 0;
+      background: var(--white);
+    }
+    iframe {
+      position: relative;
+      flex: 0 0 auto;
+      width: var(--source-width);
+      height: var(--source-height);
+      border: 0;
+      background: var(--white);
+      transform: scale(var(--scale, 1));
+      transform-origin: top center;
+    }
+    .note {
+      width: min(100% - 24px, 1380px);
+      margin: -28px auto 34px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--muted);
+      font-size: 10px;
+      text-align: center;
+    }
+    @media (max-width: 760px) {
+      .toolbar-head { align-items: start; display: grid; }
+      .segments { min-width: 0; width: 100%; }
+      .comparison { width: calc(100% - 12px); gap: 6px; margin-top: 8px; }
+      .page-label { min-height: 64px; padding: 9px; display: grid; align-content: space-between; }
+      .page-label strong { font-size: 14px; }
+      .page-label a { font-size: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="toolbar-head">
+      <div>
+        <h1>New control vs premium challenger</h1>
+        <p>Two complete Results pages. No third direction and no winner recorded yet. Scroll inside either page to compare the full story.</p>
+      </div>
+      <div class="segments" aria-label="Choose viewport">
+        <button type="button" data-device="phone" aria-pressed="true">2 Phones</button>
+        <button type="button" data-device="tablet" aria-pressed="false">2 Tablets</button>
+        <button type="button" data-device="desktop" aria-pressed="false">2 Desktops</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="comparison">
+    <section class="page-panel">
+      <div class="page-label">
+        <div><span>New control · A/B/A recipe</span><strong>Results 17</strong></div>
+        <a href="03-results-17-control.html" target="_blank" rel="noopener">Open full page ↗</a>
+      </div>
+      <div class="device-stage"><iframe src="03-results-17-control.html" title="Results 17 new control"></iframe></div>
+    </section>
+    <section class="page-panel">
+      <div class="page-label">
+        <div><span>Premium challenger · coherent editorial</span><strong>Results 18</strong></div>
+        <a href="03-results-18-premium.html" target="_blank" rel="noopener">Open full page ↗</a>
+      </div>
+      <div class="device-stage"><iframe src="03-results-18-premium.html" title="Results 18 premium challenger"></iframe></div>
+    </section>
+  </main>
+
+  <p class="note">Comparison only. Production, pricing, calculations, Birth Time, and Join are unchanged.</p>
+
+  <script>
+    const devices = {
+      phone: { width: 375, height: 1180, label: "2 Phones" },
+      tablet: { width: 768, height: 1320, label: "2 Tablets" },
+      desktop: { width: 760, height: 1380, label: "2 Desktops" }
+    };
+    let activeDevice = "phone";
+
+    function sizeFrames() {
+      const device = devices[activeDevice];
+      document.documentElement.style.setProperty("--source-width", `${device.width}px`);
+      document.documentElement.style.setProperty("--source-height", `${device.height}px`);
+      document.querySelectorAll(".device-stage").forEach(stage => {
+        const scale = Math.min(1, stage.clientWidth / device.width);
+        stage.style.height = `${Math.round(device.height * scale)}px`;
+        stage.querySelector("iframe").style.setProperty("--scale", scale);
+      });
+    }
+
+    document.querySelectorAll("[data-device]").forEach(button => {
+      button.addEventListener("click", () => {
+        activeDevice = button.dataset.device;
+        document.querySelectorAll("[data-device]").forEach(item => {
+          item.setAttribute("aria-pressed", item === button ? "true" : "false");
+        });
+        sizeFrames();
+      });
+    });
+
+    window.addEventListener("resize", sizeFrames);
+    window.addEventListener("load", sizeFrames);
+    sizeFrames();
+  </script>
+</body>
+</html>

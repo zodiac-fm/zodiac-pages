@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="McEwen Results 17. The assembled A/B/A Personal Frequency Profile control.">
+  <title>McEwen Results 17 · New Control</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "Switzer";
+      src: url("../../landers/reveal-assets/Switzer-Regular.otf") format("opentype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Switzer";
+      src: url("../../landers/reveal-assets/Switzer-Semibold.otf") format("opentype");
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+    }
+    :root {
+      --white: #ffffff;
+      --cream: #f6f1e8;
+      --moon: #fbf8f3;
+      --mist: #eee9e0;
+      --ink: #1a1620;
+      --muted: #625b67;
+      --line: rgba(26, 22, 32, .16);
+      --purple: #6521c9;
+      --purple-deep: #38007a;
+      --purple-wash: #efecff;
+      --core: #6521c9;
+      --love: #b90044;
+      --vitality: #c25500;
+      --abundance: #0a7a52;
+      --display: "Cormorant Garamond", Georgia, serif;
+      --body: "Switzer", Helvetica, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: clip; background: var(--mist); }
+    body {
+      width: min(100%, 760px);
+      min-height: 100vh;
+      margin: 0 auto;
+      overflow-x: clip;
+      background: var(--white);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      box-shadow: 0 2px 40px rgba(20, 20, 20, .07);
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; }
+    h1, h2, h3, p, blockquote, figure { margin: 0; }
+    h1, h2, h3 {
+      font-family: var(--display);
+      font-weight: 600;
+      line-height: .98;
+      text-wrap: balance;
+    }
+    .shell { width: calc(100% - 36px); margin-inline: auto; }
+    .topbar {
+      min-height: 58px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, .96);
+    }
+    .logo { width: 104px; height: auto; }
+    .coupon { color: var(--muted); font-size: 11px; line-height: 1.2; text-align: right; }
+    .coupon strong { display: block; color: var(--ink); font-size: 12px; font-weight: 600; }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--purple);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .15em;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 24px; height: 1px; background: currentColor; content: ""; }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 34px 0 39px;
+      background:
+        radial-gradient(circle at 88% 12%, rgba(101, 33, 201, .1), transparent 34%),
+        var(--cream);
+    }
+    .hero::after {
+      position: absolute;
+      right: -92px;
+      bottom: -110px;
+      width: 250px;
+      height: 250px;
+      border: 1px solid rgba(101, 33, 201, .14);
+      border-radius: 50%;
+      box-shadow: 0 0 0 42px rgba(101, 33, 201, .03), 0 0 0 84px rgba(101, 33, 201, .02);
+      content: "";
+    }
+    .hero .shell { position: relative; z-index: 1; }
+    .hero h1 {
+      max-width: 650px;
+      margin-top: 17px;
+      font-size: clamp(43px, 12vw, 64px);
+      letter-spacing: -.045em;
+    }
+    .hero-lede {
+      max-width: 610px;
+      margin-top: 18px;
+      color: #4c4550;
+      font-size: 15px;
+    }
+    .instrument {
+      margin-top: 36px;
+      padding: 18px;
+      border: 1px solid rgba(26, 22, 32, .2);
+      background: rgba(255, 255, 255, .95);
+      box-shadow: 0 18px 48px rgba(56, 0, 122, .08);
+    }
+    .instrument-head {
+      padding-bottom: 14px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .instrument-label {
+      color: var(--purple);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .instrument-name {
+      display: block;
+      margin-top: 5px;
+      font-family: var(--display);
+      font-size: 25px;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .instrument-source { max-width: 130px; color: var(--muted); font-size: 12px; line-height: 1.3; text-align: right; }
+    .frequency-row {
+      --tone: var(--core);
+      padding: 17px 0 15px;
+      display: grid;
+      grid-template-columns: 86px minmax(0, 1fr) 62px;
+      gap: 9px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+    }
+    .frequency-row:last-of-type { border-bottom: 0; }
+    .frequency-row.love { --tone: var(--love); }
+    .frequency-row.vitality { --tone: var(--vitality); }
+    .frequency-row.abundance { --tone: var(--abundance); }
+    .frequency-name { font-family: var(--display); font-size: 21px; font-weight: 600; line-height: 1; }
+    .frequency-meaning { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; line-height: 1.25; }
+    .track {
+      position: relative;
+      height: 5px;
+      background: linear-gradient(90deg, #d8d0c4 0 25%, #ddc9cc 25% 50%, #c8bdd8 50% 75%, #b6c8be 75%);
+    }
+    .track::after {
+      position: absolute;
+      top: 50%;
+      left: var(--point);
+      width: 15px;
+      height: 15px;
+      border: 4px solid var(--tone);
+      border-radius: 50%;
+      background: var(--white);
+      transform: translate(-50%, -50%);
+      content: "";
+    }
+    .frequency-value { font-size: 21px; font-weight: 600; line-height: 1; text-align: right; white-space: nowrap; }
+    .frequency-value small { color: var(--muted); font-size: 12px; letter-spacing: .04em; }
+    .frequency-band {
+      grid-column: 2 / 4;
+      margin-top: -2px;
+      color: var(--tone);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .scale {
+      padding-top: 13px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .meaning {
+      padding: 58px 0 64px;
+      background: var(--white);
+    }
+    .meaning-grid { display: grid; gap: 18px; }
+    .meaning h2 { max-width: 590px; font-size: clamp(37px, 10vw, 48px); letter-spacing: -.035em; }
+    .meaning-copy {
+      padding-top: 18px;
+      border-top: 1px solid var(--ink);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .meaning-copy strong { color: var(--ink); }
+    .proof {
+      padding: 58px 0;
+      background: var(--moon);
+    }
+    .proof-card {
+      display: grid;
+      grid-template-columns: 104px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+    }
+    .proof-card img { width: 104px; height: auto; object-fit: contain; filter: grayscale(1); }
+    .proof-card blockquote {
+      font-family: var(--display);
+      font-size: clamp(22px, 6vw, 29px);
+      line-height: 1.08;
+    }
+    .proof-card cite {
+      display: block;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 10px;
+      font-style: normal;
+      line-height: 1.45;
+    }
+    .proof-card cite strong { display: block; color: var(--ink); font-size: 12px; }
+    .reading {
+      padding: 64px 0;
+      background: var(--purple-wash);
+    }
+    .reading h2 { margin-top: 15px; font-size: clamp(38px, 10vw, 50px); letter-spacing: -.035em; }
+    .reading-intro { max-width: 600px; margin-top: 15px; color: var(--muted); font-size: 14px; }
+    .reading-list { margin-top: 28px; border-top: 1px solid rgba(56, 0, 122, .28); }
+    .reading-row {
+      --tone: var(--core);
+      padding: 20px 0;
+      display: grid;
+      grid-template-columns: 84px minmax(0, 1fr);
+      gap: 17px;
+      border-bottom: 1px solid rgba(56, 0, 122, .18);
+    }
+    .reading-row.love { --tone: var(--love); }
+    .reading-row.vitality { --tone: var(--vitality); }
+    .reading-row.abundance { --tone: var(--abundance); }
+    .reading-key { color: var(--tone); font-size: 11px; font-weight: 600; }
+    .reading-copy h3 { font-size: 25px; }
+    .reading-copy p { margin-top: 7px; color: #514659; font-size: 12px; }
+    .authority { padding: 62px 0; background: var(--white); }
+    .authority h2 { max-width: 580px; font-size: clamp(37px, 10vw, 48px); letter-spacing: -.035em; }
+    .authority .proof-card {
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid var(--ink);
+    }
+    .final {
+      padding: 54px 0 60px;
+      background: var(--cream);
+      text-align: center;
+    }
+    .final-title { font-family: var(--display); font-size: clamp(38px, 10vw, 50px); font-weight: 600; line-height: .98; letter-spacing: -.035em; text-wrap: balance; }
+    .final p { max-width: 520px; margin: 12px auto 0; color: var(--muted); font-size: 13px; }
+    .button {
+      min-height: 54px;
+      margin-top: 22px;
+      padding: 0 25px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--purple);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .cta-note { display: block; margin-top: 11px; color: var(--muted); font-size: 10px; }
+    footer { padding: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 9px; text-align: center; }
+    @media (min-width: 700px) {
+      .shell { width: calc(100% - 64px); }
+      .instrument { padding: 24px 26px; }
+      .frequency-row { grid-template-columns: 130px minmax(0, 1fr) 84px; gap: 18px; }
+      .frequency-name { font-size: 25px; }
+      .frequency-meaning, .frequency-band { font-size: 13px; }
+      .frequency-value { font-size: 26px; }
+      .meaning-grid { grid-template-columns: 1fr 1.05fr; gap: 36px; align-items: start; }
+      .meaning-copy { padding-top: 0; padding-left: 28px; border-top: 0; border-left: 1px solid var(--ink); }
+      .proof-card { grid-template-columns: 160px minmax(0, 1fr); gap: 30px; }
+      .proof-card img { width: 160px; }
+      .reading-row { grid-template-columns: 135px minmax(0, 1fr); }
+    }
+    @media (max-width: 350px) {
+      .shell { width: calc(100% - 28px); }
+      .instrument { padding: 14px; }
+      .frequency-row { grid-template-columns: 75px minmax(0, 1fr) 56px; gap: 7px; }
+      .frequency-value { font-size: 19px; }
+      .proof-card { grid-template-columns: 90px minmax(0, 1fr); gap: 14px; }
+      .proof-card img { width: 90px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <img class="logo" src="../../inapp/app-assets/logo-black.svg" width="150" height="40" alt="Zodiac.fm">
+    <div class="coupon">David's 20% coupon<strong>Applied automatically</strong></div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="control-title">
+      <div class="shell">
+        <div class="eyebrow">Your result</div>
+        <h1 id="control-title">Michael, your Personal Frequency Profile is ready.</h1>
+        <p class="hero-lede"><strong>Your exact birth moment</strong> resolved into four personal frequencies. Here are the values, the bands they land in, and the music built around them.</p>
+
+        <section class="instrument" aria-label="Michael's Personal Frequency Profile">
+          <div class="instrument-head">
+            <div><span class="instrument-label">Personal Frequency Profile</span><span class="instrument-name">Michael</span></div>
+            <p class="instrument-source">From your exact birth moment</p>
+          </div>
+          <article class="frequency-row" style="--point:24.6%">
+            <div><div class="frequency-name">Core</div><span class="frequency-meaning">Identity and purpose</span></div>
+            <div class="track" aria-label="422 hertz on the 250 to 950 hertz spectrum"></div>
+            <div class="frequency-value">422 <small>Hz</small></div>
+            <div class="frequency-band">Root Band · 250 to 425 Hz</div>
+          </article>
+          <article class="frequency-row love" style="--point:26%">
+            <div><div class="frequency-name">Love</div><span class="frequency-meaning">Connection and relationships</span></div>
+            <div class="track" aria-label="432 hertz on the 250 to 950 hertz spectrum"></div>
+            <div class="frequency-value">432 <small>Hz</small></div>
+            <div class="frequency-band">Solar Plexus Band · 425 to 600 Hz</div>
+          </article>
+          <article class="frequency-row vitality" style="--point:47%">
+            <div><div class="frequency-name">Vitality</div><span class="frequency-meaning">Energy and momentum</span></div>
+            <div class="track" aria-label="579 hertz on the 250 to 950 hertz spectrum"></div>
+            <div class="frequency-value">579 <small>Hz</small></div>
+            <div class="frequency-band">Solar Plexus Band · 425 to 600 Hz</div>
+          </article>
+          <article class="frequency-row abundance" style="--point:51.6%">
+            <div><div class="frequency-name">Abundance</div><span class="frequency-meaning">Exchange and opportunity</span></div>
+            <div class="track" aria-label="611 hertz on the 250 to 950 hertz spectrum"></div>
+            <div class="frequency-value">611 <small>Hz</small></div>
+            <div class="frequency-band">Throat Band · 600 to 775 Hz</div>
+          </article>
+          <div class="scale"><span>250 Hz</span><span>Your personal spectrum</span><span>950 Hz</span></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="meaning" aria-labelledby="control-meaning">
+      <div class="shell meaning-grid">
+        <h2 id="control-meaning">What the profile is showing you.</h2>
+        <p class="meaning-copy"><strong>Your frequency is what your signal is.</strong> Your band is how you naturally process that part of your life. The exact value identifies the signal; the band describes the channel through which understanding most naturally takes shape.</p>
+      </div>
+    </section>
+
+    <section class="proof" aria-label="David McEwen proof">
+      <div class="shell">
+        <figure class="proof-card">
+          <img src="../../landers/reveal-assets/img-images_testimonials_david-mcewen-d2c.png" width="500" height="500" alt="David McEwen">
+          <figcaption>
+            <blockquote>“It's like a little cheat code for experiencing your authentic vibration. Because it's personalized to you, not generic. I use it every day. This one earned it.”</blockquote>
+            <cite><strong>David McEwen</strong>Transformation Thought Leader · Over 12 Million YouTube Views</cite>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="reading" aria-labelledby="control-reading">
+      <div class="shell">
+        <div class="eyebrow">Your placements</div>
+        <h2 id="control-reading">How each part of your profile takes shape.</h2>
+        <p class="reading-intro">The spectrum is continuous, not a ladder. Everyone uses all four bands. Your placements show where each part of your profile naturally begins.</p>
+        <div class="reading-list">
+          <article class="reading-row"><div class="reading-key">Core · 422 Hz</div><div class="reading-copy"><h3>Root Band</h3><p><strong>Identity and purpose through grounding and steadiness.</strong> Settle first and let the answer take shape from the settled place.</p></div></article>
+          <article class="reading-row love"><div class="reading-key">Love · 432 Hz</div><div class="reading-copy"><h3>Solar Plexus Band</h3><p><strong>Connection and relationships through motion and drive.</strong> Move on the question and let the answer form while you are in motion.</p></div></article>
+          <article class="reading-row vitality"><div class="reading-key">Vitality · 579 Hz</div><div class="reading-copy"><h3>Solar Plexus Band</h3><p><strong>Energy and momentum through motion and drive.</strong> Move on the question and let the answer form while you are in motion.</p></div></article>
+          <article class="reading-row abundance"><div class="reading-key">Abundance · 611 Hz</div><div class="reading-copy"><h3>Throat Band</h3><p><strong>Exchange and opportunity through words.</strong> Say it, write it, or name it until the knowing completes in the sentences.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="authority" aria-labelledby="control-authority">
+      <div class="shell">
+        <h2 id="control-authority">The result is personal. Listening helps it become familiar.</h2>
+        <figure class="proof-card">
+          <img src="../../landers/reveal-assets/img-images_testimonials_rhonda-britten-d2c.png" width="500" height="500" alt="Rhonda Britten">
+          <figcaption>
+            <blockquote>“If you're tired of living out of tune with yourself, this is your invitation home.”</blockquote>
+            <cite><strong>Rhonda Britten</strong>Author of “Fearless Living” · Emmy Award-Winner · Founder, Fearless Living Institute</cite>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="final" aria-label="Hear your frequencies">
+      <div class="shell">
+        <p class="final-title">Now hear what your profile sounds like.</p>
+        <p>Your values run continuously through cinematic, lyric-free music built around your four personal frequencies.</p>
+        <a class="button" href="/funnel/mcewen-edit/04-join">Hear My Frequencies&nbsp; →</a>
+        <span class="cta-note">David's 20% coupon is applied automatically.</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>© 2026 Zodiac.fm · Privacy · Terms</footer>
+</body>
+</html>
