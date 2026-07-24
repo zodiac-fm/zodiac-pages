@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="McEwen Results 20. A premium Personal Frequency Profile shaped through portraiture, space, color, and contrast.">
+  <title>McEwen Results 20 · Premium Alternative</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "Switzer";
+      src: url("../../landers/reveal-assets/Switzer-Regular.otf") format("opentype");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Switzer";
+      src: url("../../landers/reveal-assets/Switzer-Semibold.otf") format("opentype");
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+    }
+    :root {
+      --paper: #fffdf8;
+      --bone: #f1eadf;
+      --stone: #ded5c8;
+      --ink: #1a1620;
+      --muted: #625a64;
+      --plum: #32133e;
+      --plum-light: #563064;
+      --lilac: #e6dded;
+      --rose: #ead8dd;
+      --sage: #d9e2db;
+      --white: #ffffff;
+      --line: rgba(26, 22, 32, .16);
+      --core: #6521c9;
+      --love: #b90044;
+      --vitality: #c25500;
+      --abundance: #0a7a52;
+      --display: "Cormorant Garamond", Georgia, serif;
+      --body: "Switzer", Helvetica, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { overflow-x: clip; background: var(--stone); scroll-behavior: smooth; }
+    body {
+      width: min(100%, 760px);
+      min-height: 100vh;
+      margin: 0 auto;
+      overflow-x: clip;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      box-shadow: 0 2px 48px rgba(28, 18, 31, .13);
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; }
+    h1, h2, h3, p, blockquote, figure { margin: 0; }
+    h1, h2, h3 {
+      font-family: var(--display);
+      font-weight: 600;
+      line-height: .98;
+      text-wrap: balance;
+    }
+    .shell { width: calc(100% - 38px); margin-inline: auto; }
+    .topbar {
+      min-height: 62px;
+      padding: 10px 19px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid rgba(26, 22, 32, .12);
+      background: rgba(255, 253, 248, .97);
+    }
+    .logo { width: 108px; height: auto; }
+    .coupon { color: var(--muted); font-size: 10px; line-height: 1.22; text-align: right; }
+    .coupon strong { display: block; color: var(--ink); font-size: 11px; font-weight: 600; }
+    .eyebrow {
+      color: var(--plum-light);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    .hero {
+      position: relative;
+      padding: 48px 0 58px;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, transparent 0 66%, rgba(86, 48, 100, .08) 66% 100%),
+        var(--bone);
+    }
+    .hero::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 34%;
+      height: 100%;
+      border-left: 1px solid rgba(86, 48, 100, .12);
+      background: linear-gradient(180deg, rgba(255,255,255,.28), rgba(86,48,100,.06));
+      content: "";
+    }
+    .hero .shell { position: relative; z-index: 1; }
+    .hero-copy { max-width: 620px; }
+    .hero h1 {
+      max-width: 635px;
+      margin-top: 17px;
+      font-size: clamp(44px, 12vw, 65px);
+      letter-spacing: -.045em;
+    }
+    .hero-lede {
+      max-width: 575px;
+      margin-top: 20px;
+      color: #4f4751;
+      font-size: 15px;
+    }
+    .profile-gallery {
+      margin-top: 38px;
+      padding: 18px;
+      border: 1px solid rgba(50, 19, 62, .16);
+      background: rgba(255, 253, 248, .74);
+      box-shadow:
+        0 26px 70px rgba(50, 19, 62, .12),
+        inset 0 1px 0 rgba(255,255,255,.84);
+      backdrop-filter: blur(8px);
+    }
+    .profile-head {
+      padding-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      border-bottom: 1px solid rgba(26, 22, 32, .18);
+    }
+    .profile-label {
+      display: block;
+      color: var(--plum-light);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .profile-name {
+      display: block;
+      margin-top: 5px;
+      font-family: var(--display);
+      font-size: 27px;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .profile-source { max-width: 126px; color: var(--muted); font-size: 11px; line-height: 1.35; text-align: right; }
+    .profile-grid {
+      padding-top: 14px;
+      display: grid;
+      gap: 9px;
+    }
+    .result-panel {
+      --tone: var(--core);
+      position: relative;
+      min-height: 118px;
+      padding: 16px 18px 17px 22px;
+      overflow: hidden;
+      border: 1px solid rgba(26, 22, 32, .12);
+      background: var(--white);
+      box-shadow: 0 9px 24px rgba(35, 24, 37, .055);
+    }
+    .result-panel::before {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--tone);
+      content: "";
+    }
+    .result-panel.love { --tone: var(--love); }
+    .result-panel.vitality { --tone: var(--vitality); }
+    .result-panel.abundance { --tone: var(--abundance); }
+    .result-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .result-name { font-family: var(--display); font-size: 25px; font-weight: 600; line-height: 1; }
+    .result-value {
+      color: var(--ink);
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .result-value small { color: var(--muted); font-size: 11px; letter-spacing: .04em; }
+    .result-meaning { margin-top: 7px; color: var(--muted); font-size: 12px; }
+    .result-band {
+      margin-top: 11px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(26, 22, 32, .11);
+      color: var(--tone);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .meaning {
+      padding: 72px 0;
+      background: var(--paper);
+    }
+    .meaning-grid { display: grid; gap: 28px; }
+    .meaning h2 { max-width: 560px; font-size: clamp(39px, 10vw, 52px); letter-spacing: -.035em; }
+    .meaning-copy {
+      max-width: 580px;
+      padding: 22px 0 0;
+      border-top: 1px solid var(--ink);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .meaning-copy strong { color: var(--ink); }
+    .proof {
+      position: relative;
+      padding: 68px 0;
+      overflow: hidden;
+      background: var(--plum);
+      color: var(--white);
+    }
+    .proof::after {
+      position: absolute;
+      right: -70px;
+      bottom: -90px;
+      width: 270px;
+      height: 270px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.045);
+      content: "";
+    }
+    .proof-card {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 28px;
+    }
+    .portrait-matte {
+      position: relative;
+      width: min(78%, 310px);
+      margin-inline: auto;
+      padding: 16px 16px 0;
+      background: var(--lilac);
+      box-shadow: 20px 20px 0 rgba(255,255,255,.07);
+    }
+    .portrait-matte img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+    }
+    .proof-copy { align-self: center; }
+    .proof-copy blockquote {
+      max-width: 560px;
+      font-family: var(--display);
+      font-size: clamp(28px, 7.5vw, 43px);
+      line-height: 1.04;
+    }
+    .proof-copy cite {
+      display: block;
+      margin-top: 21px;
+      color: rgba(255,255,255,.72);
+      font-size: 11px;
+      font-style: normal;
+      line-height: 1.5;
+    }
+    .proof-copy cite strong { display: block; color: var(--white); font-size: 13px; }
+    .reading {
+      padding: 76px 0 84px;
+      background: var(--lilac);
+    }
+    .reading h2 { max-width: 600px; font-size: clamp(40px, 10vw, 53px); letter-spacing: -.038em; }
+    .reading-intro { max-width: 590px; margin-top: 18px; color: #514857; font-size: 14px; }
+    .reading-list {
+      margin-top: 34px;
+      display: grid;
+      gap: 1px;
+      background: rgba(50, 19, 62, .18);
+      border: 1px solid rgba(50, 19, 62, .18);
+    }
+    .reading-row {
+      --tone: var(--core);
+      padding: 23px 20px;
+      display: grid;
+      gap: 10px;
+      background: rgba(255,253,248,.78);
+    }
+    .reading-row.love { --tone: var(--love); }
+    .reading-row.vitality { --tone: var(--vitality); }
+    .reading-row.abundance { --tone: var(--abundance); }
+    .reading-key { color: var(--tone); font-size: 11px; font-weight: 600; }
+    .reading-copy h3 { font-size: 27px; }
+    .reading-copy p { margin-top: 8px; color: #504852; font-size: 12px; }
+    .authority {
+      position: relative;
+      padding: 76px 0 82px;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, var(--rose) 0 42%, var(--bone) 42% 100%);
+    }
+    .authority-card { display: grid; gap: 30px; align-items: center; }
+    .authority-portrait {
+      width: min(78%, 300px);
+      margin-inline: auto;
+      padding: 18px 18px 0;
+      background: rgba(255,255,255,.58);
+      box-shadow: 18px 18px 0 rgba(86,48,100,.09);
+    }
+    .authority-portrait img { width: 100%; height: auto; object-fit: contain; mix-blend-mode: multiply; }
+    .authority-copy h2 { max-width: 530px; font-size: clamp(38px, 10vw, 51px); letter-spacing: -.035em; }
+    .authority-copy blockquote {
+      max-width: 520px;
+      margin-top: 24px;
+      padding-top: 22px;
+      border-top: 1px solid rgba(26,22,32,.55);
+      font-family: var(--display);
+      font-size: clamp(25px, 6.6vw, 35px);
+      line-height: 1.07;
+    }
+    .authority-copy cite { display: block; margin-top: 17px; color: var(--muted); font-size: 10px; font-style: normal; line-height: 1.5; }
+    .authority-copy cite strong { display: block; color: var(--ink); font-size: 12px; }
+    .final {
+      padding: 72px 0 78px;
+      background: var(--ink);
+      color: var(--white);
+      text-align: center;
+    }
+    .final-title { font-family: var(--display); font-size: clamp(42px, 11vw, 57px); font-weight: 600; line-height: .98; letter-spacing: -.04em; text-wrap: balance; }
+    .final p { max-width: 520px; margin: 15px auto 0; color: rgba(255,255,255,.7); font-size: 13px; }
+    .button {
+      min-height: 56px;
+      margin-top: 26px;
+      padding: 0 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 14px 30px rgba(0,0,0,.18);
+    }
+    .cta-note { display: block; margin-top: 12px; color: rgba(255,255,255,.58); font-size: 10px; }
+    footer { padding: 21px; border-top: 1px solid rgba(26,22,32,.12); background: var(--paper); color: var(--muted); font-size: 9px; text-align: center; }
+    @media (min-width: 600px) {
+      .shell { width: calc(100% - 76px); }
+      .hero { padding-top: 62px; padding-bottom: 70px; }
+      .profile-gallery { padding: 24px; }
+      .profile-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .meaning-grid { grid-template-columns: 1.15fr .85fr; align-items: start; }
+      .meaning-copy { padding: 0 0 0 30px; border-top: 0; border-left: 1px solid var(--ink); }
+      .proof-card { grid-template-columns: 250px minmax(0, 1fr); gap: 44px; }
+      .portrait-matte { width: 250px; }
+      .reading-row { grid-template-columns: 145px minmax(0, 1fr); gap: 24px; }
+      .authority-card { grid-template-columns: 250px minmax(0, 1fr); gap: 46px; }
+      .authority-portrait { width: 250px; }
+    }
+    @media (min-width: 720px) {
+      .shell { width: calc(100% - 96px); }
+      .proof-card { grid-template-columns: 280px minmax(0, 1fr); }
+      .portrait-matte { width: 280px; }
+      .authority-card { grid-template-columns: 270px minmax(0, 1fr); }
+      .authority-portrait { width: 270px; }
+    }
+    @media (max-width: 350px) {
+      .shell { width: calc(100% - 30px); }
+      .profile-gallery { padding: 13px; }
+      .result-panel { padding-inline: 17px 13px; }
+      .result-value { font-size: 21px; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <img class="logo" src="../../inapp/app-assets/logo-black.svg" width="150" height="40" alt="Zodiac.fm">
+    <div class="coupon">David's 20% coupon<strong>Applied automatically</strong></div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="premium-title">
+      <div class="shell">
+        <div class="hero-copy">
+          <div class="eyebrow">Your Personal Frequency Profile</div>
+          <h1 id="premium-title">Michael, your Personal Frequency Profile is ready.</h1>
+          <p class="hero-lede"><strong>Your exact birth moment</strong> resolved into four personal frequencies. Here are the values, the bands they land in, and the music built around them.</p>
+        </div>
+
+        <section class="profile-gallery" aria-label="Michael's Personal Frequency Profile">
+          <div class="profile-head">
+            <div><span class="profile-label">Personal Frequency Profile</span><span class="profile-name">Michael</span></div>
+            <p class="profile-source">From your exact birth moment</p>
+          </div>
+          <div class="profile-grid">
+            <article class="result-panel">
+              <div class="result-top"><span class="result-name">Core</span><span class="result-value">422 <small>Hz</small></span></div>
+              <p class="result-meaning">Identity and purpose</p>
+              <p class="result-band">Root Band · 250 to 425 Hz</p>
+            </article>
+            <article class="result-panel love">
+              <div class="result-top"><span class="result-name">Love</span><span class="result-value">432 <small>Hz</small></span></div>
+              <p class="result-meaning">Connection and relationships</p>
+              <p class="result-band">Solar Plexus Band · 425 to 600 Hz</p>
+            </article>
+            <article class="result-panel vitality">
+              <div class="result-top"><span class="result-name">Vitality</span><span class="result-value">579 <small>Hz</small></span></div>
+              <p class="result-meaning">Energy and momentum</p>
+              <p class="result-band">Solar Plexus Band · 425 to 600 Hz</p>
+            </article>
+            <article class="result-panel abundance">
+              <div class="result-top"><span class="result-name">Abundance</span><span class="result-value">611 <small>Hz</small></span></div>
+              <p class="result-meaning">Exchange and opportunity</p>
+              <p class="result-band">Throat Band · 600 to 775 Hz</p>
+            </article>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="meaning" aria-labelledby="premium-meaning">
+      <div class="shell meaning-grid">
+        <h2 id="premium-meaning">What the profile is showing you.</h2>
+        <p class="meaning-copy"><strong>Your frequency is what your signal is.</strong> Your band is how you naturally process that part of your life. The exact value identifies the signal; the band describes the channel through which understanding most naturally takes shape.</p>
+      </div>
+    </section>
+
+    <section class="proof" id="david-proof" aria-label="David McEwen proof">
+      <div class="shell">
+        <figure class="proof-card">
+          <div class="portrait-matte"><img src="../../landers/reveal-assets/img-images_testimonials_david-mcewen-d2c.png" width="500" height="500" alt="David McEwen"></div>
+          <figcaption class="proof-copy">
+            <blockquote>“It's like a little cheat code for experiencing your authentic vibration. Because it's personalized to you, not generic. I use it every day. This one earned it.”</blockquote>
+            <cite><strong>David McEwen</strong>Transformation Thought Leader · Over 12 Million YouTube Views</cite>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="reading" id="placement-reading" aria-labelledby="premium-reading">
+      <div class="shell">
+        <h2 id="premium-reading">How each part of your profile takes shape.</h2>
+        <p class="reading-intro">The spectrum is continuous, not a ladder. Everyone uses all four bands. Your placements show where each part of your profile naturally begins.</p>
+        <div class="reading-list">
+          <article class="reading-row"><div class="reading-key">Core · 422 Hz</div><div class="reading-copy"><h3>Root Band</h3><p><strong>Identity and purpose through grounding and steadiness.</strong> Settle first and let the answer take shape from the settled place.</p></div></article>
+          <article class="reading-row love"><div class="reading-key">Love · 432 Hz</div><div class="reading-copy"><h3>Solar Plexus Band</h3><p><strong>Connection and relationships through motion and drive.</strong> Move on the question and let the answer form while you are in motion.</p></div></article>
+          <article class="reading-row vitality"><div class="reading-key">Vitality · 579 Hz</div><div class="reading-copy"><h3>Solar Plexus Band</h3><p><strong>Energy and momentum through motion and drive.</strong> Move on the question and let the answer form while you are in motion.</p></div></article>
+          <article class="reading-row abundance"><div class="reading-key">Abundance · 611 Hz</div><div class="reading-copy"><h3>Throat Band</h3><p><strong>Exchange and opportunity through words.</strong> Say it, write it, or name it until the knowing completes in the sentences.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="authority" id="rhonda-authority" aria-labelledby="premium-authority">
+      <figure class="shell authority-card">
+        <div class="authority-portrait"><img src="../../landers/reveal-assets/img-images_testimonials_rhonda-britten-d2c.png" width="500" height="500" alt="Rhonda Britten"></div>
+        <figcaption class="authority-copy">
+          <h2 id="premium-authority">The result is personal. Listening helps it become familiar.</h2>
+          <blockquote>“If you're tired of living out of tune with yourself, this is your invitation home.”</blockquote>
+          <cite><strong>Rhonda Britten</strong>Author of “Fearless Living” · Emmy Award-Winner · Founder, Fearless Living Institute</cite>
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="final" id="hear-frequencies" aria-label="Hear your frequencies">
+      <div class="shell">
+        <p class="final-title">Now hear what your profile sounds like.</p>
+        <p>Your values run continuously through cinematic, lyric-free music built around your four personal frequencies.</p>
+        <a class="button" href="/funnel/mcewen-edit/04-join">Hear My Frequencies&nbsp; →</a>
+        <span class="cta-note">David's 20% coupon is applied automatically.</span>
+      </div>
+    </section>
+  </main>
+
+  <footer>© 2026 Zodiac.fm · Privacy · Terms</footer>
+</body>
+</html>

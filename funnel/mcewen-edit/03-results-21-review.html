@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="McEwen Results 21. The locked split-view page builder comparing the new control with one premium alternative.">
+  <title>McEwen Results 21 · Locked Builder · Control vs Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <style id="loading-style">
+    html { visibility: hidden; }
+    html.styles-ready { visibility: visible; }
+  </style>
+  <script>
+    (async () => {
+      try {
+        const source = await fetch("03-results-16-review.html", { cache: "no-store" }).then(response => response.text());
+        const parsed = new DOMParser().parseFromString(source, "text/html");
+        const lockedStyle = parsed.querySelector("style");
+        if (!lockedStyle) throw new Error("Locked builder styles were not found.");
+        const style = document.createElement("style");
+        style.textContent = lockedStyle.textContent;
+        document.head.append(style);
+      } catch (error) {
+        console.error("Locked builder styling could not be loaded.", error);
+      } finally {
+        document.documentElement.classList.add("styles-ready");
+      }
+    })();
+  </script>
+</head>
+<body>
+  <h1 class="sr-only">McEwen Results control and premium page builder</h1>
+
+  <div class="toolbar-wrap">
+    <div class="toolbar">
+      <div class="primary-controls">
+        <label class="field">
+          <span class="field-label">Page</span>
+          <select id="page-select" aria-label="Choose page to review">
+            <option value="03-results-21">McEwen Results · Control vs Premium</option>
+          </select>
+        </label>
+
+        <div class="field">
+          <span class="field-label">Mode</span>
+          <div class="segments" id="mode-controls" aria-label="Choose review mode">
+            <button type="button" data-mode="differences" aria-pressed="true">Build Page</button>
+            <button type="button" data-mode="recipe" aria-pressed="false">Final Page <span class="recipe-count" id="recipe-count">0</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-controls">
+        <div class="field" id="choice-field">
+          <span class="field-label" id="choice-label">Compare</span>
+          <div class="segments" id="pair-controls" aria-label="Compare the two directions">
+            <button type="button" aria-pressed="true">Control + Premium</button>
+          </div>
+          <div class="segments" id="base-controls" aria-label="Choose starting page" hidden>
+            <button type="button" data-base="a" aria-pressed="true">New control</button>
+            <button type="button" data-base="b" aria-pressed="false">Premium</button>
+          </div>
+        </div>
+
+        <div class="field" id="viewport-field">
+          <span class="field-label">Viewport</span>
+          <div class="segments" id="viewport-controls" aria-label="Choose viewport">
+            <button type="button" data-viewport="mobile" aria-pressed="false">iPhone mini</button>
+            <button type="button" data-viewport="compare" aria-pressed="true">2 iPhones</button>
+            <button type="button" data-viewport="tablet" aria-pressed="false">2 Tablets</button>
+            <button type="button" data-viewport="desktop" aria-pressed="false">2 Desktops</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar-actions">
+        <a class="open-page" id="open-page" href="03-results-17-control.html" target="_blank" rel="noopener">Open new control full page ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="review-layout">
+    <aside class="directory" aria-label="Page section directory">
+      <div class="directory-head">
+        <h2>Choose a section</h2>
+        <p>The highlighted section is the one you are building.</p>
+      </div>
+      <ol class="section-list" id="section-list"></ol>
+    </aside>
+
+    <div class="workbench">
+      <section class="stage" aria-live="polite">
+        <div class="stage-head">
+          <div class="stage-summary">
+            <span class="stage-count" id="stage-count">Section 1 of 9</span>
+            <h2 class="stage-title" id="stage-title">Offer and brand header</h2>
+            <p class="stage-instruction" id="stage-instruction">This section is the same in both pages. No choice is needed.</p>
+          </div>
+          <div class="stage-actions">
+            <div class="build-switch">
+              <span class="build-switch-label">Which version are you building?</span>
+              <div class="build-tabs" id="build-controls" aria-label="Choose the version to build">
+                <button type="button" data-build="one" aria-pressed="true"><strong>Version 1</strong><small id="build-summary-one">Starts with new control · 0 choices</small></button>
+                <button type="button" data-build="two" aria-pressed="false"><strong>Version 2</strong><small id="build-summary-two">Starts with new control · 0 choices</small></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="frame-outer" id="frame-outer">
+          <div id="single-preview" hidden>
+            <div class="frame-shell" id="frame-shell">
+              <iframe id="review-frame" title="Scrollable selected McEwen Results page" loading="eager" scrolling="yes" tabindex="0"></iframe>
+            </div>
+          </div>
+          <div class="compare-preview" id="compare-preview">
+            <div class="compare-item">
+              <button class="compare-label" id="compare-label-1" type="button" aria-pressed="false">New control</button>
+              <div class="compare-shell" id="compare-shell-1">
+                <iframe id="compare-frame-1" title="Scrollable Results 17 new control" loading="eager" scrolling="yes" tabindex="0"></iframe>
+              </div>
+            </div>
+            <div class="compare-item">
+              <button class="compare-label" id="compare-label-2" type="button" aria-pressed="false">Premium alternative</button>
+              <div class="compare-shell" id="compare-shell-2">
+                <iframe id="compare-frame-2" title="Scrollable Results 20 premium alternative" loading="eager" scrolling="yes" tabindex="0"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mode-panel" id="differences-panel">
+        <div class="panel-head">
+          <h2 id="difference-title">Decisions in Offer and brand header.</h2>
+          <p id="difference-intro">Choose with the black bar above a page. Scroll either page normally to review it. The bar, directory, and version count confirm the same choice.</p>
+        </div>
+        <div id="difference-content"></div>
+      </section>
+
+      <section class="mode-panel" id="recipe-panel" hidden>
+        <div class="panel-head">
+          <h2>Your two builds.</h2>
+          <p>Switch between Version 1 and Version 2 above. Each keeps its own Starting Page and selected sections.</p>
+        </div>
+        <div class="winner-choice">
+          <strong>Which built version do you prefer?</strong>
+          <div class="segments" id="winner-controls">
+            <button type="button" data-winner="one" aria-pressed="false">Choose Version 1</button>
+            <button type="button" data-winner="two" aria-pressed="false">Choose Version 2</button>
+          </div>
+        </div>
+        <div class="recipe-intro">
+          <div>
+            <span class="recipe-base-label">Starting page</span>
+            <div class="recipe-base-title" id="recipe-base-title">Version 1 · Results 17 · New control</div>
+          </div>
+          <p>The black bars are the choosers. Every selected section is recorded below.</p>
+        </div>
+        <ul class="recipe-list" id="recipe-list"></ul>
+        <div class="recipe-empty" id="recipe-empty">No selected changes yet. Version 1 currently matches the new control exactly.</div>
+        <div class="brief-wrap">
+          <span class="brief-label">Build instructions</span>
+          <p class="recipe-brief" id="recipe-brief"></p>
+        </div>
+        <div class="recipe-actions">
+          <button class="primary-action" type="button" id="copy-brief">Copy build instructions</button>
+          <button type="button" id="copy-link">Copy this setup</button>
+          <button class="clear-action" type="button" id="clear-recipe">Reset this version</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const variants = {
+      a: {
+        title: "Results 17 · New control",
+        short: "New control",
+        source: "03-results-17-control.html"
+      },
+      b: {
+        title: "Results 20 · Premium alternative",
+        short: "Premium alternative",
+        source: "03-results-20-premium.html"
+      }
+    };
+
+    const sections = [
+      { id: "header", name: "Offer and brand header", selectors: { a: ".topbar", b: ".topbar" }, shared: true },
+      { id: "opening", name: "Opening promise", selectors: { a: ".hero", b: ".hero" } },
+      { id: "profile", name: "Personal Frequency Profile", selectors: { a: ".instrument", b: ".profile-gallery" } },
+      { id: "meaning", name: "Meaning and explanation", selectors: { a: ".meaning", b: ".meaning" } },
+      { id: "david", name: "David proof", selectors: { a: ".proof", b: ".proof" } },
+      { id: "reading", name: "Placement reading", selectors: { a: ".reading", b: ".reading" } },
+      { id: "authority", name: "Rhonda authority", selectors: { a: ".authority", b: ".authority" } },
+      { id: "action", name: "Invitation to listen", selectors: { a: ".final", b: ".final" } },
+      { id: "footer", name: "Footer", selectors: { a: "footer", b: "footer" }, shared: true }
+    ];
+
+    const viewports = {
+      mobile: { width: 375, height: 812 },
+      compare: { width: 375, height: 812 },
+      tablet: { width: 768, height: 1024 },
+      desktop: { width: 1440, height: 1000 }
+    };
+    const comparisonReviewHeights = { mobile: 1180, tablet: 1320, desktop: 1380 };
+    const validModes = ["differences", "recipe"];
+    const state = {
+      mode: "differences",
+      variant: "a",
+      section: "header",
+      viewport: "compare",
+      build: "one",
+      winner: "",
+      builds: {
+        one: { base: "a", sectionOverrides: {} },
+        two: { base: "a", sectionOverrides: {} }
+      }
+    };
+
+    Object.defineProperties(state, {
+      base: {
+        get() { return state.builds[state.build].base; },
+        set(value) { state.builds[state.build].base = value; }
+      },
+      sectionOverrides: {
+        get() { return state.builds[state.build].sectionOverrides; },
+        set(value) { state.builds[state.build].sectionOverrides = value; }
+      }
+    });
+
+    const list = document.getElementById("section-list");
+    const frame = document.getElementById("review-frame");
+    const frameOuter = document.getElementById("frame-outer");
+    const frameShell = document.getElementById("frame-shell");
+    const singlePreview = document.getElementById("single-preview");
+    const comparePreview = document.getElementById("compare-preview");
+    const compareFrames = [
+      document.getElementById("compare-frame-1"),
+      document.getElementById("compare-frame-2")
+    ];
+    const compareShells = [
+      document.getElementById("compare-shell-1"),
+      document.getElementById("compare-shell-2")
+    ];
+
+    function selectedSection() {
+      return sections.find(section => section.id === state.section) || sections[0];
+    }
+
+    function hasChoice(section) {
+      return !section.shared;
+    }
+
+    function buildName(buildId = state.build) {
+      return buildId === "one" ? "Version 1" : "Version 2";
+    }
+
+    function recipeSize(buildId = state.build) {
+      return Object.keys(state.builds[buildId].sectionOverrides).length;
+    }
+
+    function effectiveViewport() {
+      return state.viewport === "compare" ? "mobile" : state.viewport;
+    }
+
+    function isComparing() {
+      return state.mode === "differences";
+    }
+
+    function effectiveVariant() {
+      return state.mode === "recipe" ? state.base : state.variant;
+    }
+
+    function frameVariant(activeFrame) {
+      try {
+        const path = activeFrame.contentWindow.location.pathname;
+        if (path.includes("03-results-20-premium")) return "b";
+        if (path.includes("03-results-17-control")) return "a";
+      } catch (error) {
+        return state.variant;
+      }
+      return state.variant;
+    }
+
+    function sectionSelector(section, variant) {
+      return section.selectors[variant];
+    }
+
+    function buildDirectory() {
+      sections.forEach((section, index) => {
+        const item = document.createElement("li");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.section = section.id;
+        button.innerHTML = `<span class="section-number">${String(index + 1).padStart(2, "0")}</span><span class="section-name">${section.name}</span><span class="section-status ${section.shared ? "" : "has-diffs"}">${section.shared ? "same" : "not chosen"}</span>`;
+        button.addEventListener("click", () => setSection(section.id));
+        item.append(button);
+        list.append(item);
+      });
+    }
+
+    function serializeMap(map) {
+      return Object.entries(map).map(([key, value]) => `${key}:${value}`).join(",");
+    }
+
+    function parseMap(value) {
+      const map = {};
+      if (!value) return map;
+      value.split(",").forEach(entry => {
+        const [key, choice] = entry.split(":");
+        if (sections.some(section => section.id === key && !section.shared) && variants[choice]) {
+          map[key] = choice;
+        }
+      });
+      return map;
+    }
+
+    function updateQuery() {
+      const url = new URL(window.location.href);
+      url.searchParams.set("mode", state.mode);
+      url.searchParams.set("variant", state.variant);
+      url.searchParams.set("section", state.section);
+      url.searchParams.set("viewport", state.viewport);
+      url.searchParams.set("build", state.build);
+      state.winner ? url.searchParams.set("winner", state.winner) : url.searchParams.delete("winner");
+      [["one", "1"], ["two", "2"]].forEach(([buildId, suffix]) => {
+        const build = state.builds[buildId];
+        url.searchParams.set(`base${suffix}`, build.base);
+        const sectionMap = serializeMap(build.sectionOverrides);
+        sectionMap ? url.searchParams.set(`so${suffix}`, sectionMap) : url.searchParams.delete(`so${suffix}`);
+      });
+      history.replaceState(null, "", url);
+    }
+
+    function renderDifferences() {
+      const section = selectedSection();
+      const explicitChoice = state.sectionOverrides[section.id];
+      const resolved = explicitChoice || state.base;
+      const content = document.getElementById("difference-content");
+      document.getElementById("difference-title").textContent = `Decisions in ${section.name}.`;
+      document.getElementById("difference-intro").textContent = hasChoice(section)
+        ? `Use the black bar above the page treatment you accept for ${section.name}. The long page windows remain freely scrollable.`
+        : "This section is identical in the new control and premium alternative.";
+
+      if (!hasChoice(section)) {
+        content.innerHTML = `<div class="no-differences"><strong>No design difference here.</strong><p>Copy, layout, and styling are shared. There is nothing to choose for this section.</p></div>`;
+        return;
+      }
+
+      content.innerHTML = `
+        <div class="choice-receipt">
+          <span>${buildName()} · Current section result</span>
+          <strong>${section.name} uses ${variants[resolved].title}</strong>
+          <small>${explicitChoice ? "Chosen from the comparison above." : `Not chosen yet. Currently inherited from the ${buildName()} Starting Page.`}</small>
+        </div>
+        <p class="shared-note"><strong>Next:</strong> choose another section from the directory, or switch to Version 2 and build a different page.</p>`;
+    }
+
+    function buildBrief() {
+      const lines = [`${buildName()}. Start with ${variants[state.base].title}.`];
+      sections.forEach(section => {
+        const choice = state.sectionOverrides[section.id];
+        if (choice) lines.push(`Use the complete ${section.name} treatment from ${variants[choice].title}.`);
+      });
+      lines.push(`Keep every other design decision from ${variants[state.base].title}.`);
+      return lines.join(" ");
+    }
+
+    function renderRecipe() {
+      document.getElementById("recipe-base-title").textContent = `${buildName()} · ${variants[state.base].title}`;
+      const listItems = sections.flatMap(section => {
+        const choice = state.sectionOverrides[section.id];
+        return choice ? [{ key: section.id, title: section.name, detail: `Use ${variants[choice].title}` }] : [];
+      });
+
+      const recipeList = document.getElementById("recipe-list");
+      recipeList.innerHTML = listItems.map(item => `
+        <li class="recipe-item">
+          <div><span class="recipe-item-scope">Selected section</span><strong>${item.title}</strong><small>${item.detail}</small></div>
+          <button class="remove-choice" type="button" data-remove-key="${item.key}">Remove</button>
+        </li>`).join("");
+
+      document.getElementById("recipe-empty").hidden = listItems.length > 0;
+      document.getElementById("recipe-empty").textContent = `No selected changes yet. ${buildName()} currently matches ${variants[state.base].title} exactly.`;
+      document.getElementById("recipe-brief").textContent = buildBrief();
+      document.getElementById("recipe-count").textContent = recipeSize();
+
+      ["one", "two"].forEach(buildId => {
+        const build = state.builds[buildId];
+        const count = recipeSize(buildId);
+        document.getElementById(`build-summary-${buildId}`).textContent = `Starts with ${variants[build.base].short.toLowerCase()} · ${count} ${count === 1 ? "choice" : "choices"}`;
+      });
+
+      document.querySelectorAll("[data-winner]").forEach(button => {
+        button.setAttribute("aria-pressed", button.dataset.winner === state.winner ? "true" : "false");
+      });
+      recipeList.querySelectorAll("[data-remove-key]").forEach(button => {
+        button.addEventListener("click", () => {
+          delete state.sectionOverrides[button.dataset.removeKey];
+          updateControls();
+        });
+      });
+    }
+
+    function updateControls() {
+      const comparing = isComparing();
+      document.getElementById("pair-controls").hidden = !comparing;
+      document.getElementById("base-controls").hidden = comparing;
+      document.getElementById("choice-label").textContent = comparing ? "Compare" : `Starting Page for ${buildName()}`;
+      document.querySelector('[data-viewport="mobile"]').hidden = comparing;
+      document.querySelector('[data-viewport="compare"]').hidden = !comparing;
+      document.querySelector('[data-viewport="tablet"]').textContent = comparing ? "2 Tablets" : "Tablet";
+      document.querySelector('[data-viewport="desktop"]').textContent = comparing ? "2 Desktops" : "Desktop";
+      singlePreview.hidden = comparing;
+      comparePreview.hidden = !comparing;
+
+      document.querySelectorAll("[data-mode]").forEach(button => {
+        button.setAttribute("aria-pressed", button.dataset.mode === state.mode ? "true" : "false");
+      });
+      document.querySelectorAll("[data-base]").forEach(button => {
+        button.setAttribute("aria-pressed", button.dataset.base === state.base ? "true" : "false");
+      });
+      document.querySelectorAll("[data-viewport]").forEach(button => {
+        button.setAttribute("aria-pressed", button.dataset.viewport === state.viewport ? "true" : "false");
+      });
+      document.querySelectorAll("[data-build]").forEach(button => {
+        button.setAttribute("aria-pressed", button.dataset.build === state.build ? "true" : "false");
+      });
+      document.querySelectorAll("[data-section]").forEach(button => {
+        const section = sections.find(item => item.id === button.dataset.section);
+        const choice = state.sectionOverrides[section.id];
+        const status = button.querySelector(".section-status");
+        button.setAttribute("aria-current", section.id === state.section ? "true" : "false");
+        status.textContent = section.shared ? "same" : choice ? `${variants[choice].short} chosen` : "not chosen";
+        status.classList.toggle("has-diffs", Boolean(choice));
+      });
+
+      const section = selectedSection();
+      const index = sections.indexOf(section) + 1;
+      document.getElementById("stage-count").textContent = `Section ${index} of ${sections.length}`;
+      document.getElementById("stage-title").textContent = section.name;
+      const instruction = document.getElementById("stage-instruction");
+      if (comparing && hasChoice(section)) {
+        instruction.innerHTML = `<strong>Choose the ${section.name} treatment for ${buildName()} with the black bar above either page.</strong> Scroll both pages normally. The long window keeps the surrounding page in context.`;
+      } else if (comparing) {
+        instruction.innerHTML = `<strong>${section.name} is the same in both pages.</strong> ${buildName()} does not need a choice here.`;
+      } else {
+        instruction.innerHTML = `<strong>Reviewing ${buildName()}.</strong> Its Starting Page and every choice are collected below.`;
+      }
+
+      const explicitChoice = state.sectionOverrides[section.id];
+      [
+        { variant: "a", label: document.getElementById("compare-label-1") },
+        { variant: "b", label: document.getElementById("compare-label-2") }
+      ].forEach(({ variant, label }) => {
+        const selectable = comparing && hasChoice(section);
+        const selected = selectable && explicitChoice === variant;
+        const inherited = selectable && !explicitChoice && state.base === variant;
+        label.dataset.variant = variant;
+        label.dataset.inherited = inherited ? "true" : "false";
+        label.disabled = !selectable;
+        label.innerHTML = selectable
+          ? `<span>${selected ? `✓ CHOSEN FOR ${buildName()}` : `Choose for ${buildName()}`}</span><strong>${variants[variant].short} · ${section.name}</strong>`
+          : `<span>No choice needed</span><strong>${variants[variant].short} · ${section.name}</strong>`;
+        label.setAttribute("aria-pressed", selected ? "true" : "false");
+      });
+
+      document.getElementById("differences-panel").hidden = !comparing;
+      document.getElementById("recipe-panel").hidden = comparing;
+      const openPage = document.getElementById("open-page");
+      const openVariant = comparing ? "a" : state.base;
+      openPage.href = variants[openVariant].source;
+      openPage.textContent = `Open ${variants[openVariant].short.toLowerCase()} full page ↗`;
+
+      renderDifferences();
+      renderRecipe();
+      updateQuery();
+    }
+
+    function sizeFrame() {
+      const available = Math.max(264, frameOuter.clientWidth - (window.innerWidth >= 1040 ? 64 : 40));
+      if (isComparing()) {
+        const viewport = viewports[effectiveViewport()];
+        const reviewHeight = comparisonReviewHeights[effectiveViewport()] || viewport.height;
+        const gap = 9;
+        const columnWidth = Math.max(112, (available - gap) / 2);
+        const scale = Math.min(1, columnWidth / viewport.width);
+        compareFrames.forEach((activeFrame, index) => {
+          activeFrame.width = viewport.width;
+          activeFrame.height = reviewHeight;
+          activeFrame.style.width = `${viewport.width}px`;
+          activeFrame.style.height = `${reviewHeight}px`;
+          activeFrame.style.transform = `scale(${scale})`;
+          compareShells[index].style.width = `${viewport.width * scale}px`;
+          compareShells[index].style.height = `${reviewHeight * scale}px`;
+        });
+        return;
+      }
+
+      const viewport = viewports[effectiveViewport()];
+      const scale = Math.min(1, available / viewport.width);
+      frame.width = viewport.width;
+      frame.height = viewport.height;
+      frame.style.width = `${viewport.width}px`;
+      frame.style.height = `${viewport.height}px`;
+      frame.style.transform = `scale(${scale})`;
+      frameShell.style.width = `${viewport.width * scale}px`;
+      frameShell.style.height = `${viewport.height * scale}px`;
+    }
+
+    function scrollOneFrameToSection(activeFrame) {
+      try {
+        const variant = frameVariant(activeFrame);
+        const target = activeFrame.contentDocument.querySelector(sectionSelector(selectedSection(), variant));
+        if (!target) return;
+        const top = target.getBoundingClientRect().top + activeFrame.contentWindow.scrollY;
+        const scroller = activeFrame.contentDocument.scrollingElement || activeFrame.contentDocument.documentElement;
+        scroller.scrollTop = top;
+      } catch (error) {
+        console.warn("Section preview could not be positioned.", error);
+      }
+    }
+
+    function syncFrameWhenReady(activeFrame, variant) {
+      let attempts = 0;
+      const expectedSource = variants[variant].source.replace(".html", "");
+      const attempt = () => {
+        let settled = false;
+        try {
+          const loadedPath = activeFrame.contentWindow.location.pathname.replace(".html", "");
+          const target = activeFrame.contentDocument.querySelector(sectionSelector(selectedSection(), variant));
+          if (loadedPath.endsWith(expectedSource) && target) {
+            scrollOneFrameToSection(activeFrame);
+            const scroller = activeFrame.contentDocument.scrollingElement || activeFrame.contentDocument.documentElement;
+            const atPageEnd = Math.abs(scroller.scrollTop - (scroller.scrollHeight - scroller.clientHeight)) < 3;
+            settled = Math.abs(target.getBoundingClientRect().top) < 3 || atPageEnd;
+          }
+        } catch (error) {
+          settled = false;
+        }
+        attempts += 1;
+        if (!settled && attempts < 800) setTimeout(attempt, 25);
+      };
+      attempt();
+    }
+
+    function loadPreview() {
+      if (isComparing()) {
+        ["a", "b"].forEach((variant, index) => {
+          compareFrames[index].onload = () => syncFrameWhenReady(compareFrames[index], variant);
+          compareFrames[index].src = variants[variant].source;
+          syncFrameWhenReady(compareFrames[index], variant);
+        });
+      } else {
+        const variant = effectiveVariant();
+        frame.onload = () => syncFrameWhenReady(frame, variant);
+        frame.src = variants[variant].source;
+        syncFrameWhenReady(frame, variant);
+      }
+    }
+
+    function setSection(id) {
+      state.section = id;
+      updateControls();
+      (isComparing() ? compareFrames : [frame]).forEach(scrollOneFrameToSection);
+    }
+
+    function setMode(mode) {
+      state.mode = mode;
+      if (mode === "differences" && state.viewport === "mobile") state.viewport = "compare";
+      if (mode === "recipe" && state.viewport === "compare") state.viewport = "mobile";
+      updateControls();
+      sizeFrame();
+      loadPreview();
+    }
+
+    function setViewport(id) {
+      state.viewport = id;
+      updateControls();
+      sizeFrame();
+      loadPreview();
+    }
+
+    function setBuild(id) {
+      if (!state.builds[id]) return;
+      state.build = id;
+      state.variant = state.base;
+      updateControls();
+      loadPreview();
+    }
+
+    function setBase(id) {
+      if (!variants[id]) return;
+      state.base = id;
+      state.variant = id;
+      updateControls();
+      loadPreview();
+    }
+
+    function setSectionChoice(choice) {
+      const section = selectedSection();
+      if (!hasChoice(section) || !variants[choice]) return;
+      state.sectionOverrides[section.id] = choice;
+      updateControls();
+    }
+
+    function setWinner(id) {
+      state.winner = state.winner === id ? "" : id;
+      updateControls();
+    }
+
+    async function copyText(text, button, successLabel) {
+      const original = button.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = successLabel;
+      } catch (error) {
+        const area = document.createElement("textarea");
+        area.value = text;
+        document.body.append(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+        button.textContent = successLabel;
+      }
+      setTimeout(() => { button.textContent = original; }, 1600);
+    }
+
+    document.getElementById("mode-controls").addEventListener("click", event => {
+      const button = event.target.closest("[data-mode]");
+      if (button) setMode(button.dataset.mode);
+    });
+    document.getElementById("base-controls").addEventListener("click", event => {
+      const button = event.target.closest("[data-base]");
+      if (button) setBase(button.dataset.base);
+    });
+    document.getElementById("viewport-controls").addEventListener("click", event => {
+      const button = event.target.closest("[data-viewport]");
+      if (button) setViewport(button.dataset.viewport);
+    });
+    document.getElementById("build-controls").addEventListener("click", event => {
+      const button = event.target.closest("[data-build]");
+      if (button) setBuild(button.dataset.build);
+    });
+    document.getElementById("winner-controls").addEventListener("click", event => {
+      const button = event.target.closest("[data-winner]");
+      if (button) setWinner(button.dataset.winner);
+    });
+    [document.getElementById("compare-label-1"), document.getElementById("compare-label-2")].forEach(button => {
+      button.addEventListener("click", () => {
+        if (!button.disabled) setSectionChoice(button.dataset.variant);
+      });
+    });
+    document.getElementById("copy-brief").addEventListener("click", event => {
+      copyText(buildBrief(), event.currentTarget, "Instructions copied");
+    });
+    document.getElementById("copy-link").addEventListener("click", event => {
+      copyText(window.location.href, event.currentTarget, "Setup copied");
+    });
+    document.getElementById("clear-recipe").addEventListener("click", () => {
+      state.sectionOverrides = {};
+      updateControls();
+    });
+    window.addEventListener("resize", sizeFrame);
+
+    const params = new URLSearchParams(window.location.search);
+    if (validModes.includes(params.get("mode"))) state.mode = params.get("mode");
+    if (variants[params.get("variant")]) state.variant = params.get("variant");
+    if (sections.some(section => section.id === params.get("section"))) state.section = params.get("section");
+    if (viewports[params.get("viewport")]) state.viewport = params.get("viewport");
+    if (state.builds[params.get("build")]) state.build = params.get("build");
+    if (state.builds[params.get("winner")]) state.winner = params.get("winner");
+    if (state.mode === "differences" && state.viewport === "mobile") state.viewport = "compare";
+    if (state.mode === "recipe" && state.viewport === "compare") state.viewport = "mobile";
+    [["one", "1"], ["two", "2"]].forEach(([buildId, suffix]) => {
+      const build = state.builds[buildId];
+      if (variants[params.get(`base${suffix}`)]) build.base = params.get(`base${suffix}`);
+      build.sectionOverrides = parseMap(params.get(`so${suffix}`));
+    });
+
+    buildDirectory();
+    updateControls();
+    sizeFrame();
+    loadPreview();
+  </script>
+</body>
+</html>
