@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="McEwen Results 23. The locked split-view builder comparing Results 17 with the vertical premium Results 22.">
+  <title>McEwen Results 23 · Locked Builder · Control vs Vertical Premium</title>
+  <style>
+    html, body { min-height: 100%; margin: 0; background: #f6f1e8; }
+    body { display: grid; place-items: center; font: 14px system-ui, sans-serif; color: #1a1620; }
+    h1 { position: fixed; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  </style>
+  <script>
+    (async () => {
+      try {
+        const source = await fetch("03-results-21-review.html", { cache: "no-store" }).then(response => response.text());
+        const revised = source
+          .replaceAll("03-results-20-premium.html", "03-results-22-premium-vertical.html")
+          .replaceAll("Results 20 · Premium alternative", "Results 22 · Vertical premium")
+          .replaceAll("Results 21 · Locked Builder · Control vs Premium", "Results 23 · Locked Builder · Control vs Vertical Premium")
+          .replaceAll("McEwen Results 21.", "McEwen Results 23.")
+          .replaceAll("Premium alternative", "Vertical premium");
+        document.open();
+        document.write(revised);
+        document.close();
+      } catch (error) {
+        document.body.innerHTML = "<p>The locked builder could not be loaded.</p>";
+        console.error(error);
+      }
+    })();
+  </script>
+</head>
+<body>
+  <h1>McEwen Results control and vertical premium page builder</h1>
+  <p>Loading the locked Results builder.</p>
+</body>
+</html>
