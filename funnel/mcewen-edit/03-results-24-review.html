@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="McEwen Results 24. The locked Results builder with current funnel-stage review navigation.">
+  <title>McEwen Results 24 · Locked Builder · Funnel Review Navigation</title>
+  <style>
+    html, body { min-height: 100%; margin: 0; background: #f6f1e8; }
+    body { display: grid; place-items: center; font: 14px system-ui, sans-serif; color: #1a1620; }
+    h1 { position: fixed; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  </style>
+  <script>
+    (async () => {
+      try {
+        const source = await fetch("03-results-21-review.html", { cache: "no-store" }).then(response => response.text());
+        const pageSelectMarkup = `<select id="page-select" aria-label="Choose page to review">
+            <option value="01-lander.html">01 · Lander · Locked McEwen 25</option>
+            <option value="02-birth-time-03-review.html">02 · Birth Time · Direction 03</option>
+            <option value="03-results-24-review.html" selected>03 · Results · Control vs Vertical Premium</option>
+            <option value="04-join.html">04 · Join · Current Reveal checkout</option>
+          </select>`;
+        const navigationScript = '<script>document.getElementById("page-select").addEventListener("change", event => { const destination = event.currentTarget.value; if (destination) window.location.assign(destination); });<' + '/script>';
+        const revised = source
+          .replaceAll("03-results-20-premium.html", "03-results-22-premium-vertical.html")
+          .replaceAll("Results 20 · Premium alternative", "Results 22 · Vertical premium")
+          .replaceAll("Results 21 · Locked Builder · Control vs Premium", "Results 24 · Locked Builder · Funnel Review Navigation")
+          .replaceAll("McEwen Results 21.", "McEwen Results 24.")
+          .replaceAll("Premium alternative", "Vertical premium")
+          .replace(`<select id="page-select" aria-label="Choose page to review">
+            <option value="03-results-21">McEwen Results · Control vs Premium</option>
+          </select>`, pageSelectMarkup)
+          .replace("</body>", `${navigationScript}
+</body>`);
+        document.open();
+        document.write(revised);
+        document.close();
+      } catch (error) {
+        document.body.innerHTML = "<p>The locked builder could not be loaded.</p>";
+        console.error(error);
+      }
+    })();
+  </script>
+</head>
+<body>
+  <h1>McEwen Results builder with funnel review navigation</h1>
+  <p>Loading the locked Results builder.</p>
+</body>
+</html>
