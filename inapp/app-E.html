@@ -1082,8 +1082,21 @@ applyGraduated();
     document.querySelectorAll('#favs .ministat').forEach(function(ms){
       ms.innerHTML='<span class="ms-lbl">Week:</span><span class="ms-ind"><i class="ms-txt'+(played.balanced?'':' low')+'">'+fmtTotal(played.total)+'</i></span>'
         +'<button class="ms-balnow" type="button">Balance Now<i>&rsaquo;</i></button>';
+      if(!ms.__weekTap){
+        /* the shared ministat taps through to Progress — on the Playlist that's the wrong
+           destination (Michael 2026-07-25): tapping the week number opens the meter instead.
+           Cloning drops ministat.js's Progress listener; its install() never re-binds an
+           existing node, so the swap sticks across re-renders and hashchange. */
+        var clone=ms.cloneNode(false); clone.__weekTap=true;
+        while(ms.firstChild) clone.appendChild(ms.firstChild);
+        ms.parentNode.replaceChild(clone, ms);
+        ms=clone;
+        ms.addEventListener('click', function(e){
+          if(e.target.closest('.ms-balnow')) return;
+          var z=document.getElementById('zbal'); if(z) z.classList.toggle('open');
+        });
+      }
       ms.querySelector('.ms-balnow').addEventListener('click', function(e){
-        /* the ministat container itself routes to Progress — keep that off the button */
         e.stopPropagation();
         if(window.zbalBalanceNow) window.zbalBalanceNow();
       });
