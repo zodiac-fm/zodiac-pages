@@ -1018,8 +1018,10 @@ applyGraduated();
   .ministat .ms-lbl{white-space:nowrap}
   /* Engine readout belongs to the Playlist only (Michael 2026-07-11): hide the Immersions header's ministat */
   section#list .ministat{display:none}
-  /* E: Balance Now sits under the Week row, same quiet scale as the ministat itself. */
-  .ms-balnow{grid-column:1/-1;justify-self:start;margin-top:2px;border:1px solid #542EB7;background:#fff;color:#542EB7;border-radius:999px;padding:4px 9px;font:700 9.5px/1 'Switzer',-apple-system,sans-serif;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  /* E: Balance Now under the Week row, in the app's own control voice — the quiet white
+     pill with the hairline cream border (same language as the arrow button and the old
+     Balance-for-me), not a colored marketing chip. */
+  .ms-balnow{grid-column:1/-1;justify-self:start;margin-top:2px;background:#fff;border:1px solid #eadfce;border-radius:999px;padding:4.5px 10px;font:700 10px/1 'Switzer',-apple-system,sans-serif;color:#1a1620;box-shadow:0 1px 3px rgba(0,0,0,.05);white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}
   .zbal-m{display:inline-block;width:22px;height:3px;border-radius:2px;background:rgba(26,22,32,.10);overflow:hidden;position:relative;margin-left:2px}
   .zbal-m i{position:absolute;left:0;top:0;bottom:0;border-radius:2px}
   .v-b .zbal-t{gap:4px;font-size:8.5px;letter-spacing:0}
