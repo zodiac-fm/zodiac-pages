@@ -20,10 +20,22 @@ color field so it sits directly on a white page.
 
 ## Current status (checked 2026-07-25)
 
-All 13 clean-named files are live-referenced. The 3 priors —
+All 13 clean-named files are live-referenced. The priors —
 `david-mcewen--pre-repair-2026-07-25.png`, `paul-tribe--pre-repair-2026-07-25.png`,
 `hilary-dimassimo--pre-repair-2026-07-25.png` — are correctly unreferenced by
 design (see below).
+
+## David McEwen rollback (2026-07-25, Michael's call)
+
+Michael rejected the set-v6 David repair (the taller 500x700 crop reads as a
+long neck with too much shirt). `david-mcewen.png` was restored to the exact
+`--pre-repair-2026-07-25` bytes (500x500, crops at the collar), here and in the
+greige `img-images_testimonials_david-mcewen-d2c.png` one folder up. The
+rejected v6 bytes are preserved as `david-mcewen--v6-rejected-2026-07-25.png`
+(and the matching `-d2c--v6-rejected-` file) — never reference, never reship
+without a fresh Michael GO. The v6 commit's David-specific CSS/attr edits
+(500x700 img attrs, cover→contain on David's fixed boxes in mcewen-01/07/10 and
+results-26) were reverted with it. Hilary's shipped v6 fix was NOT touched.
 
 ## Regenerating a headshot
 
