@@ -1018,10 +1018,10 @@ applyGraduated();
   .ministat .ms-lbl{white-space:nowrap}
   /* Engine readout belongs to the Playlist only (Michael 2026-07-11): hide the Immersions header's ministat */
   section#list .ministat{display:none}
-  /* E: Balance Now is not a button — it's a third ministat row, congruent with Week
-     above it (same size, same grammar), set in the violet accent with a chevron: in this
-     design violet ink IS the tappable signal (iOS-style colored-text affordance). */
-  .ms-balnow{grid-column:1/-1;justify-self:start;margin-top:1px;display:inline-flex;align-items:center;gap:2px;background:none;border:0;padding:0;font:700 9.5px/1 'Switzer',-apple-system,sans-serif;letter-spacing:.03em;color:#542EB7;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative}
+  /* E: Balance Now is not a button — a third ministat row, congruent with Week above it.
+     NEUTRAL ink (violet = Core's band color on this screen): the app's dark interactive
+     ink + the › disclosure chevron carry the tap affordance, iOS-style. */
+  .ms-balnow{grid-column:1/-1;justify-self:start;margin-top:1px;display:inline-flex;align-items:center;gap:2px;background:none;border:0;padding:0;font:700 9.5px/1 'Switzer',-apple-system,sans-serif;letter-spacing:.03em;color:#1a1620;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative}
   .ms-balnow::before{content:'';position:absolute;inset:-9px}
   .ms-balnow i{font-style:normal;font-size:11px;line-height:1;transform:translateY(-.5px)}
   .zbal-m{display:inline-block;width:22px;height:3px;border-radius:2px;background:rgba(26,22,32,.10);overflow:hidden;position:relative;margin-left:2px}
