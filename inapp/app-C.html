@@ -407,18 +407,17 @@
   <section class="screen" id="favs" style="display:none;z-index:5;background:var(--cream)">
     <div class="top"><div class="logo serif"><img class="logoimg" src="app-assets/logo-black.svg" alt="zodiac.fm"><span class="appletter">A</span></div><div class="ham"><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.4-3.6 4.6-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg></div></div>
     <div class="zbal" id="zbal">
-      <div class="zbal-line" id="zbalLine" title="Press the arrow to balance it for you">
+      <div class="zbal-line" id="zbalLine">
         <span class="zbal-toks" id="zbalToks"></span>
-        <span class="zbal-chevbtn" title="Press the arrow to balance it for you"><svg class="zbal-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
+        <span class="zbal-chevbtn"><svg class="zbal-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
       </div>
       <div class="zbal-panel">
-        <div class="zbal-act"><span class="zbal-bfm" id="zbalBfm">Balance for me</span><span class="zbal-bfmsub">checks your longest balanced list</span></div>
         <h4 class="zbal-ttl">Frequency Balance Meter</h4>
         <div class="zbal-sub">Keep all four frequencies above 15% each week</div>
         <ol class="zbal-ol">
           <li>The numbers above show where your week lands if you play everything checked. <b class="g">Green</b> = minutes above the line. <b class="r">Red</b> = minutes short.</li>
           <li>Tap <b>+</b> on a red frequency to add songs from your list. Tap <b>−</b> on a green one to trim it back.</li>
-          <li>Top right: <b>Time now</b> is what you've played (it climbs while you listen). <b>After list</b> is where you land after playing what's checked. You're set when After list is green.</li>
+          <li>Top right: <b>Week</b> is what you've played (it climbs while you listen) — <b class="g">green</b> when all four frequencies hold, <b class="r">red</b> when one is short. <b>Balance Now</b> checks the songs that bring your week back into balance.</li>
           <li>Press <b>Play All</b>. Songs play top to bottom and check themselves off as they finish. Remember: just hold a song card to reorder.</li>
           <li>Out of songs? Go to <b>Immersions</b> and tap <span class="ph">&#9829;</span> to add more to this list.</li>
         </ol>
@@ -1037,6 +1036,12 @@ applyGraduated();
   .ministat .ms-lbl{white-space:nowrap}
   /* Engine rows (Time now / After list) belong to the Playlist only (Michael 2026-07-11): hide the Immersions header's ministat */
   section#list .ministat{display:none}
+  /* CONTROL (promoted from E, 2026-07-25): Balance Now is not a button — a third ministat
+     row, congruent with Week above it. Neutral ink (violet = Core's band on this screen):
+     the dark interactive ink + the › disclosure chevron carry the tap affordance. */
+  .ms-balnow{grid-column:1/-1;justify-self:start;margin-top:1px;display:inline-flex;align-items:center;gap:2px;background:none;border:0;padding:0;font:700 9.5px/1 'Switzer',-apple-system,sans-serif;letter-spacing:.03em;color:#1a1620;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative}
+  .ms-balnow::before{content:'';position:absolute;inset:-9px}
+  .ms-balnow i{font-style:normal;font-size:11px;line-height:1;transform:translateY(-.5px)}
   .zbal-m{display:inline-block;width:22px;height:3px;border-radius:2px;background:rgba(26,22,32,.10);overflow:hidden;position:relative;margin-left:2px}
   .zbal-m i{position:absolute;left:0;top:0;bottom:0;border-radius:2px}
   .v-b .zbal-t{gap:4px;font-size:8.5px;letter-spacing:0}
@@ -1070,10 +1075,6 @@ applyGraduated();
   .zbal-popx{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;background:#F6F1E8;color:#63616F;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
   .zbal{position:relative}
   .zbal-min{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #d9cfc0;color:#2A2530;font-size:11px;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-  /* quiet chip, not a black flag (Michael 2026-07-11: it competed with Play All) — the guide-card language: near-white, hairline border, gray ink */
-  .zbal-tip{position:absolute;top:-32px;right:6px;background:rgba(255,255,255,.94);color:#6b6572;font-size:10.5px;font-weight:600;padding:5px 10px;border-radius:10px;border:1px solid rgba(26,22,32,.10);white-space:nowrap;box-shadow:0 3px 10px rgba(26,22,32,.08);opacity:0;pointer-events:none;transition:opacity .18s;z-index:31}
-  .zbal-tip.show{opacity:1}
-  .zbal-tip:after{content:'';position:absolute;top:100%;right:16px;border:5px solid transparent;border-top-color:rgba(255,255,255,.96)}
   @media (max-width:400px){ .zbal-t{font-size:9px} }
 </style>
 <script id="zbal-js">
@@ -1091,15 +1092,19 @@ applyGraduated();
     var m=Math.round(sec/60), h=Math.floor(m/60);
     return h ? h+'h '+(m%60)+'m' : m+'m';
   }
-  /* Top right runs on the engine, two rows: Time = played so far this week (red/green by
-     its own balance); List = where the week lands after playing what's checked (appears
-     only when something is checked, red/green by the projected balance). */
+  /* CONTROL (promoted from E, 2026-07-25): the header carries "Week:" + the played
+     number — green when the played week is balanced, red when it isn't — and Balance Now,
+     a congruent ministat row (neutral ink + chevron) that RUNS the balance action. */
   function paintMinistat(played, proj, hasChecks){
     /* Playlist header only — Immersions carries no time readout (Michael 2026-07-11) */
     document.querySelectorAll('#favs .ministat').forEach(function(ms){
-      var h='<span class="ms-lbl">Time now:</span><span class="ms-ind"><i class="ms-txt'+(played.balanced?'':' low')+'">'+fmtTotal(played.total)+'</i></span>';
-      if(hasChecks) h+='<span class="ms-lbl">After list:</span><span class="ms-ind"><i class="ms-txt'+(proj.balanced?'':' low')+'">'+fmtTotal(proj.total)+'</i></span>';
-      ms.innerHTML=h;
+      ms.innerHTML='<span class="ms-lbl">Week:</span><span class="ms-ind"><i class="ms-txt'+(played.balanced?'':' low')+'">'+fmtTotal(played.total)+'</i></span>'
+        +'<button class="ms-balnow" type="button">Balance Now<i>&rsaquo;</i></button>';
+      ms.querySelector('.ms-balnow').addEventListener('click', function(e){
+        /* the ministat container itself routes to Progress — keep that off the button */
+        e.stopPropagation();
+        if(window.zbalBalanceNow) window.zbalBalanceNow();
+      });
     });
   }
 
@@ -1165,22 +1170,9 @@ applyGraduated();
   function boot(){
     var z=document.getElementById('zbal'); if(!z) return;
     z.classList.add('v-'+V);
-    /* ONLY the arrow opens the panel (round 9): the strip itself is for reading and the
-       +/− buttons, so a stray mobile tap can't yank the drop-down open. */
-    /* a REAL tooltip (native title is slow and invisible on touch): instant on hover,
-       and shown once on load so phones get taught too */
-    var tip=document.createElement('div'); tip.className='zbal-tip';
-    tip.textContent='Press the arrow to balance it for you';
-    z.appendChild(tip);
-    function tipShow(){ if(!z.classList.contains('open')) tip.classList.add('show'); }
-    function tipHide(){ tip.classList.remove('show'); }
-    var lineEl=document.getElementById('zbalLine');
-    lineEl.addEventListener('mouseenter', tipShow);
-    lineEl.addEventListener('mouseleave', tipHide);
-    document.querySelector('.zbal-chevbtn').addEventListener('click', function(e){ e.stopPropagation(); tipHide(); z.classList.toggle('open'); });
-    /* review param ?tip=1 pins the tooltip open (for design review screenshots) */
-    if(new URLSearchParams(location.search).get('tip')==='1'){ setTimeout(tipShow, 300); }
-    else { setTimeout(function(){ tipShow(); setTimeout(tipHide, 4000); }, 900); }
+    /* Promoted control (2026-07-25): the arrow only discloses the meter; the balance
+       action lives in the header's Balance Now, and the teaching tooltip is retired. */
+    document.querySelector('.zbal-chevbtn').addEventListener('click', function(e){ e.stopPropagation(); z.classList.toggle('open'); });
     /* PLAY ALL — BOTH views (the Immersions button was a dead button until round 11):
        plays the checked queue top to bottom in the view it was pressed on; nothing
        checked = check everything first, then play. Each song accrues live time,
@@ -1274,10 +1266,11 @@ applyGraduated();
       });
       if(!pick.cleared) showBubble(f);
     });
-    /* BALANCE FOR ME: the longest balanced list — check everything, then trim the fattest
-       surplus one song at a time (preferring cuts that keep that frequency green) until
-       all four hold. If the list can't get there, the bubble points to Immersions. */
-    document.getElementById('zbalBfm').addEventListener('click', function(){
+    /* BALANCE NOW (the old panel Balance-for-me, promoted to the header): the longest
+       balanced list — check everything, then trim the fattest surplus one song at a time
+       (preferring cuts that keep that frequency green) until all four hold. If the list
+       can't get there, the bubble points to Immersions. */
+    window.zbalBalanceNow=(function(){
       var rows=[].slice.call(document.querySelectorAll('#favRows .row'));
       rows.forEach(function(r){ var b=r.querySelector('.qbox'); if(b && !b.classList.contains('on')) b.click(); });
       var guard=0;
@@ -1345,6 +1338,9 @@ applyGraduated();
     var P=new URLSearchParams(location.search);
     if(P.get('open')) z.classList.add('open');
     if(P.get('bubble') && CATS[P.get('bubble')]) showBubble(P.get('bubble'));
+    /* review aid (from E): ?demo=green seeds enough live minutes that the played week is
+       balanced, so the green header number can be seen without playing anything. */
+    if(P.get('demo')==='green'){ LIVE.vitality+=10*60; LIVE.abundance+=8*60; render(); }
     if(P.get('demo')==='balanced'){ setTimeout(function(){
       ['vitality|astrolith','vitality|kindred-spirits'].forEach(function(k){
         var p=k.split('|');

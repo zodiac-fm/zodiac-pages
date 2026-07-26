@@ -401,9 +401,9 @@
     <div class="zbal" id="zbal">
       <!-- E: strip and drop-down as in A. The balance ACTION moved to the header's
            Balance Now, so the panel carries no Balance-for-me row. -->
-      <div class="zbal-line" id="zbalLine" title="Press the arrow for the balance meter">
+      <div class="zbal-line" id="zbalLine">
         <span class="zbal-toks" id="zbalToks"></span>
-        <span class="zbal-chevbtn" title="Press the arrow for the balance meter"><svg class="zbal-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
+        <span class="zbal-chevbtn"><svg class="zbal-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
       </div>
       <div class="zbal-panel">
         <h4 class="zbal-ttl">Frequency Balance Meter</h4>
@@ -1057,10 +1057,6 @@ applyGraduated();
   .zbal-popx{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;background:#F6F1E8;color:#63616F;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
   .zbal{position:relative}
   .zbal-min{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #d9cfc0;color:#2A2530;font-size:11px;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-  /* quiet chip, not a black flag (Michael 2026-07-11: it competed with Play All) — the guide-card language: near-white, hairline border, gray ink */
-  .zbal-tip{position:absolute;top:-32px;right:6px;background:rgba(255,255,255,.94);color:#6b6572;font-size:10.5px;font-weight:600;padding:5px 10px;border-radius:10px;border:1px solid rgba(26,22,32,.10);white-space:nowrap;box-shadow:0 3px 10px rgba(26,22,32,.08);opacity:0;pointer-events:none;transition:opacity .18s;z-index:31}
-  .zbal-tip.show{opacity:1}
-  .zbal-tip:after{content:'';position:absolute;top:100%;right:16px;border:5px solid transparent;border-top-color:rgba(255,255,255,.96)}
   @media (max-width:400px){ .zbal-t{font-size:9px} }
 </style>
 <script id="zbal-js">
@@ -1156,22 +1152,9 @@ applyGraduated();
   function boot(){
     var z=document.getElementById('zbal'); if(!z) return;
     z.classList.add('v-'+V);
-    /* ONLY the arrow opens the panel (round 9): the strip itself is for reading and the
-       +/− buttons, so a stray mobile tap can't yank the drop-down open. */
-    /* a REAL tooltip (native title is slow and invisible on touch): instant on hover,
-       and shown once on load so phones get taught too */
-    var tip=document.createElement('div'); tip.className='zbal-tip';
-    tip.textContent='Press the arrow for the balance meter';
-    z.appendChild(tip);
-    function tipShow(){ if(!z.classList.contains('open')) tip.classList.add('show'); }
-    function tipHide(){ tip.classList.remove('show'); }
-    var lineEl=document.getElementById('zbalLine');
-    lineEl.addEventListener('mouseenter', tipShow);
-    lineEl.addEventListener('mouseleave', tipHide);
-    document.querySelector('.zbal-chevbtn').addEventListener('click', function(e){ e.stopPropagation(); tipHide(); z.classList.toggle('open'); });
-    /* review param ?tip=1 pins the tooltip open (for design review screenshots) */
-    if(new URLSearchParams(location.search).get('tip')==='1'){ setTimeout(tipShow, 300); }
-    else { setTimeout(function(){ tipShow(); setTimeout(tipHide, 4000); }, 900); }
+    /* Promoted control (2026-07-25): the arrow only discloses the meter; the balance
+       action lives in the header's Balance Now, and the teaching tooltip is retired. */
+    document.querySelector('.zbal-chevbtn').addEventListener('click', function(e){ e.stopPropagation(); z.classList.toggle('open'); });
     /* PLAY ALL — BOTH views (the Immersions button was a dead button until round 11):
        plays the checked queue top to bottom in the view it was pressed on; nothing
        checked = check everything first, then play. Each song accrues live time,
