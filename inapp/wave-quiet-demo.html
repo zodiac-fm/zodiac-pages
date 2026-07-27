@@ -1644,10 +1644,17 @@ html,body,#app,#favs,#favs .swrap{background:#F6F1E8!important}
  var NS='http://www.w3.org/2000/svg', aud=document.getElementById('aud');
  function el(t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);e.setAttribute('class','demo-fuse');return e;}
  function clearFuse(){document.querySelectorAll('.demo-fuse').forEach(function(e){e.remove();});}
+ var fuseId=0;
  function paintFuse(svg,p,ink,viv){
    var wEnd=320*Math.max(0,Math.min(1,p)); if(wEnd<=0)return;
-   svg.appendChild(el('rect',{x:0,y:12.1,width:wEnd,height:1.8,rx:.9,fill:ink,opacity:.9}));
-   svg.appendChild(el('rect',{x:0,y:12.55,width:Math.max(0,wEnd-4),height:.9,rx:.45,fill:'#FFFFFF',opacity:.85}));
+   /* comet: no drawn line — a white-hot head whose tail is pure light fading out behind it */
+   var tail=Math.min(46,wEnd), x0=wEnd-tail, id='cd'+(fuseId++);
+   var defs=el('defs',{});
+   var g1=el('linearGradient',{id:id+'h'}); g1.appendChild(el('stop',{offset:'0%','stop-color':viv,'stop-opacity':0})); g1.appendChild(el('stop',{offset:'100%','stop-color':viv,'stop-opacity':.5}));
+   var g2=el('linearGradient',{id:id+'c'}); g2.appendChild(el('stop',{offset:'0%','stop-color':'#FFFFFF','stop-opacity':0})); g2.appendChild(el('stop',{offset:'70%','stop-color':'#FFFFFF','stop-opacity':.75})); g2.appendChild(el('stop',{offset:'100%','stop-color':'#FFFFFF','stop-opacity':.95}));
+   defs.appendChild(g1); defs.appendChild(g2); svg.appendChild(defs);
+   svg.appendChild(el('rect',{x:x0,y:11.4,width:tail,height:3.2,rx:1.6,fill:'url(#'+id+'h)'}));
+   svg.appendChild(el('rect',{x:x0,y:12.45,width:tail,height:1.1,rx:.55,fill:'url(#'+id+'c)'}));
    svg.appendChild(el('circle',{cx:wEnd,cy:13,r:6.5,fill:viv,opacity:.30}));
    svg.appendChild(el('circle',{cx:wEnd,cy:13,r:3.4,fill:ink}));
    svg.appendChild(el('circle',{cx:wEnd,cy:13,r:1.7,fill:'#FFFFFF'}));
