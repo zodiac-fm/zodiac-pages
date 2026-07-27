@@ -1,0 +1,8 @@
+{
+  "name": "verify-camera",
+  "private": true,
+  "description": "Visual-verification harness for scroll-film pages (screenshots, jank test, teaser video, sweep contact sheet).",
+  "dependencies": {
+    "puppeteer-core": "^25.4.0"
+  }
+}
