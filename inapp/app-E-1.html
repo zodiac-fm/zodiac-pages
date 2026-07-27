@@ -131,7 +131,7 @@
   .cardpp svg{fill:var(--cink)!important}
   /* premium segmented control for the frequency toggle */
   .pills{background:#EAE4DA!important;border-radius:22px!important;padding:4px!important;gap:0!important;overflow:visible!important;margin:8px 18px 8px!important}
-  .pill{flex:1!important;text-align:center!important;justify-content:center!important;border:none!important;background:transparent!important;color:#8a8590!important;border-radius:18px!important;padding:8px 2px!important;font-size:12px!important}
+  .pill{flex:1!important;text-align:center!important;justify-content:center!important;border:none!important;background:transparent!important;color:#2A2530!important;font-weight:700!important;border-radius:18px!important;padding:8px 2px!important;font-size:12px!important}
   .pill.on{background:#fff!important;color:var(--cink)!important;box-shadow:0 1px 5px rgba(0,0,0,.13)!important;font-weight:700!important}
   /* .fm tints to the active frequency (logo no longer locked to purple) */
   #favs .logo .d{color:#1A1620!important}
@@ -1360,4 +1360,8 @@ applyGraduated();
   window.addEventListener('hashchange', repaint);
 })();
 </script>
-</body></html>
+<style id="e-pills-amend">
+#app .pills{background:#EAE4DA!important;border-radius:22px!important;padding:4px!important;gap:0!important;overflow:visible!important;margin:8px 18px 8px!important;display:flex!important}
+#app .pill,#list .pill{flex:1 1 0!important;text-align:center!important;border:none!important;background:transparent!important;background-image:none!important;color:#2A2530!important;font-weight:700!important;border-radius:18px!important;padding:8px 2px!important;font-size:12px!important;box-shadow:none!important}
+#app .pill.on,#list .pill.on{background:#fff!important;background-image:none!important;color:var(--cink)!important;box-shadow:0 1px 5px rgba(0,0,0,.13)!important;font-weight:700!important}
+</style></body></html>
