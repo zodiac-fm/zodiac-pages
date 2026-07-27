@@ -1636,4 +1636,40 @@ html,body,#app,#favs,#favs .swrap{background:#F6F1E8!important}
 .row:not(.playing) .wave rect{opacity:.95!important}
 </style><style id="filament">
 .row.playing .wave-stream .wave{filter:drop-shadow(0 1px 4px color-mix(in srgb, var(--rowviv) 60%, transparent)) drop-shadow(0 3px 18px color-mix(in srgb, var(--rowviv) 38%, transparent))!important}
-</style></body></html>
+</style></body>
+<script>
+/* COMET playing marker (adopted 2026-07-27, from wave-quiet-demo v3): the playhead is a
+   white-hot bubble trailing discrete particles of light that fade to nothing — the quiet-passage
+   position signal. HARD RULE: NO SVG gradients here — dynamically-created gradient url() refs
+   paint BLACK on iOS Safari. Colors are read from the row's own wave gradient stops (c2 halo,
+   c1 ring) so every band matches itself. Paints on every row marked playing/paused (immersions
+   + playlist mirror), stepping with timeupdate exactly like the scrubber fill. */
+(function(){
+ var NS='http://www.w3.org/2000/svg', aud=document.getElementById('aud');
+ if(!aud) return;
+ function el(t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);e.setAttribute('class','comet-dot');return e;}
+ function clear(){document.querySelectorAll('.comet-dot').forEach(function(e){e.remove();});}
+ function draw(){
+   clear();
+   var dur=aud.duration||0,p=dur?Math.min(1,aud.currentTime/dur):0; if(!p)return;
+   document.querySelectorAll('.row.playing,.row.paused').forEach(function(row){
+     var svg=row.querySelector('svg.wave'); if(!svg)return;
+     var stops=svg.querySelectorAll('linearGradient stop');
+     var c2=stops[0]?stops[0].getAttribute('stop-color'):'#A737C8';
+     var c1=stops[1]?stops[1].getAttribute('stop-color'):'#7129FD';
+     var wEnd=320*p;
+     for(var i=10;i>=1;i--){
+       var t=i/11, x=wEnd-i*4.2; if(x<0)continue;
+       svg.appendChild(el('circle',{cx:x.toFixed(1),cy:13,r:(3.4-2.4*t).toFixed(2),fill:'#FFFFFF',opacity:(.92*Math.pow(1-t,1.6)).toFixed(3)}));
+       svg.appendChild(el('circle',{cx:x.toFixed(1),cy:13,r:(5.2-3.2*t).toFixed(2),fill:c2,opacity:(.26*(1-t)).toFixed(3)}));
+     }
+     svg.appendChild(el('circle',{cx:wEnd.toFixed(1),cy:13,r:6.5,fill:c2,opacity:.30}));
+     svg.appendChild(el('circle',{cx:wEnd.toFixed(1),cy:13,r:3.4,fill:c1}));
+     svg.appendChild(el('circle',{cx:wEnd.toFixed(1),cy:13,r:1.7,fill:'#FFFFFF'}));
+   });
+ }
+ aud.addEventListener('timeupdate',draw); aud.addEventListener('play',draw);
+ aud.addEventListener('pause',draw); aud.addEventListener('ended',clear);
+ aud.addEventListener('emptied',clear);
+})();
+</script></html>
