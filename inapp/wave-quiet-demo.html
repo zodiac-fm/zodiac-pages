@@ -1661,7 +1661,7 @@ html,body,#app,#favs,#favs .swrap{background:#F6F1E8!important}
    paintFuse(svg,p,ink,viv);
  }
  aud.addEventListener('timeupdate',drawLive); aud.addEventListener('play',drawLive); aud.addEventListener('pause',drawLive);
- window.addEventListener('load',function(){setTimeout(function(){
+ (function(){(function(){
    if(aud.currentTime)return;
    var r=document.querySelectorAll('#rows .row')[0]; if(!r)return;
    r.classList.add('playing');
@@ -1669,6 +1669,6 @@ html,body,#app,#favs,#favs .swrap{background:#F6F1E8!important}
    var rects=svg.querySelectorAll('g rect'); var cut=Math.floor(rects.length*0.2);
    for(var i=0;i<cut;i++){rects[i].setAttribute('fill','url(#lg-Core-quiet-success)');}
    paintFuse(svg,0.2,'#7129FD','#A737C8');
- },400);});
+ })();})();
 })();
 </script></html>
