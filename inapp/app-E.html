@@ -578,7 +578,7 @@ function buildRows(){
     const r=document.createElement('div');r.className='row';r.innerHTML=
      `<div class="lcol"><span class="qbox${(i%4===0)?' on':''}"></span></div><div class="thumb"><img src="${tileSrc(catKey,s)}" alt=""><canvas width="148" height="148"></canvas><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
       <div class="meta mcols">
-        <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab">&#9679; ${cat.label}</div></div>
+        <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab">&#9679; ${cat.label} · ${cat.hz} Hz</div></div>
         <div class="mrail"><div class="sic"><span class="dl${(i%2===1)?' on':''}">${DL}</span><span class="heart${(i%3===0)?' on':''}">${(i%3===0)?'&#9829;':'&#9825;'}</span></div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
       </div>`;
     r.onclick=(ev)=>{playSong(catKey,i); splashAt(ev.clientX,ev.clientY);};
@@ -747,7 +747,7 @@ function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
   const r=document.createElement('div');r.className='row';r.style.setProperty('--cink',cat.cink);r.style.setProperty('--ctint',cat.ctint);r.style.setProperty('--csoft',cat.csoft);r.dataset.cat=ck;r.dataset.slug=s.slug;r.dataset.min=(window.ZBalance?ZBalance.toSec(s.dur):0);  /* every action color resolves to THIS row's family, never the app-level (Immersions) one */
   r.innerHTML=`<div class="lcol"><span class="qbox${(i%3===0)?' on':''}"></span></div><div class="thumb" style="--cink:${cat.cink}"><img src="${tileSrc(ck,s)}" alt=""><div class="pov"><span class="pcirc"><span class="pplay"></span><span class="ppause"><i></i><i></i><i></i></span></span></div></div>
    <div class="meta mcols">
-    <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab" style="color:${cat.cink}">&#9679; ${cat.label}</div></div>
+    <div class="mtext"><h3>${s.name}</h3>${bubs(s)}<div class="lab" style="color:${cat.cink}">&#9679; ${cat.label} · ${cat.hz} Hz</div></div>
     <div class="mrail"><div class="sic"><span class="dl${(i%2===0)?' on':''}">${DL}</span><span class="heart on" style="color:${cat.cink}">&#9829;</span></div><div class="dur"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>${s.dur}</div></div>
    </div>`;
   r.onclick=(ev)=>{playSong(ck,cat.songs.indexOf(s)); splashAt(ev.clientX,ev.clientY,cat.c1);};
