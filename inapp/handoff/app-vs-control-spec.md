@@ -10,9 +10,35 @@ Staging files referenced: `src/components/audio/TrackWaveform.tsx`,
 `src/lib/audio/waveformShape.ts`, `src/lib/visuals/categoryColors.ts`,
 `src/components/favorites/FavoritesGrid.tsx`.
 
-What Abbas already got right and must not be touched: the four category inks are the approved
-wheel values, the play-button gradients are wheel core→deep, and all headline/description/descriptor
-copy is verbatim. The gaps below are visual, not structural.
+## How this was written, and how to work with it
+
+This was written **against your actual implementation**, not from screenshots. Read on `develop`:
+`waveformShape.ts` (`getWaveformBars`, `mulberry32`, `hashString`), `TrackWaveform.tsx`
+(`lightCategoryTone`, the clipPath played layer, the `showThumb` playhead span), `AudioTrackCard.tsx`
+(card container, checkbox, category row), `ImmersionsBackground.tsx` + `immersions-wash.ts`
+(`WASH_STOPS`, `buildWash`), `categoryColors.ts` (`CATEGORY_INK`, `APP_BACKGROUND`), and
+`FavoritesGrid.tsx`. Staging is also rendered signed-in at 375×812 on this side, so every item below
+was confirmed both in code and on screen.
+
+Three things you did that the control should arguably copy, not the other way round: the pointer
+gesture handling in `TrackWaveform` (the 6px scrub-intent threshold before capture) is better than
+the prototype's; the keyboard seek with `role="slider"` and aria values is real accessibility the
+prototype has none of; and moving the playhead outside the SVG because `preserveAspectRatio="none"`
+distorts round caps is exactly right — if you keep the playhead as DOM, the comet in C3 works there
+too, positions are percentages either way.
+
+Each item below is **observation → what the control does → possible remedy**. The remedies are
+suggestions with the exact target values; you'll see the best way to implement them in this codebase.
+Where something is genuinely non-negotiable it says so and gives the reason (there are only two:
+the wheel colours and the iOS gradient rule in C4).
+
+If a different shape of input would be easier — bar data as a TS module instead of JSON, a different
+bar count, precomputed SVG path strings, per-song data keyed by `trackType` instead of slug — say so
+and it'll be regenerated that way; the generator is deterministic and takes a minute to re-run.
+
+What you already got right and shouldn't change: the four category inks are the approved wheel
+values, the play-button gradients are wheel core→deep, and all headline/description/descriptor copy
+is verbatim. The gaps below are visual, not structural.
 
 ---
 
