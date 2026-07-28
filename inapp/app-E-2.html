@@ -1644,16 +1644,18 @@ html,body,#app,#favs,#favs .swrap{background:#F6F1E8!important}
 .row.playing .wave rect{opacity:.65!important}
 .row.playing .wave rect.played{opacity:1!important}
 .row.playing .wave-stream .wave{filter:drop-shadow(0 2px 8px color-mix(in srgb, var(--rowviv) 34%, transparent))!important}
-/* E-2 round 2a (Michael 2026-07-28): resting waves open a touch MORE vivid — full pigment,
-   a small saturation lift, a slightly warmer glow — on Immersions AND Playlist, so the
-   playing fade reads with more contrast. The playing treatment itself is unchanged. */
+/* E-2 round 3a (Michael 2026-07-28, r2 read as no-change): resting waves open clearly MORE
+   vivid — full pigment, a real saturation lift, stronger colored light beneath — on
+   Immersions AND Playlist. The playing treatment itself is unchanged (.65 fade + white sweep),
+   so play state now reads as a bigger step down. */
 .row:not(.playing) .wave rect{opacity:1!important}
-.row:not(.playing) .wave-stream .wave{filter:saturate(1.14) drop-shadow(0 4px 12px color-mix(in srgb, var(--rowviv) 46%, transparent))!important}
-/* E-2 round 2b (Michael 2026-07-28): the aurora holds further down the Immersions page —
-   the mid/lower blobs carry a touch more pigment and b3 drifts toward center so the ground
-   doesn't fall to flat cream one card down. The top of the page is untouched. */
-#aurora .b2{opacity:.20!important}
-#aurora .b3{opacity:.18!important;width:108%!important;left:56%!important}
+.row:not(.playing) .wave-stream .wave{filter:saturate(1.28) drop-shadow(0 4px 14px color-mix(in srgb, var(--rowviv) 56%, transparent))!important}
+/* E-2 round 3b: the aurora visibly holds down the Immersions page — the mid/lower blobs carry
+   real pigment now, and a fourth soft pool (mid-left, band color) fills the dead cream zone so
+   the ground between cards keeps color at every scroll depth. Top of page untouched. */
+#aurora .b2{opacity:.28!important}
+#aurora .b3{opacity:.25!important;width:108%!important;left:56%!important}
+#aurora::after{content:'';position:absolute;left:-34%;top:40%;width:110%;aspect-ratio:1;border-radius:50%;background:var(--c2);opacity:.14;filter:blur(84px);animation:dr2 36s ease-in-out infinite alternate}
 </style></body>
 <script>
 /* COMET playing marker (adopted 2026-07-27, from wave-quiet-demo v3): the playhead is a
