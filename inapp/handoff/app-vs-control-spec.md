@@ -101,16 +101,34 @@ is verbatim. The gaps below are visual, not structural.
   side the app looks washed out.
 - **Fix:** one constant in `categoryColors.ts`.
 
-### A7. Category pills — unselected still look like buttons
-- **Now:** unselected pills are grey filled capsules.
-- **Control** (amended 2026-07-27 because coloured/bubbled pills were hard to read):
-  ```css
-  .pill    { flex:1 1 0; text-align:center; border:none; background:transparent;
-             color:#2A2530; font-weight:700; font-size:12px; padding:8px 2px; box-shadow:none }
-  .pill.on { background:#fff; color:var(--categoryInk); box-shadow:0 1px 5px rgba(0,0,0,.13) }
-  ```
-  Unselected = bold charcoal text on the ground, no bubble. Selected = white capsule, ink text.
-- **Fix:** `CategoryTabs.tsx`.
+### A7. The frequency categories across the top — unselected pills still have bubbles
+`CategoryTabs.tsx`. **The structure is already correct and shouldn't change:** `flex-1` so the four
+categories share the full width edge to edge, `rounded-[18px]`, and the selected state is already
+exactly right — `bg-white` + `shadow-[0_1px_5px_rgba(0,0,0,0.13)]` + category-ink text. That is the
+control's selected pill to the pixel.
+
+Only the **unselected** state differs, in three ways:
+
+| | staging now | control |
+|---|---|---|
+| background | `bg-black/[0.055]` (translucent fill = a visible bubble) | `transparent` — no fill at all |
+| text colour | `text-[#4a4550]` (grey) | `#2A2530` (charcoal) |
+| weight | `font-semibold` (600) | `700` — bold, same weight as selected |
+
+Plus one shared value: the label is `text-sm` (14px); the control sets **12px**. At 375px wide,
+"Abundance" bold at 14px leaves almost no margin inside its pill — 12px is what keeps all four
+comfortable. `max-w-lg` on the container never binds at phone width, so it can stay.
+
+**Why this was amended (Michael, 2026-07-27):** with bubbles on every pill the row read as four
+buttons and the selected one didn't stand out — "hard to see... I don't think you need bubbles but
+could all be bold but not colored if not selected." Bold charcoal text sitting directly on the
+category wash makes the single white capsule unmistakable.
+
+- **Possible remedy:** in the `cn(...)` for the inactive branch, swap
+  `'bg-black/[0.055] text-[#4a4550]'` → `'bg-transparent text-[#2A2530]'`, change `font-semibold` →
+  `font-bold` on the shared class, and `text-sm` → `text-xs`. Hover can keep a faint
+  `hover:bg-black/[0.05]` on pointer devices — the control is touch-first and has no hover state, so
+  that's your call.
 
 ### A8. Frequency is missing from the card label
 - **Now:** bottom-left reads `● Core`. **Control:** `● Core · 422 Hz` — dot and text in category ink,
