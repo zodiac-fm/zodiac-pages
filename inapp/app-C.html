@@ -365,6 +365,9 @@
       var reviewState=new URLSearchParams(location.search).get('state');
       if(reviewState==='milestone1'){
         document.getElementById('progressFrame').src='progress-C-milestone-1.html';
+      }else if(reviewState==='profile1'){
+        document.getElementById('progressFrame').src='progress-C-profile-1.html';
+        document.getElementById('progressFrame').title='My Zodiac';
       }
     })();
   </script>
@@ -760,6 +763,9 @@ function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
   c.appendChild(r);});
  markAlive();}   /* re-mark on rebuild so returning to the tab restores the playing highlight */
 const navItems=document.querySelectorAll('#nav div');
+if(new URLSearchParams(location.search).get('state')==='profile1'){
+ navItems[1].innerHTML='<span class="ic">&#9673;</span>My Zodiac';
+}
 function lockProgressTop(){
  var p=document.getElementById('progress');
  p.dataset.userScrolled='0';
