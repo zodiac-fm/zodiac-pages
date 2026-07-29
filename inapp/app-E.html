@@ -1645,8 +1645,8 @@ html,body,#app,#favs,#favs .swrap{background:#F6F1E8!important}
 #aurora .b2{opacity:.28!important}
 #aurora .b3{opacity:.25!important;width:108%!important;left:56%!important}
 #aurora::after{content:'';position:absolute;left:-34%;top:40%;width:110%;aspect-ratio:1;border-radius:50%;background:var(--c2);opacity:.14;filter:blur(84px);animation:dr2 36s ease-in-out infinite alternate}
-/* D-2 · playing card: no ink ring; the wave treatment alone marks the playing row (spec A9, matches staging) */
-#list .row.playing,#favRows .row.playing{box-shadow:0 4px 18px rgba(0,0,0,.04)!important;border-color:#efe6d6!important}
+/* Playing card: thin 1px category-ink ring (adopted from staging, Michael 2026-07-28 "it was a good touch") over the resting card shadow */
+#list .row.playing,#favRows .row.playing{box-shadow:0 0 0 1px var(--rowink),0 4px 18px rgba(0,0,0,.04)!important;border-color:var(--rowink)!important}
 /* D-2 · docked row carries Select all + Play All, aligned to the in-flow row */
 .dockbar{justify-content:space-between!important;align-items:center!important;padding:6px 22px 10px!important}
 </style>
