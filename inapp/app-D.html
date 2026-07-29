@@ -318,7 +318,7 @@
     <div class="pills" id="pills">
       <div class="pill" data-cat="core">Core</div><div class="pill on" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
     </div>
-    <div class="dockbar" id="dockbar"><div class="qall" id="qallDock"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All</div></div>
+    <div class="dockbar" id="dockbar"><div class="selall" data-scope="rows"><span class="qbox"></span><span class="selall-lbl">Select all</span></div><div class="qall" id="qallDock"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All</div></div>
     <div class="swrap">
     <div class="desc"><h2 class="serif" id="catTitle" style="display:none">Love Vibrational Frequency</h2>
       <h2 class="serif2" id="catTitle2">Your connection frequency</h2>
@@ -1636,7 +1636,32 @@ html,body,#app,#favs,#favs .swrap{background:#F6F1E8!important}
 .row:not(.playing) .wave rect{opacity:.95!important}
 </style><style id="filament">
 .row.playing .wave-stream .wave{filter:drop-shadow(0 1px 4px color-mix(in srgb, var(--rowviv) 60%, transparent)) drop-shadow(0 3px 18px color-mix(in srgb, var(--rowviv) 38%, transparent))!important}
-</style></body>
+</style>
+<style id="d2-overrides">
+/* D-2 · resting waves: exact playing saturation, no glow; only the playing song glows */
+.wave-stream .wave{filter:none!important}
+.row.playing .wave-stream .wave{filter:drop-shadow(0 1px 4px color-mix(in srgb, var(--rowviv) 60%, transparent)) drop-shadow(0 3px 18px color-mix(in srgb, var(--rowviv) 38%, transparent))!important}
+/* D-2 · aurora depth: bottom + mid blobs carry real pigment; fourth mid-left pool so the ground never goes flat cream (top .b1 untouched) */
+#aurora .b2{opacity:.28!important}
+#aurora .b3{opacity:.25!important;width:108%!important;left:56%!important}
+#aurora::after{content:'';position:absolute;left:-34%;top:40%;width:110%;aspect-ratio:1;border-radius:50%;background:var(--c2);opacity:.14;filter:blur(84px);animation:dr2 36s ease-in-out infinite alternate}
+/* D-2 · playing card: no ink ring; the wave treatment alone marks the playing row (spec A9, matches staging) */
+#list .row.playing,#favRows .row.playing{box-shadow:0 4px 18px rgba(0,0,0,.04)!important;border-color:#efe6d6!important}
+/* D-2 · docked row carries Select all + Play All, aligned to the in-flow row */
+.dockbar{justify-content:space-between!important;align-items:center!important;padding:6px 22px 10px!important}
+</style>
+<script id="d2-dock-sync">
+/* keep the docked Play All count and Select all label live while the dock is shown */
+(function(){
+ var dock=document.getElementById('dockbar'),dq=document.getElementById('qallDock'),
+     main=document.querySelector('#list .ctarow .qall');
+ if(!dock||!dq||!main)return;
+ document.addEventListener('click',function(){requestAnimationFrame(function(){
+   if(dock.classList.contains('show'))dq.innerHTML=main.innerHTML;
+ });},true);
+})();
+</script>
+</body>
 <script>
 /* COMET playing marker (adopted 2026-07-27, from wave-quiet-demo v3): the playhead is a
    white-hot bubble trailing discrete particles of light that fade to nothing — the quiet-passage
