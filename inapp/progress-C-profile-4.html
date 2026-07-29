@@ -1,0 +1,1537 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <title>My Zodiac · Signal Map V6</title>
+  <link rel="stylesheet" href="progress-B2-card-shared.css">
+  <!--
+  THESIS: An official, highly legible member profile in which every major section is one complete card and every disclosure stacks in the reading path.
+  MODE: Operate.
+  FIRST VIEWPORT: Mike Hill, Time and Balance, the local Monday-Sunday week, 88 actual minutes, Vitality low, and all four frequency shares.
+  -->
+  <style>
+    :root{
+      --core:#6521C9;
+      --core-deep:#38007A;
+      --core-tint:#EFECFF;
+      --love:#B90044;
+      --love-tint:#FFE8EA;
+      --vitality:#FF9112;
+      --vitality-ink:#C25500;
+      --vitality-tint:#FFEADA;
+      --abundance:#12A56E;
+      --abundance-ink:#0A7A52;
+      --abundance-tint:#DCF4E8;
+      --cream:#F6F1E8;
+      --paper:#FFFFFF;
+      --ink:#1A1620;
+      --control:#2A2530;
+      --muted:#726C78;
+      --line:#E5DED4;
+      --mist:#EEE9E0;
+      --radius:15px;
+      --shadow:0 10px 26px rgba(26,22,32,.055);
+    }
+    *{box-sizing:border-box}
+    html.embed .app{min-height:auto}
+    body{margin:0;background:var(--cream);color:var(--ink)}
+    button{font:inherit}
+    .app{
+      min-height:100vh;
+      padding-bottom:32px;
+      background:var(--cream);
+    }
+    .utility{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 18px 8px;
+    }
+    .utility .brand{
+      width:108px;
+      height:auto;
+      display:block;
+    }
+    .utility-title{
+      min-width:0;
+      margin-left:auto;
+      text-align:right;
+    }
+    .utility-title strong{
+      display:block;
+      font-size:10.5px;
+      line-height:1.15;
+      color:var(--ink);
+    }
+    .utility-title span{
+      display:block;
+      margin-top:2px;
+      font-size:9px;
+      line-height:1.15;
+      color:var(--muted);
+    }
+    .page{
+      display:grid;
+      gap:0;
+      padding:6px 17px 34px;
+    }
+    .identity{
+      position:relative;
+      padding:13px 2px 18px;
+    }
+    .identity h1{
+      margin:0;
+      font:500 27px/1.04 Canela,Georgia,serif;
+      letter-spacing:-.025em;
+      color:var(--ink);
+    }
+    .birthline{
+      margin:7px 0 0;
+      font-size:10.5px;
+      line-height:1.45;
+      color:var(--muted);
+    }
+    .guide-disclosure{margin:0}
+    .guide-button{
+      position:absolute;
+      top:8px;
+      right:0;
+      min-height:36px;
+      padding:0 2px 0 12px;
+      border:0;
+      background:transparent;
+      color:var(--muted);
+      font-size:9px;
+      line-height:1;
+      font-weight:600;
+      cursor:pointer;
+    }
+    .guide-button span{
+      display:inline-grid;
+      place-items:center;
+      width:22px;
+      height:22px;
+      margin-left:5px;
+      border:1px solid #D9D1E2;
+      border-radius:50%;
+      color:var(--muted);
+      font-size:10px;
+    }
+    .guide-button:focus-visible,
+    summary:focus-visible,
+    .mark-explored:focus-visible{
+      outline:2px solid var(--core);
+      outline-offset:3px;
+    }
+
+    .time-sheet{
+      padding:20px 19px 15px;
+      border:1px solid #DED5E9;
+      border-radius:var(--radius);
+      background:var(--paper);
+      box-shadow:var(--shadow);
+    }
+    h2{
+      margin:0;
+      font:700 22px/1.1 Suisse,-apple-system,BlinkMacSystemFont,sans-serif;
+      letter-spacing:-.025em;
+      color:var(--ink);
+    }
+    .week-line{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:12px;
+      padding-bottom:12px;
+      border-bottom:1px solid var(--line);
+    }
+    .week-line strong{
+      font-size:10.5px;
+      line-height:1.25;
+      color:var(--control);
+    }
+    .local-note{
+      display:inline-flex;
+      align-items:center;
+      max-width:138px;
+      text-align:right;
+      font-size:8.5px;
+      line-height:1.3;
+      color:var(--muted);
+    }
+    .week-reading{
+      display:grid;
+      grid-template-columns:1fr auto;
+      align-items:end;
+      gap:16px;
+      padding:15px 0 12px;
+    }
+    .week-reading-label{
+      font-size:10px;
+      line-height:1.25;
+      font-weight:700;
+      color:var(--control);
+    }
+    .week-reading-label span{
+      display:block;
+      margin-top:4px;
+      font-size:9px;
+      line-height:1.35;
+      font-weight:400;
+      color:var(--muted);
+    }
+    .week-minutes{
+      text-align:right;
+      font-variant-numeric:tabular-nums;
+      white-space:nowrap;
+    }
+    .week-minutes b{
+      display:block;
+      font-size:18px;
+      line-height:1;
+      letter-spacing:-.025em;
+      color:var(--ink);
+    }
+    .week-minutes span{
+      display:block;
+      margin-top:4px;
+      font-size:8.5px;
+      color:var(--muted);
+    }
+    .balance-status{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      padding:9px 10px;
+      border-radius:9px;
+      background:var(--vitality-tint);
+      color:var(--vitality-ink);
+      font-size:9.5px;
+      line-height:1.25;
+    }
+    .balance-status:before{
+      content:"";
+      width:7px;
+      height:7px;
+      flex:0 0 auto;
+      border-radius:50%;
+      background:var(--vitality);
+    }
+    .balance-status b{font-weight:750}
+    .balance-bar{
+      display:flex;
+      height:6px;
+      margin-top:13px;
+      overflow:hidden;
+      border-radius:999px;
+      background:var(--mist);
+    }
+    .balance-bar span:nth-child(1){width:34%;background:var(--core)}
+    .balance-bar span:nth-child(2){width:29%;background:var(--love)}
+    .balance-bar span:nth-child(3){width:11%;background:var(--vitality)}
+    .balance-bar span:nth-child(4){width:26%;background:var(--abundance)}
+    .balance-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:7px;
+      margin-top:10px;
+    }
+    .balance-item{
+      min-width:0;
+      padding:0 2px;
+    }
+    .balance-item b{
+      display:flex;
+      align-items:center;
+      gap:4px;
+      overflow:hidden;
+      font-size:8.5px;
+      line-height:1.2;
+      white-space:nowrap;
+      text-overflow:ellipsis;
+    }
+    .balance-item b:before{
+      content:"";
+      width:5px;
+      height:5px;
+      flex:0 0 auto;
+      border-radius:50%;
+      background:currentColor;
+    }
+    .balance-item strong{
+      display:block;
+      margin-top:4px;
+      font-size:14px;
+      line-height:1;
+      color:var(--ink);
+      font-variant-numeric:tabular-nums;
+    }
+    .balance-item.core b{color:var(--core)}
+    .balance-item.love b{color:var(--love)}
+    .balance-item.vitality b{color:var(--vitality-ink)}
+    .balance-item.abundance b{color:var(--abundance-ink)}
+    .time-disclosures{
+      margin-top:14px;
+      border-top:1px solid var(--line);
+    }
+    details{border:0}
+    summary{list-style:none;cursor:pointer}
+    summary::-webkit-details-marker{display:none}
+    .time-detail+.time-detail{border-top:1px solid var(--line)}
+    .time-summary{
+      display:grid;
+      grid-template-columns:1fr auto;
+      align-items:center;
+      gap:12px;
+      min-height:47px;
+    }
+    .time-summary b{
+      display:block;
+      font-size:10.5px;
+      line-height:1.25;
+      color:var(--ink);
+    }
+    .time-summary span{
+      display:block;
+      margin-top:3px;
+      font-size:8.5px;
+      line-height:1.3;
+      color:var(--muted);
+    }
+    .chev{
+      color:var(--muted);
+      font-size:16px;
+      line-height:1;
+      transition:transform .2s ease;
+    }
+    details[open]>.time-summary .chev,
+    details[open]>.signal-summary .chev,
+    details[open]>.research-summary .chev,
+    details[open]>.experience-summary .chev,
+    details[open]>.calculation-summary .chev,
+    details[open]>.raw-summary .chev{transform:rotate(90deg)}
+    .detail-body{
+      padding:0 0 14px;
+      font-size:10px;
+      line-height:1.55;
+      color:var(--muted);
+    }
+    .goal-pair,
+    .lifetime-stats{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+    .goal-rule,
+    .lifetime-stat{
+      padding:10px;
+      border-radius:10px;
+      background:#FAF8F5;
+    }
+    .goal-rule b,
+    .lifetime-stat b{
+      display:block;
+      font-size:14px;
+      line-height:1;
+      color:var(--ink);
+    }
+    .goal-rule span,
+    .lifetime-stat span{
+      display:block;
+      margin-top:5px;
+      font-size:8.5px;
+      line-height:1.35;
+      color:var(--muted);
+    }
+    .detail-note{margin:10px 1px 0}
+    .lifetime-bar{
+      display:flex;
+      height:5px;
+      margin-top:12px;
+      overflow:hidden;
+      border-radius:999px;
+      background:var(--mist);
+    }
+    .lifetime-bar span:nth-child(1){width:37%;background:var(--core)}
+    .lifetime-bar span:nth-child(2){width:27%;background:var(--love)}
+    .lifetime-bar span:nth-child(3){width:15%;background:var(--vitality)}
+    .lifetime-bar span:nth-child(4){width:21%;background:var(--abundance)}
+    .lifetime-guidance{
+      margin-top:10px;
+      padding:9px 10px;
+      border-radius:9px;
+      background:var(--vitality-tint);
+      color:#7D3A08;
+    }
+
+    .chapter{
+      padding:27px 2px 25px;
+      border-bottom:1px solid #DDD5CA;
+    }
+    .chapter-head p{
+      max-width:330px;
+      margin:7px 0 0;
+      font-size:10.5px;
+      line-height:1.48;
+      color:var(--muted);
+    }
+    .signal-ledger{
+      margin-top:15px;
+      border-top:1px solid var(--line);
+    }
+    .signal-row{border-bottom:1px solid var(--line)}
+    .signal-summary{
+      display:grid;
+      grid-template-columns:8px minmax(0,1fr) auto 14px;
+      align-items:center;
+      gap:10px;
+      min-height:60px;
+    }
+    .signal-dot{
+      width:7px;
+      height:7px;
+      border-radius:50%;
+    }
+    .signal-row.core .signal-dot{background:var(--core)}
+    .signal-row.love .signal-dot{background:var(--love)}
+    .signal-row.vitality .signal-dot{background:var(--vitality)}
+    .signal-row.abundance .signal-dot{background:var(--abundance)}
+    .signal-name{
+      min-width:0;
+      font-size:11.5px;
+      line-height:1.2;
+      font-weight:750;
+      color:var(--ink);
+    }
+    .signal-name span{
+      display:block;
+      margin-top:4px;
+      overflow:hidden;
+      font-size:8.5px;
+      line-height:1.2;
+      font-weight:400;
+      color:var(--muted);
+      white-space:nowrap;
+      text-overflow:ellipsis;
+    }
+    .signal-value{text-align:right}
+    .signal-value b{
+      display:block;
+      font-size:10.5px;
+      line-height:1.2;
+      color:var(--ink);
+    }
+    .signal-value span{
+      display:block;
+      margin-top:4px;
+      font-size:8.5px;
+      line-height:1.2;
+      color:var(--muted);
+    }
+    .signal-detail{
+      padding:0 30px 14px 18px;
+      font-size:10px;
+      line-height:1.55;
+      color:var(--muted);
+    }
+    .signal-detail b{color:var(--control)}
+
+    .experience-intro{
+      margin:14px 0 0;
+      padding:12px 13px;
+      border-radius:11px;
+      background:#FBF9F6;
+      font-size:10.5px;
+      line-height:1.55;
+      color:var(--control);
+    }
+    .subhead{
+      margin:19px 0 0;
+      font-size:13px;
+      line-height:1.25;
+      color:var(--ink);
+    }
+    .possibility-list{
+      margin-top:9px;
+      border-top:1px solid var(--line);
+    }
+    .possibility-row{
+      display:grid;
+      grid-template-columns:8px 1fr;
+      gap:10px;
+      padding:12px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .possibility-row .signal-dot{margin-top:5px}
+    .possibility-row h3{
+      margin:0;
+      font-size:10.5px;
+      line-height:1.25;
+      color:var(--ink);
+    }
+    .possibility-row ul{
+      display:grid;
+      gap:4px;
+      margin:6px 0 0;
+      padding:0;
+      list-style:none;
+    }
+    .possibility-row li{
+      position:relative;
+      padding-left:10px;
+      font-size:9.5px;
+      line-height:1.45;
+      color:var(--muted);
+    }
+    .possibility-row li:before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:.58em;
+      width:3px;
+      height:3px;
+      border-radius:50%;
+      background:#AAA2AD;
+    }
+    .research-card{margin-top:8px}
+    .research-summary,
+    .calculation-summary{
+      display:grid;
+      grid-template-columns:1fr auto 14px;
+      align-items:center;
+      gap:10px;
+      min-height:54px;
+    }
+    .research-summary b,
+    .calculation-summary b{
+      display:block;
+      font-size:11px;
+      line-height:1.25;
+      color:var(--ink);
+    }
+    .research-summary span span,
+    .calculation-summary span span{
+      display:block;
+      margin-top:4px;
+      font-size:8.5px;
+      line-height:1.3;
+      color:var(--muted);
+    }
+    .summary-action{
+      font-size:8.5px;
+      line-height:1;
+      color:var(--core);
+      font-weight:700;
+    }
+    .research-body{padding:0 0 10px}
+    .research-body>p{
+      margin:0 0 10px;
+      font-size:9.5px;
+      line-height:1.5;
+      color:var(--muted);
+    }
+    .research-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:7px 12px;
+    }
+    .research-item{
+      display:flex;
+      align-items:baseline;
+      gap:6px;
+      padding-bottom:6px;
+      border-bottom:1px solid var(--line);
+    }
+    .research-item b{
+      font-size:12px;
+      color:var(--ink);
+    }
+    .research-item span{
+      font-size:8.5px;
+      line-height:1.3;
+      color:var(--muted);
+    }
+
+    .experience-list{
+      margin-top:15px;
+      border-top:1px solid var(--line);
+    }
+    .experience{border-bottom:1px solid var(--line)}
+    .experience-summary{
+      display:grid;
+      grid-template-columns:auto minmax(0,1fr) 14px;
+      align-items:center;
+      gap:10px;
+      min-height:61px;
+    }
+    .signal-chip{
+      min-width:47px;
+      padding:5px 7px;
+      border-radius:999px;
+      text-align:center;
+      font-size:8px;
+      line-height:1;
+      font-weight:750;
+    }
+    .signal-chip.core{background:var(--core-tint);color:var(--core-deep)}
+    .signal-chip.vitality{background:var(--vitality-tint);color:var(--vitality-ink)}
+    .signal-chip.pair{background:#F5F1EA;color:var(--control)}
+    .experience-title{
+      display:block;
+      font-size:10.5px;
+      line-height:1.32;
+      font-weight:700;
+      color:var(--ink);
+    }
+    .experience-status{
+      display:none;
+      margin-top:4px;
+      font-size:8.5px;
+      color:var(--abundance-ink);
+    }
+    .experience.is-done .experience-status{display:block}
+    .experience-body{
+      padding:0 0 15px 57px;
+    }
+    .experience-line{
+      display:grid;
+      grid-template-columns:44px 1fr;
+      gap:8px;
+      margin-top:7px;
+    }
+    .experience-line b{
+      font-size:8px;
+      line-height:1.45;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:var(--core);
+    }
+    .experience-line span{
+      font-size:9.5px;
+      line-height:1.48;
+      color:var(--muted);
+    }
+    .experience-note{
+      margin-top:11px;
+      padding:9px 10px;
+      border-radius:9px;
+      background:#FAF8F5;
+      font-size:9px;
+      line-height:1.45;
+      color:var(--muted);
+    }
+    .experience-note b{color:var(--control)}
+    .mark-explored{
+      min-height:36px;
+      margin-top:10px;
+      padding:0 12px;
+      border:1px solid #D8D0E2;
+      border-radius:999px;
+      background:#fff;
+      color:var(--core-deep);
+      font-size:9px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .experience.is-done .mark-explored{
+      border-color:#BFDCCF;
+      background:#F1F9F5;
+      color:var(--abundance-ink);
+    }
+
+    .calculation-card{
+      margin-top:3px;
+      padding:0 2px;
+    }
+    .calculation-body{padding-bottom:8px}
+    .calculation-intro{
+      margin:0 0 13px;
+      font-size:10px;
+      line-height:1.55;
+      color:var(--muted);
+    }
+    .calculation-steps{
+      display:grid;
+      gap:12px;
+    }
+    .calculation-step{
+      display:grid;
+      grid-template-columns:22px 1fr;
+      gap:10px;
+      align-items:start;
+    }
+    .step-num{
+      display:grid;
+      place-items:center;
+      width:22px;
+      height:22px;
+      border:1px solid #D9D1E2;
+      border-radius:50%;
+      font-size:8.5px;
+      font-weight:700;
+      color:var(--core-deep);
+    }
+    .calculation-step b{
+      display:block;
+      font-size:10px;
+      line-height:1.3;
+      color:var(--ink);
+    }
+    .calculation-step span span{
+      display:block;
+      margin-top:4px;
+      font-size:9px;
+      line-height:1.48;
+      color:var(--muted);
+    }
+    .result-title{
+      margin:18px 0 8px;
+      font-size:10.5px;
+      line-height:1.3;
+      color:var(--ink);
+    }
+    .result-row{
+      display:grid;
+      grid-template-columns:8px 1fr auto;
+      align-items:center;
+      gap:9px;
+      min-height:38px;
+      border-top:1px solid var(--line);
+    }
+    .result-row:last-child{border-bottom:1px solid var(--line)}
+    .result-row b{font-size:9.5px;color:var(--ink)}
+    .result-row span:last-child{font-size:8.5px;color:var(--muted)}
+    .raw-positions{margin-top:8px}
+    .raw-summary{
+      display:grid;
+      grid-template-columns:1fr auto 14px;
+      align-items:center;
+      gap:10px;
+      min-height:48px;
+    }
+    .raw-summary b{font-size:10px;color:var(--ink)}
+    .raw-summary span{font-size:8.5px;color:var(--muted)}
+    .planet-table{padding-bottom:12px}
+    .planet-head,
+    .planet-row{
+      display:grid;
+      grid-template-columns:1fr auto;
+      align-items:center;
+      gap:12px;
+    }
+    .planet-head{
+      padding:9px 0 6px;
+      font-size:8px;
+      text-transform:uppercase;
+      letter-spacing:.07em;
+      color:var(--muted);
+    }
+    .planet-row{
+      min-height:30px;
+      border-top:1px solid var(--line);
+      font-size:9px;
+      color:var(--control);
+    }
+    .planet-value{font-variant-numeric:tabular-nums;color:var(--muted)}
+    .rx{font-size:7px;color:var(--love)}
+    .planet-note{
+      margin-top:8px;
+      font-size:8.5px;
+      line-height:1.45;
+      color:var(--muted);
+    }
+
+    /* V5: larger, explicit action rows and varied chapter rhythm. */
+    .app{background:var(--cream)}
+    .week-line{align-items:flex-start;margin-top:13px}
+    .week-line strong{font-size:12px;line-height:1.35}
+    .local-note{max-width:108px;font-size:10.5px;line-height:1.32}
+    .week-reading-label{font-size:12px}
+    .week-reading-label span,.week-minutes span{font-size:10.5px;line-height:1.35}
+    .week-minutes b{font-size:18px;font-weight:750;letter-spacing:-.012em}
+    .balance-status{font-size:11.5px;padding:10px 11px}
+    .balance-item b{font-size:10.5px}
+    .balance-item b:before{display:none}
+    .balance-item strong{font-size:15px}
+    .time-disclosures{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid var(--line)}
+    .time-detail+.time-detail{border-top:0;border-left:1px solid var(--line)}
+    .time-summary{min-height:76px;padding:10px 9px;align-items:center}
+    .time-summary b{font-size:12px;line-height:1.3}
+    .time-summary span span{font-size:10.5px;line-height:1.35}
+    .chev{display:grid;place-items:center;width:29px;height:29px;border:1px solid #CFC4DC;border-radius:50%;font-size:0;font-weight:700;color:var(--core-deep)}
+    .chev:before{content:"⌄";font-size:18px;line-height:1;transform:translateY(-2px)}
+    details[open]>.time-summary .chev,
+    details[open]>.signal-summary .chev,
+    details[open]>.research-summary .chev,
+    details[open]>.experience-summary .chev,
+    details[open]>.calculation-summary .chev,
+    details[open]>.raw-summary .chev,
+    details[open]>.faq-summary .chev{transform:none}
+    details[open]>summary .chev{transform:none}
+    details[open]>summary .chev:before{content:"⌃";transform:translateY(2px)}
+    @supports selector(.time-disclosures:has(.time-detail[open])){
+      .time-disclosures:has(.time-detail[open]) .time-detail{grid-column:1/-1}
+      .time-disclosures:has(.time-detail[open]) .time-detail+.time-detail{border-left:0;border-top:1px solid var(--line)}
+    }
+    .detail-body{padding:0 10px 15px;font-size:11px;line-height:1.58}
+    .goal-rule span,.lifetime-stat span{font-size:10.5px;line-height:1.4}
+    .lifetime-guidance{font-size:10.5px;line-height:1.45}
+    .chapter-head p{font-size:12px;line-height:1.5}
+    .signal-ledger{padding:4px 12px 5px;border:1px solid #D8CFEB;border-radius:14px;background:#fff;box-shadow:0 7px 18px rgba(56,0,122,.035)}
+    .signal-summary{grid-template-columns:10px minmax(0,1fr) auto 27px;min-height:70px;gap:11px}
+    .signal-row.core .signal-summary{background:var(--core-tint)}
+    .signal-row.love .signal-summary{background:var(--love-tint)}
+    .signal-row.vitality .signal-summary{background:var(--vitality-tint)}
+    .signal-row.abundance .signal-summary{background:var(--abundance-tint)}
+    .signal-dot{width:9px;height:9px}
+    .signal-name{font-size:13px}
+    .signal-name span,.signal-value span{font-size:10.5px;line-height:1.3}
+    .signal-value b{font-size:12px}
+    .signal-detail{padding:2px 35px 16px 21px;font-size:11.5px;line-height:1.58}
+    .experience-intro{font-size:12.5px;line-height:1.58;background:var(--core-tint);border:0}
+    .subhead{font-size:15px}
+    .possibility-list{display:grid;grid-template-columns:1fr}
+    .possibility-row{grid-template-columns:12px 1fr;padding:15px 0}
+    .possibility-row h3{font-size:13px}
+    .possibility-row li{font-size:12px;line-height:1.52}
+    .research-card{margin-top:19px;padding:0 14px 5px;border:1px solid var(--core-deep);border-radius:14px;background:var(--core-deep);box-shadow:0 10px 22px rgba(56,0,122,.12)}
+    .research-summary{grid-template-columns:1fr auto 27px;min-height:68px}
+    .research-summary b,.research-summary span span{color:#fff}
+    .research-summary b{font-size:13px}
+    .research-summary span span{font-size:10.5px}
+    .research-summary .summary-action{color:#DAD0FF}
+    .research-summary .chev{color:#fff;border-color:rgba(255,255,255,.45)}
+    .research-body{padding-bottom:13px}
+    .research-body>p{font-size:11px;line-height:1.55;color:#EEE9FF}
+    .research-item{border-color:rgba(255,255,255,.22)}
+    .research-item b{color:#fff;font-size:14px}
+    .research-item span{color:#EEE9FF;font-size:10.5px}
+    .experience-list{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+    .experience{padding:0 12px}
+    .experience:nth-child(1){background:var(--vitality-tint)}
+    .experience:nth-child(2){background:var(--core-tint)}
+    .experience:nth-child(3){background:#F6F1E8}
+    .experience-summary{grid-template-columns:auto minmax(0,1fr) 27px;min-height:70px}
+    .signal-chip{font-size:10px;padding:6px 8px}
+    .experience-title{font-size:12px}
+    .experience-body{padding-left:0}
+    .experience-line b{font-size:10px}
+    .experience-line span,.experience-note{font-size:11.5px;line-height:1.52}
+    .mark-explored{font-size:11px}
+    .calculation-card{padding:0 12px;border:1px solid var(--line);border-radius:14px;background:#fff}
+    .calculation-summary{grid-template-columns:1fr auto 27px;min-height:70px}
+    .calculation-summary b{font-size:13px}
+    .calculation-summary span span,.calculation-intro{font-size:10.5px}
+    .summary-action{font-size:10.5px}
+    .calculation-step b,.raw-summary b{font-size:11.5px}
+    .calculation-step span span,.raw-summary span{font-size:10.5px}
+    .raw-summary{grid-template-columns:1fr auto 27px;min-height:58px}
+    .result-row b{font-size:11px}.result-row span:last-child{font-size:10.5px}
+    .planet-head,.planet-row{font-size:10.5px}.planet-note{font-size:10.5px}
+    .guide-panel>p,.guide-item strong,.guide-item span span{font-size:10.5px}
+    .faq{padding-bottom:0;border-bottom:0}
+    .faq-list{margin-top:14px;border:1px solid var(--line);border-radius:14px;background:#fff;overflow:hidden}
+    .faq-item+.faq-item{border-top:1px solid var(--line)}
+    .faq-summary{display:grid;grid-template-columns:1fr 29px;gap:10px;align-items:center;padding:15px 13px;font-size:13px;font-weight:700;line-height:1.35;color:var(--ink)}
+    .faq-body{padding:0 13px 16px;font-size:12px;line-height:1.58;color:var(--muted)}
+    @media(max-width:350px){.time-disclosures{grid-template-columns:1fr}.time-detail+.time-detail{border-left:0;border-top:1px solid var(--line)}.possibility-list{grid-template-columns:1fr}.local-note{font-size:10px}.balance-item b{font-size:9.5px}}
+
+    .guide-panel{
+      margin-top:16px;
+      padding:13px 14px 2px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#FBF9F6;
+    }
+    .guide-panel>strong{
+      display:block;
+      font-size:11px;
+      line-height:1.3;
+      color:var(--ink);
+    }
+    .guide-panel>p{
+      margin:4px 0 0;
+      font-size:9px;
+      line-height:1.45;
+      color:var(--muted);
+    }
+    .guide-list{
+      display:grid;
+      gap:0;
+      margin-top:10px;
+      border-top:1px solid var(--line);
+    }
+    .guide-item{
+      display:grid;
+      grid-template-columns:58px 1fr;
+      gap:10px;
+      padding:10px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .guide-item>b{
+      font-size:8px;
+      line-height:1.35;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:var(--core);
+    }
+    .guide-item strong{
+      display:block;
+      font-size:10px;
+      line-height:1.35;
+      color:var(--ink);
+    }
+    .guide-item span span{
+      display:block;
+      margin-top:4px;
+      font-size:9px;
+      line-height:1.45;
+      color:var(--muted);
+    }
+
+    @media(max-width:350px){
+      .page{padding-left:13px;padding-right:13px}
+      .time-sheet{padding-left:15px;padding-right:15px}
+      .guide-button{font-size:0}
+      .guide-button span{font-size:12px}
+      .local-note{max-width:120px}
+      .balance-grid{gap:3px}
+      .balance-item b{font-size:9.5px}
+      .balance-item strong{font-size:14px}
+      .signal-name span{max-width:125px}
+      .experience-body{padding-left:0}
+    }
+    /* V6 containment repair: one complete card per major section. */
+    body{
+      background:
+        radial-gradient(circle at 84% -2%,rgba(101,33,201,.09),transparent 240px),
+        #F5F1EA;
+    }
+    .app{
+      background:transparent;
+    }
+    .utility{
+      padding:14px 18px 9px;
+    }
+    .utility-title strong{font-size:11.5px}
+    .utility-title span{font-size:10px}
+    .page{
+      gap:15px;
+      padding:7px 14px 38px;
+    }
+    .identity,
+    .time-sheet,
+    .chapter{
+      margin:0;
+      padding:20px;
+      border:1px solid #DED6E6;
+      border-radius:16px;
+      background:var(--paper);
+      box-shadow:0 8px 24px rgba(38,28,49,.065);
+    }
+    .identity{
+      padding-top:19px;
+      padding-bottom:18px;
+    }
+    .identity h1{font-size:29px}
+    .birthline{
+      margin-top:8px;
+      font-size:12px;
+      line-height:1.5;
+    }
+    .guide-button{
+      top:14px;
+      right:15px;
+      font-size:10.5px;
+    }
+    .guide-button span{
+      width:25px;
+      height:25px;
+      font-size:11px;
+    }
+    .guide-panel{
+      margin:17px -4px 0;
+      padding:15px 15px 3px;
+      background:#F8F5FB;
+    }
+    .guide-panel>strong{font-size:13px}
+    .guide-panel>p,
+    .guide-item strong,
+    .guide-item span span{font-size:11.5px}
+    .guide-item>b{font-size:9.5px}
+
+    h2{
+      font-size:22px;
+      line-height:1.14;
+    }
+    .time-sheet{
+      padding:21px 20px 0;
+      border-color:#D7CBE7;
+      box-shadow:0 11px 28px rgba(56,0,122,.08);
+    }
+    .week-line{
+      margin-top:14px;
+      padding-bottom:14px;
+    }
+    .week-line strong{font-size:12.5px}
+    .local-note{font-size:11px}
+    .week-reading{
+      padding:16px 0 14px;
+    }
+    .week-reading-label{font-size:12.5px}
+    .week-reading-label span,
+    .week-minutes span{font-size:11px}
+    .week-minutes b{font-size:18px}
+    .balance-status{
+      padding:11px 12px;
+      font-size:12px;
+    }
+    .balance-bar{height:7px;margin-top:14px}
+    .balance-grid{margin-top:10px}
+    .balance-item b{font-size:11px}
+    .balance-item strong{font-size:16px}
+
+    .time-disclosures{
+      display:grid;
+      grid-template-columns:1fr;
+      margin:17px -20px 0;
+      border-top:1px solid var(--line);
+      border-bottom:0;
+    }
+    .time-detail{display:block}
+    .time-detail+.time-detail{
+      border-top:1px solid var(--line);
+      border-left:0;
+    }
+    .time-detail[open]>.detail-body{
+      padding-top:16px;
+      background:#FBF9FC;
+    }
+    .time-summary{
+      min-height:67px;
+      padding:13px 20px;
+    }
+    .time-summary b{font-size:13.5px}
+    .time-summary span span{font-size:11.5px}
+    .detail-body{
+      padding:0 20px 18px;
+      font-size:12.5px;
+      line-height:1.58;
+    }
+    .goal-rule,
+    .lifetime-stat{
+      padding:12px;
+      background:#F7F4FA;
+    }
+    .goal-rule b,
+    .lifetime-stat b{font-size:16px}
+    .goal-rule span,
+    .lifetime-stat span,
+    .lifetime-guidance{font-size:11.5px}
+
+    .chapter{
+      border-bottom:1px solid #E1D9E8;
+    }
+    .chapter-head p{
+      max-width:none;
+      margin-top:8px;
+      font-size:13px;
+      line-height:1.52;
+    }
+    .signal-ledger{
+      margin:17px -20px -20px;
+      padding:0;
+      overflow:hidden;
+      border:0;
+      border-top:1px solid var(--line);
+      border-radius:0 0 15px 15px;
+      box-shadow:none;
+    }
+    .signal-summary{
+      min-height:76px;
+      padding:0 18px;
+    }
+    .signal-name{font-size:14px}
+    .signal-name span,
+    .signal-value span{font-size:11.5px}
+    .signal-name span{
+      overflow:visible;
+      white-space:normal;
+      text-overflow:clip;
+    }
+    .signal-value b{font-size:13px}
+    .signal-detail{
+      padding:4px 45px 18px 39px;
+      font-size:12.5px;
+      line-height:1.58;
+      color:#5F5866;
+    }
+
+    .experience-intro{
+      margin-top:16px;
+      padding:14px 15px;
+      font-size:13px;
+      line-height:1.58;
+    }
+    .subhead{font-size:16px}
+    .possibility-row{
+      padding:16px 0;
+    }
+    .possibility-row h3{font-size:14px}
+    .possibility-row li{
+      padding-left:12px;
+      font-size:12.5px;
+      line-height:1.55;
+    }
+    .research-card{
+      margin:19px -20px -20px;
+      padding:0 20px 10px;
+      border:0;
+      border-radius:0 0 15px 15px;
+      box-shadow:none;
+    }
+    .research-summary{
+      min-height:75px;
+    }
+    .research-summary b{font-size:14px}
+    .research-summary span span{font-size:11.5px}
+    .research-body>p{font-size:12px}
+    .research-item span{font-size:11px}
+
+    .experience-list{
+      margin:17px -20px -20px;
+      border:0;
+      border-top:1px solid var(--line);
+      border-radius:0 0 15px 15px;
+    }
+    .experience{
+      padding:0 18px;
+    }
+    .experience-summary{
+      min-height:76px;
+    }
+    .signal-chip{font-size:10.5px}
+    .experience-title{font-size:13px}
+    .experience-line b{font-size:10.5px}
+    .experience-line span,
+    .experience-note{
+      font-size:12px;
+      line-height:1.55;
+    }
+    .mark-explored{font-size:11.5px}
+
+    .calculation-card{
+      margin:16px -20px -20px;
+      padding:0 20px 12px;
+      border:0;
+      border-top:1px solid var(--line);
+      border-radius:0 0 15px 15px;
+      background:#FBF9F6;
+    }
+    .calculation-summary{min-height:72px}
+    .calculation-summary b{font-size:14px}
+    .calculation-summary span span,
+    .calculation-intro{font-size:11.5px}
+    .calculation-step b,
+    .raw-summary b{font-size:12.5px}
+    .calculation-step span span,
+    .raw-summary span{font-size:11.5px}
+    .result-row b,
+    .result-row span:last-child,
+    .planet-head,
+    .planet-row,
+    .planet-note{font-size:11.5px}
+
+    .faq{
+      padding-bottom:0;
+    }
+    .faq-list{
+      margin:16px -20px 0;
+      border:0;
+      border-top:1px solid var(--line);
+      border-radius:0 0 15px 15px;
+    }
+    .faq-summary{
+      padding:17px 20px;
+      font-size:13.5px;
+    }
+    .faq-body{
+      padding:0 20px 18px;
+      font-size:12.5px;
+      line-height:1.6;
+    }
+    .chev{
+      width:31px;
+      height:31px;
+      border-color:#BFAED2;
+      background:#fff;
+    }
+    .research-summary .chev{
+      color:#fff;
+      border-color:rgba(255,255,255,.5);
+      background:transparent;
+    }
+    .chev:before{font-size:18px}
+    @media(max-width:350px){
+      .page{padding-left:11px;padding-right:11px}
+      .identity,.time-sheet,.chapter{padding-left:17px;padding-right:17px}
+      .time-disclosures{margin-left:-17px;margin-right:-17px}
+      .time-summary,.detail-body{padding-left:17px;padding-right:17px}
+      .signal-ledger,.experience-list,.calculation-card,.research-card,.faq-list{margin-left:-17px;margin-right:-17px}
+      .signal-summary,.experience{padding-left:15px;padding-right:15px}
+      .signal-name span{max-width:118px}
+      .balance-item b{font-size:10px}
+      .guide-button{right:12px}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .chev{transition:none}
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="utility">
+      <img class="brand" src="app-assets/logo-black.svg" alt="Zodiac.fm">
+      <div class="utility-title"><strong>My Zodiac</strong><span>Signal Map</span></div>
+    </header>
+
+    <div class="page">
+      <section class="identity" aria-labelledby="member-name">
+        <h1 id="member-name">Mike Hill</h1>
+        <p class="birthline">March 12, 1984 · 3:47 AM<br>Austin, Texas</p>
+        <details class="guide-disclosure">
+          <summary class="guide-button" aria-label="How this page works">How this works <span aria-hidden="true">i</span></summary>
+          <div class="guide-panel">
+            <strong>Using Your Signal Map</strong>
+            <p>A fixed personal map with a listening record that grows over time.</p>
+            <div class="guide-list">
+              <div class="guide-item"><b>This week</b><span><strong>Start with Time &amp; Balance</strong><span>The study baseline was at least nine minutes a day on average, with every frequency at 15% or more.</span></span></div>
+              <div class="guide-item"><b>Your map</b><span><strong>Use your frequencies and bands as a reference</strong><span>Your frequency names the part of life. Your band shows the way that part becomes easier to read.</span></span></div>
+              <div class="guide-item"><b>Explore</b><span><strong>Choose what fits</strong><span>Experiences are optional, repeatable, and never a test of whether Zodiac is working.</span></span></div>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section class="time-sheet" aria-labelledby="time-title">
+        <h2 id="time-title">Time &amp; Balance</h2>
+        <div class="week-line">
+          <strong>Monday, July 27 to Sunday, August 2</strong>
+          <span class="local-note">Your local time</span>
+        </div>
+        <div class="week-reading">
+          <div class="week-reading-label">This week<span>Completed listening across all four frequencies</span></div>
+          <div class="week-minutes"><b>88 min</b><span>Actual time</span></div>
+        </div>
+        <div class="balance-status"><b>Vitality is low</b> this week</div>
+        <div class="balance-bar" aria-label="This week's balance: Core 34%, Love 29%, Vitality 11%, Abundance 26%"><span></span><span></span><span></span><span></span></div>
+        <div class="balance-grid">
+          <div class="balance-item core"><b>Core</b><strong>34%</strong></div>
+          <div class="balance-item love"><b>Love</b><strong>29%</strong></div>
+          <div class="balance-item vitality"><b>Vitality</b><strong>11%</strong></div>
+          <div class="balance-item abundance"><b>Abundance</b><strong>26%</strong></div>
+        </div>
+
+        <div class="time-disclosures">
+          <details class="time-detail">
+            <summary class="time-summary">
+              <span><b>Listening guide</b><span>9 min/day · 15%+ each</span></span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="detail-body">
+              <div class="goal-pair">
+                <div class="goal-rule"><b>63 min</b><span>The study baseline for a full Monday-to-Sunday week</span></div>
+                <div class="goal-rule"><b>15%+</b><span>For each of the four frequencies</span></div>
+              </div>
+              <p class="detail-note">Missing a day is fine. In the study, people who listened more while staying balanced reported stronger outcomes and often reached the common time windows earlier. That is a population pattern, not a personal schedule.</p>
+            </div>
+          </details>
+          <details class="time-detail">
+            <summary class="time-summary">
+              <span><b>All-time listening</b><span>5h 10m total · 2h 20m balanced</span></span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="detail-body">
+              <div class="lifetime-stats">
+                <div class="lifetime-stat"><b>5h 10m</b><span>Total listening</span></div>
+                <div class="lifetime-stat"><b>2h 20m</b><span>Time listened in balance</span></div>
+              </div>
+              <div class="lifetime-bar" aria-label="Lifetime mix: Core 37%, Love 27%, Vitality 15%, Abundance 21%"><span></span><span></span><span></span><span></span></div>
+              <p class="lifetime-guidance">Vitality has received the least time overall. Bringing more Vitality into future listening moves your lifetime mix toward balance.</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="frequencies-title">
+        <div class="chapter-head">
+          <h2 id="frequencies-title">Your Frequencies &amp; Bands</h2>
+          <p>Your frequency names the part of life. Your band shows the way that part becomes easier to read. You use all four ways. For each part of you, one way is home.</p>
+        </div>
+        <div class="signal-ledger">
+          <details class="signal-row core">
+            <summary class="signal-summary">
+              <span class="signal-dot" aria-hidden="true"></span>
+              <span class="signal-name">Core<span>Identity and purpose</span></span>
+              <span class="signal-value"><b>406 Hz</b><span>Root band</span></span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="signal-detail"><b>Core answers from settled certainty.</b> Core holds identity and purpose. Is this me? Is this mine to do? In your Root band, the answer can take shape when the question has solid ground and you stop forcing it.</div>
+          </details>
+          <details class="signal-row love">
+            <summary class="signal-summary">
+              <span class="signal-dot" aria-hidden="true"></span>
+              <span class="signal-name">Love<span>Connection</span></span>
+              <span class="signal-value"><b>414 Hz</b><span>Root band</span></span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="signal-detail"><b>Love reads closeness through ease.</b> Who do you let in? How close? In what context? Your Root band gives the whole relationship room to settle before the answer becomes clear.</div>
+          </details>
+          <details class="signal-row vitality">
+            <summary class="signal-summary">
+              <span class="signal-dot" aria-hidden="true"></span>
+              <span class="signal-name">Vitality<span>Energy</span></span>
+              <span class="signal-value"><b>554 Hz</b><span>Solar Plexus</span></span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="signal-detail"><b>Vitality reads energy in motion.</b> What will feed you or drain you today, this week, or this month? With Vitality in Solar Plexus, clarity can arrive while you picture the real week or take one small, reversible step.</div>
+          </details>
+          <details class="signal-row abundance">
+            <summary class="signal-summary">
+              <span class="signal-dot" aria-hidden="true"></span>
+              <span class="signal-name">Abundance<span>Opportunity and timing</span></span>
+              <span class="signal-value"><b>596 Hz</b><span>Solar Plexus</span></span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="signal-detail"><b>Abundance finds timing in the move.</b> Is this the opening? Is it now? Your Solar Plexus band can clarify the timing when you approach in a small, reversible way. Move, wait, another direction, or still unclear are all valid reads.</div>
+          </details>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="experience-title">
+        <div class="chapter-head">
+          <h2 id="experience-title">Your Zodiac Experience</h2>
+          <p>These are possibilities, not rules. Nothing obvious at first is okay.</p>
+        </div>
+        <p class="experience-intro">Changes may appear while listening, or later in ordinary life. In the beginning, the music may simply feel like music.</p>
+        <h3 class="subhead">Common experiences over time</h3>
+        <div class="possibility-list">
+          <div class="possibility-row">
+            <span class="signal-dot" style="background:var(--core)"></span>
+            <div><h3>Core</h3><ul><li>You can tell more clearly when a preference is genuinely yours and when it came from an old rule about who you should be.</li><li>A decision starts to feel like an expression of who you are, not a role you know how to perform.</li></ul></div>
+          </div>
+          <div class="possibility-row">
+            <span class="signal-dot" style="background:var(--love)"></span>
+            <div><h3>Love</h3><ul><li>You notice when connection is mutual and when you are doing the work for both people.</li><li>You can be honest in a conversation without first managing the other person's response.</li></ul></div>
+          </div>
+          <div class="possibility-row">
+            <span class="signal-dot" style="background:var(--vitality)"></span>
+            <div><h3>Vitality</h3><ul><li>You notice what a commitment will cost before saying yes automatically.</li><li>Your pace begins to match what gives energy back, not only what the calendar asks.</li></ul></div>
+          </div>
+          <div class="possibility-row">
+            <span class="signal-dot" style="background:var(--abundance)"></span>
+            <div><h3>Abundance</h3><ul><li>An opening can stand out without you having to force it.</li><li>You can tell more clearly when to move, when to wait, and when to leave something alone.</li></ul></div>
+          </div>
+        </div>
+        <details class="research-card">
+          <summary class="research-summary">
+            <span><b>What members reported</b><span>Seven outcomes from our 52-week study</span></span>
+            <span class="summary-action">See results</span>
+            <span class="chev" aria-hidden="true">⌄</span>
+          </summary>
+          <div class="research-body">
+            <p>Among members who used Zodiac as designed, averaging at least nine minutes a day and keeping every frequency at 15% or more:</p>
+            <div class="research-grid">
+              <div class="research-item"><b>94%</b><span>Deeper self-access</span></div>
+              <div class="research-item"><b>91%</b><span>Sharper instincts</span></div>
+              <div class="research-item"><b>92%</b><span>Internal regulation</span></div>
+              <div class="research-item"><b>90%</b><span>Better relationships and love</span></div>
+              <div class="research-item"><b>88%</b><span>Life responds</span></div>
+              <div class="research-item"><b>91%</b><span>A beat before reacting</span></div>
+              <div class="research-item"><b>90%</b><span>Connection to something bigger</span></div>
+            </div>
+            <p style="margin-top:11px">This was an internal, self-coded study, not a clinical trial. These are population results, not a promise about any one member or when something will happen.</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="chapter" aria-labelledby="explore-title">
+        <div class="chapter-head">
+          <h2 id="explore-title">Experiences to Explore</h2>
+          <p>Each suggestion brings one part of your map into an ordinary decision. Choose what fits. Nothing here is assigned.</p>
+        </div>
+        <div class="experience-list">
+          <details class="experience" data-experience="v6-vitality-motion">
+            <summary class="experience-summary">
+              <span class="signal-chip vitality">Vitality</span>
+              <span><span class="experience-title">Test the energy of one commitment</span><span class="experience-status">Explored</span></span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="experience-body">
+              <div class="experience-line"><b>Choose</b><span>One task, invitation, or commitment you are unsure about.</span></div>
+              <div class="experience-line"><b>Explore</b><span>Try one small reversible piece, or picture the actual week in motion.</span></div>
+              <div class="experience-line"><b>Notice</b><span>Feeds me, costs me, needs a different approach, or still unclear.</span></div>
+              <div class="experience-note"><b>Why it fits:</b> Vitality concerns energy, and your Vitality frequency processes through motion in the Solar Plexus band.</div>
+              <button class="mark-explored" type="button" aria-pressed="false">I explored this</button>
+            </div>
+          </details>
+          <details class="experience" data-experience="v6-core-steadiness">
+            <summary class="experience-summary">
+              <span class="signal-chip core">Core</span>
+              <span><span class="experience-title">Give one identity question solid ground</span><span class="experience-status">Explored</span></span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="experience-body">
+              <div class="experience-line"><b>Choose</b><span>One decision about who you are or what is yours to do.</span></div>
+              <div class="experience-line"><b>Explore</b><span>Give the question one quiet minute without arguing either side.</span></div>
+              <div class="experience-line"><b>Notice</b><span>Yes, no, not yet, or nothing clear. Every answer is useful information.</span></div>
+              <div class="experience-note"><b>Why it fits:</b> Core concerns identity and purpose, and your Core frequency processes through steadiness in the Root band.</div>
+              <button class="mark-explored" type="button" aria-pressed="false">I explored this</button>
+            </div>
+          </details>
+          <details class="experience" data-experience="v6-love-abundance">
+            <summary class="experience-summary">
+              <span class="signal-chip pair">Love + Ab.</span>
+              <span><span class="experience-title">Read an opening involving another person</span><span class="experience-status">Explored</span></span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="experience-body">
+              <div class="experience-line"><b>Choose</b><span>One opportunity that depends on a conversation, introduction, or relationship.</span></div>
+              <div class="experience-line"><b>Explore</b><span>Let the relationship question settle, then take one small step toward the opening.</span></div>
+              <div class="experience-line"><b>Notice</b><span>What becomes clearer about the person, the opportunity, and the timing.</span></div>
+              <div class="experience-note"><b>Why it fits:</b> Love processes through Root steadiness while Abundance processes through Solar Plexus motion.</div>
+              <button class="mark-explored" type="button" aria-pressed="false">I explored this</button>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="chapter calculation-chapter" aria-labelledby="calculation-title">
+        <div class="chapter-head">
+          <h2 id="calculation-title">How Your Map Was Calculated</h2>
+          <p>Your birth moment translated into four frequencies.</p>
+        </div>
+        <details class="calculation-card">
+          <summary class="calculation-summary">
+            <span><b>View calculation and results</b><span>Planetary positions, lineage, and your four values</span></span>
+            <span class="summary-action">View</span>
+            <span class="chev" aria-hidden="true">⌄</span>
+          </summary>
+          <div class="calculation-body">
+          <p class="calculation-intro">Your exact birth date, time, and location establish the astronomical moment used for your calculation.</p>
+          <div class="calculation-steps">
+            <div class="calculation-step">
+              <span class="step-num">1</span>
+              <span><b>Your planetary positions are calculated</b><span>The Swiss Ephemeris measures each planet's precise astronomical position for your birth moment and location.</span></span>
+            </div>
+            <div class="calculation-step">
+              <span class="step-num">2</span>
+              <span><b>Your complete pattern becomes 248+ data points</b><span>The planetary positions and relationships form the inputs used in your calculation.</span></span>
+            </div>
+            <div class="calculation-step">
+              <span class="step-num">3</span>
+              <span><b>Your four frequencies emerge</b><span>The 248+ data points are entered into an algorithm derived from the Sri Vidya Mantra Lineage from Southern India. The result is your Core, Love, Vitality, and Abundance frequencies.</span></span>
+            </div>
+          </div>
+          <details class="raw-positions">
+            <summary class="raw-summary">
+              <b>Raw planetary positions</b>
+              <span>View data</span>
+              <span class="chev" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="planet-table">
+              <div class="planet-head"><span>Body</span><span>Ecliptic longitude</span></div>
+              <div class="planet-row"><span>Sun</span><span class="planet-value">352.2440°</span></div>
+              <div class="planet-row"><span>Moon</span><span class="planet-value">102.7568°</span></div>
+              <div class="planet-row"><span>Mercury</span><span class="planet-value">355.7292°</span></div>
+              <div class="planet-row"><span>Venus</span><span class="planet-value">327.6190°</span></div>
+              <div class="planet-row"><span>Mars</span><span class="planet-value">235.3822°</span></div>
+              <div class="planet-row"><span>Jupiter</span><span class="planet-value">279.7401°</span></div>
+              <div class="planet-row"><span>Saturn <span class="rx">Rx</span></span><span class="planet-value">226.3651°</span></div>
+              <div class="planet-row"><span>Uranus</span><span class="planet-value">253.7732°</span></div>
+              <div class="planet-row"><span>Neptune</span><span class="planet-value">271.5248°</span></div>
+              <div class="planet-row"><span>Pluto <span class="rx">Rx</span></span><span class="planet-value">211.9669°</span></div>
+              <p class="planet-note"><b>Rx</b> means retrograde. These positions are the astronomical inputs used in the frequency calculation.</p>
+            </div>
+          </details>
+          <h3 class="result-title">Your results</h3>
+          <div class="result-list">
+            <div class="result-row"><span class="signal-dot" style="background:var(--core)"></span><b>Core</b><span>406 Hz · Root</span></div>
+            <div class="result-row"><span class="signal-dot" style="background:var(--love)"></span><b>Love</b><span>414 Hz · Root</span></div>
+            <div class="result-row"><span class="signal-dot" style="background:var(--vitality)"></span><b>Vitality</b><span>554 Hz · Solar Plexus</span></div>
+            <div class="result-row"><span class="signal-dot" style="background:var(--abundance)"></span><b>Abundance</b><span>596 Hz · Solar Plexus</span></div>
+          </div>
+          </div>
+        </details>
+      </section>
+
+      <section class="chapter faq" aria-labelledby="faq-title">
+        <div class="chapter-head">
+          <h2 id="faq-title">Frequently Asked Questions</h2>
+        </div>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary class="faq-summary"><span>How much should I listen?</span><span class="chev" aria-hidden="true">⌄</span></summary>
+            <div class="faq-body">People included in the study's as-designed results averaged at least nine minutes a day, or 63 minutes across a full Monday-to-Sunday week, while keeping every frequency at 15% or more. That is guidance, not a rule.</div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-summary"><span>What does balance mean?</span><span class="chev" aria-hidden="true">⌄</span></summary>
+            <div class="faq-body">Balance means each of your four frequencies has at least 15% of your listening for the week. It is a way to read the mix, not a score or a requirement for a result.</div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-summary"><span>What if I miss a day?</span><span class="chev" aria-hidden="true">⌄</span></summary>
+            <div class="faq-body">Missing a day is fine. In the study, people who listened more while staying balanced reported stronger outcomes and often reached the common time windows earlier. That population pattern does not promise a personal result or schedule.</div>
+          </details>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    if(self!==top||new URLSearchParams(location.search).has('embed')){
+      document.documentElement.classList.add('embed');
+    }
+
+    const exploredKey='zfm-profile-explored-v6';
+    let explored=[];
+    try{explored=JSON.parse(localStorage.getItem(exploredKey)||'[]')}catch(error){explored=[]}
+    document.querySelectorAll('.experience').forEach(function(item){
+      const id=item.dataset.experience;
+      const button=item.querySelector('.mark-explored');
+      function paint(done){
+        item.classList.toggle('is-done',done);
+        button.setAttribute('aria-pressed',String(done));
+        button.textContent=done?'Explored ✓':'I explored this';
+      }
+      paint(explored.includes(id));
+      button.addEventListener('click',function(){
+        const done=!explored.includes(id);
+        explored=done?[...explored,id]:explored.filter(function(value){return value!==id});
+        try{localStorage.setItem(exploredKey,JSON.stringify(explored))}catch(error){}
+        paint(done);
+      });
+    });
+
+    let lastHeight=0;
+    function sendHeight(){
+      try{
+        const height=Math.ceil(document.documentElement.scrollHeight);
+        if(height!==lastHeight){
+          lastHeight=height;
+          parent.postMessage({zfmH:height},'*');
+        }
+      }catch(error){}
+    }
+    document.querySelectorAll('details').forEach(function(item){
+      item.addEventListener('toggle',function(){setTimeout(sendHeight,30)});
+    });
+    addEventListener('load',sendHeight);
+    addEventListener('resize',sendHeight);
+    if('ResizeObserver' in window){new ResizeObserver(sendHeight).observe(document.body)}
+    setTimeout(sendHeight,250);
+    setTimeout(sendHeight,900);
+  </script>
+</body>
+</html>
