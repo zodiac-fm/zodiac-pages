@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-  <title>My Zodiac · Signal Map Profile V1</title>
+  <title>My Zodiac · Signal Map</title>
   <link rel="stylesheet" href="progress-B2-card-shared.css">
   <!--
-  THESIS: A fixed personal map beside a living listening record, never a progress road.
-  OWN-WORLD: C's cream canvas, white ledgers, ink headlines, Core Purple structure, and small frequency accents.
-  STORY: See the birth-derived map, understand the four processing routes, check listening rhythm, then choose an optional exploration.
-  FIRST VIEWPORT: Real logo, My Zodiac utility line, birth coordinates, the profile thesis, and the start of the four-signal ledger.
-  FORM: Two-layer signal atlas, grounded candidate 4 of 7, staged as fixed map first and living rhythm second. Seed 41529ae4.
+  THESIS: A member profile led by the two things they return to: this week's balance and their fixed personal map.
+  OWN-WORLD: C's cream canvas, white ledgers, ink hierarchy, Core Purple structure, and four frequency accents.
+  STORY: Identify the member, read this week, see the all-time context, understand the fixed map, then explore possibilities.
+  FIRST VIEWPORT: Name, birth coordinates, compact weekly balance, and the beginning of all-time listening.
+  MODE: Operate. Dense information is arranged for return visits and fast scanning.
   -->
   <style>
     :root{
@@ -20,135 +20,268 @@
       --love:#B90044;
       --love-tint:#FFE8EA;
       --vitality:#FF9112;
-      --vitality-ink:#C25500;
+      --vitality-ink:#B94E00;
       --vitality-tint:#FFEADA;
       --abundance:#12A56E;
-      --abundance-ink:#0A7A52;
+      --abundance-ink:#08734C;
       --abundance-tint:#DCF4E8;
       --root:#6B6258;
       --solar:#A95E00;
       --throat:#526C8D;
       --crown:#6D4D86;
+      --section-radius:18px;
     }
     html.embed .app{min-height:auto}
     body{background:var(--cream)}
     .app{
       padding-bottom:34px;
       background:
-        radial-gradient(circle at 92% 2%,rgba(101,33,201,.09),transparent 245px),
+        radial-gradient(circle at 95% 0,rgba(101,33,201,.07),transparent 220px),
         var(--cream);
     }
-    .utility{
-      align-items:flex-start;
-      padding-top:10px;
-      padding-bottom:6px;
-    }
-    .utility strong{
-      font-size:12px;
-      color:var(--ink);
-    }
-    .utility span{
-      max-width:180px;
-      text-align:right;
-      font-size:10.5px;
-      line-height:1.35;
-      color:var(--muted);
-    }
-    .stack{gap:18px;padding:12px 17px 34px}
+    .utility{padding-top:9px;padding-bottom:5px}
+    .utility strong{font-size:12px;color:var(--ink)}
+    .utility span{font-size:10px;color:var(--muted)}
+    .stack{gap:16px;padding:10px 17px 34px}
 
-    .profile-hero{
+    .profile-sheet,
+    .map-section,
+    .planet-card,
+    .possibility-section,
+    .explore-section{
+      border:1px solid var(--line);
+      border-radius:var(--section-radius);
+      background:#fff;
+      box-shadow:0 8px 25px rgba(26,22,32,.045);
+    }
+    .profile-sheet{
       position:relative;
       overflow:hidden;
-      padding:23px 21px 21px;
-      border:1px solid #ded3ef;
-      border-radius:22px;
-      background:#fff;
-      box-shadow:0 13px 34px rgba(56,0,122,.07);
+      padding:21px 19px 19px;
+      border-color:#ded3ef;
     }
-    .profile-hero:before{
+    .profile-sheet:before{
       content:"";
       position:absolute;
-      left:0;
-      top:0;
-      right:0;
-      height:5px;
+      inset:0 0 auto;
+      height:4px;
       background:linear-gradient(90deg,var(--core) 0 25%,var(--love) 25% 50%,var(--vitality) 50% 75%,var(--abundance) 75%);
     }
-    .profile-kicker{
-      font-size:9.5px;
+    .profile-label,
+    .section-kicker{
+      font-size:9px;
       line-height:1.2;
-      letter-spacing:.13em;
+      letter-spacing:.11em;
       text-transform:uppercase;
       font-weight:700;
-      color:var(--core);
+      color:var(--muted);
     }
-    .profile-hero h1{
-      margin-top:9px;
-      font:500 31px/1.04 Canela,Georgia,serif;
-      letter-spacing:-.022em;
+    .profile-label{color:var(--core)}
+    .identity-line{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-top:7px;
+    }
+    .identity-line h1{
+      font:500 27px/1.06 Canela,Georgia,serif;
+      letter-spacing:-.02em;
       color:var(--ink);
     }
     .birthline{
-      margin-top:11px;
-      font-size:12px;
-      line-height:1.5;
+      margin-top:6px;
+      font-size:11px;
+      line-height:1.45;
       color:var(--muted);
     }
-    .birthline b{color:var(--control);font-weight:600}
-    .profile-frame{
-      margin-top:16px;
-      padding:14px 15px;
-      border:1px solid #ded3ef;
-      border-radius:13px;
-      background:linear-gradient(100deg,var(--core-tint),#fbf9ff 74%);
-      font-size:13px;
-      line-height:1.52;
-      color:var(--control);
+    .map-fixed{
+      flex:0 0 82px;
+      padding-top:3px;
+      text-align:right;
+      font-size:9.5px;
+      line-height:1.35;
+      color:var(--core);
+      font-weight:700;
     }
-    .profile-frame b{color:var(--core-deep)}
 
-    .signal-ledger{
-      margin-top:19px;
+    .week{
+      margin-top:18px;
+      padding-top:16px;
       border-top:1px solid var(--line);
     }
-    .signal-row{border-bottom:1px solid var(--line)}
-    .signal-row summary,
-    .planet-card summary,
-    .research-card summary,
-    .experience summary{
-      list-style:none;
-      cursor:pointer;
-    }
-    .signal-row summary::-webkit-details-marker,
-    .planet-card summary::-webkit-details-marker,
-    .research-card summary::-webkit-details-marker,
-    .experience summary::-webkit-details-marker{display:none}
-    .signal-summary{
+    .week-head{
       display:grid;
-      grid-template-columns:10px minmax(0,1fr) auto 18px;
-      align-items:center;
-      gap:11px;
-      min-height:67px;
+      grid-template-columns:minmax(0,1fr) auto;
+      align-items:start;
+      gap:12px;
     }
-    .signal-dot{width:9px;height:9px;border-radius:50%}
-    .signal-name{font-size:14px;line-height:1.15;font-weight:700;color:var(--ink)}
-    .signal-domain{display:block;margin-top:4px;font-size:10.5px;line-height:1.2;font-weight:500;color:var(--muted)}
-    .signal-value{text-align:right}
-    .signal-value b{
-      display:block;
-      font-size:15px;
-      line-height:1.1;
+    .week-title{
+      display:flex;
+      align-items:baseline;
+      gap:7px;
+      color:var(--ink);
+    }
+    .week-title h2{font-size:15px;line-height:1.2}
+    .week-title b{font-size:15px;line-height:1.2;font-variant-numeric:tabular-nums}
+    .week-sub{margin-top:4px;font-size:10px;color:var(--muted)}
+    .status{
+      padding:5px 8px;
+      border-radius:999px;
+      background:var(--vitality-tint);
+      color:var(--vitality-ink);
+      font-size:8.5px;
+      line-height:1;
       font-weight:700;
+      white-space:nowrap;
+    }
+    .week-scale{
+      position:relative;
+      height:6px;
+      margin:17px 0 20px;
+      border-radius:999px;
+      background:var(--mist);
+    }
+    .week-scale .fill{
+      display:block;
+      width:100%;
+      height:100%;
+      border-radius:inherit;
+      background:var(--core);
+    }
+    .week-scale .tick{
+      position:absolute;
+      left:72%;
+      top:-3px;
+      bottom:-3px;
+      width:1px;
+      background:rgba(26,22,32,.36);
+    }
+    .week-scale .tick-label{
+      position:absolute;
+      left:72%;
+      top:10px;
+      transform:translateX(-50%);
+      font-size:8px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+    .balance-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+    .balance-item{min-width:0}
+    .balance-item b{
+      display:flex;
+      align-items:center;
+      gap:5px;
+      font-size:9px;
+      line-height:1.2;
+      color:var(--control);
+    }
+    .balance-item b:before{
+      content:"";
+      width:6px;
+      height:6px;
+      flex:0 0 auto;
+      border-radius:50%;
+      background:currentColor;
+    }
+    .balance-item span{
+      display:block;
+      margin-top:5px;
+      font-size:16px;
+      line-height:1;
+      font-weight:700;
+      font-variant-numeric:tabular-nums;
+      color:var(--ink);
+    }
+    .balance-item.core b{color:var(--core)}
+    .balance-item.love b{color:var(--love)}
+    .balance-item.vitality b{color:var(--vitality-ink)}
+    .balance-item.abundance b{color:var(--abundance-ink)}
+    .balance-note{
+      margin-top:14px;
+      padding-top:12px;
+      border-top:1px solid var(--line);
+      font-size:10.5px;
+      line-height:1.45;
+      color:var(--control);
+    }
+    .balance-note b{color:var(--vitality-ink)}
+
+    .all-time{
+      margin-top:18px;
+      padding-top:16px;
+      border-top:1px solid var(--line);
+    }
+    .all-time-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .all-time h2{font-size:14px;line-height:1.2;color:var(--ink)}
+    .all-time p{margin-top:4px;font-size:10px;line-height:1.4;color:var(--muted)}
+    .total-time{text-align:right;white-space:nowrap}
+    .total-time b{
+      display:block;
+      font-size:18px;
+      line-height:1;
       color:var(--ink);
       font-variant-numeric:tabular-nums;
     }
-    .signal-value span{
-      display:block;
-      margin-top:4px;
-      font-size:10px;
-      line-height:1.1;
+    .total-time span{display:block;margin-top:4px;font-size:8.5px;color:var(--muted)}
+    .mix-bar{display:flex;height:8px;margin-top:13px;overflow:hidden;border-radius:999px;background:var(--mist)}
+    .mix-bar span:nth-child(1){width:37%;background:var(--core)}
+    .mix-bar span:nth-child(2){width:27%;background:var(--love)}
+    .mix-bar span:nth-child(3){width:15%;background:var(--vitality)}
+    .mix-bar span:nth-child(4){width:21%;background:var(--abundance)}
+    .mix-key{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:9px}
+    .mix-key span{font-size:8.5px;color:var(--muted)}
+    .mix-key b{display:block;margin-top:3px;font-size:11px;color:var(--control);font-variant-numeric:tabular-nums}
+    .balance-total{
+      margin-top:11px;
+      font-size:9px;
+      line-height:1.35;
       color:var(--muted);
     }
+    .balance-total b{color:var(--control)}
+
+    .map-section{padding:19px}
+    .section-head{display:block}
+    .section-head h2{
+      margin-top:5px;
+      font:700 20px/1.16 Suisse,-apple-system,sans-serif;
+      letter-spacing:-.012em;
+      color:var(--ink);
+    }
+    .section-head p{
+      margin-top:7px;
+      font-size:11.5px;
+      line-height:1.48;
+      color:var(--muted);
+    }
+    .signal-ledger{margin-top:13px;border-top:1px solid var(--line)}
+    details summary{list-style:none;cursor:pointer}
+    details summary::-webkit-details-marker{display:none}
+    .signal-row{border-bottom:1px solid var(--line)}
+    .signal-summary{
+      display:grid;
+      grid-template-columns:8px minmax(0,1fr) auto 18px;
+      align-items:center;
+      gap:10px;
+      min-height:63px;
+    }
+    .signal-dot{width:8px;height:8px;border-radius:50%}
+    .signal-name{font-size:13px;line-height:1.15;font-weight:700;color:var(--ink)}
+    .signal-domain{display:block;margin-top:3px;font-size:9.5px;line-height:1.2;font-weight:500;color:var(--muted)}
+    .signal-value{text-align:right}
+    .signal-value b{
+      display:block;
+      font-size:14px;
+      line-height:1.1;
+      color:var(--ink);
+      font-variant-numeric:tabular-nums;
+    }
+    .signal-value span{display:block;margin-top:3px;font-size:9px;color:var(--muted)}
     .chev{
       width:18px;
       height:18px;
@@ -165,11 +298,11 @@
     details[open]>.research-summary .chev,
     details[open]>.experience-summary .chev{transform:rotate(90deg)}
     .signal-detail{
-      margin:-1px 29px 15px 21px;
-      padding:12px 13px;
-      border-radius:13px;
-      font-size:12.5px;
-      line-height:1.52;
+      margin:0 28px 14px 18px;
+      padding:11px 12px;
+      border-radius:12px;
+      font-size:11.5px;
+      line-height:1.5;
       color:var(--control);
     }
     .core .signal-dot{background:var(--core)}.core .signal-detail{background:var(--core-tint)}
@@ -177,120 +310,55 @@
     .vitality .signal-dot{background:var(--vitality)}.vitality .signal-detail{background:var(--vitality-tint)}
     .abundance .signal-dot{background:var(--abundance)}.abundance .signal-detail{background:var(--abundance-tint)}
     .signal-detail b{color:var(--ink)}
+    .map-ground{
+      margin-top:15px;
+      font-size:10px;
+      line-height:1.45;
+      color:var(--muted);
+    }
+    .map-ground b{color:var(--control)}
 
-    .distribution{
-      margin-top:20px;
-      padding-top:18px;
-      border-top:1px solid var(--line);
-    }
-    .mini-label{
-      font-size:9.5px;
-      line-height:1.2;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      font-weight:700;
-      color:var(--muted);
-    }
-    .distribution h2,
-    .section-head h2{
-      margin-top:6px;
-      font:700 20px/1.15 Suisse,-apple-system,sans-serif;
-      letter-spacing:-.012em;
-      color:var(--ink);
-    }
-    .distribution-bar{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr 1fr;
-      gap:4px;
-      margin-top:16px;
-    }
-    .band-segment{position:relative;height:8px;border-radius:999px;background:var(--mist)}
-    .band-segment.active.root{background:var(--root)}
-    .band-segment.active.solar{background:var(--solar)}
-    .band-counts{
-      display:grid;
-      grid-template-columns:1fr 1fr 1fr 1fr;
-      gap:4px;
-      margin-top:9px;
-    }
-    .band-counts span{
-      font-size:9px;
-      line-height:1.3;
-      text-align:center;
-      color:var(--muted);
-    }
-    .band-counts b{
-      display:block;
-      margin-bottom:3px;
-      font-size:12px;
-      color:var(--control);
-    }
-    .distribution-copy{
-      margin-top:14px;
-      font-size:12px;
-      line-height:1.5;
-      color:var(--muted);
-    }
-    .distribution-copy b{color:var(--control)}
+    .distribution{margin-top:17px;padding-top:16px;border-top:1px solid var(--line)}
+    .distribution-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+    .distribution h3{font-size:13px;color:var(--ink)}
+    .distribution-head span{font-size:9px;color:var(--muted)}
+    .distribution-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:11px}
+    .band-segment{height:7px;border-radius:999px;background:var(--mist)}
+    .band-segment.root{background:var(--root)}
+    .band-segment.solar{background:var(--solar)}
+    .band-counts{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:7px}
+    .band-counts span{font-size:8px;line-height:1.3;text-align:center;color:var(--muted)}
+    .band-counts b{display:block;margin-bottom:2px;font-size:11px;color:var(--control)}
+    .distribution p{margin-top:11px;font-size:10px;line-height:1.45;color:var(--muted)}
 
-    .planet-card,
-    .listening-card,
-    .possibility-card,
-    .explore-wrap{
-      border:1px solid var(--line);
-      border-radius:20px;
-      background:#fff;
-      box-shadow:0 7px 24px rgba(26,22,32,.04);
-    }
     .planet-summary,
     .research-summary{
       display:grid;
       grid-template-columns:minmax(0,1fr) auto 18px;
       align-items:center;
-      gap:11px;
-      padding:17px 18px;
+      gap:10px;
+      padding:16px 18px;
     }
     .planet-summary h2,
-    .research-summary h3{
-      font:700 16px/1.2 Suisse,-apple-system,sans-serif;
-      color:var(--ink);
-    }
+    .research-summary h3{font-size:14px;line-height:1.25;color:var(--ink)}
     .planet-summary p,
-    .research-summary p{
-      margin-top:4px;
-      font-size:10.5px;
-      line-height:1.4;
-      color:var(--muted);
-    }
-    .summary-meta{
-      font-size:10px;
-      font-weight:700;
-      color:var(--core);
-      white-space:nowrap;
-    }
-    .planet-table{
-      margin:0 18px 17px;
-      border-top:1px solid var(--line);
-    }
-    .planet-head,.planet-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:15px;
-    }
+    .research-summary p{margin-top:4px;font-size:9.5px;line-height:1.35;color:var(--muted)}
+    .summary-meta{font-size:9px;font-weight:700;color:var(--core);white-space:nowrap}
+    .planet-table{margin:0 18px 16px;border-top:1px solid var(--line)}
+    .planet-head,.planet-row{display:flex;align-items:center;justify-content:space-between;gap:15px}
     .planet-head{
-      padding:12px 0 8px;
-      font-size:9px;
+      padding:11px 0 7px;
+      font-size:8.5px;
       line-height:1.2;
       text-transform:uppercase;
-      letter-spacing:.1em;
+      letter-spacing:.09em;
       font-weight:700;
       color:var(--muted);
     }
-    .planet-row{min-height:43px;border-top:1px solid rgba(235,227,214,.7)}
+    .planet-row{min-height:40px;border-top:1px solid rgba(235,227,214,.72)}
     .planet-row:first-of-type{border-top:0}
-    .planet-name{font-size:12.5px;font-weight:600;color:var(--control)}
-    .planet-value{font-size:13px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+    .planet-name{font-size:12px;font-weight:600;color:var(--control)}
+    .planet-value{font-size:12px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
     .rx{
       display:inline-block;
       margin-left:5px;
@@ -302,291 +370,140 @@
       vertical-align:1px;
     }
     .planet-note{
-      padding:12px 0 2px;
-      font-size:10.5px;
-      line-height:1.5;
-      color:var(--muted);
+      padding:11px 0 2px;
       border-top:1px solid var(--line);
+      font-size:10px;
+      line-height:1.48;
+      color:var(--muted);
     }
 
-    .section-head{display:block;padding:19px 19px 0}
-    .section-head p{
-      margin-top:8px;
-      font-size:12.5px;
-      line-height:1.5;
-      color:var(--muted);
-    }
-    .listening-stats{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      margin:17px 19px 0;
-      border-top:1px solid var(--line);
-      border-bottom:1px solid var(--line);
-    }
-    .listening-stat{padding:15px 0}
-    .listening-stat+.listening-stat{padding-left:16px;border-left:1px solid var(--line)}
-    .stat-value{
-      font-size:24px;
-      line-height:1;
-      font-weight:700;
-      color:var(--ink);
-      font-variant-numeric:tabular-nums;
-    }
-    .stat-label{margin-top:6px;font-size:10px;line-height:1.3;color:var(--muted)}
-    .week-panel{
-      margin:16px 19px 0;
-      padding:15px;
-      border-radius:15px;
-      background:#fbfaf8;
-      border:1px solid var(--line);
-    }
-    .week-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-    .week-top h3{font-size:14px;line-height:1.2;color:var(--ink)}
-    .week-top p{margin-top:4px;font-size:10.5px;line-height:1.35;color:var(--muted)}
-    .status-pill{
-      flex:0 0 auto;
-      padding:5px 9px;
-      border-radius:999px;
-      background:var(--vitality-tint);
-      color:var(--vitality-ink);
-      font-size:9px;
-      font-weight:700;
-    }
-    .time-line{
-      position:relative;
-      height:7px;
-      margin:20px 0 23px;
-      border-radius:999px;
-      background:var(--mist);
-    }
-    .time-line .fill{display:block;width:100%;height:100%;border-radius:inherit;background:var(--core)}
-    .time-line .tick{position:absolute;left:72%;top:-3px;bottom:-3px;width:1px;background:rgba(26,22,32,.35)}
-    .time-line .tick-label{position:absolute;left:72%;top:12px;transform:translateX(-50%);font-size:8.5px;color:var(--muted);white-space:nowrap}
-    .week-bars{display:flex;flex-direction:column;gap:9px}
-    .week-bar{display:grid;grid-template-columns:58px minmax(0,1fr) 32px;align-items:center;gap:8px}
-    .week-bar .name,.week-bar .pct{font-size:10px;font-weight:700}
-    .week-bar .pct{text-align:right;font-variant-numeric:tabular-nums}
-    .bar-track{position:relative;height:7px;border-radius:999px;background:var(--mist)}
-    .bar-track:after{content:"";position:absolute;left:15%;top:-3px;bottom:-3px;width:1px;background:rgba(26,22,32,.32)}
-    .bar-fill{display:block;height:100%;border-radius:inherit}
-    .week-bar.core .name,.week-bar.core .pct{color:var(--core)}.week-bar.core .bar-fill{width:34%;background:var(--core)}
-    .week-bar.love .name,.week-bar.love .pct{color:var(--love)}.week-bar.love .bar-fill{width:29%;background:var(--love)}
-    .week-bar.vitality .name,.week-bar.vitality .pct{color:var(--vitality-ink)}.week-bar.vitality .bar-fill{width:11%;background:var(--vitality)}
-    .week-bar.abundance .name,.week-bar.abundance .pct{color:var(--abundance-ink)}.week-bar.abundance .bar-fill{width:26%;background:var(--abundance)}
-    .balance-advice{
-      margin-top:13px;
-      padding-top:12px;
-      border-top:1px solid var(--line);
-      font-size:11px;
-      line-height:1.45;
-      color:var(--control);
-    }
-    .balance-advice b{color:var(--vitality-ink)}
-    .history{
-      padding:18px 19px 19px;
-    }
-    .history-top{display:flex;align-items:center;justify-content:space-between}
-    .history-top h3{font-size:13px;color:var(--ink)}
-    .history-top span{font-size:9.5px;color:var(--muted)}
-    .history-grid{
-      display:grid;
-      grid-template-columns:repeat(6,1fr);
-      gap:7px;
-      align-items:end;
-      height:76px;
-      margin-top:13px;
-    }
-    .history-week{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px}
-    .history-column{
-      width:100%;
-      min-height:5px;
-      border-radius:5px 5px 2px 2px;
-      background:#d8d1c6;
-    }
-    .history-week.balanced .history-column{background:var(--core)}
-    .history-week.current .history-column{background:var(--vitality)}
-    .history-week span{font-size:8.5px;color:var(--muted)}
-    .history-legend{
-      display:flex;
-      gap:13px;
-      margin-top:11px;
-      font-size:9.5px;
-      color:var(--muted);
-    }
-    .legend-dot{display:inline-block;width:6px;height:6px;margin-right:5px;border-radius:50%;background:#d8d1c6}
-    .legend-dot.balanced{background:var(--core)}
-    .mix{
-      margin:0 19px 19px;
-      padding:15px;
-      border-radius:15px;
-      background:var(--core-tint);
-    }
-    .mix h3{font-size:13px;color:var(--ink)}
-    .mix p{margin-top:5px;font-size:10.5px;line-height:1.45;color:var(--muted)}
-    .mix-bar{display:flex;height:9px;margin-top:13px;overflow:hidden;border-radius:999px;background:#fff}
-    .mix-bar span:nth-child(1){width:37%;background:var(--core)}
-    .mix-bar span:nth-child(2){width:27%;background:var(--love)}
-    .mix-bar span:nth-child(3){width:15%;background:var(--vitality)}
-    .mix-bar span:nth-child(4){width:21%;background:var(--abundance)}
-    .mix-key{display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;margin-top:11px}
-    .mix-key span{font-size:9.5px;color:var(--muted)}
-    .mix-key b{color:var(--control);font-variant-numeric:tabular-nums}
-
-    .possibility-card{overflow:hidden}
+    .possibility-section{overflow:hidden}
+    .possibility-section>.section-head{padding:19px 19px 0}
     .possibility-intro{
-      margin:16px 19px 0;
-      padding:14px 15px;
-      border-radius:15px;
-      background:linear-gradient(110deg,var(--core-deep),var(--core));
+      margin:14px 19px 0;
+      padding:13px 14px;
+      border-radius:13px;
+      background:var(--core-deep);
       color:#fff;
     }
-    .possibility-intro strong{display:block;font-size:13px;line-height:1.35}
-    .possibility-intro p{margin-top:6px;font-size:11px;line-height:1.48;color:#eadff5}
-    .possibility-list{padding:10px 19px 4px}
+    .possibility-intro strong{display:block;font-size:12.5px;line-height:1.35}
+    .possibility-intro p{margin-top:5px;font-size:10.5px;line-height:1.48;color:#eadff5}
+    .possibility-list{padding:6px 19px 2px}
     .possibility-row{
       display:grid;
-      grid-template-columns:9px minmax(0,1fr);
-      gap:11px;
-      padding:14px 0;
+      grid-template-columns:8px minmax(0,1fr);
+      gap:10px;
+      padding:13px 0;
       border-bottom:1px solid var(--line);
     }
     .possibility-row:last-child{border-bottom:0}
-    .possibility-row .signal-dot{margin-top:5px}
-    .possibility-row h3{font-size:13px;line-height:1.25;color:var(--ink)}
-    .possibility-row ul{margin:7px 0 0 16px}
-    .possibility-row li{margin-top:4px;font-size:11.5px;line-height:1.42;color:var(--control)}
+    .possibility-row .signal-dot{margin-top:4px}
+    .possibility-row h3{font-size:12.5px;line-height:1.2;color:var(--ink)}
+    .possibility-row ul{margin:6px 0 0 15px}
+    .possibility-row li{margin-top:3px;font-size:10.8px;line-height:1.42;color:var(--control)}
     .nothing-yet{
-      margin:5px 19px 18px;
-      padding:13px 14px;
-      border-radius:13px;
-      border:1px solid var(--line);
-      font-size:11px;
-      line-height:1.5;
+      margin:4px 19px 16px;
+      padding:11px 0 0;
+      border-top:1px solid var(--line);
+      font-size:10.5px;
+      line-height:1.48;
       color:var(--muted);
-      background:#fbfaf8;
     }
     .nothing-yet b{color:var(--ink)}
-    .research-card{
-      margin:0 19px 19px;
-      border-top:1px solid var(--line);
-    }
-    .research-summary{padding:15px 0 4px}
-    .research-body{
-      padding:11px 0 2px;
-      font-size:10.5px;
-      line-height:1.45;
-      color:var(--muted);
-    }
-    .research-body>p{margin-bottom:11px}
-    .research-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-    .research-item{padding:9px 10px;border-radius:10px;background:#f7f4ef}
+    .research-card{margin:0 19px 16px;border-top:1px solid var(--line)}
+    .research-summary{padding:14px 0 3px}
+    .research-body{padding:10px 0 2px;font-size:10px;line-height:1.45;color:var(--muted)}
+    .research-body>p{margin-bottom:10px}
+    .research-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+    .research-item{padding:8px 9px;border-radius:9px;background:#f7f4ef}
     .research-item b{display:block;font-size:12px;color:var(--ink)}
-    .research-item span{display:block;margin-top:3px;font-size:9.5px;line-height:1.3}
+    .research-item span{display:block;margin-top:2px;font-size:9px;line-height:1.3}
 
-    .explore-wrap{
-      overflow:hidden;
-      padding-bottom:8px;
-      border-color:#ded3ef;
-      box-shadow:0 13px 34px rgba(56,0,122,.07);
-    }
-    .explore-head{
-      padding:20px 19px 17px;
-      background:linear-gradient(135deg,#fbf8ff,#fff 72%);
-      border-top:5px solid var(--core);
-    }
-    .explore-head h2{
-      margin-top:6px;
-      font:700 20px/1.15 Suisse,-apple-system,sans-serif;
-      color:var(--ink);
-    }
-    .explore-head p{margin-top:8px;font-size:12.5px;line-height:1.5;color:var(--muted)}
-    .experience{
-      margin:0 13px;
-      border-top:1px solid var(--line);
-    }
-    .experience:first-of-type{border-top:0}
+    .explore-section{overflow:hidden;border-color:#ded3ef}
+    .explore-section>.section-head{padding:19px 19px 15px;border-top:4px solid var(--core)}
+    .experience{margin:0 13px;border-top:1px solid var(--line)}
     .experience-summary{
       display:grid;
-      grid-template-columns:31px minmax(0,1fr) 18px;
+      grid-template-columns:28px minmax(0,1fr) 18px;
       align-items:center;
-      gap:11px;
-      min-height:73px;
-      padding:8px 5px;
+      gap:10px;
+      min-height:69px;
+      padding:7px 5px;
     }
     .experience-num{
-      width:29px;
-      height:29px;
+      width:27px;
+      height:27px;
       display:grid;
       place-items:center;
       border-radius:50%;
       background:var(--core-tint);
       color:var(--core-deep);
-      font-size:11px;
+      font-size:10px;
       font-weight:700;
     }
     .experience-label{
       display:block;
-      font-size:9px;
+      font-size:8px;
       line-height:1.2;
-      letter-spacing:.1em;
+      letter-spacing:.09em;
       text-transform:uppercase;
       font-weight:700;
       color:var(--muted);
     }
     .experience-title{
       display:block;
-      margin-top:4px;
-      font-size:13.5px;
+      margin-top:3px;
+      font-size:12.5px;
       line-height:1.25;
       font-weight:700;
       color:var(--ink);
     }
     .experience-body{
-      margin:0 5px 15px 42px;
-      padding:13px 14px;
-      border-radius:13px;
+      margin:0 5px 14px 38px;
+      padding:12px 13px;
+      border-radius:12px;
       background:#faf8fc;
     }
     .experience-line{
       display:grid;
-      grid-template-columns:50px minmax(0,1fr);
-      gap:8px;
-      font-size:11.5px;
-      line-height:1.45;
+      grid-template-columns:47px minmax(0,1fr);
+      gap:7px;
+      font-size:10.8px;
+      line-height:1.44;
       color:var(--control);
     }
-    .experience-line+.experience-line{margin-top:10px}
-    .experience-line b{font-size:9px;line-height:1.45;text-transform:uppercase;letter-spacing:.08em;color:var(--core)}
+    .experience-line+.experience-line{margin-top:9px}
+    .experience-line b{font-size:8.5px;line-height:1.44;text-transform:uppercase;letter-spacing:.07em;color:var(--core)}
     .experience-note{
-      margin-top:11px;
-      padding-top:10px;
+      margin-top:10px;
+      padding-top:9px;
       border-top:1px solid #e8e0ef;
-      font-size:10.5px;
+      font-size:9.8px;
       line-height:1.45;
       color:var(--muted);
     }
     .experience-note b{color:var(--control)}
     .explore-foot{
-      margin:6px 18px 12px;
-      padding:13px 14px;
-      border-radius:13px;
+      margin:5px 18px 11px;
+      padding:11px 12px;
+      border-radius:11px;
       background:var(--core-deep);
-      color:#eadef6;
-      font-size:10.5px;
-      line-height:1.48;
+      color:#eadff5;
+      font-size:9.8px;
+      line-height:1.46;
     }
 
     @media(max-width:350px){
       .stack{padding-left:13px;padding-right:13px}
-      .profile-hero{padding-left:18px;padding-right:18px}
-      .profile-hero h1{font-size:29px}
-      .signal-summary{grid-template-columns:9px minmax(0,1fr) auto 18px;gap:9px}
-      .week-bar{grid-template-columns:53px minmax(0,1fr) 29px;gap:6px}
+      .profile-sheet,.map-section{padding-left:16px;padding-right:16px}
+      .identity-line{display:block}
+      .map-fixed{margin-top:6px;text-align:left}
+      .balance-grid,.mix-key{gap:5px}
+      .balance-item b,.mix-key span{font-size:7.8px}
+      .signal-summary{grid-template-columns:8px minmax(0,1fr) auto 18px;gap:8px}
       .research-grid{grid-template-columns:1fr}
     }
-    @media(prefers-reduced-motion:reduce){
-      .chev{transition:none}
-    }
+    @media(prefers-reduced-motion:reduce){.chev{transition:none}}
     :focus-visible{outline:2px solid var(--core);outline-offset:3px}
   </style>
 </head>
@@ -599,20 +516,67 @@
 
     <div class="utility">
       <strong>My Zodiac</strong>
-      <span>Map &middot; listening &middot; explore</span>
+      <span>Signal Map</span>
     </div>
 
     <div class="stack">
-      <section class="profile-hero" aria-labelledby="profile-title">
-        <div class="profile-kicker">Your Signal Map</div>
-        <h1 id="profile-title">The signal you came in with.</h1>
-        <p class="birthline"><b>March 12, 1984</b> &middot; <b>3:47 AM</b><br>Austin, Texas</p>
-        <div class="profile-frame">
-          These four signals are your unique part of something larger. <b>The map itself does not change.</b> Zodiac does not create the connection. Listening helps amplify your access to what is already there.
+      <section class="profile-sheet" aria-labelledby="profile-title">
+        <div class="profile-label">Your Signal Map</div>
+        <div class="identity-line">
+          <div>
+            <h1 id="profile-title">Mike Hill</h1>
+            <p class="birthline">March 12, 1984 &middot; 3:47 AM<br>Austin, Texas</p>
+          </div>
+          <div class="map-fixed">Your map is fixed.<br>Your listening grows.</div>
         </div>
 
-        <div class="signal-ledger" aria-label="Your four signals">
-          <details class="signal-row core" open>
+        <section class="week" aria-labelledby="week-title">
+          <div class="week-head">
+            <div>
+              <div class="week-title"><h2 id="week-title">This week</h2><b>88 min</b></div>
+              <p class="week-sub">Across all four signals</p>
+            </div>
+            <span class="status">Almost balanced</span>
+          </div>
+          <div class="week-scale" aria-label="88 minutes this week, beyond the 63 minute guide">
+            <span class="fill"></span><span class="tick"></span><span class="tick-label">63 min</span>
+          </div>
+          <div class="balance-grid" aria-label="This week's signal mix">
+            <div class="balance-item core"><b>Core</b><span>34%</span></div>
+            <div class="balance-item love"><b>Love</b><span>29%</span></div>
+            <div class="balance-item vitality"><b>Vitality</b><span>11%</span></div>
+            <div class="balance-item abundance"><b>Abundance</b><span>26%</span></div>
+          </div>
+          <p class="balance-note"><b>Vitality is 4% short.</b> About five more minutes of Vitality brings all four signals into this week's balanced range.</p>
+        </section>
+
+        <section class="all-time" aria-labelledby="all-time-title">
+          <div class="all-time-head">
+            <div>
+              <h2 id="all-time-title">Your all-time mix</h2>
+              <p>This helps Zodiac choose relevant explorations. It never holds anything back.</p>
+            </div>
+            <div class="total-time"><b>5h 10m</b><span>Total listening</span></div>
+          </div>
+          <div class="mix-bar" aria-label="All-time listening mix: Core 37%, Love 27%, Vitality 15%, Abundance 21%"><span></span><span></span><span></span><span></span></div>
+          <div class="mix-key">
+            <span>Core<b>37%</b></span>
+            <span>Love<b>27%</b></span>
+            <span>Vitality<b>15%</b></span>
+            <span>Abundance<b>21%</b></span>
+          </div>
+          <p class="balance-total"><b>2h 20m listened in balance</b> across your six-week history.</p>
+        </section>
+      </section>
+
+      <section class="map-section" aria-labelledby="frequencies-title">
+        <div class="section-head">
+          <h2 id="frequencies-title">Your frequencies and bands</h2>
+          <p>Each band describes how that signal tends to process, not what the answer should be.</p>
+        </div>
+
+        <div class="signal-ledger" aria-label="Your four frequencies">
+          <details class="signal-row core">
             <summary class="signal-summary">
               <span class="signal-dot" aria-hidden="true"></span>
               <span class="signal-name">Core<span class="signal-domain">Identity and purpose</span></span>
@@ -621,7 +585,6 @@
             </summary>
             <div class="signal-detail"><b>Your Core questions process through steadiness.</b> Who you are and what is yours to do tend to become clearer when the question has ground under it. At 406 Hz, that steadiness already carries a current toward motion.</div>
           </details>
-
           <details class="signal-row love">
             <summary class="signal-summary">
               <span class="signal-dot" aria-hidden="true"></span>
@@ -631,7 +594,6 @@
             </summary>
             <div class="signal-detail"><b>Your connection questions process through steadiness.</b> Who to let in, how close, and in what way tend to make more sense when you let the whole relationship settle. At 414 Hz, this route sits close to the point where steadiness begins to move.</div>
           </details>
-
           <details class="signal-row vitality">
             <summary class="signal-summary">
               <span class="signal-dot" aria-hidden="true"></span>
@@ -641,7 +603,6 @@
             </summary>
             <div class="signal-detail"><b>Your energy questions process in motion.</b> Whether something will feed you or drain you tends to become clearer when you try a small piece or picture yourself living it. At 554 Hz, that motion carries a current toward words.</div>
           </details>
-
           <details class="signal-row abundance">
             <summary class="signal-summary">
               <span class="signal-dot" aria-hidden="true"></span>
@@ -653,14 +614,15 @@
           </details>
         </div>
 
+        <p class="map-ground"><b>These signals are your unique part of something larger.</b> Zodiac does not create the connection. Listening helps amplify access to what is already there.</p>
+
         <div class="distribution">
-          <div class="mini-label">Your band distribution</div>
-          <h2>Steadiness and motion lead.</h2>
+          <div class="distribution-head"><h3>Your band distribution</h3><span>4 frequencies</span></div>
           <div class="distribution-bar" aria-hidden="true">
-            <span class="band-segment active root"></span>
-            <span class="band-segment active solar"></span>
-            <span class="band-segment throat"></span>
-            <span class="band-segment crown"></span>
+            <span class="band-segment root"></span>
+            <span class="band-segment solar"></span>
+            <span class="band-segment"></span>
+            <span class="band-segment"></span>
           </div>
           <div class="band-counts">
             <span><b>2</b>Root</span>
@@ -668,13 +630,13 @@
             <span><b>0</b>Throat</span>
             <span><b>0</b>Crown</span>
           </div>
-          <p class="distribution-copy"><b>Two signals naturally process through steadiness and two through motion.</b> You still use words and perspective. They simply are not the home route for these four signals.</p>
+          <p>Two signals naturally process through steadiness and two through motion. Words and perspective still matter. They simply are not the home route for these four signals.</p>
         </div>
       </section>
 
       <details class="planet-card">
         <summary class="planet-summary">
-          <span><h2>Where every planet stood</h2><p>Your birth coordinates, without an astrology reading</p></span>
+          <span><h2>Your birth coordinates</h2><p>Calculated with the Swiss Ephemeris</p></span>
           <span class="summary-meta">10 positions</span>
           <span class="chev" aria-hidden="true">&#8250;</span>
         </summary>
@@ -694,64 +656,10 @@
         </div>
       </details>
 
-      <section class="listening-card" aria-labelledby="listening-title">
+      <section class="possibility-section" aria-labelledby="possibility-title">
         <div class="section-head">
-          <div class="mini-label">The living layer</div>
-          <h2 id="listening-title">Your listening rhythm</h2>
-          <p>Consistency gives all four signals time in the mix. A big week contributes, but it cannot replace returning over time.</p>
-        </div>
-
-        <div class="listening-stats">
-          <div class="listening-stat"><div class="stat-value">5h 10m</div><div class="stat-label">Total listening</div></div>
-          <div class="listening-stat"><div class="stat-value">2h 20m</div><div class="stat-label">Listening in balance</div></div>
-        </div>
-
-        <div class="week-panel">
-          <div class="week-top">
-            <div><h3>This week</h3><p>88 minutes across four signals</p></div>
-            <span class="status-pill">Almost balanced</span>
-          </div>
-          <div class="time-line" aria-label="88 minutes this week, beyond the 63 minute guide">
-            <span class="fill"></span><span class="tick"></span><span class="tick-label">63 min</span>
-          </div>
-          <div class="week-bars" aria-label="This week's mix">
-            <div class="week-bar core"><span class="name">Core</span><span class="bar-track"><span class="bar-fill"></span></span><span class="pct">34%</span></div>
-            <div class="week-bar love"><span class="name">Love</span><span class="bar-track"><span class="bar-fill"></span></span><span class="pct">29%</span></div>
-            <div class="week-bar vitality"><span class="name">Vitality</span><span class="bar-track"><span class="bar-fill"></span></span><span class="pct">11%</span></div>
-            <div class="week-bar abundance"><span class="name">Abundance</span><span class="bar-track"><span class="bar-fill"></span></span><span class="pct">26%</span></div>
-          </div>
-          <p class="balance-advice"><b>Vitality is 4% short.</b> About five more minutes of Vitality brings all four signals into this week's balanced range.</p>
-        </div>
-
-        <div class="history">
-          <div class="history-top"><h3>Your recent rhythm</h3><span>6 weeks</span></div>
-          <div class="history-grid" aria-label="Six week listening history">
-            <div class="history-week balanced"><div class="history-column" style="height:62%"></div><span>W1</span></div>
-            <div class="history-week"><div class="history-column" style="height:31%"></div><span>W2</span></div>
-            <div class="history-week balanced"><div class="history-column" style="height:78%"></div><span>W3</span></div>
-            <div class="history-week balanced"><div class="history-column" style="height:69%"></div><span>W4</span></div>
-            <div class="history-week"><div class="history-column" style="height:18%"></div><span>W5</span></div>
-            <div class="history-week current"><div class="history-column" style="height:88%"></div><span>Now</span></div>
-          </div>
-          <div class="history-legend"><span><i class="legend-dot balanced"></i>Balanced</span><span><i class="legend-dot"></i>Listened</span></div>
-        </div>
-
-        <div class="mix">
-          <h3>Your all-time mix</h3>
-          <p>This helps Zodiac choose relevant explorations. It never holds anything back.</p>
-          <div class="mix-bar" aria-label="All-time listening mix: Core 37%, Love 27%, Vitality 15%, Abundance 21%"><span></span><span></span><span></span><span></span></div>
-          <div class="mix-key">
-            <span>Core <b>37%</b></span><span>Love <b>27%</b></span>
-            <span>Vitality <b>15%</b></span><span>Abundance <b>21%</b></span>
-          </div>
-        </div>
-      </section>
-
-      <section class="possibility-card" aria-labelledby="possibility-title">
-        <div class="section-head">
-          <div class="mini-label">No fixed order</div>
           <h2 id="possibility-title">What you might notice</h2>
-          <p>These are possibilities to recognize in ordinary life, not boxes to check or changes that must arrive on schedule.</p>
+          <p>Possibilities to recognize in ordinary life, not boxes to check or changes that must arrive on schedule.</p>
         </div>
         <div class="possibility-intro">
           <strong>The larger pattern is coming home to more of yourself.</strong>
@@ -794,19 +702,18 @@
               <div class="research-item"><b>91%</b><span>A beat before reacting</span></div>
               <div class="research-item"><b>90%</b><span>Connection to something bigger</span></div>
             </div>
-            <p style="margin-top:11px">This was an internal, self-coded study, not a clinical trial. These are population results, not a promise about any one member or when something will happen.</p>
+            <p style="margin-top:10px">This was an internal, self-coded study, not a clinical trial. These are population results, not a promise about any one member or when something will happen.</p>
           </div>
         </details>
       </section>
 
-      <section class="explore-wrap" aria-labelledby="explore-title">
-        <div class="explore-head">
-          <div class="mini-label">Chosen, never assigned</div>
+      <section class="explore-section" aria-labelledby="explore-title">
+        <div class="section-head">
+          <div class="section-kicker">Chosen, never assigned</div>
           <h2 id="explore-title">Experiences to Explore</h2>
           <p>Your map and listening suggest several useful directions. Choose what fits now, return later, or skip all three.</p>
         </div>
-
-        <details class="experience" open>
+        <details class="experience">
           <summary class="experience-summary">
             <span class="experience-num">1</span>
             <span><span class="experience-label">Follow what is active</span><span class="experience-title">Bring one Core question to steadiness</span></span>
@@ -819,7 +726,6 @@
             <div class="experience-note"><b>Why this one:</b> Core has received the most of your all-time listening, and 406 Hz places it in Root with a current toward motion.</div>
           </div>
         </details>
-
         <details class="experience">
           <summary class="experience-summary">
             <span class="experience-num">2</span>
@@ -833,7 +739,6 @@
             <div class="experience-note"><b>Why this one:</b> Vitality is the quietest part of your all-time mix and the only signal short of this week's balance line.</div>
           </div>
         </details>
-
         <details class="experience">
           <summary class="experience-summary">
             <span class="experience-num">3</span>
@@ -847,7 +752,6 @@
             <div class="experience-note"><b>Why this one:</b> Your Love and Abundance routes sit near neighboring band boundaries. Together, these placements bring steadiness and motion, with a current toward words.</div>
           </div>
         </details>
-
         <div class="explore-foot">Time in balance does not move you toward a promised version of yourself. It gives Zodiac more context for helping you explore what has been there all along.</div>
       </section>
     </div>

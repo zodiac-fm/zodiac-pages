@@ -15,6 +15,6 @@ Content: Exact birth coordinates and planetary positions, four frequencies and h
 
 Constraints: Preserve the App C shell, locked tokens, real logo, and current app typography. No progress road, milestone, level, unlock, promised state, astrology wheel, punitive lifetime-balance requirement, band verdict, or retired Resonance Field Imprint language. Existing A, B, and C children remain untouched.
 
-Direction: A two-layer signal atlas. The first layer is a precise white profile ledger on cream. The second is a living listening record that leads into a small tray of optional explorations. The memorable moment is seeing the same four signals expressed three ways at once: frequency, band route, and listening behavior.
+Direction: A return-visit member profile led by this week's four-signal balance. Name and birth coordinates establish whose map this is, weekly and all-time listening supply the live context, then the fixed frequencies and bands explain the member's routes. Possibilities and optional explorations come only after the member can scan the personal facts. The memorable moment is seeing the same four signals expressed three ways at once: weekly listening, exact frequency, and band route.
 
 Unresolved: Final customer names for listening metrics, exact timing-engine merge, real member data wiring, and whether raw planetary positions remain collapsed by default.
