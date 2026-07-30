@@ -115,6 +115,53 @@ h2{font-family:var(--serif);font-weight:600;font-size:clamp(27px,3.6vw,36px);let
 .legend span{display:flex;align-items:center;gap:6px}
 .legend i{width:14px;height:10px;border-radius:3px;display:inline-block}
 
+/* "see it real" demos */
+details.demo{margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+details.demo summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--purple);border:1px solid var(--purple-soft);background:var(--purple-tint);border-radius:999px;padding:7px 15px;user-select:none}
+details.demo summary::-webkit-details-marker{display:none}
+details.demo summary .chev{display:inline-block;transition:transform .18s;font-size:11px}
+details.demo[open] summary .chev{transform:rotate(90deg)}
+.mock{margin:16px auto 4px;background:var(--bleach);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 10px 26px rgba(26,22,32,.08);max-width:392px;position:relative}
+.mock .dtag{position:absolute;top:10px;right:10px;font-size:8.5px;font-weight:700;letter-spacing:.09em;color:var(--mut);background:var(--mist);border-radius:6px;padding:3px 7px;z-index:2}
+.mock .pad{padding:24px 20px}
+.m-logo{width:92px;display:block}
+.m-eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--purple);margin-top:16px}
+.m-h1{font-family:var(--serif);font-weight:600;font-size:30px;line-height:1.1;letter-spacing:-.3px;margin-top:8px}
+.m-h1 .n{font-family:var(--sans);font-weight:700;color:var(--purple);letter-spacing:0}
+.m-sub{font-size:14.5px;line-height:1.6;color:#48434f;margin-top:10px}
+.m-cta{display:inline-block;background:var(--purple);color:#fff;font-size:14px;font-weight:700;border-radius:999px;padding:12px 24px;margin-top:16px}
+.m-quiet{font-size:11.5px;color:var(--mut);margin-top:12px}
+.m-h2{font-family:var(--serif);font-weight:600;font-size:28px;line-height:1.14;margin-top:26px}
+.m-body{font-size:13.5px;line-height:1.65;color:#55505c;margin-top:8px}
+.m-stat{background:var(--purple-tint);border-radius:12px;padding:14px 16px;margin-top:16px}
+.m-stat .big{font-size:26px;font-weight:700;letter-spacing:-.01em}
+.m-stat .big small{font-size:12px;font-weight:600;color:#48434f}
+.m-stat .cav{font-size:10px;color:var(--mut);margin-top:3px}
+.m-quote{display:flex;gap:12px;align-items:center;background:var(--bleach);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:14px}
+.m-quote img{width:64px;height:64px;border-radius:10px;object-fit:cover;background:var(--greige);flex:0 0 auto}
+.m-quote .qt{font-size:12px;line-height:1.5;color:#48434f}
+.m-quote .who{font-size:10.5px;margin-top:6px;padding-top:6px;border-top:1px solid #2A2530}
+.m-quote .who b{display:block;font-size:11px}
+.m-quote .who span{color:var(--mut)}
+.m-shot{display:block;width:64%;margin:18px auto 2px;border-radius:16px;border:1px solid rgba(26,22,32,.1);box-shadow:0 8px 22px rgba(26,22,32,.1)}
+.m-bars{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.m-bar{display:grid;grid-template-columns:76px 1fr 52px;align-items:center;gap:10px;font-size:12px}
+.m-bar .lb{font-weight:700}
+.m-bar .tr{height:10px;border-radius:99px;background:var(--mist);position:relative;overflow:hidden}
+.m-bar .fl{position:absolute;left:0;top:0;bottom:0;border-radius:99px}
+.m-bar .hz{font-weight:700;text-align:right}
+.m-bar .hz small{font-weight:600;color:var(--mut);font-size:9.5px}
+.m-play{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:16px}
+.m-play .pb{width:38px;height:38px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;flex:0 0 auto}
+.m-play .pt{font-size:13px;font-weight:700}
+.m-play .ps{font-size:11px;color:var(--mut)}
+.m-prog{font-size:10.5px;font-weight:700;letter-spacing:.12em;color:var(--mut)}
+.m-opt{display:block;border:1.5px solid #D8D2C6;border-radius:12px;padding:13px 16px;font-size:14px;font-weight:600;margin-top:10px;background:var(--bleach)}
+.m-opt.sel{border-color:var(--purple);color:var(--purple);background:var(--purple-tint)}
+.m-give{background:var(--purple-tint);border-radius:12px;padding:12px 15px;font-size:12.5px;line-height:1.55;color:var(--purple-deep);margin-top:16px}
+.m-byline{font-size:11px;color:var(--mut);margin-top:10px}
+.m-pull{border-left:2px solid #2A2530;padding:4px 0 4px 14px;margin-top:16px;font-size:15px;font-weight:600;line-height:1.5}
+
 /* screens gallery */
 .phones{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:26px;margin-top:22px}
 .ph{text-align:left}
@@ -343,6 +390,24 @@ footer{margin-top:96px;border-top:1px solid var(--line);padding-top:24px;font-si
         <li><b>Proof interrupts the scan</b>: a stat block or a quote with a face must land mid-scroll without reading body copy.</li>
         <li>Sections alternate composition (image, stats, quotes); never three in a row with the same field.</li>
       </ol>
+      <details class="demo"><summary><span class="chev">▶</span> See it real</summary>
+        <div class="mock"><span class="dtag">SYSTEM DEMO</span>
+          <div class="pad">
+            <img class="m-logo" src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
+            <div class="m-eyebrow">Personalized audio</div>
+            <div class="m-h1">Your chart, played, not read.</div>
+            <p class="m-sub">You already have your own signal. Zodiac turns it up.</p>
+            <span class="m-cta">Reveal your frequencies</span>
+            <div class="m-quiet">2 minutes · your birth chart does the work</div>
+            <div class="m-h2">The mechanism, shown.</div>
+            <p class="m-body">Four frequencies from your birth chart, embedded in real music. The app is the proof: show the screen, don't describe it.</p>
+            <img class="m-shot" src="shots/app-d/clean/d-core-375.png" alt="the app, Core screen" loading="lazy">
+            <div class="m-stat"><div class="big">98.6% <small>would recommend</small></div><div class="big" style="font-size:18px;margin-top:2px">84% <small>call it life-changing</small></div><div class="cav">Beta cohort, product as designed.</div></div>
+            <div class="m-quote"><img src="../landers/reveal-assets/testimonial-headshots-transparent-white/rhonda-britten.png" alt="member portrait"><div><div class="qt">The member's words sit here, with their face and their full credential. The credential is part of the proof.</div><div class="who"><b>Rhonda Britten</b><span>Author of "Fearless Living," Emmy Award-Winner, Founder, Fearless Living Institute</span></div></div></div>
+            <span class="m-cta">Reveal your frequencies</span>
+          </div>
+        </div>
+      </details>
     </div>
 
     <div class="skel">
@@ -367,6 +432,24 @@ footer{margin-top:96px;border-top:1px solid var(--line);padding-top:24px;font-si
         <li><b>Raw planetary direction</b>: positions and numbers, never astrology names or a zodiac wheel.</li>
         <li>The listen moment is the emotional peak; the close rides behind it, one action only.</li>
       </ol>
+      <details class="demo"><summary><span class="chev">▶</span> See it real</summary>
+        <div class="mock"><span class="dtag">SYSTEM DEMO</span>
+          <div class="pad">
+            <div class="m-eyebrow" style="margin-top:0">Calculated from your birth chart · 248+ data points</div>
+            <div class="m-h1"><span class="n">422</span> is Your Core Tone</div>
+            <p class="m-sub">Located in your Root band. This is your identity signal. It turns your sense of self back up, wherever you are.</p>
+            <div class="m-bars">
+              <div class="m-bar"><span class="lb" style="color:var(--purple)">● Core</span><span class="tr"><span class="fl" style="width:78%;background:linear-gradient(90deg,#6521C9,#A737C8)"></span></span><span class="hz">422 <small>HZ</small></span></div>
+              <div class="m-bar"><span class="lb" style="color:var(--love)">● Love</span><span class="tr"><span class="fl" style="width:56%;background:linear-gradient(90deg,#B90044,#CF4090)"></span></span><span class="hz">432 <small>HZ</small></span></div>
+              <div class="m-bar"><span class="lb" style="color:var(--vit-text)">● Vitality</span><span class="tr"><span class="fl" style="width:64%;background:linear-gradient(90deg,#FF9112,#FFC251)"></span></span><span class="hz">579 <small>HZ</small></span></div>
+              <div class="m-bar"><span class="lb" style="color:var(--abun-text)">● Abundance</span><span class="tr"><span class="fl" style="width:47%;background:linear-gradient(90deg,#12A56E,#46D99A)"></span></span><span class="hz">611 <small>HZ</small></span></div>
+            </div>
+            <div class="m-quiet">One chart, and it explains itself: your four frequencies, where each sits in its band.</div>
+            <div class="m-play"><span class="pb">▶</span><div><div class="pt">Hear your Core tone</div><div class="ps">0:47 sample · Quiet Success · 422 Hz</div></div></div>
+            <span class="m-cta">Begin your first listen</span>
+          </div>
+        </div>
+      </details>
     </div>
 
     <div class="skel">
@@ -391,6 +474,20 @@ footer{margin-top:96px;border-top:1px solid var(--line);padding-top:24px;font-si
         <li><b>Ask → give → tease</b>: between asks, a give or proof beat earns the next question; it never outranks the question itself.</li>
         <li>Reassurance (privacy, "no wrong answers") is present and always the quietest voice.</li>
       </ol>
+      <details class="demo"><summary><span class="chev">▶</span> See it real</summary>
+        <div class="mock"><span class="dtag">SYSTEM DEMO</span>
+          <div class="pad">
+            <div class="m-prog">3 OF 12</div>
+            <div class="m-h1" style="margin-top:14px">When do you feel most like yourself?</div>
+            <p class="m-quiet" style="margin-top:8px">Your answer tunes how we read your chart's timing.</p>
+            <span class="m-opt sel">Early, before the world wakes up</span>
+            <span class="m-opt">Deep in the middle of the night</span>
+            <span class="m-opt">It moves. That's the problem.</span>
+            <div class="m-give"><b>Noted.</b> Your timing pattern is forming. Two questions from now, we can place your first band.</div>
+            <div class="m-quiet">No wrong answers · about 2 minutes</div>
+          </div>
+        </div>
+      </details>
     </div>
 
     <div class="skel">
@@ -417,6 +514,22 @@ footer{margin-top:96px;border-top:1px solid var(--line);padding-top:24px;font-si
         <li><b>Each chapter earns one interruption</b> (pull quote, real image, stat); decoration that proves nothing gets cut.</li>
         <li>One CTA, placed where the argument concludes; never popups, never mid-sentence interruptions.</li>
       </ol>
+      <details class="demo"><summary><span class="chev">▶</span> See it real</summary>
+        <div class="mock"><span class="dtag">SYSTEM DEMO</span>
+          <div class="pad">
+            <div class="m-eyebrow" style="margin-top:0">The Signal · Field notes</div>
+            <div class="m-h1">The music you return to is a map of you.</div>
+            <p class="m-sub">You've curated yourself for years without noticing. Here's how to read the pattern, and what your chart adds to it.</p>
+            <div class="m-byline">Zodiac.fm · 6 min read</div>
+            <div class="m-h2">The pattern you can hear</div>
+            <p class="m-body">Everyone has songs that work on them like a key. Not favorites exactly: the ones that reset you. That set is more stable than your moods, and it points somewhere.</p>
+            <div class="m-pull">"The set is more stable than your moods, and it points somewhere."</div>
+            <div class="m-h2">Where the chart comes in</div>
+            <p class="m-body">A birth chart is a fixed set of measurements. Read as sound instead of symbols, it suggests which frequencies your reset songs already share.</p>
+            <span class="m-cta">Hear your chart</span>
+          </div>
+        </div>
+      </details>
     </div>
   </div>
 </section>
