@@ -1,0 +1,1331 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>My Zodiac · Profile 9</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    /* Hallmark · genre: editorial · macrostructure: Bento Grid · tone: light luxury transtech
+     * theme: studied-DNA (Michael's frequency, experience, hierarchy, and restraint references)
+     * enrichment: one functional Bands still · pre-emit critique: P5 H5 E5 S5 R5 V5
+     * contrast: pass (40–41) · nav: utility masthead · footer: none · slop: pass (42–45)
+     * honest: pass (46) · chrome: pass (47) · tokens: pass (48) · responsive: pass (34, 49, 50–57) · icons: pass (30)
+     */
+    :root {
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-body: "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+      --color-canvas: #f6f1e8;
+      --color-paper: #fffefd;
+      --color-paper-soft: #fbf8f3;
+      --color-ink: #1a1620;
+      --color-body: #4e4752;
+      --color-muted: #756e79;
+      --color-rule: #e5ded4;
+      --color-rule-strong: #c9c1b7;
+      --color-core: #6521c9;
+      --color-core-deep: #38007a;
+      --color-core-soft: #efecff;
+      --color-love: #b90044;
+      --color-vitality: #b54b00;
+      --color-vitality-soft: #fff3e2;
+      --color-abundance: #0a7a52;
+      --color-shadow: rgba(36, 25, 43, .07);
+      --color-shadow-deep: rgba(36, 25, 43, .12);
+      --color-orb-light: rgba(176, 154, 255, .44);
+      --color-orb-mid: rgba(101, 33, 201, .72);
+      --color-orb-deep: rgba(56, 0, 122, .8);
+      --color-white-transparent: rgba(255, 255, 255, .76);
+
+      --space-3xs: 4px;
+      --space-2xs: 8px;
+      --space-xs: 12px;
+      --space-sm: 16px;
+      --space-md: 24px;
+      --space-lg: 32px;
+      --space-xl: 48px;
+      --space-2xl: 64px;
+
+      --text-xs: 11px;
+      --text-sm: 13px;
+      --text-body: 15px;
+      --text-title: 26px;
+      --text-display: clamp(38px, 8vw, 64px);
+
+      --radius-card: 18px;
+      --radius-control: 10px;
+      --rule-hairline: 1px;
+      --shadow-card: 0 16px 38px var(--color-shadow);
+      --shadow-lift: 0 20px 50px var(--color-shadow-deep);
+
+      --dur-short: 180ms;
+      --dur-medium: 320ms;
+      --ease-out: cubic-bezier(.16, 1, .3, 1);
+      --ease-in: cubic-bezier(.7, 0, .84, 0);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      min-height: 100%;
+      overflow-x: clip;
+    }
+
+    body {
+      margin: 0;
+      color: var(--color-ink);
+      font-family: var(--font-body);
+      background: var(--color-canvas);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button, summary { font: inherit; }
+    button { border: 0; }
+    summary { list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    button, summary { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--color-core);
+      outline-offset: 3px;
+    }
+    button:active .plus,
+    summary:active .plus {
+      color: var(--color-paper);
+      background: var(--color-core);
+    }
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .app {
+      width: min(100%, 1010px);
+      margin-inline: auto;
+      padding: var(--space-sm) var(--space-sm) var(--space-2xl);
+    }
+
+    .utility {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 42px;
+      margin-bottom: var(--space-xs);
+      padding-inline: var(--space-3xs);
+    }
+
+    .utility img {
+      display: block;
+      width: 108px;
+      height: auto;
+    }
+
+    .utility span {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-sm);
+    }
+
+    .card {
+      position: relative;
+      min-width: 0;
+      overflow: clip;
+      border-radius: var(--radius-card);
+      background: var(--color-paper);
+      box-shadow: var(--shadow-card);
+    }
+
+    .card-head {
+      padding: var(--space-md) var(--space-md) var(--space-sm);
+    }
+
+    .card-head h2 {
+      min-width: 0;
+      margin: 0;
+      overflow-wrap: anywhere;
+      color: var(--color-ink);
+      font-size: var(--text-title);
+      font-weight: 650;
+      line-height: 1.08;
+      letter-spacing: -.026em;
+    }
+
+    .card-head p {
+      max-width: 62ch;
+      margin: var(--space-2xs) 0 0;
+      color: var(--color-body);
+      font-size: var(--text-body);
+      line-height: 1.5;
+    }
+
+    .identity {
+      padding: var(--space-sm) var(--space-md);
+    }
+
+    .identity-line {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: var(--space-sm);
+    }
+
+    .identity h1 {
+      min-width: 0;
+      margin: 0;
+      overflow-wrap: anywhere;
+      font-size: 19px;
+      font-weight: 650;
+      line-height: 1.15;
+      letter-spacing: -.018em;
+    }
+
+    .birthline {
+      margin: var(--space-2xs) 0 0;
+      color: var(--color-muted);
+      font-size: 12.5px;
+      line-height: 1.48;
+    }
+
+    .help-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2xs);
+      min-height: 38px;
+      padding: 0;
+      color: var(--color-core);
+      background: transparent;
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .plus {
+      position: relative;
+      display: inline-grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border: var(--rule-hairline) solid var(--color-core);
+      border-radius: 50%;
+      color: var(--color-core);
+      background: var(--color-core-soft);
+      transition: color var(--dur-short) var(--ease-out),
+                  background-color var(--dur-short) var(--ease-out),
+                  transform var(--dur-short) var(--ease-out);
+    }
+
+    .plus::before, .plus::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 1.5px;
+      border-radius: 2px;
+      background: currentColor;
+    }
+
+    .plus::after { transform: rotate(90deg); }
+    [aria-expanded="true"] .plus,
+    details[open] > summary .plus { transform: rotate(45deg); }
+
+    .help-panel {
+      display: grid;
+      gap: var(--space-sm);
+      margin-top: var(--space-sm);
+      padding-top: var(--space-sm);
+      border-top: var(--rule-hairline) solid var(--color-rule);
+    }
+
+    .help-panel[hidden] { display: none; }
+    .help-panel b {
+      display: block;
+      margin-bottom: var(--space-3xs);
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .help-panel span {
+      display: block;
+      color: var(--color-muted);
+      font-size: 12px;
+      line-height: 1.42;
+    }
+
+    .time-card {
+      background: var(--color-paper);
+    }
+
+    .time-heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: var(--space-sm);
+      padding-bottom: var(--space-xs);
+    }
+
+    .week {
+      margin-top: var(--space-2xs);
+      color: var(--color-muted);
+      font-size: 12.5px;
+      line-height: 1.42;
+    }
+
+    .week-total {
+      padding-top: var(--space-3xs);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .week-total b {
+      display: block;
+      font-size: 16px;
+      font-weight: 650;
+      line-height: 1;
+    }
+
+    .week-total span {
+      display: block;
+      margin-top: var(--space-3xs);
+      color: var(--color-muted);
+      font-size: 10.5px;
+      line-height: 1.2;
+    }
+
+    .balance-intro {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-xs);
+      padding: 0 var(--space-md) var(--space-sm);
+      color: var(--color-muted);
+      font-size: 11.5px;
+      line-height: 1.35;
+    }
+
+    .balance-intro strong {
+      color: var(--color-ink);
+      font-weight: 600;
+    }
+
+    .balance-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-inline: var(--space-md);
+      border-top: var(--rule-hairline) solid var(--color-rule-strong);
+      border-bottom: var(--rule-hairline) solid var(--color-rule-strong);
+    }
+
+    .balance-stat {
+      min-width: 0;
+      padding: var(--space-md) var(--space-xs) var(--space-sm);
+    }
+
+    .balance-stat:nth-child(odd) {
+      border-inline-end: var(--rule-hairline) solid var(--color-rule);
+    }
+
+    .balance-stat:nth-child(n + 3) {
+      border-top: var(--rule-hairline) solid var(--color-rule);
+    }
+
+    .balance-stat b {
+      display: block;
+      font-size: clamp(34px, 10vw, 48px);
+      font-weight: 500;
+      line-height: .94;
+      letter-spacing: -.055em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .balance-stat span {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2xs);
+      margin-top: var(--space-2xs);
+      color: var(--color-body);
+      font-size: 12px;
+      font-weight: 550;
+      line-height: 1.25;
+    }
+
+    .balance-stat span::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--stat-color);
+    }
+
+    .balance-stat.core { --stat-color: var(--color-core); }
+    .balance-stat.love { --stat-color: var(--color-love); }
+    .balance-stat.vitality { --stat-color: var(--color-vitality); }
+    .balance-stat.abundance { --stat-color: var(--color-abundance); }
+    .balance-stat.vitality b { color: var(--color-vitality); }
+
+    .balance-note {
+      margin: var(--space-sm) var(--space-md) var(--space-md);
+      color: var(--color-body);
+      font-size: 12.5px;
+      line-height: 1.48;
+    }
+
+    .balance-note b {
+      color: var(--color-ink);
+      font-weight: 650;
+    }
+
+    .disclosures {
+      border-top: var(--rule-hairline) solid var(--color-rule);
+    }
+
+    .disclosure + .disclosure {
+      border-top: var(--rule-hairline) solid var(--color-rule);
+    }
+
+    .disclosure summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 72px;
+      padding: var(--space-xs) var(--space-md);
+      cursor: pointer;
+    }
+
+    .disclosure summary b,
+    .disclosure summary small {
+      display: block;
+    }
+
+    .disclosure summary b {
+      font-size: 13.5px;
+      font-weight: 650;
+      line-height: 1.28;
+    }
+
+    .disclosure summary small {
+      margin-top: var(--space-3xs);
+      color: var(--color-muted);
+      font-size: 11.5px;
+      line-height: 1.35;
+    }
+
+    .disclosure-body {
+      padding: 0 var(--space-md) var(--space-md);
+      color: var(--color-body);
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+
+    .disclosure-body p { margin: 0; }
+    .disclosure-body p + p { margin-top: var(--space-2xs); }
+
+    .frequency-card {
+      isolation: isolate;
+      min-height: 100%;
+      background: var(--color-paper);
+    }
+
+    .frequency-card::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      bottom: -116px;
+      left: -94px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 62% 34%,
+        var(--color-orb-light) 0 18%,
+        var(--color-orb-mid) 53%,
+        var(--color-orb-deep) 100%);
+      filter: blur(18px);
+      opacity: .8;
+      pointer-events: none;
+    }
+
+    .frequency-card .card-head {
+      padding-bottom: var(--space-sm);
+    }
+
+    .frequency-card .card-head p {
+      max-width: 42ch;
+      font-size: 12px;
+      line-height: 1.42;
+    }
+
+    .frequency-list {
+      margin: 0 var(--space-md) var(--space-lg);
+      border-top: var(--rule-hairline) solid var(--color-rule-strong);
+    }
+
+    .frequency-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: baseline;
+      gap: var(--space-md);
+      min-height: 61px;
+      padding-block: var(--space-sm);
+      border-bottom: var(--rule-hairline) solid var(--color-rule-strong);
+    }
+
+    .frequency-row strong {
+      font-size: 12.5px;
+      font-weight: 520;
+      line-height: 1.25;
+    }
+
+    .frequency-value {
+      color: var(--color-ink);
+      font-size: 26px;
+      font-weight: 450;
+      line-height: 1;
+      letter-spacing: -.045em;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .frequency-value small {
+      margin-left: var(--space-3xs);
+      color: var(--color-body);
+      font-size: 11px;
+      font-weight: 450;
+      letter-spacing: 0;
+    }
+
+    .bands-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      background: var(--color-paper-soft);
+    }
+
+    .bands-card .card-head p {
+      max-width: 44ch;
+      font-size: 13px;
+    }
+
+    .bands-visual {
+      position: relative;
+      margin: 0 var(--space-md);
+      overflow: hidden;
+      border-radius: 13px;
+      background: var(--color-canvas);
+    }
+
+    .bands-visual img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .band-summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      margin: var(--space-sm) var(--space-md) var(--space-md);
+      border-top: var(--rule-hairline) solid var(--color-rule-strong);
+    }
+
+    .band-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: var(--space-xs);
+      padding-block: var(--space-sm);
+      border-bottom: var(--rule-hairline) solid var(--color-rule-strong);
+    }
+
+    .band-row b {
+      display: block;
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.3;
+    }
+
+    .band-row p {
+      margin: var(--space-3xs) 0 0;
+      color: var(--color-muted);
+      font-size: 11.5px;
+      line-height: 1.38;
+    }
+
+    .band-row > span:last-child {
+      align-self: center;
+      color: var(--color-muted);
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .bands-card .disclosures { margin-top: auto; }
+
+    .experience-card {
+      background: var(--color-paper);
+    }
+
+    .experience-grid {
+      display: grid;
+      gap: var(--space-lg);
+      padding: var(--space-3xs) var(--space-md) var(--space-lg);
+    }
+
+    .experience-statement {
+      min-width: 0;
+      max-width: 12ch;
+      margin: 0;
+      overflow-wrap: anywhere;
+      color: var(--color-core-deep);
+      font-family: var(--font-display);
+      font-size: var(--text-display);
+      font-weight: 500;
+      line-height: .96;
+      letter-spacing: -.032em;
+    }
+
+    .experience-copy > p {
+      max-width: 58ch;
+      margin: 0;
+      color: var(--color-body);
+      font-size: 15px;
+      line-height: 1.58;
+    }
+
+    .member-quote {
+      margin: var(--space-md) 0 0;
+    }
+
+    .member-quote blockquote {
+      margin: 0;
+      color: var(--color-body);
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+
+    .member-quote strong {
+      color: var(--color-ink);
+      font-weight: 650;
+    }
+
+    .member-quote figcaption {
+      margin-top: var(--space-xs);
+      color: var(--color-muted);
+      font-size: 11.5px;
+      line-height: 1.4;
+    }
+
+    .study-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: var(--space-sm) 0;
+      border-top: var(--rule-hairline) solid var(--color-rule);
+    }
+
+    .study-stat {
+      padding: var(--space-xs) var(--space-2xs) var(--space-xs) 0;
+      border-bottom: var(--rule-hairline) solid var(--color-rule);
+    }
+
+    .study-stat:nth-child(even) {
+      padding-inline-start: var(--space-xs);
+      border-inline-start: var(--rule-hairline) solid var(--color-rule);
+    }
+
+    .study-stat b {
+      display: block;
+      color: var(--color-ink);
+      font-size: 23px;
+      font-weight: 500;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .study-stat span {
+      display: block;
+      margin-top: var(--space-3xs);
+      color: var(--color-muted);
+      font-size: 10.5px;
+      line-height: 1.3;
+    }
+
+    .explore-card {
+      background: var(--color-paper-soft);
+    }
+
+    .explore-list {
+      border-top: var(--rule-hairline) solid var(--color-rule);
+    }
+
+    .explore + .explore {
+      border-top: var(--rule-hairline) solid var(--color-rule);
+    }
+
+    .explore summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: var(--space-xs);
+      min-height: 95px;
+      padding: var(--space-sm) var(--space-md);
+      cursor: pointer;
+    }
+
+    .explore-label {
+      display: block;
+      margin-bottom: var(--space-3xs);
+      color: var(--explore-color);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: .045em;
+      text-transform: uppercase;
+    }
+
+    .explore summary b {
+      display: block;
+      color: var(--color-ink);
+      font-size: 15px;
+      font-weight: 650;
+      line-height: 1.28;
+      letter-spacing: -.012em;
+    }
+
+    .explore summary small {
+      display: block;
+      margin-top: var(--space-3xs);
+      color: var(--color-muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .explore.core { --explore-color: var(--color-core); }
+    .explore.vitality { --explore-color: var(--color-vitality); }
+    .explore.pair { --explore-color: var(--color-abundance); }
+    .explore .plus {
+      color: var(--explore-color);
+      border-color: var(--explore-color);
+      background: var(--color-paper);
+    }
+
+    .explore-body {
+      padding: 0 var(--space-md) var(--space-md);
+      color: var(--color-body);
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+
+    .explore-steps {
+      margin: 0;
+    }
+
+    .explore-step {
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr);
+      gap: var(--space-xs);
+      padding-block: var(--space-2xs);
+      border-top: var(--rule-hairline) solid var(--color-rule);
+    }
+
+    .explore-step dt {
+      color: var(--color-ink);
+      font-weight: 650;
+    }
+
+    .explore-step dd { margin: 0; }
+
+    .why {
+      margin: var(--space-xs) 0 0;
+    }
+
+    .why b { color: var(--color-ink); }
+
+    .mark {
+      min-height: 40px;
+      margin-top: var(--space-sm);
+      padding: 0 var(--space-xs);
+      border: var(--rule-hairline) solid var(--color-ink);
+      border-radius: var(--radius-control);
+      color: var(--color-paper);
+      background: var(--color-ink);
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: color var(--dur-short) var(--ease-out),
+                  background-color var(--dur-short) var(--ease-out),
+                  transform 100ms var(--ease-out);
+    }
+
+    .mark:active { transform: translateY(1px); }
+    .is-done .mark {
+      color: var(--color-abundance);
+      border-color: var(--color-abundance);
+      background: var(--color-paper);
+    }
+
+    .calculation-card {
+      background: var(--color-paper);
+    }
+
+    .calculation-body {
+      padding: 0 var(--space-md) var(--space-md);
+    }
+
+    .calc-lead {
+      max-width: 40ch;
+      margin: var(--space-3xs) 0 var(--space-md);
+      color: var(--color-ink);
+      font-size: 18px;
+      font-weight: 650;
+      line-height: 1.3;
+      letter-spacing: -.018em;
+    }
+
+    .calc-step {
+      padding-block: var(--space-sm);
+      border-top: var(--rule-hairline) solid var(--color-rule);
+    }
+
+    .calc-step b {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 650;
+      line-height: 1.3;
+    }
+
+    .calc-step p {
+      max-width: 58ch;
+      margin: var(--space-3xs) 0 0;
+      color: var(--color-muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .calc-lineage {
+      margin: var(--space-sm) 0 0;
+      color: var(--color-body);
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+
+    .calc-lineage b {
+      color: var(--color-ink);
+      font-weight: 650;
+    }
+
+    .planet-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 var(--space-md);
+      margin-bottom: var(--space-xs);
+    }
+
+    .planet {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-xs);
+      padding-block: var(--space-2xs);
+      border-bottom: var(--rule-hairline) solid var(--color-rule);
+      font-size: 11.5px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .faq-card {
+      background: var(--color-paper);
+    }
+
+    .faq-card .card-head { padding-bottom: var(--space-md); }
+
+    @media (hover: hover) and (pointer: fine) {
+      .help-trigger:hover .plus,
+      .disclosure summary:hover .plus,
+      .explore summary:hover .plus {
+        color: var(--color-paper);
+        background: var(--color-core);
+      }
+      .explore summary:hover .plus { background: var(--explore-color); }
+      .mark:hover {
+        color: var(--color-ink);
+        background: var(--color-paper);
+      }
+    }
+
+    @media (min-width: 40rem) {
+      .app {
+        padding: var(--space-md) var(--space-md) var(--space-2xl);
+      }
+
+      .profile-grid {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: var(--space-md);
+      }
+
+      .identity,
+      .time-card,
+      .experience-card,
+      .faq-card {
+        grid-column: 1 / -1;
+      }
+
+      .frequency-card {
+        grid-column: span 7;
+      }
+
+      .bands-card {
+        grid-column: span 5;
+      }
+
+      .explore-card {
+        grid-column: span 5;
+        align-self: start;
+      }
+
+      .calculation-card {
+        grid-column: span 7;
+      }
+
+      .help-panel {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .balance-stats {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .balance-stat + .balance-stat {
+        border-inline-start: var(--rule-hairline) solid var(--color-rule);
+      }
+
+      .balance-stat:nth-child(odd) { border-inline-end: 0; }
+      .balance-stat:nth-child(n + 3) { border-top: 0; }
+
+      .experience-grid {
+        grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+        align-items: start;
+        gap: var(--space-xl);
+        padding: var(--space-xs) var(--space-lg) var(--space-xl);
+      }
+
+      .experience-statement {
+        position: sticky;
+        top: var(--space-md);
+      }
+
+      .card-head {
+        padding-inline: var(--space-lg);
+      }
+
+      .identity { padding-inline: var(--space-lg); }
+      .balance-intro { padding-inline: var(--space-lg); }
+      .balance-stats { margin-inline: var(--space-lg); }
+      .balance-note { margin-inline: var(--space-lg); }
+      .frequency-list { margin-inline: var(--space-lg); }
+      .bands-visual { margin-inline: var(--space-lg); }
+      .band-summary { margin-inline: var(--space-lg); }
+      .disclosure summary { padding-inline: var(--space-lg); }
+      .disclosure-body { padding-inline: var(--space-lg); }
+      .explore summary { padding-inline: var(--space-lg); }
+      .explore-body { padding-inline: var(--space-lg); }
+      .calculation-body { padding-inline: var(--space-lg); }
+    }
+
+    @media (min-width: 60rem) {
+      .profile-grid { gap: var(--space-lg); }
+      .card { box-shadow: 0 18px 44px var(--color-shadow); }
+      .frequency-card,
+      .bands-card {
+        align-self: stretch;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .profile-grid {
+        animation: page-arrive var(--dur-medium) var(--ease-out) both;
+      }
+    }
+
+    @keyframes page-arrive {
+      from { opacity: .01; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
+    html.embed .utility { display: none; }
+    html.embed .app {
+      width: 100%;
+      padding-top: 0;
+      padding-bottom: var(--space-md);
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="utility">
+      <img src="app-assets/logo-black.svg" alt="Zodiac.fm">
+      <span>My Zodiac</span>
+    </header>
+
+    <div class="profile-grid">
+      <section class="card identity" aria-labelledby="member-name">
+        <div class="identity-line">
+          <div>
+            <h1 id="member-name">Mike Hill</h1>
+            <p class="birthline">March 12, 1984 · 3:47 AM<br>Austin, Texas</p>
+          </div>
+          <button class="help-trigger" type="button" aria-expanded="false" aria-controls="profile-help">
+            <span>How it works</span><span class="plus" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="help-panel" id="profile-help" hidden>
+          <div><b>This week</b><span>Your actual listening and balance across all four frequencies.</span></div>
+          <div><b>Your map</b><span>Four fixed frequencies calculated from your birth moment.</span></div>
+          <div><b>Explore</b><span>Optional ways to use your map in ordinary decisions.</span></div>
+        </div>
+      </section>
+
+      <section class="card time-card" aria-labelledby="time-title">
+        <div class="card-head time-heading">
+          <div>
+            <h2 id="time-title">Time and Balance</h2>
+            <div class="week">Monday, July 27 to Sunday, August 2 · Your local time</div>
+          </div>
+          <div class="week-total"><b>88 min</b><span>this week</span></div>
+        </div>
+
+        <div class="balance-intro">
+          <span><strong>Your mix this week</strong></span>
+          <span>15% guide</span>
+        </div>
+
+        <div class="balance-stats" aria-label="This week's balance: Core 34%, Love 29%, Vitality 11%, Abundance 26%">
+          <div class="balance-stat core"><b>34%</b><span>Core</span></div>
+          <div class="balance-stat love"><b>29%</b><span>Love</span></div>
+          <div class="balance-stat vitality"><b>11%</b><span>Vitality</span></div>
+          <div class="balance-stat abundance"><b>26%</b><span>Abundance</span></div>
+        </div>
+
+        <p class="balance-note"><b>Vitality is the only frequency below the 15% guide.</b> Balance describes the mix, not a score.</p>
+
+        <div class="disclosures" data-accordion>
+          <details class="disclosure">
+            <summary>
+              <span><b>Listening guide</b><small>9 minutes a day on average · every frequency at 15%+</small></span>
+              <span class="plus" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <p>The study baseline was 63 minutes across a full week, with every frequency receiving at least 15% of listening. Missing a day is fine.</p>
+            </div>
+          </details>
+          <details class="disclosure">
+            <summary>
+              <span><b>All-time listening</b><small>5h 10m total · 2h 20m balanced</small></span>
+              <span class="plus" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <p>Vitality has received the least time overall. More Vitality in future listening moves your lifetime mix toward balance.</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="card frequency-card" aria-labelledby="frequency-title">
+        <div class="card-head">
+          <h2 id="frequency-title">Your Personalized Frequencies</h2>
+          <p>Calculated from your exact birth moment.</p>
+        </div>
+        <div class="frequency-list" aria-label="Your four personalized frequencies">
+          <div class="frequency-row"><strong>Core Frequency</strong><span class="frequency-value">406<small>Hz</small></span></div>
+          <div class="frequency-row"><strong>Love Frequency</strong><span class="frequency-value">414<small>Hz</small></span></div>
+          <div class="frequency-row"><strong>Vitality Frequency</strong><span class="frequency-value">554<small>Hz</small></span></div>
+          <div class="frequency-row"><strong>Abundance Frequency</strong><span class="frequency-value">596<small>Hz</small></span></div>
+        </div>
+      </section>
+
+      <section class="card bands-card" aria-labelledby="bands-title">
+        <div class="card-head">
+          <h2 id="bands-title">Your Bands</h2>
+          <p>Your frequency is what your signal is. Your band is how you naturally access it.</p>
+        </div>
+
+        <figure class="bands-visual">
+          <img src="app-assets/profile9-band-sculpture.jpg" width="1672" height="941" alt="A grounded dark form beside a rising amber form">
+        </figure>
+
+        <div class="band-summary">
+          <div class="band-row">
+            <span><b>Root Band</b><p>Grounding and steadiness</p></span>
+            <span>Core · Love</span>
+          </div>
+          <div class="band-row">
+            <span><b>Solar Plexus Band</b><p>Motion and drive</p></span>
+            <span>Vitality · Abundance</span>
+          </div>
+        </div>
+
+        <div class="disclosures">
+          <details class="disclosure">
+            <summary>
+              <span><b>How your bands work</b><small>Two Root · two Solar Plexus</small></span>
+              <span class="plus" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <p>Bands are not levels. Everyone uses all four. Yours describe the access points that tend to feel more natural in each part of life.</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="card experience-card" aria-labelledby="experience-title">
+        <div class="card-head">
+          <h2 id="experience-title">Your Zodiac Experience</h2>
+        </div>
+
+        <div class="experience-grid">
+          <p class="experience-statement">You feel more like yourself.</p>
+          <div class="experience-copy">
+            <p>Your own signal becomes easier to recognize in ordinary life. Decisions feel more like yours. You notice what feeds you, what drains you, what is mutual, and when an opening is worth taking.</p>
+            <figure class="member-quote">
+              <blockquote>“I feel like <strong>ME</strong>. I feel like the person I’ve been trying to get back to for so long without forcing anything.”</blockquote>
+              <figcaption>Amber Hedrick · Zodiac member</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="disclosures">
+          <details class="disclosure">
+            <summary>
+              <span><b>What members reported</b><small>Seven outcomes from our 52-week study</small></span>
+              <span class="plus" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <p>Among members who used Zodiac as designed, averaging at least nine minutes a day and keeping every frequency at 15% or more:</p>
+              <div class="study-stats">
+                <div class="study-stat"><b>94%</b><span>Deeper self-access</span></div>
+                <div class="study-stat"><b>91%</b><span>Sharper instincts</span></div>
+                <div class="study-stat"><b>92%</b><span>Internal regulation</span></div>
+                <div class="study-stat"><b>90%</b><span>Better relationships and love</span></div>
+                <div class="study-stat"><b>88%</b><span>Life responds</span></div>
+                <div class="study-stat"><b>91%</b><span>A beat before reacting</span></div>
+                <div class="study-stat"><b>90%</b><span>Connection to something bigger</span></div>
+              </div>
+              <p>This was an internal, self-coded study, not a clinical trial. These are population results, not a promise about one member or when something will happen.</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="card explore-card" aria-labelledby="explore-title">
+        <div class="card-head">
+          <h2 id="explore-title">Experiences to Explore</h2>
+          <p>Use your map on a real question. Choose what matters now.</p>
+        </div>
+
+        <div class="explore-list" data-accordion>
+          <details class="explore vitality" data-experience="profile9-vitality-commitment">
+            <summary>
+              <span><span class="explore-label">Vitality · 554 Hz</span><b>Should I say yes?</b><small>Use your energy signal before you commit.</small></span>
+              <span class="plus" aria-hidden="true"></span>
+            </summary>
+            <div class="explore-body">
+              <dl class="explore-steps">
+                <div class="explore-step"><dt>Choose</dt><dd>One commitment you are unsure about.</dd></div>
+                <div class="explore-step"><dt>Try</dt><dd>Picture the actual week, or take one small reversible piece.</dd></div>
+                <div class="explore-step"><dt>Notice</dt><dd>Feeds me, costs me, needs another approach, or still unclear.</dd></div>
+              </dl>
+              <p class="why"><b>Why it fits:</b> Vitality is about energy. Your Solar Plexus band works through a small, reversible action.</p>
+              <button class="mark" type="button" aria-pressed="false">I explored this</button>
+            </div>
+          </details>
+
+          <details class="explore core" data-experience="profile9-core-answer">
+            <summary>
+              <span><span class="explore-label">Core · 406 Hz</span><b>What do I really want?</b><small>Use your identity signal when the answer feels crowded.</small></span>
+              <span class="plus" aria-hidden="true"></span>
+            </summary>
+            <div class="explore-body">
+              <dl class="explore-steps">
+                <div class="explore-step"><dt>Choose</dt><dd>One decision about who you are or what is yours to do.</dd></div>
+                <div class="explore-step"><dt>Try</dt><dd>Give the question one quiet minute without arguing either side.</dd></div>
+                <div class="explore-step"><dt>Notice</dt><dd>Yes, no, not yet, or nothing clear. Every answer is information.</dd></div>
+              </dl>
+              <p class="why"><b>Why it fits:</b> Core is about identity and purpose. Your Root band gives the question solid ground.</p>
+              <button class="mark" type="button" aria-pressed="false">I explored this</button>
+            </div>
+          </details>
+
+          <details class="explore pair" data-experience="profile9-opportunity">
+            <summary>
+              <span><span class="explore-label">Love + Abundance</span><b>Is this worth pursuing?</b><small>Use both signals when another person is part of the opening.</small></span>
+              <span class="plus" aria-hidden="true"></span>
+            </summary>
+            <div class="explore-body">
+              <dl class="explore-steps">
+                <div class="explore-step"><dt>Choose</dt><dd>One opportunity that depends on a conversation or relationship.</dd></div>
+                <div class="explore-step"><dt>Try</dt><dd>Let the relationship question settle, then take one small step.</dd></div>
+                <div class="explore-step"><dt>Notice</dt><dd>What becomes clearer about the person, the opening, and the timing.</dd></div>
+              </dl>
+              <p class="why"><b>Why it fits:</b> Love reads the connection. Abundance reads the opening and its timing.</p>
+              <button class="mark" type="button" aria-pressed="false">I explored this</button>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="card calculation-card" aria-labelledby="calculation-title">
+        <div class="card-head">
+          <h2 id="calculation-title">How Your Map Was Calculated</h2>
+          <p>Your birth moment, translated into four exact frequencies.</p>
+        </div>
+
+        <div class="calculation-body">
+          <p class="calc-lead">We begin with the sky at the exact moment and place you were born.</p>
+          <div class="calc-step">
+            <b>Your birth moment</b>
+            <p>March 12, 1984 · 3:47 AM<br>Austin, Texas</p>
+          </div>
+          <div class="calc-step">
+            <b>The planetary positions</b>
+            <p>Calculated with Swiss Ephemeris from your exact date, time, and location.</p>
+          </div>
+          <div class="calc-step">
+            <b>Your frequency map</b>
+            <p>248+ positions and relationships resolve into the four frequencies shown above.</p>
+          </div>
+          <p class="calc-lineage"><b>The final translation</b> uses an algorithm rooted in the Sri Vidya Mantra Lineage from Southern India.</p>
+        </div>
+
+        <div class="disclosures">
+          <details class="disclosure">
+            <summary>
+              <span><b>Raw planetary positions</b><small>View the astronomical inputs used in your calculation</small></span>
+              <span class="plus" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <div class="planet-grid">
+                <div class="planet"><span>Sun</span><span>352.2440°</span></div>
+                <div class="planet"><span>Moon</span><span>102.7568°</span></div>
+                <div class="planet"><span>Mercury</span><span>355.7292°</span></div>
+                <div class="planet"><span>Venus</span><span>327.6190°</span></div>
+                <div class="planet"><span>Mars</span><span>235.3822°</span></div>
+                <div class="planet"><span>Jupiter</span><span>279.7401°</span></div>
+                <div class="planet"><span>Saturn Rx</span><span>226.3651°</span></div>
+                <div class="planet"><span>Uranus</span><span>253.7732°</span></div>
+                <div class="planet"><span>Neptune</span><span>271.5248°</span></div>
+                <div class="planet"><span>Pluto Rx</span><span>211.9669°</span></div>
+              </div>
+              <p>Rx means retrograde. These are the astronomical inputs used in the frequency calculation.</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="card faq-card" aria-labelledby="faq-title">
+        <div class="card-head"><h2 id="faq-title">Frequently Asked Questions</h2></div>
+        <div class="disclosures" data-accordion>
+          <details class="disclosure">
+            <summary><span><b>How much should I listen?</b></span><span class="plus" aria-hidden="true"></span></summary>
+            <div class="disclosure-body"><p>The study baseline was at least nine minutes a day on average, or 63 minutes across a full week, with every frequency at 15% or more. That is guidance, not a rule.</p></div>
+          </details>
+          <details class="disclosure">
+            <summary><span><b>What does balance mean?</b></span><span class="plus" aria-hidden="true"></span></summary>
+            <div class="disclosure-body"><p>Balance means each frequency has at least 15% of your listening for the week. It describes the mix, not a score or a requirement for a result.</p></div>
+          </details>
+          <details class="disclosure">
+            <summary><span><b>What if I miss a day?</b></span><span class="plus" aria-hidden="true"></span></summary>
+            <div class="disclosure-body"><p>Missing a day is fine. More time while staying balanced was a population pattern in the study, not a promise about your result or schedule.</p></div>
+          </details>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    if (self !== top || new URLSearchParams(location.search).has("embed")) {
+      document.documentElement.classList.add("embed");
+    }
+
+    const helpButton = document.querySelector(".help-trigger");
+    const helpPanel = document.getElementById("profile-help");
+    helpButton.addEventListener("click", () => {
+      const isOpen = helpButton.getAttribute("aria-expanded") === "true";
+      helpButton.setAttribute("aria-expanded", String(!isOpen));
+      helpPanel.hidden = isOpen;
+      sendHeight();
+    });
+
+    document.querySelectorAll("[data-accordion]").forEach((group) => {
+      group.querySelectorAll(":scope > details").forEach((item) => {
+        item.addEventListener("toggle", () => {
+          if (!item.open) return;
+          group.querySelectorAll(":scope > details[open]").forEach((other) => {
+            if (other !== item) other.open = false;
+          });
+          setTimeout(sendHeight, 40);
+        });
+      });
+    });
+
+    const storageKey = "zfm-profile-explored-v11";
+    let explored = [];
+    try { explored = JSON.parse(localStorage.getItem(storageKey) || "[]"); } catch (error) {}
+
+    document.querySelectorAll(".explore").forEach((item) => {
+      const id = item.dataset.experience;
+      const button = item.querySelector(".mark");
+      const paint = (done) => {
+        item.classList.toggle("is-done", done);
+        button.setAttribute("aria-pressed", String(done));
+        button.textContent = done ? "Explored ✓" : "I explored this";
+      };
+      paint(explored.includes(id));
+      button.addEventListener("click", () => {
+        const done = !explored.includes(id);
+        explored = done ? [...explored, id] : explored.filter((value) => value !== id);
+        try { localStorage.setItem(storageKey, JSON.stringify(explored)); } catch (error) {}
+        paint(done);
+        sendHeight();
+      });
+    });
+
+    let previousHeight = 0;
+    function sendHeight() {
+      try {
+        const height = Math.ceil(document.documentElement.scrollHeight);
+        if (height !== previousHeight) {
+          previousHeight = height;
+          parent.postMessage({ zfmH: height }, "*");
+        }
+      } catch (error) {}
+    }
+
+    document.querySelectorAll("details").forEach((item) => {
+      item.addEventListener("toggle", () => setTimeout(sendHeight, 40));
+    });
+    addEventListener("load", sendHeight);
+    addEventListener("resize", sendHeight);
+    if ("ResizeObserver" in window) new ResizeObserver(sendHeight).observe(document.body);
+    setTimeout(sendHeight, 250);
+    setTimeout(sendHeight, 900);
+  </script>
+</body>
+</html>
