@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Zodiac.fm — Visual Style Guide (green draft)</title>
+<style>
+@font-face{font-family:'Canela';src:url('fonts/Canela-Regular.otf');font-weight:400}
+@font-face{font-family:'Canela';src:url('fonts/Canela-Medium.otf');font-weight:500}
+@font-face{font-family:'Canela';src:url('fonts/Canela-Italic.otf');font-weight:400;font-style:italic}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Regular.otf');font-weight:400}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Medium.otf');font-weight:500}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Semibold.otf');font-weight:600}
+@font-face{font-family:'Suisse';src:url('fonts/Suisse-Bold.otf');font-weight:700}
+:root{
+  --core:#6521C9;--core-d:#38007A;--core-t:#EFECFF;--core-s:#D2C8FF;--core-g:#A737C8;
+  --love:#B90044;--love-d:#6E0024;--love-t:#FFE8EA;--love-s:#FFBDC3;--love-g:#CF4090;--love-a:#B90044;
+  --vit:#FF9112;--vit-d:#BC6700;--vit-t:#FFEADA;--vit-s:#FFC392;--vit-g:#FFC251;--vit-a:#C25500;
+  --abn:#12A56E;--abn-d:#0A6B48;--abn-t:#DCF4E8;--abn-s:#8FE1BE;--abn-g:#46D99A;--abn-a:#0A7A52;
+  --cream:#F6F1E8;--moon:#FBF8F3;--bleach:#FFF;--mist:#EEE9E0;--greige:#EAE4DA;--ink:#1A1620;--stage:#0B0712;--control:#2A2530;--mut:#7A7480;--line:#EAE1D2;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--cream);color:var(--ink);font-family:'Suisse',system-ui,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 44px}
+.cover{padding:96px 0 64px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--abn-a)}
+h1{font-family:'Canela',serif;font-size:clamp(46px,8vw,84px);font-weight:500;letter-spacing:-.02em;line-height:.98;margin:16px 0}
+h1 em{font-style:italic}
+.cover p{font-size:19px;color:#4a4550;max-width:58ch;margin-top:8px}
+.sec{padding:70px 0;border-bottom:1px solid var(--line)}
+.snum{font-family:'Suisse',sans-serif;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+h2{font-family:'Canela',serif;font-size:clamp(28px,4.5vw,40px);font-weight:500;letter-spacing:-.01em;line-height:1.05;margin:8px 0 14px}
+.intro{font-size:17px;color:#4a4550;max-width:64ch;margin-bottom:34px}
+.intro b{color:var(--ink)}
+h3{font-family:'Canela',serif;font-size:22px;font-weight:500;margin:34px 0 14px}
+.advice{background:var(--bleach);border:1px solid var(--line);border-left:3px solid var(--core);border-radius:12px;padding:16px 20px;margin:18px 0;font-size:14.5px;color:#3a3540}
+.advice b{color:var(--ink)}
+.advice.g{border-left-color:var(--abn)}
+.ramp{display:grid;grid-template-columns:repeat(6,1fr);border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-top:12px}
+.ramp .c{height:82px;display:flex;align-items:flex-end;padding:8px}
+.ramp .lab{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.ramp .meta{padding:8px 9px;background:#fff;font-size:10px;color:var(--mut);font-variant-numeric:tabular-nums;line-height:1.35}
+.freqhead{display:flex;align-items:center;gap:12px;margin-top:30px}
+.freqhead .dot{width:30px;height:30px;border-radius:50%}
+.freqhead h3{margin:0;font-size:21px}.freqhead .role{font-size:12px;color:var(--mut);letter-spacing:.06em;text-transform:uppercase}
+.grad{height:74px;border-radius:12px;border:1px solid var(--line)}
+.gcap{font-size:13px;color:#4a4550;margin-top:8px}.gcap b{color:var(--ink)}
+.gitem{margin-top:24px}
+.neu{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:8px}
+.neu .n{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.neu .sw{height:64px}.neu .t{padding:8px 10px;font-size:11px}.neu .t b{display:block;font-family:'Canela',serif;font-size:14px;font-weight:500}.neu .t span{color:var(--mut);font-variant-numeric:tabular-nums}
+.phones{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start;margin-top:10px}
+.ph{width:300px;background:var(--cream);border-radius:26px;border:1px solid rgba(0,0,0,.08);box-shadow:0 18px 44px rgba(0,0,0,.12);overflow:hidden;flex:0 0 auto}
+.ph .bar{display:flex;justify-content:space-between;align-items:center;padding:16px 18px 8px}
+.ph .logo{width:92px}.ph .logo img{width:100%;display:block}
+.pills{display:flex;gap:7px;padding:6px 16px 8px;overflow:hidden}
+.pill{font-size:12px;padding:6px 13px;border-radius:16px;background:#fff;border:1px solid var(--greige);color:#6a6470;white-space:nowrap}
+.pill.on{background:#fff;border-color:transparent;box-shadow:0 1px 6px rgba(0,0,0,.06);color:var(--abn-a);font-weight:600}
+.hz{padding:6px 18px 2px;font-family:'Canela',serif}.hz b{font-size:22px;color:var(--abn-a)}.hz span{font-size:11px;color:var(--mut);font-family:'Suisse'}
+.rows{padding:6px 14px 16px;display:flex;flex-direction:column;gap:10px}
+.card{display:flex;gap:11px;align-items:center;background:#fff;border:1px solid #efe6d6;border-radius:13px;padding:9px}
+.thumb{width:58px;height:58px;border-radius:11px;background:var(--moon);flex:0 0 auto;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.meta2{flex:1;min-width:0}.meta2 h4{font-family:'Canela',serif;font-size:15px;font-weight:500}.meta2 .lab2{font-size:10.5px;font-weight:700;color:var(--abn-a);display:flex;align-items:center;gap:5px;margin-top:3px}
+.meta2 .lab2::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--abn)}
+.pp{width:26px;height:26px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--abn),var(--abn-d))}
+.pp svg{width:10px;height:10px;fill:#fff}
+.np{background:var(--stage);border-radius:26px;width:300px;overflow:hidden;flex:0 0 auto;padding-bottom:22px}
+.np .bar{color:#cfc8d8}.np .bar span{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8b8598}
+.np .disc{width:200px;margin:14px auto 0;display:block;filter:drop-shadow(0 0 30px rgba(18,165,110,.4))}
+.np .who{text-align:center;margin-top:18px}
+.np .who .f{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--abn-g)}
+.np .who h4{font-family:'Canela',serif;font-size:21px;color:#F2EEF6;font-weight:500;margin-top:5px}
+.np .who p{font-size:11px;color:#8b8598;margin-top:3px}
+.np .scrub{height:4px;background:#2a2233;border-radius:3px;margin:20px 26px 6px;position:relative}
+.np .scrub .fill{position:absolute;left:0;top:0;bottom:0;width:44%;border-radius:3px;background:linear-gradient(90deg,var(--abn),var(--abn-d))}
+.np .scrub .kn{position:absolute;left:44%;top:50%;width:12px;height:12px;border-radius:50%;background:var(--abn-g);transform:translate(-50%,-50%)}
+.np .times{display:flex;justify-content:space-between;padding:0 26px;font-size:10px;color:#8b8598;font-variant-numeric:tabular-nums}
+.np .ctrl{display:flex;align-items:center;justify-content:center;gap:26px;margin-top:16px}
+.np .ctrl .s{color:#8b8598;font-size:16px}
+.np .big{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--abn),var(--abn-d));display:flex;align-items:center;justify-content:center;box-shadow:0 10px 28px rgba(18,165,110,.4)}
+.np .big svg{width:22px;height:22px;fill:#fff}
+.anno{font-size:13px;color:#4a4550;max-width:300px}
+.anno .t{font-family:'Canela',serif;font-size:16px;color:var(--ink);margin-bottom:4px}
+.anno ul{margin:8px 0 0 16px}.anno li{margin:6px 0;font-size:13px}
+.dd{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:14px}
+.dd .box{border-radius:14px;padding:18px 20px}
+.dd .do{background:#F2FBF6;border:1px solid #cdeadd}.dd .dont{background:#FBF3F3;border:1px solid #f0d5d3}
+.dd .h{font-family:'Canela',serif;font-size:17px;margin-bottom:10px}.dd .do .h{color:var(--abn-a)}.dd .dont .h{color:#b0342f}
+.dd ul{margin-left:16px;font-size:13.5px;color:#3a3540}.dd li{margin:6px 0}
+.tiles4{display:flex;gap:14px;margin-top:14px}
+.tiles4 .t4{flex:1;height:88px;border-radius:12px}
+.type-spec{display:flex;gap:40px;flex-wrap:wrap;margin-top:14px}
+.type-spec .col{flex:1;min-width:240px}
+.canela-demo{font-family:'Canela',serif;line-height:1}
+.dist{display:grid;grid-template-columns:60% 30% 10%;height:60px;border-radius:12px;overflow:hidden;margin-top:12px;font-size:12px;font-weight:600}
+.dist div{display:flex;align-items:center;justify-content:center}
+.scale{display:flex;align-items:flex-end;gap:10px;margin-top:14px}
+.scale .b{background:var(--core);border-radius:4px 4px 0 0;width:34px}.scale .l{font-size:10px;color:var(--mut);text-align:center;margin-top:5px}
+.comp{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.btn{background:linear-gradient(135deg,var(--core),var(--core-d));color:#fff;border:none;font-family:'Suisse';font-weight:600;font-size:15px;padding:14px 30px;border-radius:999px}
+.btn.g{background:linear-gradient(135deg,var(--abn),var(--abn-d))}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:20px;background:var(--abn-t);border:1px solid var(--abn-s);color:var(--abn-a);font-size:13px;font-weight:600}
+.foot{padding:44px 0 100px;font-size:13px;color:var(--mut);line-height:1.7;max-width:80ch}
+</style></head><body>
+
+<div class="wrap">
+<div class="cover">
+  <div class="eyebrow">Zodiac.fm · Visual Style Guide · draft with green Abundance</div>
+  <h1>One system.<br><em>Every</em> surface.</h1>
+  <p>The colour scheme with the new green Abundance, the gradients, and careful advice on how it all deploys inside the app. This is a working draft for you to decide from, not locked canon. Set in Canela and Suisse, the fonts we already own.</p>
+</div>
+
+<!-- 1 -->
+<div class="sec">
+  <div class="snum">01 · The principle</div>
+  <h2>Colour is 10% of the page.</h2>
+  <p class="intro">The whole system rests on one ratio. A calm neutral canvas carries almost everything, one structural colour (Core Purple) marks what matters, and the frequency colours appear only as small jewels. Hold this and the brand looks designed. Break it and even perfect colours look like a paint box.</p>
+  <div class="dist">
+    <div style="background:var(--cream);color:var(--ink)">60% · neutral canvas</div>
+    <div style="background:var(--core);color:#fff">30% · Core Purple structure</div>
+    <div style="background:var(--abn);color:#fff">10% · frequency</div>
+  </div>
+  <div class="advice"><b>The advice in one line:</b> one frequency leads at a time (the one the listener is in). The other three rest. Never show all four at full strength at once.</div>
+</div>
+
+<!-- 2 -->
+<div class="sec">
+  <div class="snum">02 · The four frequencies</div>
+  <h2>Your palette, with green.</h2>
+  <p class="intro">Your four hues were a considered set, and they stay. The only change: <b>Abundance moves from aqua to a jewel green</b>, which fills the one empty gap on your wheel and carries the right meaning, growth and prosperity. Each colour is a full ramp, so it works as a fill, a tint, a gradient, and legible text.</p>
+
+  <div class="freqhead"><span class="dot" style="background:var(--core)"></span><h3>Core</h3><span class="role">Identity</span></div>
+  <div class="ramp">
+    <div class="c" style="background:var(--core)"><span class="lab" style="color:#fff">primary</span></div>
+    <div class="c" style="background:var(--core-d)"><span class="lab" style="color:#fff">deep</span></div>
+    <div class="c" style="background:var(--core-t)"><span class="lab" style="color:var(--core)">tint</span></div>
+    <div class="c" style="background:var(--core-s)"><span class="lab" style="color:var(--core-d)">soft</span></div>
+    <div class="c" style="background:var(--core-g)"><span class="lab" style="color:#fff">gradEnd</span></div>
+    <div class="c" style="background:var(--core)"><span class="lab" style="color:#fff">accent</span></div>
+  </div>
+  <div class="ramp" style="border-top:none;border-radius:0 0 12px 12px"><div class="meta">#6521C9</div><div class="meta">#38007A</div><div class="meta">#EFECFF</div><div class="meta">#D2C8FF</div><div class="meta">#A737C8</div><div class="meta">#6521C9</div></div>
+
+  <div class="freqhead"><span class="dot" style="background:var(--love)"></span><h3>Love</h3><span class="role">Relationships</span></div>
+  <div class="ramp">
+    <div class="c" style="background:var(--love)"><span class="lab" style="color:#fff">primary</span></div>
+    <div class="c" style="background:var(--love-d)"><span class="lab" style="color:#fff">deep</span></div>
+    <div class="c" style="background:var(--love-t)"><span class="lab" style="color:var(--love)">tint</span></div>
+    <div class="c" style="background:var(--love-s)"><span class="lab" style="color:var(--love-d)">soft</span></div>
+    <div class="c" style="background:var(--love-g)"><span class="lab" style="color:#fff">gradEnd</span></div>
+    <div class="c" style="background:var(--love-a)"><span class="lab" style="color:#fff">accent</span></div>
+  </div>
+  <div class="ramp" style="border-top:none;border-radius:0 0 12px 12px"><div class="meta">#B90044</div><div class="meta">#6E0024</div><div class="meta">#FFE8EA</div><div class="meta">#FFBDC3</div><div class="meta">#CF4090</div><div class="meta">#B90044</div></div>
+
+  <div class="freqhead"><span class="dot" style="background:var(--vit)"></span><h3>Vitality</h3><span class="role">Energy</span></div>
+  <div class="ramp">
+    <div class="c" style="background:var(--vit)"><span class="lab" style="color:#fff">primary</span></div>
+    <div class="c" style="background:var(--vit-d)"><span class="lab" style="color:#fff">deep</span></div>
+    <div class="c" style="background:var(--vit-t)"><span class="lab" style="color:var(--vit-a)">tint</span></div>
+    <div class="c" style="background:var(--vit-s)"><span class="lab" style="color:var(--vit-d)">soft</span></div>
+    <div class="c" style="background:var(--vit-g)"><span class="lab" style="color:var(--vit-d)">gradEnd</span></div>
+    <div class="c" style="background:var(--vit-a)"><span class="lab" style="color:#fff">accent</span></div>
+  </div>
+  <div class="ramp" style="border-top:none;border-radius:0 0 12px 12px"><div class="meta">#FF9112</div><div class="meta">#BC6700</div><div class="meta">#FFEADA</div><div class="meta">#FFC392</div><div class="meta">#FFC251</div><div class="meta">#C25500 text</div></div>
+
+  <div class="freqhead"><span class="dot" style="background:var(--abn)"></span><h3>Abundance</h3><span class="role">Opportunity · NEW GREEN</span></div>
+  <div class="ramp">
+    <div class="c" style="background:var(--abn)"><span class="lab" style="color:#fff">primary</span></div>
+    <div class="c" style="background:var(--abn-d)"><span class="lab" style="color:#fff">deep</span></div>
+    <div class="c" style="background:var(--abn-t)"><span class="lab" style="color:var(--abn-a)">tint</span></div>
+    <div class="c" style="background:var(--abn-s)"><span class="lab" style="color:var(--abn-d)">soft</span></div>
+    <div class="c" style="background:var(--abn-g)"><span class="lab" style="color:var(--abn-d)">gradEnd</span></div>
+    <div class="c" style="background:var(--abn-a)"><span class="lab" style="color:#fff">accent</span></div>
+  </div>
+  <div class="ramp" style="border-top:none;border-radius:0 0 12px 12px"><div class="meta">#12A56E</div><div class="meta">#0A6B48</div><div class="meta">#DCF4E8</div><div class="meta">#8FE1BE</div><div class="meta">#46D99A</div><div class="meta">#0A7A52 text</div></div>
+
+  <div class="advice g"><b>Careful advice on the green:</b> use <b>#12A56E</b> for the jewel (dot, disc, active mark) and <b>#0A7A52 for green text/labels</b> (the primary is too light to read small). The tint <b>#DCF4E8</b> is the only green allowed on a large area (a soft chip or wash). The retired green was a dull pale one; this is a rich emerald at the same weight as your others.</div>
+</div>
+
+<!-- 3 -->
+<div class="sec">
+  <div class="snum">03 · The gradients</div>
+  <h2>Three gradients, three jobs.</h2>
+  <p class="intro">Every gradient in the system is one of three kinds. Using the right one is what keeps the product coherent. The rule: <b>controls are functional, identity is frequency, brand moments are brand.</b></p>
+
+  <div class="gitem">
+    <div class="grad" style="background:linear-gradient(135deg,var(--core),var(--core-d))"></div>
+    <p class="gcap"><b>Functional — primary to deep, same hue.</b> Buttons, play controls, the scrubber fill, active states. About 90% of all UI gradient. It reads as "this is a control," calm and structural. Usually Core Purple; when a listener is inside a frequency, that frequency's own primary-to-deep (below, the green control).</p>
+    <div class="grad" style="margin-top:10px;background:linear-gradient(135deg,var(--abn),var(--abn-d))"></div>
+    <p class="gcap">The same functional gradient in green, for a control shown inside the Abundance space.</p>
+  </div>
+
+  <div class="gitem">
+    <div class="grad" style="background:linear-gradient(135deg,var(--abn),var(--abn-g))"></div>
+    <p class="gcap"><b>Frequency — primary to gradEnd, analogous.</b> The identity moment only: the cymatic tile, the now-playing wave, the active frequency. This is where the colour gets to glow. Green to luminous mint here; each frequency has its own.</p>
+  </div>
+
+  <div class="gitem">
+    <div class="grad" style="background:linear-gradient(120deg,var(--core),var(--abn))"></div>
+    <p class="gcap"><b>Brand — one primary to a different frequency's primary.</b> Big moments only: a hero, a loading screen, the app icon, a marketing sheet. Purple to green is a striking brand gradient. <b>Never inside app UI</b>, it is too loud for everyday screens.</p>
+  </div>
+  <div class="advice"><b>The mistake to avoid:</b> putting the frequency gradient (the glowy one) on a button, or a brand gradient behind text. Controls stay functional and quiet; save the glow for the disc and the wave.</div>
+</div>
+
+<!-- 4 -->
+<div class="sec">
+  <div class="snum">04 · Neutrals</div>
+  <h2>The 60% that carries everything.</h2>
+  <p class="intro">Three warm neutrals do the real work, each with one job in the app. Do not collapse them; the small difference between them is what gives depth.</p>
+  <div class="neu">
+    <div class="n"><div class="sw" style="background:var(--cream)"></div><div class="t"><b>Cream</b><span>#F6F1E8 · screen canvas</span></div></div>
+    <div class="n"><div class="sw" style="background:var(--moon)"></div><div class="t"><b>MoonDust</b><span>#FBF8F3 · tile face</span></div></div>
+    <div class="n"><div class="sw" style="background:var(--bleach);box-shadow:inset 0 0 0 1px var(--line)"></div><div class="t"><b>Bleach</b><span>#FFFFFF · cards</span></div></div>
+    <div class="n"><div class="sw" style="background:var(--mist)"></div><div class="t"><b>Mist</b><span>#EEE9E0 · fills</span></div></div>
+    <div class="n"><div class="sw" style="background:var(--ink)"></div><div class="t"><b style="color:#fff">Ink</b><span>#1A1620 · text</span></div></div>
+    <div class="n"><div class="sw" style="background:var(--stage)"></div><div class="t"><b style="color:#fff">Stage</b><span>#0B0712 · dark ground</span></div></div>
+    <div class="n"><div class="sw" style="background:var(--greige)"></div><div class="t"><b>Greige</b><span>#EAE4DA · toggle track</span></div></div>
+    <div class="n"><div class="sw" style="background:var(--control)"></div><div class="t"><b style="color:#fff">Control</b><span>#2A2530 · dark UI</span></div></div>
+  </div>
+</div>
+
+<!-- 5 -->
+<div class="sec">
+  <div class="snum">05 · Colour in the app</div>
+  <h2>Where the green actually lives.</h2>
+  <p class="intro">This is the careful part. Here is the green Abundance deployed across two real app moments, with a note on every place colour is allowed to appear, and every place it is not.</p>
+
+  <div class="phones">
+    <div class="ph">
+      <div class="bar"><div class="logo"><img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm"></div></div>
+      <div class="pills"><span class="pill">Core</span><span class="pill">Love</span><span class="pill">Vitality</span><span class="pill on">Abundance</span></div>
+      <div class="hz"><b>611</b> <span>Hz</span></div>
+      <div class="rows">
+        <div class="card"><div class="thumb"><img src="assets/disc-abundance-green.png" alt=""></div><div class="meta2"><h4>Kindred Spirits</h4><div class="lab2">Abundance</div></div><div class="pp"><svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z"/></svg></div></div>
+        <div class="card"><div class="thumb"><img src="assets/disc-abundance-green2.png" alt=""></div><div class="meta2"><h4>Elysian Surge</h4><div class="lab2">Abundance</div></div><div class="pp"><svg viewBox="0 0 10 12"><path d="M0 0l10 6-10 6z"/></svg></div></div>
+      </div>
+    </div>
+    <div class="anno">
+      <div class="t">Immersions list</div>
+      <ul>
+        <li><b>Active pill text</b> turns the frequency accent (green #0A7A52). The pill itself stays white, only the text carries colour.</li>
+        <li><b>The dot</b> before "Abundance" and the <b>Hz number</b> use the accent green. Small marks only.</li>
+        <li><b>The cymatic tile</b> is the one place the frequency gradient glows.</li>
+        <li>Everything else, canvas, cards, text, stays neutral. The green is maybe 8% of the screen.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="phones" style="margin-top:34px">
+    <div class="np">
+      <div class="bar" style="padding:16px 18px 4px"><span>&larr;</span><span>Now playing</span><span>&middot;&middot;&middot;</span></div>
+      <img class="disc" src="assets/disc-abundance-green.png" alt="Abundance disc">
+      <div class="who"><div class="f">Abundance · Opportunity</div><h4>Kindred Spirits</h4><p>Your opportunity frequency, embedded</p></div>
+      <div class="scrub"><div class="fill"></div><div class="kn"></div></div>
+      <div class="times"><span>4:12</span><span>-6:47</span></div>
+      <div class="ctrl"><span class="s">&#9198;</span><span class="big"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></span><span class="s">&#9197;</span></div>
+    </div>
+    <div class="anno">
+      <div class="t">Now playing</div>
+      <ul>
+        <li><b>The disc</b> glows with the frequency gradient (green to mint) plus a soft halo. This is the identity moment, colour is allowed to be rich here.</li>
+        <li><b>The play button and the scrubber fill</b> use the <b>functional</b> gradient (green primary to deep), not the glowy one. Controls stay quiet.</li>
+        <li><b>Labels</b> use the light mint (#46D99A) so they read on the dark Stage ground.</li>
+        <li>On dark, the green reads as a jewel. This is the richest the green ever gets, and it earns it because the listener chose to be here.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 6 -->
+<div class="sec">
+  <div class="snum">06 · Do & don't</div>
+  <h2>The line between premium and paint box.</h2>
+  <div class="tiles4">
+    <div class="t4" style="background:linear-gradient(135deg,var(--core),var(--core-g))"></div>
+    <div class="t4" style="background:linear-gradient(135deg,var(--love),var(--love-g))"></div>
+    <div class="t4" style="background:linear-gradient(135deg,var(--vit),var(--vit-g))"></div>
+    <div class="t4" style="background:linear-gradient(135deg,var(--abn),var(--abn-g))"></div>
+  </div>
+  <p class="gcap" style="margin-top:8px">The four frequency gradients exist and are beautiful one at a time. The skill is never letting all four fill a screen together.</p>
+  <div class="dd">
+    <div class="box do">
+      <div class="h">Do</div>
+      <ul>
+        <li>Let one frequency lead per screen (the one the listener is in).</li>
+        <li>Use colour on the disc, the dot, the active text, the wave. Small jewels.</li>
+        <li>Keep controls on the functional (quiet) gradient.</li>
+        <li>Use tint or soft for any large coloured area.</li>
+        <li>Let the neutral canvas breathe. Space is the luxury.</li>
+      </ul>
+    </div>
+    <div class="box dont">
+      <div class="h">Don't</div>
+      <ul>
+        <li>Fill a screen with all four colours at once.</li>
+        <li>Put the glowy frequency gradient on buttons or backgrounds.</li>
+        <li>Use the vivid primary for small text (use the accent).</li>
+        <li>Flood a card or hero with full-saturation colour.</li>
+        <li>Add a fifth colour. Four frequencies plus neutrals is the whole set.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- 7 -->
+<div class="sec">
+  <div class="snum">07 · Type</div>
+  <h2>Canela and Suisse.</h2>
+  <p class="intro">The two fonts we already own. <b>Canela</b>, a high-contrast display serif, is the emotional voice, headlines and the moments that matter. <b>Suisse Int'l</b>, a clean grotesque, carries everything functional: body, labels, numbers, UI.</p>
+  <div class="type-spec">
+    <div class="col">
+      <div class="canela-demo" style="font-size:56px;font-weight:500">The Sound<br><em style="font-style:italic">of You</em></div>
+      <p class="gcap" style="margin-top:12px"><b>Canela</b> · display serif · headlines, hero lines, the reveal. Set large, tight leading, italic for accents.</p>
+    </div>
+    <div class="col">
+      <div style="font-family:'Suisse';font-weight:600;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)">Personalized frequency audio</div>
+      <p style="font-family:'Suisse';font-size:17px;margin-top:14px;max-width:34ch">Suisse carries the body copy, calm and readable, with real space between the lines and tabular figures for numbers like 9:41 and 611 Hz.</p>
+      <p class="gcap" style="margin-top:12px"><b>Suisse Int'l</b> · grotesque · body, labels (small-caps), UI, numbers.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 8 -->
+<div class="sec">
+  <div class="snum">08 · Spacing</div>
+  <h2>An 8-point rhythm.</h2>
+  <p class="intro">Every gap is a step on one scale, so spacing feels intentional everywhere. Sections get the big steps; components get the small ones. When unsure, add air.</p>
+  <div class="scale">
+    <div><div class="b" style="height:16px"></div><div class="l">8</div></div>
+    <div><div class="b" style="height:32px"></div><div class="l">16</div></div>
+    <div><div class="b" style="height:48px"></div><div class="l">24</div></div>
+    <div><div class="b" style="height:80px"></div><div class="l">40</div></div>
+    <div><div class="b" style="height:128px"></div><div class="l">64</div></div>
+    <div><div class="b" style="height:192px"></div><div class="l">96</div></div>
+  </div>
+</div>
+
+<!-- 9 -->
+<div class="sec">
+  <div class="snum">09 · Components</div>
+  <h2>Built from the system.</h2>
+  <div class="comp">
+    <button class="btn">Begin your chart</button>
+    <button class="btn g">Play your Abundance</button>
+    <span class="chip"><span style="width:10px;height:10px;border-radius:50%;background:var(--abn)"></span>Abundance · green</span>
+  </div>
+  <p class="gcap" style="margin-top:14px">Buttons use the functional gradient. Chips use tint + soft + accent text. Cards are white with a hairline warm border. Everything inherits from the tokens, so a change in one place updates everywhere.</p>
+</div>
+
+<!-- 10 -->
+<div class="sec">
+  <div class="snum">10 · The logo</div>
+  <h2>An asset, never typed.</h2>
+  <img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm" style="width:220px;display:block;margin:16px 0">
+  <p class="intro" style="margin-top:0">Always the real wordmark asset. The only allowed change is colour: black <b>#121314</b> on light, cream <b>#FBF8F3</b> on dark. Never re-type it, re-space it, tint it to a frequency, or rebuild it. It stays monochrome so it never competes with the colour system.</p>
+</div>
+
+<div class="foot">
+Draft visual style guide, 2026-07-01. Shows the colour system with the proposed green Abundance (#12A56E jewel, ramp derived to match the existing four), the three gradient types, and how colour deploys in the app with usage advice. Green cymatic disc is real (regenerated from the green token, then the tokens restored to current). Set in Canela and Suisse (Zodiac's licensed fonts, kept out of the public repo; this is a rendered image so the fonts show faithfully). Nothing here is canon until Michael approves. If the green is approved, the change lands in ~/zodiac-pages/design/tokens.json and propagates to the app, the discs, and every surface.
+</div>
+</div>
+</body></html>
