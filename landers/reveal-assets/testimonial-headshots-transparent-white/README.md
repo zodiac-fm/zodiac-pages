@@ -20,7 +20,11 @@ color field so it sits directly on a white page.
 
 ## Current status (checked 2026-07-25)
 
-All 13 clean-named files are live-referenced. The priors —
+All 13 clean-named files are live-referenced. Added 2026-07-27:
+`maya-shetreat.png` (Tier-1 endorser, standard `standardize_headshot.py` run
+from `tmp/transparent-headshots/work/orig-src/maya-shetreat.png` in the
+workspace repo; greige d2c also added one folder up) — not yet referenced by
+any page. The priors —
 `david-mcewen--pre-repair-2026-07-25.png`, `paul-tribe--pre-repair-2026-07-25.png`,
 `hilary-dimassimo--pre-repair-2026-07-25.png` — are correctly unreferenced by
 design (see below).
