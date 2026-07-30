@@ -356,15 +356,15 @@
     <div class="pp" id="miniPP"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
   </div>
 
-  <!-- Progress screen: the A-2 Progress build (inapp/A-2, promoted to control 2026-07-10) shown inline; auto-embeds when framed, iframe auto-sized via postMessage, panel scrolls; URL stays on the shell -->
+  <!-- My Zodiac screen: Profile17 promoted from D-13 into the D control; iframe auto-sized via postMessage, panel scrolls; URL stays on the shell -->
   <section class="screen" id="progress" style="display:none;z-index:6;background:var(--cream);bottom:calc(56px + env(safe-area-inset-bottom,0px));overflow-y:auto;-webkit-overflow-scrolling:touch">
-    <iframe id="progressFrame" src="progress-B2-26.html" title="Progress" scrolling="no" style="display:block;flex:0 0 auto;width:100%;height:820px;border:0;background:var(--cream)"></iframe>
+    <iframe id="progressFrame" src="progress-D-profile-2.html?v=21" title="My Zodiac" scrolling="no" style="display:block;flex:0 0 auto;width:100%;height:820px;border:0;background:var(--cream)"></iframe>
   </section>
 
   <!-- bottom nav -->
   <div id="nav">
     <div class="on"><span class="ic">&#9835;</span>Immersions</div>
-    <div><span class="ic">&#9776;</span>Progress</div>
+    <div><span class="ic">&#9673;</span>My Zodiac</div>
     <div><span class="ic">&#9825;</span>Playlist</div>
   </div>
 
@@ -405,12 +405,13 @@
       </div>
       <div class="zbal-panel">
         <h4 class="zbal-ttl">Frequency Balance Meter</h4>
-        <div class="zbal-sub">Keep all four frequencies above 15% each week</div>
+        <div class="zbal-sub"><b>Your goal:</b> At least 63 minutes this week, with all four frequencies green.</div>
         <ol class="zbal-ol">
-          <li>The numbers above show where your week lands if you play everything checked. <b class="g">Green</b> = minutes above the line. <b class="r">Red</b> = minutes short.</li>
-          <li>Tap <b>+</b> on a red frequency to add songs from your list. Tap <b>−</b> on a green one to trim it back.</li>
-          <li>Top right: <b>Week</b> is what you've played (it climbs while you listen) — <b class="g">green</b> when all four frequencies hold, <b class="r">red</b> when one is short. <b>Balance Now</b> checks the songs that bring your week back into balance.</li>
-          <li>Press <b>Play All</b>. Songs play top to bottom and check themselves off as they finish. Remember: just hold a song card to reorder.</li>
+          <li>Keep all four frequencies at 15% or more each week. This means you have <b>Frequency Balance</b>.</li>
+          <li>Check the total minutes in the top right. <b class="r">Red</b> means your week is not balanced yet.</li>
+          <li>If all four category numbers above are <b class="g">green</b>, completing every checked song will bring your week into <b>Frequency Balance</b>.</li>
+          <li>Check or uncheck songs manually, or press <b>Balance Now</b> in the top right and we’ll select them for you.</li>
+          <li>Press <b>Play All</b>. Songs play from top to bottom. Press and hold a song card to reorder it.</li>
           <li>Out of songs? Go to <b>Immersions</b> and tap <span class="ph">&#9829;</span> to add more to this list.</li>
         </ol>
         <div class="zbal-sofar" id="zbalSofar"></div>
