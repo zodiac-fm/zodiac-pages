@@ -413,6 +413,9 @@
       }else if(reviewState==='profile16'){
         document.getElementById('progressFrame').src='progress-C-profile-16.html?v=18';
         document.getElementById('progressFrame').title='My Zodiac';
+      }else if(reviewState==='profile17'){
+        document.getElementById('progressFrame').src='progress-C-profile-17.html?v=19';
+        document.getElementById('progressFrame').title='My Zodiac';
       }
     })();
   </script>
@@ -809,7 +812,7 @@ function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
   c.appendChild(r);});
  markAlive();}   /* re-mark on rebuild so returning to the tab restores the playing highlight */
 const navItems=document.querySelectorAll('#nav div');
-if(['profile1','profile2','profile3','profile4','profile5','profile6','profile7','profile8','profile9','profile10','profile11','profile12','profile13','profile14','profile15','profile16'].includes(new URLSearchParams(location.search).get('state'))){
+if(['profile1','profile2','profile3','profile4','profile5','profile6','profile7','profile8','profile9','profile10','profile11','profile12','profile13','profile14','profile15','profile16','profile17'].includes(new URLSearchParams(location.search).get('state'))){
  navItems[1].innerHTML='<span class="ic">&#9673;</span>My Zodiac';
 }
 function lockProgressTop(){
