@@ -1,0 +1,1990 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>My Zodiac · Bands</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --serif: "Cormorant Garamond", Georgia, serif;
+      --sans: "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --core: #6521c9;
+      --core-deep: #38007a;
+      --core-end: #a737c8;
+      --core-tint: #efecff;
+      --love: #b90044;
+      --love-end: #cf4090;
+      --love-tint: #fff0f5;
+      --vitality: #ff9112;
+      --vitality-ink: #a74700;
+      --vitality-end: #ffc251;
+      --vitality-tint: #fff3e2;
+      --abundance: #12a56e;
+      --abundance-ink: #087851;
+      --abundance-end: #46d99a;
+      --abundance-tint: #eaf9f2;
+      --cream: #f6f1e8;
+      --paper: #fff;
+      --ink: #1a1620;
+      --body: #4e4752;
+      --muted: #756e79;
+      --line: #e5ded4;
+      --soft: #faf8f4;
+      --stage: #0b0712;
+      --radius: 16px;
+      --shadow: 0 12px 32px rgba(36, 25, 43, .08);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--sans);
+      background:
+        radial-gradient(560px 300px at 95% -3%, rgba(101, 33, 201, .11), transparent 72%),
+        radial-gradient(480px 260px at -10% 24%, rgba(185, 0, 68, .045), transparent 75%),
+        var(--cream);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, summary { font: inherit; }
+    button { border: 0; }
+    summary { list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    button, summary { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--core);
+      outline-offset: 3px;
+    }
+
+    .app {
+      min-height: 100vh;
+      padding: 13px 14px 48px;
+    }
+
+    .utility {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(100%, 760px);
+      margin: 0 auto 10px;
+      padding: 0 4px;
+    }
+
+    .utility img { width: 106px; height: auto; display: block; }
+    .utility span { color: var(--muted); font-size: 11px; font-weight: 600; }
+
+    .page {
+      display: grid;
+      gap: 15px;
+      width: min(100%, 760px);
+      margin: 0 auto;
+    }
+
+    .card {
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .section-head {
+      padding: 22px 20px 16px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      color: var(--ink);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -.028em;
+    }
+
+    .section-head p {
+      max-width: 600px;
+      margin: 8px 0 0;
+      color: var(--body);
+      font-size: 14.5px;
+      line-height: 1.52;
+    }
+
+    .identity {
+      position: relative;
+      padding: 18px 20px;
+    }
+
+    .identity-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 16px;
+    }
+
+    .identity h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -.02em;
+    }
+
+    .birthline {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .help-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+      padding: 0;
+      color: var(--core-deep);
+      background: transparent;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .help-trigger .plus,
+    .disclosure-icon {
+      position: relative;
+      display: inline-grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      color: var(--ink);
+      background: var(--core);
+      box-shadow: 0 5px 14px rgba(36, 25, 43, .18);
+      transition: transform .22s cubic-bezier(.2, .8, .2, 1), background .22s ease;
+    }
+
+    .plus::before, .plus::after,
+    .disclosure-icon::before, .disclosure-icon::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 1.5px;
+      border-radius: 2px;
+      background: currentColor;
+    }
+
+    .plus::after, .disclosure-icon::after { transform: rotate(90deg); }
+    [aria-expanded="true"] .plus,
+    details[open] > summary .disclosure-icon { transform: rotate(45deg); }
+
+    .help-panel {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 11px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .help-panel[hidden] { display: none; }
+    .help-panel div { min-width: 0; }
+    .help-panel b {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--ink);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+    .help-panel span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .time-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 16px;
+      padding-bottom: 12px;
+    }
+
+    .week {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.4;
+    }
+
+    .time-stat {
+      padding-top: 1px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .time-stat b {
+      display: block;
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.1;
+      letter-spacing: -.02em;
+    }
+
+    .time-stat span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .balance-shell {
+      margin: 0 20px 18px;
+      padding: 18px 14px 14px;
+      border-radius: 14px;
+      color: var(--ink);
+      background:
+        radial-gradient(180px 120px at 8% 100%, rgba(101, 33, 201, .35), transparent 72%),
+        radial-gradient(190px 120px at 92% 0%, rgba(18, 165, 110, .17), transparent 75%),
+        var(--soft);
+      box-shadow: 0 13px 26px rgba(11, 7, 18, .17);
+    }
+
+    .balance-topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 11px;
+      color: #d8d2dc;
+      font-size: 11px;
+      line-height: 1.3;
+    }
+
+    .balance-topline strong { color: #fff; font-weight: 600; }
+    .low-note { color: #ffd191; }
+
+    .channels {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 7px;
+      height: 143px;
+      padding-top: 5px;
+    }
+
+    .guide-line {
+      position: absolute;
+      right: 0;
+      bottom: 84px;
+      left: 0;
+      height: 1px;
+      background: rgba(255, 255, 255, .28);
+    }
+
+    .channel {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-rows: 86px auto;
+      min-width: 0;
+    }
+
+    .channel-viz {
+      display: flex;
+      align-items: end;
+      justify-content: center;
+      gap: 2px;
+      min-width: 0;
+      height: 86px;
+    }
+
+    .channel-viz i {
+      display: block;
+      width: 3px;
+      min-height: 3px;
+      border-radius: 3px;
+      background: var(--channel);
+      box-shadow: none;
+      transform-origin: bottom;
+    }
+
+    .channel-copy {
+      display: block;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .channel-name {
+      display: block;
+      color: #d2cbd6;
+      font-size: 9.5px;
+      line-height: 1.15;
+    }
+
+    .channel-copy b {
+      display: block;
+      margin-top: 4px;
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .disclosures {
+      border-top: 1px solid var(--line);
+    }
+
+    details.disclosure + details.disclosure { border-top: 1px solid var(--line); }
+
+    .disclosure summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      min-height: 66px;
+      padding: 13px 20px;
+      cursor: pointer;
+    }
+
+    .disclosure summary b {
+      display: block;
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .disclosure summary small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .disclosure[open] > summary { background: #f8f4fd; }
+    .disclosure[open] > summary .disclosure-icon { background: var(--core-deep); }
+
+    .disclosure-body {
+      padding: 2px 20px 18px;
+      color: var(--body);
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+
+    .guide-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-bottom: 10px;
+    }
+
+    .guide-stat {
+      padding: 10px 11px;
+      border-radius: 10px;
+      background: var(--soft);
+    }
+
+    .guide-stat b {
+      display: block;
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.15;
+    }
+
+    .guide-stat span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.35;
+    }
+
+    .signal-card .section-head { padding-bottom: 18px; }
+
+    .signal-stage {
+      position: relative;
+      overflow: hidden;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(420px 180px at 20% -15%, rgba(101, 33, 201, .28), transparent 66%),
+        radial-gradient(360px 180px at 110% 70%, rgba(18, 165, 110, .16), transparent 70%),
+        var(--paper);
+    }
+
+    .signal-stage::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(120deg, rgba(255,255,255,.035), transparent 30%, transparent 70%, rgba(255,255,255,.025));
+    }
+
+    .signal-row {
+      --signal: var(--core);
+      --signal-soft: rgba(101, 33, 201, .32);
+      position: relative;
+    }
+
+    .signal-row + .signal-row { border-top: 1px solid rgba(255, 255, 255, .09); }
+    .signal-row.love { --signal: var(--love); --signal-soft: rgba(207, 64, 144, .29); }
+    .signal-row.vitality { --signal: var(--vitality); --signal-soft: rgba(255, 194, 81, .28); }
+    .signal-row.abundance { --signal: var(--abundance); --signal-soft: rgba(70, 217, 154, .27); }
+
+    .signal-summary {
+      position: relative;
+      display: grid;
+      grid-template-columns: 80px minmax(0, 1fr) 84px 30px;
+      align-items: center;
+      gap: 9px;
+      min-height: 105px;
+      padding: 13px 16px 13px 20px;
+      cursor: pointer;
+    }
+
+    .signal-summary::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0;
+      background: radial-gradient(240px 90px at 55% 50%, var(--signal-soft), transparent 75%);
+      transition: opacity .25s ease;
+    }
+
+    .signal-row[open] .signal-summary::before,
+    .signal-summary:hover::before { opacity: 1; }
+
+    .signal-name, .signal-visual, .signal-value, .signal-plus { position: relative; z-index: 1; }
+
+    .signal-name b {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.15;
+    }
+
+    .signal-name span {
+      display: block;
+      margin-top: 5px;
+      color: #aaa1b0;
+      font-size: 10.5px;
+      line-height: 1.25;
+    }
+
+    .signal-visual {
+      min-width: 0;
+      height: 50px;
+    }
+
+    .signal-visual svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .tone-ghost {
+      fill: none;
+      stroke: var(--signal);
+      stroke-width: 8;
+      stroke-linecap: round;
+      opacity: .12;
+      filter: blur(5px);
+    }
+
+    .tone-line {
+      fill: none;
+      stroke: var(--signal);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: .98;
+      filter: drop-shadow(0 0 5px var(--signal));
+      stroke-dasharray: 440;
+      stroke-dashoffset: 440;
+      animation: draw-signal 1.25s cubic-bezier(.18, .82, .2, 1) forwards;
+    }
+
+    .signal-row:nth-child(2) .tone-line { animation-delay: .08s; }
+    .signal-row:nth-child(3) .tone-line { animation-delay: .16s; }
+    .signal-row:nth-child(4) .tone-line { animation-delay: .24s; }
+
+    @keyframes draw-signal { to { stroke-dashoffset: 0; } }
+
+    .signal-value { text-align: right; }
+    .signal-value b {
+      display: block;
+      color: #fff;
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: -.025em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .signal-value span {
+      display: block;
+      margin-top: 6px;
+      color: var(--signal);
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .signal-plus {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--signal);
+      box-shadow: none;
+      transition: transform .22s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .signal-plus::before, .signal-plus::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 1.5px;
+      border-radius: 2px;
+      background: currentColor;
+    }
+
+    .signal-plus::after { transform: rotate(90deg); }
+    .signal-row[open] .signal-plus { transform: rotate(45deg); }
+
+    .signal-detail {
+      position: relative;
+      z-index: 1;
+      padding: 0 20px 18px 99px;
+      color: #d4cdd8;
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+
+    .signal-detail strong { color: #fff; }
+
+    .signal-caption {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 20px 13px;
+      color: #9e95a5;
+      background: var(--soft);
+      font-size: 10.5px;
+      line-height: 1.3;
+    }
+
+    .signal-caption strong { color: #d9d2dc; font-weight: 600; }
+
+    .experience-card .section-head { padding-bottom: 8px; }
+
+    .shifts {
+      position: relative;
+      display: grid;
+      gap: 0;
+      padding: 4px 20px 20px;
+    }
+
+    .shifts::before {
+      content: "";
+      position: absolute;
+      top: 22px;
+      bottom: 36px;
+      left: 28px;
+      width: 1px;
+      background: linear-gradient(var(--core), var(--love), var(--vitality), var(--abundance));
+      opacity: .42;
+    }
+
+    .shift {
+      --shift: var(--core);
+      --shift-wash: var(--core-tint);
+      position: relative;
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr);
+      gap: 13px;
+      padding: 15px 0;
+    }
+
+    .shift + .shift { border-top: 1px solid var(--line); }
+    .shift.love { --shift: var(--love); --shift-wash: var(--love-tint); }
+    .shift.vitality { --shift: var(--vitality); --shift-wash: var(--vitality-tint); }
+    .shift.abundance { --shift: var(--abundance); --shift-wash: var(--abundance-tint); }
+
+    .shift-dot {
+      position: relative;
+      z-index: 1;
+      width: 10px;
+      height: 10px;
+      margin-top: 5px;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      background: var(--shift);
+      box-shadow: 0 0 0 1px var(--shift);
+    }
+
+    .shift-copy {
+      position: relative;
+      padding: 0 0 0 2px;
+    }
+
+    .shift-copy::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: -6px;
+      right: 0;
+      bottom: -6px;
+      left: -8px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, var(--shift-wash), transparent 72%);
+      opacity: .48;
+    }
+
+    .shift h3 {
+      max-width: 560px;
+      margin: 0;
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.22;
+      letter-spacing: -.02em;
+    }
+
+    .shift p {
+      max-width: 560px;
+      margin: 7px 0 0;
+      color: var(--body);
+      font-size: 13.5px;
+      line-height: 1.52;
+    }
+
+    .study-wrap { border-top: 1px solid var(--line); }
+
+    .study-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      margin: 12px 0;
+      overflow: hidden;
+      border-radius: 11px;
+      background: var(--line);
+    }
+
+    .study-grid div { padding: 10px; background: var(--soft); }
+    .study-grid b { display: block; color: var(--ink); font-size: 15px; line-height: 1.1; }
+    .study-grid span { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; line-height: 1.3; }
+
+    .explore-list { border-top: 1px solid var(--line); }
+
+    .explore {
+      --explore: var(--core);
+      --explore-wash: var(--core-tint);
+      overflow: hidden;
+      background: linear-gradient(105deg, var(--explore-wash), #fff 70%);
+    }
+
+    .explore + .explore { border-top: 1px solid var(--line); }
+    .explore.vitality { --explore: var(--vitality-ink); --explore-wash: var(--vitality-tint); }
+    .explore.pair { --explore: var(--abundance-ink); --explore-wash: #f8f2ed; }
+
+    .explore summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+      min-height: 94px;
+      padding: 17px 20px;
+      cursor: pointer;
+    }
+
+    .explore-kicker {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--explore);
+      font-size: 10.5px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: .035em;
+      text-transform: uppercase;
+    }
+
+    .explore summary b {
+      display: block;
+      max-width: 520px;
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.25;
+      letter-spacing: -.01em;
+    }
+
+    .explore summary small {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.35;
+    }
+
+    .explore .disclosure-icon {
+      background: var(--explore);
+      box-shadow: none;
+    }
+
+    .explore-body {
+      padding: 0 20px 18px;
+      color: var(--body);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .step {
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, .76);
+    }
+
+    .step b {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--ink);
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .step span { display: block; font-size: 11.5px; line-height: 1.4; }
+
+    .why {
+      margin: 10px 0 0;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .why b { color: var(--ink); }
+
+    .mark {
+      min-height: 38px;
+      margin-top: 12px;
+      padding: 0 14px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--explore);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .is-done .mark { background: var(--abundance-ink); }
+
+    .calculation-card .section-head { padding-bottom: 12px; }
+
+    .calc-path {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0;
+      padding: 12px 20px 20px;
+    }
+
+    .calc-path::before {
+      content: "";
+      position: absolute;
+      top: 27px;
+      right: 48px;
+      left: 48px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--core), var(--love), var(--vitality), var(--abundance));
+      opacity: .55;
+    }
+
+    .calc-node {
+      position: relative;
+      z-index: 1;
+      min-width: 0;
+      padding-right: 10px;
+    }
+
+    .calc-node:last-child { padding-right: 0; }
+
+    .calc-dot {
+      display: block;
+      width: 11px;
+      height: 11px;
+      margin: 0 0 12px;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      background: var(--core);
+      box-shadow: 0 0 0 1px var(--core);
+    }
+
+    .calc-node:nth-child(2) .calc-dot { background: #7930c5; box-shadow: 0 0 0 1px #7930c5; }
+    .calc-node:nth-child(3) .calc-dot { background: var(--love); box-shadow: 0 0 0 1px var(--love); }
+    .calc-node:nth-child(4) .calc-dot { background: var(--vitality); box-shadow: 0 0 0 1px var(--vitality); }
+    .calc-node:nth-child(5) .calc-dot { background: var(--abundance); box-shadow: 0 0 0 1px var(--abundance); }
+
+    .calc-node b {
+      display: block;
+      color: var(--ink);
+      font-size: 11.5px;
+      line-height: 1.25;
+    }
+
+    .calc-node span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10.5px;
+      line-height: 1.35;
+    }
+
+    .result-band {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      margin: 0 20px 18px;
+      overflow: hidden;
+      border-radius: 12px;
+      background: var(--line);
+    }
+
+    .result {
+      min-width: 0;
+      padding: 12px 9px;
+      background: var(--soft);
+    }
+
+    .result i {
+      display: block;
+      width: 7px;
+      height: 7px;
+      margin-bottom: 8px;
+      border-radius: 50%;
+      background: var(--result);
+    }
+
+    .result b {
+      display: block;
+      color: var(--ink);
+      font-size: 11.5px;
+      line-height: 1.2;
+    }
+
+    .result span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10.5px;
+      line-height: 1.35;
+    }
+
+    .raw-wrap { border-top: 1px solid var(--line); }
+
+    .planet-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 18px;
+      margin-top: 8px;
+    }
+
+    .planet {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 0;
+      border-top: 1px solid var(--line);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .planet span:last-child { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+    .faq .section-head { padding-bottom: 8px; }
+    .faq .disclosure summary b { font-size: 14px; }
+
+    @media (max-width: 560px) {
+      .help-panel { grid-template-columns: 1fr; }
+      .signal-summary {
+        grid-template-columns: 78px minmax(0, 1fr) 64px 28px;
+        gap: 7px;
+        padding-left: 18px;
+        padding-right: 14px;
+      }
+      .signal-value b { font-size: 19px; }
+      .signal-value span { font-size: 9.5px; }
+      .signal-detail { padding-left: 103px; }
+      .steps { grid-template-columns: 1fr; }
+      .calc-path {
+        grid-template-columns: 1fr;
+        gap: 0;
+        padding-top: 6px;
+      }
+      .calc-path::before {
+        top: 18px;
+        bottom: 35px;
+        left: 25px;
+        width: 1px;
+        height: auto;
+        background: linear-gradient(var(--core), var(--love), var(--vitality), var(--abundance));
+      }
+      .calc-node {
+        display: grid;
+        grid-template-columns: 18px minmax(0, 1fr);
+        column-gap: 12px;
+        padding: 9px 0;
+      }
+      .calc-dot { grid-row: 1 / span 2; margin: 3px 0 0; }
+      .calc-node b, .calc-node span { grid-column: 2; }
+      .result-band { grid-template-columns: 1fr 1fr; }
+      .planet-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (min-width: 700px) {
+      .app { padding-top: 22px; }
+      .page { gap: 18px; }
+      .identity { padding: 21px 28px; }
+      .section-head { padding: 26px 28px 18px; }
+      .balance-shell { margin-right: 28px; margin-left: 28px; }
+      .disclosure summary { padding-right: 28px; padding-left: 28px; }
+      .disclosure-body { padding-right: 28px; padding-left: 28px; }
+      .signal-summary { padding-right: 24px; padding-left: 28px; }
+      .signal-detail { padding-right: 28px; padding-left: 107px; }
+      .shifts { padding-right: 28px; padding-left: 28px; }
+      .calc-path { padding-right: 28px; padding-left: 28px; }
+      .result-band { margin-right: 28px; margin-left: 28px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
+    /* Profile 7: light Zodiac hierarchy */
+    body {
+      background:
+        radial-gradient(520px 250px at 92% -4%, rgba(101, 33, 201, .07), transparent 74%),
+        var(--cream);
+    }
+
+    .app { padding-bottom: 64px; }
+    .page { gap: 18px; }
+
+    .utility {
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+
+    .utility span {
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: -.025em;
+    }
+
+    .card {
+      box-shadow: 0 10px 30px rgba(36, 25, 43, .055);
+    }
+
+    .section-head {
+      padding: 26px 24px 18px;
+    }
+
+    .section-head h2 {
+      font-size: 23px;
+      font-weight: 650;
+      line-height: 1.15;
+      letter-spacing: -.025em;
+    }
+
+    .section-head p {
+      max-width: 560px;
+      margin-top: 9px;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .identity { padding: 19px 24px; }
+    .identity h1 { font-size: 18px; font-weight: 650; }
+    .birthline { margin-top: 6px; font-size: 12.5px; }
+
+    .help-trigger {
+      gap: 9px;
+      color: var(--core);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .help-trigger .plus,
+    .disclosure-icon {
+      width: 27px;
+      height: 27px;
+      color: var(--core);
+      border: 1px solid rgba(101, 33, 201, .28);
+      background: #fff;
+      box-shadow: none;
+    }
+
+    .help-panel {
+      gap: 16px;
+      margin-top: 18px;
+      padding-top: 18px;
+    }
+
+    .help-panel b { font-size: 12.5px; }
+    .help-panel span { font-size: 12.5px; line-height: 1.45; }
+
+    .time-head { padding-bottom: 14px; }
+    .time-stat b { font-size: 16px; font-weight: 650; }
+
+    .balance-shell {
+      margin: 0 24px 20px;
+      padding: 18px 16px 15px;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(180px 100px at 7% 100%, rgba(101, 33, 201, .055), transparent 72%),
+        radial-gradient(180px 100px at 96% 0%, rgba(18, 165, 110, .05), transparent 75%),
+        var(--soft);
+      box-shadow: none;
+    }
+
+    .balance-topline {
+      color: var(--muted);
+      font-size: 11.5px;
+    }
+
+    .balance-topline strong { color: var(--ink); }
+    .low-note { color: var(--vitality-ink); font-weight: 600; }
+    .guide-line { background: rgba(26, 22, 32, .16); }
+    .channel-viz i { box-shadow: none; opacity: .82; }
+    .channel-name { color: var(--muted); font-size: 10px; }
+    .channel-copy b { color: var(--ink); font-size: 13px; font-weight: 650; }
+
+    .disclosure summary {
+      min-height: 70px;
+      padding: 14px 24px;
+    }
+
+    .disclosure summary b {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .disclosure summary small {
+      margin-top: 5px;
+      font-size: 12px;
+    }
+
+    .disclosure-body {
+      padding-right: 24px;
+      padding-left: 24px;
+    }
+
+    .signal-card .section-head {
+      padding-top: 30px;
+      padding-bottom: 20px;
+    }
+
+    .signal-card .section-head h2 {
+      max-width: 520px;
+      font-family: var(--serif);
+      font-size: 31px;
+      font-weight: 600;
+      line-height: 1.02;
+      letter-spacing: -.028em;
+    }
+
+    .signal-card .section-head p { max-width: 520px; }
+
+    .band-spectrum {
+      position: relative;
+      margin: 0 24px 24px;
+      padding: 20px 0 8px;
+    }
+
+    .spectrum-line {
+      position: relative;
+      height: 2px;
+      margin: 24px 4px 16px;
+      background: linear-gradient(90deg,
+        rgba(101, 33, 201, .78) 0 25%,
+        rgba(255, 145, 18, .72) 25% 50%,
+        rgba(185, 0, 68, .58) 50% 75%,
+        rgba(18, 165, 110, .66) 75% 100%);
+    }
+
+    .spectrum-line::before,
+    .spectrum-line::after {
+      content: "";
+      position: absolute;
+      top: -3px;
+      width: 1px;
+      height: 8px;
+      background: var(--line);
+    }
+
+    .spectrum-line::before { left: 25%; }
+    .spectrum-line::after { left: 50%; box-shadow: calc((100% - 1px) / 2) 0 var(--line); }
+
+    .spectrum-marker {
+      --marker: var(--core);
+      position: absolute;
+      top: -5px;
+      left: var(--position);
+      width: 12px;
+      height: 12px;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      background: var(--marker);
+      box-shadow: 0 2px 7px rgba(26, 22, 32, .2);
+      transform: translateX(-50%);
+    }
+
+    .spectrum-marker::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: 13px;
+      left: 50%;
+      color: var(--marker);
+      font-size: 9px;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+      transform: translateX(-50%);
+    }
+
+    .spectrum-marker::after { display: none; }
+
+    .spectrum-marker.love { --marker: var(--love); }
+    .spectrum-marker.vitality { --marker: var(--vitality); }
+    .spectrum-marker.abundance { --marker: var(--abundance); }
+
+    .spectrum-bands {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .spectrum-band {
+      min-width: 0;
+      padding-right: 8px;
+    }
+
+    .spectrum-band b {
+      display: block;
+      color: var(--ink);
+      font-size: 10.5px;
+      font-weight: 650;
+      line-height: 1.2;
+    }
+
+    .spectrum-band span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 9.5px;
+      line-height: 1.25;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .band-groups { border-top: 1px solid var(--line); }
+
+    .band-group + .band-group { border-top: 1px solid var(--line); }
+
+    .band-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 18px;
+      padding: 22px 24px 16px;
+      background: linear-gradient(100deg, rgba(101, 33, 201, .045), transparent 68%);
+    }
+
+    .band-group.solar .band-head {
+      background: linear-gradient(100deg, rgba(255, 145, 18, .055), transparent 68%);
+    }
+
+    .band-name {
+      display: block;
+      color: var(--ink);
+      font-size: 20px;
+      font-weight: 650;
+      line-height: 1.15;
+      letter-spacing: -.018em;
+    }
+
+    .band-method {
+      display: block;
+      margin-top: 6px;
+      color: var(--body);
+      font-size: 13px;
+      line-height: 1.42;
+    }
+
+    .band-range {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.2;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .band-rows { border-top: 1px solid rgba(229, 222, 212, .72); }
+
+    .signal-stage {
+      overflow: visible;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .signal-stage::before,
+    .signal-summary::before { display: none; }
+
+    .signal-row + .signal-row { border-top: 1px solid var(--line); }
+
+    .signal-summary {
+      grid-template-columns: 90px minmax(0, 1fr) 74px 28px;
+      min-height: 86px;
+      padding: 12px 24px;
+    }
+
+    .signal-name b {
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .signal-name span {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10.5px;
+    }
+
+    .signal-visual { height: 42px; }
+    .tone-ghost { display: none; }
+
+    .tone-line {
+      stroke-width: 1.7;
+      opacity: .68;
+      filter: none;
+      animation-duration: .9s;
+    }
+
+    .signal-value b {
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 650;
+      letter-spacing: -.02em;
+    }
+
+    .signal-value span {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 9.5px;
+      font-weight: 600;
+    }
+
+    .signal-plus {
+      width: 27px;
+      height: 27px;
+      color: var(--signal);
+      border: 1px solid var(--signal);
+      background: #fff;
+      box-shadow: none;
+    }
+
+    .signal-detail {
+      padding: 0 24px 18px 123px;
+      color: var(--body);
+      font-size: 13.5px;
+      line-height: 1.55;
+      background: linear-gradient(90deg, rgba(251, 248, 243, .92), #fff 72%);
+    }
+
+    .signal-detail strong { color: var(--ink); font-weight: 600; }
+    .signal-caption { display: none; }
+
+    .shift h3 {
+      font-size: 17px;
+      font-weight: 650;
+    }
+
+    .shift p { font-size: 13.5px; }
+
+    .shift-copy::after { opacity: .28; }
+
+    .explore { background: #fff; }
+
+    .explore summary {
+      min-height: 96px;
+      padding: 18px 24px;
+      background: linear-gradient(100deg, var(--explore-wash), #fff 62%);
+    }
+
+    .explore summary b { font-size: 16px; font-weight: 650; }
+
+    .explore .disclosure-icon {
+      color: var(--explore);
+      border-color: currentColor;
+      background: #fff;
+      box-shadow: none;
+    }
+
+    .explore-body { padding-right: 24px; padding-left: 24px; }
+
+    .step {
+      padding: 0 14px 0 0;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .step + .step {
+      padding-left: 14px;
+      border-left: 1px solid var(--line);
+    }
+
+    .mark {
+      border-radius: 9px;
+      background: var(--ink);
+      font-weight: 600;
+    }
+
+    .calculation-card .section-head {
+      padding-top: 28px;
+      padding-bottom: 20px;
+    }
+
+    .calc-story {
+      padding: 0 24px 24px;
+    }
+
+    .calc-lead {
+      max-width: 560px;
+      margin: 0;
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -.015em;
+    }
+
+    .calc-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 22px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .calc-step {
+      min-width: 0;
+      padding: 18px 18px 18px 0;
+    }
+
+    .calc-step + .calc-step {
+      padding-left: 18px;
+      border-left: 1px solid var(--line);
+    }
+
+    .calc-step b {
+      display: block;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.3;
+    }
+
+    .calc-step span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .calc-lineage {
+      margin: 16px 0 0;
+      color: var(--body);
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+
+    .calc-lineage b { color: var(--ink); font-weight: 600; }
+
+    .calc-path { display: none; }
+
+    .result-band {
+      margin: 0;
+      border-top: 1px solid var(--line);
+      border-radius: 0;
+      background: var(--line);
+    }
+
+    .result {
+      padding: 16px 14px;
+      background: var(--soft);
+    }
+
+    .result i { margin-bottom: 10px; }
+    .result b { font-size: 12.5px; font-weight: 650; }
+    .result span { margin-top: 5px; font-size: 11px; }
+
+    .raw-wrap { border-top: 0; }
+
+    @media (max-width: 560px) {
+      .utility span { font-size: 25px; }
+      .section-head { padding: 24px 20px 16px; }
+      .identity { padding-right: 20px; padding-left: 20px; }
+      .balance-shell { margin-right: 20px; margin-left: 20px; }
+      .channels { gap: 4px; }
+      .channel-viz { gap: 1.5px; }
+      .channel-viz i { width: 2.5px; }
+      .channel-name { font-size: 9px; letter-spacing: -.01em; }
+      .band-spectrum { margin-right: 20px; margin-left: 20px; }
+      .spectrum-band b { font-size: 9.5px; }
+      .spectrum-band span { font-size: 8.5px; }
+      .band-head { padding-right: 20px; padding-left: 20px; }
+      .band-name { font-size: 19px; }
+      .signal-summary {
+        grid-template-columns: 80px minmax(0, 1fr) 64px 27px;
+        gap: 7px;
+        min-height: 82px;
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+      .signal-name b { font-size: 14px; }
+      .signal-value b { font-size: 16px; }
+      .signal-detail { padding-right: 20px; padding-left: 107px; }
+      .explore summary { padding-right: 20px; padding-left: 20px; }
+      .explore-body { padding-right: 20px; padding-left: 20px; }
+      .steps { grid-template-columns: 1fr; gap: 12px; }
+      .step { padding: 0; }
+      .step + .step {
+        padding-top: 12px;
+        padding-left: 0;
+        border-top: 1px solid var(--line);
+        border-left: 0;
+      }
+      .calc-story { padding-right: 20px; padding-left: 20px; }
+      .calc-steps { grid-template-columns: 1fr; }
+      .calc-step { padding: 15px 0; }
+      .calc-step + .calc-step {
+        padding-left: 0;
+        border-top: 1px solid var(--line);
+        border-left: 0;
+      }
+      .result-band { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (min-width: 700px) {
+      .section-head { padding-right: 32px; padding-left: 32px; }
+      .identity { padding-right: 32px; padding-left: 32px; }
+      .balance-shell { margin-right: 32px; margin-left: 32px; }
+      .disclosure summary { padding-right: 32px; padding-left: 32px; }
+      .disclosure-body { padding-right: 32px; padding-left: 32px; }
+      .band-spectrum { margin-right: 32px; margin-left: 32px; }
+      .band-head { padding-right: 32px; padding-left: 32px; }
+      .signal-summary { padding-right: 32px; padding-left: 32px; }
+      .signal-detail { padding-right: 32px; padding-left: 131px; }
+      .explore summary { padding-right: 32px; padding-left: 32px; }
+      .explore-body { padding-right: 32px; padding-left: 32px; }
+      .calc-story { padding-right: 32px; padding-left: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="utility">
+      <img src="app-assets/logo-black.svg" alt="Zodiac.fm">
+      <span>My Zodiac</span>
+    </header>
+
+    <div class="page">
+      <section class="card identity" aria-labelledby="member-name">
+        <div class="identity-main">
+          <div>
+            <h1 id="member-name">Mike Hill</h1>
+            <p class="birthline">March 12, 1984 · 3:47 AM<br>Austin, Texas</p>
+          </div>
+          <button class="help-trigger" type="button" aria-expanded="false" aria-controls="profile-help">
+            <span>How it works</span><span class="plus" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="help-panel" id="profile-help" hidden>
+          <div><b>This week</b><span>Your actual listening and balance across all four frequencies.</span></div>
+          <div><b>Your map</b><span>Four fixed frequencies calculated from your birth moment.</span></div>
+          <div><b>Explore</b><span>Optional ways to use your map in ordinary decisions.</span></div>
+        </div>
+      </section>
+
+      <section class="card time-card" aria-labelledby="time-title">
+        <div class="section-head time-head">
+          <div>
+            <h2 id="time-title">Time and Balance</h2>
+            <p class="week">Monday, July 27 to Sunday, August 2 · Your local time</p>
+          </div>
+          <div class="time-stat"><b>88 min</b><span>this week</span></div>
+        </div>
+
+        <div class="balance-shell" aria-label="This week's balance: Core 34%, Love 29%, Vitality 11%, Abundance 26%">
+          <div class="balance-topline">
+            <span><strong>Your mix this week</strong> · 15% guide</span>
+            <span class="low-note">Vitality is at 11%</span>
+          </div>
+          <div class="channels">
+            <div class="guide-line"></div>
+            <div class="channel" data-percent="34" style="--channel:var(--core-end);--glow:rgba(167,55,200,.55)">
+              <div class="channel-viz" aria-hidden="true"></div>
+              <div class="channel-copy"><span class="channel-name">Core</span><b>34%</b></div>
+            </div>
+            <div class="channel" data-percent="29" style="--channel:var(--love-end);--glow:rgba(207,64,144,.48)">
+              <div class="channel-viz" aria-hidden="true"></div>
+              <div class="channel-copy"><span class="channel-name">Love</span><b>29%</b></div>
+            </div>
+            <div class="channel" data-percent="11" style="--channel:var(--vitality-end);--glow:rgba(255,194,81,.52)">
+              <div class="channel-viz" aria-hidden="true"></div>
+              <div class="channel-copy"><span class="channel-name">Vitality</span><b>11%</b></div>
+            </div>
+            <div class="channel" data-percent="26" style="--channel:var(--abundance-end);--glow:rgba(70,217,154,.48)">
+              <div class="channel-viz" aria-hidden="true"></div>
+              <div class="channel-copy"><span class="channel-name">Abundance</span><b>26%</b></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="disclosures" data-accordion>
+          <details class="disclosure">
+            <summary>
+              <span><b>Listening guide</b><small>9 minutes a day on average · every frequency at 15%+</small></span>
+              <span class="disclosure-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <div class="guide-stats">
+                <div class="guide-stat"><b>63 min</b><span>Study baseline for a full week</span></div>
+                <div class="guide-stat"><b>15%+</b><span>For each of the four frequencies</span></div>
+              </div>
+              Missing a day is fine. More time while staying balanced was a population pattern in the study, not a personal schedule.
+            </div>
+          </details>
+          <details class="disclosure">
+            <summary>
+              <span><b>All-time listening</b><small>5h 10m total · 2h 20m balanced</small></span>
+              <span class="disclosure-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <div class="guide-stats">
+                <div class="guide-stat"><b>5h 10m</b><span>Total listening</span></div>
+                <div class="guide-stat"><b>2h 20m</b><span>Time listened in balance</span></div>
+              </div>
+              Vitality has received the least time overall. More Vitality in future listening moves your lifetime mix toward balance.
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="card signal-card" aria-labelledby="signal-title">
+        <div class="section-head">
+          <h2 id="signal-title">Your Frequencies and Bands</h2>
+          <p>Your frequency is what your signal is. Your band is how you naturally process that part of your life.</p>
+        </div>
+
+        <div class="band-spectrum" aria-label="Your four frequency positions across the four Zodiac bands">
+          <div class="spectrum-line">
+            <i class="spectrum-marker" style="--position:22.3%" data-label="Core"></i>
+            <i class="spectrum-marker love" style="--position:23.4%" data-label="Love"></i>
+            <i class="spectrum-marker vitality" style="--position:43.4%" data-label="Vitality"></i>
+            <i class="spectrum-marker abundance" style="--position:49.4%" data-label="Abundance"></i>
+          </div>
+          <div class="spectrum-bands">
+            <div class="spectrum-band"><b>Root</b><span>250–425 Hz</span></div>
+            <div class="spectrum-band"><b>Solar Plexus</b><span>425–600 Hz</span></div>
+            <div class="spectrum-band"><b>Throat</b><span>600–775 Hz</span></div>
+            <div class="spectrum-band"><b>Crown</b><span>775–950 Hz</span></div>
+          </div>
+        </div>
+
+        <div class="signal-stage">
+          <div class="band-groups">
+            <section class="band-group" aria-labelledby="root-band-title">
+              <header class="band-head">
+                <div>
+                  <b class="band-name" id="root-band-title">Root Band</b>
+                  <span class="band-method">You process through grounding and steadiness.</span>
+                </div>
+                <span class="band-range">250–425 Hz · 2 tones</span>
+              </header>
+              <div class="band-rows" data-accordion>
+                <details class="signal-row core" data-hz="406">
+                  <summary class="signal-summary">
+                    <span class="signal-name"><b>Core</b><span>Identity and purpose</span></span>
+                    <span class="signal-visual" aria-hidden="true"><svg viewBox="0 0 300 50" preserveAspectRatio="none"><path class="tone-ghost"></path><path class="tone-line"></path></svg></span>
+                    <span class="signal-value"><b>406 Hz</b><span>ROOT</span></span>
+                    <span class="signal-plus" aria-hidden="true"></span>
+                  </summary>
+                  <div class="signal-detail"><strong>Core is about what feels genuinely yours.</strong> Your Root band gives an identity question solid ground without forcing an answer.</div>
+                </details>
+                <details class="signal-row love" data-hz="414">
+                  <summary class="signal-summary">
+                    <span class="signal-name"><b>Love</b><span>Connection</span></span>
+                    <span class="signal-visual" aria-hidden="true"><svg viewBox="0 0 300 50" preserveAspectRatio="none"><path class="tone-ghost"></path><path class="tone-line"></path></svg></span>
+                    <span class="signal-value"><b>414 Hz</b><span>ROOT</span></span>
+                    <span class="signal-plus" aria-hidden="true"></span>
+                  </summary>
+                  <div class="signal-detail"><strong>Love is about how connection meets you.</strong> Your Root band lets a relationship settle before you decide what honesty or closeness requires.</div>
+                </details>
+              </div>
+            </section>
+
+            <section class="band-group solar" aria-labelledby="solar-band-title">
+              <header class="band-head">
+                <div>
+                  <b class="band-name" id="solar-band-title">Solar Plexus Band</b>
+                  <span class="band-method">You process through motion and drive.</span>
+                </div>
+                <span class="band-range">425–600 Hz · 2 tones</span>
+              </header>
+              <div class="band-rows" data-accordion>
+                <details class="signal-row vitality" data-hz="554">
+                  <summary class="signal-summary">
+                    <span class="signal-name"><b>Vitality</b><span>Energy</span></span>
+                    <span class="signal-visual" aria-hidden="true"><svg viewBox="0 0 300 50" preserveAspectRatio="none"><path class="tone-ghost"></path><path class="tone-line"></path></svg></span>
+                    <span class="signal-value"><b>554 Hz</b><span>SOLAR PLEXUS</span></span>
+                    <span class="signal-plus" aria-hidden="true"></span>
+                  </summary>
+                  <div class="signal-detail"><strong>Vitality is about knowing what gives energy back.</strong> Your Solar Plexus band helps the answer form as you picture the real week or take one small step.</div>
+                </details>
+                <details class="signal-row abundance" data-hz="596">
+                  <summary class="signal-summary">
+                    <span class="signal-name"><b>Abundance</b><span>Opportunity and timing</span></span>
+                    <span class="signal-visual" aria-hidden="true"><svg viewBox="0 0 300 50" preserveAspectRatio="none"><path class="tone-ghost"></path><path class="tone-line"></path></svg></span>
+                    <span class="signal-value"><b>596 Hz</b><span>SOLAR PLEXUS</span></span>
+                    <span class="signal-plus" aria-hidden="true"></span>
+                  </summary>
+                  <div class="signal-detail"><strong>Abundance is about recognizing an opening without forcing it.</strong> Your Solar Plexus band helps timing become clearer once something is in motion.</div>
+                </details>
+              </div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="card experience-card" aria-labelledby="experience-title">
+        <div class="section-head">
+          <h2 id="experience-title">Your Zodiac Experience</h2>
+          <p>Changes often show up in ordinary moments.</p>
+        </div>
+
+        <div class="shifts">
+          <article class="shift">
+            <span class="shift-dot" aria-hidden="true"></span>
+            <div class="shift-copy">
+              <h3>A decision feels like yours.</h3>
+              <p>You can separate what you genuinely want from an old rule about who you should be.</p>
+            </div>
+          </article>
+          <article class="shift love">
+            <span class="shift-dot" aria-hidden="true"></span>
+            <div class="shift-copy">
+              <h3>You stop carrying the relationship for both people.</h3>
+              <p>You see mutuality more clearly and can be honest without first managing the other person’s response.</p>
+            </div>
+          </article>
+          <article class="shift vitality">
+            <span class="shift-dot" aria-hidden="true"></span>
+            <div class="shift-copy">
+              <h3>You can tell what a yes will cost.</h3>
+              <p>You notice the energy of a commitment before agreeing automatically.</p>
+            </div>
+          </article>
+          <article class="shift abundance">
+            <span class="shift-dot" aria-hidden="true"></span>
+            <div class="shift-copy">
+              <h3>You know when to move, wait, or walk away.</h3>
+              <p>An opening can stand out without you having to force it.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="study-wrap">
+          <details class="disclosure">
+            <summary>
+              <span><b>What members reported</b><small>Seven outcomes from our 52-week study</small></span>
+              <span class="disclosure-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <p>Among members who used Zodiac as designed, averaging at least nine minutes a day and keeping every frequency at 15% or more:</p>
+              <div class="study-grid">
+                <div><b>94%</b><span>Deeper self-access</span></div>
+                <div><b>91%</b><span>Sharper instincts</span></div>
+                <div><b>92%</b><span>Internal regulation</span></div>
+                <div><b>90%</b><span>Better relationships and love</span></div>
+                <div><b>88%</b><span>Life responds</span></div>
+                <div><b>91%</b><span>A beat before reacting</span></div>
+                <div><b>90%</b><span>Connection to something bigger</span></div>
+              </div>
+              <p>This was an internal, self-coded study, not a clinical trial. These are population results, not a promise about one member or when something will happen.</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="explore-title">
+        <div class="section-head">
+          <h2 id="explore-title">Experiences to Explore</h2>
+          <p>Use your map on a real question. Choose what matters now.</p>
+        </div>
+
+        <div class="explore-list" data-accordion>
+          <details class="explore vitality" data-experience="profile7-vitality-commitment">
+            <summary>
+              <span><span class="explore-kicker">Vitality · 554 Hz</span><b>Should I say yes to this commitment?</b><small>Use your energy signal before you commit.</small></span>
+              <span class="disclosure-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="explore-body">
+              <div class="steps">
+                <div class="step"><b>Choose</b><span>One task, invitation, or commitment you are unsure about.</span></div>
+                <div class="step"><b>Try</b><span>Picture the actual week, or take one small reversible piece.</span></div>
+                <div class="step"><b>Notice</b><span>Feeds me, costs me, needs another approach, or still unclear.</span></div>
+              </div>
+              <p class="why"><b>Why it fits:</b> Vitality is about energy. Your Solar Plexus band works through a small, reversible action.</p>
+              <button class="mark" type="button" aria-pressed="false">I explored this</button>
+            </div>
+          </details>
+
+          <details class="explore" data-experience="profile7-core-answer">
+            <summary>
+              <span><span class="explore-kicker">Core · 406 Hz</span><b>What do I actually want here?</b><small>Use your identity signal when the answer feels crowded.</small></span>
+              <span class="disclosure-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="explore-body">
+              <div class="steps">
+                <div class="step"><b>Choose</b><span>One decision about who you are or what is yours to do.</span></div>
+                <div class="step"><b>Try</b><span>Give the question one quiet minute without arguing either side.</span></div>
+                <div class="step"><b>Notice</b><span>Yes, no, not yet, or nothing clear. Every answer is information.</span></div>
+              </div>
+              <p class="why"><b>Why it fits:</b> Core is about identity and purpose. Your Root band gives the question solid ground.</p>
+              <button class="mark" type="button" aria-pressed="false">I explored this</button>
+            </div>
+          </details>
+
+          <details class="explore pair" data-experience="profile7-opportunity">
+            <summary>
+              <span><span class="explore-kicker">Love + Abundance</span><b>Is this opportunity worth pursuing?</b><small>Use both signals when another person is part of the opening.</small></span>
+              <span class="disclosure-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="explore-body">
+              <div class="steps">
+                <div class="step"><b>Choose</b><span>One opportunity that depends on a conversation or relationship.</span></div>
+                <div class="step"><b>Try</b><span>Let the relationship question settle, then take one small step.</span></div>
+                <div class="step"><b>Notice</b><span>What becomes clearer about the person, the opening, and the timing.</span></div>
+              </div>
+              <p class="why"><b>Why it fits:</b> Love reads the connection. Abundance reads the opening and its timing.</p>
+              <button class="mark" type="button" aria-pressed="false">I explored this</button>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="card calculation-card" aria-labelledby="calculation-title">
+        <div class="section-head">
+          <h2 id="calculation-title">How Your Map Was Calculated</h2>
+          <p>Your birth moment, translated into four exact frequencies.</p>
+        </div>
+
+        <div class="calc-story">
+          <p class="calc-lead">We begin with the sky at the exact moment and place you were born.</p>
+          <div class="calc-steps">
+            <div class="calc-step"><b>Your birth moment</b><span>March 12, 1984 · 3:47 AM<br>Austin, Texas</span></div>
+            <div class="calc-step"><b>The planetary positions</b><span>Calculated with Swiss Ephemeris from your exact date, time, and location.</span></div>
+            <div class="calc-step"><b>Your frequency map</b><span>248+ positions and relationships resolve into Core, Love, Vitality, and Abundance.</span></div>
+          </div>
+          <p class="calc-lineage"><b>The final translation</b> uses an algorithm rooted in the Sri Vidya Mantra Lineage from Southern India.</p>
+        </div>
+
+        <div class="result-band" aria-label="Your four calculated frequency results">
+          <div class="result" style="--result:var(--core)"><i></i><b>Core</b><span>406 Hz · Root</span></div>
+          <div class="result" style="--result:var(--love)"><i></i><b>Love</b><span>414 Hz · Root</span></div>
+          <div class="result" style="--result:var(--vitality)"><i></i><b>Vitality</b><span>554 Hz · Solar Plexus</span></div>
+          <div class="result" style="--result:var(--abundance)"><i></i><b>Abundance</b><span>596 Hz · Solar Plexus</span></div>
+        </div>
+
+        <div class="raw-wrap">
+          <details class="disclosure">
+            <summary>
+              <span><b>Raw planetary positions</b><small>View the astronomical inputs used in your calculation</small></span>
+              <span class="disclosure-icon" aria-hidden="true"></span>
+            </summary>
+            <div class="disclosure-body">
+              <div class="planet-grid">
+                <div class="planet"><span>Sun</span><span>352.2440°</span></div>
+                <div class="planet"><span>Moon</span><span>102.7568°</span></div>
+                <div class="planet"><span>Mercury</span><span>355.7292°</span></div>
+                <div class="planet"><span>Venus</span><span>327.6190°</span></div>
+                <div class="planet"><span>Mars</span><span>235.3822°</span></div>
+                <div class="planet"><span>Jupiter</span><span>279.7401°</span></div>
+                <div class="planet"><span>Saturn Rx</span><span>226.3651°</span></div>
+                <div class="planet"><span>Uranus</span><span>253.7732°</span></div>
+                <div class="planet"><span>Neptune</span><span>271.5248°</span></div>
+                <div class="planet"><span>Pluto Rx</span><span>211.9669°</span></div>
+              </div>
+              <p>Rx means retrograde. These are the astronomical inputs used in the frequency calculation.</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="card faq" aria-labelledby="faq-title">
+        <div class="section-head"><h2 id="faq-title">Frequently Asked Questions</h2></div>
+        <div class="disclosures" data-accordion>
+          <details class="disclosure">
+            <summary><span><b>How much should I listen?</b></span><span class="disclosure-icon" aria-hidden="true"></span></summary>
+            <div class="disclosure-body">The study baseline was at least nine minutes a day on average, or 63 minutes across a full week, with every frequency at 15% or more. That is guidance, not a rule.</div>
+          </details>
+          <details class="disclosure">
+            <summary><span><b>What does balance mean?</b></span><span class="disclosure-icon" aria-hidden="true"></span></summary>
+            <div class="disclosure-body">Balance means each frequency has at least 15% of your listening for the week. It describes the mix, not a score or a requirement for a result.</div>
+          </details>
+          <details class="disclosure">
+            <summary><span><b>What if I miss a day?</b></span><span class="disclosure-icon" aria-hidden="true"></span></summary>
+            <div class="disclosure-body">Missing a day is fine. More time while staying balanced was a population pattern in the study, not a promise about your result or schedule.</div>
+          </details>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    if (self !== top || new URLSearchParams(location.search).has("embed")) {
+      document.documentElement.classList.add("embed");
+    }
+
+    const helpButton = document.querySelector(".help-trigger");
+    const helpPanel = document.getElementById("profile-help");
+    helpButton.addEventListener("click", () => {
+      const isOpen = helpButton.getAttribute("aria-expanded") === "true";
+      helpButton.setAttribute("aria-expanded", String(!isOpen));
+      helpPanel.hidden = isOpen;
+      sendHeight();
+    });
+
+    const balancePatterns = [
+      [28, 48, 64, 43, 74, 55, 81, 58, 69, 45, 72],
+      [52, 68, 46, 76, 61, 84, 57, 72, 49, 67, 54],
+      [30, 47, 66, 82, 56, 73, 91, 62, 78, 52, 70],
+      [70, 55, 77, 49, 83, 58, 72, 47, 68, 53, 75]
+    ];
+
+    document.querySelectorAll(".channel").forEach((channel, index) => {
+      const percent = Number(channel.dataset.percent);
+      const scale = Math.min(1, percent / 40);
+      const container = channel.querySelector(".channel-viz");
+      balancePatterns[index].forEach((height) => {
+        const bar = document.createElement("i");
+        bar.style.height = `${Math.max(3, Math.round(height * scale))}px`;
+        container.appendChild(bar);
+      });
+    });
+
+    function signalPath(hz) {
+      const width = 300;
+      const mid = 25;
+      const points = 150;
+      const cycles = 4.2 + ((hz - 400) / 196) * 2.4;
+      const phase = (hz % 19) / 19 * Math.PI;
+      const path = [];
+      for (let i = 0; i <= points; i++) {
+        const x = i / points * width;
+        const envelope = .52 + .48 * Math.sin(Math.PI * i / points);
+        const primary = Math.sin((i / points) * Math.PI * 2 * cycles + phase);
+        const overtone = .34 * Math.sin((i / points) * Math.PI * 2 * (cycles * 2.03) - phase * .6);
+        const breath = .16 * Math.sin((i / points) * Math.PI * 2 * 1.35);
+        const y = mid + (primary + overtone + breath) * 9.5 * envelope;
+        path.push(`${i === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`);
+      }
+      return path.join(" ");
+    }
+
+    document.querySelectorAll(".signal-row").forEach((row) => {
+      const path = signalPath(Number(row.dataset.hz));
+      row.querySelector(".tone-ghost").setAttribute("d", path);
+      row.querySelector(".tone-line").setAttribute("d", path);
+    });
+
+    document.querySelectorAll("[data-accordion]").forEach((group) => {
+      group.querySelectorAll(":scope > details").forEach((item) => {
+        item.addEventListener("toggle", () => {
+          if (!item.open) return;
+          group.querySelectorAll(":scope > details[open]").forEach((other) => {
+            if (other !== item) other.open = false;
+          });
+          setTimeout(sendHeight, 40);
+        });
+      });
+    });
+
+    const storageKey = "zfm-profile-explored-v9";
+    let explored = [];
+    try { explored = JSON.parse(localStorage.getItem(storageKey) || "[]"); } catch (error) {}
+
+    document.querySelectorAll(".explore").forEach((item) => {
+      const id = item.dataset.experience;
+      const button = item.querySelector(".mark");
+      const paint = (done) => {
+        item.classList.toggle("is-done", done);
+        button.setAttribute("aria-pressed", String(done));
+        button.textContent = done ? "Explored ✓" : "I explored this";
+      };
+      paint(explored.includes(id));
+      button.addEventListener("click", () => {
+        const done = !explored.includes(id);
+        explored = done ? [...explored, id] : explored.filter((value) => value !== id);
+        try { localStorage.setItem(storageKey, JSON.stringify(explored)); } catch (error) {}
+        paint(done);
+        sendHeight();
+      });
+    });
+
+    let previousHeight = 0;
+    function sendHeight() {
+      try {
+        const height = Math.ceil(document.documentElement.scrollHeight);
+        if (height !== previousHeight) {
+          previousHeight = height;
+          parent.postMessage({ zfmH: height }, "*");
+        }
+      } catch (error) {}
+    }
+
+    document.querySelectorAll("details").forEach((item) => item.addEventListener("toggle", () => setTimeout(sendHeight, 40)));
+    addEventListener("load", sendHeight);
+    addEventListener("resize", sendHeight);
+    if ("ResizeObserver" in window) new ResizeObserver(sendHeight).observe(document.body);
+    setTimeout(sendHeight, 250);
+    setTimeout(sendHeight, 900);
+  </script>
+</body>
+</html>
