@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex">
+<title>The Key · Zodiac.fm Directory</title>
+<meta name="description" content="Every person carries four frequencies. Set one beside someone else's and the two make an interval. This is the key to reading them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --white:#fff; --cream:#f6f1e8; --mist:#eee9e0; --moondust:#fbf8f3;
+  --ink:#1a1620; --muted:#615a65; --faint:#6f6875;
+  --line:rgba(26,22,32,.13); --line-soft:rgba(26,22,32,.07);
+  --purple:#6521c9; --purple-deep:#38007a; --tint:#efecff; --soft:#d2c8ff;
+  --stage:#0b0712; --stage-soft:#171021;
+  --core:#6521c9; --love:#b90044; --vitality:#c25500; --abundance:#0a7a52;
+  --display:"Cormorant Garamond",Georgia,serif;
+  --body:"Switzer","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--white);color:var(--ink);font-family:var(--body);
+  font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p,figure,blockquote{margin:0}
+h1,h2{font-family:var(--display);font-weight:600;line-height:1.02;letter-spacing:-.03em}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit}
+
+/* numbers are NEVER the serif */
+.num{font-family:var(--body);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+.shell{width:min(100% - 40px,1120px);margin-inline:auto}
+.narrow{width:min(100% - 40px,720px);margin-inline:auto}
+.eyebrow{display:flex;align-items:center;gap:10px;color:var(--purple);
+  font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;line-height:1.2}
+.eyebrow::before{content:"";width:22px;height:1px;background:currentColor;flex:0 0 auto}
+.eyebrow.on-dark{color:var(--soft)}
+
+/* ---------- variant badge (internal review) ---------- */
+.badge{position:fixed;right:10px;bottom:10px;z-index:60;background:rgba(11,7,18,.86);
+  color:#efe9f7;font-size:9.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
+  padding:5px 9px;border-radius:4px;pointer-events:none}
+
+/* ---------- header ---------- */
+.site-head{position:sticky;top:0;z-index:50;height:56px;display:flex;align-items:center;
+  background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line-soft)}
+.site-head .shell{display:flex;align-items:center;justify-content:space-between}
+.site-head img{width:104px}
+.site-head span{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;padding:74px 0 60px}
+.hero::before{content:"";position:absolute;top:-320px;left:50%;transform:translateX(-58%);
+  width:820px;height:620px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(101,33,201,.13),rgba(101,33,201,0) 66%)}
+.hero .shell{position:relative}
+.hero h1{margin:18px 0 0;font-size:clamp(46px,12.5vw,88px);text-wrap:balance;max-width:12ch}
+.hero p{margin-top:24px;max-width:50ch;font-size:18px;color:var(--muted)}
+.hero p b{color:var(--ink);font-weight:500}
+
+/* hero figure: the whole page in miniature (desktop composition) */
+.hero-fig{display:none;margin:0;max-width:360px;border-top:1px solid var(--line);padding-top:22px}
+.hf-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:15px 0}
+.hf-lab{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.hf-val{font-family:var(--body);font-variant-numeric:tabular-nums;font-size:34px;font-weight:500;letter-spacing:-.02em;line-height:1}
+.hf-val i{font-style:normal;font-size:13px;font-weight:600;color:var(--faint);margin-left:7px}
+.hf-link{display:flex;align-items:center;gap:13px;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.hf-link::before,.hf-link::after{content:"";height:1px;background:var(--line);flex:1 1 auto}
+.hf-cap{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.hf-name{display:block;font-size:22px;font-weight:600;letter-spacing:-.012em}
+.hf-note{display:block;margin-top:6px;font-size:14px;color:var(--muted)}
+
+/* ---------- section rhythm ---------- */
+.beat{padding:76px 0}
+.beat-cream{background:var(--cream)}
+.beat-mist{background:linear-gradient(180deg,var(--moondust),var(--cream))}
+.sec-head{max-width:800px;margin-bottom:34px}
+.sec-head h2{margin-top:14px;font-size:clamp(32px,7.4vw,54px);text-wrap:balance}
+.sec-head p{margin-top:20px;max-width:56ch;color:var(--muted);font-size:17px}
+.lede{max-width:58ch;color:var(--muted);font-size:17px}
+.lede + .lede{margin-top:16px}
+
+/* ---------- the ruler ---------- */
+.ruler{position:relative;margin:44px 0 0;padding:0 6px}
+.ruler-track{position:relative;height:1px;background:rgba(26,22,32,.24)}
+.ruler-tick{position:absolute;top:-5px;width:1px;height:11px;background:rgba(26,22,32,.46);transform:translateX(-.5px)}
+.ruler-tick.edge{height:19px;top:-9px;background:var(--ink)}
+.ruler-lab{position:absolute;top:16px;transform:translateX(-50%);white-space:nowrap;
+  font-size:10px;font-weight:600;letter-spacing:.03em;color:var(--faint)}
+.ruler-lab.turn{transform:translateX(-50%) rotate(-52deg);transform-origin:top center;text-align:right}
+.ruler-ends{display:flex;justify-content:space-between;margin-top:42px;
+  font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.ruler-cap{margin-top:26px;font-size:14px;color:var(--muted);max-width:52ch}
+
+/* ---------- calculator (dark instrument) ---------- */
+.calc{background:var(--stage);color:var(--moondust);position:relative;overflow:hidden;padding:74px 0}
+.calc::before{content:"";position:absolute;bottom:-300px;right:-140px;width:660px;height:520px;
+  border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(101,33,201,.34),rgba(101,33,201,0) 68%)}
+.calc .shell{position:relative}
+.calc h2{font-size:clamp(32px,7.4vw,52px);margin-top:14px;max-width:16ch;text-wrap:balance}
+.calc .note{margin-top:20px;max-width:46ch;color:#a9a1b4;font-size:15px}
+.inputs{display:grid;gap:18px;grid-template-columns:1fr 1fr;max-width:520px;margin-top:38px}
+.field label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:#9990a6;margin-bottom:9px}
+.field-wrap{display:flex;align-items:baseline;gap:9px;border-bottom:1.5px solid rgba(233,226,244,.26);padding-bottom:8px}
+.field-wrap:focus-within{border-bottom-color:var(--soft)}
+.field input{flex:0 0 auto;width:6ch;min-width:0;border:0;background:none;outline:none;color:var(--moondust);
+  font-family:var(--body);font-variant-numeric:tabular-nums;font-size:30px;font-weight:500;letter-spacing:-.01em;padding:0}
+.field input::-webkit-outer-spin-button,.field input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.field input[type=number]{-moz-appearance:textfield}
+.field .unit{font-size:13px;font-weight:600;color:#9990a6;flex:0 0 auto}
+
+.readout{margin-top:52px}
+.readout .tag{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9990a6}
+.readout .name{font-family:var(--display);font-weight:600;font-size:clamp(38px,10vw,62px);
+  line-height:1.02;letter-spacing:-.03em;margin-top:12px;text-wrap:balance}
+.readout .name.none{font-size:clamp(28px,6.6vw,40px);color:#c8c0d4}
+.readout .facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.chip{display:inline-flex;align-items:baseline;gap:7px;padding:7px 13px;border-radius:999px;
+  border:1px solid rgba(233,226,244,.2);font-size:13px;color:#cfc7db}
+.chip b{font-family:var(--body);font-variant-numeric:tabular-nums;font-weight:600;color:var(--moondust)}
+.chip.gold{border-color:rgba(255,194,81,.5);color:#ffd98a}
+.chip.oct{border-color:rgba(210,200,255,.42);color:#ded4ff}
+.readout .say{margin-top:24px;max-width:50ch;font-size:17px;line-height:1.6;color:#e4dced}
+.readout .say .fact{color:#a9a1b4;display:block;margin-bottom:9px;font-size:15px}
+
+.calc-ruler{margin-top:34px}
+.calc-ruler .ruler-track{background:rgba(233,226,244,.2)}
+.calc-ruler .ruler-tick{background:rgba(233,226,244,.34)}
+.calc-ruler .ruler-tick.edge{background:rgba(233,226,244,.7)}
+.calc-ruler .ruler-lab{color:#7e7590}
+.marker{position:absolute;top:-16px;width:2px;height:32px;background:var(--soft);
+  transform:translateX(-1px);transition:left .42s cubic-bezier(.22,.9,.3,1)}
+.marker::after{content:"";position:absolute;left:50%;top:-6px;width:9px;height:9px;border-radius:50%;
+  background:var(--soft);transform:translateX(-50%)}
+.window-band{position:absolute;top:-6px;height:13px;background:rgba(210,200,255,.17);
+  border-radius:2px;transition:left .42s cubic-bezier(.22,.9,.3,1),width .42s}
+
+/* ---------- the key (field guide) ---------- */
+.register{margin-top:56px}
+.register:first-of-type{margin-top:38px}
+.reg-head{display:flex;align-items:baseline;gap:14px;padding-bottom:14px;border-bottom:1px solid var(--ink)}
+.reg-head h3{margin:0;font-family:var(--body);font-size:12px;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase}
+.reg-head p{font-size:14px;color:var(--muted)}
+
+.entry{padding:26px 0;border-bottom:1px solid var(--line-soft)}
+.entry-top{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+.entry-name{font-size:20px;font-weight:600;letter-spacing:-.012em}
+.entry-ratio{font-family:var(--body);font-variant-numeric:tabular-nums;font-size:14px;
+  font-weight:600;color:var(--purple);flex:0 0 auto}
+.entry-bar{position:relative;height:1px;background:var(--line-soft);margin:16px 0 15px}
+.entry-dot{position:absolute;top:-3px;width:7px;height:7px;border-radius:50%;background:var(--purple);transform:translateX(-3.5px)}
+.entry-dot.gold{background:#e0a020}
+.entry-fact{font-size:16px;color:var(--ink)}
+.entry-mean{font-size:16px;color:var(--muted);margin-top:7px}
+.entry-rare{margin-top:13px;font-size:11.5px;font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--muted)}
+.entry-rare b{font-family:var(--body);font-variant-numeric:tabular-nums;color:var(--ink);font-weight:700}
+
+/* golden gets its own moment */
+.golden-block{margin-top:56px;padding:34px;border-radius:3px;background:var(--white);
+  border:1px solid var(--line);position:relative;overflow:hidden}
+.golden-block::before{content:"";position:absolute;top:-140px;right:-100px;width:340px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,177,32,.2),rgba(255,177,32,0) 68%);pointer-events:none}
+.golden-block > *{position:relative}
+.golden-block .tag{font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#a06a05}
+.golden-block h3{margin:12px 0 0;font-family:var(--display);font-weight:600;font-size:34px;letter-spacing:-.03em;line-height:1.05}
+.golden-block .entry-fact{margin-top:16px;max-width:54ch}
+.golden-block .entry-mean{max-width:54ch}
+
+.flavour{margin-top:34px;padding-left:18px;border-left:2px solid var(--soft);max-width:56ch}
+.flavour .tag{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--purple)}
+.flavour p{margin-top:9px;font-size:15px;color:var(--muted)}
+
+/* ---------- pathways matrix ---------- */
+.matrix-wrap{margin-top:38px}
+.matrix{display:grid;grid-template-columns:auto repeat(4,1fr);gap:5px;max-width:640px}
+.mx-corner{}
+.mx-col{padding:0 0 9px;text-align:center;font-size:10px;font-weight:700;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--faint);line-height:1.25}
+.mx-row{display:flex;align-items:center;justify-content:flex-end;padding-right:11px;
+  font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
+.mx-hint{display:flex;align-items:center;gap:9px;margin-bottom:16px;
+  font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--purple)}
+.mx-hint::before{content:"";width:16px;height:1px;background:currentColor;flex:0 0 auto}
+.mx-cell{aspect-ratio:1;border:1px solid rgba(26,22,32,.16);border-radius:2px;background:var(--white);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;
+  transition:background .18s,border-color .18s}
+.mx-cell:hover{background:var(--tint);border-color:var(--soft)}
+.mx-cell .pair{display:flex;align-items:center;gap:3px}
+.mx-cell .pip{width:7px;height:7px;border-radius:50%;opacity:.78;transition:opacity .18s}
+.mx-cell[aria-pressed="true"]{background:var(--ink);border-color:var(--ink)}
+.mx-cell[aria-pressed="true"] .pip{opacity:1}
+.mx-cell:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+.mx-axis{margin-top:14px;display:flex;gap:20px;font-size:11px;color:var(--faint);flex-wrap:wrap}
+.mx-axis b{color:var(--ink);font-weight:600}
+
+.cell-read{margin-top:30px;padding:28px;background:var(--white);border:1px solid var(--line);border-radius:3px;max-width:640px}
+.cell-read .who{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--purple)}
+.cell-read h3{margin:11px 0 0;font-family:var(--display);font-weight:600;font-size:30px;line-height:1.06;letter-spacing:-.03em}
+.tell{margin-top:20px;padding-top:18px;border-top:1px solid var(--line-soft)}
+.tell:first-of-type{border-top:0;padding-top:0}
+.tell .lab{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.tell p{margin-top:6px;font-size:16.5px}
+.tell.together p{color:var(--muted)}
+
+/* ---------- worked example ---------- */
+.registers{display:grid;gap:2px;margin-top:36px;max-width:760px}
+.rgstep{background:var(--white);border:1px solid var(--line);padding:24px 26px;border-radius:2px}
+.rgstep .n{font-family:var(--body);font-variant-numeric:tabular-nums;font-size:11px;font-weight:700;
+  letter-spacing:.12em;color:var(--purple)}
+.rgstep h3{margin:8px 0 0;font-family:var(--body);font-size:17px;font-weight:600}
+.rgstep p{margin-top:8px;font-size:16px;color:var(--muted);max-width:56ch}
+.worked{margin-top:34px;max-width:700px;padding:30px;background:var(--ink);color:var(--moondust);border-radius:3px}
+.worked .tag{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9990a6}
+.worked blockquote{margin:16px 0 0;font-family:var(--display);font-weight:500;font-size:clamp(24px,5.6vw,32px);
+  line-height:1.24;letter-spacing:-.02em;text-wrap:pretty}
+.worked .src{margin-top:18px;font-size:14px;color:#a9a1b4}
+
+/* ---------- close ---------- */
+.close{padding:80px 0 96px}
+.close h2{font-size:clamp(32px,7.4vw,52px);max-width:14ch;text-wrap:balance}
+.close p{margin-top:24px;max-width:52ch;color:var(--muted);font-size:17px}
+.foot{padding:26px 0 40px;border-top:1px solid var(--line-soft);
+  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.foot img{width:88px;opacity:.62}
+.foot span{font-size:12px;color:var(--faint)}
+
+/* ---------- desktop composition ---------- */
+@media(min-width:960px){
+  .hero{padding:96px 0 84px}
+  .hero-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);
+    gap:72px;align-items:center}
+  .hero-fig{display:block;justify-self:start}
+
+  .teach-grid{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+    gap:66px;align-items:start}
+  .teach-grid .sec-head{margin-bottom:0}
+  .teach-grid .lede:first-child{margin-top:0}
+
+  .calc h2{max-width:21ch}
+  .calc-grid{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+    gap:66px;align-items:start;margin-top:44px}
+  .calc-grid .inputs{margin-top:0;grid-template-columns:1fr;gap:26px;max-width:none}
+  .calc-grid .readout{margin-top:0}
+
+  .entry{display:grid;column-gap:46px;align-items:start;padding:30px 0;
+    grid-template-columns:210px minmax(0,1fr) 186px;
+    grid-template-areas:"name body rare" "bar bar bar"}
+  .entry-top{grid-area:name;display:block}
+  .entry-top .entry-ratio{margin-top:8px}
+  .entry-body{grid-area:body}
+  .entry-rare{grid-area:rare;margin-top:2px;text-align:right}
+  .entry-bar{grid-area:bar;margin:22px 0 0}
+
+  .registers{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .rgstep p{max-width:none}
+
+  .matrix-wrap{display:grid;grid-template-columns:minmax(0,430px) minmax(0,1fr);
+    gap:60px;align-items:start}
+  .cell-read{margin-top:0}
+}
+
+@media(max-width:640px){
+  .beat{padding:58px 0}
+  .hero{padding:52px 0 44px}
+  .inputs{grid-template-columns:1fr;gap:22px;max-width:none}
+  .ruler-lab{font-size:9px}
+  .golden-block{padding:26px 22px}
+  .cell-read{padding:22px}
+  .rgstep{padding:20px 22px}
+  .worked{padding:24px 22px}
+  .mx-row{font-size:9px;padding-right:8px}
+  .mx-col{font-size:9px}
+  .reg-head{flex-direction:column;align-items:flex-start;gap:4px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<div class="badge">Key-01 · internal review</div>
+
+<header class="site-head">
+  <div class="shell">
+    <img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
+    <span>The Directory</span>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="shell">
+   <div class="hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow">The Key</div>
+      <h1>Your numbers have relationships.</h1>
+      <p>Everyone carries four frequencies. Set one beside someone else&rsquo;s and the two make an <b>interval</b> &mdash; the same intervals music has been naming for centuries. This page is the key to reading them.</p>
+    </div>
+    <figure class="hero-fig" aria-hidden="true">
+      <div class="hf-row"><span class="hf-lab">Your tone</span><span class="hf-val">406<i>Hz</i></span></div>
+      <div class="hf-link"><span class="num">702.0</span>&nbsp;cents</div>
+      <div class="hf-row"><span class="hf-lab">Their tone</span><span class="hf-val">609<i>Hz</i></span></div>
+      <figcaption class="hf-cap">
+        <span class="hf-name">Perfect Fifth</span>
+        <span class="hf-note">the most stable interval in music</span>
+      </figcaption>
+    </figure>
+   </div>
+  </div>
+</section>
+
+<!-- ============ THE TEACHING ============ -->
+<section class="beat beat-mist">
+  <div class="shell">
+    <div class="teach-grid">
+      <div class="sec-head">
+        <div class="eyebrow">How it works</div>
+        <h2>Two tones, one distance.</h2>
+      </div>
+      <div>
+        <p class="lede">A pitch is just a number: cycles per second, written <span class="num">Hz</span>. Put two tones together and what the ear actually hears is neither number. It hears the distance between them.</p>
+        <p class="lede">Music measures that distance in cents. One octave is <span class="num">1,200</span> cents wide, and the named intervals sit at fixed places along it. When two tones land within <span class="num">25</span> cents of one of those places, the pair carries that interval&rsquo;s name.</p>
+      </div>
+    </div>
+
+    <div class="ruler" id="teachRuler">
+      <div class="ruler-track" id="teachTrack"></div>
+      <div class="ruler-ends"><span>Same note</span><span>One octave apart</span></div>
+    </div>
+    <p class="ruler-cap">The twelve named places inside a single octave. Everything on this page is a position on this line.</p>
+  </div>
+</section>
+
+<!-- ============ CALCULATOR ============ -->
+<section class="calc" id="calculator">
+  <div class="shell">
+    <div class="eyebrow on-dark">The calculator</div>
+    <h2>Find the interval between any two tones.</h2>
+    <p class="note">Two numbers in. No account, nothing saved, nothing sent anywhere &mdash; the arithmetic runs in your own browser.</p>
+
+    <div class="calc-grid">
+    <div class="inputs">
+      <div class="field">
+        <label for="toneA">Your tone</label>
+        <div class="field-wrap">
+          <input id="toneA" type="number" inputmode="decimal" step="0.1" min="1" value="406" size="6" aria-describedby="readoutName">
+          <span class="unit">Hz</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="toneB">Their tone</label>
+        <div class="field-wrap">
+          <input id="toneB" type="number" inputmode="decimal" step="0.1" min="1" value="609" size="6" aria-describedby="readoutName">
+          <span class="unit">Hz</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="readout" aria-live="polite">
+      <div class="tag">The interval</div>
+      <div class="name" id="readoutName">Perfect Fifth</div>
+      <div class="facts" id="readoutFacts"></div>
+      <div class="say" id="readoutSay"></div>
+    </div>
+    </div>
+
+    <div class="ruler calc-ruler" id="calcRuler">
+      <div class="ruler-track" id="calcTrack">
+        <div class="window-band" id="calcBand"></div>
+        <div class="marker" id="calcMarker"></div>
+      </div>
+      <div class="ruler-ends"><span>Same note</span><span>One octave apart</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE KEY ============ -->
+<section class="beat">
+  <div class="shell">
+    <div class="sec-head">
+      <div class="eyebrow">The field guide</div>
+      <h2>Twelve names, and one that is not an interval at all.</h2>
+      <p>A reading is built in three registers, always in this order: first whether the two tones are the same note, then the strongest harmony between them, then one honest tension. Here is everything that can appear.</p>
+    </div>
+
+    <div class="register">
+      <div class="reg-head"><h3>One &middot; Sameness</h3><p>The same note. A stamp, never ranked.</p></div>
+      <div id="regSameness"></div>
+    </div>
+
+    <div class="register">
+      <div class="reg-head"><h3>Two &middot; Harmony</h3><p>Strongest first. The top one present leads the reading.</p></div>
+      <div id="regHarmony"></div>
+    </div>
+
+    <div class="register">
+      <div class="reg-head"><h3>Three &middot; Tension</h3><p>Direction, never a verdict. Exactly one is named.</p></div>
+      <div id="regTension"></div>
+    </div>
+
+    <div class="golden-block">
+      <div class="tag">Outside every register</div>
+      <h3>Golden</h3>
+      <p class="entry-fact">Not a musical interval at all. It is nature&rsquo;s own proportion &mdash; the ratio that never resolves into a whole-number relationship, the one the sunflower and the nautilus are built on.</p>
+      <p class="entry-mean">The connection that keeps unfolding. It does not settle, and that is the gift. Golden is recognised inside a window eight times tighter than any named interval, which is what makes it the rarest thing on this page.</p>
+      <p class="entry-rare">Carried by <b>4</b> of <b>100</b> pairs</p>
+    </div>
+
+    <div class="flavour">
+      <div class="tag">A mark, not an interval</div>
+      <p><b>Across an octave.</b> The two tones sit more than an octave apart, so the relationship holds but is expressed in different registers. <span class="num">16</span> of <span class="num">100</span> pairs carry it somewhere.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PATHWAYS ============ -->
+<section class="beat beat-cream">
+  <div class="shell">
+    <div class="sec-head">
+      <div class="eyebrow">The sixteen pathways</div>
+      <h2>Where the interval lands.</h2>
+      <p>An interval is only half a reading. The other half is which two frequencies made it. Your Core meeting their Love is a different sentence from your Love meeting their Core &mdash; different numbers, different interval, different meaning. Every pairing carries all sixteen at once.</p>
+    </div>
+
+    <div class="matrix-wrap">
+      <div>
+        <div class="mx-hint">Tap any pairing to read it</div>
+        <div class="matrix" id="matrix" role="group" aria-label="The sixteen pathways"></div>
+        <div class="mx-axis">
+          <span><b>Down</b> &mdash; your frequency</span>
+          <span><b>Across</b> &mdash; theirs</span>
+        </div>
+      </div>
+      <div class="cell-read" id="cellRead" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW TO READ ============ -->
+<section class="beat">
+  <div class="shell">
+    <div class="sec-head">
+      <div class="eyebrow">Putting it together</div>
+      <h2>How to read a pairing.</h2>
+      <p>Sixteen pathways produce a lot of information. A reading keeps only three things, in a fixed order, so that two people always get the same sentence from the same numbers.</p>
+    </div>
+
+    <div class="registers">
+      <div class="rgstep">
+        <div class="n">01</div>
+        <h3>The sameness stamp</h3>
+        <p>Do any of the sixteen land on the same note? Unison and octave both count, and they are not ranked against each other. Sung together they make the chorus effect: one voice, thickened. About half of all pairs carry a stamp somewhere.</p>
+      </div>
+      <div class="rgstep">
+        <div class="n">02</div>
+        <h3>The harmony headline</h3>
+        <p>The strongest harmony present, taken straight down the ladder: fifth, fourth, major third, major sixth, minor third, minor sixth. If several pathways carry it, the tightest one leads.</p>
+      </div>
+      <div class="rgstep">
+        <div class="n">03</div>
+        <h3>One named tension</h3>
+        <p>Exactly one, and it is described as a direction rather than a problem. Tension is what makes music move; nothing here is a warning.</p>
+      </div>
+    </div>
+
+    <div class="worked">
+      <div class="tag">What that sounds like</div>
+      <blockquote>&ldquo;Her Vitality makes a Perfect Fifth with your Love &mdash; her aliveness warms how you love, and it is the most stable harmony in music.&rdquo;</blockquote>
+      <p class="src">Pathway plus interval, in one sentence. The tension line follows it, never replaces it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLOSE ============ -->
+<section class="close">
+  <div class="shell">
+    <div class="eyebrow">The one rule</div>
+    <h2>A key, not a verdict.</h2>
+    <p>Nothing here says two people are right or wrong for each other. A fifth is not a score, and a minor second is not a warning. Music has always used tension as direction &mdash; it is the reason a piece moves at all. Read these the same way.</p>
+    <div class="foot">
+      <img src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
+      <span>The Directory &middot; the key to what two sets of numbers make together.</span>
+    </div>
+  </div>
+</section>
+
+<script>
+"use strict";
+/* =========================================================================
+   THE MATCHING SPEC — client port (locked 2026-07-29).
+   Exact port of classify_pathway() in code/matchmaking_scorer.py.
+   Window 25c nearest-wins · golden 3c overlay on folded cents · octave fold.
+   ========================================================================= */
+var WINDOW_CENTS = 25.0, GOLDEN_WINDOW_CENTS = 3.0, GOLDEN_CENTS = 833.09;
+
+var TARGETS = [
+  ["Minor Second",   111.73],
+  ["Minor Third",    315.64],
+  ["Major Third",    386.31],
+  ["Perfect Fourth", 498.04],
+  ["Tritone",        600.00],
+  ["Perfect Fifth",  701.96],
+  ["Minor Sixth",    813.69],
+  ["Major Sixth",    884.36],
+  ["Minor Seventh", 1017.60],
+  ["Major Seventh", 1088.27]
+];
+
+function classify(fa, fb){
+  var cRaw = Math.abs(1200 * Math.log2(fa / fb));
+  var cFold = cRaw % 1200;
+  var wrap = Math.min(cFold, 1200 - cFold);
+  var interval = null, dist = null;
+  var acrossOctave = cRaw > 1200;
+
+  if (wrap <= WINDOW_CENTS){
+    interval = (cRaw >= 1200) ? "Octave" : "Unison";
+    dist = wrap;
+  } else {
+    var bn = null, bd = null;
+    for (var i = 0; i < TARGETS.length; i++){
+      var d = Math.abs(cFold - TARGETS[i][1]);
+      d = Math.min(d, 1200 - d);
+      if (bd === null || d < bd){ bn = TARGETS[i][0]; bd = d; }
+    }
+    if (bd !== null && bd <= WINDOW_CENTS){ interval = bn; dist = bd; }
+  }
+
+  var gd = Math.abs(cFold - GOLDEN_CENTS);
+  gd = Math.min(gd, 1200 - gd);
+
+  return { cents: cRaw, folded: cFold, interval: interval, distance: dist,
+           acrossOctave: acrossOctave, golden: gd <= GOLDEN_WINDOW_CENTS };
+}
+
+/* =========================== THE KEY DATA =============================== */
+var KEY = {
+  "Unison":        {ratio:"1 : 1",  cents:0,       reg:"sameness",
+    fact:"The same note. Two tones close enough that the ear hears one.",
+    mean:"Deep sameness. You work from the same place — recognition more than spark.",
+    rare:"Present in <b>46</b> of <b>100</b> pairs"},
+  "Octave":        {ratio:"2 : 1",  cents:1200,    reg:"sameness",
+    fact:"The same note again, one tone at double the other. Sung together it sounds like a single voice, thickened.",
+    mean:"The same essence at two scales. Often reads as kinship across a difference — age, stage of life, temperament.",
+    rare:"Present in <b>5</b> of <b>100</b> pairs"},
+  "Perfect Fifth": {ratio:"3 : 2",  cents:701.96,  reg:"harmony",
+    fact:"The most stable interval in music, and the backbone of very nearly every chord ever written.",
+    mean:"Steady and load-bearing. The connection that works without anyone working at it.",
+    rare:"Leads the reading in <b>39</b> of <b>100</b> pairs"},
+  "Perfect Fourth":{ratio:"4 : 3",  cents:498.04,  reg:"harmony",
+    fact:"The fifth turned upside down. Grounded, supportive, faintly formal.",
+    mean:"Reliable support. The connection that holds things up.",
+    rare:"Leads the reading in <b>35</b> of <b>100</b> pairs"},
+  "Major Third":   {ratio:"5 : 4",  cents:386.31,  reg:"harmony",
+    fact:"The note that makes a chord bright. It is the difference between major and minor.",
+    mean:"Warmth and lift. The one who lightens the room.",
+    rare:"Leads the reading in <b>18</b> of <b>100</b> pairs"},
+  "Major Sixth":   {ratio:"5 : 3",  cents:884.36,  reg:"harmony",
+    fact:"Wide and open — the reach in a melody that sounds like optimism.",
+    mean:"Momentum together, and a generous reach.",
+    rare:"Leads the reading in <b>2</b> of <b>100</b> pairs"},
+  "Minor Third":   {ratio:"6 : 5",  cents:315.64,  reg:"harmony",
+    fact:"The note that makes a chord deep. The major third’s shadow.",
+    mean:"Soulfulness. Shared inner weather.",
+    rare:"Leads the reading in <b>5</b> of <b>100</b> pairs"},
+  "Minor Sixth":   {ratio:"8 : 5",  cents:813.69,  reg:"harmony",
+    fact:"As wide as the major sixth, and bittersweet where that one is bright.",
+    mean:"Depth with a shadow of longing in it.",
+    rare:"Leads the reading in <b>4</b> of <b>1,000</b> pairs — the rarest headline there is"},
+  "Minor Second":  {ratio:"16 : 15", cents:111.73, reg:"tension",
+    fact:"Two notes almost the same, close enough to grate.",
+    mean:"The near-miss. You are so nearly on the same note that the difference is the thing you feel — and where you sharpen each other.",
+    rare:"The named tension in <b>79</b> of <b>100</b> pairs that carry one"},
+  "Tritone":       {ratio:"√2 : 1", cents:600, reg:"tension",
+    fact:"Music’s famous outsider: exactly half an octave, electric and unresolved.",
+    mean:"Charge. The pull that never quite lands — and some of the best music ever written is built on it.",
+    rare:"The named tension in <b>15</b> of <b>100</b> pairs that carry one"},
+  "Minor Seventh": {ratio:"9 : 5",  cents:1017.60, reg:"tension",
+    fact:"A reaching interval; the note that leans toward home without arriving.",
+    mean:"The stretch. A connection that keeps asking for the next note.",
+    rare:"The sevenths together are the named tension in <b>5</b> of <b>100</b> pairs that carry one"},
+  "Major Seventh": {ratio:"15 : 8", cents:1088.27, reg:"tension",
+    fact:"A half step below the octave — so close to arriving that the ear leans forward.",
+    mean:"Almost-arrival, held open.",
+    rare:"The sevenths together are the named tension in <b>5</b> of <b>100</b> pairs that carry one"}
+};
+
+var ORDER = {
+  sameness: ["Unison","Octave"],
+  harmony:  ["Perfect Fifth","Perfect Fourth","Major Third","Major Sixth","Minor Third","Minor Sixth"],
+  tension:  ["Minor Second","Tritone","Minor Seventh","Major Seventh"]
+};
+
+/* ============================ THE RULERS ================================ */
+var RULER_MARKS = [
+  {c:0,      s:"Unison",  short:"Uni"},
+  {c:111.73, s:"m2"},
+  {c:315.64, s:"m3"},
+  {c:386.31, s:"M3"},
+  {c:498.04, s:"P4"},
+  {c:600.00, s:"Tri"},
+  {c:701.96, s:"P5"},
+  {c:813.69, s:"m6"},
+  {c:884.36, s:"M6"},
+  {c:1017.60,s:"m7"},
+  {c:1088.27,s:"M7"},
+  {c:1200,   s:"Octave", short:"Oct"}
+];
+var PAD = 4; /* percent inset so edge marks are never clipped */
+function pos(cents){ return PAD + (Math.max(0, Math.min(1200, cents)) / 1200) * (100 - 2*PAD); }
+
+function paintRuler(trackId){
+  var track = document.getElementById(trackId);
+  if (!track) return;
+  RULER_MARKS.forEach(function(m){
+    var edge = (m.c === 0 || m.c === 1200);
+    var t = document.createElement("div");
+    t.className = "ruler-tick" + (edge ? " edge" : "");
+    t.style.left = pos(m.c) + "%";
+    track.appendChild(t);
+    if (!edge){
+      var l = document.createElement("div");
+      l.className = "ruler-lab";
+      l.style.left = pos(m.c) + "%";
+      l.textContent = m.s;
+      track.appendChild(l);
+    }
+  });
+}
+
+/* ========================== BUILD THE KEY =============================== */
+function buildRegister(containerId, names){
+  var box = document.getElementById(containerId);
+  if (!box) return;
+  names.forEach(function(name){
+    var k = KEY[name];
+    var el = document.createElement("div");
+    el.className = "entry";
+    el.innerHTML =
+      '<div class="entry-top">' +
+        '<div class="entry-name">' + name + '</div>' +
+        '<div class="entry-ratio">' + k.ratio + '</div>' +
+      '</div>' +
+      '<div class="entry-bar"><div class="entry-dot" style="left:' + pos(k.cents) + '%"></div></div>' +
+      '<div class="entry-body">' +
+        '<p class="entry-fact">' + k.fact + '</p>' +
+        '<p class="entry-mean">' + k.mean + '</p>' +
+      '</div>' +
+      '<p class="entry-rare">' + k.rare + '</p>';
+    box.appendChild(el);
+  });
+}
+
+/* ========================== THE CALCULATOR ============================== */
+var elA = document.getElementById("toneA");
+var elB = document.getElementById("toneB");
+var elName = document.getElementById("readoutName");
+var elFacts = document.getElementById("readoutFacts");
+var elSay = document.getElementById("readoutSay");
+var elMarker = document.getElementById("calcMarker");
+var elBand = document.getElementById("calcBand");
+
+function fmt(n, dp){
+  return n.toLocaleString("en-US", {minimumFractionDigits:dp, maximumFractionDigits:dp});
+}
+
+function sizeInput(el){
+  el.style.width = Math.min(8, Math.max(3, el.value.length)) + "ch";
+}
+
+function render(){
+  sizeInput(elA); sizeInput(elB);
+  var a = parseFloat(elA.value), b = parseFloat(elB.value);
+  if (!(a > 0) || !(b > 0)){
+    elName.textContent = "Two tones, please";
+    elName.className = "name none";
+    elFacts.innerHTML = "";
+    elSay.innerHTML = "";
+    elMarker.style.opacity = "0";
+    elBand.style.opacity = "0";
+    return;
+  }
+
+  var r = classify(a, b);
+  var k = r.interval ? KEY[r.interval] : null;
+
+  elName.textContent = r.interval ? r.interval : "No named interval";
+  elName.className = "name" + (r.interval ? "" : " none");
+
+  var chips = '<span class="chip"><b>' + fmt(r.cents, 1) + '</b> cents apart</span>';
+  if (k) chips += '<span class="chip">ratio <b>' + k.ratio + '</b></span>';
+  if (r.distance !== null) chips += '<span class="chip">off by <b>' + fmt(r.distance, 1) + '</b> cents</span>';
+  if (r.acrossOctave) chips += '<span class="chip oct">Across an octave</span>';
+  if (r.golden) chips += '<span class="chip gold">Golden</span>';
+  elFacts.innerHTML = chips;
+
+  if (k){
+    elSay.innerHTML = '<span class="fact">' + k.fact + '</span>' + k.mean;
+  } else {
+    elSay.innerHTML = '<span class="fact">These two sit between the named places — more than ' +
+      '25 cents from every one of them.</span>Most pairings carry several named intervals across their ' +
+      'sixteen pathways, so an unnamed one is simply a quiet pathway, not a bad one.';
+  }
+  if (r.golden){
+    elSay.innerHTML += '<br><br><span class="fact" style="color:#ffd98a">Golden: these two also sit on ' +
+      'nature’s own proportion, the ratio that never resolves. It is the rarest thing on this page.</span>';
+  }
+
+  elMarker.style.opacity = "1";
+  elMarker.style.left = pos(r.folded) + "%";
+  var half = (WINDOW_CENTS / 1200) * (100 - 2*PAD);
+  elBand.style.opacity = "1";
+  elBand.style.left = (pos(r.folded) - half) + "%";
+  elBand.style.width = (half * 2) + "%";
+}
+
+/* =========================== THE PATHWAYS =============================== */
+var DOMAINS = [
+  {key:"core",      label:"Core",      color:"var(--core)"},
+  {key:"abundance", label:"Abundance", color:"var(--abundance)"},
+  {key:"vitality",  label:"Vitality",  color:"var(--vitality)"},
+  {key:"love",      label:"Love",      color:"var(--love)"}
+];
+
+var CELLS = {
+  "core|core":{title:"The Root Meeting",
+    a:"Your essence recognises and steadies theirs.",
+    b:"Their essence confirms and grounds yours.",
+    t:"Recognition at the most fundamental level — two selves that register each other."},
+  "core|abundance":{title:"Your Core, their Abundance",
+    a:"Who you are inspires how they create and provide.",
+    b:"Their flow gives your essence somewhere to build.",
+    t:"Selfhood and prosperity feeding each other."},
+  "core|vitality":{title:"Your Core, their Vitality",
+    a:"Who you are wakes up their whole system.",
+    b:"Their energy brings your true self more fully alive.",
+    t:"Essence and energy in a live circuit."},
+  "core|love":{title:"Your Core, their Love",
+    a:"Who you are opens their heart.",
+    b:"Their love makes room for you to be fully yourself.",
+    t:"Authenticity and love strengthening each other."},
+  "abundance|core":{title:"Your Abundance, their Core",
+    a:"What you build gives their essence ground to stand on.",
+    b:"Who they are sparks your creating and providing.",
+    t:"True self and material life aligned."},
+  "abundance|abundance":{title:"The Build",
+    a:"Your flow amplifies their making.",
+    b:"Their prosperity widens your field.",
+    t:"Co-creation — two currents joining downstream."},
+  "abundance|vitality":{title:"Your Abundance, their Vitality",
+    a:"Your prosperity charges their body and drive.",
+    b:"Their energy strengthens what you are building.",
+    t:"Fuel and fire."},
+  "abundance|love":{title:"Your Abundance, their Love",
+    a:"What you build makes room for their heart.",
+    b:"Their love enriches everything you make.",
+    t:"Generosity with an engine."},
+  "vitality|core":{title:"Your Vitality, their Core",
+    a:"Your energy steadies and refreshes who they are.",
+    b:"Their essence balances your system.",
+    t:"Aliveness and authenticity trading strength."},
+  "vitality|abundance":{title:"Your Vitality, their Abundance",
+    a:"Your fire activates their flow.",
+    b:"Their abundance feeds your body and drive.",
+    t:"Energy and prosperity in a rising spiral."},
+  "vitality|vitality":{title:"The Current",
+    a:"Your life force amplifies theirs.",
+    b:"Their vitality stabilises yours.",
+    t:"Two currents, one stronger river."},
+  "vitality|love":{title:"Your Vitality, their Love",
+    a:"Your aliveness charges how they feel and express.",
+    b:"Their heart smooths and steadies your energy.",
+    t:"Life force and love in the same rhythm."},
+  "love|core":{title:"Your Love, their Core",
+    a:"Your heart sees and honours exactly who they are.",
+    b:"Who they are deepens how you give and receive.",
+    t:"Heart and essence in a nurturing loop."},
+  "love|abundance":{title:"Your Love, their Abundance",
+    a:"Your heart enlarges what they are able to receive.",
+    b:"What they build supports how you love.",
+    t:"Love and plenty enriching each other."},
+  "love|vitality":{title:"Your Love, their Vitality",
+    a:"Your heart tends their strength and well-being.",
+    b:"Their energy gives your love stamina.",
+    t:"Care with vitality behind it."},
+  "love|love":{title:"The Sanctuary",
+    a:"Your heart opens theirs further.",
+    b:"Their feeling deepens yours.",
+    t:"Mutual heart resonance — emotional safety as a place."}
+};
+
+function buildMatrix(){
+  var mx = document.getElementById("matrix");
+  if (!mx) return;
+  var corner = document.createElement("div");
+  corner.className = "mx-corner";
+  mx.appendChild(corner);
+
+  DOMAINS.forEach(function(d){
+    var c = document.createElement("div");
+    c.className = "mx-col";
+    c.textContent = d.label;
+    mx.appendChild(c);
+  });
+
+  DOMAINS.forEach(function(rowD){
+    var rl = document.createElement("div");
+    rl.className = "mx-row";
+    rl.textContent = rowD.label;
+    mx.appendChild(rl);
+
+    DOMAINS.forEach(function(colD){
+      var key = rowD.key + "|" + colD.key;
+      var btn = document.createElement("button");
+      btn.className = "mx-cell";
+      btn.type = "button";
+      btn.setAttribute("aria-pressed", key === "core|core" ? "true" : "false");
+      btn.setAttribute("aria-label", "Your " + rowD.label + " with their " + colD.label);
+      btn.dataset.key = key;
+      btn.dataset.row = rowD.label;
+      btn.dataset.col = colD.label;
+      btn.innerHTML = '<span class="pair">' +
+        '<span class="pip" style="background:' + rowD.color + '"></span>' +
+        '<span class="pip" style="background:' + colD.color + '"></span></span>';
+      btn.addEventListener("click", function(){ selectCell(key); });
+      mx.appendChild(btn);
+    });
+  });
+}
+
+function selectCell(key){
+  var cells = document.querySelectorAll(".mx-cell");
+  var row = "", col = "";
+  for (var i = 0; i < cells.length; i++){
+    var on = cells[i].dataset.key === key;
+    cells[i].setAttribute("aria-pressed", on ? "true" : "false");
+    if (on){ row = cells[i].dataset.row; col = cells[i].dataset.col; }
+  }
+  var c = CELLS[key];
+  var box = document.getElementById("cellRead");
+  box.innerHTML =
+    '<div class="who">Your ' + row + ' &nbsp;&middot;&nbsp; their ' + col + '</div>' +
+    '<h3>' + c.title + '</h3>' +
+    '<div class="tell"><div class="lab">For you</div><p>' + c.a + '</p></div>' +
+    '<div class="tell"><div class="lab">For them</div><p>' + c.b + '</p></div>' +
+    '<div class="tell together"><div class="lab">Together</div><p>' + c.t + '</p></div>';
+}
+
+/* Shareable state: ?a=406&b=609 prefills the calculator. */
+function applyQuery(){
+  var q = new URLSearchParams(window.location.search);
+  var a = parseFloat(q.get("a")), b = parseFloat(q.get("b"));
+  if (a > 0) elA.value = a;
+  if (b > 0) elB.value = b;
+}
+
+/* ============================== INIT ==================================== */
+applyQuery();
+paintRuler("teachTrack");
+paintRuler("calcTrack");
+buildRegister("regSameness", ORDER.sameness);
+buildRegister("regHarmony",  ORDER.harmony);
+buildRegister("regTension",  ORDER.tension);
+buildMatrix();
+selectCell("core|core");
+elA.addEventListener("input", render);
+elB.addEventListener("input", render);
+render();
+
+/* test hook for the differential check against matchmaking_scorer.py */
+window.__zclassify = classify;
+</script>
+</body>
+</html>
