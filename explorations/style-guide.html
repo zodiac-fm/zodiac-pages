@@ -129,6 +129,15 @@ details.fold[open]>summary{border-bottom:0}
 @media (max-width:640px){details.fold>summary .su{display:none}}
 .exlabel{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin:18px 0 0}
 .m-h1.big{font-size:40px;line-height:1.04}
+.mock.xl{max-width:100%}
+.mock.xl .pad{padding:34px 30px}
+.m-h1.hero{font-size:clamp(36px,4.6vw,54px);line-height:1.05}
+.m-sub.hero{font-size:18px;line-height:1.55;max-width:46ch}
+.m-h3{font-size:17px;font-weight:700;margin-top:20px}
+.m-cap{font-size:12px;color:var(--mut);margin-top:8px}
+.herogrid{display:grid;grid-template-columns:1.5fr 1fr;gap:28px;align-items:center}
+.herogrid img{width:100%;max-width:240px;justify-self:center;border-radius:20px;border:1px solid rgba(26,22,32,.1);box-shadow:0 12px 30px rgba(26,22,32,.12)}
+@media (max-width:640px){.herogrid{grid-template-columns:1fr}.herogrid img{max-width:200px}}
 .mock{margin:16px auto 4px;background:var(--bleach);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 10px 26px rgba(26,22,32,.08);max-width:392px;position:relative}
 .mock .dtag{position:absolute;top:10px;right:10px;font-size:8.5px;font-weight:700;letter-spacing:.09em;color:var(--mut);background:var(--mist);border-radius:6px;padding:3px 7px;z-index:2}
 .mock .pad{padding:24px 20px}
@@ -338,6 +347,10 @@ footer{margin-top:96px;border-top:1px solid var(--line);padding-top:24px;font-si
     <div class="h2x">The sound of you, in four frequencies.</div>
     <div class="rolelab">Body · Switzer 400 · 15 to 16px · 1.6 to 1.7 leading · 50 to 75ch measure</div>
     <p class="bodyx">Personalized audio built from your birth chart: four frequencies embedded in real music. You already have your own signal. Zodiac turns it up.</p>
+    <div class="rolelab">H3 · Switzer 700 · 17px · section sub-heads, card headlines — the serif never goes this small</div>
+    <div style="font-size:17px;font-weight:700">Water one seed</div>
+    <div class="rolelab">Caption · Switzer 400 · 12.5px muted · under images, charts, fine print</div>
+    <div style="font-size:12.5px;color:var(--mut)">One chart, and it explains itself. Captions never carry a rule the member must know.</div>
     <div class="rolelab">Label · Switzer 600 · small caps tracking for eyebrows and tags</div>
     <div class="labx">Reset · Calm · De-stress · Unwind · Ground</div>
     <div class="rolelab">Numbers · Switzer, always, at every size</div>
@@ -399,8 +412,9 @@ footer{margin-top:96px;border-top:1px solid var(--line);padding-top:24px;font-si
       <div class="frame">
         <div class="b eyebrow">Eyebrow</div>
         <div class="b h1">H1 · The one promise</div>
-        <div class="b sub">Support line, subordinate</div>
-        <div class="b cta">One CTA</div>
+        <div class="b sub">Subhead, clearly smaller</div>
+        <div class="b img">Hero visual · real product</div>
+        <div class="b cta">One CTA · after the visual, never under the H1</div>
         <div class="b quiet">Endorser / trust row</div>
         <div class="gaprow"></div>
         <div class="b h2">H2 · Mechanism, shown</div>
@@ -415,40 +429,49 @@ footer{margin-top:96px;border-top:1px solid var(--line);padding-top:24px;font-si
       </div>
       <ol>
         <li><b>The H1 is the loudest thing on the page</b>, once. Every later H2 is a beat in one argument; read alone they retell it.</li>
-        <li><b>The CTA is the only purple structure</b>, repeated verbatim at natural close points, never redesigned per section.</li>
+        <li><b>The CTA never sits directly under the headline.</b> The hero earns it first: H1 → subhead → the mechanism or product shown → then the one purple action. It repeats verbatim at natural close points, never redesigned per section.</li>
         <li><b>Proof interrupts the scan</b>: a stat block or a quote with a face must land mid-scroll without reading body copy.</li>
         <li>Sections alternate composition (image, stats, quotes); never three in a row with the same field.</li>
       </ol>
       <details class="demo"><summary><span class="chev">▶</span> Examples</summary>
-        <div class="exlabel">Example · The top fold: the headline owns it</div>
-        <div class="mock"><span class="dtag">SYSTEM DEMO</span>
+        <div class="exlabel">Example · The top fold, real scale: H1 vs subhead vs everything else</div>
+        <div class="mock xl"><span class="dtag">SYSTEM DEMO</span>
           <div class="pad">
             <img class="m-logo" src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
-            <div class="m-eyebrow">Personalized audio · from your birth chart</div>
-            <div class="m-h1 big">The Sound<br>of You.</div>
-            <p class="m-sub" style="font-size:16px">Your chart, played, not read. Four frequencies, embedded in real music.</p>
-            <span class="m-cta">Reveal your frequencies</span>
-            <div class="m-quiet">2 minutes · nothing to download yet</div>
-          </div>
-        </div>
-        <p class="cap" style="margin-top:10px">Read the ladder top to bottom: the eyebrow whispers, the H1 owns the fold at full display size, the support line steps down, the one purple action closes it, reassurance is quietest. Five voices, five clearly different volumes.</p>
-        <div class="exlabel">Example · The full-page flow</div>
-        <div class="mock"><span class="dtag">SYSTEM DEMO</span>
-          <div class="pad">
-            <img class="m-logo" src="../inapp/app-assets/logo-black.svg" alt="zodiac.fm">
-            <div class="m-eyebrow">Personalized audio</div>
-            <div class="m-h1">Your chart, played, not read.</div>
-            <p class="m-sub">You already have your own signal. Zodiac turns it up.</p>
+            <div class="herogrid" style="margin-top:22px">
+              <div>
+                <div class="m-eyebrow" style="margin-top:0">Personalized audio · from your birth chart</div>
+                <div class="m-h1 hero">The Sound of You.</div>
+                <p class="m-sub hero">Your chart, played, not read. Four frequencies, embedded in real music you'll actually want on repeat.</p>
+              </div>
+              <img src="shots/app-d/clean/d-playing-core-375.png" alt="the app, playing" loading="lazy">
+            </div>
             <span class="m-cta">Reveal your frequencies</span>
             <div class="m-quiet">2 minutes · your birth chart does the work</div>
-            <div class="m-h2">The mechanism, shown.</div>
-            <p class="m-body">Four frequencies from your birth chart, embedded in real music. The app is the proof: show the screen, don't describe it.</p>
-            <img class="m-shot" src="shots/app-d/clean/d-core-375.png" alt="the app, Core screen" loading="lazy">
-            <div class="m-stat"><div class="big">98.6% <small>would recommend</small></div><div class="big" style="font-size:18px;margin-top:2px">84% <small>call it life-changing</small></div><div class="cav">Beta cohort, product as designed.</div></div>
-            <div class="m-quote"><img src="../landers/reveal-assets/testimonial-headshots-transparent-white/rhonda-britten.png" alt="member portrait"><div><div class="qt">The member's words sit here, with their face and their full credential. The credential is part of the proof.</div><div class="who"><b>Rhonda Britten</b><span>Author of "Fearless Living," Emmy Award-Winner, Founder, Fearless Living Institute</span></div></div></div>
-            <span class="m-cta">Reveal your frequencies</span>
           </div>
         </div>
+        <p class="cap" style="margin-top:10px">The volumes, unmistakable at real scale: eyebrow whispers, the H1 owns the fold in display serif, the subhead is a clear step down in Switzer, the real product is the hero image, and only then the one purple action. The CTA never sits directly under the headline; the hero earns it first.</p>
+
+        <div class="exlabel">Example · How it flows down the page: H2 → H3 → body → caption → proof → close</div>
+        <div class="mock xl"><span class="dtag">SYSTEM DEMO</span>
+          <div class="pad">
+            <div class="m-h2" style="margin-top:0">Listen for just 9 minutes a day.</div>
+            <p class="m-body" style="font-size:14.5px;max-width:56ch">Nine minutes is one song. You press play, the frequency is already in the music, and the day carries it from there. No practice to learn, no streak to keep.</p>
+            <div class="m-h3">Water one seed</div>
+            <p class="m-body" style="max-width:56ch">Pick the one thing you're tuning first. One frequency, one listen, one seed; the rest of your chart waits its turn.</p>
+            <div class="m-h3">Let it repeat</div>
+            <p class="m-body" style="max-width:56ch">Repetition is the mechanism doing its quiet work. The song you return to is the one that's working.</p>
+            <div class="m-cap">A caption sits under an image or chart, in muted Switzer. It never carries a rule the reader must know.</div>
+            <div class="m-h2">People who pressed play.</div>
+            <div class="m-stat" style="max-width:420px"><div class="big">98.6% <small>would recommend</small></div><div class="big" style="font-size:18px;margin-top:2px">84% <small>call it life-changing</small></div><div class="cav">Beta cohort, product as designed.</div></div>
+            <div class="m-quote" style="max-width:520px"><img src="../landers/reveal-assets/testimonial-headshots-transparent-white/rhonda-britten.png" alt="member portrait"><div><div class="qt">The member's words sit here, with their face and their full credential. The credential is part of the proof.</div><div class="who"><b>Rhonda Britten</b><span>Author of "Fearless Living," Emmy Award-Winner, Founder, Fearless Living Institute</span></div></div></div>
+            <div class="m-h2">Let's get started.</div>
+            <p class="m-body" style="max-width:56ch">The close restates the promise in one calm line, then hands over the same action the hero opened with.</p>
+            <span class="m-cta">Reveal your frequencies</span>
+            <div class="m-quiet">You're 5 minutes away from your first listen</div>
+          </div>
+        </div>
+        <p class="cap" style="margin-top:10px">The full cascade on one surface: H2s carry the argument (real H2s from the shipped McEwen lander), H3s in Switzer break a section into steps, body stays at reading size on a capped measure, captions whisper, proof interrupts with a stat and a face, and the close repeats the hero's CTA verbatim.</p>
       </details>
       </div>
     </details>
