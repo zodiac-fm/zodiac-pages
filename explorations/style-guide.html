@@ -89,6 +89,32 @@ h2{font-family:var(--serif);font-weight:600;font-size:clamp(27px,3.6vw,36px);let
 .dd .why{font-size:12.5px;color:var(--mut);margin-top:8px;line-height:1.55}
 .dd.bad .ex i{font-style:italic}
 
+/* hierarchy skeletons */
+.skels{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:20px;margin-top:22px}
+@media (max-width:470px){.skels{grid-template-columns:1fr}}
+.skel{background:var(--bleach);border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:0 4px 18px rgba(26,22,32,.04)}
+.skel h3{font-family:var(--sans);font-size:15px;font-weight:700}
+.skel .use{font-size:12px;color:var(--mut);margin-top:2px}
+.frame{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:16px 14px;display:flex;flex-direction:column;gap:7px;margin:14px 0}
+.b{border-radius:6px;display:flex;align-items:center;padding:0 9px;font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;flex:0 0 auto}
+.b.eyebrow{height:12px;width:38%;background:var(--purple-soft);color:var(--purple-deep)}
+.b.h1{height:38px;background:var(--ink);color:#fff;font-size:10px;border-radius:8px}
+.b.sub{height:14px;width:74%;background:#DDD6C9;color:#6E6876}
+.b.cta{height:28px;width:56%;background:var(--purple);color:#fff}
+.b.quiet{height:11px;background:var(--mist);color:var(--mut)}
+.b.h2{height:20px;width:64%;background:#3c3743;color:#fff}
+.b.body{height:7px;background:#E7E0D2;padding:0}
+.b.body.w1{width:96%}.b.body.w2{width:88%}.b.body.w3{width:56%}
+.b.proof{height:24px;background:var(--purple-tint);color:var(--purple-deep)}
+.b.img{height:44px;background:linear-gradient(135deg,var(--mist),#E2DACB);color:#6E6876;justify-content:center}
+.b.opt{height:22px;background:var(--bleach);border:1px solid #D8D2C6;color:#48434f}
+.gaprow{height:8px;flex:0 0 auto}
+.skel ol{margin:6px 0 0 17px;font-size:12.5px;line-height:1.7;color:#55505c}
+.skel ol b{color:var(--ink);font-weight:600}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:11.5px;color:var(--mut)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:14px;height:10px;border-radius:3px;display:inline-block}
+
 /* screens gallery */
 .phones{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:26px;margin-top:22px}
 .ph{text-align:left}
@@ -275,6 +301,123 @@ footer{margin-top:96px;border-top:1px solid var(--line);padding-top:24px;font-si
     <div class="card"><h3>On a screen of cards</h3><p>One headline layer: every card's headline is identical in size, weight, and ink. Inside a card nothing beats the headline on both size and color at once. Color lives in the device layer (washes, strips, orbs), never in headline type. One accent moment per zone. A card earns separation with one signature element the eye knows before reading, not with borders.</p></div>
     <div class="card"><h3>Elements teach, prose doesn't</h3><p>A rule the member must know is a label on the element that embodies it, never a gray sentence floating in the flow. If a card needs a paragraph to explain itself, the design failed. Nothing implies an interaction it doesn't have: no decorative chevrons, no button-shaped statics.</p></div>
     <div class="card"><h3>Row anatomy</h3><p>A list row is two columns: the text column and the control rail, and text must be structurally unable to enter the rail. Pin the leading on every single-line element. Within-group gaps at most half of between-group gaps. Captions sit at 60 to 70% of their title size.</p></div>
+  </div>
+</section>
+
+<section id="applied">
+  <span class="kick">Hierarchy, applied</span>
+  <h2>The same ladder, four surfaces.</h2>
+  <p class="note">Each skeleton shows the <b>loudness ranks</b> for a surface type, not a layout to trace: block weight = how hard that element may speak. The constants never move: one ink headline layer, one purple action, proof in the device layer, and quiet everything else. Model the move, never the pixels.</p>
+
+  <div class="legend">
+    <span><i style="background:var(--ink)"></i> headline layer (ink)</span>
+    <span><i style="background:var(--purple)"></i> the ONE action</span>
+    <span><i style="background:var(--purple-tint);border:1px solid var(--purple-soft)"></i> proof / color device</span>
+    <span><i style="background:#E7E0D2"></i> body + support</span>
+  </div>
+
+  <div class="skels">
+    <div class="skel">
+      <h3>Landing / sales page</h3>
+      <div class="use">Cold traffic · long scroll · one argument</div>
+      <div class="frame">
+        <div class="b eyebrow">Eyebrow</div>
+        <div class="b h1">H1 · The one promise</div>
+        <div class="b sub">Support line, subordinate</div>
+        <div class="b cta">One CTA</div>
+        <div class="b quiet">Endorser / trust row</div>
+        <div class="gaprow"></div>
+        <div class="b h2">H2 · Mechanism, shown</div>
+        <div class="b img">Real product / real screen</div>
+        <div class="b body w1"></div><div class="b body w2"></div>
+        <div class="gaprow"></div>
+        <div class="b h2">H2 · Next beat</div>
+        <div class="b proof">Stat block · quotes with faces</div>
+        <div class="b body w2"></div><div class="b body w3"></div>
+        <div class="gaprow"></div>
+        <div class="b cta">Same CTA, again</div>
+      </div>
+      <ol>
+        <li><b>The H1 is the loudest thing on the page</b>, once. Every later H2 is a beat in one argument; read alone they retell it.</li>
+        <li><b>The CTA is the only purple structure</b>, repeated verbatim at natural close points, never redesigned per section.</li>
+        <li><b>Proof interrupts the scan</b>: a stat block or a quote with a face must land mid-scroll without reading body copy.</li>
+        <li>Sections alternate composition (image, stats, quotes); never three in a row with the same field.</li>
+      </ol>
+    </div>
+
+    <div class="skel">
+      <h3>Results / reveal page</h3>
+      <div class="use">The paid moment · their data · one chart</div>
+      <div class="frame">
+        <div class="b eyebrow">Provenance line</div>
+        <div class="b h1">The read · their number, Switzer</div>
+        <div class="b sub">What it means, one sentence</div>
+        <div class="gaprow"></div>
+        <div class="b img">ONE chart grammar, self-explaining</div>
+        <div class="b quiet">Raw planetary positions, quiet</div>
+        <div class="gaprow"></div>
+        <div class="b h2">H2 · Hear it</div>
+        <div class="b proof">The player · first-listen moment</div>
+        <div class="gaprow"></div>
+        <div class="b cta">One next step</div>
+      </div>
+      <ol>
+        <li><b>Their result outranks everything</b>: the number (Switzer, always) plus one plain-language sentence before any chart.</li>
+        <li><b>One chart grammar per screen</b>, and it must explain itself on sight; a legend that needs studying failed.</li>
+        <li><b>Raw planetary direction</b>: positions and numbers, never astrology names or a zodiac wheel.</li>
+        <li>The listen moment is the emotional peak; the close rides behind it, one action only.</li>
+      </ol>
+    </div>
+
+    <div class="skel">
+      <h3>Quiz screen</h3>
+      <div class="use">One screen = one job · no scroll</div>
+      <div class="frame">
+        <div class="b quiet" style="width:30%">Progress</div>
+        <div class="gaprow"></div>
+        <div class="b h1">The question, loudest</div>
+        <div class="b sub">Why we ask, one quiet line</div>
+        <div class="gaprow"></div>
+        <div class="b opt">Answer</div>
+        <div class="b opt">Answer</div>
+        <div class="b opt">Answer</div>
+        <div class="gaprow"></div>
+        <div class="b proof">Give / tease beat between asks</div>
+        <div class="b quiet" style="width:56%">Reassurance, quietest</div>
+      </div>
+      <ol>
+        <li><b>One focal point</b>: the question owns the screen; nothing competes, nothing scrolls.</li>
+        <li><b>The answers are the only interactive zone</b>; nothing else may look tappable.</li>
+        <li><b>Ask → give → tease</b>: between asks, a give or proof beat earns the next question; it never outranks the question itself.</li>
+        <li>Reassurance (privacy, "no wrong answers") is present and always the quietest voice.</li>
+      </ol>
+    </div>
+
+    <div class="skel">
+      <h3>Long content / blog / advertorial</h3>
+      <div class="use">Editorial · the H2s are the spine</div>
+      <div class="frame">
+        <div class="b eyebrow">Kicker</div>
+        <div class="b h1">H1 · The article's promise</div>
+        <div class="b sub">Standfirst: the payoff in two lines</div>
+        <div class="b quiet" style="width:44%">Byline · date, quiet</div>
+        <div class="gaprow"></div>
+        <div class="b h2">H2 · Chapter one</div>
+        <div class="b body w1"></div><div class="b body w2"></div><div class="b body w3"></div>
+        <div class="b proof">Pull quote or real image, earns its place</div>
+        <div class="gaprow"></div>
+        <div class="b h2">H2 · Chapter two</div>
+        <div class="b body w1"></div><div class="b body w2"></div>
+        <div class="gaprow"></div>
+        <div class="b cta">One CTA at the natural end</div>
+      </div>
+      <ol>
+        <li><b>The H2 spine carries a skimmer</b> to the payoff: chapters read alone as the whole argument, exactly like this page.</li>
+        <li><b>Measure capped at 50 to 75 characters</b>, generous leading; the serif appears at display size only.</li>
+        <li><b>Each chapter earns one interruption</b> (pull quote, real image, stat); decoration that proves nothing gets cut.</li>
+        <li>One CTA, placed where the argument concludes; never popups, never mid-sentence interruptions.</li>
+      </ol>
+    </div>
   </div>
 </section>
 
