@@ -135,12 +135,16 @@ button{font:inherit;color:inherit}
 .calc-ruler .ruler-tick{background:rgba(233,226,244,.34)}
 .calc-ruler .ruler-tick.edge{background:rgba(233,226,244,.7)}
 .calc-ruler .ruler-lab{color:#7e7590}
-.marker{position:absolute;top:-16px;width:2px;height:32px;background:var(--soft);
-  transform:translateX(-1px);transition:left .42s cubic-bezier(.22,.9,.3,1)}
+/* One probe carries the marker and the fixed-width window band. Only the probe
+   moves, and only via transform, so the readout never triggers layout. */
+.probe{position:absolute;top:0;left:0;width:100%;height:0;
+  transition:transform .42s cubic-bezier(.22,.9,.3,1);will-change:transform}
+.marker{position:absolute;top:-16px;width:2px;height:32px;background:var(--soft);margin-left:-1px}
 .marker::after{content:"";position:absolute;left:50%;top:-6px;width:9px;height:9px;border-radius:50%;
   background:var(--soft);transform:translateX(-50%)}
-.window-band{position:absolute;top:-6px;height:13px;background:rgba(210,200,255,.17);
-  border-radius:2px;transition:left .42s cubic-bezier(.22,.9,.3,1),width .42s}
+/* the +/-25 cent window is a constant share of the scale, so its width is fixed */
+.window-band{position:absolute;top:-6px;height:13px;width:3.833%;margin-left:-1.9165%;
+  background:rgba(210,200,255,.17);border-radius:2px}
 
 /* ---------- the key (field guide) ---------- */
 .register{margin-top:56px}
@@ -375,8 +379,10 @@ button{font:inherit;color:inherit}
 
     <div class="ruler calc-ruler" id="calcRuler">
       <div class="ruler-track" id="calcTrack">
-        <div class="window-band" id="calcBand"></div>
-        <div class="marker" id="calcMarker"></div>
+        <div class="probe" id="calcProbe">
+          <div class="window-band"></div>
+          <div class="marker"></div>
+        </div>
       </div>
       <div class="ruler-ends"><span>Same note</span><span>One octave apart</span></div>
     </div>
@@ -666,8 +672,7 @@ var elB = document.getElementById("toneB");
 var elName = document.getElementById("readoutName");
 var elFacts = document.getElementById("readoutFacts");
 var elSay = document.getElementById("readoutSay");
-var elMarker = document.getElementById("calcMarker");
-var elBand = document.getElementById("calcBand");
+var elProbe = document.getElementById("calcProbe");
 
 function fmt(n, dp){
   return n.toLocaleString("en-US", {minimumFractionDigits:dp, maximumFractionDigits:dp});
@@ -685,8 +690,7 @@ function render(){
     elName.className = "name none";
     elFacts.innerHTML = "";
     elSay.innerHTML = "";
-    elMarker.style.opacity = "0";
-    elBand.style.opacity = "0";
+    elProbe.style.opacity = "0";
     return;
   }
 
@@ -715,12 +719,8 @@ function render(){
       'nature’s own proportion, the ratio that never resolves. It is the rarest thing on this page.</span>';
   }
 
-  elMarker.style.opacity = "1";
-  elMarker.style.left = pos(r.folded) + "%";
-  var half = (WINDOW_CENTS / 1200) * (100 - 2*PAD);
-  elBand.style.opacity = "1";
-  elBand.style.left = (pos(r.folded) - half) + "%";
-  elBand.style.width = (half * 2) + "%";
+  elProbe.style.opacity = "1";
+  elProbe.style.transform = "translateX(" + pos(r.folded) + "%)";
 }
 
 /* =========================== THE PATHWAYS =============================== */
