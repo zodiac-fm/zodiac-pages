@@ -395,6 +395,9 @@
       }else if(reviewState==='profile10'){
         document.getElementById('progressFrame').src='progress-C-profile-10.html?v=12';
         document.getElementById('progressFrame').title='My Zodiac';
+      }else if(reviewState==='profile11'){
+        document.getElementById('progressFrame').src='progress-C-profile-11.html?v=13';
+        document.getElementById('progressFrame').title='My Zodiac';
       }
     })();
   </script>
@@ -790,7 +793,7 @@ function buildFavs(){const c=document.getElementById('favRows');c.innerHTML='';
   c.appendChild(r);});
  markAlive();}   /* re-mark on rebuild so returning to the tab restores the playing highlight */
 const navItems=document.querySelectorAll('#nav div');
-if(['profile1','profile2','profile3','profile4','profile5','profile6','profile7','profile8','profile9','profile10'].includes(new URLSearchParams(location.search).get('state'))){
+if(['profile1','profile2','profile3','profile4','profile5','profile6','profile7','profile8','profile9','profile10','profile11'].includes(new URLSearchParams(location.search).get('state'))){
  navItems[1].innerHTML='<span class="ic">&#9673;</span>My Zodiac';
 }
 function lockProgressTop(){
