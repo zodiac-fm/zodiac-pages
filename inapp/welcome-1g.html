@@ -10,7 +10,6 @@
 <style>
 :root{--cream:#F6F1E8;--paper:#fff;--ink:#1a1620;--body:#2b2533;--mut:#756e79;--rule:#eadfce;--violet:#6521c9;--violet-deep:#38007a;--violet-soft:#efecff;--serif:"Cormorant Garamond",Georgia,serif;--sans:"Switzer",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
 html,body{margin:0;min-height:100%;overflow-x:clip;background:var(--cream);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
 body{position:relative;isolation:isolate}
 body:before,body:after{content:"";position:fixed;z-index:0;pointer-events:none;border-radius:50%;filter:blur(74px)}
@@ -45,7 +44,7 @@ a:focus-visible{outline:2px solid var(--violet);outline-offset:3px}
 
 /* ---------- feed ---------- */
 .feed{padding:8px 24px 46px}
-.lede{margin:34px 0 0;max-width:340px;font-size:20px;font-weight:500;line-height:1.42;text-align:left;color:var(--ink)}
+.lede{margin:34px 0 0;font-size:20px;font-weight:500;line-height:1.42;text-align:left;color:var(--ink)}
 .feature{margin:72px 0 0}
 .tick{width:34px;height:3px;margin:0 0 14px;border-radius:2px;background:linear-gradient(90deg,var(--violet),#9a55d7)}
 .feature h2{margin:0;font-family:var(--serif);font-size:36px;font-weight:600;letter-spacing:-.01em;line-height:1.06}
@@ -69,8 +68,8 @@ a:focus-visible{outline:2px solid var(--violet);outline-offset:3px}
 .expect .tm{text-align:left}
 
 /* ---------- graduation ---------- */
-.grad{margin:76px 0 0;text-align:center}
-.grad .freq-label{margin:0}
+.grad{margin:76px 0 0}
+.grad .freq-label{margin:0 auto;max-width:340px;text-align:left}
 .map{margin:22px auto 0;max-width:340px;text-align:left}
 .map .row{padding:15px 2px 17px;border-top:1px solid #ddd3c4}
 .map .row:last-of-type{border-bottom:1px solid #ddd3c4}
@@ -116,7 +115,7 @@ a:focus-visible{outline:2px solid var(--violet);outline-offset:3px}
   <h2 class="howhead">How to Use Zodiac.fm</h2>
 </section>
 
-<section class="feed" id="how">
+<section class="feed">
 
   <p class="lede">The results of our 12 month beta test reveal that this is all you have to do in order to get the results you see in the testimonials.</p>
 
@@ -144,7 +143,7 @@ a:focus-visible{outline:2px solid var(--violet);outline-offset:3px}
       <p>How you process each Signal</p>
       <p>Go to the My Zodiac Tab and discover yours</p>
     </div>
-    <div class="shot"><img src="app-assets-welcome/bands-key.png" alt="The Your Bands key: the four ranges and how each one processes" width="750" height="748"></div>
+    <div class="shot"><img src="app-assets-welcome/bands-key.png" alt="The Your Bands key: the four ranges and how each one processes" width="750" height="804"></div>
     <div class="tm">
       <img src="app-assets-welcome/barbara-ditlow.png" alt="Barbara Ditlow">
       <blockquote>&ldquo;Zodiac core frequencies translate this unique imprint into sound, bypassing the mind and speaking directly to the body.&rdquo;
