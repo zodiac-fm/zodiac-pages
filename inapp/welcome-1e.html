@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Welcome — Zodiac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F6F1E8;--paper:#fff;--ink:#1a1620;--mut:#756e79;--rule:#eadfce;--violet:#6521c9;--violet-deep:#38007a;--violet-soft:#efecff;--serif:"Cormorant Garamond",Georgia,serif;--sans:"Switzer",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0;min-height:100%;overflow-x:clip;background:var(--cream);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body{position:relative;isolation:isolate}
+body:before,body:after{content:"";position:fixed;z-index:0;pointer-events:none;border-radius:50%;filter:blur(74px)}
+body:before{width:520px;height:520px;left:-300px;top:-280px;background:#6521c9;opacity:.22}
+body:after{width:500px;height:500px;right:-300px;top:310px;background:#9a55d7;opacity:.19}
+html:before{content:"";position:fixed;z-index:0;pointer-events:none;border-radius:50%;filter:blur(74px);width:500px;height:500px;left:-260px;bottom:-240px;background:#8b68e5;opacity:.15}
+a{-webkit-tap-highlight-color:transparent}
+a:focus-visible{outline:2px solid var(--violet);outline-offset:3px}
+.letter{position:absolute;z-index:5;top:14px;left:14px;padding:2px 9px;border:1px solid var(--rule);border-radius:9px;background:#fff;color:#6a6470;font-size:14px;font-weight:700;letter-spacing:.05em}
+.close{position:fixed;z-index:6;top:14px;right:14px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:1px solid var(--rule);border-radius:50%;background:#fff;color:#46404d;text-decoration:none;box-shadow:0 2px 10px rgba(26,22,32,.1)}
+.app{position:relative;z-index:1;width:min(420px,100%);margin:auto}
+.app:before{content:"";position:fixed;z-index:-1;width:440px;height:440px;left:-220px;top:44%;border-radius:50%;background:#cf4090;filter:blur(84px);opacity:.16;pointer-events:none}
+.app:after{content:"";position:fixed;z-index:-1;width:480px;height:480px;right:-250px;bottom:-180px;border-radius:50%;background:#6521c9;filter:blur(84px);opacity:.14;pointer-events:none}
+
+/* ---------- splash ---------- */
+.splash{display:flex;flex-direction:column;padding:22px 26px 44px;text-align:center}
+.splash-logo{padding:6px 0 26px}
+.splash-logo img{width:104px;height:auto}
+.splash h1{margin:0;font-family:var(--serif);font-size:40px;font-weight:600;letter-spacing:-.01em;line-height:1.06}
+.splash .sub{margin:18px auto 0;max-width:310px;color:#46404d;font-size:15px;line-height:1.55}
+.freqs{margin:24px auto 0;width:100%;max-width:320px;text-align:left}
+.freq{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 2px;border-top:1px solid #ddd3c4}
+.freq:last-child{border-bottom:1px solid #ddd3c4}
+.freq .name b{display:block;font-size:15px;font-weight:700;letter-spacing:-.01em}
+.freq .name small{display:block;margin-top:3px;color:var(--mut);font-size:12px}
+.freq .val{text-align:right;flex:0 0 auto}
+.freq .val b{display:block;font-size:22px;font-weight:700;letter-spacing:-.01em;color:var(--violet)}
+.freq .val b small{font-size:12px;font-weight:600;color:var(--mut);margin-left:2px}
+.freq .val > small{display:block;margin-top:2px;color:var(--mut);font-size:11.5px}
+.cta{display:inline-block;margin:26px auto 0;padding:15px 38px;border-radius:999px;background:linear-gradient(135deg,var(--violet),var(--violet-deep));color:#fff;font-size:14px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;box-shadow:0 6px 16px rgba(56,0,122,.22)}
+.cta2{display:block;width:max-content;margin:14px auto 0;padding:12px 30px;border-radius:999px;border:1px solid #cfc4b0;background:transparent;color:#46404d;font-size:12.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;text-decoration:none}
+
+/* ---------- features ---------- */
+.feed{padding:8px 24px 46px}
+.feature{margin:68px 0 0}
+.feature:first-child{margin-top:32px}
+.tick{width:32px;height:3px;margin:0 0 13px;border-radius:2px;background:linear-gradient(90deg,var(--violet),#9a55d7)}
+.feature h2{margin:0;font-family:var(--serif);font-size:34px;font-weight:600;letter-spacing:-.01em;line-height:1.08}
+.feature p{margin:11px 0 0;color:#46404d;font-size:14px;line-height:1.6}
+.shot{margin:20px auto 0;border:1px solid #d9ccb7;border-radius:16px;background:var(--cream);overflow:hidden;box-shadow:0 16px 36px rgba(26,22,32,.14)}
+.shot img{display:block;width:100%;height:auto}
+.tm{display:flex;gap:14px;align-items:flex-start;margin:26px 0 0;padding:16px;border:1px solid #ddd3c4;border-radius:16px;background:#fff}
+.tm img{width:54px;height:54px;border-radius:50%;flex:0 0 auto}
+.tm blockquote{margin:0;color:#46404d;font-size:13.5px;line-height:1.55}
+.tm .who{display:block;margin-top:8px;font-size:12px;font-weight:700;color:var(--ink)}
+.tm .who small{display:block;margin-top:1px;color:var(--mut);font-size:11.5px;font-weight:600}
+
+/* ---------- closing ---------- */
+.closing{margin:64px 0 0;text-align:center}
+.closing h2{margin:0;font-family:var(--serif);font-size:27px;font-weight:600;letter-spacing:-.01em;line-height:1.08}
+.closing .find{margin:14px auto 0;max-width:320px;color:#46404d;font-size:13.5px;line-height:1.55}
+.closing .find b{color:var(--ink)}
+.closing .quiet{margin:12px auto 0;max-width:320px;color:#5d5661;font-size:13.5px;line-height:1.52}
+.closing .quiet a{color:var(--violet);font-weight:600;text-decoration:none}
+.closing .tm{text-align:left}
+.last{margin:64px 0 0;text-align:center}
+.last h2{margin:0;font-family:var(--serif);font-size:27px;font-weight:600;letter-spacing:-.01em;line-height:1.08}
+.last p{margin:12px auto 0;max-width:300px;color:#46404d;font-size:13.5px;line-height:1.55}
+</style></head><body>
+<span class="letter">W-1e</span>
+<a class="close" href="#" onclick="parent.postMessage({wnClose:1},'*');return false" aria-label="Close Welcome"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></a>
+<main class="app">
+
+<section class="splash">
+  <div class="splash-logo"><img src="app-assets/logo-black.svg" alt="zodiac.fm"></div>
+  <h1>Your Frequencies<br>Are Ready</h1>
+  <p class="sub">Calculated from the exact time and place you were born:</p>
+
+  <div class="freqs">
+    <div class="freq">
+      <span class="name"><b>Core</b><small>Identity and Purpose</small></span>
+      <span class="val"><b>406<small>Hz</small></b><small>Root/Belly Band</small></span>
+    </div>
+    <div class="freq">
+      <span class="name"><b>Love</b><small>Connection to others</small></span>
+      <span class="val"><b>414<small>Hz</small></b><small>Root/Belly Band</small></span>
+    </div>
+    <div class="freq">
+      <span class="name"><b>Vitality</b><small>Energy and lifeforce</small></span>
+      <span class="val"><b>554<small>Hz</small></b><small>Solar Plexus Band</small></span>
+    </div>
+    <div class="freq">
+      <span class="name"><b>Abundance</b><small>Timing and Opportunity</small></span>
+      <span class="val"><b>596<small>Hz</small></b><small>Solar Plexus Band</small></span>
+    </div>
+  </div>
+
+  <p class="sub">This is where your journey starts. Two minutes here and you'll know exactly how to use everything.</p>
+
+  <a class="cta" href="#how">Show me</a>
+</section>
+
+<section class="feed" id="how">
+
+  <article class="feature">
+    <div class="tick"></div>
+    <h2>Your Frequencies, As&nbsp;Music</h2>
+    <p>See the four tabs in Immersions? Core, Love, Vitality, Abundance. Those are the same four frequencies you just saw above. Every song inside a tab carries that frequency of yours, inside the music.</p>
+    <p>Pick whichever one you need today. Pick a song. Press play.</p>
+    <p>You don't have to sit still or do anything special. Listen while you work, drive, cook, or fall asleep. Every song's Guide is open when you arrive and tells you what it's for.</p>
+    <div class="shot"><img src="app-assets-whatsnew/playlist-screen.png" alt="The Immersions screen: the four frequency tabs with Core selected, your Core tone, and the song cards" width="750" height="1456"></div>
+    <div class="tm">
+      <img src="app-assets-welcome/amber-hedrick.png" alt="Amber Hedrick">
+      <blockquote>&ldquo;I'm just finishing my first week and I can't begin to explain how different I feel compared to just 5 days ago. I feel like ME.&rdquo;
+        <span class="who">Amber Hedrick<small>Zodiac.fm member</small></span>
+      </blockquote>
+    </div>
+  </article>
+
+  <article class="feature">
+    <div class="tick"></div>
+    <h2>Balance and Time</h2>
+    <p>At the top of the Playlist tab, you can easily see your weekly time under frequency and the balance. You can balance yourself or let the system do it for you.</p>
+    <p>Your balance goal is at least 15% total listening time in each frequency. The remaining 40% is up to you.</p>
+    <p>Your time goal is an average of 9 minutes a day or more per week.</p>
+    <p>The more the better, most people listen for an average of over 45 minutes a day with more profound results.</p>
+    <div class="shot"><img src="app-assets-whatsnew/meter-panel.png" alt="The Frequency Balance Meter open at the top of the Playlist tab" width="750" height="1036"></div>
+    <div class="tm">
+      <img src="app-assets-welcome/ken-hoffman.png" alt="Ken Hoffman">
+      <blockquote>&ldquo;A lot of people around me have seen the shift in my energy since listening to my vibrations. My wife especially loves the man I am turning into since subscribing.&rdquo;
+        <span class="who">Ken Hoffman<small>Zodiac.fm member</small></span>
+      </blockquote>
+    </div>
+  </article>
+
+  <article class="feature">
+    <div class="tick"></div>
+    <h2>The Band System</h2>
+    <p>Discovered after reviewing the results of 278 people using Zodiac for 12 months, your bands give you insight into how to gain clarity on your Core, Love, Vitality, and Abundance signals.</p>
+    <p>Your bands are waiting in My Zodiac. Tap each of yours and read what it says about you.</p>
+    <div class="shot"><img src="app-assets-whatsnew/bands-card.png" alt="The Your Frequency Bands card: Core open, all four bands and the range key" width="750" height="1468"></div>
+    <div class="tm">
+      <img src="app-assets-welcome/barbara-ditlow.png" alt="Barbara Ditlow">
+      <blockquote>&ldquo;Zodiac core frequencies translate this unique imprint into sound, bypassing the mind and speaking directly to the body.&rdquo;
+        <span class="who">Barbara Ditlow<small>Human Design Mentor, certified by Ra Uru Hu</small></span>
+      </blockquote>
+    </div>
+  </article>
+
+  <article class="feature">
+    <div class="tick"></div>
+    <h2>Make Your Playlist</h2>
+    <p>Tap the heart on any song you love and it goes to your Playlist tab. Choose which songs you want to play, put them in any order, then press Play All and let it carry you through the day or the night.</p>
+    <p>A playlist that touches all four of your frequencies keeps your balance building while you listen.</p>
+    <div class="shot"><img src="app-assets-whatsnew/playlist-controls-guide.png" alt="The Select all control and Play All button above the song cards, with the Guide card below" width="750" height="930"></div>
+    <div class="tm">
+      <img src="app-assets-welcome/jennifer-k-hill.png" alt="Jennifer K. Hill">
+      <blockquote>&ldquo;Instead of 10 paid members, I got 30 paid members in 30 days. Within 45 days, we had almost 40 paid members. It felt like the floodgates of abundance, prosperity, and purpose opened.&rdquo;
+        <span class="who">Jennifer K. Hill<small>Founder, OptiMatch</small></span>
+      </blockquote>
+    </div>
+  </article>
+
+  <article class="feature">
+    <div class="tick"></div>
+    <h2>Your Record Starts Today</h2>
+    <p>You're on day one, so yours starts at zero. This is what it looks like once you've been listening for a while: every minute is kept.</p>
+    <p>Come back in a month and see what you've built.</p>
+    <div class="shot"><img src="app-assets-whatsnew/alltime-card.png" alt="The All-time listening card with lifetime totals and mix" width="750" height="808"></div>
+  </article>
+
+  <article class="feature closing">
+    <h2>That's Everything You Need</h2>
+    <p class="find"><b>Immersions</b> is your music. <b>My Zodiac</b> is your numbers and your bands. <b>Playlist</b> is your lineup. The bar at the bottom takes you anywhere, any time.</p>
+    <p class="find">In our 12-month study, 98.6% of the 278 people who completed it would recommend it. Among those who used it as designed, 84% called it life-changing.</p>
+    <div class="tm">
+      <img src="app-assets-welcome/srini-pillay.png" alt="Srini Pillay, M.D.">
+      <blockquote>&ldquo;Most personal growth asks us to think differently. Zodiac.fm invites us to experience ourselves differently.&rdquo;
+        <span class="who">Srini Pillay, M.D.<small>Harvard-trained psychiatrist</small></span>
+      </blockquote>
+    </div>
+    <div class="tm">
+      <img src="app-assets-welcome/debra-silverman.png" alt="Debra Silverman">
+      <blockquote>&ldquo;This music tickled my soul and reminded me that there's such a connection between vibration, the stars and the sounds that are coordinated by higher intelligence.&rdquo;
+        <span class="who">Debra Silverman<small>Astrologer to Sting, Jennifer Aniston, and More</small></span>
+      </blockquote>
+    </div>
+    <p class="quiet">And if you have any questions, please email us at <a href="mailto:support@zodiac.fm">support@zodiac.fm</a>.</p>
+  </article>
+
+  <article class="feature last">
+    <h2>One Last Thing,<br>Then Press Play</h2>
+    <p>Put the app on your home screen so tomorrow it's one tap away. The sheet walks you through it, five seconds.</p>
+    <a class="cta" href="#" onclick="return false">Add to Home Screen</a>
+    <a class="cta2" href="#" onclick="parent.postMessage({wnClose:1},'*');return false">Play My First Song</a>
+  </article>
+
+</section>
+</main>
+</body></html>
