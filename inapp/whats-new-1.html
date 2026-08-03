@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>What&rsquo;s new — Zodiac</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F6F1E8;--paper:#fff;--ink:#1a1620;--mut:#756e79;--rule:#eadfce;--violet:#6521c9;--violet-deep:#38007a;--violet-soft:#efecff;--shadow:0 4px 18px rgba(26,22,32,.055);--serif:"Cormorant Garamond",Georgia,serif;--sans:"Switzer",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0;min-height:100%;overflow-x:clip;background:var(--cream);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body{position:relative;isolation:isolate}
+body:before,body:after{content:"";position:fixed;z-index:0;pointer-events:none;border-radius:50%;filter:blur(74px)}
+body:before{width:520px;height:520px;left:-300px;top:-280px;background:#6521c9;opacity:.22}
+body:after{width:500px;height:500px;right:-300px;top:310px;background:#9a55d7;opacity:.19}
+html:before{content:"";position:fixed;z-index:0;pointer-events:none;border-radius:50%;filter:blur(74px);width:500px;height:500px;left:-260px;bottom:-240px;background:#8b68e5;opacity:.15}
+a{-webkit-tap-highlight-color:transparent}
+a:focus-visible{outline:2px solid var(--violet);outline-offset:3px}
+.letter{position:fixed;z-index:5;top:14px;right:14px;padding:2px 9px;border:1px solid var(--rule);border-radius:9px;background:#fff;color:#6a6470;font-size:14px;font-weight:700;letter-spacing:.05em}
+.app{position:relative;z-index:1;width:min(420px,100%);margin:auto}
+.app:before{content:"";position:fixed;z-index:-1;width:440px;height:440px;left:-220px;top:44%;border-radius:50%;background:#cf4090;filter:blur(84px);opacity:.16;pointer-events:none}
+.app:after{content:"";position:fixed;z-index:-1;width:480px;height:480px;right:-250px;bottom:-180px;border-radius:50%;background:#6521c9;filter:blur(84px);opacity:.14;pointer-events:none}
+
+/* ---------- splash ---------- */
+.splash{display:flex;flex-direction:column;min-height:min(100svh,812px);padding:22px 26px 30px;text-align:center}
+.splash-logo{padding-top:6px}
+.splash-logo img{width:104px;height:auto}
+.splash-mid{flex:1;display:flex;flex-direction:column;justify-content:center;padding:14px 0 90px}
+.splash .eyebrow{margin:0 0 14px;color:var(--violet);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.splash h1{margin:0;font-family:var(--serif);font-size:40px;font-weight:600;letter-spacing:-.01em;line-height:1.06}
+.splash .sub{margin:18px auto 0;max-width:300px;color:#46404d;font-size:15px;line-height:1.55}
+.cta{display:inline-block;margin:30px auto 0;padding:15px 34px;border-radius:999px;background:linear-gradient(135deg,var(--violet),var(--violet-deep));color:#fff;font-size:15px;font-weight:600;letter-spacing:.01em;text-decoration:none;box-shadow:0 6px 16px rgba(56,0,122,.22)}
+.splash .quiet{margin:0 auto;max-width:290px;color:var(--mut);font-size:12.5px;line-height:1.5;text-wrap:balance}
+
+/* ---------- sections ---------- */
+.feed{padding:6px 14px 34px}
+.card{overflow:hidden;margin:0 0 20px;border:1px solid #efe6d6;border-radius:14px;background:var(--paper);box-shadow:var(--shadow)}
+.card-head{padding:17px 16px 13px}
+.eyebrow{margin:0 0 4px;color:var(--violet);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.card h2{margin:0;font-family:var(--sans);font-size:20px;font-weight:700;letter-spacing:-.018em;line-height:1.1}
+.card-head p{margin:7px 0 0;color:#5d5661;font-size:13.5px;line-height:1.52}
+.shot{position:relative;margin:3px 12px 14px;border:1px solid var(--rule);border-radius:12px;background:var(--cream);overflow:hidden}
+.shot.flush{margin:12px 0 0;border:0;border-top:1px solid var(--rule);border-radius:0}
+.shot img{display:block;width:100%;height:auto}
+.shot.trim{max-height:345px}
+.shot.trim:after{content:"";position:absolute;inset:auto 0 0 0;height:74px;background:linear-gradient(to bottom,rgba(246,241,232,0),var(--cream) 82%,var(--cream))}
+
+
+/* ---------- closing ---------- */
+.closing .find{margin:6px 16px 0;color:#46404d;font-size:13.5px;line-height:1.55}
+.closing .find b{color:var(--ink)}
+.closing .quiet{margin:13px 16px 17px;color:#5d5661;font-size:13.5px;line-height:1.52}
+</style></head><body>
+<span class="letter">WN-1</span>
+<main class="app">
+
+<section class="splash">
+  <div class="splash-logo"><img src="app-assets/logo-black.svg" alt="zodiac.fm"></div>
+  <div class="splash-mid">
+    <p class="eyebrow">The new Zodiac</p>
+    <h1>Your frequencies<br>have a home.</h1>
+    <p class="sub">This update is more than a new look. Your map, your bands, and your balance now live in one place &mdash; the new My&nbsp;Zodiac tab.</p>
+    <a class="cta" href="#new">See what&rsquo;s new</a>
+  </div>
+  <p class="quiet">Your music is untouched.</p>
+</section>
+
+<section class="feed" id="new">
+
+  <article class="card">
+    <div class="card-head">
+      <p class="eyebrow">The new tab</p>
+      <h2>Meet My Zodiac</h2>
+      <p>A new tab in the middle of the app. Your four personalized frequencies, calculated from your exact birth moment &mdash; and everything behind your map.</p>
+    </div>
+    <div class="shot strip"><img src="app-assets-whatsnew/tab-strip.png" alt="The app navigation with the new My Zodiac tab in the middle" width="750" height="112"></div>
+    <div class="shot"><img src="app-assets-whatsnew/freq-card.png" alt="The Your Personalized Frequencies card in My Zodiac" width="750" height="876"></div>
+  </article>
+
+  <article class="card">
+    <div class="card-head">
+      <p class="eyebrow">Frequency Bands</p>
+      <h2>How you process each frequency</h2>
+      <p>Where each of your frequencies sits in your body, and how you most naturally process that part of life. Open each band and read yours &mdash; shown in full in the app, all four bands plus what every range means.</p>
+    </div>
+    <div class="shot trim"><img src="app-assets-whatsnew/bands-card.png" alt="The Your Frequency Bands card with the Core band open" width="750" height="1296"></div>
+    
+  </article>
+
+  <article class="card">
+    <div class="card-head">
+      <p class="eyebrow">Weekly balance</p>
+      <h2>Your weekly balance</h2>
+      <p>Your minutes this week against your 63-minute weekly minimum, and how your listening spreads across your four frequencies &mdash; every frequency at 15% or more counts toward balance. Tap it any time for the full breakdown.</p>
+    </div>
+    <div class="shot"><img src="app-assets-whatsnew/week-card.png" alt="The This Week card showing weekly minutes, goal bar, and four frequency bars" width="750" height="722"></div>
+  </article>
+
+  <article class="card">
+    <div class="card-head">
+      <p class="eyebrow">All-time listening</p>
+      <h2>Your lifetime record</h2>
+      <p>Every minute since your first: your lifetime total, balanced and unbalanced, and your lifetime frequency mix.</p>
+    </div>
+    <div class="shot"><img src="app-assets-whatsnew/alltime-card.png" alt="The All-time listening card with lifetime totals and mix" width="750" height="808"></div>
+  </article>
+
+  <article class="card">
+    <div class="card-head">
+      <p class="eyebrow">Immersions</p>
+      <h2>A new look for listening</h2>
+      <p>Every song now draws its waveform from its own audio, in its frequency&rsquo;s color &mdash; and the whole screen is calmer, clearer, and alive underneath.</p>
+    </div>
+    <div class="shot flush trim"><img src="app-assets-whatsnew/playlist-screen.png" alt="The redesigned Playlist with real waveforms on each song" width="750" height="1456"></div>
+  </article>
+
+  <article class="card closing">
+    <div class="card-head">
+      <p class="eyebrow">Keep this page</p>
+      <h2>Come back anytime</h2>
+    </div>
+    <p class="find">You&rsquo;ll always find this page in <b>My Zodiac &rsaquo; FAQ &rsaquo; &ldquo;See what&rsquo;s new&rdquo;</b>.</p>
+    <p class="quiet">And your music? Untouched. Every song and every playlist is exactly where you left it.</p>
+  </article>
+
+</section>
+</main>
+</body></html>
