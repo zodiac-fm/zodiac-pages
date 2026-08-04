@@ -1,0 +1,1034 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zodiac.fm &middot; Your birth chart, composed into music</title>
+<meta name="description" content="Zodiac calculates four frequencies from the moment and place you were born, then a composer writes them into music you can listen to every day.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+    --sans:'Switzer',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+
+    /* GROUND: white, never cream. Warmth comes from the serif and the ink, not the paper. */
+    --paper:#FFFFFF;
+    --ink:#1A1620;
+    --stage:#0B0712;          /* the one dark panel */
+    --greige:#EAE4DA;         /* portrait field only */
+
+    /* THE FOUR FAMILY INKS — design-system §2.3 locked tokens (design/tokens.json).
+       --f-*  = the ink MASS: ribbon, bar, spine, aurora pool. Flat, hard edges, grain, no glow.
+       --g-*  = gradEnd, the analogous partner of the same family.
+       --t-*  = the legible TEXT accent. Every number and word uses this, never the mass.
+       Abundance is EMERALD (Michael 2026-07-02); the aqua/teal family is RETIRED. */
+    --f-core:#6521C9;        --g-core:#A737C8;        --t-core:#6521C9;       /* 8.03:1 on white */
+    --f-love:#B90044;        --g-love:#CF4090;        --t-love:#B90044;       /* 6.67:1 on white */
+    --f-vitality:#FF9112;    --g-vitality:#FFC251;    --t-vitality:#C25500;   /* 4.57:1 on white */
+    --f-abundance:#12A56E;   --g-abundance:#46D99A;   --t-abundance:#0A7A52;  /* 5.36:1 on white */
+
+    /* Core Purple is the single UI accent, in-app and marketing (design-system §5) */
+    --violet:#6521C9;
+    --violet-deep:#38007A;    /* Core `deep` token; the functional darker state */
+    --violet-soft:#D2C8FF;    /* Core `soft` token, the accent on Stage, 12.7:1 there */
+
+    /* text tiers, all measured on #FFFFFF
+       .72 = 8.9:1 · .66 = 7.5:1 · .60 = 6.2:1 */
+    --ink-72:rgba(26,22,32,.72);
+    --ink-mid:rgba(26,22,32,.66);
+    --ink-quiet:rgba(26,22,32,.60);
+    --rule:rgba(26,22,32,.15);
+    --rule-soft:rgba(26,22,32,.08);
+    --cream-76:rgba(246,241,232,.78);   /* on Stage, 11.4:1 */
+
+    --gut:clamp(20px,5vw,64px);
+    --sect:clamp(60px,10vw,128px);
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-weight:400;font-size:16px;line-height:1.62;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit}
+  ::selection{background:rgba(101,33,201,.16)}
+  :focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:1px}
+
+  .wrap{width:100%;max-width:1120px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+
+  /* ---------- shared editorial parts ---------- */
+  .eyebrow{
+    font-family:var(--sans);font-weight:600;font-size:11px;line-height:1;
+    letter-spacing:.17em;text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .marker{
+    display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    border-top:1px solid var(--ink);padding-top:12px;margin-bottom:clamp(26px,4vw,44px);
+  }
+  .marker .idx{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.14em;
+    color:var(--ink-quiet);font-variant-numeric:tabular-nums;
+  }
+
+  h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.012em}
+  h1{font-size:clamp(42px,7vw,80px);line-height:1.02}
+  h2{font-size:clamp(31px,5.4vw,54px);line-height:1.06}
+  h3{font-size:clamp(28px,4.2vw,33px);line-height:1.12}
+
+  p{max-width:60ch}
+  .lede{font-size:clamp(17px,1.9vw,20px);line-height:1.58;color:var(--ink-72)}
+  .fine{font-size:12.5px;line-height:1.62;color:var(--ink-quiet);max-width:62ch}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-height:54px;padding:0 32px;border-radius:2px;border:1px solid var(--violet);
+    background:var(--violet);color:#fff;text-decoration:none;
+    font-family:var(--sans);font-weight:600;font-size:15px;letter-spacing:.015em;
+    transition:background .25s ease,border-color .25s ease;
+  }
+  .btn:hover,.btn:focus-visible{background:var(--violet-deep);border-color:var(--violet-deep)}
+
+  .tlink{
+    display:inline-flex;align-items:center;min-height:24px;
+    font-family:var(--sans);font-weight:600;font-size:14px;
+    color:var(--violet);text-decoration:none;
+    border-bottom:1px solid rgba(101,33,201,.34);padding-bottom:1px;
+    transition:border-color .25s ease;
+  }
+  .tlink:hover,.tlink:focus-visible{border-bottom-color:var(--violet)}
+
+  .skip{position:absolute;left:-9999px;top:0}
+  .skip:focus{left:12px;top:12px;z-index:99;background:#fff;color:var(--ink);padding:12px 16px;border:1px solid var(--ink)}
+
+  /* ---------- header ---------- */
+  .site-head{padding-top:22px;padding-bottom:18px}
+  .head-row{display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .head-row img{height:21px;width:auto}
+  .nav{display:flex;align-items:center;gap:clamp(14px,2.4vw,30px);flex-wrap:wrap}
+  .nav a{
+    display:inline-flex;align-items:center;min-height:26px;
+    font-family:var(--sans);font-weight:500;font-size:14px;color:var(--ink-72);
+    text-decoration:none;transition:color .2s ease;
+  }
+  .nav a:hover,.nav a:focus-visible{color:var(--ink)}
+  .nav a[aria-current="page"]{color:var(--ink);font-weight:600}
+  .login{
+    display:inline-flex;align-items:center;min-height:34px;padding:0 15px;
+    border:1px solid var(--rule);border-radius:2px;
+    font-family:var(--sans);font-weight:600;font-size:13px;color:var(--ink);
+    text-decoration:none;letter-spacing:.02em;transition:border-color .25s ease;
+  }
+  .login:hover,.login:focus-visible{border-color:var(--ink)}
+  .nav-mobile{display:none}
+  @media (max-width:719px){
+    .head-row .nav{display:none}
+    .nav-mobile{
+      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+      margin-top:14px;padding-top:12px;border-top:1px solid var(--rule-soft);
+    }
+    .nav-mobile a{font-size:13.5px;min-height:24px}
+  }
+
+  /* ============================================================
+     ROOM 1 — HERO. The ink ribbon, printed not glowing.
+     ============================================================ */
+  .hero{position:relative;padding-top:clamp(24px,5vw,56px);padding-bottom:clamp(56px,8vw,96px)}
+  .hero-grid{display:grid;grid-template-columns:1fr;row-gap:clamp(34px,5vw,46px);align-items:center}
+  @media (min-width:1000px){
+    .hero-grid{grid-template-columns:minmax(0,1.02fr) minmax(0,1fr);column-gap:clamp(40px,4.6vw,64px);row-gap:0}
+  }
+  .hero h1{margin-top:16px;max-width:13ch}
+  .hero .lede{margin-top:clamp(18px,2.4vw,26px);max-width:46ch}
+  .hero .cta-row{margin-top:clamp(26px,3.4vw,38px);display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+  .hero .credible{margin-top:20px;max-width:48ch;font-size:14px;line-height:1.6;color:var(--ink-mid)}
+  .hero .credible b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+
+  /* the ribbon plate bleeds off the right edge on desktop so the ink runs off the page */
+  .ribbon{position:relative;width:100%;aspect-ratio:5/4;overflow:hidden}
+  @media (min-width:1000px){
+    .ribbon{
+      aspect-ratio:auto;height:clamp(430px,50vw,600px);
+      margin-right:calc((100vw - min(100vw,1120px))/-2 - var(--gut));
+      width:auto;
+    }
+  }
+  .ribbon svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+  /* the inks are OPAQUE and occlude one another, the way real paper ribbon does.
+     Blending them would mud the overlaps toward black and kill the vividness. */
+  .rb-a{animation:drift-a 34s ease-in-out infinite alternate}
+  .rb-b{animation:drift-b 41s ease-in-out infinite alternate}
+  .rb-c{animation:drift-c 47s ease-in-out infinite alternate}
+  @keyframes drift-a{from{transform:translate3d(0,0,0)}to{transform:translate3d(-14px,10px,0)}}
+  @keyframes drift-b{from{transform:translate3d(0,0,0)}to{transform:translate3d(12px,-12px,0)}}
+  @keyframes drift-c{from{transform:translate3d(0,0,0)}to{transform:translate3d(-8px,-7px,0)}}
+  @media (prefers-reduced-motion:reduce){
+    .rb-a,.rb-b,.rb-c{animation:none}
+  }
+  /* RIBBON TERMINATION (desktop only). The SVG viewport was cutting every band on one
+     shared vertical line mid-canvas, which read as a clipping bug rather than a design.
+     Each band now ends in its own raked cut-ribbon tip — rakes 26-34deg, staggered
+     depths (viewBox x=60..186) so no two bands finish together. Below 1000px the plate
+     bleeds off BOTH edges, so no tip is drawn there and mobile is untouched. */
+  @media (min-width:1000px){
+    .ribbon .tip-core{clip-path:url(#tip-core)}
+    .ribbon .tip-vital{clip-path:url(#tip-vital)}
+    .ribbon .tip-love{clip-path:url(#tip-love)}
+    .ribbon .tip-abund{clip-path:url(#tip-abund)}
+    .ribbon .tip-core2{clip-path:url(#tip-core2)}
+    .ribbon .tip-love2{clip-path:url(#tip-love2)}
+    .ribbon .tip-abund2{clip-path:url(#tip-abund2)}
+    .ribbon .tip-vital2{clip-path:url(#tip-vital2)}
+  }
+
+  /* ---------- section frame ---------- */
+  section.band{padding-top:var(--sect);padding-bottom:var(--sect)}
+
+  /* ============================================================
+     ROOM 2 — THE FREQUENCY PLATE. The mechanism, self-proving.
+     ============================================================ */
+  .plate-head{max-width:22ch}
+  .plate{
+    margin-top:clamp(34px,4.4vw,54px);
+    border-top:1px solid var(--ink);border-bottom:1px solid var(--rule);
+  }
+  .plate-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0}
+  @media (min-width:860px){.plate-grid{grid-template-columns:repeat(4,1fr)}}
+  .fq{
+    padding:clamp(20px,2.6vw,30px) clamp(14px,1.6vw,22px) clamp(22px,2.8vw,32px) 0;
+    border-bottom:1px solid var(--rule-soft);
+  }
+  @media (min-width:860px){
+    .fq{border-bottom:0;border-right:1px solid var(--rule-soft);padding-left:clamp(14px,1.6vw,22px)}
+    .fq:first-child{padding-left:0}
+    .fq:last-child{border-right:0}
+  }
+  @media (max-width:859px){
+    .fq:nth-child(odd){padding-right:clamp(14px,3vw,22px);border-right:1px solid var(--rule-soft)}
+    .fq:nth-child(even){padding-left:clamp(14px,3vw,22px)}
+    .fq:nth-last-child(-n+2){border-bottom:0}
+  }
+  /* the ink mass: a flat saturated bar, hard edges, no glow */
+  .fq .bar{display:block;height:9px;width:100%;max-width:96px}
+  .fq .band{
+    margin-top:16px;font-family:var(--sans);font-weight:600;font-size:11px;
+    letter-spacing:.15em;text-transform:uppercase;color:var(--ink);
+  }
+  /* numbers are Switzer, never the serif. The numeral takes the family TEXT accent
+     (--t-*), never the ink mass: on white, Vitality/Abundance primaries fail even the
+     3:1 large-text floor. The bar beside it carries the mass. */
+  .fq .hz{
+    margin-top:10px;font-family:var(--sans);font-weight:600;
+    font-size:clamp(48px,8vw,86px);line-height:.92;letter-spacing:-.04em;
+    font-variant-numeric:tabular-nums;
+  }
+  .fq .hz .u{font-size:.26em;font-weight:600;letter-spacing:.04em;margin-left:4px;vertical-align:.5em}
+  .fq .dom{margin-top:12px;font-family:var(--sans);font-weight:500;font-size:13px;line-height:1.4;color:var(--ink-mid)}
+  .fq-core .bar{background:var(--f-core)}       .fq-core .hz{color:var(--t-core)}
+  .fq-love .bar{background:var(--f-love)}       .fq-love .hz{color:var(--t-love)}
+  .fq-vit .bar{background:var(--f-vitality)}    .fq-vit .hz{color:var(--t-vitality)}
+  .fq-abu .bar{background:var(--f-abundance)}   .fq-abu .hz{color:var(--t-abundance)}
+  .plate-note{margin-top:clamp(18px,2.2vw,26px);max-width:52ch}
+
+  /* ---------- the trumpet: full-bleed right, copy in a true white column ---------- */
+  .artband{margin-top:clamp(56px,7vw,96px)}
+  .artband-grid{display:grid;grid-template-columns:1fr;gap:clamp(28px,3.4vw,44px);align-items:center}
+  @media (min-width:900px){
+    .artband-grid{grid-template-columns:minmax(0,4.4fr) minmax(0,7.6fr);gap:clamp(32px,4vw,56px)}
+  }
+  .artband figure{position:relative}
+  @media (min-width:900px){
+    .artband figure{margin-right:calc((100vw - min(100vw,1120px))/-2 - var(--gut))}
+  }
+  .artband img{width:100%;height:auto}
+  .artband .kicker{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.17em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .artband h3{margin-top:16px;max-width:14ch}
+  .artband p{margin-top:16px;font-size:15.5px;line-height:1.6;color:var(--ink-72);max-width:38ch}
+
+  /* ---------- three beats ---------- */
+  .beats{margin-top:clamp(56px,7vw,96px);display:grid;grid-template-columns:1fr;gap:0}
+  @media (min-width:860px){.beats{grid-template-columns:repeat(3,1fr);column-gap:clamp(28px,4vw,56px)}}
+  .beat{
+    border-top:1px solid var(--rule);
+    padding:clamp(24px,3vw,34px) 0 clamp(26px,3.2vw,36px);
+    display:grid;grid-template-rows:auto auto 1fr;
+  }
+  .beat .step{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.16em;
+    color:var(--ink-quiet);font-variant-numeric:tabular-nums;
+  }
+  .beat h3{margin-top:14px;max-width:16ch}
+  .beat p{margin-top:16px;font-size:15.5px;line-height:1.6;color:var(--ink-72);max-width:40ch}
+
+  /* ============================================================
+     THE DUO BAND — one image band, between room 2 and room 3.
+     Art, not documentation.
+     ============================================================ */
+  .duo{padding-bottom:clamp(52px,7vw,96px)}
+  .duo figure{width:100%}
+  .duo img{width:100%;height:auto}
+  @media (min-width:900px){
+    .duo img{max-height:60vh;object-fit:cover;object-position:center 38%}
+  }
+  .duo figcaption{
+    margin-top:16px;font-family:var(--sans);font-style:italic;font-weight:400;
+    font-size:13.5px;line-height:1.6;color:var(--ink-quiet);max-width:44ch;
+  }
+
+  /* ============================================================
+     ROOM 3 — THE STAGE. The only dark panel, the only glow.
+     ============================================================ */
+  .stage{
+    position:relative;overflow:hidden;background:var(--stage);color:#F6F1E8;
+    padding-top:clamp(58px,8vw,110px);padding-bottom:clamp(58px,8vw,110px);
+  }
+  /* Frame-scale rule (design-system §3): aurora opacities are surface-sized. These are
+     tuned so the Stage still reads as the near-black ground with light pooling on it,
+     never as a grey field. `screen` adds light to the dark rather than painting over it. */
+  .aurora{position:absolute;inset:-25%;pointer-events:none;z-index:0;filter:blur(70px);opacity:.5;mix-blend-mode:screen}
+  .aurora i{position:absolute;display:block;border-radius:50%}
+  /* the four pools are the family PRIMARIES: Core 101,33,201 · Love 185,0,68 ·
+     Vitality 255,145,18 · Abundance 18,165,110 (emerald, not teal). */
+  .aurora .a1{width:46%;padding-bottom:46%;left:-2%;top:6%;background:radial-gradient(circle,rgba(101,33,201,.9) 0%,rgba(101,33,201,0) 58%);animation:au1 26s ease-in-out infinite alternate}
+  .aurora .a2{width:40%;padding-bottom:40%;left:46%;top:-4%;background:radial-gradient(circle,rgba(185,0,68,.82) 0%,rgba(185,0,68,0) 58%);animation:au2 33s ease-in-out infinite alternate}
+  .aurora .a3{width:38%;padding-bottom:38%;left:64%;top:48%;background:radial-gradient(circle,rgba(255,145,18,.78) 0%,rgba(255,145,18,0) 58%);animation:au3 39s ease-in-out infinite alternate}
+  .aurora .a4{width:36%;padding-bottom:36%;left:6%;top:56%;background:radial-gradient(circle,rgba(18,165,110,.8) 0%,rgba(18,165,110,0) 58%);animation:au4 30s ease-in-out infinite alternate}
+  /* a5 is anchored under the tile grid so the right half of the panel is a lit place and
+     not a void. Core Purple, the one UI accent, so the extra light adds no new hue. */
+  .aurora .a5{width:34%;padding-bottom:34%;left:44%;top:24%;background:radial-gradient(circle,rgba(101,33,201,.8) 0%,rgba(101,33,201,0) 60%);animation:au3 35s ease-in-out infinite alternate}
+  /* inside a narrow column all four cores overlap the visible area and stack, so the
+     opacity comes down — but not so far that the Stage stops reading as a lit place.
+     a5 is a desktop-only fill; on a phone the four originals already overlap the frame. */
+  @media (max-width:760px){.aurora{opacity:.34;inset:-15%}.aurora .a5{display:none}}
+  @keyframes au1{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(7%,5%,0) scale(1.14)}}
+  @keyframes au2{from{transform:translate3d(0,0,0) scale(1.06)}to{transform:translate3d(-8%,7%,0) scale(.94)}}
+  @keyframes au3{from{transform:translate3d(0,0,0) scale(.96)}to{transform:translate3d(-6%,-8%,0) scale(1.12)}}
+  @keyframes au4{from{transform:translate3d(0,0,0) scale(1.08)}to{transform:translate3d(9%,-6%,0) scale(.95)}}
+  @media (prefers-reduced-motion:reduce){
+    .aurora i{animation:none}
+  }
+  .stage .wrap{position:relative;z-index:1}
+  .stage .marker{border-top-color:rgba(246,241,232,.4)}
+  .stage .eyebrow,.stage .marker .idx{color:var(--violet-soft)}
+  .stage h2{color:#F6F1E8;max-width:15ch}
+  .stage-grid{display:grid;grid-template-columns:1fr;gap:clamp(34px,4.4vw,58px);align-items:start}
+  @media (min-width:900px){
+    .stage-grid{grid-template-columns:minmax(0,4.8fr) minmax(0,7.2fr);gap:clamp(36px,4.6vw,68px);
+      /* the tile column stretches to meet the headline column, so the panel has no dead
+         floor under the grid — the two halves now finish on the same line */
+      align-items:stretch}
+    .stage-grid > div:nth-child(2){display:flex;flex-direction:column}
+    .stage-grid .tiles{flex:1 1 auto;grid-template-rows:1fr 1fr}
+    .stage-grid .tile .body{align-self:center}
+  }
+  .stage-lede{margin-top:20px;font-size:16.5px;line-height:1.62;color:var(--cream-76);max-width:34ch}
+  .track-words{
+    margin-top:18px;font-family:var(--sans);font-weight:600;font-size:10.5px;
+    letter-spacing:.19em;text-transform:uppercase;color:var(--cream-76);
+    max-width:26ch;line-height:1.9;
+  }
+  .track-words .w{white-space:nowrap}
+  .stage-note{margin-top:24px;font-size:14px;line-height:1.6;color:var(--cream-76);max-width:32ch}
+
+  .tiles{display:grid;grid-template-columns:1fr;gap:10px}
+  @media (min-width:560px){.tiles{grid-template-columns:1fr 1fr;gap:12px}}
+  .tile{
+    display:grid;grid-template-columns:10px minmax(0,1fr);
+    background:rgba(246,241,232,.055);
+    border:1px solid rgba(246,241,232,.14);border-radius:2px;overflow:hidden;
+  }
+  .tile .spine{display:block;height:100%}
+  .tile-core .spine{background:var(--f-core)}
+  .tile-love .spine{background:var(--f-love)}
+  .tile-vit  .spine{background:var(--f-vitality)}
+  .tile-abu  .spine{background:var(--f-abundance)}
+  .tile .body{padding:clamp(16px,2vw,20px) clamp(15px,1.9vw,20px)}
+  .tile .fam{
+    font-family:var(--sans);font-weight:600;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--cream-76);
+  }
+  .tile .name{
+    margin-top:9px;font-family:var(--sans);font-weight:600;font-size:16px;
+    line-height:1.2;color:#F6F1E8;
+  }
+  .tile .meta{
+    margin-top:8px;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+    font-family:var(--sans);font-weight:500;font-size:13px;color:var(--cream-76);
+    font-variant-numeric:tabular-nums;
+  }
+  .tile.on{border-color:rgba(210,200,255,.5);background:rgba(210,200,255,.1)}
+  .tile.on .state{
+    font-weight:600;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--violet-soft);
+  }
+  .tiles-cap{
+    margin-bottom:14px;font-family:var(--sans);font-weight:600;font-size:10.5px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--violet-soft);
+  }
+
+  /* ============================================================
+     ROOM 4 — THE PROOF WALL. Dense, labeled, back on white.
+     ============================================================ */
+  .tier-label{
+    display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    border-top:1px solid var(--ink);padding-top:11px;margin-bottom:clamp(20px,2.6vw,30px);
+  }
+  .tier-label .ct{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.14em;
+    color:var(--ink-quiet);font-variant-numeric:tabular-nums;
+  }
+
+  .lead-voice{
+    display:grid;grid-template-columns:1fr;gap:clamp(20px,2.6vw,34px);
+    padding-bottom:clamp(30px,3.6vw,44px);border-bottom:1px solid var(--rule);
+  }
+  @media (min-width:760px){.lead-voice{grid-template-columns:150px minmax(0,1fr);align-items:start}}
+  .lead-voice blockquote{
+    font-family:var(--sans);font-weight:500;
+    font-size:clamp(16px,1.85vw,19px);line-height:1.55;color:var(--ink);max-width:56ch;
+  }
+  .lead-voice figcaption{margin-top:20px}
+
+  .wall{
+    display:grid;grid-template-columns:1fr;
+    grid-template-rows:auto 1fr auto;gap:0;margin-top:clamp(26px,3.2vw,38px);
+  }
+  @media (min-width:620px){.wall{grid-template-columns:1fr 1fr;column-gap:clamp(24px,3.2vw,44px)}}
+  @media (min-width:960px){.wall{grid-template-columns:repeat(3,1fr)}}
+  .voice{
+    border-top:1px solid var(--rule);padding:clamp(18px,2.2vw,24px) 0 clamp(20px,2.4vw,26px);
+    display:grid;grid-template-rows:auto 1fr auto;grid-row:span 3;
+  }
+  @supports (grid-template-rows:subgrid){.voice{grid-template-rows:subgrid}}
+  .port{
+    width:78px;aspect-ratio:112/132;background:var(--greige);border-radius:2px;
+    display:flex;align-items:flex-end;justify-content:center;overflow:hidden;
+  }
+  .port img{width:86%;height:auto;background:transparent}
+  .port.mono{
+    align-items:center;font-family:var(--serif);font-weight:600;font-size:34px;
+    line-height:1;color:var(--ink-72);
+  }
+  .lead-voice .port{width:150px}
+  .voice blockquote{
+    margin-top:16px;font-family:var(--sans);font-weight:500;
+    font-size:15px;line-height:1.55;color:var(--ink);max-width:34ch;
+  }
+  .voice figcaption{padding-top:14px}
+  .who{font-family:var(--sans);font-weight:600;font-size:14px;line-height:1.3;color:var(--ink)}
+  .lead-voice .who{font-size:16px}
+  .role{margin-top:4px;font-family:var(--sans);font-weight:500;font-size:12.5px;line-height:1.45;color:var(--ink-quiet);max-width:32ch}
+  .lead-voice .role{font-size:13.5px;color:var(--ink-mid);max-width:40ch}
+
+  /* the numbers sit between the two tiers so the wall is not one undifferentiated field */
+  .numbers{
+    margin:clamp(44px,5.4vw,72px) 0;padding:clamp(28px,3.4vw,40px) 0;
+    border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    display:grid;grid-template-columns:1fr;gap:clamp(26px,3.2vw,40px);
+  }
+  @media (min-width:760px){.numbers{grid-template-columns:auto auto minmax(0,1fr);gap:clamp(30px,4.4vw,64px);align-items:start}}
+  .num .n{
+    font-family:var(--sans);font-weight:600;font-size:clamp(46px,7.2vw,72px);
+    line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--ink);
+  }
+  .num p{margin-top:12px;font-size:14.5px;line-height:1.5;color:var(--ink-72);max-width:26ch}
+  .proof-more{margin-top:clamp(30px,3.8vw,46px);border-top:1px solid var(--rule);padding-top:24px}
+
+  /* ============================================================
+     ROOM 5 — THE QUIET CLOSE.
+     ============================================================ */
+  .close-grid{display:grid;grid-template-columns:1fr;gap:clamp(30px,4vw,56px);align-items:start;margin-top:clamp(28px,3.4vw,44px)}
+  @media (min-width:900px){.close-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}}
+  .price-plate{border:1px solid var(--ink);border-radius:2px;padding:clamp(26px,3.6vw,42px)}
+  .plans{display:flex;flex-direction:column;gap:10px}
+  @media (min-width:560px){.plans{flex-direction:row;align-items:baseline;gap:clamp(18px,2.6vw,30px)}}
+  .plan{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
+  .amt{
+    font-family:var(--sans);font-weight:600;font-size:clamp(38px,6.4vw,56px);
+    line-height:1;letter-spacing:-.032em;font-variant-numeric:tabular-nums;color:var(--ink);
+  }
+  .per{font-family:var(--sans);font-weight:500;font-size:15px;color:var(--ink-mid)}
+  .or{font-family:var(--sans);font-weight:500;font-size:15px;color:var(--ink-quiet)}
+  .price-plate .included{margin-top:24px;padding-top:22px;border-top:1px solid var(--rule);font-size:15px;line-height:1.62;color:var(--ink-72);max-width:46ch}
+  .price-plate .btn{margin-top:26px}
+  .price-plate .fine{margin-top:18px}
+  .gtee{border-top:1px solid var(--rule);padding-top:clamp(18px,2.2vw,24px)}
+  .gtee h3{
+    font-family:var(--sans);font-weight:600;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .gtee p{margin-top:14px;font-size:15px;line-height:1.62;color:var(--ink-72)}
+  .gtee dl{margin-top:16px}
+  .gtee .kv{display:grid;grid-template-columns:minmax(74px,90px) minmax(0,1fr);gap:12px;
+    padding:12px 0;border-bottom:1px solid var(--rule-soft)}
+  .gtee .kv:last-child{border-bottom:0}
+  .gtee dt{font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-quiet);padding-top:3px}
+  .gtee dd{font-size:15px;line-height:1.5;color:var(--ink-72)}
+
+  /* ---------- footer ---------- */
+  .site-foot{border-top:1px solid var(--ink);padding-top:clamp(46px,6vw,72px);padding-bottom:44px}
+  .foot-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(26px,3.4vw,44px)}
+  @media (min-width:760px){.foot-grid{grid-template-columns:minmax(0,2fr) repeat(3,minmax(0,1fr))}}
+  .foot-brand img{height:20px;width:auto}
+  .foot-brand p{margin-top:16px;font-size:13.5px;line-height:1.6;color:var(--ink-mid);max-width:30ch}
+  .foot-label{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.15em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .foot-col ul{list-style:none;margin-top:16px}
+  .foot-col li{margin-top:2px}
+  .foot-col a{
+    display:inline-flex;align-items:center;min-height:28px;
+    font-size:14px;color:var(--ink-72);text-decoration:none;transition:color .2s ease;
+  }
+  .foot-col a:hover,.foot-col a:focus-visible{color:var(--ink)}
+  .foot-base{
+    margin-top:clamp(34px,4.4vw,54px);padding-top:22px;border-top:1px solid var(--rule);
+    display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;
+    font-size:12.5px;color:var(--ink-quiet);
+  }
+  .foot-base span{font-variant-numeric:tabular-nums}
+
+  /* ---------- variant badge (bake-off pattern) ---------- */
+  .badge{
+    position:fixed;right:14px;bottom:14px;z-index:90;pointer-events:none;
+    background:#fff;border:1px solid var(--rule);color:var(--ink-mid);
+    font:700 10.5px/1 var(--sans);letter-spacing:.1em;padding:8px 12px;border-radius:999px;
+    box-shadow:0 2px 10px rgba(26,22,32,.09);
+  }
+
+  /* ---------- quiet reveal ---------- */
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.3,1)}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+</style>
+<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <div class="head-row">
+      <a href="/" aria-label="Zodiac.fm home"><img src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm" width="120" height="21"></a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/" aria-current="page">Home</a>
+        <a href="/how-it-works">How it works</a>
+        <a href="/the-study">The study</a>
+        <a href="/testimonials">Testimonials</a>
+      </nav>
+      <a class="login" href="/login">Log in</a>
+    </div>
+    <nav class="nav nav-mobile" aria-label="Primary, mobile">
+      <a href="/" aria-current="page">Home</a>
+      <a href="/how-it-works">How it works</a>
+      <a href="/the-study">The study</a>
+      <a href="/testimonials">Testimonials</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ ROOM 1 · HERO ============ -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+
+        <div>
+          <p class="eyebrow">Personal psychoacoustics</p>
+          <h1>Your birth chart, composed into music.</h1>
+          <p class="lede">Zodiac calculates four frequencies from the exact moment and place you were born, then a composer writes them into real music. About nine minutes a day, eyes open, no practice to learn.</p>
+          <div class="cta-row">
+            <a class="btn" href="#how">See how it works</a>
+          </div>
+          <p class="credible">In our 52-week beta, <b>98.6%</b> of the people who finished the study said they would recommend it.</p>
+        </div>
+
+        <div class="ribbon" aria-hidden="true">
+          <svg viewBox="0 0 900 700" preserveAspectRatio="xMinYMid slice" focusable="false">
+            <defs>
+              <!-- grain is clipped to the ink itself, so the paper stays pure white -->
+              <filter id="inkGrain" x="-5%" y="-5%" width="110%" height="110%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch" result="noise"/>
+                <feColorMatrix in="noise" type="saturate" values="0" result="mono"/>
+                <feComponentTransfer in="mono" result="grain">
+                  <feFuncA type="linear" slope="0.30" intercept="0"/>
+                </feComponentTransfer>
+                <feComposite in="grain" in2="SourceGraphic" operator="in" result="clipped"/>
+                <feBlend in="SourceGraphic" in2="clipped" mode="multiply"/>
+              </filter>
+              <!-- Cut-ribbon tips. Each band ends in its own raked, staggered cut rather than
+                   on the shared vertical line the SVG viewport used to impose. -->
+              <clipPath id="tip-core" clipPathUnits="userSpaceOnUse"><polygon points="465,-300 2200,-300 2200,1000 -285,1000"/></clipPath>
+              <clipPath id="tip-vital" clipPathUnits="userSpaceOnUse"><polygon points="422,-300 2200,-300 2200,1000 -212,1000"/></clipPath>
+              <clipPath id="tip-love" clipPathUnits="userSpaceOnUse"><polygon points="553,-300 2200,-300 2200,1000 -291,1000"/></clipPath>
+              <clipPath id="tip-abund" clipPathUnits="userSpaceOnUse"><polygon points="537,-300 2200,-300 2200,1000 -154,1000"/></clipPath>
+              <clipPath id="tip-core2" clipPathUnits="userSpaceOnUse"><polygon points="582,-300 2200,-300 2200,1000 -199,1000"/></clipPath>
+              <clipPath id="tip-love2" clipPathUnits="userSpaceOnUse"><polygon points="519,-300 2200,-300 2200,1000 -144,1000"/></clipPath>
+              <clipPath id="tip-abund2" clipPathUnits="userSpaceOnUse"><polygon points="613,-300 2200,-300 2200,1000 -264,1000"/></clipPath>
+              <clipPath id="tip-vital2" clipPathUnits="userSpaceOnUse"><polygon points="526,-300 2200,-300 2200,1000 -195,1000"/></clipPath>
+            </defs>
+
+            <!-- The ink fans out of a single point off the left edge and crosses itself,
+                 the drawn twin of the paper ribbons in the trumpet photograph below. -->
+            <g filter="url(#inkGrain)">
+
+              <!-- the dominant mass -->
+              <g class="rb-a">
+                <path class="tip-core" d="M-160,432 C 120,414 300,330 520,248 S 800,116 1060,64" fill="none" stroke="#6521C9" stroke-width="132"/>
+                <path class="tip-vital" d="M-160,402 C 140,392 330,296 560,186 S 830,54 1060,4" fill="none" stroke="#FF9112" stroke-width="94"/>
+              </g>
+
+              <!-- the mid ribbons, crossing the mass -->
+              <g class="rb-b">
+                <path class="tip-love" d="M-160,458 C 130,452 320,412 545,344 S 825,246 1060,206" fill="none" stroke="#B90044" stroke-width="90"/>
+                <path class="tip-abund" d="M-160,474 C 150,474 350,464 575,412 S 845,348 1060,320" fill="none" stroke="#12A56E" stroke-width="96"/>
+                <path class="tip-core2" d="M-160,444 C 130,430 330,358 552,296 S 822,196 1060,152" fill="none" stroke="#6521C9" stroke-width="42"/>
+              </g>
+
+              <!-- the thin ink on top -->
+              <g class="rb-c">
+                <path class="tip-love2" d="M-160,492 C 160,498 372,512 592,486 S 852,446 1060,425" fill="none" stroke="#B90044" stroke-width="56"/>
+                <path class="tip-abund2" d="M-160,412 C 120,396 312,278 532,158 S 812,20 1060,-36" fill="none" stroke="#12A56E" stroke-width="26"/>
+                <path class="tip-vital2" d="M-160,482 C 162,490 382,544 602,552 S 862,536 1060,520" fill="none" stroke="#FF9112" stroke-width="62"/>
+              </g>
+
+            </g>
+          </svg>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 2 · THE FREQUENCY PLATE ============ -->
+  <section class="band rv" id="how">
+    <div class="wrap">
+      <div class="marker">
+        <p class="eyebrow">How it works</p>
+        <span class="idx">01</span>
+      </div>
+
+      <h2 class="plate-head">Four numbers, and everything else follows.</h2>
+
+      <div class="plate">
+        <div class="plate-grid">
+          <div class="fq fq-core">
+            <span class="bar" aria-hidden="true"></span>
+            <p class="band">Core</p>
+            <p class="hz">422<span class="u">Hz</span></p>
+            <p class="dom">Identity</p>
+          </div>
+          <div class="fq fq-love">
+            <span class="bar" aria-hidden="true"></span>
+            <p class="band">Love</p>
+            <p class="hz">432<span class="u">Hz</span></p>
+            <p class="dom">Connection</p>
+          </div>
+          <div class="fq fq-vit">
+            <span class="bar" aria-hidden="true"></span>
+            <p class="band">Vitality</p>
+            <p class="hz">579<span class="u">Hz</span></p>
+            <p class="dom">Energy</p>
+          </div>
+          <div class="fq fq-abu">
+            <span class="bar" aria-hidden="true"></span>
+            <p class="band">Abundance</p>
+            <p class="hz">611<span class="u">Hz</span></p>
+            <p class="dom">Opportunity</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="fine plate-note">A sample set, shown so you can see the shape of it. Yours are computed from your exact birth moment, so they belong to your chart and not to a type.</p>
+
+      <!-- the music-culture moment: ink on paper, photographed -->
+      <div class="artband">
+        <div class="artband-grid">
+          <div>
+            <p class="kicker">What comes out</p>
+            <h3>It has to be music first.</h3>
+            <p>Your frequencies are built into real compositions down at the level of the instruments. Not a tone over a track, and nothing you have to sit still for.</p>
+          </div>
+          <figure>
+            <img src="assets/alive-01-trumpet-white.jpg" alt="A brass trumpet on a white surface with four wide paper ribbons in violet, magenta, orange and teal streaming out of the bell." width="1800" height="1011" loading="lazy" decoding="async">
+          </figure>
+        </div>
+      </div>
+
+      <div class="beats">
+        <article class="beat">
+          <p class="step">01</p>
+          <h3>You give us one moment in time.</h3>
+          <p>The date, the time, and the place you were born. That is the whole input. No quiz, no personality test, nothing for you to interpret. The chart is the raw material, not the product.</p>
+        </article>
+        <article class="beat">
+          <p class="step">02</p>
+          <h3>We isolate the four frequencies that are yours.</h3>
+          <p>One for identity, one for connection, one for energy, one for opportunity. They are computed from your exact birth moment, down to the minute and the place, and they do not change as you change.</p>
+        </article>
+        <article class="beat">
+          <p class="step">03</p>
+          <h3>A composer writes them into the music.</h3>
+          <p>Your frequencies are built into real compositions down at the level of the instruments, so what you get stays music you actually want playing. Nine minutes a day, while you work, walk, cook, or sleep.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE ONE IMAGE BAND ============ -->
+  <section class="duo rv" aria-label="Image">
+    <div class="wrap">
+      <figure>
+        <img src="assets/alive-09-duo-current.jpg" alt="Two people wearing over-ear headphones face each other under warm string lights, laughing, with woven paper ribbons in violet, magenta, orange and teal arcing between them." width="1800" height="1011" loading="lazy" decoding="async">
+        <figcaption>Ribbon study, four inks, one current passing between two people.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 3 · THE STAGE ============ -->
+  <section class="stage rv" id="stage">
+    <div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i><i class="a5"></i></div>
+    <div class="wrap">
+      <div class="marker">
+        <p class="eyebrow">One track from the library</p>
+        <span class="idx">02</span>
+      </div>
+
+      <div class="stage-grid">
+        <div>
+          <h2>One track, four versions.</h2>
+          <p class="stage-lede">Astrolith exists four times, once for each of your four frequencies. You choose which one gets the time.</p>
+          <p class="track-words"><span class="w">Focus</span> <span class="w">&middot; Meditate</span> <span class="w">&middot; Calm</span> <span class="w">&middot; Deep</span> <span class="w">&middot; Flow</span></p>
+          <p class="stage-note">A steady pulse that never distracts. One honest block of focused work, then the music ends and that is your cue to look up.</p>
+        </div>
+
+        <div>
+          <p class="tiles-cap">Four versions, one per frequency</p>
+          <div class="tiles">
+            <article class="tile tile-core on">
+              <span class="spine" aria-hidden="true"></span>
+              <div class="body">
+                <p class="fam">Core</p>
+                <p class="name">Astrolith</p>
+                <p class="meta"><span>422 Hz</span> <span class="state">Playing</span></p>
+              </div>
+            </article>
+            <article class="tile tile-love">
+              <span class="spine" aria-hidden="true"></span>
+              <div class="body">
+                <p class="fam">Love</p>
+                <p class="name">Astrolith</p>
+                <p class="meta"><span>432 Hz</span></p>
+              </div>
+            </article>
+            <article class="tile tile-vit">
+              <span class="spine" aria-hidden="true"></span>
+              <div class="body">
+                <p class="fam">Vitality</p>
+                <p class="name">Astrolith</p>
+                <p class="meta"><span>579 Hz</span></p>
+              </div>
+            </article>
+            <article class="tile tile-abu">
+              <span class="spine" aria-hidden="true"></span>
+              <div class="body">
+                <p class="fam">Abundance</p>
+                <p class="name">Astrolith</p>
+                <p class="meta"><span>611 Hz</span></p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 4 · THE PROOF WALL ============ -->
+  <section class="band rv" id="proof">
+    <div class="wrap">
+      <div class="marker">
+        <p class="eyebrow">In their own words</p>
+        <span class="idx">03</span>
+      </div>
+
+      <div class="tier-label">
+        <p class="eyebrow">Practitioners and researchers</p>
+        <span class="ct">07</span>
+      </div>
+
+      <figure class="lead-voice">
+        <span class="port"><img src="../inapp/app-assets-welcome/srini-pillay.png" alt="Portrait of Srini Pillay, M.D." width="500" height="500" loading="lazy"></span>
+        <div>
+          <blockquote>&ldquo;Psychology shows that the identities we construct can become so rigid that they limit what we notice, how we think, and even the possibilities we perceive. What interests me about Zodiac.fm is not that it tells people who they are, but that it may help them access aspects of themselves that have always been there. Through personalized frequencies rather than language alone, it provides another pathway into self-awareness. When people become more coherent with themselves, they often make clearer decisions, relate more authentically, and experience greater presence.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Srini Pillay, M.D.</p>
+            <p class="role">Harvard-trained psychiatrist and brain-imaging researcher</p>
+          </figcaption>
+        </div>
+      </figure>
+
+      <div class="wall">
+
+        <figure class="voice">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_debra-silverman-d2c.png" alt="Portrait of Debra Silverman" width="500" height="500" loading="lazy"></span>
+          <blockquote>&ldquo;This music tickled my soul and reminded me that there&rsquo;s such a connection between vibration, the stars and the sounds that are coordinated by higher intelligence. Give it a try — you&rsquo;ll love it.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Debra Silverman</p>
+            <p class="role">Astrologer to Sting, Jennifer Aniston, and more</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_joey-vaillancourt-d2c.png" alt="Portrait of Joey Vaillancourt" width="500" height="500" loading="lazy"></span>
+          <blockquote>&ldquo;Without doing anything but listening, I become a different person. I shift into the version of me I actually want to be. I can tap into different frequencies based on what I need — abundance when I&rsquo;m visualizing, love when I want to connect with people, core when I need to realign.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Joey Vaillancourt</p>
+            <p class="role">VP of Marketing, BiOptimizers</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_barbara-ditlow-d2c.png" alt="Portrait of Barbara Ditlow" width="500" height="500" loading="lazy"></span>
+          <blockquote>&ldquo;Bypassing the mind and speaking directly to the body.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Barbara Ditlow</p>
+            <p class="role">Human Design mentor, trained and endorsed by Ra Uru Hu</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_rhonda-britten-d2c.png" alt="Portrait of Rhonda Britten" width="500" height="500" loading="lazy"></span>
+          <blockquote>&ldquo;If you&rsquo;re tired of living out of tune with yourself, this is your invitation home.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Rhonda Britten</p>
+            <p class="role">Author of &ldquo;Fearless Living,&rdquo; Emmy Award-winner, Founder, Fearless Living Institute</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_katie-wells-d2c.png" alt="Portrait of Katie Wells" width="500" height="500" loading="lazy"></span>
+          <blockquote>&ldquo;Feels like coming home to myself.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Katie Wells</p>
+            <p class="role">Founder, Wellness Mama, best-selling author</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_anja-zibert-d2c.png" alt="Portrait of Anja Zibert" width="500" height="500" loading="lazy"></span>
+          <blockquote>&ldquo;The cutting-edge tool I didn&rsquo;t know I needed.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Anja Zibert</p>
+            <p class="role">Founder, Rebels Rising, a conscious recruiting firm</p>
+          </figcaption>
+        </figure>
+
+      </div>
+
+      <!-- the beta numbers, between the tiers -->
+      <div class="numbers">
+        <div class="num">
+          <p class="n">98.6%</p>
+          <p>of everyone who finished the beta would recommend it.</p>
+        </div>
+        <div class="num">
+          <p class="n">84%</p>
+          <p>of the people who used it as designed called it life-changing.</p>
+        </div>
+        <p class="fine">Our own 52-week beta study: 300 people started, 278 finished. &ldquo;As designed&rdquo; means about nine minutes a day on average, balanced across all four frequencies. It was rigorous for a beta, and we do not present it as clinical proof.</p>
+      </div>
+
+      <div class="tier-label">
+        <p class="eyebrow">Members</p>
+        <span class="ct">07</span>
+      </div>
+
+      <div class="wall" style="margin-top:0">
+
+        <figure class="voice">
+          <span class="port mono" aria-hidden="true">H</span>
+          <blockquote>&ldquo;Oh there you are, Hilary, I found you.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Hilary Wilson</p>
+            <p class="role">Member, about a week in</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_amber-hedrick-d2c.png" alt="Portrait of Amber Hedrick" width="500" height="500" loading="lazy"></span>
+          <blockquote>&ldquo;I feel like ME again.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Amber Hedrick</p>
+            <p class="role">Member, first week</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_zehra-ashary-d2c.png" alt="Portrait of Zehra Ashary" width="500" height="500" loading="lazy"></span>
+          <blockquote>&ldquo;It lets you finally feel the parts of yourself you have only ever read about.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Zehra Ashary</p>
+            <p class="role">Member, London</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice">
+          <span class="port"><img src="../inapp/app-assets-welcome/ken-hoffman.png" alt="Portrait of Ken Hoffman" width="500" height="500" loading="lazy"></span>
+          <blockquote>&ldquo;My wife especially loves the man I am turning into since subscribing.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Ken Hoffman</p>
+            <p class="role">Member, Operations Manager, WNY Dyslexia Specialists</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_ellen-grimaldi-d2c.png" alt="Portrait of Ellen Grimaldi" width="500" height="500" loading="lazy"></span>
+          <blockquote>&ldquo;I kid you not, from the first 631 Hz tonal ring in my ears, it&rsquo;s as if my soul comes alive&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Ellen Grimaldi</p>
+            <p class="role">Member, Mission, KS</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_kevin-knabe-d2c.png" alt="Portrait of Kevin Knabe" width="500" height="500" loading="lazy"></span>
+          <blockquote>&ldquo;This has been a subtle and profound new practice I have incorporated into my daily life! I feel more centered and grounded and connected during and after listening to the CVF immersions.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Kevin Knabe</p>
+            <p class="role">Member, six months in</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice">
+          <span class="port mono" aria-hidden="true">L</span>
+          <blockquote>&ldquo;It felt like a &lsquo;coming home to myself&rsquo; experience.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Laura</p>
+            <p class="role">Member</p>
+          </figcaption>
+        </figure>
+
+      </div>
+
+      <div class="proof-more">
+        <a class="tlink" href="/testimonials">Read the testimonials</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 5 · THE QUIET CLOSE ============ -->
+  <section class="band rv" id="price">
+    <div class="wrap">
+      <div class="marker">
+        <p class="eyebrow">Price and guarantee</p>
+        <span class="idx">04</span>
+      </div>
+
+      <h2>What it costs.</h2>
+
+      <div class="close-grid">
+        <div class="price-plate">
+          <div class="plans">
+            <p class="plan"><span class="amt">$110</span> <span class="per">a year</span></p>
+            <p class="or">or</p>
+            <p class="plan"><span class="amt">$17.50</span> <span class="per">a month</span></p>
+          </div>
+          <p class="included">Your four frequencies, composed into music, for as long as you are a member.</p>
+          <a class="btn" href="/pricing">Get your frequencies</a>
+          <p class="fine">Billed in USD. Cancel from your account settings at any time.</p>
+        </div>
+
+        <aside class="gtee">
+          <h3>If it does not land</h3>
+          <dl>
+            <div class="kv"><dt>Annual</dt><dd>90-day money-back guarantee.</dd></div>
+            <div class="kv"><dt>Monthly</dt><dd>30-day money-back guarantee.</dd></div>
+          </dl>
+          <p>If your frequencies do not land, write to us. We will change them on our side and keep working with you until they do, and we will extend your guarantee while we sort it out.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm" width="114" height="20">
+        <p>Music composed from the moment and place you were born.</p>
+      </div>
+
+      <div class="foot-col">
+        <p class="foot-label">Product</p>
+        <ul>
+          <li><a href="/how-it-works">How it works</a></li>
+          <li><a href="/the-study">The study</a></li>
+          <li><a href="/testimonials">Testimonials</a></li>
+          <li><a href="/who-this-is-for">Who this is for</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <p class="foot-label">Company</p>
+        <ul>
+          <li><a href="/story">Zodiac&rsquo;s story</a></li>
+          <li><a href="/how-we-compare">How we compare</a></li>
+          <li><a href="/questions">Questions</a></li>
+          <li><a href="/support">Support</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <p class="foot-label">Legal</p>
+        <ul>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="mailto:support@zodiac.fm">support@zodiac.fm</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-base">
+      <span>&copy; 2026 Zodiac.fm</span>
+      <span>Zodiac is music. It is not medical or health care, and it does not diagnose or treat anything.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="badge">HOME &middot; LIGHT &middot; 01 &middot; DEMO</div>
+
+<script>
+(function(){
+  var els = document.querySelectorAll('.rv');
+  if (!('IntersectionObserver' in window) ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    for (var i=0;i<els.length;i++) els[i].classList.add('in');
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {rootMargin:'0px 0px -8% 0px', threshold:0});
+  els.forEach(function(el){ io.observe(el); });
+})();
+</script>
+
+</body>
+</html>
