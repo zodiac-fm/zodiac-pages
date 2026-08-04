@@ -1,0 +1,960 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zodiac.fm · Your birth chart, composed into music</title>
+<meta name="description" content="Zodiac calculates four frequencies from the moment and place you were born, then a composer writes them into music you can listen to every day.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+    --sans:'Switzer',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+
+    /* locked tokens */
+    --paper:#F6F1E8;        /* Cream */
+    --mist:#EEE9E0;         /* Mist, the locked step down from Cream */
+    --moondust:#FBF8F3;     /* Moon Dust, the plate/card ground */
+    --greige:#EAE4DA;       /* the headshot field colour */
+    --ink:#1A1620;          /* Ink */
+    --stage:#0B0712;        /* Stage, the one reversed surface */
+    --violet:#6521C9;       /* Core Purple, the one accent */
+    --violet-deep:#38007A;
+    --violet-soft:#D2C8FF;  /* Core soft, the accent on Stage */
+
+    /* text tiers. every one of these clears 4.5:1 on every ground it lands on:
+       Cream #F6F1E8, Mist #EEE9E0, Moon Dust #FBF8F3, Greige #EAE4DA.
+       .72 = 6.4:1 · .66 = 5.3:1 · .63 = 4.7:1 (all measured on Mist, the darkest) */
+    --ink-72:rgba(26,22,32,.72);
+    --ink-mid:rgba(26,22,32,.66);
+    --ink-quiet:rgba(26,22,32,.63);
+    --rule:rgba(26,22,32,.14);
+    --rule-soft:rgba(26,22,32,.08);
+    /* on Stage */
+    --cream-72:rgba(246,241,232,.76);
+
+    --gut:clamp(20px,5vw,64px);
+    --sect:clamp(60px,10vw,132px);
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-weight:400;font-size:16px;line-height:1.62;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit}
+
+  .wrap{width:100%;max-width:1120px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+  .measure{max-width:60ch}
+
+  /* ---------- shared editorial parts ---------- */
+  .eyebrow{
+    font-family:var(--sans);font-weight:600;font-size:11px;line-height:1;
+    letter-spacing:.17em;text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .marker{
+    display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    border-top:1px solid var(--rule);padding-top:12px;margin-bottom:clamp(26px,4vw,44px);
+  }
+  .marker .idx{font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.14em;color:var(--ink-quiet);font-variant-numeric:tabular-nums}
+
+  h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.012em}
+  h1{font-size:clamp(40px,6.4vw,72px);line-height:1.03}
+  h2{font-size:clamp(30px,5.4vw,52px);line-height:1.06}
+  h3{font-size:clamp(28px,4.2vw,33px);line-height:1.12}
+
+  p{max-width:60ch}
+  .lede{font-size:clamp(17px,1.9vw,20px);line-height:1.58;color:var(--ink-72);font-weight:400}
+  .small{font-size:14px;line-height:1.6;color:var(--ink-mid)}
+  .fine{font-size:12.5px;line-height:1.62;color:var(--ink-quiet);max-width:62ch}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-height:52px;padding:0 30px;border-radius:2px;border:1px solid var(--violet);
+    background:var(--violet);color:#fff;text-decoration:none;
+    font-family:var(--sans);font-weight:600;font-size:15px;letter-spacing:.015em;
+    transition:background .25s ease,border-color .25s ease;
+  }
+  .btn:hover,.btn:focus-visible{background:var(--violet-deep);border-color:var(--violet-deep)}
+
+  .tlink{
+    display:inline-flex;align-items:center;min-height:24px;
+    font-family:var(--sans);font-weight:600;font-size:14px;letter-spacing:.01em;
+    color:var(--violet);text-decoration:none;
+    border-bottom:1px solid rgba(101,33,201,.32);padding-bottom:1px;
+    transition:border-color .25s ease;
+  }
+  .tlink:hover,.tlink:focus-visible{border-bottom-color:var(--violet)}
+
+  :focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:1px}
+
+  .skip{position:absolute;left:-9999px;top:0}
+  .skip:focus{left:12px;top:12px;z-index:99;background:#fff;color:var(--ink);padding:12px 16px;border:1px solid var(--ink)}
+
+  /* ---------- header ---------- */
+  .site-head{padding-top:22px;padding-bottom:18px}
+  .head-row{display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .head-row img{height:21px;width:auto}
+  .nav{display:flex;align-items:center;gap:clamp(14px,2.4vw,30px);flex-wrap:wrap}
+  .nav a{
+    display:inline-flex;align-items:center;min-height:26px;
+    font-family:var(--sans);font-weight:500;font-size:14px;color:var(--ink-72);
+    text-decoration:none;transition:color .2s ease;
+  }
+  .nav a:hover,.nav a:focus-visible{color:var(--ink)}
+  .nav a[aria-current="page"]{color:var(--ink);font-weight:600}
+  .login{
+    display:inline-flex;align-items:center;min-height:34px;padding:0 15px;
+    border:1px solid var(--rule);border-radius:2px;background:transparent;
+    font-family:var(--sans);font-weight:600;font-size:13px;color:var(--ink);
+    text-decoration:none;letter-spacing:.02em;transition:border-color .25s ease;
+  }
+  .login:hover,.login:focus-visible{border-color:var(--ink)}
+  .nav-mobile{display:none}
+  @media (max-width:719px){
+    .head-row .nav{display:none}
+    .nav-mobile{
+      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+      margin-top:14px;padding-top:12px;border-top:1px solid var(--rule-soft);
+    }
+    .nav-mobile a{font-size:13.5px;min-height:24px}
+  }
+
+  /* ---------- hero ---------- */
+  /* the bottom pad is deliberately short: at 1440x900 the fold must close on the
+     top edge of section 01, not on empty cream */
+  .hero{padding-top:clamp(26px,6vw,66px);padding-bottom:clamp(46px,6.4vw,74px)}
+  .hero-grid{display:grid;grid-template-columns:1fr;row-gap:clamp(38px,5vw,52px);align-items:center}
+  @media (min-width:1000px){
+    .hero-grid{
+      grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);
+      column-gap:clamp(44px,5vw,76px);row-gap:0;
+    }
+  }
+  .hero h1{margin-top:16px;max-width:15ch}
+  .hero .lede{margin-top:clamp(18px,2.4vw,26px);max-width:48ch}
+  .hero .cta-row{margin-top:clamp(26px,3.6vw,40px);display:flex;flex-wrap:wrap;gap:18px;align-items:center}
+  .hero .credible{
+    margin-top:18px;max-width:50ch;font-size:14px;line-height:1.6;color:var(--ink-mid);
+  }
+  .hero .credible b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+
+  /* ---------- the four-frequency specimen: the page's signature device ---------- */
+  .specimen{
+    border:1px solid var(--rule);border-radius:2px;background:var(--moondust);
+    padding:clamp(20px,2.6vw,26px) clamp(18px,2.4vw,26px) clamp(16px,2vw,22px);
+  }
+  .specimen .cap{
+    font-family:var(--sans);font-weight:600;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink-quiet);
+    padding-bottom:14px;border-bottom:1px solid var(--rule);
+  }
+  .freq-row{
+    display:grid;grid-template-columns:minmax(84px,96px) minmax(0,1fr);
+    column-gap:clamp(12px,1.8vw,20px);align-items:center;
+    padding:clamp(12px,1.6vw,16px) 0;border-bottom:1px solid var(--rule-soft);
+  }
+  .freq-row:last-of-type{border-bottom:0;padding-bottom:6px}
+  @media (max-width:479px){.specimen .cap{font-size:10px;letter-spacing:.11em}}
+  .freq-name{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-72);
+  }
+  .freq-hz{
+    margin-top:5px;font-family:var(--sans);font-weight:600;
+    font-size:clamp(19px,2.1vw,23px);line-height:1;letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;color:var(--ink);
+  }
+  .freq-hz .u{font-size:.56em;font-weight:500;letter-spacing:.04em;color:var(--ink-quiet);margin-left:3px}
+  .freq-domain{margin-top:6px;font-family:var(--sans);font-weight:500;font-size:11.5px;line-height:1.2;color:var(--ink-quiet)}
+  .wv{width:100%;height:clamp(38px,5vw,52px);display:block}
+  .wv .ln{fill:none;stroke:var(--ink);stroke-opacity:.46;stroke-width:1.25;vector-effect:non-scaling-stroke}
+  .wv .fl{fill:none;stroke:none}
+  .freq-row.accent .freq-name,.freq-row.accent .freq-hz{color:var(--violet)}
+  .freq-row.accent .wv .ln{stroke:var(--violet);stroke-opacity:1;stroke-width:2.4}
+  .freq-row.accent .wv .fl{fill:var(--violet);fill-opacity:.09}
+  .spec-note{
+    margin-top:14px;padding-top:13px;border-top:1px solid var(--rule);
+    font-size:12px;line-height:1.5;color:var(--ink-quiet);max-width:44ch;
+  }
+
+  /* ---------- section frame ---------- */
+  section.band{padding-top:var(--sect);padding-bottom:var(--sect)}
+  section.tint{background:var(--mist)}
+  /* the first band after the hero runs a shorter top pad so the tint edge and the
+     01 marker break the fold on a laptop screen */
+  #proof{padding-top:clamp(52px,7.4vw,94px)}
+
+  /* ---------- proof ---------- */
+  .proof-grid{display:grid;grid-template-columns:1fr;gap:clamp(38px,5vw,64px);align-items:start}
+  @media (min-width:900px){.proof-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}}
+  .proof-h2{max-width:17ch}
+  .pull{
+    font-family:var(--serif);font-weight:500;
+    font-size:clamp(30px,6vw,54px);line-height:1.12;letter-spacing:-.015em;
+    max-width:17ch;text-indent:-.42em;   /* hangs the opening quote mark */
+  }
+  .pull-attr{margin-top:22px;font-family:var(--sans);font-size:13.5px;color:var(--ink-mid);font-weight:500}
+  .pull-attr b{font-weight:600;color:var(--ink)}
+  .echo{
+    margin-top:clamp(26px,3.4vw,36px);padding-left:18px;border-left:2px solid var(--rule);
+    max-width:44ch;
+  }
+  .echo p{font-size:16px;line-height:1.55;color:var(--ink-72);font-weight:500}
+  .echo .pull-attr{margin-top:10px}
+
+  .stats{display:grid;grid-template-columns:1fr;gap:clamp(26px,3vw,34px)}
+  @media (min-width:560px) and (max-width:899px){.stats{grid-template-columns:1fr 1fr}}
+  .stat{border-top:1px solid var(--rule);padding-top:clamp(16px,2vw,22px)}
+  .stat .n{
+    font-family:var(--sans);font-weight:600;
+    font-size:clamp(44px,7vw,68px);line-height:1;letter-spacing:-.03em;
+    font-variant-numeric:tabular-nums;color:var(--ink);
+  }
+  .stat p{margin-top:12px;font-size:15px;line-height:1.5;color:var(--ink-72);max-width:32ch}
+  .caveat{margin-top:clamp(22px,2.6vw,30px)}
+
+  .tier{margin-top:clamp(46px,6vw,74px)}
+  .tier-label{
+    padding-top:12px;border-top:1px solid var(--ink);
+    display:inline-block;margin-bottom:6px;
+  }
+  /* subgrid so portrait, quote and attribution share row lines across the whole
+     row: a two-line role can no longer push one name off its neighbours' baseline */
+  .voices{display:grid;grid-template-columns:1fr;grid-template-rows:auto 1fr auto;gap:0}
+  @media (min-width:620px){.voices{grid-template-columns:1fr 1fr;column-gap:clamp(28px,4vw,56px)}}
+  @media (min-width:960px){.voices{grid-template-columns:repeat(3,1fr)}}
+  .voice{
+    border-top:1px solid var(--rule);
+    padding:clamp(22px,2.8vw,30px) 0;
+    display:grid;grid-template-rows:auto 1fr auto;
+    grid-row:span 3;
+  }
+  @supports (grid-template-rows:subgrid){.voice{grid-template-rows:subgrid}}
+  /* ONE shared field for every portrait: the greige headshot token.
+     The plate is taller than the image and the image is bottom-anchored,
+     so every crown gets the same air above it and nothing can clip. */
+  .port{
+    width:100px;aspect-ratio:112/132;background:var(--greige);border-radius:2px;
+    display:flex;align-items:flex-end;justify-content:center;overflow:hidden;
+  }
+  .port img{width:86%;height:auto;background:transparent}
+  .voice blockquote{
+    margin-top:20px;font-family:var(--sans);font-weight:500;
+    font-size:15.5px;line-height:1.56;color:var(--ink);max-width:34ch;
+  }
+  .voice figcaption{padding-top:18px}
+  .voice .who{font-family:var(--sans);font-weight:600;font-size:14px;color:var(--ink)}
+  .voice .role{margin-top:4px;font-family:var(--sans);font-weight:500;font-size:12.5px;line-height:1.45;color:var(--ink-quiet);max-width:30ch}
+  /* authority tier carries visibly more weight than the member tier */
+  .tier-a .port{width:126px}
+  .tier-a .voice{padding-top:clamp(26px,3.2vw,34px)}
+  .tier-a .voice blockquote{font-size:17.5px;line-height:1.5;margin-top:24px;max-width:32ch}
+  .tier-a .voice .who{font-size:15.5px}
+  .tier-a .voice .role{font-size:13px;color:var(--ink-mid)}
+  .tier-b{margin-top:clamp(34px,4.4vw,54px)}
+  .tier-b .port{width:88px}
+  .proof-more{margin-top:clamp(34px,4.4vw,52px);border-top:1px solid var(--rule);padding-top:26px}
+
+  /* ---------- how it works ---------- */
+  .how-head{display:grid;grid-template-columns:1fr;gap:clamp(28px,4vw,56px);align-items:start}
+  @media (min-width:900px){.how-head{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}}
+  .beats{
+    margin-top:clamp(34px,4.6vw,58px);
+    display:grid;grid-template-columns:1fr;gap:0;
+  }
+  @media (min-width:860px){.beats{grid-template-columns:repeat(3,1fr);column-gap:clamp(28px,4vw,56px)}}
+  .beat{border-top:1px solid var(--rule);padding:clamp(26px,3.2vw,36px) 0 clamp(28px,3.4vw,38px);display:grid;grid-template-rows:auto auto 1fr auto}
+  .beat .step{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.16em;
+    color:var(--ink-quiet);font-variant-numeric:tabular-nums;
+  }
+  .beat h3{margin-top:14px;max-width:16ch}
+  .beat p{margin-top:16px;font-size:15.5px;line-height:1.6;color:var(--ink-72);max-width:40ch}
+  .beat .tlink{margin-top:20px;align-self:end;justify-self:start}
+  .beat-intro{max-width:46ch;margin-top:22px}
+
+  /* ---------- the authored peak: one track, on Stage ---------- */
+  .track{
+    margin-top:clamp(44px,5.6vw,76px);
+    background:var(--stage);color:var(--paper);border-radius:3px;
+    padding:clamp(30px,4.4vw,60px) clamp(22px,3.4vw,56px);
+  }
+  .track-grid{display:grid;grid-template-columns:1fr;gap:clamp(30px,4vw,60px);align-items:center}
+  @media (min-width:900px){.track-grid{grid-template-columns:minmax(0,4.6fr) minmax(0,7.4fr)}}
+  .track .eyebrow{color:var(--violet-soft)}
+  .track-title{
+    margin-top:16px;font-family:var(--serif);font-weight:600;
+    font-size:clamp(34px,5vw,54px);line-height:1.02;letter-spacing:-.015em;color:var(--paper);
+  }
+  .track-words{
+    margin-top:14px;font-family:var(--sans);font-weight:600;font-size:10.5px;
+    letter-spacing:.19em;text-transform:uppercase;color:var(--cream-72);max-width:26ch;line-height:1.9;
+  }
+  /* each separator is bound to the word that FOLLOWS it, so a line can never end
+     on a dangling middot (the catalog's own format law) */
+  .track-words .w{white-space:nowrap}
+  .track-line{margin-top:16px;font-size:15.5px;line-height:1.55;color:var(--cream-72);max-width:30ch}
+  .track-play{display:flex;align-items:center;gap:14px;margin-top:clamp(24px,3vw,32px)}
+  .disc{
+    width:52px;height:52px;flex:0 0 auto;border-radius:50%;
+    background:var(--violet);display:flex;align-items:center;justify-content:center;
+  }
+  .disc svg{width:15px;height:16px;display:block}
+  .disc svg path{fill:#fff}
+  .track-play span{font-family:var(--sans);font-weight:500;font-size:13.5px;line-height:1.4;color:var(--cream-72);max-width:28ch}
+
+  /* the version list caption on Stage, the Stage twin of .specimen .cap */
+  .track-cap{
+    font-family:var(--sans);font-weight:600;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--violet-soft);
+    max-width:30ch;line-height:1.7;padding-bottom:14px;
+  }
+  .track .freq-mark{
+    margin-top:6px;font-family:var(--sans);font-weight:600;font-size:10px;
+    letter-spacing:.13em;text-transform:uppercase;color:var(--violet-soft);
+  }
+
+  .track .freq-row{border-bottom:1px solid rgba(246,241,232,.13)}
+  .track .freq-row:first-of-type{border-top:1px solid rgba(246,241,232,.13)}
+  .track .freq-name{color:var(--cream-72)}
+  .track .freq-hz{color:var(--paper)}
+  .track .freq-hz .u,.track .freq-domain{color:var(--cream-72)}
+  .track .wv .ln{stroke:var(--paper);stroke-opacity:.42}
+  .track .freq-row.accent .freq-name,.track .freq-row.accent .freq-hz{color:var(--violet-soft)}
+  .track .freq-row.accent .wv .ln{stroke:var(--violet-soft);stroke-opacity:1;stroke-width:2.4}
+  .track .freq-row.accent .wv .fl{fill:var(--violet-soft);fill-opacity:.16}
+  .track-scale{
+    margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;align-items:center;
+    font-family:var(--sans);font-weight:600;font-size:10.5px;letter-spacing:.15em;
+    text-transform:uppercase;color:var(--cream-72);
+  }
+  .track-scale span{white-space:nowrap}
+  .track-scale span:last-of-type{text-align:right}
+  .track-scale em{
+    grid-column:1/-1;grid-row:2;font-style:normal;letter-spacing:.02em;text-transform:none;
+    font-weight:500;font-size:12.5px;color:var(--cream-72);
+  }
+  @media (min-width:620px){
+    .track-scale{grid-template-columns:auto minmax(0,1fr) auto}
+    .track-scale em{grid-column:2;grid-row:1;text-align:center}
+  }
+  @media (max-width:419px){.track-scale{font-size:10px;letter-spacing:.1em}}
+
+  /* ---------- who / story shared prose ---------- */
+  .prose p{margin-top:20px;font-size:clamp(16px,1.75vw,17.5px);line-height:1.68;color:var(--ink-72)}
+  .prose p:first-child{margin-top:0}
+  .prose .tlink{margin-top:28px}
+  .two-col{display:grid;grid-template-columns:1fr;gap:clamp(28px,4vw,56px);align-items:start}
+  @media (min-width:900px){.two-col{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}}
+  /* the right column is a composed object, never a leftover hole.
+     Stretching only sets the card's HEIGHT; the content inside it is centred the
+     same way .margin-pull centres its quote, so no bordered card can end on a
+     block of dead space. */
+  @media (min-width:900px){
+    .two-col.stretch{align-items:stretch}
+    .two-col.stretch>.note{display:flex;flex-direction:column;justify-content:center}
+  }
+
+  .note{
+    border:1px solid var(--rule);border-radius:2px;background:var(--paper);
+    padding:clamp(22px,2.8vw,30px);
+  }
+  section.tint .note{background:var(--moondust)}
+  .note h3{
+    font-family:var(--sans);font-weight:600;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .note p{margin-top:14px;font-size:15px;line-height:1.62;color:var(--ink-72)}
+  .note dl{margin-top:6px}
+  .note .kv{display:grid;grid-template-columns:minmax(72px,88px) minmax(0,1fr);gap:12px;
+    padding:13px 0;border-bottom:1px solid var(--rule-soft)}
+  .note .kv:last-child{border-bottom:0;padding-bottom:0}
+  .note dt{font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-quiet);padding-top:3px}
+  .note dd{font-size:15px;line-height:1.5;color:var(--ink-72)}
+
+  /* story drop cap */
+  .story-body{margin-top:26px;max-width:58ch}
+  .story-body p{font-size:clamp(16.5px,1.85vw,18.5px);line-height:1.68;color:var(--ink-72);margin-top:20px}
+  .story-body p:first-child{margin-top:0}
+  /* two-line drop cap: the float box is pinned just under two 1.68em lines,
+     so exactly two lines wrap it */
+  .story-body .dc{
+    float:left;font-family:var(--serif);font-weight:600;color:var(--ink);
+    font-size:4.4em;line-height:.72;height:.72em;margin:0 .09em 0 0;
+  }
+  .margin-pull{
+    border:1px solid var(--rule);border-radius:2px;background:var(--moondust);
+    padding:clamp(26px,3.2vw,42px);
+    display:flex;flex-direction:column;justify-content:center;
+  }
+  .margin-pull q{
+    quotes:none;display:block;font-family:var(--serif);font-weight:500;
+    font-size:clamp(28px,3.3vw,38px);line-height:1.16;letter-spacing:-.012em;color:var(--ink);
+  }
+  .margin-pull q::before{
+    content:"";display:block;width:44px;height:2px;background:var(--violet);
+    margin-bottom:clamp(20px,2.4vw,28px);
+  }
+  .margin-pull .src{
+    margin-top:20px;font-family:var(--sans);font-weight:600;font-size:11px;
+    letter-spacing:.15em;text-transform:uppercase;color:var(--ink-quiet);
+  }
+  /* the pull quote is a MARGIN object. Once the columns stack it lands directly
+     under the sentence it lifts and reads as a duplicate, so it only exists at the
+     width where it actually sits in the margin. (Declared after the base rule so
+     the cascade cannot hand display:flex back.) */
+  @media (max-width:899px){.margin-pull{display:none}}
+
+  /* ---------- price ---------- */
+  .price-plate{
+    border:1px solid var(--rule);border-radius:2px;background:var(--moondust);
+    padding:clamp(28px,3.8vw,44px);
+  }
+  .plans{display:flex;flex-direction:column;gap:8px}
+  @media (min-width:560px){.plans{flex-direction:row;align-items:baseline;gap:clamp(18px,2.6vw,30px)}}
+  .plan{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
+  .price-row .amt{
+    font-family:var(--sans);font-weight:600;font-size:clamp(38px,6.6vw,58px);
+    line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;
+  }
+  .price-row .per{font-family:var(--sans);font-weight:500;font-size:15px;color:var(--ink-mid)}
+  .price-row .or{font-family:var(--sans);font-weight:500;font-size:15px;color:var(--ink-quiet)}
+  .price-plate .included{margin-top:24px;padding-top:22px;border-top:1px solid var(--rule);font-size:15px;line-height:1.62;color:var(--ink-72);max-width:46ch}
+  .price-plate .btn{margin-top:26px}
+  .price-plate .fine{margin-top:18px}
+
+  /* ---------- footer ---------- */
+  .site-foot{background:var(--mist);border-top:1px solid var(--rule);padding-top:clamp(48px,6vw,76px);padding-bottom:44px}
+  .foot-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(26px,3.4vw,44px)}
+  @media (min-width:760px){.foot-grid{grid-template-columns:minmax(0,2fr) repeat(3,minmax(0,1fr))}}
+  .foot-brand img{height:20px;width:auto}
+  .foot-brand p{margin-top:16px;font-size:13.5px;line-height:1.6;color:var(--ink-mid);max-width:30ch}
+  .foot-label{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.15em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .foot-col ul{list-style:none;margin-top:16px}
+  .foot-col li{margin-top:2px}
+  .foot-col a{
+    display:inline-flex;align-items:center;min-height:28px;
+    font-size:14px;color:var(--ink-72);text-decoration:none;transition:color .2s ease;
+  }
+  .foot-col a:hover,.foot-col a:focus-visible{color:var(--ink)}
+  .foot-base{
+    margin-top:clamp(36px,4.6vw,56px);padding-top:22px;border-top:1px solid var(--rule);
+    display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;
+    font-size:12.5px;color:var(--ink-quiet);
+  }
+  .foot-base span{font-variant-numeric:tabular-nums}
+
+  /* ---------- demo badge ----------
+     Pinned into the left margin band (content starts at the gutter, min 20px),
+     so it can never sit on top of a button, a link, or the hero CTA. */
+  .demo-badge{
+    position:fixed;left:0;bottom:16px;z-index:80;
+    writing-mode:vertical-rl;transform:rotate(180deg);
+    background:var(--greige);border:1px solid var(--rule);border-left:0;
+    color:var(--ink-quiet);font:700 9px/1 var(--sans);letter-spacing:.16em;
+    padding:11px 3px;border-radius:999px 0 0 999px;pointer-events:none;
+  }
+  @media (min-width:720px){.demo-badge{bottom:22px;font-size:10px;padding:13px 4px}}
+
+  /* ---------- quiet reveal ---------- */
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.3,1)}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+</style>
+<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <div class="head-row">
+      <a href="/" aria-label="Zodiac.fm home"><img src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm" width="120" height="21"></a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/" aria-current="page">Home</a>
+        <a href="/how-it-works">How it works</a>
+        <a href="/the-study">The study</a>
+        <a href="/testimonials">Testimonials</a>
+      </nav>
+      <a class="login" href="/login">Log in</a>
+    </div>
+    <nav class="nav nav-mobile" aria-label="Primary, mobile">
+      <a href="/" aria-current="page">Home</a>
+      <a href="/how-it-works">How it works</a>
+      <a href="/the-study">The study</a>
+      <a href="/testimonials">Testimonials</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+
+        <div class="hero-copy">
+          <p class="eyebrow">Personal psychoacoustics</p>
+          <h1>Your birth chart, composed into music.</h1>
+          <p class="lede">Zodiac calculates four frequencies from the exact moment and place you were born, then a composer writes them into real music. About nine minutes a day, eyes open, no practice to learn.</p>
+          <div class="cta-row">
+            <a class="btn" href="#how">See how it works</a>
+          </div>
+          <p class="credible">In our 52-week beta, <b>98.6%</b> of the people who finished the study said they would recommend it.</p>
+        </div>
+
+        <div class="specimen" aria-labelledby="spec-cap">
+          <p class="cap" id="spec-cap">Four frequencies, one per area of life</p>
+
+          <div class="freq-row accent">
+            <div>
+              <p class="freq-name">Core</p>
+              <p class="freq-hz">422<span class="u">Hz</span></p>
+              <p class="freq-domain">Identity</p>
+            </div>
+            <svg class="wv" viewBox="0 0 640 24" preserveAspectRatio="none" focusable="false" aria-hidden="true">
+              <path class="fl" d="M0,12 q45.71,-17.20 91.43,0 q45.71,17.20 91.43,0 q45.71,-17.20 91.43,0 q45.71,17.20 91.43,0 q45.71,-17.20 91.43,0 q45.71,17.20 91.43,0 q45.71,-17.20 91.43,0 L640,24 L0,24 Z"/>
+              <path class="ln" d="M0,12 q45.71,-17.20 91.43,0 q45.71,17.20 91.43,0 q45.71,-17.20 91.43,0 q45.71,17.20 91.43,0 q45.71,-17.20 91.43,0 q45.71,17.20 91.43,0 q45.71,-17.20 91.43,0"/>
+            </svg>
+          </div>
+
+          <div class="freq-row">
+            <div>
+              <p class="freq-name">Love</p>
+              <p class="freq-hz">432<span class="u">Hz</span></p>
+              <p class="freq-domain">Connection</p>
+            </div>
+            <svg class="wv" viewBox="0 0 640 24" preserveAspectRatio="none" focusable="false" aria-hidden="true">
+              <path class="ln" d="M0,12 q29.09,-12.80 58.18,0 q29.09,12.80 58.18,0 q29.09,-12.80 58.18,0 q29.09,12.80 58.18,0 q29.09,-12.80 58.18,0 q29.09,12.80 58.18,0 q29.09,-12.80 58.18,0 q29.09,12.80 58.18,0 q29.09,-12.80 58.18,0 q29.09,12.80 58.18,0 q29.09,-12.80 58.18,0"/>
+            </svg>
+          </div>
+
+          <div class="freq-row">
+            <div>
+              <p class="freq-name">Vitality</p>
+              <p class="freq-hz">579<span class="u">Hz</span></p>
+              <p class="freq-domain">Energy</p>
+            </div>
+            <svg class="wv" viewBox="0 0 640 24" preserveAspectRatio="none" focusable="false" aria-hidden="true">
+              <path class="ln" d="M0,12 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0"/>
+            </svg>
+          </div>
+
+          <div class="freq-row">
+            <div>
+              <p class="freq-name">Abundance</p>
+              <p class="freq-hz">611<span class="u">Hz</span></p>
+              <p class="freq-domain">Opportunity</p>
+            </div>
+            <svg class="wv" viewBox="0 0 640 24" preserveAspectRatio="none" focusable="false" aria-hidden="true">
+              <path class="ln" d="M0,12 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0"/>
+            </svg>
+          </div>
+
+          <p class="spec-note">A sample set, shown so you can see the shape of it. Yours are computed from your exact birth moment, so they belong to your chart and not to a type.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SOCIAL PROOF ============ -->
+  <section class="band tint rv" id="proof">
+    <div class="wrap">
+      <div class="marker">
+        <p class="eyebrow">In their own words</p>
+        <span class="idx">01</span>
+      </div>
+
+      <h2 class="proof-h2">Nearly everyone who finished would recommend it.</h2>
+
+      <div class="proof-grid" style="margin-top:clamp(32px,4vw,52px)">
+        <div>
+          <blockquote>
+            <p class="pull">&ldquo;Oh there you are, Hilary, I found you.&rdquo;</p>
+            <p class="pull-attr"><b>Hilary Wilson</b>, about a week in</p>
+          </blockquote>
+
+          <blockquote class="echo">
+            <p>&ldquo;It felt like a &lsquo;coming home to myself&rsquo; experience.&rdquo;</p>
+            <p class="pull-attr"><b>Laura</b>, member</p>
+          </blockquote>
+        </div>
+
+        <div>
+          <div class="stats">
+            <div class="stat">
+              <p class="n">98.6%</p>
+              <p>of everyone who finished the beta would recommend it.</p>
+            </div>
+            <div class="stat">
+              <p class="n">84%</p>
+              <p>of the people who used it as designed called it life-changing.</p>
+            </div>
+          </div>
+          <p class="fine caveat">Our own 52-week beta study: 300 people started, 278 finished. &ldquo;As designed&rdquo; means about nine minutes a day on average, balanced across all four frequencies. It was rigorous for a beta, and we do not present it as clinical proof.</p>
+        </div>
+      </div>
+
+      <div class="tier tier-a">
+        <p class="eyebrow tier-label">Practitioners</p>
+        <div class="voices">
+
+          <figure class="voice">
+            <span class="port"><img src="../inapp/app-assets-welcome/srini-pillay.png" alt="Portrait of Srini Pillay, M.D." width="500" height="500" loading="lazy"></span>
+            <blockquote>&ldquo;Most personal growth asks us to think differently. Zodiac.fm invites us to experience ourselves differently.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Srini Pillay, M.D.</p>
+              <p class="role">Harvard-trained psychiatrist and brain-imaging researcher</p>
+            </figcaption>
+          </figure>
+
+          <figure class="voice">
+            <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_debra-silverman-d2c.png" alt="Portrait of Debra Silverman" width="500" height="500" loading="lazy"></span>
+            <blockquote>&ldquo;This music tickled my soul and reminded me that there&rsquo;s such a connection between vibration, the stars and the sounds that are coordinated by higher intelligence.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Debra Silverman</p>
+              <p class="role">Astrologer to Sting, Jennifer Aniston, and more</p>
+            </figcaption>
+          </figure>
+
+          <figure class="voice">
+            <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_barbara-ditlow-d2c.png" alt="Portrait of Barbara Ditlow" width="500" height="500" loading="lazy"></span>
+            <blockquote>&ldquo;Zodiac core frequencies translate this unique imprint into sound, bypassing the mind and speaking directly to the body.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Barbara Ditlow</p>
+              <p class="role">Human Design mentor, trained and endorsed by Ra Uru Hu</p>
+            </figcaption>
+          </figure>
+
+        </div>
+      </div>
+
+      <div class="tier tier-b">
+        <p class="eyebrow tier-label">Members</p>
+        <div class="voices">
+
+          <figure class="voice">
+            <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_amber-hedrick-d2c.png" alt="Portrait of Amber Hedrick" width="500" height="500" loading="lazy"></span>
+            <blockquote>&ldquo;I feel like ME. I feel like the person I&rsquo;ve been trying to get back to for so long without forcing anything.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Amber Hedrick</p>
+              <p class="role">Member, first week</p>
+            </figcaption>
+          </figure>
+
+          <figure class="voice">
+            <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_zehra-ashary-d2c.png" alt="Portrait of Zehra Ashary" width="500" height="500" loading="lazy"></span>
+            <blockquote>&ldquo;It lets you finally feel the parts of yourself you have only ever read about.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Zehra Ashary</p>
+              <p class="role">Member, London</p>
+            </figcaption>
+          </figure>
+
+          <figure class="voice">
+            <span class="port"><img src="../inapp/app-assets-welcome/ken-hoffman.png" alt="Portrait of Ken Hoffman" width="500" height="500" loading="lazy"></span>
+            <blockquote>&ldquo;My wife especially loves the man I am turning into since subscribing.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Ken Hoffman</p>
+              <p class="role">Member, Operations Manager, WNY Dyslexia Specialists</p>
+            </figcaption>
+          </figure>
+
+        </div>
+      </div>
+
+      <div class="proof-more">
+        <a class="tlink" href="/testimonials">Read the testimonials</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="band rv" id="how">
+    <div class="wrap">
+      <div class="marker">
+        <p class="eyebrow">How it works</p>
+        <span class="idx">02</span>
+      </div>
+
+      <div class="how-head">
+        <div>
+          <h2>How your music gets made.</h2>
+          <p class="lede beat-intro">Three steps happen once, before you ever press play. After that there is nothing to do but listen.</p>
+        </div>
+
+        <aside class="note">
+          <h3>At a glance</h3>
+          <dl>
+            <div class="kv"><dt>Input</dt><dd>The date, the time, and the place you were born.</dd></div>
+            <div class="kv"><dt>Output</dt><dd>Four frequencies, one per area of life, written into real music.</dd></div>
+            <div class="kv"><dt>Daily</dt><dd>About nine minutes, eyes open, while you do something else.</dd></div>
+            <div class="kv"><dt>To learn</dt><dd>Nothing.</dd></div>
+          </dl>
+        </aside>
+      </div>
+
+      <div class="beats">
+        <article class="beat">
+          <p class="step">01</p>
+          <h3>You give us one moment in time.</h3>
+          <p>The date, the time, and the place you were born. That is the whole input. No quiz, no personality test, nothing for you to interpret. The chart is the raw material, not the product.</p>
+          <a class="tlink" href="/how-it-works">What the chart gives us</a>
+        </article>
+
+        <article class="beat">
+          <p class="step">02</p>
+          <h3>We isolate the four frequencies that are yours.</h3>
+          <p>One for identity, one for connection, one for energy, one for opportunity. They are computed from your exact birth moment, down to the minute and the place, and they do not change as you change.</p>
+          <a class="tlink" href="/how-it-works">Why four</a>
+        </article>
+
+        <article class="beat">
+          <p class="step">03</p>
+          <h3>A composer writes them into the music.</h3>
+          <p>Your frequencies are built into real compositions down at the level of the instruments, so what you get stays music you actually want playing. Nine minutes a day, while you work, walk, cook, or sleep.</p>
+          <a class="tlink" href="/how-it-works">Inside a track</a>
+        </article>
+      </div>
+
+      <!-- the authored peak: the specimen becomes the product -->
+      <div class="track">
+        <div class="track-grid">
+
+          <div>
+            <p class="eyebrow">One track from the library</p>
+            <p class="track-title">Astrolith</p>
+            <p class="track-words"><span class="w">Focus</span> <span class="w">&middot; Meditate</span> <span class="w">&middot; Calm</span> <span class="w">&middot; Deep</span> <span class="w">&middot; Flow</span></p>
+            <p class="track-line">A steady pulse that never distracts. One honest block of focused work, then the music ends and that is your cue to look up.</p>
+            <div class="track-play">
+              <span class="disc" aria-hidden="true"><svg viewBox="0 0 15 16" focusable="false"><path d="M2 1.2 13 8 2 14.8Z"/></svg></span>
+              <span>Astrolith exists four times, once for each of your four frequencies. You choose which one gets the time.</span>
+            </div>
+          </div>
+
+          <div>
+            <p class="track-cap">Four versions, one per frequency</p>
+
+            <div class="freq-row accent">
+              <div>
+                <p class="freq-name">Core</p>
+                <p class="freq-hz">422<span class="u">Hz</span></p>
+                <p class="freq-mark">Playing</p>
+              </div>
+              <svg class="wv" viewBox="0 0 640 24" preserveAspectRatio="none" focusable="false" aria-hidden="true">
+                <path class="fl" d="M0,12 q45.71,-17.20 91.43,0 q45.71,17.20 91.43,0 q45.71,-17.20 91.43,0 q45.71,17.20 91.43,0 q45.71,-17.20 91.43,0 q45.71,17.20 91.43,0 q45.71,-17.20 91.43,0 L640,24 L0,24 Z"/>
+                <path class="ln" d="M0,12 q45.71,-17.20 91.43,0 q45.71,17.20 91.43,0 q45.71,-17.20 91.43,0 q45.71,17.20 91.43,0 q45.71,-17.20 91.43,0 q45.71,17.20 91.43,0 q45.71,-17.20 91.43,0"/>
+              </svg>
+            </div>
+
+            <div class="freq-row">
+              <div>
+                <p class="freq-name">Love</p>
+                <p class="freq-hz">432<span class="u">Hz</span></p>
+              </div>
+              <svg class="wv" viewBox="0 0 640 24" preserveAspectRatio="none" focusable="false" aria-hidden="true">
+                <path class="ln" d="M0,12 q29.09,-12.80 58.18,0 q29.09,12.80 58.18,0 q29.09,-12.80 58.18,0 q29.09,12.80 58.18,0 q29.09,-12.80 58.18,0 q29.09,12.80 58.18,0 q29.09,-12.80 58.18,0 q29.09,12.80 58.18,0 q29.09,-12.80 58.18,0 q29.09,12.80 58.18,0 q29.09,-12.80 58.18,0"/>
+              </svg>
+            </div>
+
+            <div class="freq-row">
+              <div>
+                <p class="freq-name">Vitality</p>
+                <p class="freq-hz">579<span class="u">Hz</span></p>
+              </div>
+              <svg class="wv" viewBox="0 0 640 24" preserveAspectRatio="none" focusable="false" aria-hidden="true">
+                <path class="ln" d="M0,12 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0 q18.82,9.60 37.65,0 q18.82,-9.60 37.65,0"/>
+              </svg>
+            </div>
+
+            <div class="freq-row">
+              <div>
+                <p class="freq-name">Abundance</p>
+                <p class="freq-hz">611<span class="u">Hz</span></p>
+              </div>
+              <svg class="wv" viewBox="0 0 640 24" preserveAspectRatio="none" focusable="false" aria-hidden="true">
+                <path class="ln" d="M0,12 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0 q12.80,6.80 25.60,0 q12.80,-6.80 25.60,0"/>
+              </svg>
+            </div>
+
+            <div class="track-scale">
+              <span>Start</span>
+              <em>422 Hz, the whole way through</em>
+              <span>Nine minutes</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHO THIS IS FOR ============ -->
+  <section class="band tint rv" id="who">
+    <div class="wrap">
+      <div class="marker">
+        <p class="eyebrow">Who this is for</p>
+        <span class="idx">03</span>
+      </div>
+
+      <div class="two-col stretch">
+        <div>
+          <h2>Who this is for, honestly.</h2>
+          <div class="prose" style="margin-top:26px">
+            <p>Most of the people here already believe their chart says something true about them. They have done the readings, the courses, the practice. Zodiac is usually not the first thing they have tried, and it is rarely the thing they expected to work.</p>
+            <p>It is also worth saying who it is not for. If you want a meditation app, a daily horoscope, or something to treat a medical condition, this is not that. It is music, and it asks almost nothing of you, which is exactly why some people bounce off it.</p>
+            <a class="tlink" href="/who-this-is-for">Read the full page</a>
+          </div>
+        </div>
+
+        <aside class="note">
+          <h3>If you don&rsquo;t know your birth time</h3>
+          <p>You can still use Zodiac. Your birth time fine-tunes one part of the calculation, so the closer it is the better, but depending on your configuration, being off by a few minutes, or even a couple of hours, often will not change much.</p>
+          <p>Give us your best estimate. You can correct it later, and we will recalculate.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STORY ============ -->
+  <section class="band rv" id="story">
+    <div class="wrap">
+      <div class="marker">
+        <p class="eyebrow">Zodiac&rsquo;s story</p>
+        <span class="idx">04</span>
+      </div>
+
+      <div class="two-col stretch">
+        <div>
+          <h2>Where Zodiac came from.</h2>
+          <div class="story-body">
+            <p class="dropcap"><span class="dc">M</span>ichael Lovitch came out of the evidence-based world. A master&rsquo;s in academic hypnosis, a company built on publishing the work of clinical hypnotists, training with Robert Dilts, eight years of his own therapy. He was a materialist, and he assumed everything came down to the power of the mind.</p>
+            <p>Then astrologers told him what those eight years had uncovered, without ever having met him, working only from his birth chart. He tried to knock it down and could not.</p>
+            <p>So he went looking for the source. It turned out to be an old Indian sound lineage, and Zodiac&rsquo;s algorithm came out of that work. We still cannot fully explain how it lands on the right frequencies, and we would rather say that than pretend otherwise. Nobody here is a guru.</p>
+          </div>
+          <p style="margin-top:30px"><a class="tlink" href="/story">Read Zodiac&rsquo;s story</a></p>
+        </div>
+
+        <div class="margin-pull">
+          <q>He tried to knock it down and could not.</q>
+          <p class="src">From Zodiac&rsquo;s story</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRICE ============ -->
+  <section class="band tint rv" id="price">
+    <div class="wrap">
+      <div class="marker">
+        <p class="eyebrow">Price and guarantee</p>
+        <span class="idx">05</span>
+      </div>
+
+      <h2>What it costs.</h2>
+
+      <div class="two-col stretch" style="margin-top:clamp(28px,3.4vw,44px)">
+        <div class="price-plate">
+          <div class="plans price-row">
+            <p class="plan"><span class="amt">$110</span> <span class="per">a year</span></p>
+            <p class="or">or</p>
+            <p class="plan"><span class="amt">$17.50</span> <span class="per">a month</span></p>
+          </div>
+          <p class="included">Your four frequencies, composed into music, for as long as you are a member.</p>
+          <a class="btn" href="/pricing">Get your frequencies</a>
+          <p class="fine">Billed in USD. Cancel from your account settings at any time.</p>
+        </div>
+
+        <aside class="note">
+          <h3>If it does not land</h3>
+          <p>The annual plan carries a 90-day money-back guarantee. The monthly plan carries 30 days.</p>
+          <p>If your frequencies do not land, write to us. We will change them on our side and keep working with you until they do, and we will extend your guarantee while we sort it out.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm" width="114" height="20">
+        <p>Music composed from the moment and place you were born.</p>
+      </div>
+
+      <div class="foot-col">
+        <p class="foot-label">Product</p>
+        <ul>
+          <li><a href="/how-it-works">How it works</a></li>
+          <li><a href="/the-study">The study</a></li>
+          <li><a href="/testimonials">Testimonials</a></li>
+          <li><a href="/who-this-is-for">Who this is for</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <p class="foot-label">Company</p>
+        <ul>
+          <li><a href="/story">Zodiac&rsquo;s story</a></li>
+          <li><a href="/how-we-compare">How we compare</a></li>
+          <li><a href="/questions">Questions</a></li>
+          <li><a href="/support">Support</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <p class="foot-label">Legal</p>
+        <ul>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="mailto:support@zodiac.fm">support@zodiac.fm</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-base">
+      <span>&copy; 2026 Zodiac.fm</span>
+      <span>Zodiac is music. It is not medical or health care, and it does not diagnose or treat anything.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="demo-badge">HOME &middot; WARM &middot; 01 &middot; DEMO</div>
+
+<script>
+(function(){
+  var els = document.querySelectorAll('.rv');
+  if (!('IntersectionObserver' in window) ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    for (var i=0;i<els.length;i++) els[i].classList.add('in');
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {rootMargin:'0px 0px -8% 0px', threshold:0});
+  els.forEach(function(el){ io.observe(el); });
+})();
+</script>
+
+</body>
+</html>
