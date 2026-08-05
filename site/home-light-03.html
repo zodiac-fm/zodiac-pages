@@ -1,0 +1,1117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zodiac.fm &middot; Your birth chart, composed into music</title>
+<meta name="description" content="Zodiac calculates four frequencies from the moment and place you were born, then a composer writes them into music you can listen to every day.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+    --sans:'Switzer',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+
+    /* GROUND: white page, one dark plate. Black-and-white photography at scale,
+       the four inks used only as gradient events. */
+    --paper:#FFFFFF;
+    --ink:#1A1620;
+    --stage:#0B0712;
+    --greige:#EAE4DA;         /* the duotone portrait ground, baked into the assets */
+    --field:#EDE9E1;          /* matching field for transparent-background portraits */
+
+    /* ---- LOCKED FAMILY TOKENS (design-system §2.3 / design/tokens.json) ----
+       --f-*  primary   --g-*  gradEnd   --t-*  legible TEXT accent
+       --d-*  deep      --n-*  tint      --s-*  soft
+       Abundance is EMERALD (Michael 2026-07-02); the aqua/teal family is RETIRED. */
+    --f-core:#6521C9;      --g-core:#A737C8;      --t-core:#6521C9;      --d-core:#38007A;  --n-core:#EFECFF;  --s-core:#D2C8FF;
+    --f-love:#B90044;      --g-love:#CF4090;      --t-love:#B90044;      --d-love:#6E0024;  --n-love:#FFE8EA;  --s-love:#FFBDC3;
+    --f-vitality:#FF9112;  --g-vitality:#FFC251;  --t-vitality:#C25500;  --d-vitality:#BC6700; --n-vitality:#FFEADA; --s-vitality:#FFC392;
+    --f-abundance:#12A56E; --g-abundance:#46D99A; --t-abundance:#0A7A52; --d-abundance:#0A6B48; --n-abundance:#DCF4E8; --s-abundance:#8FE1BE;
+
+    /* Core Purple is the single structure/action accent (design-system §5) */
+    --violet:#6521C9;
+    --violet-deep:#38007A;
+    --violet-soft:#D2C8FF;
+
+    /* THE ONE GRADIENT. Four inks, left to right, low saturation by opacity only.
+       Deployed in exactly four places: section hairlines, the two CTA buttons,
+       the mid-page CTA underline, and the barely-there whitespace washes. */
+    --ink-grad:linear-gradient(90deg,var(--f-core) 0%,var(--g-core) 24%,var(--f-love) 46%,var(--f-vitality) 72%,var(--f-abundance) 100%);
+
+    /* text tiers measured on #FFFFFF: .72 = 8.9:1 · .66 = 7.5:1 · .60 = 6.2:1 */
+    --ink-72:rgba(26,22,32,.72);
+    --ink-mid:rgba(26,22,32,.66);
+    --ink-quiet:rgba(26,22,32,.60);
+    --rule:rgba(26,22,32,.15);
+    --rule-soft:rgba(26,22,32,.08);
+    --cream:#F6F1E8;
+    --cream-76:rgba(246,241,232,.78);   /* on Stage, 11.4:1 */
+
+    --gut:clamp(20px,5vw,64px);
+    --sect:clamp(64px,9vw,132px);
+    --max:1240px;                        /* the master wrap. Nothing bleeds past it. */
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-weight:400;font-size:16px;line-height:1.62;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit}
+  ::selection{background:rgba(101,33,201,.16)}
+  :focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:1px}
+  [id]{scroll-margin-top:96px}
+
+  .wrap{width:100%;max-width:var(--max);margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+
+  /* ---------- shared editorial parts ---------- */
+  .eyebrow{
+    font-family:var(--sans);font-weight:600;font-size:11px;line-height:1;
+    letter-spacing:.17em;text-transform:uppercase;color:var(--ink-quiet);
+  }
+
+  /* THE SECTION RULE GRAMMAR: a 1px four-ink hairline at 40%. It replaces every
+     plain gray rule that opened a room in -02. */
+  .hair{position:relative}
+  .hair::before{
+    content:"";position:absolute;left:0;right:0;top:0;height:1px;
+    background:var(--ink-grad);opacity:.4;
+  }
+  .marker{
+    position:relative;
+    display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    padding-top:13px;margin-bottom:clamp(28px,4vw,48px);
+  }
+  .marker .idx{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.14em;
+    color:var(--ink-quiet);font-variant-numeric:tabular-nums;
+  }
+
+  /* Cormorant Garamond: display, pull quotes and captions. Never numbers. */
+  h1,h2,h3.disp{font-family:var(--serif);font-weight:600;letter-spacing:-.012em;font-style:normal}
+  h1{font-size:clamp(42px,6vw,76px);line-height:1.03}
+  h2{font-size:clamp(32px,5vw,58px);line-height:1.05}
+  h3.disp{font-size:clamp(28px,3.6vw,36px);line-height:1.12}
+
+  p{max-width:60ch}
+  .lede{font-size:clamp(17px,1.55vw,20.5px);line-height:1.58;color:var(--ink-72)}
+  .fine{font-size:12.5px;line-height:1.62;color:var(--ink-quiet);max-width:64ch}
+
+  /* the small-caps line: the page's credit voice, under every face */
+  .sc{
+    font-family:var(--sans);font-weight:600;font-size:10.5px;line-height:1.62;
+    letter-spacing:.13em;text-transform:uppercase;color:var(--ink-quiet);max-width:40ch;
+  }
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-height:56px;padding:0 34px;border-radius:2px;border:1px solid transparent;
+    background:var(--violet);color:#fff;text-decoration:none;
+    font-family:var(--sans);font-weight:600;font-size:15px;letter-spacing:.015em;
+    transition:filter .25s ease,box-shadow .25s ease;
+  }
+  /* the two gradient buttons on the page. White on #A737C8 = 5.2:1 at the pale end. */
+  .btn-grad{
+    background:linear-gradient(96deg,var(--f-core) 0%,var(--g-core) 100%);
+    box-shadow:0 10px 26px rgba(101,33,201,.22);
+  }
+  .btn-grad:hover,.btn-grad:focus-visible{filter:saturate(1.06) brightness(1.04);box-shadow:0 14px 32px rgba(101,33,201,.3)}
+  .btn:not(.btn-grad):hover,.btn:not(.btn-grad):focus-visible{background:var(--violet-deep)}
+
+  .tlink{
+    display:inline-flex;align-items:center;min-height:24px;
+    font-family:var(--sans);font-weight:600;font-size:14px;
+    color:var(--violet);text-decoration:none;
+    border-bottom:1px solid rgba(101,33,201,.34);padding-bottom:1px;
+    transition:border-color .25s ease;
+  }
+  .tlink:hover,.tlink:focus-visible{border-bottom-color:var(--violet)}
+
+  .skip{position:absolute;left:-9999px;top:0}
+  .skip:focus{left:12px;top:12px;z-index:99;background:#fff;color:var(--ink);padding:12px 16px;border:1px solid var(--ink)}
+
+  /* ---------- the whitespace washes. 3–5%, and never a fourth. ---------- */
+  .washed{position:relative;overflow:hidden}
+  .washed > .wrap{position:relative;z-index:1}
+  .wash{position:absolute;z-index:0;pointer-events:none;border-radius:50%}
+  .wash-a{width:54%;padding-bottom:46%;left:-12%;top:4%;background:radial-gradient(circle,rgba(101,33,201,.05) 0%,rgba(101,33,201,0) 70%)}
+  .wash-b{width:48%;padding-bottom:42%;right:-10%;top:34%;background:radial-gradient(circle,rgba(255,145,18,.045) 0%,rgba(255,145,18,0) 70%)}
+  .wash-c{width:46%;padding-bottom:40%;left:22%;bottom:14%;background:radial-gradient(circle,rgba(18,165,110,.04) 0%,rgba(18,165,110,0) 70%)}
+
+  /* ============================================================
+     HEADER — static on phones, sticky + frosted from 900px up.
+     ============================================================ */
+  .site-head{padding-top:20px;padding-bottom:16px;background:var(--paper)}
+  @media (min-width:900px){
+    .site-head{
+      position:sticky;top:0;z-index:60;
+      background:rgba(255,255,255,.78);
+      -webkit-backdrop-filter:saturate(1.4) blur(14px);
+      backdrop-filter:saturate(1.4) blur(14px);
+      border-bottom:1px solid transparent;
+      transition:border-color .3s ease,background .3s ease;
+    }
+    .site-head.stuck{border-bottom-color:var(--rule-soft);background:rgba(255,255,255,.9)}
+  }
+  .head-row{display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .head-row img{height:21px;width:auto}
+  .nav{display:flex;align-items:center;gap:clamp(14px,2.2vw,32px);flex-wrap:wrap}
+  .nav a{
+    display:inline-flex;align-items:center;min-height:26px;
+    font-family:var(--sans);font-weight:500;font-size:14px;color:var(--ink-72);
+    text-decoration:none;transition:color .2s ease;
+  }
+  .nav a:hover,.nav a:focus-visible{color:var(--ink)}
+  .nav a[aria-current="page"]{color:var(--ink);font-weight:600}
+  .login{
+    display:inline-flex;align-items:center;min-height:34px;padding:0 15px;
+    border:1px solid var(--rule);border-radius:2px;
+    font-family:var(--sans);font-weight:600;font-size:13px;color:var(--ink);
+    text-decoration:none;letter-spacing:.02em;transition:border-color .25s ease;
+  }
+  .login:hover,.login:focus-visible{border-color:var(--ink)}
+  .nav-mobile{display:none}
+  @media (max-width:899px){
+    .head-row .nav{display:none}
+    .nav-mobile{
+      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+      margin-top:13px;padding-top:11px;border-top:1px solid var(--rule-soft);
+    }
+    .nav-mobile a{font-size:13.5px;min-height:24px}
+  }
+
+  /* ============================================================
+     THE DEVICE FRAME — rounded rect, thin dark bezel, honest shadow.
+     ============================================================ */
+  .phone{
+    position:relative;width:100%;
+    border-radius:42px;padding:8px;
+    background:linear-gradient(160deg,#241D2E 0%,#120D1A 58%,#241D2E 100%);
+    box-shadow:0 1px 0 rgba(255,255,255,.14) inset,
+               0 26px 60px -18px rgba(26,22,32,.4),
+               0 6px 18px -8px rgba(26,22,32,.24);
+  }
+  .phone img{
+    width:100%;height:auto;aspect-ratio:375/812;object-fit:cover;object-position:top center;
+    border-radius:34px;background:#fff;display:block;
+  }
+
+  /* ============================================================
+     ROOM 1 — HERO. 7:5 against the phone. Light on white.
+     ============================================================ */
+  .hero{position:relative;overflow:hidden;padding-top:clamp(18px,3.4vw,44px);padding-bottom:clamp(52px,7vw,104px)}
+  .glow{position:absolute;inset:-18% -10%;z-index:0;pointer-events:none;filter:blur(78px);opacity:.72}
+  .glow i{position:absolute;display:block;border-radius:50%}
+  .glow .g1{width:56%;padding-bottom:52%;left:40%;top:-14%;background:radial-gradient(circle,rgba(210,200,255,.82) 0%,rgba(210,200,255,0) 66%);animation:gd1 38s ease-in-out infinite alternate}
+  .glow .g2{width:44%;padding-bottom:44%;left:-6%;top:24%;background:radial-gradient(circle,rgba(239,236,255,.94) 0%,rgba(239,236,255,0) 68%);animation:gd2 46s ease-in-out infinite alternate}
+  .glow .g3{width:38%;padding-bottom:36%;left:56%;top:54%;background:radial-gradient(circle,rgba(255,234,218,.72) 0%,rgba(255,234,218,0) 66%);animation:gd3 52s ease-in-out infinite alternate}
+  @keyframes gd1{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-5%,4%,0) scale(1.1)}}
+  @keyframes gd2{from{transform:translate3d(0,0,0) scale(1.06)}to{transform:translate3d(6%,-4%,0) scale(.96)}}
+  @keyframes gd3{from{transform:translate3d(0,0,0) scale(.98)}to{transform:translate3d(-4%,-6%,0) scale(1.12)}}
+  @media (prefers-reduced-motion:reduce){.glow i{animation:none}}
+  .hero .wrap{position:relative;z-index:1}
+
+  .hero-grid{display:grid;grid-template-columns:1fr;row-gap:clamp(30px,4vw,40px)}
+  @media (max-width:899px){.hero-stage{order:3}}
+  @media (min-width:900px){
+    .hero-grid{
+      grid-template-columns:minmax(0,7fr) minmax(0,5fr);
+      grid-template-areas:"top stage" "bot stage";
+      grid-template-rows:auto 1fr;
+      column-gap:clamp(40px,4.6vw,84px);row-gap:clamp(26px,3vw,38px);
+      align-items:start;
+    }
+    .hero-top{grid-area:top;align-self:end}
+    .hero-bot{grid-area:bot;align-self:start;padding-top:clamp(22px,2.6vw,34px)}
+    .hero-stage{grid-area:stage;align-self:center}
+  }
+  /* The headline breaks at the comma at EVERY width: two lines, never four.
+     Desktop cap is sized so "composed into music." always clears the 7fr column. */
+  .hero h1{margin-top:18px;max-width:none;font-size:clamp(42px,5.6vw,68px)}
+  @media (max-width:899px){
+    .hero h1{font-size:clamp(28px,9.2vw,44px)}
+  }
+  .hero .lede{margin-top:clamp(18px,2vw,26px);max-width:46ch}
+  .hero .credible{margin-top:20px;max-width:50ch;font-size:14px;line-height:1.6;color:var(--ink-mid)}
+  .hero .credible b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+
+  .hero-stage{position:relative}
+  .hero-stage .phone{max-width:300px;margin:0 auto}
+  @media (min-width:900px){.hero-stage .phone{max-width:clamp(252px,24vw,312px);margin:0 auto}}
+
+  /* ---------- section frame ---------- */
+  section.band{padding-top:var(--sect);padding-bottom:var(--sect)}
+  @media (min-width:900px){#how.band{padding-bottom:calc(var(--sect)*.55)}}
+
+  /* ============================================================
+     ROOM 2 — HOW IT WORKS. Three beats, each with its own ink spine.
+     ============================================================ */
+  .beats{display:grid;grid-template-columns:1fr;gap:0}
+  @media (min-width:860px){.beats{grid-template-columns:repeat(3,1fr);column-gap:clamp(28px,3.6vw,64px)}}
+  .beat{
+    position:relative;border-top:1px solid var(--rule);
+    padding:clamp(22px,2.6vw,32px) 0 clamp(24px,3vw,36px);
+  }
+  .beat::before{content:"";position:absolute;top:-1px;left:0;width:52px;height:3px;border-radius:2px}
+  .beat-core::before{background:linear-gradient(90deg,var(--f-core),var(--g-core))}
+  .beat-love::before{background:linear-gradient(90deg,var(--f-love),var(--g-love))}
+  .beat-vit::before{background:linear-gradient(90deg,var(--f-vitality),var(--g-vitality))}
+  .beat .step{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.16em;
+    font-variant-numeric:tabular-nums;
+  }
+  .beat-core .step{color:var(--t-core)}
+  .beat-love .step{color:var(--t-love)}
+  .beat-vit .step{color:var(--t-vitality)}
+  .beat h3{text-wrap:balance;
+    margin-top:14px;max-width:17ch;font-family:var(--sans);font-weight:600;
+    font-size:19px;line-height:1.28;letter-spacing:-.01em;color:var(--ink);
+  }
+  .beat p{margin-top:14px;font-size:15.5px;line-height:1.6;color:var(--ink-72);max-width:42ch}
+
+  /* ============================================================
+     ROOM 3 — THE DOCTOR MOMENT. A chapter break, not a card.
+     Faces render as generous rectangles on their own greige field.
+     ============================================================ */
+  .voice-lead{
+    display:grid;grid-template-columns:1fr;gap:clamp(28px,3.4vw,52px);align-items:center;
+  }
+  @media (min-width:860px){
+    .voice-lead{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(44px,5vw,88px)}
+  }
+  .voice-lead .port-big{width:100%;max-width:440px}
+  .voice-lead .port-big img{width:100%;height:auto;border-radius:2px;background:var(--greige)}
+  .voice-lead blockquote{
+    font-family:var(--serif);font-weight:500;font-style:normal;
+    font-size:clamp(20px,1.9vw,26px);line-height:1.42;letter-spacing:-.004em;
+    color:var(--ink);max-width:46ch;
+  }
+  .voice-lead figcaption{margin-top:26px;padding-top:16px}
+  .who{font-family:var(--sans);font-weight:600;font-size:14px;line-height:1.3;color:var(--ink)}
+  .voice-lead .who{font-size:16.5px}
+  .voice-lead .sc{margin-top:6px;font-size:11px;max-width:44ch}
+
+  /* the second pairing, mirrored, smaller, quieter */
+  .voice-second{
+    margin-top:clamp(48px,6vw,96px);
+    display:grid;grid-template-columns:1fr;gap:clamp(26px,3.2vw,48px);align-items:center;
+  }
+  @media (min-width:860px){
+    .voice-second{grid-template-columns:minmax(0,1fr) minmax(0,300px);gap:clamp(40px,5vw,80px)}
+    .voice-second .vs-body{order:1}
+    .voice-second .port-field{order:2;justify-self:end}
+  }
+  .port-field{width:100%;max-width:300px;background:var(--field);border-radius:2px;overflow:hidden;isolation:isolate}
+  .port-field img{width:100%;height:auto;mix-blend-mode:multiply}
+  .voice-second blockquote{
+    font-family:var(--serif);font-weight:600;font-style:normal;
+    font-size:clamp(28px,3.4vw,42px);line-height:1.1;letter-spacing:-.014em;color:var(--ink);
+  }
+  .voice-second figcaption{margin-top:22px;padding-top:15px}
+  .voice-second .who{font-size:15px}
+  .voice-second .sc{margin-top:6px}
+
+  /* ============================================================
+     ROOM 4 — THE FREQUENCY ROOM. The phone carries the numbers.
+     No bare Hz in the annotations; the screen is self-attributing.
+     ============================================================ */
+  .fqroom{margin-top:clamp(40px,5vw,72px);display:grid;grid-template-columns:1fr;gap:clamp(34px,4vw,56px)}
+  @media (min-width:960px){
+    .fqroom{
+      grid-template-columns:minmax(0,1fr) minmax(230px,300px) minmax(0,1fr);
+      gap:clamp(34px,4vw,64px);align-items:center;
+    }
+  }
+  .fq-col{display:grid;grid-template-columns:1fr;gap:clamp(26px,3vw,40px);align-content:center}
+  @media (min-width:560px) and (max-width:959px){.fq-col{grid-template-columns:1fr 1fr;gap:clamp(24px,3vw,36px)}}
+  @media (min-width:960px){
+    .fq-col{gap:clamp(40px,5vw,74px)}
+    .fq-left{text-align:right}
+    .fq-right{text-align:left}
+  }
+  .fq-phone{order:-1;max-width:300px;margin:0 auto;width:100%}
+  @media (min-width:960px){.fq-phone{order:0;max-width:none}}
+  .anno .anno-l{
+    font-family:var(--sans);font-weight:600;font-size:10.5px;letter-spacing:.15em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .anno .anno-s{
+    margin-top:10px;font-family:var(--serif);font-weight:600;font-style:normal;
+    font-size:clamp(22px,2.1vw,29px);line-height:1.12;letter-spacing:-.01em;color:var(--ink);
+    max-width:none;
+  }
+  .anno .anno-b{
+    display:inline-flex;align-items:center;margin-top:13px;padding:5px 12px;border-radius:999px;
+    font-family:var(--sans);font-weight:600;font-size:11.5px;letter-spacing:.06em;line-height:1.2;
+    background:#fff;border:1px solid var(--rule);color:var(--ink-mid);
+  }
+  .fq-cap{
+    margin:clamp(30px,3.6vw,52px) auto 0;padding-top:14px;position:relative;max-width:60ch;text-align:center;
+    font-family:var(--serif);font-style:italic;font-weight:500;
+    font-size:clamp(17px,1.5vw,21px);line-height:1.45;color:var(--ink-72);
+  }
+  .fq-cap::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:min(100%,320px);height:1px;background:var(--ink-grad);opacity:.34}
+
+  /* ============================================================
+     ROOM 5 — MUSIC FIRST. Contained. Every photo earns a caption.
+     ============================================================ */
+  section.band.music{padding-top:clamp(30px,4vw,56px);padding-bottom:clamp(44px,5.4vw,84px)}
+  .music-grid{display:grid;grid-template-columns:1fr;gap:clamp(28px,3.4vw,48px);align-items:center}
+  @media (min-width:900px){
+    .music-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(40px,4.6vw,76px);align-items:center}
+  }
+  .music .kicker{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.17em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .music h3.disp{margin-top:18px;max-width:12ch}
+  .music .say{margin-top:18px;font-size:16px;line-height:1.62;color:var(--ink-72);max-width:38ch}
+  .music figure{position:relative}
+  .music img,.duo img{width:100%;height:auto;border-radius:2px}
+
+  /* THE CAPTION GRAMMAR: one hairline, then italic serif, left aligned. */
+  .cap{
+    position:relative;margin-top:18px;padding-top:14px;
+    font-family:var(--serif);font-style:italic;font-weight:500;
+    font-size:clamp(17px,1.5vw,21px);line-height:1.45;color:var(--ink-72);max-width:52ch;
+  }
+  .cap::before{content:"";position:absolute;top:0;left:0;width:min(100%,320px);height:1px;background:var(--ink-grad);opacity:.34}
+
+  .duo{padding-bottom:var(--sect)}
+  @media (min-width:900px){.duo img{max-height:560px;object-fit:cover;object-position:center 38%}}
+
+  /* ============================================================
+     ROOM 6 — THE STAGE. A printed plate, contained in the wrap.
+     ============================================================ */
+  .stage-room{padding-bottom:clamp(48px,6vw,92px)}
+  .stage-panel{
+    --pad-x:clamp(22px,4vw,72px);
+    position:relative;overflow:hidden;border-radius:6px;
+    background:var(--stage);color:var(--cream);
+    padding:clamp(38px,5.4vw,92px) var(--pad-x);
+  }
+  /* on near-black, `screen` ADDS light rather than painting over it */
+  .aurora{position:absolute;inset:-25%;pointer-events:none;z-index:0;filter:blur(78px);opacity:.5;mix-blend-mode:screen}
+  .aurora i{position:absolute;display:block;border-radius:50%}
+  .aurora .a1{width:46%;padding-bottom:46%;left:-2%;top:4%;background:radial-gradient(circle,rgba(101,33,201,.92) 0%,rgba(101,33,201,0) 60%);animation:br1 34s ease-in-out infinite alternate}
+  .aurora .a2{width:40%;padding-bottom:40%;left:44%;top:-8%;background:radial-gradient(circle,rgba(185,0,68,.8) 0%,rgba(185,0,68,0) 60%);animation:br2 41s ease-in-out infinite alternate}
+  .aurora .a3{width:38%;padding-bottom:38%;left:66%;top:44%;background:radial-gradient(circle,rgba(255,145,18,.74) 0%,rgba(255,145,18,0) 60%);animation:br3 47s ease-in-out infinite alternate}
+  .aurora .a4{width:36%;padding-bottom:36%;left:6%;top:56%;background:radial-gradient(circle,rgba(18,165,110,.78) 0%,rgba(18,165,110,0) 60%);animation:br4 38s ease-in-out infinite alternate}
+  .aurora .a5{width:34%;padding-bottom:34%;left:40%;top:30%;background:radial-gradient(circle,rgba(101,33,201,.82) 0%,rgba(101,33,201,0) 62%);animation:br3 44s ease-in-out infinite alternate}
+  @media (max-width:760px){.aurora{opacity:.4;inset:-14%}.aurora .a5{display:none}}
+  @keyframes br1{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(6%,4%,0) scale(1.13)}}
+  @keyframes br2{from{transform:translate3d(0,0,0) scale(1.06)}to{transform:translate3d(-7%,6%,0) scale(.95)}}
+  @keyframes br3{from{transform:translate3d(0,0,0) scale(.96)}to{transform:translate3d(-5%,-7%,0) scale(1.11)}}
+  @keyframes br4{from{transform:translate3d(0,0,0) scale(1.07)}to{transform:translate3d(8%,-5%,0) scale(.96)}}
+  @media (prefers-reduced-motion:reduce){.aurora i{animation:none}}
+  .stage-in{position:relative;z-index:1}
+  .stage-panel .marker::before{opacity:.85}
+  .stage-panel .eyebrow,.stage-panel .marker .idx{color:var(--violet-soft)}
+  .stage-panel h2{color:var(--cream);max-width:13ch}
+
+  .stage-head{display:grid;grid-template-columns:1fr;gap:clamp(22px,3vw,40px);align-items:start}
+  @media (min-width:900px){
+    .stage-head{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(40px,5vw,96px)}
+  }
+  .stage-lede{font-size:17px;line-height:1.6;color:var(--cream-76);max-width:44ch}
+  .track-words{
+    margin-top:20px;font-family:var(--sans);font-weight:600;font-size:10.5px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--violet-soft);
+    line-height:1.9;max-width:34ch;
+  }
+  .track-words .w{white-space:nowrap}
+
+  .phones{display:flex;margin-top:clamp(40px,5.4vw,80px)}
+  @media (min-width:900px){
+    .phones{justify-content:center;align-items:flex-start;gap:0}
+    .phones .phone{width:clamp(164px,14.8vw,218px);flex:0 0 auto}
+    .phones .p1{transform:translateY(28px);z-index:1}
+    .phones .p2{width:clamp(176px,16vw,236px);margin:0 -8px 0 -20px;z-index:4}
+    .phones .p3{transform:translateY(50px);z-index:2}
+    .phones .p4{transform:translateY(16px);margin-left:-14px;z-index:3}
+  }
+  @media (max-width:899px){
+    .phones{
+      overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;gap:16px;
+      margin-left:calc(var(--pad-x) * -1);margin-right:calc(var(--pad-x) * -1);
+      padding:6px var(--pad-x) 10px;scrollbar-width:none;
+    }
+    .phones::-webkit-scrollbar{display:none}
+    .phones .phone{flex:0 0 68%;max-width:280px;scroll-snap-align:center}
+  }
+  .phones-cap{
+    margin-top:clamp(26px,3vw,42px);padding-top:12px;border-top:1px solid rgba(246,241,232,.2);
+    font-family:var(--sans);font-weight:500;font-size:13px;line-height:1.55;
+    color:var(--cream-76);max-width:56ch;
+  }
+  @media (min-width:900px){
+    .phones{margin-top:clamp(48px,5vw,84px)}
+    .phones-cap{margin-left:auto;margin-right:auto;text-align:center;max-width:46ch}
+  }
+
+  /* the one quiet mid-page CTA: a text link with a gradient underline */
+  .midcta{margin-top:clamp(38px,4.4vw,64px);max-width:none;text-align:center}
+  .glink{
+    display:inline-block;padding-bottom:7px;
+    font-family:var(--sans);font-weight:600;font-size:15.5px;letter-spacing:.01em;
+    color:var(--violet);text-decoration:none;
+    background-image:var(--ink-grad);background-repeat:no-repeat;
+    background-size:100% 2px;background-position:0 100%;
+    transition:color .25s ease;
+  }
+  .glink:hover,.glink:focus-visible{color:var(--violet-deep)}
+
+  /* ============================================================
+     ROOM 7 — THE PROOF WALL. Faces at scale, hairlines between,
+     white all around. Only people with photographs.
+     ============================================================ */
+  .tier-label{
+    position:relative;display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    padding-top:12px;margin-bottom:clamp(26px,3.2vw,40px);
+  }
+
+  .wall{
+    display:grid;grid-template-columns:repeat(12,minmax(0,1fr));
+    column-gap:clamp(20px,2.6vw,44px);row-gap:clamp(36px,4.2vw,68px);
+    align-items:start;
+  }
+  .voice{grid-column:span 12;position:relative;padding-top:20px}
+  .voice::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:var(--ink-grad);opacity:.4}
+  @media (min-width:620px){.voice{grid-column:span 6}}
+  @media (min-width:960px){
+    .voice{grid-column:span var(--span,6)}
+    .s4{--span:4}.s5{--span:5}.s6{--span:6}.s7{--span:7}
+    .s5.v-side .pt{width:clamp(150px,14vw,184px)}
+  }
+  /* portraits: clean rectangles on their own greige field. No border, no card. */
+  .pt{width:100%;max-width:268px;border-radius:2px;overflow:hidden;background:var(--greige)}
+  .pt.pt-lg{max-width:300px}
+  .pt img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;display:block}
+  .voice .vb{margin-top:20px}
+  @media (min-width:620px){
+    .v-side{display:grid;grid-template-columns:minmax(150px,auto) minmax(0,1fr);gap:clamp(22px,2.4vw,38px);align-items:start}
+    .v-side .pt{width:clamp(160px,17vw,232px)}
+    .v-side .vb{margin-top:0}
+  }
+  .voice blockquote{
+    font-family:var(--sans);font-weight:500;
+    font-size:15.5px;line-height:1.55;color:var(--ink);max-width:40ch;
+  }
+  .voice figcaption{margin-top:16px}
+  .voice .sc{margin-top:5px}
+
+  /* the featured member: a tinted plate, still a rectangle portrait */
+  .voice.feat{grid-column:span 12;padding-top:0}
+  .voice.feat::before{display:none}
+  .feat-in{
+    display:grid;grid-template-columns:1fr;gap:clamp(24px,3vw,44px);align-items:center;
+    background:var(--n-core);border-radius:3px;padding:clamp(24px,3.2vw,44px);
+  }
+  @media (min-width:760px){
+    .feat-in{grid-template-columns:minmax(200px,auto) minmax(0,1fr);gap:clamp(30px,3.6vw,54px)}
+    .feat-in .vb{margin-top:0}
+  }
+  .feat-in .pt{width:clamp(200px,22vw,300px);max-width:300px;background:var(--greige)}
+  .voice.feat blockquote{font-size:clamp(16.5px,1.5vw,19.5px);max-width:52ch}
+  .voice.feat .sc{color:rgba(26,22,32,.74)}
+
+  /* the numbers, between the tiers. Switzer, always. */
+  .numbers{
+    position:relative;margin:clamp(52px,6vw,92px) 0;padding:clamp(30px,3.6vw,46px) 0;
+    display:grid;grid-template-columns:1fr;gap:clamp(26px,3.2vw,44px);
+  }
+  .wall-h2{margin:clamp(16px,2.2vw,26px) 0 clamp(34px,4.2vw,58px);max-width:16ch}
+  @media (min-width:820px){.numbers{grid-template-columns:auto auto minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:start}}
+  .num .n{
+    font-family:var(--sans);font-weight:600;font-size:clamp(48px,6.4vw,76px);
+    line-height:1;letter-spacing:-.038em;font-variant-numeric:tabular-nums;color:var(--ink);
+  }
+  .num p{margin-top:12px;font-size:14.5px;line-height:1.5;color:var(--ink-72);max-width:26ch}
+
+  .proof-more{margin-top:clamp(36px,4.2vw,56px);padding-top:24px;position:relative}
+
+  /* ============================================================
+     ROOM 8 — THE CLOSE. No price on this page.
+     ============================================================ */
+  .close{text-align:center}
+  .close h2{max-width:16ch;margin:0 auto}
+  .close .close-say{
+    margin:clamp(20px,2.4vw,30px) auto 0;max-width:48ch;
+    font-size:clamp(16px,1.4vw,18px);line-height:1.62;color:var(--ink-72);
+  }
+  .close .btn{margin-top:clamp(28px,3.2vw,40px)}
+  .close .close-fine{margin:18px auto 0;max-width:none;font-size:12.5px;line-height:1.62;color:var(--ink-quiet)}
+  .close .close-fine a{color:var(--violet);text-decoration:none;border-bottom:1px solid rgba(101,33,201,.34)}
+  .close .close-fine a:hover,.close .close-fine a:focus-visible{border-bottom-color:var(--violet)}
+
+  /* ---------- footer, opened by the four-ink hairline ----------
+     contained in the wrap like every other rule on the page: the -02
+     full-bleed 3px bar would break the 1240px law and shout louder than
+     the two CTAs. Same grammar as every other section hairline. */
+  .spine-rule{height:1px;width:100%;background:var(--ink-grad);opacity:.4}
+  .site-foot{padding-top:clamp(46px,6vw,76px);padding-bottom:46px}
+  .foot-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(26px,3.4vw,48px)}
+  @media (min-width:760px){.foot-grid{grid-template-columns:minmax(0,2fr) repeat(3,minmax(0,1fr))}}
+  .foot-brand img{height:20px;width:auto}
+  .foot-brand p{margin-top:16px;font-size:13.5px;line-height:1.6;color:var(--ink-mid);max-width:30ch}
+  .foot-label{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.15em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .foot-col ul{list-style:none;margin-top:16px}
+  .foot-col li{margin-top:2px}
+  .foot-col a{
+    display:inline-flex;align-items:center;min-height:28px;
+    font-size:14px;color:var(--ink-72);text-decoration:none;transition:color .2s ease;
+  }
+  .foot-col a:hover,.foot-col a:focus-visible{color:var(--ink)}
+  .foot-base{
+    margin-top:clamp(34px,4.4vw,56px);padding-top:22px;border-top:1px solid var(--rule);
+    display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;
+    font-size:12.5px;color:var(--ink-quiet);
+  }
+  .foot-base span{font-variant-numeric:tabular-nums}
+
+  /* ---------- variant badge (bake-off pattern) ---------- */
+  .badge{
+    position:fixed;right:14px;bottom:14px;z-index:90;pointer-events:none;
+    background:#fff;border:1px solid var(--rule);color:var(--ink-mid);
+    font:700 10.5px/1 var(--sans);letter-spacing:.1em;padding:8px 12px;border-radius:999px;
+    box-shadow:0 2px 10px rgba(26,22,32,.09);
+  }
+
+  /* ---------- quiet reveal ---------- */
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.3,1)}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+</style>
+<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head" id="top">
+  <div class="wrap">
+    <div class="head-row">
+      <a href="#top" aria-label="Zodiac.fm home"><img src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm" width="120" height="21"></a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#top" aria-current="page">Home</a>
+        <a href="#how">How it works</a>
+        <a href="#study">The study</a>
+        <a href="#proof">Testimonials</a>
+      </nav>
+      <a class="login" href="#">Log in</a>
+    </div>
+    <nav class="nav nav-mobile" aria-label="Primary, mobile">
+      <a href="#top" aria-current="page">Home</a>
+      <a href="#how">How it works</a>
+      <a href="#study">The study</a>
+      <a href="#proof">Testimonials</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ ROOM 1 · HERO ============ -->
+  <section class="hero">
+    <div class="glow" aria-hidden="true"><i class="g1"></i><i class="g2"></i><i class="g3"></i></div>
+    <div class="wrap">
+      <div class="hero-grid">
+
+        <div class="hero-top">
+          <p class="eyebrow">Personal psychoacoustics</p>
+          <h1>Your birth chart,<br>composed into music.</h1>
+          <p class="lede">Zodiac calculates four frequencies from the exact moment and place you were born, then a composer writes them into real music. About nine minutes a day, eyes open, no practice to learn.</p>
+        </div>
+
+        <div class="hero-stage">
+          <div class="phone">
+            <img src="/explorations/shots/app-d/clean/d-core-375.png"
+                 alt="The Zodiac app open on the Immersions screen, showing 422 is your Core Tone, located in your Root band, above a list of tracks with violet waveforms."
+                 width="750" height="1624" fetchpriority="high" decoding="async">
+          </div>
+        </div>
+
+        <div class="hero-bot">
+          <a class="btn btn-grad" href="#how">See how it works</a>
+          <p class="credible">In our 52-week beta, <b>98.6%</b> of the people who finished the study said they would recommend it.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 2 · HOW IT WORKS ============ -->
+  <section class="band rv" id="how">
+    <div class="wrap">
+      <div class="marker hair">
+        <p class="eyebrow">How it works</p>
+        <span class="idx">01</span>
+      </div>
+
+      <div class="beats">
+        <article class="beat beat-core">
+          <p class="step">01</p>
+          <h3>You give us one moment in time.</h3>
+          <p>The date, the time, and the place you were born. That is the whole input. No quiz, no personality test, nothing for you to interpret. The chart is the raw material, not the product.</p>
+        </article>
+        <article class="beat beat-love">
+          <p class="step">02</p>
+          <h3>We isolate the four frequencies that are yours.</h3>
+          <p>One for identity, one for connection, one for energy, one for opportunity. They are computed from your exact birth moment, down to the minute and the place, and they do not change as you change.</p>
+        </article>
+        <article class="beat beat-vit">
+          <p class="step">03</p>
+          <h3>A composer writes them into the music.</h3>
+          <p>One composition at a time, instrument by instrument &mdash; so what you get stays music you actually want playing. Nine minutes a day, while you work, walk, cook, or sleep.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 3 · THE DOCTOR MOMENT ============ -->
+  <section class="band rv washed" id="doctor" aria-label="A psychiatrist on what this is">
+    <div class="wash wash-a" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="marker hair">
+        <p class="eyebrow">A psychiatrist on what this is</p>
+        <span class="idx">02</span>
+      </div>
+
+      <figure class="voice-lead">
+        <div class="port-big">
+          <img src="../inapp/app-assets-welcome/srini-pillay.png"
+               alt="Black-and-white portrait of Srini Pillay, M.D., looking toward the camera."
+               width="500" height="500" loading="lazy" decoding="async">
+        </div>
+        <div>
+          <blockquote>&ldquo;Psychology shows that the identities we construct can become so rigid that they limit what we notice, how we think, and even the possibilities we perceive. What interests me about Zodiac.fm is not that it tells people who they are, but that it may help them access aspects of themselves that have always been there. Through personalized frequencies rather than language alone, it provides another pathway into self-awareness. When people become more coherent with themselves, they often make clearer decisions, relate more authentically, and experience greater presence.&rdquo;</blockquote>
+          <figcaption class="hair">
+            <p class="who">Srini Pillay, M.D.</p>
+            <p class="sc">Harvard-trained psychiatrist and brain-imaging researcher</p>
+          </figcaption>
+        </div>
+      </figure>
+
+      <figure class="voice-second">
+        <div class="vs-body">
+          <blockquote>&ldquo;Way ahead of the curve.&rdquo;</blockquote>
+          <figcaption class="hair">
+            <p class="who">Maya Shetreat, MD</p>
+            <p class="sc">Adult and Pediatric Neurologist, Best-Selling Author</p>
+          </figcaption>
+        </div>
+        <div class="port-field">
+          <img src="../landers/reveal-assets/testimonial-headshots-transparent-white/maya-shetreat.png"
+               alt="Black-and-white portrait of Maya Shetreat, MD, smiling."
+               width="500" height="500" loading="lazy" decoding="async">
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 4 · THE FREQUENCY ROOM ============ -->
+  <section class="band rv" id="frequencies" aria-label="Your four frequencies">
+    <div class="wrap">
+      <div class="marker hair">
+        <p class="eyebrow">Your four frequencies</p>
+        <span class="idx">03</span>
+      </div>
+
+      <h2>Four numbers, and everything else follows.</h2>
+
+      <div class="fqroom">
+        <div class="fq-col fq-left">
+          <div class="anno">
+            <p class="anno-l">Your Core Frequency</p>
+            <p class="anno-s">Identity and Purpose</p>
+            <p class="anno-b">Root Band</p>
+          </div>
+          <div class="anno">
+            <p class="anno-l">Your Love Frequency</p>
+            <p class="anno-s">Connection to others</p>
+            <p class="anno-b">Solar Plexus Band</p>
+          </div>
+        </div>
+
+        <div class="fq-phone">
+          <div class="phone">
+            <img src="/explorations/shots/app-d/clean/d-abundance-375.png"
+                 alt="The Zodiac app open on the Abundance frequency, showing 611 is your Abundance Tone, located in your Throat band, above the track list in emerald."
+                 width="750" height="1624" loading="lazy" decoding="async">
+          </div>
+        </div>
+
+        <div class="fq-col fq-right">
+          <div class="anno">
+            <p class="anno-l">Your Vitality Frequency</p>
+            <p class="anno-s">Energy and lifeforce</p>
+            <p class="anno-b">Solar Plexus Band</p>
+          </div>
+          <div class="anno">
+            <p class="anno-l">Your Abundance Frequency</p>
+            <p class="anno-s">Opportunity</p>
+            <p class="anno-b">Throat Band</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="fq-cap">Screens from the member app, showing one sample chart. Two of this member&rsquo;s four land in the same band; that happens, and the numbers are still their own. Yours are computed from your exact birth moment, down to the minute and the place.</p>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 5 · MUSIC FIRST ============ -->
+  <section class="band music rv washed" aria-label="What comes out">
+    <div class="wash wash-b" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="music-grid">
+        <div>
+          <p class="kicker">What comes out</p>
+          <h3 class="disp">It has to be music first.</h3>
+          <p class="say">Your frequencies are built into real compositions down at the level of the instruments. Not a tone over a track, and nothing you have to sit still for.</p>
+        </div>
+        <figure>
+          <img src="assets/alive-01-trumpet-white.jpg" alt="A brass trumpet on a white surface with four wide paper ribbons in violet, magenta, orange and teal streaming out of the bell." width="1800" height="1011" loading="lazy" decoding="async">
+          <figcaption class="cap">Music first, always. The color is what your frequencies do to it.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="duo rv" aria-label="Two listeners">
+    <div class="wrap">
+      <figure>
+        <img src="assets/alive-09-duo-current.jpg" alt="Two people wearing over-ear headphones face each other under warm string lights, laughing, with woven paper ribbons in violet, magenta, orange and teal arcing between them." width="1800" height="1011" loading="lazy" decoding="async">
+        <figcaption class="cap">Two charts, two currents. The same song never plays the same way twice.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 6 · THE STAGE ============ -->
+  <section class="stage-room rv" id="stage">
+    <div class="wrap">
+      <div class="stage-panel">
+        <div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i><i class="a5"></i></div>
+        <div class="stage-in">
+          <div class="marker hair">
+            <p class="eyebrow">One track from the library</p>
+            <span class="idx">04</span>
+          </div>
+
+          <div class="stage-head">
+            <h2>Every song exists four times.</h2>
+            <div>
+              <p class="stage-lede">Once for each of your four frequencies. Each version is fully remastered, the whole composition rebuilt and pitch-shifted around that one frequency. This is Quiet Success, one track from the library.</p>
+              <p class="track-words"><span class="w">Focus&nbsp;&middot;</span> <span class="w">Meditate&nbsp;&middot;</span> <span class="w">Calm&nbsp;&middot;</span> <span class="w">Deep&nbsp;&middot;</span> <span class="w">Flow</span></p>
+            </div>
+          </div>
+
+          <div class="phones">
+            <div class="phone p1">
+              <img src="/explorations/shots/app-d/clean/d-core-375.png"
+                   alt="The app on the Core frequency: 422 is your Core Tone, located in your Root band, with the track list beneath it."
+                   width="750" height="1624" loading="lazy" decoding="async">
+            </div>
+            <div class="phone p2">
+              <img src="/explorations/shots/app-d/clean/d-love-375.png"
+                   alt="The same app on the Love frequency: 432 Hz, located in the Solar Plexus band, with the same tracks retuned."
+                   width="750" height="1624" loading="lazy" decoding="async">
+            </div>
+            <div class="phone p3">
+              <img src="/explorations/shots/app-d/clean/d-vitality-375.png"
+                   alt="The same app on the Vitality frequency: 579 Hz, the same tracks retuned in orange."
+                   width="750" height="1624" loading="lazy" decoding="async">
+            </div>
+            <div class="phone p4">
+              <img src="/explorations/shots/app-d/clean/d-abundance-375.png"
+                   alt="The same app on the Abundance frequency: 611 Hz, located in the Throat band, the same tracks retuned in green."
+                   width="750" height="1624" loading="lazy" decoding="async">
+            </div>
+          </div>
+
+          <p class="phones-cap">The same library, tuned to each of your four frequencies. Screens from the member app.</p>
+        </div>
+      </div>
+
+      <p class="midcta"><a class="glink" href="#start">Hear your four frequencies &rarr;</a></p>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 7 · THE PROOF WALL ============ -->
+  <section class="band rv washed" id="proof">
+    <div class="wash wash-c" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="marker hair">
+        <p class="eyebrow">In their own words</p>
+        <span class="idx">05</span>
+      </div>
+
+      <h2 class="wall-h2">On the record, under their own names.</h2>
+
+      <div class="tier-label">
+        <p class="eyebrow">Practitioners and researchers</p>
+      </div>
+
+      <div class="wall">
+
+        <figure class="voice s7 v-side">
+          <div class="pt"><img src="../landers/reveal-assets/img-images_testimonials_debra-silverman-d2c.png" alt="Black-and-white portrait of Debra Silverman" width="500" height="500" loading="lazy" decoding="async"></div>
+          <div class="vb">
+            <blockquote>&ldquo;This music tickled my soul and reminded me that there&rsquo;s such a connection between vibration, the stars and the sounds that are coordinated by higher intelligence. Give it a try — you&rsquo;ll love it.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Debra Silverman</p>
+              <p class="sc">Astrologer to Sting, Jennifer Aniston, and more</p>
+            </figcaption>
+          </div>
+        </figure>
+
+        <figure class="voice s5 v-side">
+          <div class="pt"><img src="../landers/reveal-assets/img-images_testimonials_rhonda-britten-d2c.png" alt="Black-and-white portrait of Rhonda Britten" width="500" height="500" loading="lazy" decoding="async"></div>
+          <div class="vb">
+            <blockquote>&ldquo;If you&rsquo;re tired of living out of tune with yourself, this is your invitation home.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Rhonda Britten</p>
+              <p class="sc">Author of &ldquo;Fearless Living,&rdquo; Emmy Award-winner, Founder, Fearless Living Institute</p>
+            </figcaption>
+          </div>
+        </figure>
+
+        <figure class="voice s5">
+          <div class="pt pt-lg"><img src="../landers/reveal-assets/img-images_testimonials_katie-wells-d2c.png" alt="Black-and-white portrait of Katie Wells" width="500" height="500" loading="lazy" decoding="async"></div>
+          <div class="vb">
+            <blockquote>&ldquo;Feels like coming home to myself.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Katie Wells</p>
+              <p class="sc">Founder, Wellness Mama, Best-Selling Author</p>
+            </figcaption>
+          </div>
+        </figure>
+
+        <figure class="voice s7">
+          <div class="pt pt-lg"><img src="../landers/reveal-assets/img-images_testimonials_anja-zibert-d2c.png" alt="Black-and-white portrait of Anja Zibert" width="500" height="500" loading="lazy" decoding="async"></div>
+          <div class="vb">
+            <blockquote>&ldquo;The cutting-edge tool I didn&rsquo;t know I needed.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Anja Zibert</p>
+              <p class="sc">Founder, Rebels Rising, a conscious recruiting firm</p>
+            </figcaption>
+          </div>
+        </figure>
+
+        <figure class="voice s7 v-side">
+          <div class="pt"><img src="../landers/reveal-assets/img-images_testimonials_joey-vaillancourt-d2c.png" alt="Black-and-white portrait of Joey Vaillancourt" width="500" height="500" loading="lazy" decoding="async"></div>
+          <div class="vb">
+            <blockquote>&ldquo;Without doing anything but listening, I become a different person. I shift into the version of me I actually want to be. I can tap into different frequencies based on what I need — abundance when I&rsquo;m visualizing, love when I want to connect with people, core when I need to realign.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Joey Vaillancourt</p>
+              <p class="sc">VP of Marketing, BiOptimizers</p>
+            </figcaption>
+          </div>
+        </figure>
+
+        <figure class="voice s5 v-side">
+          <div class="pt"><img src="../landers/reveal-assets/img-images_testimonials_barbara-ditlow-d2c.png" alt="Black-and-white portrait of Barbara Ditlow" width="500" height="500" loading="lazy" decoding="async"></div>
+          <div class="vb">
+            <blockquote>&ldquo;Bypassing the mind and speaking directly to the body.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Barbara Ditlow</p>
+              <p class="sc">Human Design Mentor, Master Practitioner, Trained/Certified/Endorsed by Ra Uru Hu (Founder of Human Design)</p>
+            </figcaption>
+          </div>
+        </figure>
+
+      </div>
+
+      <!-- the beta numbers, between the tiers -->
+      <div class="numbers hair" id="study">
+        <div class="num">
+          <p class="n">98.6%</p>
+          <p>of everyone who finished the beta would recommend it.</p>
+        </div>
+        <div class="num">
+          <p class="n">84%</p>
+          <p>of the people who used it as designed called it life-changing.</p>
+        </div>
+        <p class="fine">Our own 52-week beta study: 300 people started, 278 finished. &ldquo;As designed&rdquo; means about nine minutes a day on average, balanced across all four frequencies. It was rigorous for a beta, and we do not present it as clinical proof.</p>
+      </div>
+
+      <div class="tier-label">
+        <p class="eyebrow">Members</p>
+      </div>
+
+      <div class="wall">
+
+        <figure class="voice feat">
+          <div class="feat-in">
+            <div class="pt"><img src="../landers/reveal-assets/img-images_testimonials_kevin-knabe-d2c.png" alt="Black-and-white portrait of Kevin Knabe" width="500" height="500" loading="lazy" decoding="async"></div>
+            <div class="vb">
+              <blockquote>&ldquo;This has been a subtle and profound new practice I have incorporated into my daily life! I feel more centered and grounded and connected during and after listening to the CVF immersions.&rdquo;</blockquote>
+              <figcaption>
+                <p class="who">Kevin Knabe</p>
+                <p class="sc">Member, six months in</p>
+              </figcaption>
+            </div>
+          </div>
+        </figure>
+
+        <figure class="voice s7 v-side">
+          <div class="pt"><img src="../inapp/app-assets-welcome/ken-hoffman.png" alt="Black-and-white portrait of Ken Hoffman" width="500" height="500" loading="lazy" decoding="async"></div>
+          <div class="vb">
+            <blockquote>&ldquo;My wife especially loves the man I am turning into since subscribing.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Ken Hoffman</p>
+              <p class="sc">Member, Operations Manager, WNY Dyslexia Specialists</p>
+            </figcaption>
+          </div>
+        </figure>
+
+        <figure class="voice s5 v-side">
+          <div class="pt"><img src="../landers/reveal-assets/img-images_testimonials_ellen-grimaldi-d2c.png" alt="Black-and-white portrait of Ellen Grimaldi" width="500" height="500" loading="lazy" decoding="async"></div>
+          <div class="vb">
+            <blockquote>&ldquo;I kid you not, from the first 631 Hz tonal ring in my ears, it&rsquo;s as if my soul comes alive&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Ellen Grimaldi</p>
+              <p class="sc">Member, Mission, KS</p>
+            </figcaption>
+          </div>
+        </figure>
+
+        <figure class="voice s5">
+          <div class="pt pt-lg"><img src="../landers/reveal-assets/img-images_testimonials_amber-hedrick-d2c.png" alt="Black-and-white portrait of Amber Hedrick" width="500" height="500" loading="lazy" decoding="async"></div>
+          <div class="vb">
+            <blockquote>&ldquo;I feel like ME again.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Amber Hedrick</p>
+              <p class="sc">Member, first week</p>
+            </figcaption>
+          </div>
+        </figure>
+
+        <figure class="voice s7">
+          <div class="pt pt-lg"><img src="../landers/reveal-assets/img-images_testimonials_zehra-ashary-d2c.png" alt="Black-and-white portrait of Zehra Ashary" width="500" height="500" loading="lazy" decoding="async"></div>
+          <div class="vb">
+            <blockquote>&ldquo;It lets you finally feel the parts of yourself you have only ever read about.&rdquo;</blockquote>
+            <figcaption>
+              <p class="who">Zehra Ashary</p>
+              <p class="sc">Member, London</p>
+            </figcaption>
+          </div>
+        </figure>
+
+      </div>
+
+      <div class="proof-more hair">
+        <a class="tlink" href="/testimonials">Read the testimonials</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 8 · THE CLOSE ============ -->
+  <section class="band rv close" id="start">
+    <div class="wrap">
+      <div class="marker hair">
+        <p class="eyebrow">Start listening</p>
+        <span class="idx">06</span>
+      </div>
+
+      <h2>Hear what you sound like.</h2>
+      <p class="close-say">Your four frequencies are already set. They have been since the moment you were born. All that is left is to listen.</p>
+      <a class="btn btn-grad" href="/pricing">Get your frequencies</a>
+      <p class="close-fine">90-day money-back guarantee. Details and pricing under <a href="/questions">Questions</a>.</p>
+    </div>
+  </section>
+
+</main>
+
+<div class="wrap"><div class="spine-rule" aria-hidden="true"></div></div>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm" width="114" height="20">
+        <p>Music composed from the moment and place you were born.</p>
+      </div>
+
+      <div class="foot-col">
+        <p class="foot-label">Product</p>
+        <ul>
+          <li><a href="/how-it-works">How it works</a></li>
+          <li><a href="/the-study">The study</a></li>
+          <li><a href="/testimonials">Testimonials</a></li>
+          <li><a href="/who-this-is-for">Who this is for</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <p class="foot-label">Company</p>
+        <ul>
+          <li><a href="/story">Zodiac&rsquo;s story</a></li>
+          <li><a href="/how-we-compare">How we compare</a></li>
+          <li><a href="/questions">Questions</a></li>
+          <li><a href="/support">Support</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <p class="foot-label">Legal</p>
+        <ul>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="mailto:support@zodiac.fm">support@zodiac.fm</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-base">
+      <span>&copy; 2026 Zodiac.fm</span>
+      <span>Zodiac is music. It is not medical or health care, and it does not diagnose or treat anything.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="badge">HOME &middot; LIGHT &middot; 03 &middot; DEMO</div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- 1. reveal on scroll ---- */
+  var els = document.querySelectorAll('.rv');
+  if (!('IntersectionObserver' in window) || reduce) {
+    for (var i=0;i<els.length;i++) els[i].classList.add('in');
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {rootMargin:'0px 0px -8% 0px', threshold:0});
+    els.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---- 2. sticky header hairline (desktop only) ---- */
+  var head = document.querySelector('.site-head');
+  if (head){
+    var onScroll = function(){
+      if (window.scrollY > 8) head.classList.add('stuck');
+      else head.classList.remove('stuck');
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, {passive:true});
+  }
+})();
+</script>
+
+</body>
+</html>
