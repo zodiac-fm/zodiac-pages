@@ -1,0 +1,1162 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zodiac.fm &middot; Your birth chart, composed into music</title>
+<meta name="description" content="Zodiac calculates four frequencies from the moment and place you were born, then a composer writes them into music you can listen to every day.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+    --sans:'Switzer',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+
+    /* GROUND: white page, one dark room. The luminous world of the app arrives as
+       LIGHT on that white — aurora as accent, never as flood. */
+    --paper:#FFFFFF;
+    --ink:#1A1620;
+    --stage:#0B0712;
+    --greige:#EAE4DA;         /* the duotone portrait ground, baked into the assets */
+
+    /* ---- LOCKED FAMILY TOKENS (design-system §2.3 / design/tokens.json) ----
+       --f-*  primary   --g-*  gradEnd   --t-*  legible TEXT accent
+       --d-*  deep      --n-*  tint      --s-*  soft
+       Abundance is EMERALD (Michael 2026-07-02); the aqua/teal family is RETIRED. */
+    --f-core:#6521C9;      --g-core:#A737C8;      --t-core:#6521C9;      --d-core:#38007A;  --n-core:#EFECFF;  --s-core:#D2C8FF;
+    --f-love:#B90044;      --g-love:#CF4090;      --t-love:#B90044;      --d-love:#6E0024;  --n-love:#FFE8EA;  --s-love:#FFBDC3;
+    --f-vitality:#FF9112;  --g-vitality:#FFC251;  --t-vitality:#C25500;  --d-vitality:#BC6700; --n-vitality:#FFEADA; --s-vitality:#FFC392;
+    --f-abundance:#12A56E; --g-abundance:#46D99A; --t-abundance:#0A7A52; --d-abundance:#0A6B48; --n-abundance:#DCF4E8; --s-abundance:#8FE1BE;
+
+    /* Core Purple is the single structure/action accent (design-system §5) */
+    --violet:#6521C9;
+    --violet-deep:#38007A;
+    --violet-soft:#D2C8FF;
+
+    /* text tiers measured on #FFFFFF: .72 = 8.9:1 · .66 = 7.5:1 · .60 = 6.2:1 */
+    --ink-72:rgba(26,22,32,.72);
+    --ink-mid:rgba(26,22,32,.66);
+    --ink-quiet:rgba(26,22,32,.60);
+    --rule:rgba(26,22,32,.15);
+    --rule-soft:rgba(26,22,32,.08);
+    --cream:#F6F1E8;
+    --cream-76:rgba(246,241,232,.78);   /* on Stage, 11.4:1 */
+
+    --gut:clamp(20px,5vw,64px);
+    --sect:clamp(64px,9vw,132px);
+    --max:1320px;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-weight:400;font-size:16px;line-height:1.62;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit}
+  ::selection{background:rgba(101,33,201,.16)}
+  :focus-visible{outline:2px solid var(--violet);outline-offset:3px;border-radius:1px}
+  [id]{scroll-margin-top:96px}
+
+  .wrap{width:100%;max-width:var(--max);margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+
+  /* ---------- shared editorial parts ---------- */
+  .eyebrow{
+    font-family:var(--sans);font-weight:600;font-size:11px;line-height:1;
+    letter-spacing:.17em;text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .marker{
+    display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    border-top:1px solid var(--ink);padding-top:12px;margin-bottom:clamp(26px,4vw,44px);
+  }
+  .marker .idx{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.14em;
+    color:var(--ink-quiet);font-variant-numeric:tabular-nums;
+  }
+
+  /* Cormorant Garamond: DISPLAY ONLY, >=28px, upright, never italic, never numbers. */
+  h1,h2,h3.disp{font-family:var(--serif);font-weight:600;letter-spacing:-.012em;font-style:normal}
+  h1{font-size:clamp(42px,6vw,76px);line-height:1.03}
+  h2{font-size:clamp(32px,5vw,58px);line-height:1.05}
+  h3.disp{font-size:clamp(28px,3.6vw,36px);line-height:1.12}
+
+  p{max-width:60ch}
+  .lede{font-size:clamp(17px,1.55vw,20.5px);line-height:1.58;color:var(--ink-72)}
+  .fine{font-size:12.5px;line-height:1.62;color:var(--ink-quiet);max-width:64ch}
+
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-height:56px;padding:0 34px;border-radius:2px;border:1px solid transparent;
+    background:var(--violet);color:#fff;text-decoration:none;
+    font-family:var(--sans);font-weight:600;font-size:15px;letter-spacing:.015em;
+    transition:filter .25s ease,box-shadow .25s ease;
+  }
+  /* the ONE gradient button on the page-type: Core primary -> gradEnd (frequency role,
+     used here as the brand hero action). White on #A737C8 = 5.2:1 at the pale end. */
+  .btn-grad{
+    background:linear-gradient(96deg,var(--f-core) 0%,var(--g-core) 100%);
+    box-shadow:0 10px 26px rgba(101,33,201,.22);
+  }
+  .btn-grad:hover,.btn-grad:focus-visible{filter:saturate(1.06) brightness(1.04);box-shadow:0 14px 32px rgba(101,33,201,.3)}
+  .btn:not(.btn-grad):hover,.btn:not(.btn-grad):focus-visible{background:var(--violet-deep)}
+
+  .tlink{
+    display:inline-flex;align-items:center;min-height:24px;
+    font-family:var(--sans);font-weight:600;font-size:14px;
+    color:var(--violet);text-decoration:none;
+    border-bottom:1px solid rgba(101,33,201,.34);padding-bottom:1px;
+    transition:border-color .25s ease;
+  }
+  .tlink:hover,.tlink:focus-visible{border-bottom-color:var(--violet)}
+
+  .skip{position:absolute;left:-9999px;top:0}
+  .skip:focus{left:12px;top:12px;z-index:99;background:#fff;color:var(--ink);padding:12px 16px;border:1px solid var(--ink)}
+
+  /* ============================================================
+     HEADER — static on phones (the viewport is precious there),
+     sticky + frosted from 900px up.
+     ============================================================ */
+  .site-head{padding-top:20px;padding-bottom:16px;background:var(--paper)}
+  @media (min-width:900px){
+    .site-head{
+      position:sticky;top:0;z-index:60;
+      background:rgba(255,255,255,.78);
+      -webkit-backdrop-filter:saturate(1.4) blur(14px);
+      backdrop-filter:saturate(1.4) blur(14px);
+      border-bottom:1px solid transparent;
+      transition:border-color .3s ease,background .3s ease;
+    }
+    .site-head.stuck{border-bottom-color:var(--rule-soft);background:rgba(255,255,255,.9)}
+  }
+  .head-row{display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .head-row img{height:21px;width:auto}
+  .nav{display:flex;align-items:center;gap:clamp(14px,2.2vw,32px);flex-wrap:wrap}
+  .nav a{
+    display:inline-flex;align-items:center;min-height:26px;
+    font-family:var(--sans);font-weight:500;font-size:14px;color:var(--ink-72);
+    text-decoration:none;transition:color .2s ease;
+  }
+  .nav a:hover,.nav a:focus-visible{color:var(--ink)}
+  .nav a[aria-current="page"]{color:var(--ink);font-weight:600}
+  .login{
+    display:inline-flex;align-items:center;min-height:34px;padding:0 15px;
+    border:1px solid var(--rule);border-radius:2px;
+    font-family:var(--sans);font-weight:600;font-size:13px;color:var(--ink);
+    text-decoration:none;letter-spacing:.02em;transition:border-color .25s ease;
+  }
+  .login:hover,.login:focus-visible{border-color:var(--ink)}
+  .nav-mobile{display:none}
+  @media (max-width:899px){
+    .head-row .nav{display:none}
+    .nav-mobile{
+      display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;
+      margin-top:13px;padding-top:11px;border-top:1px solid var(--rule-soft);
+    }
+    .nav-mobile a{font-size:13.5px;min-height:24px}
+  }
+
+  /* ============================================================
+     THE DEVICE FRAME — one component, used in two rooms.
+     Rounded rect, thin dark bezel, honest shadow. No notch gimmicks.
+     ============================================================ */
+  .phone{
+    position:relative;width:100%;
+    border-radius:42px;padding:8px;
+    background:linear-gradient(160deg,#241D2E 0%,#120D1A 58%,#241D2E 100%);
+    box-shadow:0 1px 0 rgba(255,255,255,.14) inset,
+               0 26px 60px -18px rgba(26,22,32,.4),
+               0 6px 18px -8px rgba(26,22,32,.24);
+  }
+  .phone img{
+    width:100%;height:auto;aspect-ratio:375/812;object-fit:cover;object-position:top center;
+    border-radius:34px;background:#fff;display:block;
+  }
+
+  /* ============================================================
+     ROOM 1 — HERO. White ground, aurora as light not paint.
+     Order (design-system §4.1): eyebrow, H1, subhead, the product,
+     THEN the one CTA, then the quiet reassurance.
+     ============================================================ */
+  .hero{position:relative;overflow:hidden;padding-top:clamp(18px,3.4vw,44px);padding-bottom:clamp(52px,7vw,104px)}
+  /* Frame-scale rule (design-system §3): these are page-scale surfaces, so the pools stay
+     pale — Core tint/soft plus one warm Vitality tint. Light on white, never a wash of colour. */
+  .glow{position:absolute;inset:-18% -10%;z-index:0;pointer-events:none;filter:blur(72px)}
+  .glow i{position:absolute;display:block;border-radius:50%}
+  .glow .g1{width:56%;padding-bottom:52%;left:38%;top:-14%;background:radial-gradient(circle,rgba(210,200,255,.92) 0%,rgba(210,200,255,0) 66%);animation:gd1 38s ease-in-out infinite alternate}
+  .glow .g2{width:44%;padding-bottom:44%;left:-6%;top:24%;background:radial-gradient(circle,rgba(239,236,255,.98) 0%,rgba(239,236,255,0) 68%);animation:gd2 46s ease-in-out infinite alternate}
+  .glow .g3{width:38%;padding-bottom:36%;left:56%;top:52%;background:radial-gradient(circle,rgba(255,234,218,.9) 0%,rgba(255,234,218,0) 66%);animation:gd3 52s ease-in-out infinite alternate}
+  @keyframes gd1{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-5%,4%,0) scale(1.1)}}
+  @keyframes gd2{from{transform:translate3d(0,0,0) scale(1.06)}to{transform:translate3d(6%,-4%,0) scale(.96)}}
+  @keyframes gd3{from{transform:translate3d(0,0,0) scale(.98)}to{transform:translate3d(-4%,-6%,0) scale(1.12)}}
+  @media (prefers-reduced-motion:reduce){.glow i{animation:none}}
+  .hero .wrap{position:relative;z-index:1}
+
+  .hero-grid{display:grid;grid-template-columns:1fr;row-gap:clamp(30px,4vw,40px)}
+  @media (min-width:900px){
+    .hero-grid{
+      grid-template-columns:minmax(0,1.06fr) minmax(0,1fr);
+      grid-template-areas:"top stage" "bot stage";
+      grid-template-rows:auto 1fr;
+      column-gap:clamp(36px,4.4vw,80px);row-gap:clamp(26px,3vw,38px);
+      align-items:start;
+    }
+    .hero-top{grid-area:top;align-self:end}
+    .hero-bot{grid-area:bot;align-self:start;padding-top:clamp(22px,2.6vw,34px)}
+    .hero-stage{grid-area:stage;align-self:center}
+  }
+  .hero h1{margin-top:18px;max-width:13ch}
+  .hero .lede{margin-top:clamp(18px,2vw,26px);max-width:44ch}
+  .hero .credible{margin-top:20px;max-width:50ch;font-size:14px;line-height:1.6;color:var(--ink-mid)}
+  .hero .credible b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+
+  .hero-stage{position:relative}
+  .hero-stage .phone{max-width:300px;margin:0 auto}
+  @media (min-width:900px){.hero-stage .phone{max-width:clamp(250px,25vw,318px);margin:0 auto}}
+
+  /* floating proof chips: real people, banked lines, elegant depth. */
+  .chip{
+    position:absolute;z-index:3;width:212px;
+    background:#fff;border:1px solid var(--rule-soft);border-radius:4px;
+    padding:13px 15px 14px;
+    box-shadow:0 14px 34px -12px rgba(26,22,32,.24),0 3px 10px -4px rgba(26,22,32,.12);
+  }
+  .chip .ch-head{display:flex;align-items:center;gap:10px}
+  .chip .av{
+    width:32px;height:32px;flex:0 0 32px;border-radius:50%;overflow:hidden;
+    background:var(--greige);border:1px solid var(--rule-soft);
+  }
+  .chip .av img{width:100%;height:100%;object-fit:cover}
+  .chip .av.mono{display:flex;align-items:center;justify-content:center;font:600 14px/1 var(--sans);color:var(--ink-72)}
+  .chip .ch-name{font-family:var(--sans);font-weight:600;font-size:12px;line-height:1.25;color:var(--ink)}
+  .chip q,.chip .q{
+    display:block;margin-top:10px;font-family:var(--sans);font-weight:500;
+    font-size:13px;line-height:1.45;color:var(--ink-72);quotes:none;
+  }
+  /* zig-zag: top-right, mid-left, bottom-right. Nothing sits on the app's headline —
+     "422 is Your Core Tone" is the proof, so it stays uncovered. */
+  .chip.c1{display:none;right:-9%;top:2%;transform:rotate(1.2deg)}
+  .chip.c2{display:none;left:-11%;top:42%;transform:rotate(-1.4deg)}
+  .chip.c3{left:2%;bottom:4%;transform:rotate(-1deg)}
+  @media (min-width:1120px){.chip.c1,.chip.c2{display:block}.chip.c3{right:-7%;left:auto;bottom:7%;transform:rotate(1deg)}}
+  @media (max-width:899px){
+    .hero-stage{padding-bottom:14px}
+    .chip.c3{width:196px;left:0;bottom:-6px}
+  }
+  @media (max-width:400px){.chip.c3{width:180px;left:-6px}}
+
+  /* ---------- section frame ---------- */
+  section.band{padding-top:var(--sect);padding-bottom:var(--sect)}
+
+  /* ============================================================
+     ROOM 2 — THE FREQUENCY PLATE. Four numbers, self-proving.
+     ============================================================ */
+  .plate-head{max-width:20ch}
+  .plate{margin-top:clamp(34px,4vw,56px)}
+  .plate-grid{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    column-gap:clamp(16px,2.4vw,36px);row-gap:clamp(30px,3.4vw,44px);
+  }
+  @media (min-width:900px){.plate-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  .fq{border-top:1px solid var(--ink);padding-top:clamp(16px,1.8vw,22px)}
+  .fq-label{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.15em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+  /* numbers are Switzer, always. The numeral takes the family TEXT accent (--t-*),
+     never the ink mass: on white the Vitality/Abundance primaries fail the floor. */
+  .fq .hz{
+    margin-top:clamp(12px,1.4vw,18px);font-family:var(--sans);font-weight:600;
+    font-size:clamp(50px,6.6vw,88px);line-height:.9;letter-spacing:-.045em;
+    font-variant-numeric:tabular-nums;
+  }
+  .fq .hz .u{font-size:.24em;font-weight:600;letter-spacing:.04em;margin-left:5px;vertical-align:.62em}
+  .fq .ul{display:block;height:3px;width:100%;max-width:120px;margin-top:clamp(14px,1.6vw,20px);border-radius:2px}
+  .fq .dom{margin-top:14px;font-family:var(--sans);font-weight:500;font-size:14px;line-height:1.4;color:var(--ink-mid)}
+  .fq .chipband{
+    display:inline-flex;align-items:center;margin-top:14px;padding:5px 12px;border-radius:999px;
+    font-family:var(--sans);font-weight:600;font-size:12px;letter-spacing:.06em;line-height:1.2;
+    background:#fff;border:1px solid;
+  }
+  .fq-core .hz{color:var(--t-core)}
+  .fq-core .ul{background:linear-gradient(90deg,var(--f-core),var(--g-core))}
+  /* band chips stay NEUTRAL: band is a location on one shared scale, not a family
+     property — a family-colored chip makes the same band name render two colors. */
+  .fq .chipband{border-color:var(--rule);color:var(--ink-mid)}
+  .fq-love .hz{color:var(--t-love)}
+  .fq-love .ul{background:linear-gradient(90deg,var(--f-love),var(--g-love))}
+  .fq-vit .hz{color:var(--t-vitality)}
+  .fq-vit .ul{background:linear-gradient(90deg,var(--f-vitality),var(--g-vitality))}
+  .fq-abu .hz{color:var(--t-abundance)}
+  .fq-abu .ul{background:linear-gradient(90deg,var(--f-abundance),var(--g-abundance))}
+  .plate-note{margin-top:clamp(24px,2.8vw,34px);max-width:54ch}
+
+  /* ---------- three beats, each with its own ink spine ---------- */
+  .beats{margin-top:clamp(52px,6vw,92px);display:grid;grid-template-columns:1fr;gap:0}
+  @media (min-width:860px){.beats{grid-template-columns:repeat(3,1fr);column-gap:clamp(28px,3.6vw,64px)}}
+  .beat{
+    position:relative;border-top:1px solid var(--rule);
+    padding:clamp(22px,2.6vw,32px) 0 clamp(24px,3vw,36px);
+  }
+  .beat::before{content:"";position:absolute;top:-1px;left:0;width:52px;height:3px;border-radius:2px}
+  .beat-core::before{background:linear-gradient(90deg,var(--f-core),var(--g-core))}
+  .beat-love::before{background:linear-gradient(90deg,var(--f-love),var(--g-love))}
+  .beat-vit::before{background:linear-gradient(90deg,var(--f-vitality),var(--g-vitality))}
+  .beat .step{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.16em;
+    font-variant-numeric:tabular-nums;
+  }
+  .beat-core .step{color:var(--t-core)}
+  .beat-love .step{color:var(--t-love)}
+  .beat-vit .step{color:var(--t-vitality)}
+  .beat h3{
+    margin-top:14px;max-width:17ch;font-family:var(--sans);font-weight:600;
+    font-size:19px;line-height:1.28;letter-spacing:-.01em;color:var(--ink);
+  }
+  .beat p{margin-top:14px;font-size:15.5px;line-height:1.6;color:var(--ink-72);max-width:42ch}
+
+  /* ============================================================
+     ROOM 3 — MUSIC FIRST. Asymmetric, generous, the image large.
+     ============================================================ */
+  /* specificity note: this must out-rank `section.band`, hence the doubled selector */
+  section.band.music{padding-top:clamp(30px,4vw,56px);padding-bottom:var(--sect)}
+  .music-grid{display:grid;grid-template-columns:1fr;gap:clamp(28px,3.4vw,48px);align-items:center}
+  @media (min-width:900px){
+    .music-grid{grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(40px,5vw,84px);align-items:center}
+  }
+  .music .kicker{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.17em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .music h3.disp{margin-top:18px;max-width:12ch}
+  .music .say{margin-top:18px;font-size:16px;line-height:1.62;color:var(--ink-72);max-width:36ch}
+  .music figure{position:relative}
+  /* full-bleed to the right edge on desktop: the picture runs off the page */
+  @media (min-width:900px){
+    .music figure{margin-right:calc((100vw - min(100vw,var(--max)))/-2 - var(--gut))}
+  }
+  .music img{width:100%;height:auto}
+  .plate-cap{
+    display:flex;align-items:baseline;gap:14px;
+    margin-top:16px;padding-top:11px;border-top:1px solid var(--rule);
+    font-family:var(--sans);font-weight:600;font-size:10.5px;letter-spacing:.19em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .plate-cap .n{font-variant-numeric:tabular-nums;color:rgba(26,22,32,.42)}
+
+  .duo{padding-bottom:clamp(46px,6vw,88px)}
+  .duo img{width:100%;height:auto}
+  @media (min-width:900px){.duo img{max-height:62vh;object-fit:cover;object-position:center 38%}}
+  .duo figcaption{
+    margin-top:16px;padding-top:11px;border-top:1px solid var(--rule);
+    font-family:var(--sans);font-weight:600;font-size:10.5px;letter-spacing:.19em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+
+  /* ============================================================
+     ROOM 4 — THE APP ROOM. The one dark moment on the page.
+     ============================================================ */
+  .stage{
+    position:relative;overflow:hidden;background:var(--stage);color:var(--cream);
+    padding-top:clamp(60px,8vw,120px);padding-bottom:clamp(56px,7.4vw,112px);
+  }
+  /* Frame-scale rule again, inverted: on near-black, `screen` ADDS light rather than
+     painting over it, so the ground stays black with pools of colour on it. */
+  .aurora{position:absolute;inset:-25%;pointer-events:none;z-index:0;filter:blur(78px);opacity:.5;mix-blend-mode:screen}
+  .aurora i{position:absolute;display:block;border-radius:50%}
+  .aurora .a1{width:46%;padding-bottom:46%;left:-2%;top:4%;background:radial-gradient(circle,rgba(101,33,201,.92) 0%,rgba(101,33,201,0) 60%);animation:br1 34s ease-in-out infinite alternate}
+  .aurora .a2{width:40%;padding-bottom:40%;left:44%;top:-8%;background:radial-gradient(circle,rgba(185,0,68,.8) 0%,rgba(185,0,68,0) 60%);animation:br2 41s ease-in-out infinite alternate}
+  .aurora .a3{width:38%;padding-bottom:38%;left:66%;top:44%;background:radial-gradient(circle,rgba(255,145,18,.74) 0%,rgba(255,145,18,0) 60%);animation:br3 47s ease-in-out infinite alternate}
+  .aurora .a4{width:36%;padding-bottom:36%;left:6%;top:56%;background:radial-gradient(circle,rgba(18,165,110,.78) 0%,rgba(18,165,110,0) 60%);animation:br4 38s ease-in-out infinite alternate}
+  .aurora .a5{width:34%;padding-bottom:34%;left:40%;top:30%;background:radial-gradient(circle,rgba(101,33,201,.82) 0%,rgba(101,33,201,0) 62%);animation:br3 44s ease-in-out infinite alternate}
+  @media (max-width:760px){.aurora{opacity:.36;inset:-14%}.aurora .a5{display:none}}
+  @keyframes br1{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(6%,4%,0) scale(1.13)}}
+  @keyframes br2{from{transform:translate3d(0,0,0) scale(1.06)}to{transform:translate3d(-7%,6%,0) scale(.95)}}
+  @keyframes br3{from{transform:translate3d(0,0,0) scale(.96)}to{transform:translate3d(-5%,-7%,0) scale(1.11)}}
+  @keyframes br4{from{transform:translate3d(0,0,0) scale(1.07)}to{transform:translate3d(8%,-5%,0) scale(.96)}}
+  @media (prefers-reduced-motion:reduce){.aurora i{animation:none}}
+  .stage .wrap{position:relative;z-index:1}
+  .stage .marker{border-top-color:rgba(246,241,232,.4)}
+  .stage .eyebrow,.stage .marker .idx{color:var(--violet-soft)}
+  .stage h2{color:var(--cream);max-width:11ch}
+
+  .stage-head{display:grid;grid-template-columns:1fr;gap:clamp(22px,3vw,40px);align-items:start}
+  @media (min-width:900px){
+    .stage-head{grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(40px,6vw,110px)}
+  }
+  .stage-lede{font-size:17px;line-height:1.6;color:var(--cream-76);max-width:40ch}
+  .track-words{
+    margin-top:20px;font-family:var(--sans);font-weight:600;font-size:10.5px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--violet-soft);
+    line-height:1.9;max-width:34ch;
+  }
+  .track-words .w{white-space:nowrap}
+  .stage-note{margin-top:18px;font-size:14.5px;line-height:1.6;color:var(--cream-76);max-width:38ch}
+
+  .phones{display:flex;margin-top:clamp(40px,5.4vw,80px)}
+  @media (min-width:900px){
+    .phones{justify-content:center;align-items:flex-start;gap:0}
+    .phones .phone{width:clamp(196px,19vw,272px);flex:0 0 auto}
+    .phones .p1{transform:translateY(30px);z-index:1}
+    /* the overlap is deliberate on the left and almost nothing on the right, so the
+       third screen (the playing state) still reads whole */
+    .phones .p2{width:clamp(212px,20.6vw,296px);margin:0 -6px 0 -24px;z-index:3}
+    .phones .p3{transform:translateY(54px);z-index:2}
+  }
+  @media (max-width:899px){
+    .phones{
+      overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;gap:16px;
+      margin-left:calc(var(--gut) * -1);margin-right:calc(var(--gut) * -1);
+      padding:6px var(--gut) 10px;scrollbar-width:none;
+    }
+    .phones::-webkit-scrollbar{display:none}
+    .phones .phone{flex:0 0 68%;max-width:290px;scroll-snap-align:center}
+  }
+  .phones-cap{
+    margin-top:clamp(26px,3vw,42px);padding-top:12px;border-top:1px solid rgba(246,241,232,.2);
+    font-family:var(--sans);font-weight:500;font-size:13px;line-height:1.55;
+    color:var(--cream-76);max-width:56ch;
+  }
+  @media (min-width:900px){
+    .phones{margin-top:clamp(48px,5vw,76px)}
+    .phones-cap{margin-left:auto;margin-right:auto;text-align:center;max-width:46ch}
+  }
+
+  /* ============================================================
+     ROOM 5 — THE PROOF WALL. A mosaic, not a grid of clones.
+     ============================================================ */
+  .tier-label{
+    display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    border-top:1px solid var(--ink);padding-top:11px;margin-bottom:clamp(22px,2.8vw,34px);
+  }
+  .tier-label .ct{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.14em;
+    color:var(--ink-quiet);font-variant-numeric:tabular-nums;
+  }
+
+  /* the lead voice, matted like a framed print */
+  .lead-voice{
+    display:grid;grid-template-columns:1fr;gap:clamp(26px,3.4vw,54px);
+    padding-bottom:clamp(38px,4.4vw,60px);
+  }
+  @media (min-width:820px){.lead-voice{grid-template-columns:auto minmax(0,1fr);align-items:start}}
+  .matte{
+    display:block;padding:12px;background:#fff;border:1px solid var(--rule);border-radius:3px;
+    width:clamp(180px,22vw,236px);
+    box-shadow:0 18px 40px -26px rgba(26,22,32,.4);
+  }
+  .matte img{width:100%;height:auto;border-radius:1px}
+  .lead-voice blockquote{
+    font-family:var(--sans);font-weight:500;
+    font-size:clamp(17px,1.6vw,21px);line-height:1.54;color:var(--ink);max-width:54ch;
+  }
+  .lead-voice figcaption{margin-top:26px;padding-top:16px;border-top:1px solid var(--rule)}
+  .who{font-family:var(--sans);font-weight:600;font-size:14px;line-height:1.3;color:var(--ink)}
+  .lead-voice .who{font-size:16.5px}
+  .role{margin-top:4px;font-family:var(--sans);font-weight:500;font-size:12.5px;line-height:1.45;color:var(--ink-quiet);max-width:36ch}
+  .lead-voice .role{font-size:13.5px;color:var(--ink-mid);max-width:44ch}
+
+  /* the mosaic: 12 columns, quote length drives the span, cards size to content */
+  .wall{
+    display:grid;grid-template-columns:repeat(12,minmax(0,1fr));
+    column-gap:clamp(18px,2.4vw,40px);row-gap:clamp(28px,3.2vw,50px);
+    align-items:start;
+  }
+  .voice{grid-column:span 12;position:relative;padding-top:16px}
+  .voice::before{content:"";position:absolute;top:0;left:0;right:0;height:2px}
+  @media (min-width:620px){.voice{grid-column:span 6}}
+  @media (min-width:960px){
+    .voice{grid-column:span var(--span,4)}
+    .s3{--span:3}.s4{--span:4}.s5{--span:5}.s6{--span:6}.s7{--span:7}
+    .voice.wide{grid-column:span 12}
+  }
+  .ac-core::before{background:linear-gradient(90deg,var(--f-core),var(--g-core))}
+  .ac-love::before{background:linear-gradient(90deg,var(--f-love),var(--g-love))}
+  .ac-vit::before{background:linear-gradient(90deg,var(--f-vitality),var(--g-vitality))}
+  .ac-abu::before{background:linear-gradient(90deg,var(--f-abundance),var(--g-abundance))}
+  .port{
+    display:flex;width:54px;height:54px;flex:0 0 54px;border-radius:50%;overflow:hidden;
+    background:var(--greige);border:1px solid var(--rule-soft);
+  }
+  .port img{width:100%;height:100%;object-fit:cover}
+  .port.mono{
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--sans);font-weight:600;font-size:19px;line-height:1;color:var(--ink-72);
+  }
+  .voice blockquote{
+    margin-top:18px;font-family:var(--sans);font-weight:500;
+    font-size:15.5px;line-height:1.55;color:var(--ink);max-width:38ch;
+  }
+  .voice figcaption{margin-top:16px}
+  /* the closing pull-quote card: a rhythm break, not another column */
+  .voice.wide{padding:0}
+  .voice.wide .wide-in{
+    display:grid;grid-template-columns:1fr;gap:22px;align-items:center;
+    background:var(--n-core);border-radius:3px;padding:clamp(24px,3vw,40px);
+  }
+  @media (min-width:760px){
+    .voice.wide .wide-in{grid-template-columns:auto minmax(0,1fr);gap:clamp(26px,3.4vw,48px)}
+  }
+  .voice.wide .port{width:78px;height:78px;flex-basis:78px;border-color:rgba(56,0,122,.16)}
+  .voice.wide blockquote{margin-top:0;font-size:clamp(16.5px,1.5vw,19px);max-width:52ch}
+  .voice.wide figcaption{margin-top:16px}
+
+  /* the numbers, between the tiers */
+  .numbers{
+    margin:clamp(48px,5.6vw,84px) 0;padding:clamp(30px,3.6vw,46px) 0;
+    border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    display:grid;grid-template-columns:1fr;gap:clamp(26px,3.2vw,44px);
+  }
+  @media (min-width:820px){.numbers{grid-template-columns:auto auto minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:start}}
+  .num .n{
+    font-family:var(--sans);font-weight:600;font-size:clamp(48px,6.4vw,76px);
+    line-height:1;letter-spacing:-.038em;font-variant-numeric:tabular-nums;color:var(--ink);
+  }
+  .num p{margin-top:12px;font-size:14.5px;line-height:1.5;color:var(--ink-72);max-width:26ch}
+
+  .disclose-btn{
+    display:none;align-items:center;justify-content:center;gap:10px;width:100%;
+    min-height:52px;margin-bottom:26px;
+    background:#fff;border:1px solid var(--rule);border-radius:2px;
+    font-family:var(--sans);font-weight:600;font-size:14px;color:var(--violet);cursor:pointer;
+  }
+  .disclose-btn:hover{border-color:var(--violet)}
+  /* collapsed = mobile only, and only the tail: the featured wide voice + two cards stay visible */
+  .wall.is-collapsed .voice:not(.wide):nth-child(n+3){display:none}
+  @media (max-width:899px){#moreVoices .voice.wide{order:-1}}
+  .disclose-btn{margin-top:18px}
+  /* letter avatars read designed, not missing: family tint, serif letter */
+  .ac-abu .port.mono{background:var(--n-abundance);color:var(--d-abundance)}
+  .chip .av.mono{background:var(--n-core);color:var(--d-core)}
+  .proof-more{margin-top:clamp(32px,3.8vw,48px);border-top:1px solid var(--rule);padding-top:24px}
+  /* the proof room hands off to the close without a dead screen of white */
+  #proof{padding-bottom:clamp(36px,4.4vw,60px)}
+  #price{padding-top:clamp(36px,4.4vw,56px)}
+
+  /* ============================================================
+     ROOM 6 — THE QUIET CLOSE.
+     ============================================================ */
+  .close-grid{display:grid;grid-template-columns:1fr;gap:clamp(30px,4vw,64px);align-items:start;margin-top:clamp(28px,3.4vw,46px)}
+  @media (min-width:900px){.close-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}}
+  .price-plate{
+    position:relative;border:1px solid var(--ink);border-radius:3px;
+    padding:clamp(26px,3.4vw,46px);background:#fff;overflow:hidden;
+  }
+  .price-plate::before{
+    content:"";position:absolute;right:-14%;top:-46%;width:62%;padding-bottom:62%;
+    border-radius:50%;pointer-events:none;filter:blur(46px);
+    background:radial-gradient(circle,rgba(210,200,255,.7) 0%,rgba(210,200,255,0) 68%);
+  }
+  .price-plate > *{position:relative}
+  .plans{display:flex;flex-direction:column;gap:10px}
+  @media (min-width:560px){.plans{flex-direction:row;align-items:baseline;gap:clamp(18px,2.6vw,32px)}}
+  .plan{display:flex;align-items:baseline;gap:11px;flex-wrap:wrap}
+  .amt{
+    font-family:var(--sans);font-weight:600;font-size:clamp(38px,5.4vw,58px);
+    line-height:1;letter-spacing:-.034em;font-variant-numeric:tabular-nums;color:var(--ink);
+  }
+  .per{font-family:var(--sans);font-weight:500;font-size:15px;color:var(--ink-mid)}
+  .or{font-family:var(--sans);font-weight:500;font-size:15px;color:var(--ink-quiet)}
+  .price-plate .included{margin-top:26px;padding-top:22px;border-top:1px solid var(--rule);font-size:15px;line-height:1.62;color:var(--ink-72);max-width:46ch}
+  .price-plate .btn{margin-top:28px}
+  .price-plate .fine{margin-top:18px}
+  .gtee{border-top:1px solid var(--rule);padding-top:clamp(18px,2.2vw,26px)}
+  .gtee h3{
+    font-family:var(--sans);font-weight:600;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .gtee p{margin-top:14px;font-size:15px;line-height:1.62;color:var(--ink-72)}
+  .gtee dl{margin-top:16px}
+  .gtee .kv{display:grid;grid-template-columns:minmax(74px,90px) minmax(0,1fr);gap:12px;
+    padding:12px 0;border-bottom:1px solid var(--rule-soft)}
+  .gtee .kv:last-child{border-bottom:0}
+  .gtee dt{font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-quiet);padding-top:3px}
+  .gtee dd{font-size:15px;line-height:1.5;color:var(--ink-72)}
+
+  /* ---------- footer, opened by the four-ink hairline ---------- */
+  .spine-rule{
+    height:3px;width:100%;
+    background:linear-gradient(90deg,var(--f-core) 0%,var(--g-core) 22%,var(--f-love) 42%,var(--f-vitality) 66%,var(--f-abundance) 100%);
+    opacity:.8;
+  }
+  .site-foot{padding-top:clamp(46px,6vw,76px);padding-bottom:46px}
+  .foot-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(26px,3.4vw,48px)}
+  @media (min-width:760px){.foot-grid{grid-template-columns:minmax(0,2fr) repeat(3,minmax(0,1fr))}}
+  .foot-brand img{height:20px;width:auto}
+  .foot-brand p{margin-top:16px;font-size:13.5px;line-height:1.6;color:var(--ink-mid);max-width:30ch}
+  .foot-label{
+    font-family:var(--sans);font-weight:600;font-size:11px;letter-spacing:.15em;
+    text-transform:uppercase;color:var(--ink-quiet);
+  }
+  .foot-col ul{list-style:none;margin-top:16px}
+  .foot-col li{margin-top:2px}
+  .foot-col a{
+    display:inline-flex;align-items:center;min-height:28px;
+    font-size:14px;color:var(--ink-72);text-decoration:none;transition:color .2s ease;
+  }
+  .foot-col a:hover,.foot-col a:focus-visible{color:var(--ink)}
+  .foot-base{
+    margin-top:clamp(34px,4.4vw,56px);padding-top:22px;border-top:1px solid var(--rule);
+    display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;
+    font-size:12.5px;color:var(--ink-quiet);
+  }
+  .foot-base span{font-variant-numeric:tabular-nums}
+
+  /* ---------- variant badge (bake-off pattern) ---------- */
+  .badge{
+    position:fixed;right:14px;bottom:14px;z-index:90;pointer-events:none;
+    background:#fff;border:1px solid var(--rule);color:var(--ink-mid);
+    font:700 10.5px/1 var(--sans);letter-spacing:.1em;padding:8px 12px;border-radius:999px;
+    box-shadow:0 2px 10px rgba(26,22,32,.09);
+  }
+
+  /* ---------- quiet reveal ---------- */
+  .rv{opacity:0;transform:translateY(14px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.3,1)}
+  .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+</style>
+<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-head" id="top">
+  <div class="wrap">
+    <div class="head-row">
+      <a href="#top" aria-label="Zodiac.fm home"><img src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm" width="120" height="21"></a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#top" aria-current="page">Home</a>
+        <a href="#how">How it works</a>
+        <a href="#study">The study</a>
+        <a href="#proof">Testimonials</a>
+      </nav>
+      <a class="login" href="#">Log in</a>
+    </div>
+    <nav class="nav nav-mobile" aria-label="Primary, mobile">
+      <a href="#top" aria-current="page">Home</a>
+      <a href="#how">How it works</a>
+      <a href="#study">The study</a>
+      <a href="#proof">Testimonials</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ ROOM 1 · HERO ============ -->
+  <section class="hero">
+    <div class="glow" aria-hidden="true"><i class="g1"></i><i class="g2"></i><i class="g3"></i></div>
+    <div class="wrap">
+      <div class="hero-grid">
+
+        <div class="hero-top">
+          <p class="eyebrow">Personal psychoacoustics</p>
+          <h1>Your birth chart, composed into music.</h1>
+          <p class="lede">Zodiac calculates four frequencies from the exact moment and place you were born, then a composer writes them into real music. About nine minutes a day, eyes open, no practice to learn.</p>
+        </div>
+
+        <div class="hero-stage">
+          <div class="phone">
+            <img src="/explorations/shots/app-d/clean/d-core-375.png"
+                 alt="The Zodiac app open on the Immersions screen, showing 422 is your Core Tone, located in your Root band, above a list of tracks with violet waveforms."
+                 width="750" height="1624" fetchpriority="high" decoding="async">
+          </div>
+
+          <figure class="chip c1">
+            <div class="ch-head">
+              <span class="av"><img src="../landers/reveal-assets/img-images_testimonials_barbara-ditlow-d2c.png" alt="Portrait of Barbara Ditlow" width="500" height="500" loading="lazy" decoding="async"></span>
+              <figcaption class="ch-name">Barbara Ditlow</figcaption>
+            </div>
+            <blockquote class="q">&ldquo;Bypassing the mind and speaking directly to the body.&rdquo;</blockquote>
+          </figure>
+
+          <figure class="chip c2">
+            <div class="ch-head">
+              <span class="av mono" aria-hidden="true">H</span>
+              <figcaption class="ch-name">Hilary Wilson</figcaption>
+            </div>
+            <blockquote class="q">&ldquo;Oh there you are, Hilary, I found you.&rdquo;</blockquote>
+          </figure>
+
+          <figure class="chip c3">
+            <div class="ch-head">
+              <span class="av"><img src="../landers/reveal-assets/img-images_testimonials_katie-wells-d2c.png" alt="Portrait of Katie Wells" width="500" height="500" loading="lazy" decoding="async"></span>
+              <figcaption class="ch-name">Katie Wells</figcaption>
+            </div>
+            <blockquote class="q">&ldquo;Feels like coming home to myself.&rdquo;</blockquote>
+          </figure>
+        </div>
+
+        <div class="hero-bot">
+          <a class="btn btn-grad" href="#how">See how it works</a>
+          <p class="credible">In our 52-week beta, <b>98.6%</b> of the people who finished the study said they would recommend it.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 2 · THE FREQUENCY PLATE ============ -->
+  <section class="band rv" id="how">
+    <div class="wrap">
+      <div class="marker">
+        <p class="eyebrow">How it works</p>
+        <span class="idx">01</span>
+      </div>
+
+      <h2 class="plate-head">Four numbers, and everything else follows.</h2>
+
+      <div class="plate">
+        <div class="plate-grid" id="plate">
+          <article class="fq fq-core">
+            <p class="fq-label">Your Core Frequency</p>
+            <p class="hz"><span class="num" data-to="422">422</span><span class="u">Hz</span></p>
+            <span class="ul" aria-hidden="true"></span>
+            <p class="dom">Identity and Purpose</p>
+            <p class="chipband">Root Band</p>
+          </article>
+          <article class="fq fq-love">
+            <p class="fq-label">Your Love Frequency</p>
+            <p class="hz"><span class="num" data-to="432">432</span><span class="u">Hz</span></p>
+            <span class="ul" aria-hidden="true"></span>
+            <p class="dom">Connection to others</p>
+            <p class="chipband">Solar Plexus Band</p>
+          </article>
+          <article class="fq fq-vit">
+            <p class="fq-label">Your Vitality Frequency</p>
+            <p class="hz"><span class="num" data-to="579">579</span><span class="u">Hz</span></p>
+            <span class="ul" aria-hidden="true"></span>
+            <p class="dom">Energy and lifeforce</p>
+            <p class="chipband">Solar Plexus Band</p>
+          </article>
+          <article class="fq fq-abu">
+            <p class="fq-label">Your Abundance Frequency</p>
+            <p class="hz"><span class="num" data-to="611">611</span><span class="u">Hz</span></p>
+            <span class="ul" aria-hidden="true"></span>
+            <p class="dom">Opportunity</p>
+            <p class="chipband">Throat Band</p>
+          </article>
+        </div>
+      </div>
+
+      <p class="fine plate-note">A sample set, shown so you can see the shape of it. Yours are computed from your exact birth moment, so they belong to your chart and not to a type.</p>
+
+      <div class="beats">
+        <article class="beat beat-core">
+          <p class="step">01</p>
+          <h3>You give us one moment in time.</h3>
+          <p>The date, the time, and the place you were born. That is the whole input. No quiz, no personality test, nothing for you to interpret. The chart is the raw material, not the product.</p>
+        </article>
+        <article class="beat beat-love">
+          <p class="step">02</p>
+          <h3>We isolate the four frequencies that are yours.</h3>
+          <p>One for identity, one for connection, one for energy, one for opportunity. They are computed from your exact birth moment, down to the minute and the place, and they do not change as you change.</p>
+        </article>
+        <article class="beat beat-vit">
+          <p class="step">03</p>
+          <h3>A composer writes them into the music.</h3>
+          <p>One composition at a time, instrument by instrument &mdash; so what you get stays music you actually want playing. Nine minutes a day, while you work, walk, cook, or sleep.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 3 · MUSIC FIRST ============ -->
+  <section class="band music rv" aria-label="What comes out">
+    <div class="wrap">
+      <div class="music-grid">
+        <div>
+          <p class="kicker">What comes out</p>
+          <h3 class="disp">It has to be music first.</h3>
+          <p class="say">Your frequencies are built into real compositions down at the level of the instruments. Not a tone over a track, and nothing you have to sit still for.</p>
+        </div>
+        <figure>
+          <img src="assets/alive-01-trumpet-white.jpg" alt="A brass trumpet on a white surface with four wide paper ribbons in violet, magenta, orange and teal streaming out of the bell." width="1800" height="1011" loading="lazy" decoding="async">
+          <figcaption class="plate-cap"><span>Sound made visible &middot; four inks, one instrument</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="duo rv" aria-label="Image">
+    <div class="wrap">
+      <figure>
+        <img src="assets/alive-09-duo-current.jpg" alt="Two people wearing over-ear headphones face each other under warm string lights, laughing, with woven paper ribbons in violet, magenta, orange and teal arcing between them." width="1800" height="1011" loading="lazy" decoding="async">
+        <figcaption>Four inks, one current passing between two people.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 4 · THE APP ROOM ============ -->
+  <section class="stage rv" id="stage">
+    <div class="aurora" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><i class="a4"></i><i class="a5"></i></div>
+    <div class="wrap">
+      <div class="marker">
+        <p class="eyebrow">One track from the library</p>
+        <span class="idx">02</span>
+      </div>
+
+      <div class="stage-head">
+        <h2>One track, four versions.</h2>
+        <div>
+          <p class="stage-lede">Quiet Success exists four times, once for each of your four frequencies. You choose which one gets the time.</p>
+          <p class="track-words"><span class="w">Focus&nbsp;&middot;</span> <span class="w">Meditate&nbsp;&middot;</span> <span class="w">Calm&nbsp;&middot;</span> <span class="w">Deep&nbsp;&middot;</span> <span class="w">Flow</span></p>
+          <p class="stage-note">A steady pulse that never distracts. One honest block of focused work, then the music ends and that is your cue to look up.</p>
+        </div>
+      </div>
+
+      <div class="phones">
+        <div class="phone p1">
+          <img src="/explorations/shots/app-d/clean/d-core-375.png"
+               alt="The app on the Core frequency: 422 is your Core Tone, located in your Root band, with the track list beneath it."
+               width="750" height="1624" loading="lazy" decoding="async">
+        </div>
+        <div class="phone p2">
+          <img src="/explorations/shots/app-d/clean/d-love-375.png"
+               alt="The same app on the Love frequency: 432 Hz, located in the Solar Plexus band, with the same tracks retuned."
+               width="750" height="1624" loading="lazy" decoding="async">
+        </div>
+        <div class="phone p3">
+          <img src="/explorations/shots/app-d/clean/d-vitality-375.png"
+               alt="The same app on the Vitality frequency: 579 Hz, the same tracks retuned in orange."
+               width="750" height="1624" loading="lazy" decoding="async">
+        </div>
+      </div>
+
+      <p class="phones-cap">The same library, tuned to each of your four frequencies. Screens from the member app.</p>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 5 · THE PROOF WALL ============ -->
+  <section class="band rv" id="proof">
+    <div class="wrap">
+      <div class="marker">
+        <p class="eyebrow">In their own words</p>
+        <span class="idx">03</span>
+      </div>
+
+      <div class="tier-label">
+        <p class="eyebrow">Practitioners and researchers</p>
+      </div>
+
+      <figure class="lead-voice">
+        <span class="matte"><img src="../inapp/app-assets-welcome/srini-pillay.png" alt="Portrait of Srini Pillay, M.D." width="500" height="500" loading="lazy" decoding="async"></span>
+        <div>
+          <blockquote>&ldquo;Psychology shows that the identities we construct can become so rigid that they limit what we notice, how we think, and even the possibilities we perceive. What interests me about Zodiac.fm is not that it tells people who they are, but that it may help them access aspects of themselves that have always been there. Through personalized frequencies rather than language alone, it provides another pathway into self-awareness. When people become more coherent with themselves, they often make clearer decisions, relate more authentically, and experience greater presence.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Srini Pillay, M.D.</p>
+            <p class="role">Harvard-trained psychiatrist and brain-imaging researcher</p>
+          </figcaption>
+        </div>
+      </figure>
+
+      <div class="wall">
+
+        <figure class="voice ac-core s5">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_debra-silverman-d2c.png" alt="Portrait of Debra Silverman" width="500" height="500" loading="lazy" decoding="async"></span>
+          <blockquote>&ldquo;This music tickled my soul and reminded me that there&rsquo;s such a connection between vibration, the stars and the sounds that are coordinated by higher intelligence. Give it a try — you&rsquo;ll love it.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Debra Silverman</p>
+            <p class="role">Astrologer to Sting, Jennifer Aniston, and more</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice ac-love s7">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_joey-vaillancourt-d2c.png" alt="Portrait of Joey Vaillancourt" width="500" height="500" loading="lazy" decoding="async"></span>
+          <blockquote>&ldquo;Without doing anything but listening, I become a different person. I shift into the version of me I actually want to be. I can tap into different frequencies based on what I need — abundance when I&rsquo;m visualizing, love when I want to connect with people, core when I need to realign.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Joey Vaillancourt</p>
+            <p class="role">VP of Marketing, BiOptimizers</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice ac-vit s7">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_rhonda-britten-d2c.png" alt="Portrait of Rhonda Britten" width="500" height="500" loading="lazy" decoding="async"></span>
+          <blockquote>&ldquo;If you&rsquo;re tired of living out of tune with yourself, this is your invitation home.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Rhonda Britten</p>
+            <p class="role">Author of &ldquo;Fearless Living,&rdquo; Emmy Award-winner, Founder, Fearless Living Institute</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice ac-abu s5">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_anja-zibert-d2c.png" alt="Portrait of Anja Zibert" width="500" height="500" loading="lazy" decoding="async"></span>
+          <blockquote>&ldquo;The cutting-edge tool I didn&rsquo;t know I needed.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Anja Zibert</p>
+            <p class="role">Founder, Rebels Rising, a conscious recruiting firm</p>
+          </figcaption>
+        </figure>
+
+      </div>
+
+      <!-- the beta numbers, between the tiers -->
+      <div class="numbers" id="study">
+        <div class="num">
+          <p class="n">98.6%</p>
+          <p>of everyone who finished the beta would recommend it.</p>
+        </div>
+        <div class="num">
+          <p class="n">84%</p>
+          <p>of the people who used it as designed called it life-changing.</p>
+        </div>
+        <p class="fine">Our own 52-week beta study: 300 people started, 278 finished. &ldquo;As designed&rdquo; means about nine minutes a day on average, balanced across all four frequencies. It was rigorous for a beta, and we do not present it as clinical proof.</p>
+      </div>
+
+      <div class="tier-label">
+        <p class="eyebrow">Members</p>
+      </div>
+
+      <div class="wall" id="moreVoices">
+
+        <figure class="voice ac-abu s3">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_amber-hedrick-d2c.png" alt="Portrait of Amber Hedrick" width="500" height="500" loading="lazy" decoding="async"></span>
+          <blockquote>&ldquo;I feel like ME again.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Amber Hedrick</p>
+            <p class="role">Member, first week</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice ac-core s4">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_zehra-ashary-d2c.png" alt="Portrait of Zehra Ashary" width="500" height="500" loading="lazy" decoding="async"></span>
+          <blockquote>&ldquo;It lets you finally feel the parts of yourself you have only ever read about.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Zehra Ashary</p>
+            <p class="role">Member, London</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice ac-love s5">
+          <span class="port"><img src="../inapp/app-assets-welcome/ken-hoffman.png" alt="Portrait of Ken Hoffman" width="500" height="500" loading="lazy" decoding="async"></span>
+          <blockquote>&ldquo;My wife especially loves the man I am turning into since subscribing.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Ken Hoffman</p>
+            <p class="role">Member, Operations Manager, WNY Dyslexia Specialists</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice ac-vit s7">
+          <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_ellen-grimaldi-d2c.png" alt="Portrait of Ellen Grimaldi" width="500" height="500" loading="lazy" decoding="async"></span>
+          <blockquote>&ldquo;I kid you not, from the first 631 Hz tonal ring in my ears, it&rsquo;s as if my soul comes alive&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Ellen Grimaldi</p>
+            <p class="role">Member, Mission, KS</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice ac-abu s5">
+          <span class="port mono" aria-hidden="true">L</span>
+          <blockquote>&ldquo;It felt like a &lsquo;coming home to myself&rsquo; experience.&rdquo;</blockquote>
+          <figcaption>
+            <p class="who">Laura</p>
+            <p class="role">Member</p>
+          </figcaption>
+        </figure>
+
+        <figure class="voice wide ac-core">
+          <div class="wide-in">
+            <span class="port"><img src="../landers/reveal-assets/img-images_testimonials_kevin-knabe-d2c.png" alt="Portrait of Kevin Knabe" width="500" height="500" loading="lazy" decoding="async"></span>
+            <div>
+              <blockquote>&ldquo;This has been a subtle and profound new practice I have incorporated into my daily life! I feel more centered and grounded and connected during and after listening to the CVF immersions.&rdquo;</blockquote>
+              <figcaption>
+                <p class="who">Kevin Knabe</p>
+                <p class="role">Member, six months in</p>
+              </figcaption>
+            </div>
+          </div>
+        </figure>
+
+      </div>
+
+      <button class="disclose-btn" id="moreBtn" type="button" aria-expanded="false" aria-controls="moreVoices" hidden>Show more voices</button>
+
+      <div class="proof-more">
+        <a class="tlink" href="/testimonials">Read the testimonials</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ROOM 6 · THE QUIET CLOSE ============ -->
+  <section class="band rv" id="price">
+    <div class="wrap">
+      <div class="marker">
+        <p class="eyebrow">Price and guarantee</p>
+        <span class="idx">04</span>
+      </div>
+
+      <h2>What it costs.</h2>
+
+      <div class="close-grid">
+        <div class="price-plate">
+          <div class="plans">
+            <p class="plan"><span class="amt">$110</span> <span class="per">a year</span></p>
+            <p class="or">or</p>
+            <p class="plan"><span class="amt">$17.50</span> <span class="per">a month</span></p>
+          </div>
+          <p class="included">Your four frequencies, composed into music, for as long as you are a member.</p>
+          <a class="btn btn-grad" href="/pricing">Get your frequencies</a>
+          <p class="fine">Billed in USD. Cancel from your account settings at any time.</p>
+        </div>
+
+        <aside class="gtee">
+          <h3>If it does not land</h3>
+          <dl>
+            <div class="kv"><dt>Annual</dt><dd>90-day money-back guarantee.</dd></div>
+            <div class="kv"><dt>Monthly</dt><dd>30-day money-back guarantee.</dd></div>
+          </dl>
+          <p>If your frequencies do not land, write to us. We will change them on our side and keep working with you until they do, and we will extend your guarantee while we sort it out.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="spine-rule" aria-hidden="true"></div>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <img src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm" width="114" height="20">
+        <p>Music composed from the moment and place you were born.</p>
+      </div>
+
+      <div class="foot-col">
+        <p class="foot-label">Product</p>
+        <ul>
+          <li><a href="/how-it-works">How it works</a></li>
+          <li><a href="/the-study">The study</a></li>
+          <li><a href="/testimonials">Testimonials</a></li>
+          <li><a href="/who-this-is-for">Who this is for</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <p class="foot-label">Company</p>
+        <ul>
+          <li><a href="/story">Zodiac&rsquo;s story</a></li>
+          <li><a href="/how-we-compare">How we compare</a></li>
+          <li><a href="/questions">Questions</a></li>
+          <li><a href="/support">Support</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <p class="foot-label">Legal</p>
+        <ul>
+          <li><a href="/terms">Terms</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="mailto:support@zodiac.fm">support@zodiac.fm</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="foot-base">
+      <span>&copy; 2026 Zodiac.fm</span>
+      <span>Zodiac is music. It is not medical or health care, and it does not diagnose or treat anything.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="badge">HOME &middot; LIGHT &middot; 02 &middot; DEMO</div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- 1. reveal on scroll (kept from -01) ---- */
+  var els = document.querySelectorAll('.rv');
+  if (!('IntersectionObserver' in window) || reduce) {
+    for (var i=0;i<els.length;i++) els[i].classList.add('in');
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, {rootMargin:'0px 0px -8% 0px', threshold:0});
+    els.forEach(function(el){ io.observe(el); });
+  }
+
+  /* ---- 2. the plate numbers roll up once, on first reveal ---- */
+  var plate = document.getElementById('plate');
+  if (plate){
+    var nums = plate.querySelectorAll('.num');
+    var run = function(){
+      if (reduce || !window.requestAnimationFrame){
+        nums.forEach(function(n){ n.textContent = n.getAttribute('data-to'); });
+        return;
+      }
+      nums.forEach(function(n){
+        var to = parseInt(n.getAttribute('data-to'),10), dur = 900, t0 = null;
+        var step = function(ts){
+          if (t0 === null) t0 = ts;
+          var p = Math.min((ts - t0)/dur, 1);
+          var e = 1 - Math.pow(1 - p, 3);           /* ease-out cubic */
+          n.textContent = Math.round(to * e);
+          if (p < 1) requestAnimationFrame(step);
+          else n.textContent = to;
+        };
+        n.textContent = '0';
+        requestAnimationFrame(step);
+      });
+    };
+    if (!('IntersectionObserver' in window) || reduce){ run(); }
+    else {
+      var pio = new IntersectionObserver(function(en){
+        en.forEach(function(e){ if (e.isIntersecting){ run(); pio.disconnect(); } });
+      }, {threshold:.35});
+      pio.observe(plate);
+    }
+  }
+
+  /* ---- 3. sticky header hairline (desktop only) ---- */
+  var head = document.querySelector('.site-head');
+  if (head){
+    var onScroll = function(){
+      if (window.scrollY > 8) head.classList.add('stuck');
+      else head.classList.remove('stuck');
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, {passive:true});
+  }
+
+  /* ---- 4. members wall disclosure, phones and tablets only ---- */
+  var btn = document.getElementById('moreBtn');
+  var more = document.getElementById('moreVoices');
+  if (btn && more){
+    var mq = window.matchMedia('(max-width: 899px)');
+    var sync = function(){
+      if (mq.matches){
+        btn.hidden = false;
+        btn.style.display = 'inline-flex';
+        if (btn.getAttribute('aria-expanded') !== 'true') more.classList.add('is-collapsed');
+      } else {
+        btn.hidden = true;
+        btn.style.display = 'none';
+        more.classList.remove('is-collapsed');
+      }
+    };
+    btn.addEventListener('click', function(){
+      var open = more.classList.toggle('is-collapsed') === false;
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.textContent = open ? 'Show fewer voices' : 'Show more voices';
+    });
+    if (mq.addEventListener) mq.addEventListener('change', sync);
+    else if (mq.addListener) mq.addListener(sync);
+    sync();
+  }
+})();
+</script>
+
+</body>
+</html>
