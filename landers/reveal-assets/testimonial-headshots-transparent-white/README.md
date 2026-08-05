@@ -55,3 +55,11 @@ from the prior ("v5") ship — RGB differs beyond the claimed alpha-only crown
 fix. Not re-investigated as part of this hygiene pass (out of scope); flagged
 here so a future audit can find it. The file itself is untouched and
 unreferenced, exactly as it should be.
+
+2026-08-04: added `sabrina-truscott.png` (Sabrina Truscott — Entrepreneur,
+Owner at Satori Method Academy). Source was a 236px photo upscaled via fal.ai
+ESRGAN (RealESRGAN_x4plus + face enhance; Michael picked it over CodeFormer/
+Topaz from a five-model board — CodeFormer v1 rejected as fake-looking),
+cropped below the gold neckline per Michael; build documented in
+`tmp/transparent-headshots/sabrina-truscott-2026-08-04/MANIFEST.md` (workspace
+repo). Greige copy shipped as `img-images_testimonials_sabrina-truscott-d2c.png`.
