@@ -341,7 +341,7 @@
   /* playing card: the wash breathes (whole-card action; the standard cink ring + spinning disc ride on top) */
   #favRows .row.playing{animation:washbreathe 3.4s ease-in-out infinite alternate}
   @keyframes washbreathe{from{background-size:100% 100%}to{background-size:140% 140%}}
-</style><script>window.APP_BADGE='B-DK'</script></head><body>
+</style><script>window.APP_BADGE=(new URLSearchParams(location.search).get('font')==='switzer')?'B-DK-S':'B-DK';document.title='Zodiac.fm · '+window.APP_BADGE;</script></head><body>
 <!-- INTERACTION · REORDER: the WHOLE card is draggable on click-and-hold (long-press) anywhere on it, not just the grip dots — the grip is only the visual cue. Applies to Immersions + Favourites. Not wired in this prototype; spec for dev. -->
 <div id="app">
 <div id="aurora" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>

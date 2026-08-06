@@ -9,6 +9,9 @@
   try{if(window.top!==window&&window.top.location.search)search=window.top.location.search;}catch(e){}
   var q=new URLSearchParams(search);
   window.DG_MODE=(q.get('font')!=='switzer');
+  var BADGE=window.DG_MODE?'B-DK':'B-DK-S';
+  function setBadge(){var e=document.querySelector('.letter');if(e)e.textContent=BADGE;document.title='My Zodiac · '+BADGE;}
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',setBadge);}else{setBadge();}
   if(!window.DG_MODE)return;
   document.querySelectorAll&&null; /* head-parse time: link may follow; disable after DOM ready too */
   var adj=parseFloat(q.get('adj')||'126');
