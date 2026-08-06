@@ -1,0 +1,1558 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Welcome — Zodiac</title>
+<script src="balance-engine.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F6F1E8;--ink:#1a1620;--body:#2b2533;--mut:#756e79;--rule:#eadfce;--hair:#ddd3c4;--violet:#6521c9;--violet-deep:#38007a;--serif:"Cormorant Garamond",Georgia,serif;--sans:"Switzer",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#e7e2d8;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden}
+body{display:flex;align-items:center;justify-content:center}
+#frame{position:relative;width:min(420px,100vw);height:min(880px,100vh);height:min(880px,100dvh);overflow:hidden;background:var(--cream)}
+/* W-3m: desktop always gets the fixed-width card (it used to go full-bleed on short windows) */
+@media (min-width:440px){ #frame{border-radius:30px;box-shadow:0 30px 80px rgba(0,0,0,.22);border:1px solid rgba(0,0,0,.05)} }
+@media (max-width:439px){ body{align-items:flex-start} #frame{width:100vw;height:100vh;height:100dvh} }
+
+/* ---------- the aurora ground (the app's own gradient, never pure cream) ---------- */
+#aurora{position:absolute;inset:-20%;z-index:0;pointer-events:none}
+#aurora i{position:absolute;width:130%;aspect-ratio:1;border-radius:50%;filter:blur(72px);transition:background 1.4s ease;will-change:transform}
+#aurora .b1{background:var(--c1);top:-34%;left:-52%;opacity:.19;animation:dr1 26s ease-in-out infinite alternate}
+#aurora .b2{background:var(--c2);bottom:-52%;right:-50%;opacity:.28;animation:dr2 32s ease-in-out infinite alternate}
+#aurora .b3{background:var(--csoft);top:44%;left:66%;width:92%;opacity:.25;animation:dr3 40s ease-in-out infinite alternate}
+@keyframes dr1{to{transform:translate(9%,7%) scale(1.15)}}
+@keyframes dr2{to{transform:translate(-8%,-9%) scale(1.12)}}
+@keyframes dr3{to{transform:translate(-12%,6%) scale(1.2)}}
+
+.letter{position:absolute;z-index:7;top:14px;left:14px;padding:2px 9px;border:1px solid var(--rule);border-radius:9px;background:#fff;color:#6a6470;font-size:14px;font-weight:700;letter-spacing:.05em}
+
+#pane{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;padding:0 22px calc(env(safe-area-inset-bottom,0px) + 16px)}
+
+/* ---------- editorial head (W-4 spine) ---------- */
+.head{padding-top:48px}
+.tick{width:34px;height:3px;margin:0 0 12px;border-radius:2px;background:linear-gradient(90deg,var(--violet),#9a55d7)}
+.head h2{font-family:var(--serif);font-size:34px;font-weight:600;letter-spacing:-.01em;line-height:1.06}
+.head .lede{margin:10px 0 0;color:var(--body);font-size:17px;font-weight:500;line-height:1.4;text-wrap:pretty}
+
+/* ---------- the living specimen (real app components, real colors) ---------- */
+#stage{position:relative;margin-top:12px;--c1:#6521C9;--c2:#A737C8;--cink:#6521C9;--csoft:#D2C8FF}
+.pills{display:flex;gap:0;padding:0;margin:0 0 10px}
+.pill{flex:1;text-align:center;padding:8px 2px;border-radius:18px;background:transparent;color:#2A2530;font-size:12px;font-weight:700;cursor:pointer;user-select:none;-webkit-user-select:none}
+.pill.on{background:#fff;color:var(--cink);box-shadow:0 1px 5px rgba(0,0,0,.13)}
+
+.row{position:relative;display:grid;grid-template-columns:28px minmax(0,1fr) 22px;align-items:center;background:#fff;border:1px solid #efe6d6;border-radius:14px;padding:10px 10px;margin-bottom:9px;cursor:pointer;user-select:none;-webkit-user-select:none}
+.row:last-child{margin-bottom:0}
+.row.playing{border-color:var(--rowink);box-shadow:0 0 0 1px var(--rowink),0 4px 18px rgba(0,0,0,.04)}
+.lcol{display:flex;align-items:center;justify-content:center;align-self:stretch}
+.qbox{width:14px;height:14px;border:1.5px solid #c2bdc7;border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.qbox.on{border-color:#948f9a}
+.qbox.on::after{content:'';width:4px;height:8px;border:solid #1A1620;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-2px}
+.meta{min-width:0;display:flex;flex-direction:column}
+.wave-title{display:flex;align-items:center;gap:7px;min-width:0}
+.row-play{width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 14px;margin-right:2px;color:var(--rowink)}
+.row-triangle{width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:11px solid currentColor;margin-left:1px}
+.row-pause{display:none;align-items:center;gap:3px;height:14px}
+.row-pause i{width:3px;height:12px;border-radius:1px;background:currentColor}
+.row.playing .row-triangle{display:none}
+.row.playing .row-pause{display:flex}
+.wave-title h3{font-size:17px;font-weight:600;color:#1a1620;min-width:0;flex:1 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--sans)}
+.row-eq{display:none;width:12px;height:12px;align-items:center;gap:2px;margin-left:2px;flex:0 0 auto}
+.row-eq i{width:2px;background:var(--rowink);border-radius:2px}
+.row-eq i:nth-child(1){height:6px}.row-eq i:nth-child(2){height:11px}.row-eq i:nth-child(3){height:8px}
+.row.playing .row-eq{display:inline-flex}
+.sic{display:flex;gap:14px;align-items:center;flex:0 0 auto;margin-left:auto}
+.sic .dl,.sic .heart{width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;color:#c2bdc7;cursor:pointer}
+.sic .heart{width:19px;height:19px;font-size:19px;line-height:1;color:#aaa3b2}
+.sic .dl.on{color:#1A1620}
+.sic .heart.on{color:var(--rowink)}
+.wave-stream{margin-top:6px}
+.wave{display:block;width:66%;height:32px;margin:7px 0 5px;overflow:visible}
+.bubs{display:flex;align-items:baseline;gap:0;margin:2px 0 0;flex-wrap:wrap;line-height:1.1;max-height:14px;overflow:hidden}
+.bub{white-space:nowrap;font-size:9.5px;font-weight:600;letter-spacing:.09em;color:#8a8390}
+.sep{font-size:9.5px;color:#cfc8ba}
+.botrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:5px}
+.wave-band{display:flex;align-items:center;gap:5px;color:var(--rowink);font-size:11px;font-weight:700}
+.wave-band i{display:block;width:7px;height:7px;border-radius:50%;background:var(--rowink)}
+.wave-dur{font-size:12px;font-weight:600;color:#1A1620}
+.grip{display:flex;align-items:center;justify-content:center;color:#c2bdc7;align-self:stretch}
+
+/* ---------- the teaching finger ---------- */
+#finger{position:absolute;z-index:6;width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.55),rgba(101,33,201,.38) 62%);box-shadow:0 4px 14px rgba(56,0,122,.35);opacity:0;pointer-events:none;transition:left .8s cubic-bezier(.4,0,.2,1),top .8s cubic-bezier(.4,0,.2,1),opacity .45s ease,transform .18s ease}
+#finger.press{transform:scale(.74)}
+#finger::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(101,33,201,.35);opacity:0}
+#finger.press::after{animation:ripple .5s ease-out}
+@keyframes ripple{0%{opacity:.9;transform:scale(.6)}100%{opacity:0;transform:scale(1.5)}}
+
+/* ---------- narration ---------- */
+#narr{margin-top:10px;min-height:40px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:16.5px;font-weight:600;color:var(--ink);line-height:1.3;transition:opacity .26s ease;text-wrap:balance;padding:0 6px}
+#narr .hg{color:var(--violet)}
+
+.gap{flex:1}
+
+.bridge{margin:0 0 12px;color:var(--body);font-size:15.5px;font-weight:500;line-height:1.45;text-wrap:pretty}
+
+.nextwrap{display:flex;justify-content:center}
+.next{display:inline-block;padding:16px 46px;border-radius:999px;background:#fff;border:1px solid var(--hair);color:var(--violet);font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;box-shadow:0 2px 12px rgba(26,22,32,.09);cursor:pointer;transition:transform .12s ease}
+.next:active{transform:scale(.96)}
+
+/* ---------- proof end card (W-1s: Next responds) ---------- */
+#pane{transition:opacity .45s ease,transform .45s ease}
+#pane.gone{opacity:0;transform:translateX(-26px);pointer-events:none}
+#pane2{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;padding:0 22px calc(env(safe-area-inset-bottom,0px) + 16px);opacity:0;transform:translateX(46px);pointer-events:none;transition:opacity .5s ease .18s,transform .5s cubic-bezier(.22,.9,.3,1) .18s}
+#pane2.show{opacity:1;transform:none;pointer-events:auto}
+@media (prefers-reduced-motion: reduce){#pane,#pane2{transition:none}}
+.donelist{margin-top:18px}
+.done-item{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #efe6d6;border-radius:14px;padding:14px 14px;margin-bottom:9px;font-size:16px;font-weight:600;color:var(--ink)}
+.done-item .qbox{cursor:default}
+
+@media (max-height:740px){.head{padding-top:48px}.head h2{font-size:30px}.wave{height:26px}#narr{font-size:15.5px}}
+
+/* ---------- W-2 coaching-loop chrome ---------- */
+.letter{left:50%;transform:translateX(-50%)}
+.scr{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;padding:0 22px calc(env(safe-area-inset-bottom,0px) + 16px);transition:transform .45s ease,opacity .45s ease}
+.scr.off-l{transform:translateX(-40px);opacity:0;pointer-events:none}
+.scr.off-r{transform:translateX(40px);opacity:0;pointer-events:none}
+@media (prefers-reduced-motion: reduce){.scr{transition:none}}
+.chrome{display:flex;justify-content:space-between;align-items:center;padding-top:12px;min-height:44px}
+.chrome a{font-size:14px;font-weight:600;color:#756e79;text-decoration:none;padding:8px 6px}
+.chrome a.backb{margin-left:-6px}
+.lede2{margin:14px 0 0;color:var(--body);font-size:17px;font-weight:500;line-height:1.4}
+.ctawrap{display:flex;justify-content:center;margin-top:22px}
+.tm{display:flex;gap:14px;align-items:flex-start;margin:20px 0 0;padding:20px 0 0;border-top:1px solid var(--hair)}
+.tm img{width:56px;height:56px;border-radius:50%;flex:0 0 auto}
+.tm blockquote{margin:0;font-family:var(--serif);font-style:italic;font-size:19px;font-weight:500;line-height:1.35;color:var(--ink)}
+.tm .who{display:block;margin-top:8px;font-family:var(--sans);font-style:normal;font-size:14px;font-weight:700;color:var(--ink)}
+.tm .who small{display:block;margin-top:1px;color:var(--mut);font-size:13px;font-weight:600}
+.coach-head{padding-top:2px;min-height:74px;display:flex;align-items:flex-end}
+.coach-head h2{font-family:var(--serif);font-size:27px;font-weight:600;letter-spacing:-.01em;line-height:1.12}
+#s2 #stage{margin-top:10px}
+#coach{margin-top:8px;min-height:34px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:15.5px;font-weight:600;color:var(--ink);line-height:1.3;padding:0 4px}
+#coach .ok{color:var(--violet);margin-right:6px}
+.chips{display:flex;gap:8px;justify-content:center;margin-top:6px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;border:1px solid var(--hair);background:rgba(255,255,255,.6);font-size:12px;font-weight:600;color:#8a8390}
+.chip.done{color:#1A1620;border-color:#c9c0b1}
+.chip.done::before{content:'\2713';font-weight:700}
+.next.dim{opacity:.45}
+#s2{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 70px)}
+#nav{position:absolute;left:0;right:0;bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 56px);padding-bottom:env(safe-area-inset-bottom,0px);background:#fff;border-top:1px solid #EFE6D6;display:flex;justify-content:space-around;align-items:center;z-index:15}
+#nav>div{font-size:11px;text-align:center;color:#9a95a0;cursor:pointer}
+#nav>div.on{color:#1A1620;font-weight:700}
+#nav .ic{font-size:16px;display:block;margin-bottom:2px}
+.hint{animation:hintpulse 1.7s ease-in-out infinite;border-radius:14px}
+@keyframes hintpulse{0%,100%{box-shadow:0 0 0 0 rgba(101,33,201,0)}50%{box-shadow:0 0 0 5px rgba(101,33,201,.30)}}
+@media (prefers-reduced-motion: reduce){.hint{animation:none;box-shadow:0 0 0 3px rgba(101,33,201,.30)}}
+
+/* ---------- W-3: wow intro + hard guidance ---------- */
+#aurora.vivid .b1{opacity:.32}#aurora.vivid .b2{opacity:.46}#aurora.vivid .b3{opacity:.40}
+.hero{margin:26px 0 0}
+.herowave{display:block;width:100%;height:122px}
+.famstrip{display:flex;justify-content:space-between;margin-top:16px;padding:0 4px}
+.fam{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700}
+.fam i{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
+#hg stop{transition:stop-color 1.3s ease}
+.stepeyebrow{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--violet);margin-bottom:5px}
+.coach-head{min-height:0;display:block;padding-top:6px}
+.coach-head h2{min-height:62px}
+.steps{display:flex;gap:7px;margin:8px 0 0}
+.step{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:6px 2px;border-radius:12px;border:1.5px solid var(--hair);background:rgba(255,255,255,.55);font-size:11.5px;font-weight:700;color:#8a8390;transition:all .3s ease}
+.step .num{width:16px;height:16px;border-radius:50%;background:#e7dfd2;color:#6a6470;display:inline-flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700}
+.step.now{border-color:var(--violet);background:#fff;color:var(--violet);box-shadow:0 2px 10px rgba(101,33,201,.18)}
+.step.now .num{background:var(--violet);color:#fff}
+.step.did{color:#1A1620;border-color:#c9c0b1;background:#fff}
+.step.did .num{background:#1A1620;color:#fff}
+.row,.pill,.sic .heart,.sic .dl{transition:opacity .4s ease}
+.dimmed{opacity:.32;filter:saturate(.6)}
+.hint{animation:hintpulse2 1.1s ease-in-out infinite;border-radius:14px;position:relative;z-index:3}
+.sic .heart.hint,.sic .dl.hint{border-radius:50%}
+@keyframes hintpulse2{0%,100%{box-shadow:0 0 0 3px rgba(101,33,201,.38)}50%{box-shadow:0 0 0 11px rgba(101,33,201,.55)}}
+@media (prefers-reduced-motion: reduce){.hint{animation:none;box-shadow:0 0 0 5px rgba(101,33,201,.45)}}
+#s2 .wave{height:28px;margin:6px 0 4px}
+#s2 .row{padding:9px 10px;margin-bottom:8px}
+#s2 #coach{min-height:30px;margin-top:6px}
+#s1 .head{padding-top:8px!important}
+#s1 .tm{margin:16px 0 0;padding:16px 0 0}
+
+/* ---------- W-3b: status up top + reorder rep ---------- */
+#coachTop{min-height:24px;margin-top:4px;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.25}
+#coachTop .ok{color:var(--violet);margin-right:5px}
+.coach-head h2{min-height:0}
+.steps .step .lbl{display:none}
+.steps .step.now .lbl{display:inline}
+.steps .step.now{flex:1.6}
+.row{touch-action:none}
+.row.dragging{z-index:9;box-shadow:0 12px 28px rgba(26,22,32,.20);border-color:var(--rowink)}
+
+/* ---------- W-3c: space law, dots, thin blink ---------- */
+.letter{top:46px;left:auto;right:12px;bottom:auto;font-size:11px;padding:2px 7px;opacity:.7}
+#s1 .letter-anchor{display:none}
+.subtitle{margin:18px 0 0;font-family:var(--serif);font-style:italic;font-size:27px;font-weight:500;color:var(--ink);letter-spacing:.01em}
+.sp1{flex:1;max-height:70px}
+.sp2{flex:1.4}
+@media (min-height:820px){ #s1 .head{padding-top:34px!important} .hero{margin-top:40px} .famstrip{margin-top:22px} #s1 .ctawrap{margin-top:40px!important} }
+.dots{display:flex;gap:7px;align-items:center;justify-content:center}
+.dots i{width:7px;height:7px;border-radius:50%;background:#d9d1c3;transition:background .3s ease,box-shadow .3s ease}
+.dots i.did{background:var(--violet)}
+.dots i.now{background:#fff;box-shadow:0 0 0 1.5px var(--violet)}
+.viewlabel{font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--mut);margin-bottom:10px}
+.coach-head h2{font-size:31px;color:var(--violet-deep)}
+#coachTop{min-height:26px;margin-top:8px;font-size:15.5px;font-weight:600;color:var(--ink)}
+.hint{animation:none;box-shadow:none}
+.row.hint{animation:rowblink 1.3s ease-in-out infinite}
+@keyframes rowblink{0%,100%{border-color:#efe6d6;box-shadow:0 1px 4px rgba(26,22,32,.05)}50%{border-color:var(--violet);box-shadow:0 4px 16px rgba(101,33,201,.20)}}
+.pill.hint{animation:pillblink 1.3s ease-in-out infinite}
+@keyframes pillblink{0%,100%{box-shadow:0 0 0 1px transparent}50%{box-shadow:0 0 0 1px var(--violet),0 3px 12px rgba(101,33,201,.20)}}
+.sic .heart.hint,.sic .dl.hint{animation:iconblink 1.3s ease-in-out infinite;border-radius:50%}
+@keyframes iconblink{0%,100%{color:#c2bdc7;box-shadow:0 0 0 1px transparent}50%{color:var(--violet);box-shadow:0 0 0 1px var(--violet)}}
+#nav .on.navblink{animation:navblink 2.2s ease-in-out infinite}
+@keyframes navblink{0%,100%{color:#1A1620}50%{color:var(--violet)}}
+@media (prefers-reduced-motion: reduce){.row.hint,.pill.hint,.sic .heart.hint,.sic .dl.hint,#nav .on.navblink{animation:none}.row.hint{border-color:var(--violet)}}
+/* iOS: never compress children into overlap; spacers absorb; scroll only as a safety valve */
+.scr>*{flex-shrink:0}
+.gap{flex:1 1 0;min-height:0}
+.sp1{flex:1 1 0;min-height:0;max-height:70px}
+.sp2{flex:1.4 1 0;min-height:0}
+.scr{overflow-y:auto;-webkit-overflow-scrolling:touch}
+@media (max-height:760px){
+ .coach-head h2{font-size:26px}
+ #s2 .row{padding:8px 10px;margin-bottom:7px}
+ #s2 .wave{height:22px;margin:5px 0 3px}
+ #s1 .head{padding-top:6px!important}
+ .hero{margin-top:16px}
+ .herowave{height:88px}
+ .subtitle{font-size:23px;margin-top:12px}
+}
+
+/* ---------- W-3d: coaching sentence, ink headline + violet underline, wave ripple, Amber up ---------- */
+.coach-head h2{font-size:30px;color:var(--ink);font-weight:700;min-height:68px}
+/* W-3m (Michael 2026-08-05): the violet underline-for-emphasis is retired; commands read in the headline's own type */
+.cmd{border-bottom:none;padding-bottom:0}
+#coachTop{min-height:0;margin-top:6px;font-size:14.5px;font-weight:600;color:var(--mut)}
+.row.hint .wave{animation:waveripple 1.6s ease-in-out infinite;transform-origin:50% 50%}
+@keyframes waveripple{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.22)}}
+@media (prefers-reduced-motion: reduce){.row.hint .wave{animation:none}}
+.tm{gap:16px;margin:14px 0 0;padding:16px 0 0}
+.tm img{width:72px;height:72px;border-radius:16px}
+.tm blockquote{font-size:21px}
+.sp1{flex:1 1 0;min-height:0;max-height:56px}
+.sp2{flex:1.2 1 0;min-height:0;max-height:110px}
+.sp3{flex:1.5 1 0;min-height:0}
+@media (max-height:760px){.coach-head h2{font-size:26px;min-height:60px}.tm blockquote{font-size:18px}.tm img{width:60px;height:60px;border-radius:13px}}
+
+/* ---------- W-3e: pinned nav, black Next, vivid Love hint, small glyph ---------- */
+#nav{display:none;z-index:16}
+#nav.navvis{display:flex}
+#nextBtn{color:var(--ink)}
+.glyph{font-size:.68em}
+.pill.hint{animation:pillblink2 1.1s ease-in-out infinite}
+@keyframes pillblink2{0%,100%{box-shadow:0 0 0 1px transparent;background:transparent}50%{box-shadow:0 0 0 1.5px var(--hintc,#6521C9),0 3px 12px rgba(0,0,0,.10);background:var(--hintbg,rgba(101,33,201,.14))}}
+@media (prefers-reduced-motion: reduce){.pill.hint{animation:none;box-shadow:0 0 0 1.5px var(--hintc,#6521C9);background:var(--hintbg,rgba(101,33,201,.14))}}
+@media (max-height:820px){
+ #s2 .row{padding:8px 10px;margin-bottom:7px}
+ #s2 .wave{height:22px;margin:5px 0 3px}
+ .coach-head h2{font-size:27px;min-height:62px}
+}
+
+/* ---------- W-3f: Playlist lesson (specimen controls lifted from app-D favs view) ---------- */
+.barrow{display:flex;align-items:center;justify-content:space-between;padding:2px 2px 10px}
+.selall{display:flex;align-items:center;gap:8px;cursor:pointer;-webkit-user-select:none;user-select:none;padding:4px 8px 4px 4px;border-radius:10px}
+.selall .qbox{cursor:pointer}
+.selall-lbl{font-size:12.5px;color:#7a7580;font-weight:500;letter-spacing:.01em}
+.qbox.dash{border-color:#948f9a}
+.qbox.dash::after{content:'';width:9px;height:0;border:0;border-top:2px solid #1A1620;transform:none;margin:0;border-radius:1px}
+.qall{display:flex;align-items:center;gap:6px;font-size:13px;background:#2A2530;border:1px solid #2A2530;color:#fff;font-weight:700;border-radius:16px;padding:7px 14px;cursor:pointer;transition:transform .08s;user-select:none;-webkit-user-select:none}
+.qall:active{transform:scale(.95)}
+.tipcard{background:rgba(255,255,255,.42);border:1px solid rgba(230,221,206,.5);border-radius:14px;margin:10px 0 0;padding:9px 14px 12px}
+.tiphead{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:2px 0 8px;color:#a8a2ad;user-select:none;-webkit-user-select:none}
+.tiplab{font-size:9px;font-weight:700;letter-spacing:.16em}
+.tipchev{transition:transform .2s}
+.tipcard.min{padding-bottom:9px}
+.tipcard.min .legend4{display:none}
+.tipcard.min .tiphead{padding-bottom:2px}
+.tipcard.min .tipchev{transform:rotate(180deg)}
+.legend{display:flex;align-items:center;font-size:11px;font-weight:500;color:#8a8390}
+.legend .lgbox{width:13px;height:13px;border:1.5px solid #c2bdc7;border-radius:3.5px;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;color:#8a8390}
+.legend .lgheart{color:#1A1620;font-size:12px;line-height:1}
+.lgline{display:flex;align-items:center;gap:6px}
+.lgico{width:13px;display:inline-flex;justify-content:center;flex:0 0 auto}
+.lggrip{color:#a8a2ad;display:inline-flex;align-items:center}
+.lgdlh{color:#a8a2ad;display:inline-flex;align-items:center}
+.legend4{flex-direction:column;align-items:stretch;gap:8px;padding:0;margin:0}
+.legend4 .lgrow{display:flex;justify-content:space-between}
+.tipcard.hint{animation:rowblink 1.3s ease-in-out infinite}
+.selall.hint{animation:selblink 1.3s ease-in-out infinite}
+@keyframes selblink{0%,100%{box-shadow:0 0 0 1px transparent}50%{box-shadow:0 0 0 1.5px var(--violet),0 3px 12px rgba(101,33,201,.20)}}
+.qall.hint{animation:qallblink 1.3s ease-in-out infinite}
+@keyframes qallblink{0%,100%{box-shadow:0 0 0 0 rgba(101,33,201,0)}50%{box-shadow:0 0 0 5px rgba(101,33,201,.32)}}
+.qbox.hint{animation:qboxblink 1.3s ease-in-out infinite}
+@keyframes qboxblink{0%,100%{border-color:#c2bdc7;box-shadow:0 0 0 1px transparent}50%{border-color:var(--violet);box-shadow:0 0 0 1.5px var(--violet)}}
+@media (prefers-reduced-motion: reduce){.tipcard.hint,.selall.hint,.qall.hint,.qbox.hint{animation:none;box-shadow:0 0 0 1.5px var(--violet)}}
+#s3{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 70px)}
+#s3 #stage3{margin-top:10px}
+#s3 .row{padding:9px 10px;margin-bottom:8px}
+#s3 .wave{height:26px;margin:6px 0 4px}
+@media (max-height:820px){#s3 .row{padding:8px 10px;margin-bottom:7px}#s3 .wave{height:21px;margin:5px 0 3px}#s3 .bubs{display:none}}
+
+/* ---------- W-3g: visible Almost toast, loud tab blink, screen-level back, skip to app ---------- */
+/* ---------- W-3h: red family heart, current balance bar on Playlist, exit lands on app-D ---------- */
+/* ---------- W-3h: the current Frequency Balance Meter bar (byte grammar from app-D favs) ---------- */
+.zbal{position:relative;margin:0 2px 10px;background:rgba(255,255,255,.42);border:1px solid rgba(26,22,32,.07);border-radius:14px}
+.zbal-line{display:flex;align-items:center;padding:0 12px;height:44px;gap:8px}
+.zbal-toks{flex:1;display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0;overflow:hidden}
+.zbal-t{display:inline-flex;flex-direction:column;align-items:center;gap:2.5px;font-size:9.5px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;color:#9a93a0;white-space:nowrap;line-height:1}
+.zbal-b{display:inline-flex;align-items:center;gap:3px;font-size:10px}
+.zbal-t .amt{font-weight:800;font-variant-numeric:tabular-nums;text-transform:none;color:#B90044}
+.zbal-t .amt.plus{color:#0A7A52;font-weight:700}
+.zbal-chevbtn{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:#fff;border:1px solid #eadfce;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.06);cursor:pointer}
+.zbal-chev{transition:transform .2s}
+.zbal.open .zbal-chev{transform:rotate(180deg)}
+.zbal-panel{display:none;padding:0 14px 12px;border-top:1px solid rgba(26,22,32,.05)}
+.zbal.open .zbal-panel{display:block}
+.zbal-ttl{font-size:14px;font-weight:700;letter-spacing:-.01em;padding-top:12px;font-family:var(--sans)}
+.zbal-sub{font-size:11px;font-weight:600;color:#8a8290;margin-top:2px}
+.zbal-ol{margin:10px 0 0 17px;padding:0}
+.zbal-ol li{font-size:12px;line-height:1.55;color:#6a6470;margin-top:7px}
+.zbal-ol b{color:#3a3542}
+.zbal-ol b.g{color:#0A7A52}
+.zbal-ol .ph{color:#2A2530;font-weight:700}
+.zbal-pop{position:absolute;top:calc(100% + 6px);left:8px;right:8px;background:#fff;border:1px solid #eadfce;border-radius:14px;padding:12px 38px 12px 14px;box-shadow:0 12px 32px rgba(26,22,32,.16);font-size:12.5px;line-height:1.5;color:#3a3542;z-index:30}
+.zbal-pop .ph{color:#2A2530;font-weight:700}
+.zbal-popx{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;background:#F6F1E8;color:#63616F;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+@media (max-width:400px){.zbal-t{font-size:9px}}
+
+#toast{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 130px);transform:translateX(-50%) translateY(8px);z-index:22;background:#1A1620;color:#fff;font-size:14.5px;font-weight:600;line-height:1.2;padding:11px 20px;border-radius:999px;box-shadow:0 10px 28px rgba(26,22,32,.30);opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;white-space:nowrap;max-width:calc(100% - 36px)}
+#toast.showing{opacity:1;transform:translateX(-50%)}
+#nav .on.navblink{animation:navblink2 1.1s ease-in-out infinite}
+@keyframes navblink2{0%,100%{color:#1A1620;transform:scale(1)}50%{color:var(--violet);transform:scale(1.18)}}
+@media (prefers-reduced-motion: reduce){#nav .on.navblink{animation:none;color:var(--violet)}}
+/* ---------- W-3i: Balance Meter lesson (s5) ----------
+   Corner strip byte-pulled from ministat.js CSS (lines 11-15) + app-D.html:1016-1018 (.ms-balnow).
+   Meter, goal panel and bubble reuse the .zbal-* grammar already in this file (W-3h). */
+.mstop{display:flex;justify-content:flex-end;padding:0 4px 0}
+.ministat{margin-left:auto;display:grid;grid-template-columns:auto 44px;column-gap:7px;row-gap:5px;align-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent;padding:3px 5px;border-radius:10px}
+.ms-lbl{font-size:9.5px;font-weight:600;color:#8a8390;letter-spacing:.03em;justify-self:start;white-space:nowrap}
+.ms-ind{justify-self:start;display:inline-flex;align-items:center}
+.ms-txt{font-size:9.5px;font-weight:700;color:#0A7A52;letter-spacing:.02em;font-style:normal;line-height:1;white-space:nowrap;display:inline-block}
+.ms-txt.low{color:#B90044}
+.ms-balnow{grid-column:1/-1;justify-self:start;margin-top:1px;display:inline-flex;align-items:center;gap:2px;background:none;border:0;padding:0;font:700 9.5px/1 'Switzer',-apple-system,sans-serif;letter-spacing:.03em;color:#1a1620;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;position:relative}
+.ms-balnow::before{content:'';position:absolute;inset:-9px}
+.ms-balnow i{font-style:normal;font-size:11px;line-height:1;transform:translateY(-.5px)}
+
+/* blink grammar: 1px border blink in the target's own tokens (C4) */
+.ministat.hint,.ms-balnow.hint,.zbal-line.hint{animation:balblink 1.3s ease-in-out infinite}
+@keyframes balblink{0%,100%{box-shadow:0 0 0 1px transparent}50%{box-shadow:0 0 0 1.5px var(--violet),0 3px 12px rgba(101,33,201,.20)}}
+.ms-balnow.hint{border-radius:8px}
+.zbal-line.hint{border-radius:14px}
+.zbal-t{padding:2px 3px;border-radius:8px}
+.zbal-t.hint{animation:tokblink 1.3s ease-in-out infinite}
+@keyframes tokblink{0%,100%{box-shadow:0 0 0 1px transparent}50%{box-shadow:0 0 0 1.5px var(--tink,#6521C9),0 3px 10px rgba(0,0,0,.13)}}
+.ms-txt.pulsing{animation:mspulse .85s ease-in-out 2}
+@keyframes mspulse{0%,100%{transform:scale(1)}50%{transform:scale(1.55)}}
+.row.slidein{animation:rowslide .55s cubic-bezier(.22,.9,.3,1)}
+@keyframes rowslide{0%{opacity:0;transform:translateX(38px)}100%{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.ministat.hint,.ms-balnow.hint,.zbal-line.hint,.zbal-t.hint{animation:none;box-shadow:0 0 0 1.5px var(--violet)}.ms-txt.pulsing,.row.slidein{animation:none}}
+
+#s5{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 70px)}
+#s5 #stage5{margin-top:8px}
+#s5 .row{padding:9px 10px;margin-bottom:8px}
+#s5 .wave{height:24px;margin:5px 0 3px}
+#s5 .zbal{margin-bottom:6px}
+#s5 .bridge{margin-bottom:5px}
+#coachTop5{min-height:24px;margin-top:4px;font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.3}
+/* the goal panel is a transient fold-down on a one-viewport lesson screen: same app-D
+   component and copy, tightened vertically so the panel-open state still never scrolls */
+#s5 .zbal-panel{padding:0 14px 8px}
+#s5 .zbal-ttl{padding-top:9px}
+#s5 .zbal-ol{margin-top:8px}
+#s5 .zbal-ol li{margin-top:5px}
+#coachTop5 .ok{color:var(--violet);margin-right:5px}
+#coachTop5.intro{color:var(--body);font-size:15.5px;font-weight:500}
+#s5 .bridge{font-size:15px}
+@media (max-height:820px){#s5 .row{padding:7px 10px;margin-bottom:4px}#s5 .wave{height:19px;margin:4px 0 3px}#s5 .bubs{display:none}#coachTop5{font-size:14px}#s5 .bridge{font-size:14.5px}}
+
+/* ---------- W-3j: chained one-line coaching, auto-advance, louder cues ----------
+   Michael 2026-08-05: Next dies except screen 1 (+ short screens where it sits high);
+   praise opens the next instruction; cues get more motion/vividness; checkboxes
+   read square; the meter carries app-D's real +/- controls (app-D.html:1125-1131). */
+.qbox{width:17px;height:17px;border-radius:3px}
+.qbox.on::after{width:5px;height:9px}
+.legend .lgbox{width:15px;height:15px}
+.row.hint{animation:rowblink2 1.05s ease-in-out infinite}
+@keyframes rowblink2{0%,100%{border-color:#efe6d6;box-shadow:0 1px 4px rgba(26,22,32,.05)}50%{border-color:var(--violet);box-shadow:0 0 0 2px var(--violet),0 6px 22px rgba(101,33,201,.30)}}
+.qbox.hint{animation:qboxblink2 1.05s ease-in-out infinite}
+@keyframes qboxblink2{0%,100%{border-color:#c2bdc7;box-shadow:0 0 0 1px transparent;transform:scale(1)}50%{border-color:var(--violet);box-shadow:0 0 0 2.5px rgba(101,33,201,.55);transform:scale(1.12)}}
+.sic .heart.hint,.sic .dl.hint{animation:iconblink2 1.05s ease-in-out infinite;border-radius:50%}
+@keyframes iconblink2{0%,100%{color:#c2bdc7;box-shadow:0 0 0 1px transparent;transform:scale(1)}50%{color:var(--violet);box-shadow:0 0 0 3px rgba(101,33,201,.35);transform:scale(1.18)}}
+.pill.hint{animation:pillblink3 1.05s ease-in-out infinite}
+@keyframes pillblink3{0%,100%{box-shadow:0 0 0 1px transparent;background:transparent;transform:scale(1)}50%{box-shadow:0 0 0 2px var(--hintc,#6521C9),0 4px 16px rgba(0,0,0,.14);background:var(--hintbg,rgba(101,33,201,.16));transform:scale(1.05)}}
+.selall.hint{animation:selblink2 1.05s ease-in-out infinite}
+@keyframes selblink2{0%,100%{box-shadow:0 0 0 1px transparent}50%{box-shadow:0 0 0 2px var(--violet),0 4px 16px rgba(101,33,201,.28)}}
+.ministat.hint,.ms-balnow.hint,.zbal-line.hint{animation:balblink2 1.05s ease-in-out infinite}
+@keyframes balblink2{0%,100%{box-shadow:0 0 0 1px transparent}50%{box-shadow:0 0 0 2px var(--violet),0 4px 16px rgba(101,33,201,.28)}}
+.zbal-t.hint{animation:tokblink2 1.05s ease-in-out infinite}
+@keyframes tokblink2{0%,100%{box-shadow:0 0 0 1px transparent}50%{box-shadow:0 0 0 2px var(--tink,#6521C9),0 4px 14px rgba(0,0,0,.16)}}
+@media (prefers-reduced-motion: reduce){.row.hint,.qbox.hint,.sic .heart.hint,.sic .dl.hint,.pill.hint,.selall.hint,.ministat.hint,.ms-balnow.hint,.zbal-line.hint,.zbal-t.hint{animation:none;box-shadow:0 0 0 2px var(--violet)}}
+/* the real meter's +/- (byte grammar: app-D.html:1006 .zbal-add, :1051 .zbal-min, :1008-1009 touch halo) */
+.zbal-add,.zbal-min{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:#fff;border:1px solid #d9cfc0;color:#2A2530;font-size:11px;font-weight:800;line-height:1;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.06);position:relative}
+.zbal-add{margin-left:1px}
+.zbal-add::after,.zbal-min::after{content:'';position:absolute;inset:-8px}
+.zbal-add.hint,.zbal-min.hint{animation:pmblink 1.05s ease-in-out infinite}
+@keyframes pmblink{0%,100%{box-shadow:0 1px 3px rgba(0,0,0,.06);transform:scale(1)}50%{box-shadow:0 0 0 3px rgba(101,33,201,.45);transform:scale(1.25);border-color:var(--violet);color:var(--violet)}}
+@media (prefers-reduced-motion: reduce){.zbal-add.hint,.zbal-min.hint{animation:none;box-shadow:0 0 0 2px var(--violet)}}
+.amt.pulsing{display:inline-block;animation:mspulse .85s ease-in-out 2}
+/* Keys screen (s6) */
+.keysub{margin:10px 0 0;font-family:var(--serif);font-style:italic;font-size:21px;font-weight:500;color:var(--body)}
+.bandcard{margin-top:14px;background:#fff;border:1px solid #efe6d6;border-radius:18px;padding:18px 18px 17px;text-align:center;box-shadow:0 10px 30px rgba(26,22,32,.07)}
+.bc-eyebrow{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--violet)}
+.bc-title{font-family:var(--serif);font-size:30px;font-weight:600;color:var(--ink);margin-top:4px;letter-spacing:-.01em}
+.bc-cta{display:inline-block;margin-top:12px;padding:11px 30px;border-radius:999px;background:#fff;border:1px solid var(--hair);color:var(--violet);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;box-shadow:0 2px 12px rgba(26,22,32,.09);transition:transform .12s ease}
+.bc-cta:active{transform:scale(.96)}
+.tcard{background:rgba(255,255,255,.62);border:1px solid #efe6d6;border-radius:18px;padding:3px 16px}
+.trow{display:flex;gap:12px;align-items:center;padding:12px 0}
+.trow+.trow{border-top:1px solid var(--rule)}
+.trow img{width:52px;height:52px;border-radius:10px;object-fit:cover;flex:0 0 auto}
+.trow blockquote{margin:0;font-family:var(--serif);font-style:italic;font-size:15.5px;font-weight:500;line-height:1.3;color:var(--ink)}
+.trow .who{display:block;margin-top:5px;font-family:var(--sans);font-style:normal;font-size:12px;font-weight:700;color:var(--ink)}
+.trow .who small{display:block;color:var(--mut);font-size:11px;font-weight:600;margin-top:1px}
+@media (max-height:760px){.bc-title{font-size:26px}.trow blockquote{font-size:14px}.trow img{width:44px;height:44px}}
+/* Bands page (s7): the capture carries its own card; crop to it so the frame never doubles */
+.bandimg{margin-top:14px;border-radius:22px;overflow:hidden;box-shadow:0 10px 30px rgba(26,22,32,.10)}
+.bandimg img{display:block;width:109%;margin:-4.5% 0 -4.5% -4.5%}
+/* Install (s8) */
+.cta8{display:inline-block;padding:17px 44px;border-radius:999px;background:var(--violet);color:#fff;font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;box-shadow:0 10px 26px rgba(101,33,201,.35);transition:transform .12s ease}
+.cta8:active{transform:scale(.96)}
+.support8{text-align:center;font-size:13px;color:var(--mut);font-weight:500}
+.support8 a{color:var(--violet);text-decoration:none;font-weight:700}
+/* ---------- W-3k: pre-tour ritual screens + Keys rebuild ----------
+   Michael 2026-08-05: "How to Use" screen after Welcome (weekly ritual, target,
+   speakers, 40-min line), Todd+Barbara screen with Take the Tour; Keys screen:
+   Learn More dies (the read lives in My Zodiac), testimonial card fills the
+   bottom, Next dies, a full-width bar carries to Add to Home Screen. */
+/* W-3o: How to Use teaches visually — week strip, stat tiles, device chips (his "you could do better") */
+.wk{display:flex;gap:6px;align-items:center;margin-top:12px}
+.wkd{width:29px;height:29px;border-radius:50%;background:#fff;border:1px solid #e6ddce;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#9a93a0;flex:0 0 auto}
+.wkd.on{background:#EFECFF;color:var(--violet);border-color:transparent}
+.wkd.start{box-shadow:0 0 0 1.5px var(--violet)}
+.wkcap{margin-top:7px;font-size:11.5px;font-weight:600;color:var(--mut)}
+.wstats{display:flex;gap:10px;margin-top:9px}
+.wstat{flex:1;background:#FBF8F3;border:1px solid #f0e8d9;border-radius:12px;padding:11px 8px;text-align:center}
+.wstat b{display:block;font-family:var(--sans);font-size:27px;font-weight:700;color:var(--violet);font-variant-numeric:lining-nums;line-height:1}
+.wstat span{display:block;font-size:11px;color:var(--mut);font-weight:600;margin-top:5px;line-height:1.3}
+.howcap{margin:10px 2px 0;font-size:12.5px;color:var(--body);line-height:1.4}
+.sndrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.sndchip{font-size:12px;font-weight:700;padding:6px 11px;border-radius:13px;background:#EFECFF;color:var(--violet)}
+.sndrow.bad .sndchip{background:#F1EDE4;color:#9a93a0}
+.howfree{margin:16px 2px 0;font-family:var(--serif);font-style:italic;font-size:17.5px;color:var(--body)}
+/* W-3p: the Rhonda screen as a centered hero moment */
+.rcard{background:#fff;border:1px solid #efe6d6;border-radius:20px;padding:26px 22px 22px;margin-top:20px;text-align:center;box-shadow:0 10px 30px rgba(26,22,32,.07);display:flex;flex-direction:column;align-items:center}
+.rcard img{width:84px;height:84px;border-radius:50%;object-fit:cover;object-position:center 22%;filter:grayscale(1) contrast(1.05)}
+.rcard blockquote{margin:16px 0 0;font-family:var(--serif);font-style:italic;font-size:18.5px;font-weight:500;line-height:1.42;color:var(--ink)}
+.rcard .who{display:block;margin-top:14px;font-family:var(--sans);font-size:13px;font-weight:700;color:var(--ink)}
+.rcard .who small{display:block;color:var(--mut);font-size:11.5px;font-weight:600;margin-top:2px}
+@media (max-height:740px){.rcard{padding:16px 16px 15px;margin-top:12px}.rcard img{width:60px;height:60px}.rcard blockquote{font-size:14.5px;line-height:1.35;margin-top:11px}.rcard .who{margin-top:9px;font-size:12px}}
+/* W-3m: bright solid cards, serif ink card titles (his "bright cards, better font than the purple") */
+.howcard{margin-top:10px;background:#fff;border:1px solid #efe6d6;border-radius:16px;padding:12px 16px 13px;box-shadow:0 6px 20px rgba(26,22,32,.05)}
+.how-lab{font-family:var(--serif);font-size:19px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--ink)}
+.how-ul{margin:8px 0 0;padding:0;list-style:none}
+.how-ul li{position:relative;padding-left:16px;font-size:15px;font-weight:500;color:var(--body);line-height:1.4;margin-top:6px}
+.how-ul li:first-child{margin-top:0}
+.how-ul li::before{content:'';position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:50%;background:var(--violet)}
+.how-ul b{font-weight:700;color:var(--ink)}
+.howmore{margin:14px 2px 0;font-size:15px;font-weight:500;color:var(--body);line-height:1.45;text-wrap:pretty}
+.howmore b{color:var(--ink)}
+@media (max-height:760px){.how-ul li{font-size:14px}.howmore{font-size:14px}.howcard{padding:11px 14px 12px}}
+/* W-3m: four cards must fit the 812 floor with Next on-screen */
+#s1b .head h2{font-size:29px}
+#s1b .lede{font-size:15px;line-height:1.35;margin-top:8px}
+#s1b .howcard{margin-top:8px;padding:10px 14px 11px}
+#s1b .how-lab{font-size:17px}
+#s1b .how-ul li{font-size:13.5px;margin-top:4px;line-height:1.35}
+#s1b .nextwrap{margin-top:8px}
+#s1b .next{padding:13px 40px;font-size:13px}
+/* W-3m: testimonials as breathing cards on the proof + bands screens; hard fit for short phones */
+#s1c .tm,#s7a .tm,#s7b .tm{background:#fff;border:1px solid #efe6d6;border-radius:16px;padding:11px 13px;margin:9px 0 0;border-top:1px solid #efe6d6;box-shadow:0 6px 20px rgba(26,22,32,.05);gap:11px}
+#s1c .head h2{font-size:30px}
+#s1c .tm blockquote{font-size:16.5px;line-height:1.35}
+#s1c .tm img{width:54px;height:54px}
+#s1c .tm .who{font-size:12px;margin-top:4px}
+#s1c .tm .who small{font-size:11px}
+#s1c .ctawrap{margin-top:10px}
+/* W-3n law: a CTA can never be cut off — these screens always scroll if content ever exceeds the viewport */
+#s1b,#s1c,#s6,#s7a,#s7b{overflow-y:auto}
+#s7a .tm blockquote{font-size:15px}
+#s7b .tm blockquote{font-size:13.5px;line-height:1.3}
+#s7b .tm img{width:44px;height:44px}
+#s7b .bxcard{margin-top:10px}
+#s7b .brows{margin-top:10px;gap:8px}
+#s7b .bxnote{margin-top:10px;font-size:12px}
+#s7b .head h2{font-size:30px}
+@media (max-height:740px){
+ #s1b .head,#s1c .head{padding-top:0}
+ #s1b .head h2{font-size:23px}
+ #s1b .lede{font-size:12.5px;margin-top:5px;line-height:1.3}
+ #s1b .howcard{margin-top:6px;padding:7px 12px 8px}
+ #s1b .how-lab{font-size:14.5px}
+ #s1b .how-ul li{font-size:11.5px;margin-top:2px;padding-left:13px;line-height:1.3}
+ #s1b .how-ul li::before{top:6px;width:5px;height:5px}
+ #s1b .gap{min-height:0}
+ #s1b .nextwrap{margin-top:6px}
+ #s1b .next{padding:11px 34px;font-size:12px}
+ #s1b,#s1c{overflow-y:auto} /* W-3c precedent: scroll is the safety valve on short phones; nothing may clip */
+ #s1c .head h2{font-size:21px}
+ #s1c .sp1{display:none}
+ #s1c .tm{padding:7px 10px;margin-top:5px;gap:9px}
+ #s1c .tm blockquote{font-size:11.5px;line-height:1.26}
+ #s1c .tm img{width:34px;height:34px}
+ #s1c .tm .who{font-size:10px;margin-top:2px}
+ #s1c .tm .who small{font-size:9px}
+ #s1c .gap{min-height:0}
+ #s1c .ctawrap{margin-top:4px}
+ #s1c .next{padding:9px 30px;font-size:11.5px}
+ #s7a .tm blockquote,#s7b .tm blockquote{font-size:12.5px;line-height:1.3}
+ #s7a .tm img,#s7b .tm img{width:40px;height:40px}
+ #s7a .tm,#s7b .tm{padding:9px 11px;margin-top:8px}
+}
+#s1c .tm{margin-top:0}
+#s1c .tm:first-of-type{border-top:0;padding-top:6px}
+#s1c .sp1{max-height:none;flex:.8 1 0}
+#s1c .gap{flex:1.1 1 0}
+#s1c .tm img{width:84px;height:84px;border-radius:18px}
+#s1c .tm blockquote{font-size:22px}
+.bc-myz{margin:10px 2px 0;font-size:14px;font-weight:500;color:var(--body);line-height:1.45;text-align:left;text-wrap:pretty}
+.bc-myz b{font-weight:700;color:var(--ink)}
+.myzico{display:inline-block;transform:translateY(1px)}
+/* W-3q: Barbara as the same centered hero moment as Rhonda (SS C13) */
+#s6 .rcard{margin:auto 0}
+@media (max-height:760px){#s6 .rcard{padding:18px 18px 16px}#s6 .rcard img{width:64px;height:64px}#s6 .rcard blockquote{font-size:15.5px;line-height:1.36;margin-top:12px}}
+/* W-3l: the Keys screen was overflowing on shorter phones — full compression tier */
+@media (max-height:740px){
+ #s6 .head h2{font-size:23px}
+ #s6 .keysub{font-size:16px;margin-top:5px}
+ #s6 .bandcard{margin-top:10px;padding:12px 14px 12px}
+ #s6 .bc-title{font-size:22px}
+ #s6 .bc-myz{font-size:12px;margin-top:6px;line-height:1.4}
+ #s6 .rcard{padding:12px 14px 11px}
+ #s6 .rcard img{width:48px;height:48px}
+ #s6 .rcard blockquote{font-size:13px;line-height:1.3;margin-top:9px}
+ #s6 .rcard .who{font-size:11px;margin-top:6px}
+ #s6 .rcard .who small{font-size:10px}
+ #s6 .lastbar{margin-top:9px;padding:12px 18px;font-size:12.5px}
+}
+/* ---- W-3l bands chapter (from the approved copy/bands-explainer.md) ---- */
+.bxcard{background:#fff;border:1px solid #efe6d6;border-radius:18px;padding:14px 15px;margin-top:14px;text-align:left;box-shadow:0 10px 30px rgba(26,22,32,.07)}
+.bxlede{font-size:14.5px;line-height:1.5;color:var(--body);margin:0}
+.bxlede b{color:var(--ink);font-weight:700}
+.frows{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+.frow{display:flex;gap:9px;align-items:flex-start}
+.fdot2{width:9px;height:9px;border-radius:50%;background:var(--fc);flex:0 0 auto;margin-top:5px}
+.frow p{font-size:13.5px;line-height:1.45;color:var(--body);margin:0}
+.frow b{color:var(--fc);font-weight:700}
+.spec{display:flex;gap:2px;height:12px;border-radius:7px;overflow:hidden;margin-top:4px}
+.spec i{flex:1;background:#E9E2FA}
+.spectick{display:flex;justify-content:space-between;margin-top:5px;font-size:10.5px;font-weight:700;color:var(--mut);font-variant-numeric:lining-nums}
+.brows{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+.brow{display:flex;gap:10px;align-items:flex-start}
+.bverb{flex:0 0 60px;text-align:center;font-size:10.5px;font-weight:800;color:var(--violet);background:#EFECFF;border-radius:12px;padding:5px 0;margin-top:2px}
+.brow .bl b{font-weight:700;color:var(--ink);font-size:13.5px}
+.bhz{font-size:11px;font-weight:700;color:var(--mut);margin-left:4px;font-variant-numeric:lining-nums}
+.brow .bl p{font-size:12.5px;color:var(--mut);line-height:1.4;margin:1px 0 0}
+.bxnote{margin-top:12px;font-size:12.5px;line-height:1.5;color:var(--body);background:#FBF8F3;border:1px solid #f0e8d9;border-radius:10px;padding:9px 11px}
+.bxnote .myzico{color:var(--violet)}
+@media (max-height:740px){
+ #s7a .head h2,#s7b .head h2{font-size:26px}
+ #s7a .keysub,#s7b .keysub{font-size:16px;margin-top:5px}
+ .bxcard{padding:11px 12px;margin-top:10px}
+ .frows{gap:6px}.frow p{font-size:12.5px}
+ .brows{gap:7px}.brow .bl p{font-size:11.5px}
+ #s7a .lastbar,#s7b .lastbar{margin-top:10px;padding:12px 18px;font-size:12.5px}
+}
+.lastbar{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:14px;padding:16px 20px;border-radius:999px;background:var(--violet);color:#fff;font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;box-shadow:0 10px 26px rgba(101,33,201,.35);transition:transform .12s ease}
+.lastbar:active{transform:scale(.97)}
+.lastbar i{font-style:normal;font-size:1.15em;line-height:1;transform:translateY(-1px)}
+</style></head><body>
+<div id="frame">
+  <div id="aurora" aria-hidden="true" style="--c1:#6521C9;--c2:#A737C8;--csoft:#D2C8FF"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
+  <span class="letter">W-3q</span>
+
+  <div class="scr" id="s1">
+    <div class="chrome"><span></span><a class="skip" href="#" data-skip>Skip tour</a></div>
+    <div class="head" style="padding-top:14px">
+      <div class="tick"></div>
+      <h2>Welcome to Zodiac.fm</h2>
+      <p class="subtitle">The Sound of You</p>
+    </div>
+    <div class="hero"><svg class="herowave" viewBox="0 0 320 26" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#6521C9"/><stop offset="100%" stop-color="#A737C8"/></linearGradient></defs><g id="heroG" fill="url(#hg)"><rect x="0.0" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="0.0" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="3.1" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="3.1" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="6.2" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="6.2" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="9.3" y="12.5" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="9.3" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="12.4" y="11.8" width="2.2" height="2.3" rx="1.1" fill-opacity=".38"/><rect x="12.4" y="12.1" width="2.2" height="1.8" rx="1.1"/><rect x="15.5" y="12.6" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="15.5" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="18.6" y="11.7" width="2.2" height="2.5" rx="1.1" fill-opacity=".38"/><rect x="18.6" y="12.1" width="2.2" height="1.8" rx="1.1"/><rect x="21.7" y="11.7" width="2.2" height="2.6" rx="1.1" fill-opacity=".38"/><rect x="21.7" y="12.1" width="2.2" height="1.9" rx="1.1"/><rect x="24.8" y="11.8" width="2.2" height="2.9" rx="1.1" fill-opacity=".38"/><rect x="24.8" y="12.3" width="2.2" height="1.5" rx="1.1"/><rect x="27.9" y="11.0" width="2.2" height="3.5" rx="1.1" fill-opacity=".38"/><rect x="27.9" y="11.4" width="2.2" height="2.9" rx="1.1"/><rect x="31.0" y="10.9" width="2.2" height="3.8" rx="1.1" fill-opacity=".38"/><rect x="31.0" y="11.3" width="2.2" height="3.0" rx="1.1"/><rect x="34.1" y="10.9" width="2.2" height="4.5" rx="1.1" fill-opacity=".38"/><rect x="34.1" y="11.2" width="2.2" height="3.8" rx="1.1"/><rect x="37.2" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="37.2" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="40.3" y="6.8" width="2.2" height="14.1" rx="1.1" fill-opacity=".38"/><rect x="40.3" y="7.0" width="2.2" height="13.6" rx="1.1"/><rect x="43.4" y="9.0" width="2.2" height="8.1" rx="1.1" fill-opacity=".38"/><rect x="43.4" y="9.8" width="2.2" height="6.4" rx="1.1"/><rect x="46.5" y="11.0" width="2.2" height="3.6" rx="1.1" fill-opacity=".38"/><rect x="46.5" y="11.3" width="2.2" height="3.1" rx="1.1"/><rect x="49.6" y="9.7" width="2.2" height="6.5" rx="1.1" fill-opacity=".38"/><rect x="49.6" y="10.4" width="2.2" height="5.1" rx="1.1"/><rect x="52.7" y="10.7" width="2.2" height="4.5" rx="1.1" fill-opacity=".38"/><rect x="52.7" y="11.3" width="2.2" height="3.3" rx="1.1"/><rect x="55.8" y="10.5" width="2.2" height="5.2" rx="1.1" fill-opacity=".38"/><rect x="55.8" y="11.3" width="2.2" height="3.5" rx="1.1"/><rect x="58.9" y="10.2" width="2.2" height="5.3" rx="1.1" fill-opacity=".38"/><rect x="58.9" y="10.7" width="2.2" height="4.4" rx="1.1"/><rect x="62.0" y="10.4" width="2.2" height="4.6" rx="1.1" fill-opacity=".38"/><rect x="62.0" y="10.8" width="2.2" height="3.9" rx="1.1"/><rect x="65.1" y="9.9" width="2.2" height="6.4" rx="1.1" fill-opacity=".38"/><rect x="65.1" y="10.8" width="2.2" height="4.4" rx="1.1"/><rect x="68.2" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="68.2" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="71.3" y="5.9" width="2.2" height="14.9" rx="1.1" fill-opacity=".38"/><rect x="71.3" y="6.1" width="2.2" height="14.4" rx="1.1"/><rect x="74.4" y="9.4" width="2.2" height="8.9" rx="1.1" fill-opacity=".38"/><rect x="74.4" y="9.6" width="2.2" height="8.4" rx="1.1"/><rect x="77.5" y="10.4" width="2.2" height="4.7" rx="1.1" fill-opacity=".38"/><rect x="77.5" y="11.1" width="2.2" height="3.4" rx="1.1"/><rect x="80.6" y="11.0" width="2.2" height="3.9" rx="1.1" fill-opacity=".38"/><rect x="80.6" y="11.4" width="2.2" height="3.1" rx="1.1"/><rect x="83.7" y="12.2" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="83.7" y="12.4" width="2.2" height="1.0" rx="1.1"/><rect x="86.8" y="10.9" width="2.2" height="4.0" rx="1.1" fill-opacity=".38"/><rect x="86.8" y="11.4" width="2.2" height="3.0" rx="1.1"/><rect x="89.9" y="10.9" width="2.2" height="3.4" rx="1.1" fill-opacity=".38"/><rect x="89.9" y="11.5" width="2.2" height="2.4" rx="1.1"/><rect x="93.0" y="11.1" width="2.2" height="3.2" rx="1.1" fill-opacity=".38"/><rect x="93.0" y="11.4" width="2.2" height="2.7" rx="1.1"/><rect x="96.1" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="96.1" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="99.2" y="2.2" width="2.2" height="23.8" rx="1.1" fill-opacity=".38"/><rect x="99.2" y="6.1" width="2.2" height="15.2" rx="1.1"/><rect x="102.3" y="4.5" width="2.2" height="19.9" rx="1.1" fill-opacity=".38"/><rect x="102.3" y="4.7" width="2.2" height="19.4" rx="1.1"/><rect x="105.4" y="1.4" width="2.2" height="24.6" rx="1.1" fill-opacity=".38"/><rect x="105.4" y="3.2" width="2.2" height="20.8" rx="1.1"/><rect x="108.5" y="2.2" width="2.2" height="23.8" rx="1.1" fill-opacity=".38"/><rect x="108.5" y="3.6" width="2.2" height="20.8" rx="1.1"/><rect x="111.6" y="0.0" width="2.2" height="23.9" rx="1.1" fill-opacity=".38"/><rect x="111.6" y="3.2" width="2.2" height="17.9" rx="1.1"/><rect x="114.7" y="6.7" width="2.2" height="11.1" rx="1.1" fill-opacity=".38"/><rect x="114.7" y="7.8" width="2.2" height="9.1" rx="1.1"/><rect x="117.8" y="3.5" width="2.2" height="18.7" rx="1.1" fill-opacity=".38"/><rect x="117.8" y="4.8" width="2.2" height="16.0" rx="1.1"/><rect x="120.9" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="120.9" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="124.0" y="10.3" width="2.2" height="4.5" rx="1.1" fill-opacity=".38"/><rect x="124.0" y="11.3" width="2.2" height="2.8" rx="1.1"/><rect x="127.1" y="7.2" width="2.2" height="8.9" rx="1.1" fill-opacity=".38"/><rect x="127.1" y="8.1" width="2.2" height="7.5" rx="1.1"/><rect x="130.2" y="5.3" width="2.2" height="15.6" rx="1.1" fill-opacity=".38"/><rect x="130.2" y="5.6" width="2.2" height="14.9" rx="1.1"/><rect x="133.3" y="3.2" width="2.2" height="21.6" rx="1.1" fill-opacity=".38"/><rect x="133.3" y="3.6" width="2.2" height="20.8" rx="1.1"/><rect x="136.4" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="136.4" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="139.5" y="8.8" width="2.2" height="9.6" rx="1.1" fill-opacity=".38"/><rect x="139.5" y="10.6" width="2.2" height="5.6" rx="1.1"/><rect x="142.6" y="7.1" width="2.2" height="11.2" rx="1.1" fill-opacity=".38"/><rect x="142.6" y="8.7" width="2.2" height="8.2" rx="1.1"/><rect x="145.7" y="7.8" width="2.2" height="11.0" rx="1.1" fill-opacity=".38"/><rect x="145.7" y="8.0" width="2.2" height="10.5" rx="1.1"/><rect x="148.8" y="11.2" width="2.2" height="3.4" rx="1.1" fill-opacity=".38"/><rect x="148.8" y="11.6" width="2.2" height="2.7" rx="1.1"/><rect x="151.9" y="7.2" width="2.2" height="9.8" rx="1.1" fill-opacity=".38"/><rect x="151.9" y="7.8" width="2.2" height="8.9" rx="1.1"/><rect x="155.0" y="6.0" width="2.2" height="16.5" rx="1.1" fill-opacity=".38"/><rect x="155.0" y="7.1" width="2.2" height="13.8" rx="1.1"/><rect x="158.1" y="5.7" width="2.2" height="18.2" rx="1.1" fill-opacity=".38"/><rect x="158.1" y="5.9" width="2.2" height="17.7" rx="1.1"/><rect x="161.2" y="4.5" width="2.2" height="15.8" rx="1.1" fill-opacity=".38"/><rect x="161.2" y="5.8" width="2.2" height="13.5" rx="1.1"/><rect x="164.3" y="7.9" width="2.2" height="10.0" rx="1.1" fill-opacity=".38"/><rect x="164.3" y="9.2" width="2.2" height="7.5" rx="1.1"/><rect x="167.4" y="4.2" width="2.2" height="17.0" rx="1.1" fill-opacity=".38"/><rect x="167.4" y="7.0" width="2.2" height="11.6" rx="1.1"/><rect x="170.5" y="5.6" width="2.2" height="12.9" rx="1.1" fill-opacity=".38"/><rect x="170.5" y="6.4" width="2.2" height="11.6" rx="1.1"/><rect x="173.6" y="7.2" width="2.2" height="10.4" rx="1.1" fill-opacity=".38"/><rect x="173.6" y="7.9" width="2.2" height="9.1" rx="1.1"/><rect x="176.7" y="9.1" width="2.2" height="7.1" rx="1.1" fill-opacity=".38"/><rect x="176.7" y="9.6" width="2.2" height="6.2" rx="1.1"/><rect x="179.8" y="5.0" width="2.2" height="14.0" rx="1.1" fill-opacity=".38"/><rect x="179.8" y="7.1" width="2.2" height="10.3" rx="1.1"/><rect x="182.9" y="1.5" width="2.2" height="19.6" rx="1.1" fill-opacity=".38"/><rect x="182.9" y="3.3" width="2.2" height="16.5" rx="1.1"/><rect x="186.0" y="4.6" width="2.2" height="17.4" rx="1.1" fill-opacity=".38"/><rect x="186.0" y="7.6" width="2.2" height="11.3" rx="1.1"/><rect x="189.1" y="8.1" width="2.2" height="8.6" rx="1.1" fill-opacity=".38"/><rect x="189.1" y="8.8" width="2.2" height="7.3" rx="1.1"/><rect x="192.2" y="6.1" width="2.2" height="12.9" rx="1.1" fill-opacity=".38"/><rect x="192.2" y="6.4" width="2.2" height="12.4" rx="1.1"/><rect x="195.3" y="6.9" width="2.2" height="14.1" rx="1.1" fill-opacity=".38"/><rect x="195.3" y="7.1" width="2.2" height="13.6" rx="1.1"/><rect x="198.4" y="7.9" width="2.2" height="8.3" rx="1.1" fill-opacity=".38"/><rect x="198.4" y="8.8" width="2.2" height="6.8" rx="1.1"/><rect x="201.5" y="10.0" width="2.2" height="6.2" rx="1.1" fill-opacity=".38"/><rect x="201.5" y="10.8" width="2.2" height="4.5" rx="1.1"/><rect x="204.6" y="5.3" width="2.2" height="19.8" rx="1.1" fill-opacity=".38"/><rect x="204.6" y="7.3" width="2.2" height="14.7" rx="1.1"/><rect x="207.7" y="5.5" width="2.2" height="18.8" rx="1.1" fill-opacity=".38"/><rect x="207.7" y="5.7" width="2.2" height="18.3" rx="1.1"/><rect x="210.8" y="5.0" width="2.2" height="21.0" rx="1.1" fill-opacity=".38"/><rect x="210.8" y="7.6" width="2.2" height="14.1" rx="1.1"/><rect x="213.9" y="8.4" width="2.2" height="9.1" rx="1.1" fill-opacity=".38"/><rect x="213.9" y="9.6" width="2.2" height="6.7" rx="1.1"/><rect x="217.0" y="5.4" width="2.2" height="15.2" rx="1.1" fill-opacity=".38"/><rect x="217.0" y="6.3" width="2.2" height="13.5" rx="1.1"/><rect x="220.1" y="9.6" width="2.2" height="8.1" rx="1.1" fill-opacity=".38"/><rect x="220.1" y="9.8" width="2.2" height="7.6" rx="1.1"/><rect x="223.2" y="6.8" width="2.2" height="8.9" rx="1.1" fill-opacity=".38"/><rect x="223.2" y="8.8" width="2.2" height="6.0" rx="1.1"/><rect x="226.3" y="8.1" width="2.2" height="7.6" rx="1.1" fill-opacity=".38"/><rect x="226.3" y="9.7" width="2.2" height="5.1" rx="1.1"/><rect x="229.4" y="7.6" width="2.2" height="10.9" rx="1.1" fill-opacity=".38"/><rect x="229.4" y="7.9" width="2.2" height="10.4" rx="1.1"/><rect x="232.5" y="4.5" width="2.2" height="16.9" rx="1.1" fill-opacity=".38"/><rect x="232.5" y="6.2" width="2.2" height="13.5" rx="1.1"/><rect x="235.6" y="3.0" width="2.2" height="18.1" rx="1.1" fill-opacity=".38"/><rect x="235.6" y="6.9" width="2.2" height="11.0" rx="1.1"/><rect x="238.7" y="9.3" width="2.2" height="7.1" rx="1.1" fill-opacity=".38"/><rect x="238.7" y="10.0" width="2.2" height="5.8" rx="1.1"/><rect x="241.8" y="5.0" width="2.2" height="15.0" rx="1.1" fill-opacity=".38"/><rect x="241.8" y="7.0" width="2.2" height="11.3" rx="1.1"/><rect x="244.9" y="8.4" width="2.2" height="7.9" rx="1.1" fill-opacity=".38"/><rect x="244.9" y="9.4" width="2.2" height="6.2" rx="1.1"/><rect x="248.0" y="10.3" width="2.2" height="5.6" rx="1.1" fill-opacity=".38"/><rect x="248.0" y="10.9" width="2.2" height="4.5" rx="1.1"/><rect x="251.1" y="9.5" width="2.2" height="7.1" rx="1.1" fill-opacity=".38"/><rect x="251.1" y="9.7" width="2.2" height="6.6" rx="1.1"/><rect x="254.2" y="7.9" width="2.2" height="9.3" rx="1.1" fill-opacity=".38"/><rect x="254.2" y="8.2" width="2.2" height="8.8" rx="1.1"/><rect x="257.3" y="5.6" width="2.2" height="15.1" rx="1.1" fill-opacity=".38"/><rect x="257.3" y="6.9" width="2.2" height="12.6" rx="1.1"/><rect x="260.4" y="4.6" width="2.2" height="13.1" rx="1.1" fill-opacity=".38"/><rect x="260.4" y="6.6" width="2.2" height="10.0" rx="1.1"/><rect x="263.5" y="9.2" width="2.2" height="7.8" rx="1.1" fill-opacity=".38"/><rect x="263.5" y="10.2" width="2.2" height="5.7" rx="1.1"/><rect x="266.6" y="7.3" width="2.2" height="13.0" rx="1.1" fill-opacity=".38"/><rect x="266.6" y="7.8" width="2.2" height="11.7" rx="1.1"/><rect x="269.7" y="7.6" width="2.2" height="11.2" rx="1.1" fill-opacity=".38"/><rect x="269.7" y="8.2" width="2.2" height="10.1" rx="1.1"/><rect x="272.8" y="9.7" width="2.2" height="6.4" rx="1.1" fill-opacity=".38"/><rect x="272.8" y="10.6" width="2.2" height="4.6" rx="1.1"/><rect x="275.9" y="9.7" width="2.2" height="6.8" rx="1.1" fill-opacity=".38"/><rect x="275.9" y="10.2" width="2.2" height="5.7" rx="1.1"/><rect x="279.0" y="7.8" width="2.2" height="10.7" rx="1.1" fill-opacity=".38"/><rect x="279.0" y="8.2" width="2.2" height="9.9" rx="1.1"/><rect x="282.1" y="5.9" width="2.2" height="13.7" rx="1.1" fill-opacity=".38"/><rect x="282.1" y="6.8" width="2.2" height="12.0" rx="1.1"/><rect x="285.2" y="6.1" width="2.2" height="12.6" rx="1.1" fill-opacity=".38"/><rect x="285.2" y="7.6" width="2.2" height="9.9" rx="1.1"/><rect x="288.3" y="9.1" width="2.2" height="7.6" rx="1.1" fill-opacity=".38"/><rect x="288.3" y="9.9" width="2.2" height="6.0" rx="1.1"/><rect x="291.4" y="7.7" width="2.2" height="12.7" rx="1.1" fill-opacity=".38"/><rect x="291.4" y="8.5" width="2.2" height="10.9" rx="1.1"/><rect x="294.5" y="6.8" width="2.2" height="11.5" rx="1.1" fill-opacity=".38"/><rect x="294.5" y="8.3" width="2.2" height="8.8" rx="1.1"/><rect x="297.6" y="9.4" width="2.2" height="7.2" rx="1.1" fill-opacity=".38"/><rect x="297.6" y="10.5" width="2.2" height="5.1" rx="1.1"/><rect x="300.7" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="300.7" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="303.8" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="303.8" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="306.9" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="306.9" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="310.0" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="310.0" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="313.1" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="313.1" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="316.2" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="316.2" y="12.5" width="2.2" height="1.0" rx="1.1"/></g></svg></div>
+    <div class="famstrip" aria-hidden="true">
+      <span class="fam" style="color:#6521C9"><i></i>Core</span>
+      <span class="fam" style="color:#B90044"><i></i>Love</span>
+      <span class="fam" style="color:#C25500"><i></i>Vitality</span>
+      <span class="fam" style="color:#0A7A52"><i></i>Abundance</span>
+    </div>
+    <div class="sp1"></div>
+    <div class="ctawrap" style="margin-top:26px"><a class="next" id="startBtn" href="#">Start the tour</a></div>
+    <div class="sp2"></div>
+    <div class="tm"><img src="app-assets-welcome/srini-pillay.png" alt="Srini Pillay"><blockquote>&ldquo;Zodiac.fm provides another pathway into self-awareness. By becoming more coherent with themselves, people make clearer decisions, relate more authentically, and experience greater presence.&rdquo;<span class="who">Srini Pillay, M.D.<small>Harvard-trained psychiatrist, brain-imaging researcher</small></span></blockquote></div>
+    <div class="sp3"></div>
+  </div>
+
+  <div class="scr off-r" id="s1b">
+    <div class="chrome"><a class="backb" href="#" data-back="s1">&#8249; Back</a><span></span><a class="skip" href="#" data-skip>Skip tour</a></div>
+    <div class="head" style="padding-top:2px">
+      <div class="tick"></div>
+      <h2>How to Use Zodiac.fm</h2>
+      <p class="lede">Zodiac is a weekly ritual, starting every Monday.</p>
+    </div>
+    <div class="howcard" style="margin-top:22px">
+      <div class="how-lab">Your Weekly Target</div>
+      <div class="wstats">
+        <div class="wstat"><b>63+</b><span>minutes a week,<br>9 a day on average</span></div>
+        <div class="wstat"><b>15%</b><span>in each frequency,<br>every week</span></div>
+      </div>
+      <p class="howcap">The more you listen in balance, the more profound your results. The average user listens over <b>40 minutes a day</b>.</p>
+    </div>
+    <div class="howcard">
+      <div class="how-lab">Ideal Listening Devices</div>
+      <div class="sndrow"><span class="sndchip">&#10003; Headphones</span><span class="sndchip">&#10003; Quality speaker $75+</span><span class="sndchip">&#10003; Your car</span></div>
+      <div class="sndrow bad"><span class="sndchip">&#10005; Phone speakers</span><span class="sndchip">&#10005; Computer speakers</span></div>
+    </div>
+    <p class="howfree">Stay still, move around, listen while you drive&hellip; It is up to you.</p>
+    <div class="gap"></div>
+    <div class="nextwrap"><a class="next" id="nextHow" href="#">Next</a></div>
+    <div class="sp1" style="max-height:18px"></div>
+  </div>
+
+  <div class="scr off-r" id="s1c">
+    <div class="chrome"><a class="backb" href="#" data-back="s1b">&#8249; Back</a><span></span><a class="skip" href="#" data-skip>Skip tour</a></div>
+    <div class="head" style="padding-top:2px">
+      <div class="tick"></div>
+      <h2>Listen and Come Back Home</h2>
+    </div>
+    <div class="rcard"><img src="app-assets-welcome/rhonda-britten.jpg" alt="Rhonda Britten"><blockquote>&ldquo;These aren&rsquo;t just pretty sounds or generic meditation tracks. This is your cosmic blueprint translated into frequency. If you&rsquo;re tired of living out of tune with yourself, this is your invitation home.&rdquo;</blockquote><span class="who">Rhonda Britten<small>Author of &ldquo;Fearless Living,&rdquo; Emmy Award-Winner</small></span></div>
+    <div class="gap"></div>
+    <div class="ctawrap"><a class="next" id="tourBtn" href="#">Take the Tour</a></div>
+    <div class="sp1" style="max-height:26px"></div>
+  </div>
+
+  <div class="scr off-r" id="s2">
+    <div class="chrome"><a class="backb" href="#" data-back="s1">&#8249; Back</a><div class="dots" id="dots"><i></i><i></i><i></i><i></i><i></i></div><a class="skip" href="#" data-skip>Skip tour</a></div>
+    <div class="coach-head"><div class="viewlabel">Immersions View</div><h2 id="tell">Tap the Card &ldquo;Quiet Success&rdquo; to <span class="cmd">Play the Song</span></h2><div id="coachTop">&nbsp;</div></div>
+    <div id="stage">
+      <div class="pills" id="pills">
+        <div class="pill on" data-cat="core">Core</div><div class="pill" data-cat="love">Love</div><div class="pill" data-cat="vitality">Vitality</div><div class="pill" data-cat="abundance">Abundance</div>
+      </div>
+      <div id="rows"></div>
+    </div>
+    <div class="gap"></div>
+  </div>
+
+  <div class="scr off-r" id="s3">
+    <div class="chrome"><a class="backb" href="#" data-back="s2">&#8249; Back</a><div class="dots" id="dots3"><i></i><i></i></div><a class="skip" href="#" data-skip>Skip tour</a></div>
+    <div class="coach-head"><div class="viewlabel">Playlist View</div><h2 id="tell3">Great! Playlist Tab: Tap &ldquo;Select All&rdquo; to <span class="cmd">Queue All Songs</span></h2><div id="coachTop3">&nbsp;</div></div>
+    <!-- W-3m: dots3 trimmed to two reps below -->
+    <div id="stage3">
+      <div class="zbal" id="zbal">
+        <div class="zbal-line" id="zbalLine">
+          <span class="zbal-toks" id="zbalToks"></span>
+          <span class="zbal-chevbtn"><svg class="zbal-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
+        </div>
+        <div class="zbal-panel">
+          <h4 class="zbal-ttl">Frequency Balance Meter</h4>
+          <div class="zbal-sub"><b>Your goal:</b> At least 63 minutes this week, with all four frequencies green.</div>
+          <ol class="zbal-ol">
+            <li>Keep all four frequencies at 15% or more each week. This means you have <b>Frequency Balance</b>.</li>
+            <li>If all four category numbers above are <b class="g">green</b>, completing every checked song will bring your week into <b>Frequency Balance</b>.</li>
+            <li>Out of songs? Go to <b>Immersions</b> and tap <span class="ph">&#9829;</span> to add more to this list.</li>
+          </ol>
+        </div>
+        <div class="zbal-pop" id="zbalPop" style="display:none"><span id="zbalPopMsg"></span><span class="zbal-popx" id="zbalPopX">&#10005;</span></div>
+      </div>
+      <div class="barrow"><div class="selall" id="selall"><span class="qbox" id="saBox"></span><span class="selall-lbl" id="saLbl">Select all</span></div><div class="qall" id="qall"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="margin-right:5px;vertical-align:-1px"><path d="M8 5v14l11-7z"/></svg>Play All<span id="qn3"></span></div></div>
+      <div id="favRows"></div>
+    </div>
+    <div class="gap"></div>
+  </div>
+
+  <div class="scr off-r" id="s5">
+    <div class="chrome"><a class="backb" href="#" data-back="s3">&#8249; Back</a><div class="dots" id="dots5"><i></i><i></i><i></i><i></i><i></i><i></i></div><a class="skip" href="#" data-skip>Skip tour</a></div>
+    <div class="coach-head"><div class="viewlabel">Playlist View</div><h2 id="tell5">Great! Check &ldquo;Elysian Surge&rdquo; and <span class="cmd">Watch Vitality Turn Green</span></h2><div id="coachTop5">&nbsp;</div></div>
+    <div id="stage5">
+      <div class="mstop"><div class="ministat" id="ms5"></div></div>
+      <div class="zbal" id="zbal5">
+        <div class="zbal-line" id="zbalLine5">
+          <span class="zbal-toks" id="zbalToks5"></span>
+          <span class="zbal-chevbtn"><svg class="zbal-chev" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#55505c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 10 12 16 18 10"/></svg></span>
+        </div>
+        <div class="zbal-panel">
+          <h4 class="zbal-ttl">Frequency Balance Meter</h4>
+          <div class="zbal-sub"><b>Your goal:</b> At least 63 minutes this week, with all four frequencies green.</div>
+          <ol class="zbal-ol">
+            <li>Keep all four frequencies at 15% or more each week. This means you have <b>Frequency Balance</b>.</li>
+          </ol>
+        </div>
+        <div class="zbal-pop" id="zbalPop5" style="display:none"><span id="zbalPopMsg5"></span><span class="zbal-popx" id="zbalPopX5">&#10005;</span></div>
+      </div>
+      <div id="balRows"></div>
+    </div>
+    <div class="gap"></div>
+  </div>
+
+  <div class="scr off-r" id="s6">
+    <div class="chrome"><a class="backb" href="#" data-back="s5">&#8249; Back</a><span></span><a class="skip" href="#" data-skip>Skip tour</a></div>
+    <div class="head" style="padding-top:2px">
+      <div class="tick"></div>
+      <h2 style="font-size:29px">Congratulations! You Now Have the Keys to Zodiac.fm</h2>
+      <p class="keysub">Saving the best for last&hellip;</p>
+    </div>
+    <div class="bandcard">
+      <div class="bc-eyebrow">A Zodiac.fm Discovery</div>
+      <h3 class="bc-title">Your Bands</h3>
+      <p class="bc-myz"><b>Read about YOUR Bands in My Zodiac <span class="myzico">&#9673;</span>.</b> This is also where you check on your overall time, your balance, what to expect, and so much more.</p>
+    </div>
+    <div class="rcard"><img src="app-assets-welcome/barbara-ditlow.png" alt="Barbara Ditlow"><blockquote>&ldquo;Understanding alone isn&rsquo;t transformation. It must be felt. Zodiac core frequencies translate this unique imprint into sound, bypassing the mind and speaking directly to the body.&rdquo;</blockquote><span class="who">Barbara Ditlow<small>Human Design Master Practitioner, endorsed by Ra&nbsp;Uru&nbsp;Hu</small></span></div>
+    <a class="lastbar" id="nextBtn6" href="#">Next: Your Bands <i>&#8250;</i></a>
+    <div class="sp1" style="max-height:16px"></div>
+  </div>
+
+  <div class="scr off-r" id="s7a">
+    <div class="chrome"><a class="backb" href="#" data-back="s6">&#8249; Back</a><span></span><a class="skip" href="#" data-skip>Skip tour</a></div>
+    <div class="head" style="padding-top:2px">
+      <div class="tick"></div>
+      <h2>Your Bands</h2>
+      <p class="keysub">How you process each signal.</p>
+    </div>
+    <div class="bxcard">
+      <p class="bxlede"><b>A frequency tells you what the signal is. Your band shows how you process it.</b> That turns a number into an internal compass for all four:</p>
+      <div class="frows">
+        <div class="frow" style="--fc:#6521C9"><span class="fdot2"></span><p><b>Core:</b> how you process who you are and your life&rsquo;s purpose.</p></div>
+        <div class="frow" style="--fc:#B90044"><span class="fdot2"></span><p><b>Love:</b> how you understand who you connect with and how, in romance and every relationship.</p></div>
+        <div class="frow" style="--fc:#C25500"><span class="fdot2"></span><p><b>Vitality:</b> how you sense what feeds your lifeforce and what drains it.</p></div>
+        <div class="frow" style="--fc:#0A7A52"><span class="fdot2"></span><p><b>Abundance:</b> how you judge which opportunities to take, and when.</p></div>
+      </div>
+    </div>
+    <div class="tm"><img src="app-assets-welcome/joey-vaillancourt.png" alt="Joey Vaillancourt"><blockquote>&ldquo;Without doing anything but listening, I become a different person. I shift into the version of me I actually want to be. I can tap into different frequencies based on what I need.&rdquo;<span class="who">Joey Vaillancourt<small>VP of Marketing, BiOptimizers</small></span></blockquote></div>
+    <div class="gap"></div>
+    <a class="lastbar" id="nextBtn7a" href="#">Next <i>&#8250;</i></a>
+    <div class="sp1" style="max-height:16px"></div>
+  </div>
+
+  <div class="scr off-r" id="s7b">
+    <div class="chrome"><a class="backb" href="#" data-back="s7a">&#8249; Back</a><span></span><a class="skip" href="#" data-skip>Skip tour</a></div>
+    <div class="head" style="padding-top:2px">
+      <div class="tick"></div>
+      <h2>Four Ways Clarity Arrives</h2>
+      <p class="keysub">Every frequency sits on one spectrum.</p>
+    </div>
+    <div class="bxcard">
+      <div class="spec"><i></i><i></i><i></i><i></i></div>
+      <div class="spectick"><span>250</span><span>425</span><span>600</span><span>775</span><span>950 Hz</span></div>
+      <div class="brows">
+        <div class="brow"><span class="bverb">Feel it</span><div class="bl"><b>Root / Belly</b><span class="bhz">250 to 425 Hz</span><p>Clarity through grounding.</p></div></div>
+        <div class="brow"><span class="bverb">Do it</span><div class="bl"><b>Solar Plexus</b><span class="bhz">425 to 600 Hz</span><p>Clarity through drive and action.</p></div></div>
+        <div class="brow"><span class="bverb">Say it</span><div class="bl"><b>Throat</b><span class="bhz">600 to 775 Hz</span><p>Clarity through articulation.</p></div></div>
+        <div class="brow"><span class="bverb">See it</span><div class="bl"><b>Crown</b><span class="bhz">775 to 950 Hz</span><p>Clarity through perspective and systems.</p></div></div>
+      </div>
+      <div class="bxnote">These are not levels: everyone uses all four, and none is higher. Read the full story of YOUR bands in <b>My Zodiac <span class="myzico">&#9673;</span></b>.</div>
+    </div>
+    <div class="tm"><img src="app-assets-welcome/amber-hedrick.png" alt="Amber Hedrick"><blockquote>&ldquo;I&rsquo;m just finishing my first week and I can&rsquo;t begin to explain how different I feel compared to just 5 days ago. I feel like ME.&rdquo;<span class="who">Amber Hedrick<small>Zodiac.fm member</small></span></blockquote></div>
+    <div class="gap"></div>
+    <a class="lastbar" id="nextBtn7b" href="#">One Last Step <i>&#8250;</i></a>
+    <div class="sp1" style="max-height:16px"></div>
+  </div>
+
+  <div class="scr off-r" id="s8">
+    <div class="chrome"><a class="backb" href="#" data-back="s7b">&#8249; Back</a><span></span></div>
+    <div class="head" style="padding-top:14px">
+      <div class="tick"></div>
+      <h2>Add Zodiac.fm to Your Home Screen</h2>
+      <p class="lede">This will provide you with the app&rsquo;s full functionality. Do NOT skip. This is important!</p>
+    </div>
+    <div class="sp1"></div>
+    <div class="ctawrap"><a class="cta8" href="#" onclick="return false">Add to Home Screen</a></div>
+    <div class="sp2"></div>
+    <p class="support8">Questions? <a href="mailto:support@zodiac.fm">support@zodiac.fm</a></p>
+    <div class="sp1" style="max-height:34px"></div>
+  </div>
+
+  <div id="nav">
+    <div id="navImm" class="on navblink" data-navmsg="Immersions is the library. You just mastered it."><span class="ic">&#9835;</span>Immersions</div>
+    <div id="navMyz" data-navmsg="My Zodiac holds your frequencies. The tour gets there."><span class="ic">&#9673;</span>My Zodiac</div>
+    <div id="navPl" data-navmsg="Playlist is the next lesson."><span class="ic">&#9825;</span>Playlist</div>
+  </div>
+  <div id="toast" role="status"></div>
+</div>
+
+<script>
+var CATS={
+ core:{label:'Core',c1:'#6521C9',c2:'#A737C8',cink:'#6521C9',csoft:'#D2C8FF',hz:'422'},
+ love:{label:'Love',c1:'#B90044',c2:'#CF4090',cink:'#B90044',csoft:'#FFBDC3',hz:'432'},
+ vitality:{label:'Vitality',c1:'#FF9112',c2:'#FFC251',cink:'#C25500',csoft:'#FFC392',hz:'579'},
+ abundance:{label:'Abundance',c1:'#12A56E',c2:'#46D99A',cink:'#0A7A52',csoft:'#8FE1BE',hz:'611'}
+};
+var WAVES={'quiet-success':'<rect x="0.0" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="0.0" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="3.1" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="3.1" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="6.2" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="6.2" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="9.3" y="12.5" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="9.3" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="12.4" y="11.8" width="2.2" height="2.3" rx="1.1" fill-opacity=".38"/><rect x="12.4" y="12.1" width="2.2" height="1.8" rx="1.1"/><rect x="15.5" y="12.6" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="15.5" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="18.6" y="11.7" width="2.2" height="2.5" rx="1.1" fill-opacity=".38"/><rect x="18.6" y="12.1" width="2.2" height="1.8" rx="1.1"/><rect x="21.7" y="11.7" width="2.2" height="2.6" rx="1.1" fill-opacity=".38"/><rect x="21.7" y="12.1" width="2.2" height="1.9" rx="1.1"/><rect x="24.8" y="11.8" width="2.2" height="2.9" rx="1.1" fill-opacity=".38"/><rect x="24.8" y="12.3" width="2.2" height="1.5" rx="1.1"/><rect x="27.9" y="11.0" width="2.2" height="3.5" rx="1.1" fill-opacity=".38"/><rect x="27.9" y="11.4" width="2.2" height="2.9" rx="1.1"/><rect x="31.0" y="10.9" width="2.2" height="3.8" rx="1.1" fill-opacity=".38"/><rect x="31.0" y="11.3" width="2.2" height="3.0" rx="1.1"/><rect x="34.1" y="10.9" width="2.2" height="4.5" rx="1.1" fill-opacity=".38"/><rect x="34.1" y="11.2" width="2.2" height="3.8" rx="1.1"/><rect x="37.2" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="37.2" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="40.3" y="6.8" width="2.2" height="14.1" rx="1.1" fill-opacity=".38"/><rect x="40.3" y="7.0" width="2.2" height="13.6" rx="1.1"/><rect x="43.4" y="9.0" width="2.2" height="8.1" rx="1.1" fill-opacity=".38"/><rect x="43.4" y="9.8" width="2.2" height="6.4" rx="1.1"/><rect x="46.5" y="11.0" width="2.2" height="3.6" rx="1.1" fill-opacity=".38"/><rect x="46.5" y="11.3" width="2.2" height="3.1" rx="1.1"/><rect x="49.6" y="9.7" width="2.2" height="6.5" rx="1.1" fill-opacity=".38"/><rect x="49.6" y="10.4" width="2.2" height="5.1" rx="1.1"/><rect x="52.7" y="10.7" width="2.2" height="4.5" rx="1.1" fill-opacity=".38"/><rect x="52.7" y="11.3" width="2.2" height="3.3" rx="1.1"/><rect x="55.8" y="10.5" width="2.2" height="5.2" rx="1.1" fill-opacity=".38"/><rect x="55.8" y="11.3" width="2.2" height="3.5" rx="1.1"/><rect x="58.9" y="10.2" width="2.2" height="5.3" rx="1.1" fill-opacity=".38"/><rect x="58.9" y="10.7" width="2.2" height="4.4" rx="1.1"/><rect x="62.0" y="10.4" width="2.2" height="4.6" rx="1.1" fill-opacity=".38"/><rect x="62.0" y="10.8" width="2.2" height="3.9" rx="1.1"/><rect x="65.1" y="9.9" width="2.2" height="6.4" rx="1.1" fill-opacity=".38"/><rect x="65.1" y="10.8" width="2.2" height="4.4" rx="1.1"/><rect x="68.2" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="68.2" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="71.3" y="5.9" width="2.2" height="14.9" rx="1.1" fill-opacity=".38"/><rect x="71.3" y="6.1" width="2.2" height="14.4" rx="1.1"/><rect x="74.4" y="9.4" width="2.2" height="8.9" rx="1.1" fill-opacity=".38"/><rect x="74.4" y="9.6" width="2.2" height="8.4" rx="1.1"/><rect x="77.5" y="10.4" width="2.2" height="4.7" rx="1.1" fill-opacity=".38"/><rect x="77.5" y="11.1" width="2.2" height="3.4" rx="1.1"/><rect x="80.6" y="11.0" width="2.2" height="3.9" rx="1.1" fill-opacity=".38"/><rect x="80.6" y="11.4" width="2.2" height="3.1" rx="1.1"/><rect x="83.7" y="12.2" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="83.7" y="12.4" width="2.2" height="1.0" rx="1.1"/><rect x="86.8" y="10.9" width="2.2" height="4.0" rx="1.1" fill-opacity=".38"/><rect x="86.8" y="11.4" width="2.2" height="3.0" rx="1.1"/><rect x="89.9" y="10.9" width="2.2" height="3.4" rx="1.1" fill-opacity=".38"/><rect x="89.9" y="11.5" width="2.2" height="2.4" rx="1.1"/><rect x="93.0" y="11.1" width="2.2" height="3.2" rx="1.1" fill-opacity=".38"/><rect x="93.0" y="11.4" width="2.2" height="2.7" rx="1.1"/><rect x="96.1" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="96.1" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="99.2" y="2.2" width="2.2" height="23.8" rx="1.1" fill-opacity=".38"/><rect x="99.2" y="6.1" width="2.2" height="15.2" rx="1.1"/><rect x="102.3" y="4.5" width="2.2" height="19.9" rx="1.1" fill-opacity=".38"/><rect x="102.3" y="4.7" width="2.2" height="19.4" rx="1.1"/><rect x="105.4" y="1.4" width="2.2" height="24.6" rx="1.1" fill-opacity=".38"/><rect x="105.4" y="3.2" width="2.2" height="20.8" rx="1.1"/><rect x="108.5" y="2.2" width="2.2" height="23.8" rx="1.1" fill-opacity=".38"/><rect x="108.5" y="3.6" width="2.2" height="20.8" rx="1.1"/><rect x="111.6" y="0.0" width="2.2" height="23.9" rx="1.1" fill-opacity=".38"/><rect x="111.6" y="3.2" width="2.2" height="17.9" rx="1.1"/><rect x="114.7" y="6.7" width="2.2" height="11.1" rx="1.1" fill-opacity=".38"/><rect x="114.7" y="7.8" width="2.2" height="9.1" rx="1.1"/><rect x="117.8" y="3.5" width="2.2" height="18.7" rx="1.1" fill-opacity=".38"/><rect x="117.8" y="4.8" width="2.2" height="16.0" rx="1.1"/><rect x="120.9" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="120.9" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="124.0" y="10.3" width="2.2" height="4.5" rx="1.1" fill-opacity=".38"/><rect x="124.0" y="11.3" width="2.2" height="2.8" rx="1.1"/><rect x="127.1" y="7.2" width="2.2" height="8.9" rx="1.1" fill-opacity=".38"/><rect x="127.1" y="8.1" width="2.2" height="7.5" rx="1.1"/><rect x="130.2" y="5.3" width="2.2" height="15.6" rx="1.1" fill-opacity=".38"/><rect x="130.2" y="5.6" width="2.2" height="14.9" rx="1.1"/><rect x="133.3" y="3.2" width="2.2" height="21.6" rx="1.1" fill-opacity=".38"/><rect x="133.3" y="3.6" width="2.2" height="20.8" rx="1.1"/><rect x="136.4" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="136.4" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="139.5" y="8.8" width="2.2" height="9.6" rx="1.1" fill-opacity=".38"/><rect x="139.5" y="10.6" width="2.2" height="5.6" rx="1.1"/><rect x="142.6" y="7.1" width="2.2" height="11.2" rx="1.1" fill-opacity=".38"/><rect x="142.6" y="8.7" width="2.2" height="8.2" rx="1.1"/><rect x="145.7" y="7.8" width="2.2" height="11.0" rx="1.1" fill-opacity=".38"/><rect x="145.7" y="8.0" width="2.2" height="10.5" rx="1.1"/><rect x="148.8" y="11.2" width="2.2" height="3.4" rx="1.1" fill-opacity=".38"/><rect x="148.8" y="11.6" width="2.2" height="2.7" rx="1.1"/><rect x="151.9" y="7.2" width="2.2" height="9.8" rx="1.1" fill-opacity=".38"/><rect x="151.9" y="7.8" width="2.2" height="8.9" rx="1.1"/><rect x="155.0" y="6.0" width="2.2" height="16.5" rx="1.1" fill-opacity=".38"/><rect x="155.0" y="7.1" width="2.2" height="13.8" rx="1.1"/><rect x="158.1" y="5.7" width="2.2" height="18.2" rx="1.1" fill-opacity=".38"/><rect x="158.1" y="5.9" width="2.2" height="17.7" rx="1.1"/><rect x="161.2" y="4.5" width="2.2" height="15.8" rx="1.1" fill-opacity=".38"/><rect x="161.2" y="5.8" width="2.2" height="13.5" rx="1.1"/><rect x="164.3" y="7.9" width="2.2" height="10.0" rx="1.1" fill-opacity=".38"/><rect x="164.3" y="9.2" width="2.2" height="7.5" rx="1.1"/><rect x="167.4" y="4.2" width="2.2" height="17.0" rx="1.1" fill-opacity=".38"/><rect x="167.4" y="7.0" width="2.2" height="11.6" rx="1.1"/><rect x="170.5" y="5.6" width="2.2" height="12.9" rx="1.1" fill-opacity=".38"/><rect x="170.5" y="6.4" width="2.2" height="11.6" rx="1.1"/><rect x="173.6" y="7.2" width="2.2" height="10.4" rx="1.1" fill-opacity=".38"/><rect x="173.6" y="7.9" width="2.2" height="9.1" rx="1.1"/><rect x="176.7" y="9.1" width="2.2" height="7.1" rx="1.1" fill-opacity=".38"/><rect x="176.7" y="9.6" width="2.2" height="6.2" rx="1.1"/><rect x="179.8" y="5.0" width="2.2" height="14.0" rx="1.1" fill-opacity=".38"/><rect x="179.8" y="7.1" width="2.2" height="10.3" rx="1.1"/><rect x="182.9" y="1.5" width="2.2" height="19.6" rx="1.1" fill-opacity=".38"/><rect x="182.9" y="3.3" width="2.2" height="16.5" rx="1.1"/><rect x="186.0" y="4.6" width="2.2" height="17.4" rx="1.1" fill-opacity=".38"/><rect x="186.0" y="7.6" width="2.2" height="11.3" rx="1.1"/><rect x="189.1" y="8.1" width="2.2" height="8.6" rx="1.1" fill-opacity=".38"/><rect x="189.1" y="8.8" width="2.2" height="7.3" rx="1.1"/><rect x="192.2" y="6.1" width="2.2" height="12.9" rx="1.1" fill-opacity=".38"/><rect x="192.2" y="6.4" width="2.2" height="12.4" rx="1.1"/><rect x="195.3" y="6.9" width="2.2" height="14.1" rx="1.1" fill-opacity=".38"/><rect x="195.3" y="7.1" width="2.2" height="13.6" rx="1.1"/><rect x="198.4" y="7.9" width="2.2" height="8.3" rx="1.1" fill-opacity=".38"/><rect x="198.4" y="8.8" width="2.2" height="6.8" rx="1.1"/><rect x="201.5" y="10.0" width="2.2" height="6.2" rx="1.1" fill-opacity=".38"/><rect x="201.5" y="10.8" width="2.2" height="4.5" rx="1.1"/><rect x="204.6" y="5.3" width="2.2" height="19.8" rx="1.1" fill-opacity=".38"/><rect x="204.6" y="7.3" width="2.2" height="14.7" rx="1.1"/><rect x="207.7" y="5.5" width="2.2" height="18.8" rx="1.1" fill-opacity=".38"/><rect x="207.7" y="5.7" width="2.2" height="18.3" rx="1.1"/><rect x="210.8" y="5.0" width="2.2" height="21.0" rx="1.1" fill-opacity=".38"/><rect x="210.8" y="7.6" width="2.2" height="14.1" rx="1.1"/><rect x="213.9" y="8.4" width="2.2" height="9.1" rx="1.1" fill-opacity=".38"/><rect x="213.9" y="9.6" width="2.2" height="6.7" rx="1.1"/><rect x="217.0" y="5.4" width="2.2" height="15.2" rx="1.1" fill-opacity=".38"/><rect x="217.0" y="6.3" width="2.2" height="13.5" rx="1.1"/><rect x="220.1" y="9.6" width="2.2" height="8.1" rx="1.1" fill-opacity=".38"/><rect x="220.1" y="9.8" width="2.2" height="7.6" rx="1.1"/><rect x="223.2" y="6.8" width="2.2" height="8.9" rx="1.1" fill-opacity=".38"/><rect x="223.2" y="8.8" width="2.2" height="6.0" rx="1.1"/><rect x="226.3" y="8.1" width="2.2" height="7.6" rx="1.1" fill-opacity=".38"/><rect x="226.3" y="9.7" width="2.2" height="5.1" rx="1.1"/><rect x="229.4" y="7.6" width="2.2" height="10.9" rx="1.1" fill-opacity=".38"/><rect x="229.4" y="7.9" width="2.2" height="10.4" rx="1.1"/><rect x="232.5" y="4.5" width="2.2" height="16.9" rx="1.1" fill-opacity=".38"/><rect x="232.5" y="6.2" width="2.2" height="13.5" rx="1.1"/><rect x="235.6" y="3.0" width="2.2" height="18.1" rx="1.1" fill-opacity=".38"/><rect x="235.6" y="6.9" width="2.2" height="11.0" rx="1.1"/><rect x="238.7" y="9.3" width="2.2" height="7.1" rx="1.1" fill-opacity=".38"/><rect x="238.7" y="10.0" width="2.2" height="5.8" rx="1.1"/><rect x="241.8" y="5.0" width="2.2" height="15.0" rx="1.1" fill-opacity=".38"/><rect x="241.8" y="7.0" width="2.2" height="11.3" rx="1.1"/><rect x="244.9" y="8.4" width="2.2" height="7.9" rx="1.1" fill-opacity=".38"/><rect x="244.9" y="9.4" width="2.2" height="6.2" rx="1.1"/><rect x="248.0" y="10.3" width="2.2" height="5.6" rx="1.1" fill-opacity=".38"/><rect x="248.0" y="10.9" width="2.2" height="4.5" rx="1.1"/><rect x="251.1" y="9.5" width="2.2" height="7.1" rx="1.1" fill-opacity=".38"/><rect x="251.1" y="9.7" width="2.2" height="6.6" rx="1.1"/><rect x="254.2" y="7.9" width="2.2" height="9.3" rx="1.1" fill-opacity=".38"/><rect x="254.2" y="8.2" width="2.2" height="8.8" rx="1.1"/><rect x="257.3" y="5.6" width="2.2" height="15.1" rx="1.1" fill-opacity=".38"/><rect x="257.3" y="6.9" width="2.2" height="12.6" rx="1.1"/><rect x="260.4" y="4.6" width="2.2" height="13.1" rx="1.1" fill-opacity=".38"/><rect x="260.4" y="6.6" width="2.2" height="10.0" rx="1.1"/><rect x="263.5" y="9.2" width="2.2" height="7.8" rx="1.1" fill-opacity=".38"/><rect x="263.5" y="10.2" width="2.2" height="5.7" rx="1.1"/><rect x="266.6" y="7.3" width="2.2" height="13.0" rx="1.1" fill-opacity=".38"/><rect x="266.6" y="7.8" width="2.2" height="11.7" rx="1.1"/><rect x="269.7" y="7.6" width="2.2" height="11.2" rx="1.1" fill-opacity=".38"/><rect x="269.7" y="8.2" width="2.2" height="10.1" rx="1.1"/><rect x="272.8" y="9.7" width="2.2" height="6.4" rx="1.1" fill-opacity=".38"/><rect x="272.8" y="10.6" width="2.2" height="4.6" rx="1.1"/><rect x="275.9" y="9.7" width="2.2" height="6.8" rx="1.1" fill-opacity=".38"/><rect x="275.9" y="10.2" width="2.2" height="5.7" rx="1.1"/><rect x="279.0" y="7.8" width="2.2" height="10.7" rx="1.1" fill-opacity=".38"/><rect x="279.0" y="8.2" width="2.2" height="9.9" rx="1.1"/><rect x="282.1" y="5.9" width="2.2" height="13.7" rx="1.1" fill-opacity=".38"/><rect x="282.1" y="6.8" width="2.2" height="12.0" rx="1.1"/><rect x="285.2" y="6.1" width="2.2" height="12.6" rx="1.1" fill-opacity=".38"/><rect x="285.2" y="7.6" width="2.2" height="9.9" rx="1.1"/><rect x="288.3" y="9.1" width="2.2" height="7.6" rx="1.1" fill-opacity=".38"/><rect x="288.3" y="9.9" width="2.2" height="6.0" rx="1.1"/><rect x="291.4" y="7.7" width="2.2" height="12.7" rx="1.1" fill-opacity=".38"/><rect x="291.4" y="8.5" width="2.2" height="10.9" rx="1.1"/><rect x="294.5" y="6.8" width="2.2" height="11.5" rx="1.1" fill-opacity=".38"/><rect x="294.5" y="8.3" width="2.2" height="8.8" rx="1.1"/><rect x="297.6" y="9.4" width="2.2" height="7.2" rx="1.1" fill-opacity=".38"/><rect x="297.6" y="10.5" width="2.2" height="5.1" rx="1.1"/><rect x="300.7" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="300.7" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="303.8" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="303.8" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="306.9" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="306.9" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="310.0" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="310.0" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="313.1" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="313.1" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="316.2" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="316.2" y="12.5" width="2.2" height="1.0" rx="1.1"/>','kindred-spirits':'<rect x="0.0" y="9.0" width="2.2" height="9.2" rx="1.1" fill-opacity=".38"/><rect x="0.0" y="11.6" width="2.2" height="3.3" rx="1.1"/><rect x="3.1" y="7.0" width="2.2" height="12.3" rx="1.1" fill-opacity=".38"/><rect x="3.1" y="9.6" width="2.2" height="6.9" rx="1.1"/><rect x="6.2" y="8.6" width="2.2" height="9.3" rx="1.1" fill-opacity=".38"/><rect x="6.2" y="8.8" width="2.2" height="8.7" rx="1.1"/><rect x="9.3" y="7.1" width="2.2" height="13.2" rx="1.1" fill-opacity=".38"/><rect x="9.3" y="9.9" width="2.2" height="7.0" rx="1.1"/><rect x="12.4" y="5.0" width="2.2" height="14.3" rx="1.1" fill-opacity=".38"/><rect x="12.4" y="8.3" width="2.2" height="8.4" rx="1.1"/><rect x="15.5" y="8.8" width="2.2" height="8.4" rx="1.1" fill-opacity=".38"/><rect x="15.5" y="10.2" width="2.2" height="5.6" rx="1.1"/><rect x="18.6" y="5.0" width="2.2" height="14.3" rx="1.1" fill-opacity=".38"/><rect x="18.6" y="7.5" width="2.2" height="9.7" rx="1.1"/><rect x="21.7" y="11.6" width="2.2" height="3.2" rx="1.1" fill-opacity=".38"/><rect x="21.7" y="11.9" width="2.2" height="2.7" rx="1.1"/><rect x="24.8" y="10.7" width="2.2" height="4.9" rx="1.1" fill-opacity=".38"/><rect x="24.8" y="11.8" width="2.2" height="2.6" rx="1.1"/><rect x="27.9" y="11.8" width="2.2" height="3.0" rx="1.1" fill-opacity=".38"/><rect x="27.9" y="12.6" width="2.2" height="1.0" rx="1.1"/><rect x="31.0" y="12.3" width="2.2" height="2.0" rx="1.1" fill-opacity=".38"/><rect x="31.0" y="12.6" width="2.2" height="1.0" rx="1.1"/><rect x="34.1" y="0.3" width="2.2" height="20.4" rx="1.1" fill-opacity=".38"/><rect x="34.1" y="7.9" width="2.2" height="8.1" rx="1.1"/><rect x="37.2" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="37.2" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="40.3" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="40.3" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="43.4" y="0.0" width="2.2" height="25.4" rx="1.1" fill-opacity=".38"/><rect x="43.4" y="2.4" width="2.2" height="20.8" rx="1.1"/><rect x="46.5" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="46.5" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="49.6" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="49.6" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="52.7" y="4.3" width="2.2" height="18.6" rx="1.1" fill-opacity=".38"/><rect x="52.7" y="5.6" width="2.2" height="15.9" rx="1.1"/><rect x="55.8" y="0.0" width="2.2" height="20.9" rx="1.1" fill-opacity=".38"/><rect x="55.8" y="1.7" width="2.2" height="18.1" rx="1.1"/><rect x="58.9" y="2.8" width="2.2" height="20.1" rx="1.1" fill-opacity=".38"/><rect x="58.9" y="4.2" width="2.2" height="17.3" rx="1.1"/><rect x="62.0" y="11.0" width="2.2" height="2.3" rx="1.1" fill-opacity=".38"/><rect x="62.0" y="12.1" width="2.2" height="1.0" rx="1.1"/><rect x="65.1" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="65.1" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="68.2" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="68.2" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="71.3" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="71.3" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="74.4" y="12.4" width="2.2" height="1.7" rx="1.1" fill-opacity=".38"/><rect x="74.4" y="12.6" width="2.2" height="1.0" rx="1.1"/><rect x="77.5" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="77.5" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="80.6" y="6.7" width="2.2" height="14.1" rx="1.1" fill-opacity=".38"/><rect x="80.6" y="9.4" width="2.2" height="8.2" rx="1.1"/><rect x="83.7" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="83.7" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="86.8" y="0.0" width="2.2" height="20.7" rx="1.1" fill-opacity=".38"/><rect x="86.8" y="2.7" width="2.2" height="16.3" rx="1.1"/><rect x="89.9" y="2.5" width="2.2" height="17.2" rx="1.1" fill-opacity=".38"/><rect x="89.9" y="3.9" width="2.2" height="14.8" rx="1.1"/><rect x="93.0" y="5.4" width="2.2" height="16.7" rx="1.1" fill-opacity=".38"/><rect x="93.0" y="5.7" width="2.2" height="16.2" rx="1.1"/><rect x="96.1" y="3.8" width="2.2" height="17.1" rx="1.1" fill-opacity=".38"/><rect x="96.1" y="4.4" width="2.2" height="15.9" rx="1.1"/><rect x="99.2" y="6.1" width="2.2" height="11.6" rx="1.1" fill-opacity=".38"/><rect x="99.2" y="7.2" width="2.2" height="9.7" rx="1.1"/><rect x="102.3" y="6.0" width="2.2" height="13.5" rx="1.1" fill-opacity=".38"/><rect x="102.3" y="6.2" width="2.2" height="13.0" rx="1.1"/><rect x="105.4" y="9.1" width="2.2" height="9.9" rx="1.1" fill-opacity=".38"/><rect x="105.4" y="9.9" width="2.2" height="7.8" rx="1.1"/><rect x="108.5" y="8.1" width="2.2" height="12.7" rx="1.1" fill-opacity=".38"/><rect x="108.5" y="8.7" width="2.2" height="11.2" rx="1.1"/><rect x="111.6" y="8.2" width="2.2" height="8.6" rx="1.1" fill-opacity=".38"/><rect x="111.6" y="8.5" width="2.2" height="8.1" rx="1.1"/><rect x="114.7" y="5.4" width="2.2" height="12.4" rx="1.1" fill-opacity=".38"/><rect x="114.7" y="7.8" width="2.2" height="8.4" rx="1.1"/><rect x="117.8" y="6.2" width="2.2" height="13.0" rx="1.1" fill-opacity=".38"/><rect x="117.8" y="6.8" width="2.2" height="11.8" rx="1.1"/><rect x="120.9" y="7.8" width="2.2" height="9.1" rx="1.1" fill-opacity=".38"/><rect x="120.9" y="8.4" width="2.2" height="8.1" rx="1.1"/><rect x="124.0" y="8.5" width="2.2" height="8.8" rx="1.1" fill-opacity=".38"/><rect x="124.0" y="9.3" width="2.2" height="7.2" rx="1.1"/><rect x="127.1" y="5.5" width="2.2" height="12.8" rx="1.1" fill-opacity=".38"/><rect x="127.1" y="6.6" width="2.2" height="11.0" rx="1.1"/><rect x="130.2" y="10.1" width="2.2" height="6.1" rx="1.1" fill-opacity=".38"/><rect x="130.2" y="11.4" width="2.2" height="3.4" rx="1.1"/><rect x="133.3" y="10.1" width="2.2" height="7.1" rx="1.1" fill-opacity=".38"/><rect x="133.3" y="10.9" width="2.2" height="5.1" rx="1.1"/><rect x="136.4" y="11.8" width="2.2" height="1.9" rx="1.1" fill-opacity=".38"/><rect x="136.4" y="12.1" width="2.2" height="1.4" rx="1.1"/><rect x="139.5" y="10.2" width="2.2" height="5.5" rx="1.1" fill-opacity=".38"/><rect x="139.5" y="10.8" width="2.2" height="4.3" rx="1.1"/><rect x="142.6" y="9.6" width="2.2" height="6.1" rx="1.1" fill-opacity=".38"/><rect x="142.6" y="10.0" width="2.2" height="5.4" rx="1.1"/><rect x="145.7" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="145.7" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="148.8" y="10.1" width="2.2" height="4.1" rx="1.1" fill-opacity=".38"/><rect x="148.8" y="10.9" width="2.2" height="3.0" rx="1.1"/><rect x="151.9" y="8.7" width="2.2" height="7.1" rx="1.1" fill-opacity=".38"/><rect x="151.9" y="9.5" width="2.2" height="5.8" rx="1.1"/><rect x="155.0" y="10.0" width="2.2" height="6.8" rx="1.1" fill-opacity=".38"/><rect x="155.0" y="10.7" width="2.2" height="5.2" rx="1.1"/><rect x="158.1" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="158.1" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="161.2" y="9.1" width="2.2" height="7.2" rx="1.1" fill-opacity=".38"/><rect x="161.2" y="10.0" width="2.2" height="5.6" rx="1.1"/><rect x="164.3" y="9.6" width="2.2" height="6.9" rx="1.1" fill-opacity=".38"/><rect x="164.3" y="9.9" width="2.2" height="6.2" rx="1.1"/><rect x="167.4" y="6.6" width="2.2" height="12.5" rx="1.1" fill-opacity=".38"/><rect x="167.4" y="6.9" width="2.2" height="12.0" rx="1.1"/><rect x="170.5" y="9.7" width="2.2" height="6.0" rx="1.1" fill-opacity=".38"/><rect x="170.5" y="10.0" width="2.2" height="5.5" rx="1.1"/><rect x="173.6" y="8.0" width="2.2" height="10.5" rx="1.1" fill-opacity=".38"/><rect x="173.6" y="8.8" width="2.2" height="8.7" rx="1.1"/><rect x="176.7" y="4.4" width="2.2" height="18.0" rx="1.1" fill-opacity=".38"/><rect x="176.7" y="6.0" width="2.2" height="14.6" rx="1.1"/><rect x="179.8" y="5.5" width="2.2" height="12.3" rx="1.1" fill-opacity=".38"/><rect x="179.8" y="6.5" width="2.2" height="10.6" rx="1.1"/><rect x="182.9" y="11.1" width="2.2" height="3.6" rx="1.1" fill-opacity=".38"/><rect x="182.9" y="11.4" width="2.2" height="3.1" rx="1.1"/><rect x="186.0" y="6.6" width="2.2" height="10.9" rx="1.1" fill-opacity=".38"/><rect x="186.0" y="7.9" width="2.2" height="8.7" rx="1.1"/><rect x="189.1" y="6.1" width="2.2" height="12.7" rx="1.1" fill-opacity=".38"/><rect x="189.1" y="6.5" width="2.2" height="12.0" rx="1.1"/><rect x="192.2" y="8.2" width="2.2" height="8.6" rx="1.1" fill-opacity=".38"/><rect x="192.2" y="9.4" width="2.2" height="6.5" rx="1.1"/><rect x="195.3" y="10.7" width="2.2" height="5.1" rx="1.1" fill-opacity=".38"/><rect x="195.3" y="11.1" width="2.2" height="4.2" rx="1.1"/><rect x="198.4" y="5.5" width="2.2" height="15.0" rx="1.1" fill-opacity=".38"/><rect x="198.4" y="6.6" width="2.2" height="12.7" rx="1.1"/><rect x="201.5" y="2.6" width="2.2" height="20.2" rx="1.1" fill-opacity=".38"/><rect x="201.5" y="5.6" width="2.2" height="14.4" rx="1.1"/><rect x="204.6" y="7.2" width="2.2" height="11.8" rx="1.1" fill-opacity=".38"/><rect x="204.6" y="10.0" width="2.2" height="6.1" rx="1.1"/><rect x="207.7" y="9.5" width="2.2" height="8.8" rx="1.1" fill-opacity=".38"/><rect x="207.7" y="9.7" width="2.2" height="8.3" rx="1.1"/><rect x="210.8" y="9.9" width="2.2" height="6.6" rx="1.1" fill-opacity=".38"/><rect x="210.8" y="10.1" width="2.2" height="6.1" rx="1.1"/><rect x="213.9" y="9.3" width="2.2" height="7.2" rx="1.1" fill-opacity=".38"/><rect x="213.9" y="10.1" width="2.2" height="5.7" rx="1.1"/><rect x="217.0" y="7.7" width="2.2" height="10.1" rx="1.1" fill-opacity=".38"/><rect x="217.0" y="8.2" width="2.2" height="9.2" rx="1.1"/><rect x="220.1" y="9.4" width="2.2" height="7.3" rx="1.1" fill-opacity=".38"/><rect x="220.1" y="9.9" width="2.2" height="6.2" rx="1.1"/><rect x="223.2" y="9.9" width="2.2" height="6.6" rx="1.1" fill-opacity=".38"/><rect x="223.2" y="10.3" width="2.2" height="5.7" rx="1.1"/><rect x="226.3" y="7.9" width="2.2" height="8.6" rx="1.1" fill-opacity=".38"/><rect x="226.3" y="8.7" width="2.2" height="7.2" rx="1.1"/><rect x="229.4" y="9.5" width="2.2" height="6.5" rx="1.1" fill-opacity=".38"/><rect x="229.4" y="10.0" width="2.2" height="5.6" rx="1.1"/><rect x="232.5" y="9.3" width="2.2" height="8.0" rx="1.1" fill-opacity=".38"/><rect x="232.5" y="9.9" width="2.2" height="6.8" rx="1.1"/><rect x="235.6" y="10.7" width="2.2" height="5.3" rx="1.1" fill-opacity=".38"/><rect x="235.6" y="10.9" width="2.2" height="4.8" rx="1.1"/><rect x="238.7" y="9.4" width="2.2" height="7.2" rx="1.1" fill-opacity=".38"/><rect x="238.7" y="10.2" width="2.2" height="5.7" rx="1.1"/><rect x="241.8" y="9.8" width="2.2" height="6.8" rx="1.1" fill-opacity=".38"/><rect x="241.8" y="10.3" width="2.2" height="5.7" rx="1.1"/><rect x="244.9" y="11.2" width="2.2" height="3.6" rx="1.1" fill-opacity=".38"/><rect x="244.9" y="11.4" width="2.2" height="3.1" rx="1.1"/><rect x="248.0" y="10.9" width="2.2" height="4.6" rx="1.1" fill-opacity=".38"/><rect x="248.0" y="11.1" width="2.2" height="4.1" rx="1.1"/><rect x="251.1" y="10.6" width="2.2" height="5.1" rx="1.1" fill-opacity=".38"/><rect x="251.1" y="11.2" width="2.2" height="3.8" rx="1.1"/><rect x="254.2" y="3.3" width="2.2" height="19.1" rx="1.1" fill-opacity=".38"/><rect x="254.2" y="4.1" width="2.2" height="17.6" rx="1.1"/><rect x="257.3" y="4.8" width="2.2" height="18.0" rx="1.1" fill-opacity=".38"/><rect x="257.3" y="5.9" width="2.2" height="15.5" rx="1.1"/><rect x="260.4" y="2.4" width="2.2" height="17.2" rx="1.1" fill-opacity=".38"/><rect x="260.4" y="3.4" width="2.2" height="15.5" rx="1.1"/><rect x="263.5" y="1.8" width="2.2" height="18.5" rx="1.1" fill-opacity=".38"/><rect x="263.5" y="4.0" width="2.2" height="14.9" rx="1.1"/><rect x="266.6" y="3.5" width="2.2" height="18.1" rx="1.1" fill-opacity=".38"/><rect x="266.6" y="5.3" width="2.2" height="14.7" rx="1.1"/><rect x="269.7" y="3.7" width="2.2" height="16.7" rx="1.1" fill-opacity=".38"/><rect x="269.7" y="4.8" width="2.2" height="14.7" rx="1.1"/><rect x="272.8" y="2.5" width="2.2" height="17.9" rx="1.1" fill-opacity=".38"/><rect x="272.8" y="4.0" width="2.2" height="15.3" rx="1.1"/><rect x="275.9" y="8.6" width="2.2" height="7.9" rx="1.1" fill-opacity=".38"/><rect x="275.9" y="9.4" width="2.2" height="6.5" rx="1.1"/><rect x="279.0" y="3.3" width="2.2" height="17.8" rx="1.1" fill-opacity=".38"/><rect x="279.0" y="5.1" width="2.2" height="14.4" rx="1.1"/><rect x="282.1" y="5.4" width="2.2" height="12.9" rx="1.1" fill-opacity=".38"/><rect x="282.1" y="6.2" width="2.2" height="11.5" rx="1.1"/><rect x="285.2" y="6.8" width="2.2" height="13.6" rx="1.1" fill-opacity=".38"/><rect x="285.2" y="7.9" width="2.2" height="11.3" rx="1.1"/><rect x="288.3" y="6.1" width="2.2" height="13.0" rx="1.1" fill-opacity=".38"/><rect x="288.3" y="6.4" width="2.2" height="12.5" rx="1.1"/><rect x="291.4" y="5.6" width="2.2" height="15.7" rx="1.1" fill-opacity=".38"/><rect x="291.4" y="7.1" width="2.2" height="12.7" rx="1.1"/><rect x="294.5" y="5.7" width="2.2" height="16.5" rx="1.1" fill-opacity=".38"/><rect x="294.5" y="6.8" width="2.2" height="14.0" rx="1.1"/><rect x="297.6" y="4.2" width="2.2" height="17.8" rx="1.1" fill-opacity=".38"/><rect x="297.6" y="4.9" width="2.2" height="16.3" rx="1.1"/><rect x="300.7" y="4.9" width="2.2" height="15.2" rx="1.1" fill-opacity=".38"/><rect x="300.7" y="7.5" width="2.2" height="10.3" rx="1.1"/><rect x="303.8" y="9.4" width="2.2" height="6.9" rx="1.1" fill-opacity=".38"/><rect x="303.8" y="10.0" width="2.2" height="5.7" rx="1.1"/><rect x="306.9" y="10.6" width="2.2" height="4.0" rx="1.1" fill-opacity=".38"/><rect x="306.9" y="11.5" width="2.2" height="2.5" rx="1.1"/><rect x="310.0" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="310.0" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="313.1" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="313.1" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="316.2" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="316.2" y="12.5" width="2.2" height="1.0" rx="1.1"/>','elysian-surge':'<rect x="0.0" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="0.0" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="3.1" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="3.1" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="6.2" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="6.2" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="9.3" y="10.0" width="2.2" height="6.6" rx="1.1" fill-opacity=".38"/><rect x="9.3" y="11.3" width="2.2" height="3.9" rx="1.1"/><rect x="12.4" y="11.5" width="2.2" height="3.1" rx="1.1" fill-opacity=".38"/><rect x="12.4" y="11.8" width="2.2" height="2.4" rx="1.1"/><rect x="15.5" y="6.7" width="2.2" height="10.4" rx="1.1" fill-opacity=".38"/><rect x="15.5" y="7.0" width="2.2" height="9.9" rx="1.1"/><rect x="18.6" y="9.0" width="2.2" height="8.1" rx="1.1" fill-opacity=".38"/><rect x="18.6" y="9.2" width="2.2" height="7.6" rx="1.1"/><rect x="21.7" y="8.9" width="2.2" height="8.8" rx="1.1" fill-opacity=".38"/><rect x="21.7" y="9.2" width="2.2" height="8.3" rx="1.1"/><rect x="24.8" y="9.4" width="2.2" height="6.6" rx="1.1" fill-opacity=".38"/><rect x="24.8" y="10.0" width="2.2" height="5.5" rx="1.1"/><rect x="27.9" y="8.3" width="2.2" height="8.4" rx="1.1" fill-opacity=".38"/><rect x="27.9" y="10.1" width="2.2" height="5.1" rx="1.1"/><rect x="31.0" y="10.3" width="2.2" height="5.1" rx="1.1" fill-opacity=".38"/><rect x="31.0" y="10.7" width="2.2" height="4.3" rx="1.1"/><rect x="34.1" y="10.1" width="2.2" height="8.0" rx="1.1" fill-opacity=".38"/><rect x="34.1" y="10.3" width="2.2" height="7.5" rx="1.1"/><rect x="37.2" y="10.4" width="2.2" height="5.4" rx="1.1" fill-opacity=".38"/><rect x="37.2" y="10.7" width="2.2" height="4.9" rx="1.1"/><rect x="40.3" y="11.8" width="2.2" height="2.7" rx="1.1" fill-opacity=".38"/><rect x="40.3" y="12.1" width="2.2" height="1.9" rx="1.1"/><rect x="43.4" y="11.1" width="2.2" height="3.9" rx="1.1" fill-opacity=".38"/><rect x="43.4" y="11.4" width="2.2" height="3.1" rx="1.1"/><rect x="46.5" y="12.3" width="2.2" height="1.7" rx="1.1" fill-opacity=".38"/><rect x="46.5" y="12.5" width="2.2" height="1.2" rx="1.1"/><rect x="49.6" y="0.0" width="2.2" height="25.5" rx="1.1" fill-opacity=".38"/><rect x="49.6" y="3.8" width="2.2" height="18.0" rx="1.1"/><rect x="52.7" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="52.7" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="55.8" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="55.8" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="58.9" y="3.7" width="2.2" height="18.2" rx="1.1" fill-opacity=".38"/><rect x="58.9" y="4.5" width="2.2" height="16.7" rx="1.1"/><rect x="62.0" y="0.7" width="2.2" height="22.7" rx="1.1" fill-opacity=".38"/><rect x="62.0" y="2.5" width="2.2" height="19.4" rx="1.1"/><rect x="65.1" y="7.1" width="2.2" height="10.8" rx="1.1" fill-opacity=".38"/><rect x="65.1" y="7.4" width="2.2" height="10.3" rx="1.1"/><rect x="68.2" y="0.0" width="2.2" height="24.0" rx="1.1" fill-opacity=".38"/><rect x="68.2" y="3.7" width="2.2" height="17.2" rx="1.1"/><rect x="71.3" y="6.7" width="2.2" height="12.1" rx="1.1" fill-opacity=".38"/><rect x="71.3" y="7.0" width="2.2" height="11.6" rx="1.1"/><rect x="74.4" y="2.8" width="2.2" height="20.3" rx="1.1" fill-opacity=".38"/><rect x="74.4" y="5.6" width="2.2" height="14.8" rx="1.1"/><rect x="77.5" y="7.9" width="2.2" height="12.9" rx="1.1" fill-opacity=".38"/><rect x="77.5" y="9.2" width="2.2" height="9.4" rx="1.1"/><rect x="80.6" y="9.0" width="2.2" height="10.6" rx="1.1" fill-opacity=".38"/><rect x="80.6" y="10.3" width="2.2" height="7.3" rx="1.1"/><rect x="83.7" y="7.5" width="2.2" height="9.9" rx="1.1" fill-opacity=".38"/><rect x="83.7" y="8.1" width="2.2" height="8.9" rx="1.1"/><rect x="86.8" y="9.3" width="2.2" height="8.7" rx="1.1" fill-opacity=".38"/><rect x="86.8" y="10.0" width="2.2" height="7.3" rx="1.1"/><rect x="89.9" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="89.9" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="93.0" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="93.0" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="96.1" y="11.6" width="2.2" height="2.5" rx="1.1" fill-opacity=".38"/><rect x="96.1" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="99.2" y="9.7" width="2.2" height="6.3" rx="1.1" fill-opacity=".38"/><rect x="99.2" y="10.6" width="2.2" height="4.7" rx="1.1"/><rect x="102.3" y="9.8" width="2.2" height="6.3" rx="1.1" fill-opacity=".38"/><rect x="102.3" y="10.7" width="2.2" height="4.6" rx="1.1"/><rect x="105.4" y="9.8" width="2.2" height="6.2" rx="1.1" fill-opacity=".38"/><rect x="105.4" y="10.8" width="2.2" height="4.3" rx="1.1"/><rect x="108.5" y="7.8" width="2.2" height="11.2" rx="1.1" fill-opacity=".38"/><rect x="108.5" y="9.2" width="2.2" height="8.1" rx="1.1"/><rect x="111.6" y="6.8" width="2.2" height="17.0" rx="1.1" fill-opacity=".38"/><rect x="111.6" y="8.6" width="2.2" height="12.0" rx="1.1"/><rect x="114.7" y="6.6" width="2.2" height="15.6" rx="1.1" fill-opacity=".38"/><rect x="114.7" y="8.1" width="2.2" height="11.9" rx="1.1"/><rect x="117.8" y="5.8" width="2.2" height="12.7" rx="1.1" fill-opacity=".38"/><rect x="117.8" y="6.1" width="2.2" height="12.2" rx="1.1"/><rect x="120.9" y="4.1" width="2.2" height="16.8" rx="1.1" fill-opacity=".38"/><rect x="120.9" y="5.7" width="2.2" height="13.8" rx="1.1"/><rect x="124.0" y="10.2" width="2.2" height="5.3" rx="1.1" fill-opacity=".38"/><rect x="124.0" y="10.5" width="2.2" height="4.8" rx="1.1"/><rect x="127.1" y="6.8" width="2.2" height="11.7" rx="1.1" fill-opacity=".38"/><rect x="127.1" y="7.1" width="2.2" height="11.2" rx="1.1"/><rect x="130.2" y="3.6" width="2.2" height="19.5" rx="1.1" fill-opacity=".38"/><rect x="130.2" y="6.3" width="2.2" height="13.8" rx="1.1"/><rect x="133.3" y="0.0" width="2.2" height="25.7" rx="1.1" fill-opacity=".38"/><rect x="133.3" y="2.5" width="2.2" height="20.8" rx="1.1"/><rect x="136.4" y="9.3" width="2.2" height="7.2" rx="1.1" fill-opacity=".38"/><rect x="136.4" y="9.6" width="2.2" height="6.7" rx="1.1"/><rect x="139.5" y="2.5" width="2.2" height="17.3" rx="1.1" fill-opacity=".38"/><rect x="139.5" y="3.3" width="2.2" height="15.9" rx="1.1"/><rect x="142.6" y="7.5" width="2.2" height="9.7" rx="1.1" fill-opacity=".38"/><rect x="142.6" y="7.9" width="2.2" height="9.2" rx="1.1"/><rect x="145.7" y="5.1" width="2.2" height="20.9" rx="1.1" fill-opacity=".38"/><rect x="145.7" y="7.7" width="2.2" height="13.9" rx="1.1"/><rect x="148.8" y="8.6" width="2.2" height="8.3" rx="1.1" fill-opacity=".38"/><rect x="148.8" y="11.2" width="2.2" height="3.5" rx="1.1"/><rect x="151.9" y="9.6" width="2.2" height="10.3" rx="1.1" fill-opacity=".38"/><rect x="151.9" y="11.8" width="2.2" height="3.5" rx="1.1"/><rect x="155.0" y="11.3" width="2.2" height="3.1" rx="1.1" fill-opacity=".38"/><rect x="155.0" y="12.4" width="2.2" height="1.0" rx="1.1"/><rect x="158.1" y="7.3" width="2.2" height="10.6" rx="1.1" fill-opacity=".38"/><rect x="158.1" y="9.8" width="2.2" height="6.1" rx="1.1"/><rect x="161.2" y="8.2" width="2.2" height="7.7" rx="1.1" fill-opacity=".38"/><rect x="161.2" y="10.9" width="2.2" height="3.3" rx="1.1"/><rect x="164.3" y="11.0" width="2.2" height="4.0" rx="1.1" fill-opacity=".38"/><rect x="164.3" y="12.2" width="2.2" height="1.6" rx="1.1"/><rect x="167.4" y="0.5" width="2.2" height="23.4" rx="1.1" fill-opacity=".38"/><rect x="167.4" y="4.0" width="2.2" height="16.8" rx="1.1"/><rect x="170.5" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="170.5" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="173.6" y="6.2" width="2.2" height="18.0" rx="1.1" fill-opacity=".38"/><rect x="173.6" y="7.4" width="2.2" height="14.7" rx="1.1"/><rect x="176.7" y="0.0" width="2.2" height="24.7" rx="1.1" fill-opacity=".38"/><rect x="176.7" y="2.4" width="2.2" height="20.3" rx="1.1"/><rect x="179.8" y="6.7" width="2.2" height="13.8" rx="1.1" fill-opacity=".38"/><rect x="179.8" y="8.0" width="2.2" height="10.9" rx="1.1"/><rect x="182.9" y="4.0" width="2.2" height="14.4" rx="1.1" fill-opacity=".38"/><rect x="182.9" y="6.7" width="2.2" height="10.2" rx="1.1"/><rect x="186.0" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="186.0" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="189.1" y="0.0" width="2.2" height="24.4" rx="1.1" fill-opacity=".38"/><rect x="189.1" y="3.7" width="2.2" height="17.5" rx="1.1"/><rect x="192.2" y="0.0" width="2.2" height="25.6" rx="1.1" fill-opacity=".38"/><rect x="192.2" y="2.5" width="2.2" height="20.7" rx="1.1"/><rect x="195.3" y="5.7" width="2.2" height="15.2" rx="1.1" fill-opacity=".38"/><rect x="195.3" y="6.5" width="2.2" height="13.5" rx="1.1"/><rect x="198.4" y="1.5" width="2.2" height="21.8" rx="1.1" fill-opacity=".38"/><rect x="198.4" y="4.7" width="2.2" height="15.7" rx="1.1"/><rect x="201.5" y="0.4" width="2.2" height="25.6" rx="1.1" fill-opacity=".38"/><rect x="201.5" y="3.0" width="2.2" height="20.3" rx="1.1"/><rect x="204.6" y="0.5" width="2.2" height="23.7" rx="1.1" fill-opacity=".38"/><rect x="204.6" y="4.1" width="2.2" height="16.8" rx="1.1"/><rect x="207.7" y="5.9" width="2.2" height="14.4" rx="1.1" fill-opacity=".38"/><rect x="207.7" y="6.5" width="2.2" height="13.2" rx="1.1"/><rect x="210.8" y="0.0" width="2.2" height="23.1" rx="1.1" fill-opacity=".38"/><rect x="210.8" y="2.2" width="2.2" height="19.2" rx="1.1"/><rect x="213.9" y="5.1" width="2.2" height="15.3" rx="1.1" fill-opacity=".38"/><rect x="213.9" y="9.0" width="2.2" height="7.7" rx="1.1"/><rect x="217.0" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="217.0" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="220.1" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="220.1" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="223.2" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="223.2" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="226.3" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="226.3" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="229.4" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="229.4" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="232.5" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="232.5" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="235.6" y="8.6" width="2.2" height="9.2" rx="1.1" fill-opacity=".38"/><rect x="235.6" y="9.6" width="2.2" height="7.0" rx="1.1"/><rect x="238.7" y="8.0" width="2.2" height="9.4" rx="1.1" fill-opacity=".38"/><rect x="238.7" y="9.2" width="2.2" height="7.2" rx="1.1"/><rect x="241.8" y="9.5" width="2.2" height="7.4" rx="1.1" fill-opacity=".38"/><rect x="241.8" y="10.1" width="2.2" height="6.1" rx="1.1"/><rect x="244.9" y="9.2" width="2.2" height="7.7" rx="1.1" fill-opacity=".38"/><rect x="244.9" y="10.0" width="2.2" height="6.0" rx="1.1"/><rect x="248.0" y="9.0" width="2.2" height="8.4" rx="1.1" fill-opacity=".38"/><rect x="248.0" y="9.2" width="2.2" height="7.9" rx="1.1"/><rect x="251.1" y="9.8" width="2.2" height="6.7" rx="1.1" fill-opacity=".38"/><rect x="251.1" y="10.8" width="2.2" height="4.7" rx="1.1"/><rect x="254.2" y="7.0" width="2.2" height="10.0" rx="1.1" fill-opacity=".38"/><rect x="254.2" y="8.7" width="2.2" height="7.1" rx="1.1"/><rect x="257.3" y="9.1" width="2.2" height="7.7" rx="1.1" fill-opacity=".38"/><rect x="257.3" y="10.0" width="2.2" height="5.9" rx="1.1"/><rect x="260.4" y="7.9" width="2.2" height="9.9" rx="1.1" fill-opacity=".38"/><rect x="260.4" y="8.1" width="2.2" height="9.4" rx="1.1"/><rect x="263.5" y="9.1" width="2.2" height="7.3" rx="1.1" fill-opacity=".38"/><rect x="263.5" y="9.7" width="2.2" height="6.2" rx="1.1"/><rect x="266.6" y="7.8" width="2.2" height="11.2" rx="1.1" fill-opacity=".38"/><rect x="266.6" y="8.3" width="2.2" height="10.1" rx="1.1"/><rect x="269.7" y="9.8" width="2.2" height="6.2" rx="1.1" fill-opacity=".38"/><rect x="269.7" y="10.4" width="2.2" height="5.2" rx="1.1"/><rect x="272.8" y="6.9" width="2.2" height="11.7" rx="1.1" fill-opacity=".38"/><rect x="272.8" y="9.7" width="2.2" height="6.3" rx="1.1"/><rect x="275.9" y="9.3" width="2.2" height="7.5" rx="1.1" fill-opacity=".38"/><rect x="275.9" y="9.7" width="2.2" height="6.8" rx="1.1"/><rect x="279.0" y="9.2" width="2.2" height="8.2" rx="1.1" fill-opacity=".38"/><rect x="279.0" y="9.5" width="2.2" height="7.7" rx="1.1"/><rect x="282.1" y="10.5" width="2.2" height="5.5" rx="1.1" fill-opacity=".38"/><rect x="282.1" y="11.0" width="2.2" height="4.4" rx="1.1"/><rect x="285.2" y="8.9" width="2.2" height="8.6" rx="1.1" fill-opacity=".38"/><rect x="285.2" y="9.7" width="2.2" height="7.0" rx="1.1"/><rect x="288.3" y="10.1" width="2.2" height="5.9" rx="1.1" fill-opacity=".38"/><rect x="288.3" y="10.3" width="2.2" height="5.4" rx="1.1"/><rect x="291.4" y="10.6" width="2.2" height="4.8" rx="1.1" fill-opacity=".38"/><rect x="291.4" y="11.3" width="2.2" height="3.4" rx="1.1"/><rect x="294.5" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="294.5" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="297.6" y="0.7" width="2.2" height="25.3" rx="1.1" fill-opacity=".38"/><rect x="297.6" y="2.9" width="2.2" height="20.8" rx="1.1"/><rect x="300.7" y="0.0" width="2.2" height="25.7" rx="1.1" fill-opacity=".38"/><rect x="300.7" y="2.5" width="2.2" height="20.8" rx="1.1"/><rect x="303.8" y="3.4" width="2.2" height="18.5" rx="1.1" fill-opacity=".38"/><rect x="303.8" y="3.9" width="2.2" height="17.4" rx="1.1"/><rect x="306.9" y="3.9" width="2.2" height="18.3" rx="1.1" fill-opacity=".38"/><rect x="306.9" y="4.3" width="2.2" height="17.4" rx="1.1"/><rect x="310.0" y="1.3" width="2.2" height="24.6" rx="1.1" fill-opacity=".38"/><rect x="310.0" y="3.1" width="2.2" height="20.8" rx="1.1"/><rect x="313.1" y="9.0" width="2.2" height="9.3" rx="1.1" fill-opacity=".38"/><rect x="313.1" y="12.6" width="2.2" height="1.0" rx="1.1"/><rect x="316.2" y="12.7" width="2.2" height="1.2" rx="1.1" fill-opacity=".38"/><rect x="316.2" y="12.5" width="2.2" height="1.0" rx="1.1"/>'};
+var SONGS=[
+ {name:'Quiet Success',slug:'quiet-success',dur:'3 min',b:['RESET','CALM','DE-STRESS','UNWIND','GROUND']},
+ {name:'Kindred Spirits',slug:'kindred-spirits',dur:'5 min',b:['ENERGY','HAPPY','BRIGHT','FLOW','MOTIVATE']},
+ {name:'Elysian Surge',slug:'elysian-surge',dur:'5 min',b:['ENERGY','MOTIVATE','BUILD','DRIVE','FLOW']}
+];
+var DLSVG='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+var GRIPSVG='<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><circle cx="9" cy="5" r="1.6"/><circle cx="15" cy="5" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="19" r="1.6"/><circle cx="15" cy="19" r="1.6"/></svg>';
+
+var catKey='core';
+var rowsEl=document.getElementById('rows');
+var SSTATE={};SONGS.forEach(function(s){SSTATE[s.slug]={heart:false,dl:false,q:false};});
+var ORDERARR=SONGS.map(function(s){return s.slug;});
+
+function waveSVG(slug,cat,gp){
+ var gid=(gp||'wg-')+slug;
+ return '<svg class="wave" viewBox="0 0 320 26" aria-label="Audio waveform" preserveAspectRatio="none"><defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+cat.c2+'"/><stop offset="100%" stop-color="'+cat.c1+'"/></linearGradient></defs><g fill="url(#'+gid+')">'+WAVES[slug]+'</g></svg>';
+}
+function bubs(s){var out='';for(var i=0;i<s.b.length;i++){out+='<span class="bub">'+s.b[i]+(i<s.b.length-1?'<span class="sep"> &middot; </span>':'')+'</span>';}return '<div class="bubs">'+out+'</div>';}
+
+function buildRows(){
+ var cat=CATS[catKey];rowsEl.innerHTML='';
+ ORDERARR.forEach(function(_slug){
+  var s=SONGS.filter(function(x){return x.slug===_slug;})[0];
+  var r=document.createElement('div');r.className='row';
+  r.style.setProperty('--rowink',cat.cink);
+  r.dataset.slug=s.slug;
+  var st=SSTATE[s.slug];
+  r.innerHTML='<div class="lcol"><span class="qbox'+(st.q?' on':'')+'"></span></div>'
+   +'<div class="meta">'
+   +'<div class="wave-title"><span class="row-play" aria-hidden="true"><span class="row-triangle"></span><span class="row-pause"><i></i><i></i></span></span><h3>'+s.name+'</h3><span class="row-eq" aria-hidden="true"><i></i><i></i><i></i></span><div class="sic"><span class="dl'+(st.dl?' on':'')+'">'+DLSVG+'</span><span class="heart'+(st.heart?' on':'')+'">'+(st.heart?'&#9829;':'&#9825;')+'</span></div></div>'
+   +'<div class="wave-stream">'+waveSVG(s.slug,cat)+'</div>'
+   +bubs(s)
+   +'<div class="botrow"><div class="wave-band"><i></i>'+cat.label+' &middot; '+cat.hz+' Hz</div><span class="wave-dur">'+s.dur+'</span></div>'
+   +'</div>'
+   +'<div class="grip">'+GRIPSVG+'</div>';
+  rowsEl.appendChild(r);
+ });
+}
+
+function recolor(){
+ var cat=CATS[catKey];
+ document.querySelectorAll('#rows .row').forEach(function(r){
+  r.style.setProperty('--rowink',cat.cink);
+  r.querySelector('.wave-band').innerHTML='<i></i>'+cat.label+' &middot; '+cat.hz+' Hz';
+  var stops=r.querySelectorAll('.wave stop');
+  if(stops.length===2){stops[0].setAttribute('stop-color',cat.c2);stops[1].setAttribute('stop-color',cat.c1);}
+ });
+ var au=document.getElementById('aurora');
+ au.style.setProperty('--c1',cat.c1);au.style.setProperty('--c2',cat.c2);au.style.setProperty('--csoft',cat.csoft);
+ document.getElementById('stage').style.setProperty('--cink',cat.cink);
+ document.querySelectorAll('#pills .pill').forEach(function(p){p.classList.toggle('on',p.dataset.cat===catKey);});
+}
+function setCat(k){if(k===catKey)return;var playing=null;document.querySelectorAll('#rows .row').forEach(function(r){if(r.classList.contains('playing'))playing=r.dataset.slug;});catKey=k;buildRows();recolor();if(playing){var pr=document.querySelector('#rows .row[data-slug="'+playing+'"]');if(pr)pr.classList.add('playing');}}
+
+buildRows();recolor();
+
+/* ---------- screens ---------- */
+var ORDER={s1:1,s1b:2,s1c:3,s2:4,s3:5,s5:6,s6:7,s7a:8,s7b:9,s8:10};
+function show(id){['s1','s1b','s1c','s2','s3','s5','s6','s7a','s7b','s8'].forEach(function(kk){var el=document.getElementById(kk);
+ if(kk===id){el.classList.remove('off-l','off-r');}
+ else{el.classList.remove('off-l','off-r');el.classList.add(ORDER[kk]<ORDER[id]?'off-l':'off-r');}
+});
+ document.getElementById('nav').classList.toggle('navvis',id==='s2'||id==='s3'||id==='s5');
+ document.getElementById('navImm').className=id==='s2'?'on navblink':'';
+ document.getElementById('navPl').className=(id==='s3'||id==='s5')?'on navblink':'';}
+function onScr(id){var el=document.getElementById(id);return !el.classList.contains('off-l')&&!el.classList.contains('off-r');}
+
+/* ---------- wow intro: living waveform breathing through all four families ---------- */
+var FAM=['core','love','vitality','abundance'];var fi=0;var heroTimer=null;
+var auEl=document.getElementById('aurora');
+function famPaint(k){var c=CATS[k];
+ var st=document.querySelectorAll('#hg stop');st[0].setAttribute('stop-color',c.c1);st[1].setAttribute('stop-color',c.c2);
+ auEl.style.setProperty('--c1',c.c1);auEl.style.setProperty('--c2',c.c2);auEl.style.setProperty('--csoft',c.csoft);}
+var reduce2=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+auEl.classList.add('vivid');
+try{if(!reduce2){heroTimer=setInterval(function(){fi=(fi+1)%4;famPaint(FAM[fi]);},2600);}}catch(err){}
+function stopHero(){if(heroTimer){clearInterval(heroTimer);heroTimer=null;}auEl.classList.remove('vivid');recolor();}
+
+document.getElementById('startBtn').addEventListener('click',function(e){e.preventDefault();stopHero();show('s1b');});
+document.getElementById('nextHow').addEventListener('click',function(e){e.preventDefault();show('s1c');});
+document.getElementById('tourBtn').addEventListener('click',function(e){e.preventDefault();show('s2');setTell();});
+/* Back walks one screen, never one section: undo the last completed move first, then cross to the prior screen */
+function lastDone(reps,flags){for(var i=reps.length-1;i>=0;i--){if(flags[reps[i]])return reps[i];}return null;}
+function stepBack2(){
+ var last=lastDone(REPS,done);
+ if(last){done[last]=false;setTell();return;}
+ show('s1c');
+}
+function restartHero(){if(!reduce2&&!heroTimer){auEl.classList.add('vivid');heroTimer=setInterval(function(){fi=(fi+1)%4;famPaint(FAM[fi]);},2600);}}
+function undo3(rep){
+ if(rep==='selall'){favEl.querySelectorAll('.qbox.on').forEach(function(b){b.classList.remove('on');});FAVORDER.forEach(function(sl){QST[sl]=false;});updSel();}
+ if(rep==='qcheck'){var k=favEl.querySelector('.row[data-slug="kindred-spirits"] .qbox');if(k){k.classList.add('on');QST['kindred-spirits']=true;updSel();}}
+}
+function stepBack3(){
+ var last=lastDone(REPS3,done3);
+ if(last){done3[last]=false;undo3(last);setTell3();return;}
+ s2Adv=false;done.order=false;show('s2');setTell();
+}
+document.querySelectorAll('[data-back]').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();
+ var from=b.closest('.scr').id;
+ if(from==='s1b'){restartHero();show('s1');return;}
+ if(from==='s2'){stepBack2();return;}
+ if(from==='s3'){stepBack3();return;}
+ if(from==='s5'){stepBack5();return;}
+ if(from==='s6'){done5.balnow=false;s5Adv=false;show('s5');setTell5();return;}
+ show(b.dataset.back);
+});});
+document.querySelectorAll('[data-skip]').forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();window.location.href='app-D.html';});});
+
+/* the Almost toast: lives where the thumb is, over the Next button, never under the headline */
+var toastEl=document.getElementById('toast'),toastTimer=null;
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add('showing');if(toastTimer)clearTimeout(toastTimer);toastTimer=setTimeout(function(){toastEl.classList.remove('showing');},2200);}
+
+/* ---------- the coaching loop: one coaching sentence (reward + underlined command) ---------- */
+var done={play:false,cat:false,heart:false,dl:false,order:false};
+var REPS=['play','cat','heart','dl','order'];
+var CMDS={
+ play:{pre:'Tap the Card \u201cQuiet Success\u201d to ',cmd:'Play the Song'},
+ cat:{pre:'Very Nice! Now Tap \u201cLove\u201d to ',cmd:'Switch Frequencies'},
+ heart:{pre:'Perfect. Tap the <span class="glyph">\u2661</span> to ',cmd:'Add to the Playlist'},
+ dl:{pre:'Amazing! ',cmd:'Tap the Arrow to Download'},
+ order:{pre:'Smooth! ',cmd:'Hold and Drag to Reorder'}
+};
+var s2Adv=false,s3Adv=false,s5Adv=false;
+var aux=document.getElementById('coachTop');
+function say(html){aux.innerHTML=html;}
+function currentRep(){for(var i=0;i<REPS.length;i++){if(!done[REPS[i]])return REPS[i];}return null;}
+function clearGuides(){document.querySelectorAll('.hint').forEach(function(h){h.classList.remove('hint');});document.querySelectorAll('.dimmed').forEach(function(d){d.classList.remove('dimmed');});}
+function playingRow(){return document.querySelector('#rows .row.playing')||document.querySelector('#rows .row');}
+function dim(el){if(el)el.classList.add('dimmed');}
+function setTell(){
+ clearGuides();
+ say('&nbsp;');
+ var rep=currentRep();
+ var tell=document.getElementById('tell');
+ var dts=document.querySelectorAll('#dots i');
+ REPS.forEach(function(r,i){dts[i].classList.toggle('did',done[r]);dts[i].classList.toggle('now',r===rep);});
+ if(!rep){if(!s2Adv){s2Adv=true;setTimeout(function(){show('s3');enter3();},900);}return;}
+ tell.innerHTML=CMDS[rep].pre+'<span class="cmd">'+CMDS[rep].cmd+'</span>';
+ var rows=document.querySelectorAll('#rows .row');
+ var pills=document.querySelectorAll('#pills .pill');
+ var t=null;
+ if(rep==='play'){t=rows[0];rows.forEach(function(r,i){if(i>0)dim(r);});}
+ if(rep==='cat'){t=document.querySelector('#pills .pill[data-cat="love"]');t.style.setProperty('--hintc',CATS.love.cink);t.style.setProperty('--hintbg',CATS.love.csoft+'80');pills.forEach(function(pl){if(pl!==t)dim(pl);});rows.forEach(dim);}
+ if(rep==='heart'){var pr=playingRow();t=pr.querySelector('.heart');rows.forEach(function(r){if(r!==pr)dim(r);});}
+ if(rep==='dl'){var pr2=playingRow();t=pr2.querySelector('.dl');rows.forEach(function(r){if(r!==pr2)dim(r);});}
+ if(rep==='order'){t=playingRow();}
+ if(t)t.classList.add('hint');
+}
+function complete(rep){
+ if(done[rep])return;
+ done[rep]=true;
+ setTell();
+}
+
+/* live specimen: live from the first frame, any valid choice counts */
+document.getElementById('pills').addEventListener('click',function(e){
+ var pl=e.target.closest('.pill');if(!pl)return;
+ var prev=catKey;
+ setCat(pl.dataset.cat);
+ if(pl.dataset.cat!==prev&&!done.cat)complete('cat');
+ else setTell();
+});
+var suppressClick=false;
+rowsEl.addEventListener('click',function(e){
+ if(suppressClick){suppressClick=false;return;}
+ var rr=e.target.closest('.row');var slug=rr?rr.dataset.slug:null;
+ var h=e.target.closest('.heart');
+ if(h){h.classList.toggle('on');var on=h.classList.contains('on');h.innerHTML=on?'\u2665':'\u2661';if(slug)SSTATE[slug].heart=on;
+  if(on)complete('heart');return;}
+ var d=e.target.closest('.dl');
+ if(d){d.classList.toggle('on');if(slug)SSTATE[slug].dl=d.classList.contains('on');
+  if(d.classList.contains('on'))complete('dl');return;}
+ var q=e.target.closest('.qbox');
+ if(q){q.classList.toggle('on');if(slug)SSTATE[slug].q=q.classList.contains('on');return;}
+ if(e.target.closest('.grip'))return;
+ var r=e.target.closest('.row');if(!r)return;
+ var was=r.classList.contains('playing');
+ document.querySelectorAll('#rows .row').forEach(function(x){x.classList.remove('playing');});
+ if(!was){r.classList.add('playing');complete('play');}
+});
+
+/* hold-and-drag reorder (forgiving: any drag that changes the order counts) */
+var dragEl=null,dragY0=0,dragging=false;
+rowsEl.addEventListener('pointerdown',function(e){
+ var r=e.target.closest('.row');if(!r)return;
+ dragEl=r;dragY0=e.clientY;dragging=false;
+});
+window.addEventListener('pointermove',function(e){
+ if(!dragEl)return;
+ var dy=e.clientY-dragY0;
+ if(!dragging&&Math.abs(dy)>14){dragging=true;dragEl.classList.add('dragging');}
+ if(dragging){e.preventDefault();dragEl.style.transform='translateY('+dy+'px) scale(1.02)';}
+},{passive:false});
+window.addEventListener('pointerup',function(e){
+ if(!dragEl)return;
+ if(dragging){
+  suppressClick=true;
+  var moved=dragEl,rect=moved.getBoundingClientRect(),mid=rect.top+rect.height/2;
+  moved.style.transform='';moved.classList.remove('dragging');
+  var rows=Array.prototype.slice.call(document.querySelectorAll('#rows .row'));
+  var before=rows.indexOf(moved);
+  var target=null;
+  rows.forEach(function(r){if(r===moved)return;var rr=r.getBoundingClientRect();if(mid<rr.top+rr.height/2&&target===null){target=r;}});
+  if(target){rowsEl.insertBefore(moved,target);}
+  else{rowsEl.appendChild(moved);}
+  var after=Array.prototype.slice.call(document.querySelectorAll('#rows .row')).indexOf(moved);
+  ORDERARR=Array.prototype.slice.call(document.querySelectorAll('#rows .row')).map(function(r){return r.dataset.slug;});
+  if(after!==before)complete('order');
+  else setTell();
+ }
+ dragEl=null;dragging=false;
+});
+
+/* nav responds, never dead */
+document.querySelectorAll('#nav [data-navmsg]').forEach(function(n){
+ n.addEventListener('click',function(){
+  if(n.classList.contains('on'))return;
+  (onScr('s5')?say5:(onScr('s3')?say3:say))(n.dataset.navmsg);
+ });
+});
+
+
+/* ---------- Playlist lesson (s3): the same coaching loop on the Playlist specimen ---------- */
+var favEl=document.getElementById('favRows');
+var FAVCATS={'quiet-success':'core','kindred-spirits':'love','elysian-surge':'vitality'};
+var FAVORDER=SONGS.map(function(s){return s.slug;});
+var QST={};SONGS.forEach(function(s){QST[s.slug]=false;});
+var s3Init=false;
+
+function buildFavs(){
+ favEl.innerHTML='';
+ FAVORDER.forEach(function(slug){
+  var s=SONGS.filter(function(x){return x.slug===slug;})[0];
+  var cat=CATS[FAVCATS[slug]];
+  var st=SSTATE[s.slug];
+  var r=document.createElement('div');r.className='row';
+  r.style.setProperty('--rowink',cat.cink);
+  r.dataset.slug=s.slug;
+  r.innerHTML='<div class="lcol"><span class="qbox'+(QST[slug]?' on':'')+'"></span></div>'
+   +'<div class="meta">'
+   +'<div class="wave-title"><span class="row-play" aria-hidden="true"><span class="row-triangle"></span><span class="row-pause"><i></i><i></i></span></span><h3>'+s.name+'</h3><span class="row-eq" aria-hidden="true"><i></i><i></i><i></i></span><div class="sic"><span class="dl'+(st.dl?' on':'')+'">'+DLSVG+'</span><span class="heart on">&#9829;</span></div></div>'
+   +'<div class="wave-stream">'+waveSVG(s.slug,cat,'wgf-')+'</div>'
+   +bubs(s)
+   +'<div class="botrow"><div class="wave-band"><i></i>'+cat.label+' &middot; '+cat.hz+' Hz</div><span class="wave-dur">'+s.dur+'</span></div>'
+   +'</div>'
+   +'<div class="grip">'+GRIPSVG+'</div>';
+  favEl.appendChild(r);
+ });
+ updSel();
+}
+function updSel(){
+ var boxes=favEl.querySelectorAll('.qbox'),t=boxes.length,c=0;
+ boxes.forEach(function(b){if(b.classList.contains('on'))c++;});
+ var sb=document.getElementById('saBox');
+ sb.classList.toggle('on',t>0&&c===t);
+ sb.classList.toggle('dash',c>0&&c<t);
+ document.getElementById('saLbl').textContent=c>0?'Clear':'Select all';
+ document.getElementById('qn3').textContent=c?' ('+c+')':'';
+ if(window.zbalRender)zbalRender();
+}
+
+/* W-3m (Michael 2026-08-05): the drag-to-reorder rep is cut \u2014 they already know from Immersions */
+var done3={selall:false,qcheck:false};
+var REPS3=['selall','qcheck'];
+var CMDS3={
+ selall:{pre:'Nice! \u201cSelect all\u201d to ',cmd:'Queue All Songs'},
+ qcheck:{pre:'Easy! Tap the Checkbox to ',cmd:'Remove \u201cKindred Spirits\u201d from Queue'}
+};
+var aux3=document.getElementById('coachTop3');
+function say3(html){aux3.innerHTML=html;}
+function rep3(){for(var i=0;i<REPS3.length;i++){if(!done3[REPS3[i]])return REPS3[i];}return null;}
+function clearG3(){document.querySelectorAll('#s3 .hint').forEach(function(h){h.classList.remove('hint');});document.querySelectorAll('#s3 .dimmed').forEach(function(d){d.classList.remove('dimmed');});}
+function setTell3(){
+ clearG3();
+ say3('&nbsp;');
+ var rep=rep3();
+ var tell=document.getElementById('tell3');
+ var dts=document.querySelectorAll('#dots3 i');
+ REPS3.forEach(function(r,i){dts[i].classList.toggle('did',done3[r]);dts[i].classList.toggle('now',r===rep);});
+ var rows=favEl.querySelectorAll('.row');
+ if(!rep){if(!s3Adv){s3Adv=true;setTimeout(function(){show('s5');enter5();},900);}return;}
+ tell.innerHTML=CMDS3[rep].pre+'<span class="cmd">'+CMDS3[rep].cmd+'</span>';
+ var t=null;
+ if(rep==='selall'){t=document.getElementById('selall');rows.forEach(dim);}
+ if(rep==='qcheck'){var rq=favEl.querySelector('.row[data-slug="kindred-spirits"]');t=rq?rq.querySelector('.qbox'):null;rows.forEach(function(r){if(r!==rq)dim(r);});}
+ if(t)t.classList.add('hint');
+}
+function complete3(rep){if(done3[rep])return;done3[rep]=true;setTell3();}
+function enter3(){
+ if(!s3Init){s3Init=true;SONGS.forEach(function(s){SSTATE[s.slug].heart=true;});buildFavs();}
+ setTell3();
+}
+
+
+/* W-3h: the current Frequency Balance Meter, live from balance-engine.js (the one source).
+   New-member week: nothing played; checked songs project what-if, exactly like the app. */
+(function(){
+ if(!window.ZBalance)return;
+ var z=document.getElementById('zbal');
+ function fmtMin(sec){return Math.max(1,Math.ceil(sec/60));}
+ function projection(){
+  return FAVORDER.filter(function(sl){return QST[sl];}).map(function(sl){
+   var s=SONGS.filter(function(x){return x.slug===sl;})[0];
+   return {freq:FAVCATS[sl],sec:ZBalance.toSec(s.dur)};
+  });
+ }
+ var res3=null;
+ function songOf(sl){return SONGS.filter(function(x){return x.slug===sl;})[0];}
+ window.zbalRender=function(){
+  var el=document.getElementById('zbalToks');if(!el)return;
+  var res=ZBalance.compute({events:[],window:null,projection:projection(),catalog:[]});res3=res;
+  var short={};res.shortfalls.forEach(function(sf){short[sf.freq]=sf;});
+  var html='';
+  ZBalance.FREQS.forEach(function(f){
+   var cat=CATS[f],sf=short[f];
+   var overM=sf?0:Math.max(0,Math.floor((res.byFreq[f].sec-0.15*res.total)/60));
+   var canAdd=sf&&FAVORDER.some(function(sl){return FAVCATS[sl]===f&&!QST[sl];});   /* app-D.html:1125 */
+   var canTrim=!sf&&FAVORDER.some(function(sl){return FAVCATS[sl]===f&&QST[sl];});  /* app-D.html:1126 */
+   html+='<span class="zbal-t'+(sf?' short':'')+'" data-freq="'+f+'" style="--tink:'+cat.cink+'">'+cat.label
+    +'<span class="zbal-b">'+(sf?'<b class="amt">&minus;'+fmtMin(sf.neededSec)+'m</b>':'<b class="amt plus">+'+overM+'m</b>')
+    +(canAdd?'<i class="zbal-add" title="Add songs to clear it">+</i>':'')
+    +(canTrim?'<i class="zbal-min" title="Trim this frequency">&minus;</i>':'')+'</span></span>';
+  });
+  el.innerHTML=html;
+ };
+ document.querySelector('.zbal-chevbtn').addEventListener('click',function(e){e.stopPropagation();z.classList.toggle('open');});
+ document.querySelector('.zbal-panel').addEventListener('click',function(e){e.stopPropagation();z.classList.remove('open');});
+ var pop=document.getElementById('zbalPop');
+ function bubble3(f){
+  document.getElementById('zbalPopMsg').innerHTML='Not enough <b>'+CATS[f].label+'</b> songs in your list to get there. Go to <b>Immersions &rarr; '+CATS[f].label+'</b> and tap <span class="ph">&#9829;</span> to heart more songs.';
+  pop.style.display='block';
+  clearTimeout(window.__zbalPopT);
+  window.__zbalPopT=setTimeout(function(){pop.style.display='none';},8000);
+ }
+ document.getElementById('zbalToks').addEventListener('click',function(e){
+  var tok=e.target.closest('.zbal-t');if(!tok)return;
+  var f=tok.dataset.freq;
+  var add=e.target.closest('.zbal-add'),min=e.target.closest('.zbal-min');
+  /* the bar's real controls (app-D.html:1223-1249) live here too — the specimen never
+     simplifies the app; the lesson reps just don't depend on them on this screen */
+  if(min){
+   e.stopPropagation();
+   var checked=FAVORDER.filter(function(sl){return FAVCATS[sl]===f&&QST[sl];})
+    .sort(function(a,b){return ZBalance.toSec(songOf(b).dur)-ZBalance.toSec(songOf(a).dur);});
+   if(checked[0]){var b0=favEl.querySelector('.row[data-slug="'+checked[0]+'"] .qbox');if(b0)b0.classList.remove('on');QST[checked[0]]=false;updSel();}
+   return;
+  }
+  if(add){
+   e.stopPropagation();
+   var sf=res3?res3.shortfalls.filter(function(x){return x.freq===f;})[0]:null;if(!sf)return;
+   var avail=FAVORDER.filter(function(sl){return FAVCATS[sl]===f&&!QST[sl];})
+    .map(function(sl){return {slug:sl,sec:ZBalance.toSec(songOf(sl).dur)};});
+   var pick=ZBalance.bestAdditions(sf.neededSec,avail);
+   pick.songs.forEach(function(s){var b1=favEl.querySelector('.row[data-slug="'+s.slug+'"] .qbox');if(b1&&!b1.classList.contains('on')){b1.classList.add('on');QST[s.slug]=true;}});
+   updSel();
+   if(!pick.cleared)bubble3(f);
+   return;
+  }
+  if(!tok.classList.contains('short'))return;
+  if(FAVORDER.some(function(sl){return FAVCATS[sl]===f&&!QST[sl];}))return;
+  e.stopPropagation();
+  bubble3(f);
+ });
+ document.getElementById('zbalPopX').addEventListener('click',function(){pop.style.display='none';});
+ document.addEventListener('click',function(e){if(pop.style.display==='block'&&!pop.contains(e.target))pop.style.display='none';},true);
+ zbalRender();
+})();
+
+/* live specimen: the real Select all control (any checked clears; none checked selects all) */
+document.getElementById('selall').addEventListener('click',function(e){
+ e.stopPropagation();
+ var boxes=favEl.querySelectorAll('.qbox');var any=false;
+ boxes.forEach(function(b){if(b.classList.contains('on'))any=true;});
+ boxes.forEach(function(b){b.classList.toggle('on',!any);});
+ FAVORDER.forEach(function(sl){QST[sl]=!any;});
+ updSel();
+ if(!any)complete3('selall');else setTell3();
+});
+
+var suppress3=false;
+favEl.addEventListener('click',function(e){
+ if(suppress3){suppress3=false;return;}
+ var rr=e.target.closest('.row');var slug=rr?rr.dataset.slug:null;
+ var q=e.target.closest('.qbox');
+ if(q){q.classList.toggle('on');if(slug)QST[slug]=q.classList.contains('on');updSel();if(done3.selall&&!q.classList.contains('on')&&slug==='kindred-spirits'){complete3('qcheck');}else{setTell3();}return;}
+ var h=e.target.closest('.heart');
+ if(h){say3('That would remove it from your Playlist. Keep it for the lesson.');return;}
+ var d=e.target.closest('.dl');
+ if(d){d.classList.toggle('on');if(slug)SSTATE[slug].dl=d.classList.contains('on');return;}
+ if(e.target.closest('.grip'))return;
+ var r=e.target.closest('.row');if(!r)return;
+ var was=r.classList.contains('playing');
+ favEl.querySelectorAll('.row').forEach(function(x){x.classList.remove('playing');});
+ if(!was)r.classList.add('playing');
+});
+
+/* Play All: checked songs play from the top */
+document.getElementById('qall').addEventListener('click',function(e){
+ e.preventDefault();
+ var rows=Array.prototype.slice.call(favEl.querySelectorAll('.row'));
+ var first=null;
+ rows.forEach(function(r){if(first)return;var b=r.querySelector('.qbox');if(b&&b.classList.contains('on'))first=r;});
+ rows.forEach(function(r){r.classList.remove('playing');});
+ if(first){first.classList.add('playing');}
+ else{say3('Queue a song first. Checked songs play.');}
+});
+
+/* hold-and-drag reorder on the Playlist rows */
+var dragEl3=null,dragY03=0,dragging3=false;
+favEl.addEventListener('pointerdown',function(e){
+ var r=e.target.closest('.row');if(!r)return;
+ dragEl3=r;dragY03=e.clientY;dragging3=false;
+});
+window.addEventListener('pointermove',function(e){
+ if(!dragEl3)return;
+ var dy=e.clientY-dragY03;
+ if(!dragging3&&Math.abs(dy)>14){dragging3=true;dragEl3.classList.add('dragging');}
+ if(dragging3){e.preventDefault();dragEl3.style.transform='translateY('+dy+'px) scale(1.02)';}
+},{passive:false});
+window.addEventListener('pointerup',function(e){
+ if(!dragEl3)return;
+ if(dragging3){
+  suppress3=true;
+  var moved=dragEl3,rect=moved.getBoundingClientRect(),mid=rect.top+rect.height/2;
+  moved.style.transform='';moved.classList.remove('dragging');
+  var rows=Array.prototype.slice.call(favEl.querySelectorAll('.row'));
+  var before=rows.indexOf(moved);
+  var target=null;
+  rows.forEach(function(r){if(r===moved)return;var rr2=r.getBoundingClientRect();if(mid<rr2.top+rr2.height/2&&target===null){target=r;}});
+  if(target){favEl.insertBefore(moved,target);}
+  else{favEl.appendChild(moved);}
+  var after=Array.prototype.slice.call(favEl.querySelectorAll('.row')).indexOf(moved);
+  FAVORDER=Array.prototype.slice.call(favEl.querySelectorAll('.row')).map(function(r){return r.dataset.slug;});
+  if(after!==before)complete3('drag');else setTell3();
+ }
+ dragEl3=null;dragging3=false;
+});
+
+
+
+/* ============================================================================
+   W-3i: the Balance Meter lesson (s5) — six reps, §C5 approved words.
+   Nothing here redraws app UI: the corner strip, the four-number meter, the goal
+   panel and the red-number bubble are the app-D components; the coaching engine
+   is the one already running s2/s3, extended with a sixth-rep screen.
+   ========================================================================== */
+
+/* SEED — the played week, engine-computed as in app-D (var WEEK grammar, app-D.html:1060).
+   51 minutes played: Core clears the 15% floor; Love, Vitality and Abundance do not.
+   quiet-success starts checked (the list they built in lesson 2), so the projected week
+   opens at 54m and every rep below lands on ZBalance output, nothing hardcoded:
+   check Elysian -> Vitality +3m green; + by Love adds Kindred (64m week); - by Core trims
+   quiet-success and Core stays green; Abundance has no songs -> the real bubble;
+   Starseed checked -> all four green, corner flips. */
+var BALWEEK={core:32*60,love:7*60,vitality:7*60,abundance:5*60};
+var BALEVENTS=['core','love','vitality','abundance'].map(function(f){return {freq:f,sec:BALWEEK[f]};});
+
+/* Starseed is a real app-D song (SONGLIST, app-D.html:445) staged as the Abundance
+   row: 611 Hz, 9 min, purpose bubbles from app-D's SONGMETA (app-D.html:456).
+   Its waveform is measured data from app-assets/starseed.mp3, run through app-D's
+   own analyze() envelope + 611 Hz Goertzel presence, in this file's rect grammar. */
+WAVES['starseed']='<rect x="0.0" y="11.8" width="2.2" height="2.3" rx="1.1" fill-opacity=".38"/><rect x="0.0" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="3.1" y="10.7" width="2.2" height="4.6" rx="1.1" fill-opacity=".38"/><rect x="3.1" y="12.2" width="2.2" height="1.5" rx="1.1"/><rect x="6.2" y="9.7" width="2.2" height="6.6" rx="1.1" fill-opacity=".38"/><rect x="6.2" y="11.9" width="2.2" height="2.2" rx="1.1"/><rect x="9.3" y="8.9" width="2.2" height="8.1" rx="1.1" fill-opacity=".38"/><rect x="9.3" y="11.7" width="2.2" height="2.6" rx="1.1"/><rect x="12.4" y="8.1" width="2.2" height="9.9" rx="1.1" fill-opacity=".38"/><rect x="12.4" y="11.4" width="2.2" height="3.3" rx="1.1"/><rect x="15.5" y="9.3" width="2.2" height="7.5" rx="1.1" fill-opacity=".38"/><rect x="15.5" y="11.8" width="2.2" height="2.4" rx="1.1"/><rect x="18.6" y="8.9" width="2.2" height="8.1" rx="1.1" fill-opacity=".38"/><rect x="18.6" y="11.7" width="2.2" height="2.6" rx="1.1"/><rect x="21.7" y="8.0" width="2.2" height="10.1" rx="1.1" fill-opacity=".38"/><rect x="21.7" y="11.3" width="2.2" height="3.3" rx="1.1"/><rect x="24.8" y="9.2" width="2.2" height="7.5" rx="1.1" fill-opacity=".38"/><rect x="24.8" y="11.8" width="2.2" height="2.5" rx="1.1"/><rect x="27.9" y="9.1" width="2.2" height="7.8" rx="1.1" fill-opacity=".38"/><rect x="27.9" y="11.7" width="2.2" height="2.6" rx="1.1"/><rect x="31.0" y="7.9" width="2.2" height="10.2" rx="1.1" fill-opacity=".38"/><rect x="31.0" y="11.3" width="2.2" height="3.4" rx="1.1"/><rect x="34.1" y="9.1" width="2.2" height="7.9" rx="1.1" fill-opacity=".38"/><rect x="34.1" y="11.7" width="2.2" height="2.7" rx="1.1"/><rect x="37.2" y="8.7" width="2.2" height="8.7" rx="1.1" fill-opacity=".38"/><rect x="37.2" y="11.5" width="2.2" height="3.0" rx="1.1"/><rect x="40.3" y="7.9" width="2.2" height="10.1" rx="1.1" fill-opacity=".38"/><rect x="40.3" y="11.3" width="2.2" height="3.5" rx="1.1"/><rect x="43.4" y="8.8" width="2.2" height="8.4" rx="1.1" fill-opacity=".38"/><rect x="43.4" y="11.6" width="2.2" height="2.8" rx="1.1"/><rect x="46.5" y="2.8" width="2.2" height="20.4" rx="1.1" fill-opacity=".38"/><rect x="46.5" y="8.7" width="2.2" height="8.6" rx="1.1"/><rect x="49.6" y="1.9" width="2.2" height="22.2" rx="1.1" fill-opacity=".38"/><rect x="49.6" y="7.4" width="2.2" height="11.1" rx="1.1"/><rect x="52.7" y="2.0" width="2.2" height="22.0" rx="1.1" fill-opacity=".38"/><rect x="52.7" y="7.0" width="2.2" height="12.0" rx="1.1"/><rect x="55.8" y="2.5" width="2.2" height="20.9" rx="1.1" fill-opacity=".38"/><rect x="55.8" y="6.7" width="2.2" height="12.7" rx="1.1"/><rect x="58.9" y="1.9" width="2.2" height="22.3" rx="1.1" fill-opacity=".38"/><rect x="58.9" y="7.5" width="2.2" height="10.9" rx="1.1"/><rect x="62.0" y="1.8" width="2.2" height="22.4" rx="1.1" fill-opacity=".38"/><rect x="62.0" y="2.8" width="2.2" height="20.4" rx="1.1"/><rect x="65.1" y="2.5" width="2.2" height="21.1" rx="1.1" fill-opacity=".38"/><rect x="65.1" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="68.2" y="2.1" width="2.2" height="21.8" rx="1.1" fill-opacity=".38"/><rect x="68.2" y="7.5" width="2.2" height="10.9" rx="1.1"/><rect x="71.3" y="1.7" width="2.2" height="22.6" rx="1.1" fill-opacity=".38"/><rect x="71.3" y="6.1" width="2.2" height="13.8" rx="1.1"/><rect x="74.4" y="2.3" width="2.2" height="21.3" rx="1.1" fill-opacity=".38"/><rect x="74.4" y="7.3" width="2.2" height="11.4" rx="1.1"/><rect x="77.5" y="2.3" width="2.2" height="21.5" rx="1.1" fill-opacity=".38"/><rect x="77.5" y="8.9" width="2.2" height="8.1" rx="1.1"/><rect x="80.6" y="1.5" width="2.2" height="22.9" rx="1.1" fill-opacity=".38"/><rect x="80.6" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="83.7" y="2.4" width="2.2" height="21.3" rx="1.1" fill-opacity=".38"/><rect x="83.7" y="2.4" width="2.2" height="21.3" rx="1.1"/><rect x="86.8" y="2.1" width="2.2" height="21.9" rx="1.1" fill-opacity=".38"/><rect x="86.8" y="9.3" width="2.2" height="7.5" rx="1.1"/><rect x="89.9" y="1.9" width="2.2" height="22.1" rx="1.1" fill-opacity=".38"/><rect x="89.9" y="7.1" width="2.2" height="11.8" rx="1.1"/><rect x="93.0" y="1.7" width="2.2" height="22.6" rx="1.1" fill-opacity=".38"/><rect x="93.0" y="8.3" width="2.2" height="9.5" rx="1.1"/><rect x="96.1" y="1.7" width="2.2" height="22.6" rx="1.1" fill-opacity=".38"/><rect x="96.1" y="4.3" width="2.2" height="17.4" rx="1.1"/><rect x="99.2" y="1.7" width="2.2" height="22.6" rx="1.1" fill-opacity=".38"/><rect x="99.2" y="8.4" width="2.2" height="9.3" rx="1.1"/><rect x="102.3" y="1.8" width="2.2" height="22.4" rx="1.1" fill-opacity=".38"/><rect x="102.3" y="8.6" width="2.2" height="8.7" rx="1.1"/><rect x="105.4" y="1.6" width="2.2" height="22.9" rx="1.1" fill-opacity=".38"/><rect x="105.4" y="4.6" width="2.2" height="16.7" rx="1.1"/><rect x="108.5" y="1.7" width="2.2" height="22.5" rx="1.1" fill-opacity=".38"/><rect x="108.5" y="1.7" width="2.2" height="22.5" rx="1.1"/><rect x="111.6" y="1.5" width="2.2" height="23.0" rx="1.1" fill-opacity=".38"/><rect x="111.6" y="8.6" width="2.2" height="8.8" rx="1.1"/><rect x="114.7" y="1.0" width="2.2" height="24.0" rx="1.1" fill-opacity=".38"/><rect x="114.7" y="1.2" width="2.2" height="23.5" rx="1.1"/><rect x="117.8" y="1.4" width="2.2" height="23.2" rx="1.1" fill-opacity=".38"/><rect x="117.8" y="8.4" width="2.2" height="9.2" rx="1.1"/><rect x="120.9" y="1.2" width="2.2" height="23.5" rx="1.1" fill-opacity=".38"/><rect x="120.9" y="9.1" width="2.2" height="7.9" rx="1.1"/><rect x="124.0" y="0.5" width="2.2" height="24.9" rx="1.1" fill-opacity=".38"/><rect x="124.0" y="5.6" width="2.2" height="14.8" rx="1.1"/><rect x="127.1" y="1.3" width="2.2" height="23.4" rx="1.1" fill-opacity=".38"/><rect x="127.1" y="1.9" width="2.2" height="22.3" rx="1.1"/><rect x="130.2" y="1.2" width="2.2" height="23.6" rx="1.1" fill-opacity=".38"/><rect x="130.2" y="8.7" width="2.2" height="8.6" rx="1.1"/><rect x="133.3" y="0.2" width="2.2" height="25.7" rx="1.1" fill-opacity=".38"/><rect x="133.3" y="1.3" width="2.2" height="23.3" rx="1.1"/><rect x="136.4" y="1.3" width="2.2" height="23.4" rx="1.1" fill-opacity=".38"/><rect x="136.4" y="8.0" width="2.2" height="10.1" rx="1.1"/><rect x="139.5" y="0.9" width="2.2" height="24.2" rx="1.1" fill-opacity=".38"/><rect x="139.5" y="8.7" width="2.2" height="8.6" rx="1.1"/><rect x="142.6" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="142.6" y="2.6" width="2.2" height="20.8" rx="1.1"/><rect x="145.7" y="1.2" width="2.2" height="23.6" rx="1.1" fill-opacity=".38"/><rect x="145.7" y="2.1" width="2.2" height="21.8" rx="1.1"/><rect x="148.8" y="0.8" width="2.2" height="24.3" rx="1.1" fill-opacity=".38"/><rect x="148.8" y="8.4" width="2.2" height="9.2" rx="1.1"/><rect x="151.9" y="0.4" width="2.2" height="25.3" rx="1.1" fill-opacity=".38"/><rect x="151.9" y="6.6" width="2.2" height="12.9" rx="1.1"/><rect x="155.0" y="0.7" width="2.2" height="24.7" rx="1.1" fill-opacity=".38"/><rect x="155.0" y="6.3" width="2.2" height="13.4" rx="1.1"/><rect x="158.1" y="0.8" width="2.2" height="24.5" rx="1.1" fill-opacity=".38"/><rect x="158.1" y="3.9" width="2.2" height="18.1" rx="1.1"/><rect x="161.2" y="0.6" width="2.2" height="24.8" rx="1.1" fill-opacity=".38"/><rect x="161.2" y="6.9" width="2.2" height="12.2" rx="1.1"/><rect x="164.3" y="0.7" width="2.2" height="24.6" rx="1.1" fill-opacity=".38"/><rect x="164.3" y="2.7" width="2.2" height="20.6" rx="1.1"/><rect x="167.4" y="0.9" width="2.2" height="24.2" rx="1.1" fill-opacity=".38"/><rect x="167.4" y="3.0" width="2.2" height="20.0" rx="1.1"/><rect x="170.5" y="0.5" width="2.2" height="24.9" rx="1.1" fill-opacity=".38"/><rect x="170.5" y="6.9" width="2.2" height="12.2" rx="1.1"/><rect x="173.6" y="0.6" width="2.2" height="24.9" rx="1.1" fill-opacity=".38"/><rect x="173.6" y="2.9" width="2.2" height="20.1" rx="1.1"/><rect x="176.7" y="0.8" width="2.2" height="24.4" rx="1.1" fill-opacity=".38"/><rect x="176.7" y="2.6" width="2.2" height="20.9" rx="1.1"/><rect x="179.8" y="0.5" width="2.2" height="25.0" rx="1.1" fill-opacity=".38"/><rect x="179.8" y="6.3" width="2.2" height="13.4" rx="1.1"/><rect x="182.9" y="0.4" width="2.2" height="25.2" rx="1.1" fill-opacity=".38"/><rect x="182.9" y="3.4" width="2.2" height="19.2" rx="1.1"/><rect x="186.0" y="0.5" width="2.2" height="25.1" rx="1.1" fill-opacity=".38"/><rect x="186.0" y="3.3" width="2.2" height="19.5" rx="1.1"/><rect x="189.1" y="0.5" width="2.2" height="25.0" rx="1.1" fill-opacity=".38"/><rect x="189.1" y="7.0" width="2.2" height="12.0" rx="1.1"/><rect x="192.2" y="0.6" width="2.2" height="24.9" rx="1.1" fill-opacity=".38"/><rect x="192.2" y="4.8" width="2.2" height="16.5" rx="1.1"/><rect x="195.3" y="0.7" width="2.2" height="24.6" rx="1.1" fill-opacity=".38"/><rect x="195.3" y="5.5" width="2.2" height="15.1" rx="1.1"/><rect x="198.4" y="0.6" width="2.2" height="24.8" rx="1.1" fill-opacity=".38"/><rect x="198.4" y="7.6" width="2.2" height="10.7" rx="1.1"/><rect x="201.5" y="0.5" width="2.2" height="25.1" rx="1.1" fill-opacity=".38"/><rect x="201.5" y="1.8" width="2.2" height="22.4" rx="1.1"/><rect x="204.6" y="0.6" width="2.2" height="24.8" rx="1.1" fill-opacity=".38"/><rect x="204.6" y="3.9" width="2.2" height="18.1" rx="1.1"/><rect x="207.7" y="0.6" width="2.2" height="24.8" rx="1.1" fill-opacity=".38"/><rect x="207.7" y="7.8" width="2.2" height="10.4" rx="1.1"/><rect x="210.8" y="0.5" width="2.2" height="25.0" rx="1.1" fill-opacity=".38"/><rect x="210.8" y="4.1" width="2.2" height="17.8" rx="1.1"/><rect x="213.9" y="0.7" width="2.2" height="24.5" rx="1.1" fill-opacity=".38"/><rect x="213.9" y="5.9" width="2.2" height="14.3" rx="1.1"/><rect x="217.0" y="0.3" width="2.2" height="25.4" rx="1.1" fill-opacity=".38"/><rect x="217.0" y="8.6" width="2.2" height="8.7" rx="1.1"/><rect x="220.1" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="220.1" y="3.7" width="2.2" height="18.7" rx="1.1"/><rect x="223.2" y="0.6" width="2.2" height="24.7" rx="1.1" fill-opacity=".38"/><rect x="223.2" y="4.4" width="2.2" height="17.1" rx="1.1"/><rect x="226.3" y="0.6" width="2.2" height="24.8" rx="1.1" fill-opacity=".38"/><rect x="226.3" y="8.4" width="2.2" height="9.2" rx="1.1"/><rect x="229.4" y="0.0" width="2.2" height="25.9" rx="1.1" fill-opacity=".38"/><rect x="229.4" y="8.2" width="2.2" height="9.6" rx="1.1"/><rect x="232.5" y="0.4" width="2.2" height="25.2" rx="1.1" fill-opacity=".38"/><rect x="232.5" y="6.0" width="2.2" height="14.0" rx="1.1"/><rect x="235.6" y="0.6" width="2.2" height="24.9" rx="1.1" fill-opacity=".38"/><rect x="235.6" y="1.5" width="2.2" height="22.9" rx="1.1"/><rect x="238.7" y="0.3" width="2.2" height="25.4" rx="1.1" fill-opacity=".38"/><rect x="238.7" y="7.9" width="2.2" height="10.1" rx="1.1"/><rect x="241.8" y="0.3" width="2.2" height="25.4" rx="1.1" fill-opacity=".38"/><rect x="241.8" y="2.7" width="2.2" height="20.6" rx="1.1"/><rect x="244.9" y="0.5" width="2.2" height="25.0" rx="1.1" fill-opacity=".38"/><rect x="244.9" y="7.3" width="2.2" height="11.4" rx="1.1"/><rect x="248.0" y="0.4" width="2.2" height="25.2" rx="1.1" fill-opacity=".38"/><rect x="248.0" y="8.2" width="2.2" height="9.5" rx="1.1"/><rect x="251.1" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="251.1" y="8.4" width="2.2" height="9.2" rx="1.1"/><rect x="254.2" y="0.4" width="2.2" height="25.2" rx="1.1" fill-opacity=".38"/><rect x="254.2" y="1.3" width="2.2" height="23.5" rx="1.1"/><rect x="257.3" y="0.4" width="2.2" height="25.3" rx="1.1" fill-opacity=".38"/><rect x="257.3" y="7.1" width="2.2" height="11.9" rx="1.1"/><rect x="260.4" y="0.0" width="2.2" height="26.0" rx="1.1" fill-opacity=".38"/><rect x="260.4" y="0.2" width="2.2" height="25.5" rx="1.1"/><rect x="263.5" y="0.8" width="2.2" height="24.4" rx="1.1" fill-opacity=".38"/><rect x="263.5" y="8.1" width="2.2" height="9.8" rx="1.1"/><rect x="266.6" y="1.1" width="2.2" height="23.7" rx="1.1" fill-opacity=".38"/><rect x="266.6" y="8.1" width="2.2" height="9.8" rx="1.1"/><rect x="269.7" y="0.3" width="2.2" height="25.4" rx="1.1" fill-opacity=".38"/><rect x="269.7" y="6.6" width="2.2" height="12.7" rx="1.1"/><rect x="272.8" y="2.0" width="2.2" height="21.9" rx="1.1" fill-opacity=".38"/><rect x="272.8" y="3.1" width="2.2" height="19.9" rx="1.1"/><rect x="275.9" y="5.8" width="2.2" height="14.3" rx="1.1" fill-opacity=".38"/><rect x="275.9" y="10.5" width="2.2" height="5.0" rx="1.1"/><rect x="279.0" y="5.2" width="2.2" height="15.7" rx="1.1" fill-opacity=".38"/><rect x="279.0" y="10.5" width="2.2" height="5.1" rx="1.1"/><rect x="282.1" y="6.1" width="2.2" height="13.8" rx="1.1" fill-opacity=".38"/><rect x="282.1" y="10.6" width="2.2" height="4.8" rx="1.1"/><rect x="285.2" y="6.5" width="2.2" height="13.1" rx="1.1" fill-opacity=".38"/><rect x="285.2" y="10.8" width="2.2" height="4.4" rx="1.1"/><rect x="288.3" y="6.3" width="2.2" height="13.3" rx="1.1" fill-opacity=".38"/><rect x="288.3" y="10.8" width="2.2" height="4.5" rx="1.1"/><rect x="291.4" y="7.6" width="2.2" height="10.8" rx="1.1" fill-opacity=".38"/><rect x="291.4" y="11.1" width="2.2" height="3.8" rx="1.1"/><rect x="294.5" y="7.3" width="2.2" height="11.4" rx="1.1" fill-opacity=".38"/><rect x="294.5" y="11.1" width="2.2" height="3.7" rx="1.1"/><rect x="297.6" y="6.6" width="2.2" height="12.7" rx="1.1" fill-opacity=".38"/><rect x="297.6" y="10.8" width="2.2" height="4.4" rx="1.1"/><rect x="300.7" y="9.3" width="2.2" height="7.3" rx="1.1" fill-opacity=".38"/><rect x="300.7" y="11.8" width="2.2" height="2.4" rx="1.1"/><rect x="303.8" y="8.0" width="2.2" height="10.0" rx="1.1" fill-opacity=".38"/><rect x="303.8" y="11.3" width="2.2" height="3.4" rx="1.1"/><rect x="306.9" y="10.0" width="2.2" height="6.0" rx="1.1" fill-opacity=".38"/><rect x="306.9" y="12.0" width="2.2" height="1.9" rx="1.1"/><rect x="310.0" y="11.2" width="2.2" height="3.6" rx="1.1" fill-opacity=".38"/><rect x="310.0" y="12.4" width="2.2" height="1.2" rx="1.1"/><rect x="313.1" y="11.7" width="2.2" height="2.7" rx="1.1" fill-opacity=".38"/><rect x="313.1" y="12.5" width="2.2" height="1.0" rx="1.1"/><rect x="316.2" y="12.1" width="2.2" height="1.8" rx="1.1" fill-opacity=".38"/><rect x="316.2" y="12.5" width="2.2" height="1.0" rx="1.1"/>';
+var BALSONGS={
+ 'quiet-success':SONGS[0],
+ 'kindred-spirits':SONGS[1],
+ 'elysian-surge':SONGS[2],
+ 'starseed':{name:'Starseed',slug:'starseed',dur:'9 min',b:['MEDITATE','DEEP','DREAMY','CALM','UNWIND']}
+};
+/* the list the member already built in lesson 2, same three songs, same frequencies */
+var BALROWS=[{cat:'core',slug:'quiet-success'},{cat:'vitality',slug:'elysian-surge'},{cat:'love',slug:'kindred-spirits'}];
+var BALSTAGED={cat:'abundance',slug:'starseed'};
+
+var balEl=document.getElementById('balRows');
+var z5=document.getElementById('zbal5');
+var pop5=document.getElementById('zbalPop5');
+var bal5Init=false;
+
+/* row markup identical to the Playlist lesson's buildFavs(), with app-D's row data
+   attributes (data-cat / data-min, app-D.html:1368) so the engine reads it the same way */
+function balAppend(entry,slide,top){
+ var s=BALSONGS[entry.slug],cat=CATS[entry.cat];
+ var r=document.createElement('div');r.className='row'+(slide?' slidein':'');
+ r.style.setProperty('--rowink',cat.cink);
+ r.dataset.slug=entry.slug;r.dataset.cat=entry.cat;
+ r.dataset.min=ZBalance.toSec(s.dur);
+ r.innerHTML='<div class="lcol"><span class="qbox"></span></div>'
+  +'<div class="meta">'
+  +'<div class="wave-title"><span class="row-play" aria-hidden="true"><span class="row-triangle"></span><span class="row-pause"><i></i><i></i></span></span><h3>'+s.name+'</h3><span class="row-eq" aria-hidden="true"><i></i><i></i><i></i></span><div class="sic"><span class="dl">'+DLSVG+'</span><span class="heart on">&#9829;</span></div></div>'
+  +'<div class="wave-stream">'+waveSVG(s.slug,cat,'wgb-')+'</div>'
+  +bubs(s)
+  +'<div class="botrow"><div class="wave-band"><i></i>'+cat.label+' &middot; '+cat.hz+' Hz</div><span class="wave-dur">'+s.dur+'</span></div>'
+  +'</div>'
+  +'<div class="grip">'+GRIPSVG+'</div>';
+ /* Michael 2026-08-05: the hearted-for-you song lands UP TOP so they see it */
+ /* W-3l (Michael 2026-08-05): slot TWO, not top — the go-to-Immersions bubble covered the top row */
+ if(top&&balEl.children.length>1){balEl.insertBefore(r,balEl.children[1]);}else{balEl.appendChild(r);}
+ return r;
+}
+function buildBal(){balEl.innerHTML='';BALROWS.forEach(function(e){balAppend(e,false);});var q0=balRow('quiet-success');if(q0)q0.querySelector('.qbox').classList.add('on');}
+function balRow(slug){return balEl.querySelector('.row[data-slug="'+slug+'"]');}
+function balStagedIn(){return !!balRow(BALSTAGED.slug);}
+
+/* ---- the meter, straight off balance-engine.js ---- */
+function balProjection(){
+ return [].slice.call(balEl.querySelectorAll('.row')).filter(function(r){return r.querySelector('.qbox.on');})
+  .map(function(r){return {freq:r.dataset.cat,slug:r.dataset.slug,sec:parseFloat(r.dataset.min)||0};});
+}
+function balFmtMin(sec){return Math.max(1,Math.ceil(sec/60));}                                  /* app-D.html:1068 */
+function balFmtTotal(sec){var m=Math.round(sec/60),h=Math.floor(m/60);return h?h+'h '+(m%60)+'m':m+'m';}  /* app-D.html:1069-1072 */
+var balRes=null,balPlayed=null;
+function balRender(){
+ balPlayed=ZBalance.compute({events:BALEVENTS,window:null,projection:[],catalog:[]});
+ balRes=ZBalance.compute({events:BALEVENTS,window:null,projection:balProjection(),catalog:[]});
+ var short={};balRes.shortfalls.forEach(function(s){short[s.freq]=s;});
+ var html='';
+ var balrows=[].slice.call(balEl.querySelectorAll('.row'));
+ ZBalance.FREQS.forEach(function(f){
+  var cat=CATS[f],sf=short[f];
+  var overM=sf?0:Math.max(0,Math.floor((balRes.byFreq[f].sec-0.15*balRes.total)/60));           /* app-D.html:1127 */
+  var canAdd=sf&&balrows.some(function(r){return r.dataset.cat===f&&!r.querySelector('.qbox.on');});   /* app-D.html:1125 */
+  var canTrim=!sf&&balrows.some(function(r){return r.dataset.cat===f&&r.querySelector('.qbox.on');});  /* app-D.html:1126 */
+  html+='<span class="zbal-t'+(sf?' short':'')+'" data-freq="'+f+'" style="--tink:'+cat.cink+'">'+cat.label
+   +'<span class="zbal-b">'+(sf?'<b class="amt">&minus;'+balFmtMin(sf.neededSec)+'m</b>':'<b class="amt plus">+'+overM+'m</b>')
+   +(canAdd?'<i class="zbal-add" title="Add songs to clear it">+</i>':'')
+   +(canTrim?'<i class="zbal-min" title="Trim this frequency">&minus;</i>':'')+'</span></span>';
+ });
+ document.getElementById('zbalToks5').innerHTML=html;
+ /* corner strip: app-D's ministat markup (app-D.html:1079-1080). The NUMBER is the played
+    week (64 minutes, it never moves — "your week so far"). The COLOUR is the projected week,
+    so it flips red->green the moment the checked list balances (§C5 rep 5). app-D colours it
+    from the played week instead, which can never flip — the one deliberate deviation. */
+ document.getElementById('ms5').innerHTML='<span class="ms-lbl">Week:</span><span class="ms-ind"><i class="ms-txt'+(balRes.balanced?'':' low')+'">'+balFmtTotal(balPlayed.total)+'</i></span>'
+  +'<button class="ms-balnow" type="button">Balance Now<i>&#8250;</i></button>';
+}
+
+/* ---- the coaching loop ---- */
+var done5={check:false,plus:false,minus:false,stuck:false,newsong:false,balnow:false};
+var REPS5=['check','plus','minus','stuck','newsong','balnow'];
+/* Michael's chain (2026-08-05): the three ways to balance — by song (check/uncheck),
+   on the bar (+ / \u2212), or Balance Now. His verbatim lines kept; the praise that
+   confirms one rep OPENS the next instruction — no interstitials, no congratulations. */
+var CMDS5={
+ check:{pre:'Great! Check \u201cElysian Surge\u201d and ',cmd:'Watch Vitality Turn Green'},
+ plus:{pre:'Perfect! ',cmd:'Tap the + on Love to Add a Song'},
+ minus:{pre:'Wow! Core Has Plenty: ',cmd:'Tap Its \u2212 to Trim One'},
+ stuck:{pre:'Great! Abundance Is Stuck: ',cmd:'Tap the Red Number'},
+ newsong:{pre:'Remember the <span class="glyph">\u2665</span>? We Hearted \u201cStarseed\u201d for You: ',cmd:'Check It'},
+ balnow:{pre:'All Four Green! Next Time, ',cmd:'Just Tap Balance Now'}
+};
+function say5(html){var c=document.getElementById('coachTop5');c.className='';c.innerHTML=html;}
+function rep5cur(){for(var i=0;i<REPS5.length;i++){if(!done5[REPS5[i]])return REPS5[i];}return null;}
+function clearG5(){document.querySelectorAll('#s5 .hint').forEach(function(h){h.classList.remove('hint');});document.querySelectorAll('#s5 .dimmed').forEach(function(d){d.classList.remove('dimmed');});}
+function balHasRow(f,checked){return [].slice.call(balEl.querySelectorAll('.row')).some(function(r){var on=!!r.querySelector('.qbox.on');return r.dataset.cat===f&&(checked?on:!on);});}
+/* a rep whose teachable state is already gone (member ran ahead on the live controls)
+   completes silently — every control always does its real job, the lesson never lies */
+function rep5ready(rep){
+ if(rep==='check')return !balRes.byFreq.vitality.meetsFloor&&balHasRow('vitality',false);
+ if(rep==='plus')return !balRes.byFreq.love.meetsFloor&&balHasRow('love',false);
+ if(rep==='minus')return balRes.byFreq.core.meetsFloor&&balHasRow('core',true);
+ if(rep==='newsong')return !balRes.balanced;
+ return true;
+}
+function setTell5(){
+ clearG5();balRender();
+ var tell=document.getElementById('tell5'),ct=document.getElementById('coachTop5');
+ var dts=document.querySelectorAll('#dots5 i');
+ var rep=rep5cur(),guard=0;
+ while(rep&&guard++<8&&!rep5ready(rep)){done5[rep]=true;rep=rep5cur();}
+ REPS5.forEach(function(r,i){dts[i].classList.toggle('did',done5[r]);dts[i].classList.toggle('now',r===rep);});
+ ct.className='';ct.innerHTML='&nbsp;';
+ if(!rep){
+  tell.innerHTML='Already balanced! Next week, one tap does this whole job for you.';
+  if(!s5Adv){s5Adv=true;setTimeout(function(){show('s6');},2000);}
+  return;
+ }
+ tell.innerHTML=CMDS5[rep].pre+'<span class="cmd">'+CMDS5[rep].cmd+'</span>';
+ var rows=balEl.querySelectorAll('.row'),t=null;
+ /* W-3m: only the checkbox lights up; Vitality blinks at the flip (pulseAmt on completion), not through the rep */
+ if(rep==='check'){var vr=balRow('elysian-surge');t=vr?vr.querySelector('.qbox'):null;rows.forEach(function(r){if(r!==vr)dim(r);});}
+ if(rep==='plus'){t=document.querySelector('#zbalToks5 .zbal-t[data-freq="love"] .zbal-add');rows.forEach(dim);}
+ if(rep==='minus'){t=document.querySelector('#zbalToks5 .zbal-t[data-freq="core"] .zbal-min');rows.forEach(dim);}
+ if(rep==='stuck'){t=document.querySelector('#zbalToks5 .zbal-t[data-freq="abundance"]');rows.forEach(dim);}
+ if(rep==='newsong'){var nr=balRow('starseed');t=nr?nr.querySelector('.qbox'):null;rows.forEach(function(r){if(r!==nr)dim(r);});}
+ if(rep==='balnow'){t=document.querySelector('#ms5 .ms-balnow');}
+ if(t)t.classList.add('hint');
+}
+function pulseAmt(f){var a=document.querySelector('#zbalToks5 .zbal-t[data-freq="'+f+'"] .amt');if(a){a.classList.remove('pulsing');void a.offsetWidth;a.classList.add('pulsing');}}
+function complete5(rep){
+ if(done5[rep])return;done5[rep]=true;
+ z5.classList.remove('open');
+ setTell5();
+ if(rep==='check')pulseAmt('vitality');
+ if(rep==='plus')pulseAmt('love');
+ if(rep==='minus')pulseAmt('core');
+ if(rep==='newsong'){pulseAmt('abundance');} /* W-3m: the corner time no longer blinks on the all-green moment */
+}
+/* a control always does its real job, but it only advances the lesson when it is the live rep */
+function tryComplete5(rep){if(rep5cur()===rep){complete5(rep);return true;}setTell5();return false;}
+function enter5(){if(!bal5Init){bal5Init=true;buildBal();}setTell5();}
+
+/* ---- rep 1: the corner week time. Pulses in place; app-D's ministat routes to Progress,
+       here it acknowledges without leaving the tab (Michael, §C5). ---- */
+function pulseWeek(){var txt=document.querySelector('#ms5 .ms-txt');if(txt){txt.classList.remove('pulsing');void txt.offsetWidth;txt.classList.add('pulsing');}}
+document.getElementById('ms5').addEventListener('click',function(e){
+ /* Both corner controls acknowledge in place and navigate nowhere; tapped out of turn
+    they pulse and say nothing — never dead, never lying about the balance state. */
+ if(e.target.closest('.ms-balnow')){e.stopPropagation();tryComplete5('balnow');return;}
+ pulseWeek();
+});
+
+/* ---- rep 2: the four numbers open the goal panel. A red token keeps app-D's real
+       behaviour and shows the bubble (app-D.html:1222-1228). ---- */
+function showBubble5(f){
+ document.getElementById('zbalPopMsg5').innerHTML=
+  'Not enough <b>'+CATS[f].label+'</b> songs in your list to get there. '
+  +'Go to <b>Immersions &rarr; '+CATS[f].label+'</b> and tap <span class="ph">&#9829;</span> to heart more songs.';
+ pop5.style.display='block';
+ clearTimeout(window.__zbalPop5T);
+ window.__zbalPop5T=setTimeout(function(){pop5.style.display='none';},8000);
+}
+document.getElementById('zbalPopX5').addEventListener('click',function(){pop5.style.display='none';});
+document.addEventListener('click',function(e){if(pop5.style.display==='block'&&!pop5.contains(e.target))pop5.style.display='none';},true);
+document.getElementById('zbalLine5').addEventListener('click',function(e){
+ var tok=e.target.closest('.zbal-t');
+ var f=tok?tok.dataset.freq:null;
+ var add=e.target.closest('.zbal-add'),min=e.target.closest('.zbal-min');
+ /* the bar's own controls, byte behavior from app-D.html:1223-1249: \u2212 unchecks the
+    largest checked song of that frequency; + checks the engine's best additions; a red
+    number with no + left raises the real go-to-Immersions bubble. */
+ if(min&&tok){
+  e.stopPropagation();
+  var checked=[].slice.call(balEl.querySelectorAll('.row')).filter(function(r){return r.dataset.cat===f&&r.querySelector('.qbox.on');})
+   .sort(function(a,b){return (parseFloat(b.dataset.min)||0)-(parseFloat(a.dataset.min)||0);});
+  if(checked[0])checked[0].querySelector('.qbox').classList.remove('on');
+  balRender();
+  if(rep5cur()==='minus'&&f==='core'){complete5('minus');return;}
+  setTell5();return;
+ }
+ if(add&&tok){
+  e.stopPropagation();
+  var sf=balRes.shortfalls.filter(function(x){return x.freq===f;})[0];if(!sf){setTell5();return;}
+  var avail=[].slice.call(balEl.querySelectorAll('.row')).filter(function(r){return r.dataset.cat===f&&!r.querySelector('.qbox.on');})
+   .map(function(r){return {slug:r.dataset.slug,sec:parseFloat(r.dataset.min)||0,row:r};});
+  var pick=ZBalance.bestAdditions(sf.neededSec,avail);
+  pick.songs.forEach(function(s){var b=s.row.querySelector('.qbox');if(b&&!b.classList.contains('on'))b.classList.add('on');});
+  balRender();
+  if(!pick.cleared)showBubble5(f);
+  if(rep5cur()==='plus'&&f==='love'&&balRes.byFreq.love.meetsFloor){complete5('plus');return;}
+  if(rep5cur()==='newsong'&&balRes.balanced){complete5('newsong');return;}
+  setTell5();return;
+ }
+ /* app-D raises this bubble only for a red frequency the list can no longer cover — the
+    one whose + is gone (app-D.html:1226): the bubble can never claim a shortage the
+    playlist could actually fix. */
+ if(tok&&tok.classList.contains('short')&&![].slice.call(balEl.querySelectorAll('.row')).some(function(r){return r.dataset.cat===f&&!r.querySelector('.qbox.on');})){
+  e.stopPropagation();
+  showBubble5(f);
+  /* the stuck Abundance number: the bubble sends them to Immersions and the \u2661; the
+     lesson then does that one \u2661 for them, exactly as the Immersions heart would. */
+  if(f==='abundance'&&rep5cur()==='stuck'){
+   complete5('stuck');
+   setTimeout(function(){
+    if(balStagedIn())return;
+    balAppend(BALSTAGED,true,true);
+    setTell5();
+   },900);
+  }
+  return;
+ }
+ if(e.target.closest('.zbal-chevbtn')){e.stopPropagation();z5.classList.toggle('open');setTell5();return;}
+ e.stopPropagation();
+ z5.classList.toggle('open');setTell5();
+});
+/* app-D D-15: the open panel is display-only, so any tap on its body tucks it away */
+document.querySelector('#zbal5 .zbal-panel').addEventListener('click',function(e){e.stopPropagation();z5.classList.remove('open');});
+
+/* ---- reps 3 + 5: the checkboxes, the lesson-2 skill reused ---- */
+var suppress5=false;
+balEl.addEventListener('click',function(e){
+ if(suppress5){suppress5=false;return;}
+ var q=e.target.closest('.qbox');
+ if(q){
+  q.classList.toggle('on');
+  balRender();
+  var cur=rep5cur();
+  if(cur==='check'&&balRes.byFreq.vitality.meetsFloor){complete5('check');return;}
+  if(cur==='newsong'&&balRes.balanced){complete5('newsong');return;}
+  setTell5();return;
+ }
+ var h=e.target.closest('.heart');
+ if(h){say5('That would remove it from your Playlist. Keep it for the lesson.');return;}
+ var d=e.target.closest('.dl');
+ if(d){d.classList.toggle('on');return;}
+ if(e.target.closest('.grip'))return;
+ var r=e.target.closest('.row');if(!r)return;
+ var was=r.classList.contains('playing');
+ balEl.querySelectorAll('.row').forEach(function(x){x.classList.remove('playing');});
+ if(!was)r.classList.add('playing');
+});
+
+/* hold-and-drag reorder, same handler as the Playlist lesson, so the grip is never dead */
+var dragEl5=null,dragY05=0,dragging5=false;
+balEl.addEventListener('pointerdown',function(e){var r=e.target.closest('.row');if(!r)return;dragEl5=r;dragY05=e.clientY;dragging5=false;});
+window.addEventListener('pointermove',function(e){
+ if(!dragEl5)return;
+ var dy=e.clientY-dragY05;
+ if(!dragging5&&Math.abs(dy)>14){dragging5=true;dragEl5.classList.add('dragging');}
+ if(dragging5){e.preventDefault();dragEl5.style.transform='translateY('+dy+'px) scale(1.02)';}
+},{passive:false});
+window.addEventListener('pointerup',function(e){
+ if(!dragEl5)return;
+ if(dragging5){
+  suppress5=true;
+  var moved=dragEl5,rect=moved.getBoundingClientRect(),mid=rect.top+rect.height/2;
+  moved.style.transform='';moved.classList.remove('dragging');
+  var rows=Array.prototype.slice.call(balEl.querySelectorAll('.row'));
+  var target=null;
+  rows.forEach(function(r){if(r===moved)return;var rr=r.getBoundingClientRect();if(mid<rr.top+rr.height/2&&target===null){target=r;}});
+  if(target){balEl.insertBefore(moved,target);}else{balEl.appendChild(moved);}
+  setTell5();
+ }
+ dragEl5=null;dragging5=false;
+});
+
+/* ---- Back: undo one move at a time, then cross back into the FINISHED Playlist lesson ---- */
+function undo5(rep){
+ if(rep==='check'){var vr=balRow('elysian-surge');if(vr)vr.querySelector('.qbox').classList.remove('on');}
+ if(rep==='plus'){var kr=balRow('kindred-spirits');if(kr)kr.querySelector('.qbox').classList.remove('on');}
+ if(rep==='minus'){var qr=balRow('quiet-success');if(qr)qr.querySelector('.qbox').classList.add('on');}
+ if(rep==='stuck'){pop5.style.display='none';var sr=balRow(BALSTAGED.slug);if(sr)sr.remove();}
+ if(rep==='newsong'){var nr=balRow(BALSTAGED.slug);if(nr){var b=nr.querySelector('.qbox');if(b)b.classList.remove('on');}}
+}
+function stepBack5(){
+ var last=lastDone(REPS5,done5);
+ if(last){done5[last]=false;undo5(last);setTell5();return;}
+ s3Adv=false;done3.drag=false;show('s3');setTell3();
+}
+
+
+/* ---- Keys / Bands / Install wiring (W-3l: bands chapter between Keys and install) ---- */
+document.getElementById('nextBtn6').addEventListener('click',function(e){e.preventDefault();show('s7a');});
+document.getElementById('nextBtn7a').addEventListener('click',function(e){e.preventDefault();show('s7b');});
+document.getElementById('nextBtn7b').addEventListener('click',function(e){e.preventDefault();show('s8');});
+
+/* review deep-links: #playlist, #balance, #keys, #bands, #install jump in with prior lessons done */
+if(['#playlist','#balance','#keys','#bands','#install'].indexOf(location.hash)>=0){
+ stopHero();
+ REPS.forEach(function(r){done[r]=true;});s2Adv=true;setTell();
+ show('s3');enter3();
+ if(location.hash!=='#playlist'){
+  REPS3.forEach(function(r){done3[r]=true;});s3Adv=true;setTell3();
+  show('s5');enter5();
+  if(location.hash!=='#balance'){
+   if(!balStagedIn())balAppend(BALSTAGED,false,true);
+   var dq=balRow('quiet-success');if(dq)dq.querySelector('.qbox').classList.remove('on');
+   ['elysian-surge','kindred-spirits','starseed'].forEach(function(sl){var r=balRow(sl);if(r)r.querySelector('.qbox').classList.add('on');});
+   REPS5.forEach(function(r){done5[r]=true;});s5Adv=true;setTell5();
+   show(location.hash==='#install'?'s8':location.hash==='#bands'?'s7a':'s6');
+  }
+ }
+}
+</script>
+</body></html>
