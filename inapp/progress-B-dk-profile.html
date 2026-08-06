@@ -21,7 +21,7 @@
   var wshift=parseFloat(q.get('wshift')||'100');
   var SRC='https://fonts.gstatic.com/s/darkergrotesque/v10/U9MH6cuh-mLQlC4BKCtayOfARkSVq7HUJEUJQOM.woff2';
   var css='';
-  [[400,560],[500,660],[600,740],[700,820],[800,900]].forEach(function(p){
+  [[400,480],[500,580],[600,670],[700,760],[800,850]].forEach(function(p){
     var declared=p[0], real=Math.max(300,Math.min(900,Math.round(p[1]*wshift/100)));
     css+="@font-face{font-family:'Switzer';font-style:normal;font-weight:"+declared+";font-display:block;"+
       "src:url("+SRC+") format('woff2-variations'),url("+SRC+") format('woff2');"+
@@ -30,11 +30,7 @@
   });
   var st=document.createElement('style');st.id='dgLayer';st.textContent=css;
   document.head.appendChild(st);
-  var TUNE=':root{--ink:#141019}'+
-    '.intro h1,.card h1,.card h2,.week-title h2{font-weight:800!important;color:#120d18!important}'+
-    '.frequency-copy strong{color:#120d18}';
   function applyDg(){
-    if(q.get('tune')!=='off'){var tn=document.createElement('style');tn.id='dgTune';tn.textContent=TUNE;(document.body||document.head).appendChild(tn);}
     document.querySelectorAll('link[href*="fontshare"]').forEach(function(l){l.disabled=true;l.parentNode&&l.parentNode.removeChild(l);});
   }
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',applyDg);}else{applyDg();}
