@@ -31,7 +31,7 @@
     '.intro h1,.card h1,.card h2,.week-title h2{font-weight:800!important;color:#120d18!important}'+
     '.frequency-copy strong{color:#120d18}';
   function applyDg(){
-    if(q.get('tune')!=='off'){var tn=document.createElement('style');tn.id='dgTune';tn.textContent=TUNE;document.head.appendChild(tn);}
+    if(q.get('tune')!=='off'){var tn=document.createElement('style');tn.id='dgTune';tn.textContent=TUNE;(document.body||document.head).appendChild(tn);}
     document.querySelectorAll('link[href*="fontshare"]').forEach(function(l){l.disabled=true;l.parentNode&&l.parentNode.removeChild(l);});
   }
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',applyDg);}else{applyDg();}
