@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm Site Styleguide 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype'); font-weight:400; }
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype'); font-weight:600; }
+
+  :root{
+    --stage:#0B0712; --ink:#1A1620; --card:#141019;
+    --cream:#FBF8F3; --cream82:rgba(251,248,243,.82); --cream58:rgba(251,248,243,.58); --cream40:rgba(251,248,243,.40);
+    --hair:rgba(251,248,243,.13);
+    --violet:#6521C9; --violet-deep:#38007A; --violet-soft:#D2C8FF; --violet-glint:#7A4AE0;
+    --rose:#B90044; --rose-end:#E0559A;
+    --amber:#FF9112; --amber-text:#C25500;
+    --emerald:#12A56E; --emerald-end:#2BC47F;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--stage);color:var(--cream);font-family:var(--sans);font-size:19px;line-height:1.65;-webkit-font-smoothing:antialiased}
+
+  .badge{position:fixed;top:14px;right:14px;z-index:50;font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--violet-soft);background:rgba(11,7,18,.85);border:1px solid rgba(210,200,255,.3);border-radius:6px;padding:9px 12px;backdrop-filter:blur(6px)}
+  .badge span{color:var(--cream40)}
+
+  .wrap{max-width:1140px;margin:0 auto;padding:0 32px}
+  section{padding:120px 0;border-bottom:1px solid var(--hair)}
+  header.masthead{padding:110px 0 90px;border-bottom:1px solid var(--hair)}
+
+  .eyebrow{font:600 13px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:26px}
+  h1,.h1{font:500 84px/1.02 var(--serif);letter-spacing:-.01em;color:var(--cream)}
+  h2,.h2{font:500 52px/1.08 var(--serif);letter-spacing:-.005em;color:var(--cream)}
+  h3,.h3{font:600 22px/1.3 var(--sans);color:var(--cream)}
+  .h1s{font:600 72px/1.04 var(--sans);letter-spacing:-.025em}
+  .h2s{font:600 44px/1.1 var(--sans);letter-spacing:-.02em}
+  p.body,.body{font:400 19px/1.65 var(--sans);color:var(--cream82);max-width:34em}
+  .lede{font:400 23px/1.55 var(--sans);color:var(--cream82);max-width:30em}
+
+  .spec{display:inline-flex;flex-wrap:wrap;gap:6px 8px;line-height:1.5;align-items:center;margin:18px 0 0;font:600 11px/1 var(--sans);letter-spacing:.08em;color:var(--violet-soft);background:rgba(101,33,201,.16);border:1px solid rgba(210,200,255,.22);border-radius:5px;padding:8px 11px;text-transform:uppercase}
+  .spec b{color:var(--cream)}
+  .specimen{margin-top:56px}
+  .specimen + .specimen{margin-top:72px}
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:48px}
+  .sw{border:1px solid var(--hair);border-radius:8px;overflow:hidden}
+  .sw .chip{height:92px}
+  .sw .meta{padding:12px 13px;font:600 12px/1.5 var(--sans);letter-spacing:.04em}
+  .sw .meta span{display:block;font-weight:400;color:var(--cream58)}
+
+  figure.photo{margin-top:56px}
+  figure.photo img{width:100%;display:block;border-radius:4px}
+  figcaption{border-top:1px solid var(--hair);margin-top:14px;padding-top:12px;font:400 14px/1.5 var(--sans);color:var(--cream58);max-width:46em}
+  figcaption b{color:var(--cream82);font-weight:600}
+
+  ul.zlist{list-style:none;margin-top:34px;max-width:34em}
+  ul.zlist li{position:relative;padding:11px 0 11px 34px;color:var(--cream82)}
+  ul.zlist li::before{content:"";position:absolute;left:0;top:1.22em;width:16px;height:2px;background:var(--violet-glint)}
+  ol.zlist{list-style:none;counter-reset:z;margin-top:34px;max-width:34em}
+  ol.zlist li{counter-increment:z;position:relative;padding:14px 0 14px 46px;color:var(--cream82);border-bottom:1px solid var(--hair)}
+  ol.zlist li::before{content:counter(z,decimal-leading-zero);position:absolute;left:0;top:14px;font:600 14px/1.65 var(--sans);color:var(--violet-soft);letter-spacing:.05em}
+
+  table.law{width:100%;border-collapse:collapse;margin-top:48px;font:400 15px/1.5 var(--sans)}
+  table.law th{font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cream58);text-align:left;padding:0 18px 14px 0;border-bottom:1px solid var(--hair)}
+  table.law td{padding:14px 18px 14px 0;border-bottom:1px solid var(--hair);color:var(--cream82);vertical-align:top}
+  table.law td:first-child{color:var(--cream);font-weight:600}
+
+  .statband{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;margin-top:56px;padding:56px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+  .stat .n{font:600 64px/1 var(--sans);letter-spacing:-.02em;color:var(--cream)}
+  .stat .n em{font-style:normal;color:var(--violet-soft)}
+  .stat .l{margin-top:12px;font:600 14px/1.4 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--cream58)}
+  .caveat{margin-top:22px;font:400 14px/1.55 var(--sans);color:var(--cream58);max-width:46em}
+
+  blockquote.testi{margin-top:56px;max-width:36em}
+  blockquote.testi .q{font:500 30px/1.4 var(--serif);font-style:italic;color:var(--cream)}
+  blockquote.testi .who{margin-top:24px;font:600 13px/1.6 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cream)}
+  blockquote.testi .who span{display:block;font-weight:400;letter-spacing:.04em;text-transform:none;color:var(--cream58)}
+
+  .phonewrap{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center;margin-top:56px}
+  .phonewrap img{width:100%;max-width:370px;display:block;margin:0 auto}
+
+  .btn{display:inline-block;font:600 16px/1 var(--sans);letter-spacing:.02em;color:#fff;background:linear-gradient(160deg,var(--violet),var(--violet-deep));border-radius:10px;padding:17px 30px;text-decoration:none}
+  .btn.ghost{background:none;border:1px solid rgba(251,248,243,.35);color:var(--cream)}
+  .btnrow{display:flex;gap:16px;margin-top:44px;flex-wrap:wrap}
+
+  .note{margin-top:26px;font:400 14px/1.55 var(--sans);color:var(--cream40);max-width:46em}
+  .logo{height:22px;display:block;margin-bottom:60px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+
+  @media(max-width:640px){
+    body{font-size:17px}
+    .wrap{padding:0 24px}
+    section{padding:72px 0}
+    header.masthead{padding:84px 0 60px}
+    h1,.h1{font-size:44px;line-height:1.05}
+    h2,.h2{font-size:32px;line-height:1.12}
+    h3,.h3{font-size:19px}
+    .h1s{font-size:40px}
+    .h2s{font-size:28px}
+    p.body,.body{font-size:17px;line-height:1.6}
+    .lede{font-size:19px}
+    .eyebrow{font-size:12px;margin-bottom:20px}
+    .statband{grid-template-columns:1fr;gap:36px;padding:44px 0}
+    .stat .n{font-size:42px}
+    blockquote.testi .q{font-size:24px}
+    .phonewrap{grid-template-columns:1fr;gap:36px}
+    .grid2{grid-template-columns:1fr;gap:36px}
+    figcaption{font-size:13px}
+  }
+</style>
+</head>
+<body>
+
+<div class="badge">STYLEGUIDE-1 <span>· SITE DESIGN SYSTEM · PLACEHOLDER COPY</span></div>
+
+<header class="masthead">
+  <div class="wrap">
+    <img class="logo" src="/inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+    <div class="eyebrow">Site Design System · Extracted from the Referent Board</div>
+    <h1>The world stays black and white. Color arrives as an event.</h1>
+    <p class="lede" style="margin-top:34px">Every rule on this page traces to a frame Michael approved. Nothing here is invented taste. All copy on this page is placeholder; real language comes later, through the gated copy lanes.</p>
+  </div>
+</header>
+
+<section id="laws">
+  <div class="wrap">
+    <div class="eyebrow">01 · The World</div>
+    <h2>Nine laws, none negotiable</h2>
+    <ul class="zlist">
+      <li>The ground is near-black. Photography is black and white, hard sun, real blacks and blown whites.</li>
+      <li>Color is an event, one per screen. It belongs to a person or a thing, never a wash.</li>
+      <li>Violet is the site accent. The other three colors exist and appear only when the content is theirs.</li>
+      <li>People in daylight are lit: bright skin, squints, crisp cast shadows. Full silhouettes are dusk grammar.</li>
+      <li>Waves are drawn by code, never generated. Wave E is the only wave. Water-3 is the only water.</li>
+      <li>No fills or panels over photography. Type sits on the stage ground, photos breathe alone.</li>
+      <li>Numbers are always Switzer. The serif never touches a digit.</li>
+      <li>The wordmark is the real asset, cream on dark, never re-typeset.</li>
+      <li>No charts anywhere until the site exists and the content is decided.</li>
+    </ul>
+    <p class="note">Sources: r19 parasol, r20 crosswalk, r21 rose-spin and four-caps-dive, wave dose E, water-embellish-3, plus the 30-frame keeper board.</p>
+  </div>
+</section>
+
+<section id="color">
+  <div class="wrap">
+    <div class="eyebrow">02 · Color</div>
+    <h2>Locked tokens only</h2>
+    <p class="body" style="margin-top:30px">From design/tokens.json, the single source of truth. The stage and cream carry ninety percent of the site. The four frequency colors arrive like the parasol arrives: carried, lit, singular.</p>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#0B0712"></div><div class="meta">Stage<span>#0B0712 · the ground</span></div></div>
+      <div class="sw"><div class="chip" style="background:#1A1620"></div><div class="meta">Ink<span>#1A1620 · lifted panels</span></div></div>
+      <div class="sw"><div class="chip" style="background:#FBF8F3"></div><div class="meta">MoonDust<span>#FBF8F3 · type, wordmark</span></div></div>
+      <div class="sw"><div class="chip" style="background:#FFFFFF"></div><div class="meta">Bleach<span>#FFFFFF · blown whites</span></div></div>
+      <div class="sw"><div class="chip" style="background:#6521C9"></div><div class="meta">Core Violet<span>#6521C9 · the accent</span></div></div>
+      <div class="sw"><div class="chip" style="background:#B90044"></div><div class="meta">Love Rose<span>#B90044 · event only</span></div></div>
+      <div class="sw"><div class="chip" style="background:#FF9112"></div><div class="meta">Vitality Amber<span>#FF9112 · event only</span></div></div>
+      <div class="sw"><div class="chip" style="background:#12A56E"></div><div class="meta">Abundance Emerald<span>#12A56E · event only</span></div></div>
+    </div>
+    <p class="note">On the dark stage, accent text uses Violet Soft #D2C8FF for legibility; the vivid #6521C9 is for graphic surfaces, buttons and drawn waves. Ratios: roughly 90 percent stage and cream, 10 percent color, of which violet takes nearly all.</p>
+  </div>
+</section>
+
+<section id="type">
+  <div class="wrap">
+    <div class="eyebrow">03 · Type</div>
+    <h2>Two voices: the serif speaks, Switzer works</h2>
+    <p class="body" style="margin-top:30px">Cormorant Garamond carries the big human statements. Switzer carries everything functional: body, labels, captions, and every number. Both weights of every headline exist in both fonts; the Switzer twin is the fallback pending the font license call.</p>
+
+    <div class="specimen">
+      <div class="eyebrow" style="margin-bottom:10px">Eyebrow · Section kicker</div>
+      <div class="spec">Switzer 600 · <b>13px</b> desktop · <b>12px</b> mobile · tracking .18em · uppercase · Violet Soft</div>
+    </div>
+
+    <div class="specimen">
+      <div class="h1">Headline one, the serif</div>
+      <div class="spec">H1 · Cormorant 500 · <b>84 / 1.02</b> desktop · <b>44 / 1.05</b> mobile · tracking -.01em</div>
+    </div>
+    <div class="specimen">
+      <div class="h1s">Headline one, Switzer twin</div>
+      <div class="spec">H1-S · Switzer 600 · <b>72 / 1.04</b> desktop · <b>40</b> mobile · tracking -.025em</div>
+    </div>
+
+    <div class="specimen">
+      <div class="h2">Headline two carries a section</div>
+      <div class="spec">H2 · Cormorant 500 · <b>52 / 1.08</b> desktop · <b>32 / 1.12</b> mobile</div>
+    </div>
+    <div class="specimen">
+      <div class="h2s">Headline two, Switzer twin</div>
+      <div class="spec">H2-S · Switzer 600 · <b>44 / 1.1</b> desktop · <b>28</b> mobile · tracking -.02em</div>
+    </div>
+
+    <div class="specimen">
+      <h3>Headline three is Switzer, always</h3>
+      <div class="spec">H3 · Switzer 600 · <b>22 / 1.3</b> desktop · <b>19</b> mobile</div>
+    </div>
+
+    <div class="specimen">
+      <p class="body">Body copy is Switzer at a generous measure. Paragraphs run one to three sentences and never longer, with real air between them. The reading width holds at thirty-four ems so a line never exceeds about seventy characters.</p>
+      <div class="spec">Body · Switzer 400 · <b>19 / 1.65</b> desktop · <b>17 / 1.6</b> mobile · max 34em</div>
+    </div>
+
+    <div class="specimen">
+      <div class="stat"><div class="n">98.6<em>%</em></div></div>
+      <div class="spec">Stat digits · Switzer 600 · <b>64</b> desktop · <b>42</b> mobile · digits never serif</div>
+    </div>
+  </div>
+</section>
+
+<section id="photo">
+  <div class="wrap">
+    <div class="eyebrow">04 · Photography and Captions</div>
+    <h2>The photo breathes, the caption whispers</h2>
+    <figure class="photo">
+      <img src="/site/assets/refs/ref-parasol.jpg" alt="Woman on a bench under a violet parasol, black and white plaza, hard sun">
+      <figcaption><b>Placeholder caption.</b> One or two lines, fourteen words at most, set small under a hairline rule. It names what the reader is seeing and stops.</figcaption>
+    </figure>
+    <div class="spec">Caption · Switzer 400 · <b>14 / 1.5</b> desktop · <b>13</b> mobile · cream 58% · hairline rule above · max 14 words</div>
+
+    <figure class="photo">
+      <img src="/site/assets/refs/ref-crosswalk.jpg" alt="Woman in a violet dress crossing a black and white street in hard sun">
+      <figcaption><b>Contained or full-bleed, never boxed.</b> Photos sit directly on the stage with a 4px radius, no borders, no panels, no overlays.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="lists">
+  <div class="wrap">
+    <div class="eyebrow">05 · Lists</div>
+    <h2>Two list forms, nothing else</h2>
+    <div class="grid2" style="margin-top:30px">
+      <div>
+        <h3>Unordered: the tick</h3>
+        <ul class="zlist">
+          <li>Each marker is a short violet line, a quiet signal.</li>
+          <li>Items run twelve words or fewer.</li>
+          <li>Three to six items per list, never more.</li>
+        </ul>
+        <div class="spec">Marker · <b>16×2px</b> Violet Glint · text Switzer body</div>
+      </div>
+      <div>
+        <h3>Ordered: the counter</h3>
+        <ol class="zlist">
+          <li>Numbers are Switzer, letterspaced, violet soft.</li>
+          <li>A hairline separates each step.</li>
+          <li>Used for sequences the reader will actually follow.</li>
+        </ol>
+        <div class="spec">Counter · Switzer 600 <b>14px</b> · leading-zero style</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="lengths">
+  <div class="wrap">
+    <div class="eyebrow">06 · Copy Segment Lengths</div>
+    <h2>How long anything is allowed to be</h2>
+    <p class="body" style="margin-top:30px">Identical limits on desktop and mobile. The design assumes these lengths; copy that exceeds them changes the design, so it goes back to the copy lane instead.</p>
+    <table class="law">
+      <tr><th>Element</th><th>Limit</th><th>Rule</th></tr>
+      <tr><td>H1</td><td>4 to 9 words</td><td>One line at desktop, never three lines anywhere.</td></tr>
+      <tr><td>Subhead / lede</td><td>22 words max</td><td>Two lines max. One idea, no comma chains.</td></tr>
+      <tr><td>Section intro</td><td>45 words max</td><td>Two to three sentences under an H2, then stop.</td></tr>
+      <tr><td>Body paragraph</td><td>55 words max</td><td>One to three sentences. Air between paragraphs is part of the design.</td></tr>
+      <tr><td>Photo caption</td><td>14 words max</td><td>One to two lines. Names what is seen, adds one fact.</td></tr>
+      <tr><td>Pull quote</td><td>30 words max</td><td>Use the banked Short version; Full lives on the testimonial page.</td></tr>
+      <tr><td>List item</td><td>12 words max</td><td>Front-load the noun. No trailing clauses.</td></tr>
+      <tr><td>Stat label</td><td>4 words max</td><td>Uppercase, under the number, never above it.</td></tr>
+      <tr><td>Button</td><td>2 to 4 words</td><td>A verb first. One primary button per screen.</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="proof">
+  <div class="wrap">
+    <div class="eyebrow">07 · Social Proof</div>
+    <h2>Proof is a first-class element</h2>
+    <p class="body" style="margin-top:30px">Two proof patterns carry the site: the stat band and the testimonial. Numbers below are the real locked beta numbers; the quote is a real approved endorsement. Their placement here shows the pattern, final placement is the site build's call.</p>
+
+    <div class="statband">
+      <div class="stat"><div class="n">98.6<em>%</em></div><div class="l">Would recommend it</div></div>
+      <div class="stat"><div class="n">84<em>%</em></div><div class="l">Called it life-changing</div></div>
+      <div class="stat"><div class="n">7</div><div class="l">Measured outcomes</div></div>
+    </div>
+    <p class="caveat">From our 52-week study of 300 people. The life-changing figure and the seven outcomes are among members who used it as designed: about nine minutes a day, balanced across all four frequencies.</p>
+    <div class="spec">Stat band · digits Switzer 600 <b>64/42</b> · labels 14px uppercase · caveat always travels with the numbers</div>
+
+    <blockquote class="testi">
+      <div class="q">"My husband Tristan, a Qigong master, said: 'I could feel the vibrations moving through my system. It felt aligned to me.' That's when I knew this isn't just sound - it is an energetic recalibration."</div>
+      <div class="who">Sabrina Truscott<span>Entrepreneur, Owner at Satori Method Academy</span></div>
+    </blockquote>
+    <div class="spec">Quote · Cormorant 500 italic <b>30 / 1.4</b> desktop · <b>24</b> mobile · name Switzer 600 caps · title below in cream 58%</div>
+    <p class="note">Testimonial portraits ship as transparent cutouts on the stage ground. The dual-gel treatment is banked and waits until the site design calls for it. Titled people lead the roster.</p>
+  </div>
+</section>
+
+<section id="phone">
+  <div class="wrap">
+    <div class="eyebrow">08 · The Phone</div>
+    <h2>The screen is the only full-color object</h2>
+    <div class="phonewrap">
+      <img src="/site/assets/refs/phone-hero-transparent.png" alt="Zodiac app on a rendered phone, transparent background">
+      <div>
+        <p class="body">The hero device is our rendered phone with true transparency, dropped straight on the stage. In a monochrome world the living screen is the loudest color on the page, so it needs nothing behind it.</p>
+        <ul class="zlist">
+          <li>Any new angle or pose is one script line away.</li>
+          <li>Smoke and wave dressing come from the code engines.</li>
+          <li>Never place the phone over photography.</li>
+        </ul>
+        <div class="btnrow">
+          <a class="btn" href="#">Placeholder CTA</a>
+          <a class="btn ghost" href="#">Secondary</a>
+        </div>
+        <div class="spec" style="margin-top:26px">Primary btn · Switzer 600 <b>16px</b> · violet functional gradient · radius 10 · one per screen</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="grid" style="border-bottom:none">
+  <div class="wrap">
+    <div class="eyebrow">09 · Grid and Rhythm</div>
+    <h2>Air is the luxury</h2>
+    <table class="law">
+      <tr><th>Property</th><th>Desktop</th><th>Mobile (375 floor)</th></tr>
+      <tr><td>Content max width</td><td>1140px</td><td>100% minus gutters</td></tr>
+      <tr><td>Gutters</td><td>32px</td><td>24px</td></tr>
+      <tr><td>Section padding</td><td>120px top and bottom</td><td>72px top and bottom</td></tr>
+      <tr><td>Heading to intro gap</td><td>30px</td><td>24px</td></tr>
+      <tr><td>Photo to caption gap</td><td>14px + hairline</td><td>14px + hairline</td></tr>
+      <tr><td>Hairline</td><td colspan="2">1px, cream at 13% opacity, the only divider in the system</td></tr>
+    </table>
+    <p class="note" style="margin-top:44px">Styleguide 1 · extracted 2026-08-11 from the tapped referent board · fonts are trial licenses, mockups only · design system authority: design/tokens.json + the referent board. Placeholder copy throughout; no line on this page is approved language.</p>
+  </div>
+</section>
+
+</body>
+</html>
