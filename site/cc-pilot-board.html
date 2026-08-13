@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Correction Pilot · 4 Before/After Pairs</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0B0712; color:#F6F1E8; font-family:'Switzer','Helvetica Neue',Arial,sans-serif; padding:0 0 120px; }
+  .wrap { max-width:1240px; margin:0 auto; padding:0 20px; }
+  header { padding:56px 0 8px; }
+  .variant-badge { display:inline-block; font-size:12px; letter-spacing:.14em; text-transform:uppercase; background:#6521C9; color:#F6F1E8; padding:5px 12px; border-radius:4px; margin-bottom:18px; }
+  h1 { font-size:clamp(30px,4.5vw,44px); font-weight:600; letter-spacing:-.01em; }
+  .intro { color:#B7AFC4; font-size:16px; line-height:1.55; max-width:760px; margin:14px 0 8px; }
+  .intro b { color:#F6F1E8; }
+  .pair-head { display:flex; align-items:baseline; gap:14px; margin:64px 0 4px; padding-top:22px; border-top:1px solid #241B31; }
+  .pair-head .dot { width:14px; height:14px; border-radius:50%; flex:none; align-self:center; }
+  .pair-head h2 { font-size:clamp(22px,3vw,30px); font-weight:600; }
+  .pair-head .num { color:#8a8194; font-size:clamp(22px,3vw,30px); font-weight:600; }
+  .look { color:#B7AFC4; font-size:15px; line-height:1.5; margin:6px 0 18px; max-width:760px; }
+  .look b { color:#F6F1E8; }
+  .duo { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media (max-width:740px){ .duo { grid-template-columns:1fr; gap:22px; } }
+  .shot { display:block; text-decoration:none; color:inherit; background:#130D1D; border:1px solid #241B31; border-radius:10px; overflow:hidden; }
+  .shot img { width:100%; display:block; }
+  .shot .tag { display:block; padding:10px 14px; font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:#B7AFC4; }
+  .shot.after { border-color:#6521C9; }
+  .shot.after .tag { color:#D9CFE8; background:linear-gradient(90deg,#1d1229,#130D1D); }
+  .calls { margin-top:72px; padding-top:26px; border-top:1px solid #241B31; }
+  .calls h2 { font-size:clamp(22px,3vw,30px); font-weight:600; margin-bottom:6px; }
+  .calls p.sub { color:#B7AFC4; font-size:15px; margin-bottom:20px; }
+  .call { background:#130D1D; border:1px solid #241B31; border-radius:10px; padding:16px 18px; margin-bottom:14px; }
+  .call .num-name { display:flex; gap:12px; align-items:baseline; }
+  .call .num { font-size:15px; color:#8a8194; flex:none; font-variant-numeric:tabular-nums; }
+  .call .name { font-size:18px; font-weight:600; line-height:1.3; }
+  .call p { color:#B7AFC4; font-size:14.5px; line-height:1.5; margin-top:6px; }
+  .answer { margin-top:56px; background:#1d1229; border:1px solid #6521C9; border-radius:10px; padding:20px 22px; }
+  .answer h3 { font-size:17px; margin-bottom:8px; }
+  .answer p { color:#D9CFE8; font-size:15px; line-height:1.6; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <span class="variant-badge">COLOR CORRECTION PILOT · STYLE GUIDE INPUT</span>
+  <h1>4 pairs: same photo, color pulled onto our wheel</h1>
+  <p class="intro">The audit found every approved frame within range, but three hues drift (violet goes blue, rose goes magenta, emerald wobbles) and some events are too quiet. This is the proposed fix, run on the four worst cases: <b>a code pass, no re-generation</b> &mdash; the photo is untouched except the color event itself, rotated onto the exact brand hue. <b>BEFORE is left, AFTER is right</b> (top/bottom on phone). Click any image for full size.</p>
+  <p class="intro"><b>Answer with the number and yes or no</b> (&ldquo;1 yes, 2 yes, 3 no&hellip;&rdquo;). Yes = the corrected version is what enters the style guide.</p>
+</header>
+
+<section>
+  <div class="pair-head"><span class="dot" style="background:linear-gradient(135deg,#6521C9,#A737C8)"></span><span class="num">01</span><h2>Violet Turntable &mdash; blue pulled back to violet</h2></div>
+  <p class="look">Look at the light on the vinyl. Before, it reads <b>cobalt blue</b> &mdash; not a color on our wheel. After, it is <b>Core violet</b>, the brand anchor. This was the biggest drift in the whole set (28% of the frame).</p>
+  <div class="duo">
+    <a class="shot" href="assets/cc-pilot/01-violet-turntable-before.jpg" target="_blank"><img src="assets/cc-pilot/01-violet-turntable-before.jpg" alt=""><span class="tag">Before &mdash; drifts blue</span></a>
+    <a class="shot after" href="assets/cc-pilot/01-violet-turntable-after.jpg" target="_blank"><img src="assets/cc-pilot/01-violet-turntable-after.jpg" alt=""><span class="tag">After &mdash; Core violet</span></a>
+  </div>
+</section>
+
+<section>
+  <div class="pair-head"><span class="dot" style="background:linear-gradient(135deg,#B90044,#E0559A)"></span><span class="num">02</span><h2>Rose Laundry Dress &mdash; magenta pulled back to rose</h2></div>
+  <p class="look">Look at the dress. Before, it runs <b>hot magenta</b> (the &ldquo;pink runs hot&rdquo; problem in almost every rose frame). After, it is the <b>Love rose</b>. Everything else in the frame is untouched.</p>
+  <div class="duo">
+    <a class="shot" href="assets/cc-pilot/02-rose-laundry-before.jpg" target="_blank"><img src="assets/cc-pilot/02-rose-laundry-before.jpg" alt=""><span class="tag">Before &mdash; runs magenta</span></a>
+    <a class="shot after" href="assets/cc-pilot/02-rose-laundry-after.jpg" target="_blank"><img src="assets/cc-pilot/02-rose-laundry-after.jpg" alt=""><span class="tag">After &mdash; Love rose</span></a>
+  </div>
+</section>
+
+<section>
+  <div class="pair-head"><span class="dot" style="background:linear-gradient(135deg,#12A56E,#46D99A)"></span><span class="num">03</span><h2>Emerald Go Lights &mdash; teal pulled back to emerald</h2></div>
+  <p class="look">Look at the traffic lights and their reflections on the wet street. Before, they lean <b>teal/cyan</b>. After, they are the <b>Abundance emerald</b>. Subtler than 01 and 02 &mdash; this is what most of the batch would look like.</p>
+  <div class="duo">
+    <a class="shot" href="assets/cc-pilot/03-emerald-go-before.jpg" target="_blank"><img src="assets/cc-pilot/03-emerald-go-before.jpg" alt=""><span class="tag">Before &mdash; leans teal</span></a>
+    <a class="shot after" href="assets/cc-pilot/03-emerald-go-after.jpg" target="_blank"><img src="assets/cc-pilot/03-emerald-go-after.jpg" alt=""><span class="tag">After &mdash; Abundance emerald</span></a>
+  </div>
+</section>
+
+<section>
+  <div class="pair-head"><span class="dot" style="background:linear-gradient(135deg,#12A56E,#46D99A)"></span><span class="num">04</span><h2>Emerald Speaker &mdash; same hue, turned UP</h2></div>
+  <p class="look">This one is not a hue fix, it is the <b>loudness fix</b>: the hero object was on-hue but muted, against the color-pops-as-art law. After, the speaker <b>pops</b> &mdash; and its bounce light on the board edge comes up with it, so it still reads as light, not paint.</p>
+  <div class="duo">
+    <a class="shot" href="assets/cc-pilot/04-emerald-speaker-before.jpg" target="_blank"><img src="assets/cc-pilot/04-emerald-speaker-before.jpg" alt=""><span class="tag">Before &mdash; on-hue but quiet</span></a>
+    <a class="shot after" href="assets/cc-pilot/04-emerald-speaker-after.jpg" target="_blank"><img src="assets/cc-pilot/04-emerald-speaker-after.jpg" alt=""><span class="tag">After &mdash; turned up to pop</span></a>
+  </div>
+</section>
+
+<section class="calls">
+  <h2>Then three calls, same list</h2>
+  <p class="sub">Answer these with the same numbers (&ldquo;5 yes&hellip;&rdquo;).</p>
+  <div class="call"><div class="num-name"><span class="num">05</span><span class="name">Batch the rest</span></div><p>17 more approved frames in our lanes carry the same drifts. Same code pass, every corrected frame re-measured and eyeballed before it enters the style guide. Originals always kept.</p></div>
+  <div class="call"><div class="num-name"><span class="num">06</span><span class="name">Hand the R28 findings to that lane</span></div><p>8 flagged frames belong to the other session's R28 set (including the violet turntable above &mdash; shown here as the demo because it was the worst drift). I hand over the findings and the tool; that session corrects its own frames.</p></div>
+  <div class="call"><div class="num-name"><span class="num">07</span><span class="name">Standing gate</span></div><p>Every future round runs the color audit on its keepers before the board ships. The style guide admits only clean or corrected frames. This cleanup never happens again.</p></div>
+</section>
+
+<div class="answer">
+  <h3>How to answer</h3>
+  <p>One line: <b>&ldquo;1 yes, 2 yes, 3 yes, 4 no, 5 yes, 6 yes, 7 yes&rdquo;</b> &mdash; or just &ldquo;all yes&rdquo;. A no on any pair tells me the correction is too visible or the wrong direction; say a word about why if you can (&ldquo;4 no, too loud&rdquo;).</p>
+</div>
+</div>
+</body>
+</html>
