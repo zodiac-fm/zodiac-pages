@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R31 Board — T-Pass Fixes + R31 Re-Gens</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { max-width:100%; overflow-x:hidden; }
+  body { background:#0B0712; color:#F6F1E8; font-family:'Switzer','Helvetica Neue',Arial,sans-serif; padding:0 0 120px; }
+  img { max-width:100%; }
+  .wrap { max-width:1240px; margin:0 auto; padding:0 20px; }
+  header { padding:56px 0 8px; }
+  .variant-badge { display:inline-block; font-size:12px; letter-spacing:.14em; text-transform:uppercase; background:#6521C9; color:#F6F1E8; padding:5px 12px; border-radius:4px; margin-bottom:18px; }
+  h1 { font-size:clamp(28px,4.5vw,44px); font-weight:600; letter-spacing:-.01em; line-height:1.15; }
+  .intro { color:#B7AFC4; font-size:16px; line-height:1.55; max-width:760px; margin:14px 0 8px; }
+  .intro b { color:#F6F1E8; }
+
+  .sec-head { margin:72px 0 6px; padding-top:24px; border-top:1px solid #241B31; }
+  .sec-head h2 { font-size:clamp(22px,3vw,32px); font-weight:600; }
+  .sec-head p { color:#B7AFC4; font-size:15px; line-height:1.55; max-width:760px; margin-top:8px; }
+
+  .item { margin-top:48px; }
+  .item-head { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  .item-head .num { font-size:clamp(26px,4vw,38px); font-weight:700; color:#F6F1E8; font-variant-numeric:tabular-nums; line-height:1; flex:none; }
+  .item-head .name { font-size:clamp(20px,2.6vw,28px); font-weight:600; line-height:1.2; }
+  .tags { margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; }
+  .tag { font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; padding:3px 9px; border-radius:4px; background:#241B31; color:#B7AFC4; }
+  .tag.cat { background:#2E2440; color:#D9CFE8; }
+  .flag { margin-top:10px; font-size:13px; line-height:1.5; color:#8a8194; max-width:760px; }
+  .flag b { color:#B7AFC4; font-weight:600; }
+
+  .duo { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:16px; }
+  .solo { display:block; margin-top:16px; }
+  @media (max-width:740px){ .duo { grid-template-columns:1fr; gap:20px; } }
+  .shot { display:block; text-decoration:none; color:inherit; background:#130D1D; border:1px solid #241B31; border-radius:10px; overflow:hidden; }
+  .shot img { width:100%; display:block; }
+  .shot .lbl { display:block; padding:10px 14px; font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:#8a8194; }
+  .shot.after { border-color:#6521C9; }
+  .shot.after .lbl { color:#D9CFE8; background:linear-gradient(90deg,#1d1229,#130D1D); }
+
+  .r31grid { display:grid; grid-template-columns:repeat(2,1fr); gap:34px; }
+  @media (max-width:900px){ .r31grid { grid-template-columns:1fr; } }
+  .r31grid .item { margin-top:0; }
+
+  .answers { margin-top:80px; padding-top:26px; border-top:1px solid #241B31; }
+  .answers h2 { font-size:clamp(22px,3vw,30px); font-weight:600; }
+  .answers p.sub { color:#B7AFC4; font-size:15px; line-height:1.55; margin:8px 0 20px; max-width:760px; }
+  .answers p.sub b { color:#F6F1E8; }
+  ol.list { list-style:none; counter-reset:none; }
+  ol.list li { display:flex; gap:12px; align-items:baseline; background:#130D1D; border:1px solid #241B31; border-radius:8px; padding:12px 16px; margin-bottom:10px; }
+  ol.list li .n { font-size:15px; color:#8a8194; font-variant-numeric:tabular-nums; flex:none; min-width:26px; }
+  ol.list li .t { font-size:16px; font-weight:600; line-height:1.35; }
+  ol.list li .k { font-size:13px; color:#8a8194; font-weight:400; }
+  ol.list li.gap { margin-top:22px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="variant-badge">R31 · T-PASS + RE-GENS · REVIEW BOARD</span>
+  <h1>R31 Board &mdash; T-Pass Fixes + R31 Re-Gens</h1>
+  <p class="intro">Top section (01&ndash;06): the six frames where you said <b>love the photo, fix the treatment</b> &mdash; same photos, re-graded in code, shown before and after. Bottom section (07&ndash;12): the six re-gen slots from your R30 notes. Click any image to open it full size.</p>
+</header>
+
+<section>
+  <div class="sec-head">
+    <h2>T-Pass &mdash; same photo, treatment fixed</h2>
+    <p>No re-generation here. The black-and-white field is pushed deeper and the colour event is pulled onto the exact brand colour, so the colour reads as ours. <b>BEFORE is left, AFTER is right</b> (stacked on phone). Your originals are untouched on disk.</p>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">01</span><span class="name">Rooftop Toast</span></div>
+    <div class="tags"><span class="tag cat">T-PASS</span><span class="tag">Vitality amber</span></div>
+    <div class="duo">
+      <a class="shot" href="assets/r31/01-rooftop-toast-before.jpg" target="_blank"><img src="assets/r31/01-rooftop-toast-before.jpg" alt="Rooftop Toast, before"><span class="lbl">Before</span></a>
+      <a class="shot after" href="assets/r31/01-rooftop-toast-after.jpg" target="_blank"><img src="assets/r31/01-rooftop-toast-after.jpg" alt="Rooftop Toast, after"><span class="lbl">After &mdash; graded</span></a>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">02</span><span class="name">Piggyback</span></div>
+    <div class="tags"><span class="tag cat">T-PASS</span><span class="tag">Love rose</span></div>
+    <div class="duo">
+      <a class="shot" href="assets/r31/02-piggyback-before.jpg" target="_blank"><img src="assets/r31/02-piggyback-before.jpg" alt="Piggyback, before"><span class="lbl">Before</span></a>
+      <a class="shot after" href="assets/r31/02-piggyback-after.jpg" target="_blank"><img src="assets/r31/02-piggyback-after.jpg" alt="Piggyback, after"><span class="lbl">After &mdash; graded</span></a>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">03</span><span class="name">Arrival Spin</span></div>
+    <div class="tags"><span class="tag cat">T-PASS</span><span class="tag">Love rose</span></div>
+    <p class="flag"><b>Flag:</b> some rose sits on the coat &mdash; that&rsquo;s where the original light fell; only a re-gen could move it to skin.</p>
+    <div class="duo">
+      <a class="shot" href="assets/r31/03-arrival-spin-before.jpg" target="_blank"><img src="assets/r31/03-arrival-spin-before.jpg" alt="Arrival Spin, before"><span class="lbl">Before</span></a>
+      <a class="shot after" href="assets/r31/03-arrival-spin-after.jpg" target="_blank"><img src="assets/r31/03-arrival-spin-after.jpg" alt="Arrival Spin, after"><span class="lbl">After &mdash; graded</span></a>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">04</span><span class="name">Fort Reveal</span></div>
+    <div class="tags"><span class="tag cat">T-PASS</span><span class="tag">Vitality amber</span></div>
+    <div class="duo">
+      <a class="shot" href="assets/r31/04-fort-reveal-before.jpg" target="_blank"><img src="assets/r31/04-fort-reveal-before.jpg" alt="Fort Reveal, before"><span class="lbl">Before</span></a>
+      <a class="shot after" href="assets/r31/04-fort-reveal-after.jpg" target="_blank"><img src="assets/r31/04-fort-reveal-after.jpg" alt="Fort Reveal, after"><span class="lbl">After &mdash; graded</span></a>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">05</span><span class="name">Dawn Swimmer</span></div>
+    <div class="tags"><span class="tag cat">T-PASS</span><span class="tag">Vitality amber</span></div>
+    <div class="duo">
+      <a class="shot" href="assets/r31/05-dawn-swimmer-before.jpg" target="_blank"><img src="assets/r31/05-dawn-swimmer-before.jpg" alt="Dawn Swimmer, before"><span class="lbl">Before</span></a>
+      <a class="shot after" href="assets/r31/05-dawn-swimmer-after.jpg" target="_blank"><img src="assets/r31/05-dawn-swimmer-after.jpg" alt="Dawn Swimmer, after"><span class="lbl">After &mdash; graded</span></a>
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="item-head"><span class="num">06</span><span class="name">Harvest Crate</span></div>
+    <div class="tags"><span class="tag cat">T-PASS</span><span class="tag">Vitality amber</span></div>
+    <p class="flag"><b>Flag:</b> grade at its ceiling &mdash; the source photo had almost no light on her, so this reads as a warm rim-light. Re-gen candidate with an invented light.</p>
+    <div class="duo">
+      <a class="shot" href="assets/r31/06-harvest-crate-before.jpg" target="_blank"><img src="assets/r31/06-harvest-crate-before.jpg" alt="Harvest Crate, before"><span class="lbl">Before</span></a>
+      <a class="shot after" href="assets/r31/06-harvest-crate-after.jpg" target="_blank"><img src="assets/r31/06-harvest-crate-after.jpg" alt="Harvest Crate, after"><span class="lbl">After &mdash; graded</span></a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <h2>R31 &mdash; the six re-gens</h2>
+    <p>New frames built from your R30 notes: three colours in one frame, people lit instead of fabric, more black-and-white around the colour.</p>
+  </div>
+
+  <div class="r31grid">
+    <div class="item">
+      <div class="item-head"><span class="num">07</span><span class="name">Sprinkler Chase</span></div>
+      <div class="tags"><span class="tag cat">R31 RE-GEN</span><span class="tag">Violet + rose + amber</span></div>
+      <p class="flag"><b>Flag:</b> violet and rose ride the shirts more than skin; the amber child&rsquo;s spray reads as a sparkle burst.</p>
+      <a class="shot solo" href="assets/r31/07-sprinkler-chase.jpg" target="_blank"><img src="assets/r31/07-sprinkler-chase.jpg" alt="Sprinkler Chase, three colours"><span class="lbl">Three colours, one per child</span></a>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="num">08</span><span class="name">Stoop Cards</span></div>
+      <div class="tags"><span class="tag cat">R31 RE-GEN</span><span class="tag">Vitality amber</span></div>
+      <p class="flag"><b>Flag:</b> the card fans glow on their own. An alternate take fixes the cards but loses grandma&rsquo;s light &mdash; your call.</p>
+      <a class="shot solo" href="assets/r31/08-stoop-cards.jpg" target="_blank"><img src="assets/r31/08-stoop-cards.jpg" alt="Stoop Cards, relit"><span class="lbl">Relit &mdash; both faces brightest</span></a>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="num">09</span><span class="name">Double Dutch</span></div>
+      <div class="tags"><span class="tag cat">R31 RE-GEN</span><span class="tag">Core violet</span></div>
+      <a class="shot solo" href="assets/r31/09-double-dutch.jpg" target="_blank"><img src="assets/r31/09-double-dutch.jpg" alt="Double Dutch, lit rope"><span class="lbl">Lit rope</span></a>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="num">10</span><span class="name">Beach Circle</span></div>
+      <div class="tags"><span class="tag cat">R31 RE-GEN</span><span class="tag">Love rose</span></div>
+      <a class="shot solo" href="assets/r31/10-beach-circle.jpg" target="_blank"><img src="assets/r31/10-beach-circle.jpg" alt="Beach Circle in rose"><span class="lbl">Rose as art &mdash; few faces lit</span></a>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="num">11</span><span class="name">Barn Spin</span></div>
+      <div class="tags"><span class="tag cat">R31 RE-GEN</span><span class="tag">Violet + rose + amber</span></div>
+      <a class="shot solo" href="assets/r31/11-barn-spin.jpg" target="_blank"><img src="assets/r31/11-barn-spin.jpg" alt="Barn Spin, three colours"><span class="lbl">Three colours, one per dancer</span></a>
+    </div>
+
+    <div class="item">
+      <div class="item-head"><span class="num">12</span><span class="name">Wall Painter</span></div>
+      <div class="tags"><span class="tag cat">R31 RE-GEN</span><span class="tag">Core violet</span></div>
+      <p class="flag"><b>Flag:</b> one-attempt slot per your fix-or-kill &mdash; it lived.</p>
+      <a class="shot solo" href="assets/r31/12-wall-painter.jpg" target="_blank"><img src="assets/r31/12-wall-painter.jpg" alt="Wall Painter, person lit"><span class="lbl">The person lit, not the wall</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="answers">
+  <h2>Answer by number: keep / fix / dead &mdash; one line each</h2>
+  <p class="sub">For 01&ndash;06, you are judging the <b>after</b>: keep it, fix it (say what), or it&rsquo;s dead and the frame goes. For 07&ndash;12 you are judging the new frame the same way.</p>
+  <ol class="list">
+    <li><span class="n">01</span><span class="t">Rooftop Toast <span class="k">&mdash; T-pass, amber</span></span></li>
+    <li><span class="n">02</span><span class="t">Piggyback <span class="k">&mdash; T-pass, rose</span></span></li>
+    <li><span class="n">03</span><span class="t">Arrival Spin <span class="k">&mdash; T-pass, rose</span></span></li>
+    <li><span class="n">04</span><span class="t">Fort Reveal <span class="k">&mdash; T-pass, amber</span></span></li>
+    <li><span class="n">05</span><span class="t">Dawn Swimmer <span class="k">&mdash; T-pass, amber</span></span></li>
+    <li><span class="n">06</span><span class="t">Harvest Crate <span class="k">&mdash; T-pass, amber</span></span></li>
+    <li class="gap"><span class="n">07</span><span class="t">Sprinkler Chase <span class="k">&mdash; R31, three colours</span></span></li>
+    <li><span class="n">08</span><span class="t">Stoop Cards <span class="k">&mdash; R31, amber</span></span></li>
+    <li><span class="n">09</span><span class="t">Double Dutch <span class="k">&mdash; R31, violet</span></span></li>
+    <li><span class="n">10</span><span class="t">Beach Circle <span class="k">&mdash; R31, rose</span></span></li>
+    <li><span class="n">11</span><span class="t">Barn Spin <span class="k">&mdash; R31, three colours</span></span></li>
+    <li><span class="n">12</span><span class="t">Wall Painter <span class="k">&mdash; R31, violet</span></span></li>
+  </ol>
+</section>
+
+</div>
+</body>
+</html>
