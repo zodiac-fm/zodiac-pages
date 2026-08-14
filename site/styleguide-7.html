@@ -1,0 +1,993 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm Site Styleguide 7 · The Builder's Kit — World of Color</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype'); font-weight:400; }
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype'); font-weight:600; }
+
+  :root{
+    --stage:#0B0712; --ink:#1A1620; --card:#141019;
+    --cream:#FBF8F3; --cream82:rgba(251,248,243,.82); --cream58:rgba(251,248,243,.58); --cream40:rgba(251,248,243,.40);
+    --hair:rgba(251,248,243,.13);
+    --violet:#6521C9; --violet-deep:#38007A; --violet-soft:#D2C8FF; --violet-glint:#7A4AE0; --violet-gradend:#A737C8;
+    --rose:#B90044; --rose-end:#CF4090;
+    --amber:#FF9112; --amber-end:#FFC251; --amber-text:#C25500;
+    --emerald:#12A56E; --emerald-end:#46D99A;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+
+    /* responsive values: desktop (1140 grid, designed at 1440) */
+    --fs-body:19px; --lh-body:1.65;
+    --fs-h1:84px; --lh-h1:1.02;
+    --fs-h2:52px; --lh-h2:1.08;
+    --fs-h3:22px;
+    --fs-h1s:72px; --fs-h2s:44px;
+    --fs-lede:23px;
+    --fs-statement:30px;
+    --fs-eyebrow:13px; --mb-eyebrow:26px;
+    --pad-wrap:32px;
+    --pad-section:120px;
+    --pad-masthead-t:110px; --pad-masthead-b:90px;
+    --fs-statn:64px; --fs-bignum:120px; --fs-price:56px; --fs-freq:76px;
+    --fs-testiq:30px;
+    --fs-letter:21px; --pad-letter:40px;
+    --fs-figcap:14px;
+    --fs-faqq:18px;
+    --cols3:1fr 1fr 1fr; --cols2:1fr 1fr; --defcols:180px 1fr;
+    --phonecols:1.1fr 1fr;
+    --gap-grid2:56px;
+    --pad-demo:72px 56px;
+    --testiw:200px;
+  }
+  @media(max-width:900px){
+    :root{--cols3:1fr;--testiw:180px}
+  }
+  @media(max-width:640px){
+    :root{
+      --fs-body:17px; --lh-body:1.6;
+      --fs-h1:44px; --lh-h1:1.05;
+      --fs-h2:32px; --lh-h2:1.12;
+      --fs-h3:19px;
+      --fs-h1s:40px; --fs-h2s:28px;
+      --fs-lede:19px;
+      --fs-statement:24px;
+      --fs-eyebrow:12px; --mb-eyebrow:20px;
+      --pad-wrap:24px;
+      --pad-section:72px;
+      --pad-masthead-t:84px; --pad-masthead-b:60px;
+      --fs-statn:42px; --fs-bignum:64px; --fs-price:44px; --fs-freq:52px;
+      --fs-testiq:24px;
+      --fs-letter:19px; --pad-letter:24px;
+      --fs-figcap:13px;
+      --fs-faqq:17px;
+      --cols3:1fr; --cols2:1fr; --defcols:1fr;
+      --phonecols:1fr;
+      --gap-grid2:36px;
+      --pad-demo:48px 24px;
+      --testiw:150px;
+    }
+  }
+  /* the mobile state of the toggle: true 375 column, real values, not scaled */
+  body.vm{
+    --fs-body:17px; --lh-body:1.6;
+    --fs-h1:44px; --lh-h1:1.05;
+    --fs-h2:32px; --lh-h2:1.12;
+    --fs-h3:19px;
+    --fs-h1s:40px; --fs-h2s:28px;
+    --fs-lede:19px;
+    --fs-statement:24px;
+    --fs-eyebrow:12px; --mb-eyebrow:20px;
+    --pad-wrap:24px;
+    --pad-section:72px;
+    --pad-masthead-t:84px; --pad-masthead-b:60px;
+    --fs-statn:42px; --fs-bignum:64px; --fs-price:44px; --fs-freq:52px;
+    --fs-testiq:24px;
+    --fs-letter:19px; --pad-letter:24px;
+    --fs-figcap:13px;
+    --fs-faqq:17px;
+    --cols3:1fr; --cols2:1fr; --defcols:1fr;
+    --phonecols:1fr;
+    --gap-grid2:36px;
+    --pad-demo:48px 24px;
+    --testiw:150px;
+  }
+  body.vm .wrap{max-width:375px}
+  body.vm::before,body.vm::after{content:"";position:fixed;top:0;bottom:0;width:1px;background:var(--hair);z-index:1;pointer-events:none}
+  body.vm::before{left:calc(50% - 188px)}
+  body.vm::after{left:calc(50% + 187px)}
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--stage);color:var(--cream);font-family:var(--sans);font-size:var(--fs-body);line-height:var(--lh-body);-webkit-font-smoothing:antialiased}
+
+  .badge{position:fixed;top:14px;right:14px;z-index:50;font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--violet-soft);background:rgba(11,7,18,.85);border:1px solid rgba(210,200,255,.3);border-radius:6px;padding:9px 12px;backdrop-filter:blur(6px)}
+  .badge span{color:var(--cream40)}
+
+  .viewtoggle{position:fixed;top:14px;left:14px;z-index:50;display:flex;background:rgba(11,7,18,.85);border:1px solid rgba(210,200,255,.3);border-radius:6px;overflow:hidden;backdrop-filter:blur(6px)}
+  .viewtoggle button{font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--cream58);background:none;border:0;padding:9px 14px;cursor:pointer}
+  .viewtoggle button.on{color:var(--stage);background:var(--violet-soft)}
+  @media(max-width:640px){.viewtoggle{display:none}}
+
+  .wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad-wrap)}
+  section{padding:var(--pad-section) 0;border-bottom:1px solid var(--hair)}
+  header.masthead{padding:var(--pad-masthead-t) 0 var(--pad-masthead-b);border-bottom:1px solid var(--hair)}
+
+  .part{padding:26px 0;border-bottom:1px solid var(--hair)}
+  .part .wrap{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+  .part .pn{font:600 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--violet-soft)}
+  .part .pt{font:400 13px/1.5 var(--sans);color:var(--cream40)}
+
+  .eyebrow{font:600 var(--fs-eyebrow)/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:var(--mb-eyebrow)}
+  h1,.h1{font:500 var(--fs-h1)/var(--lh-h1) var(--serif);letter-spacing:-.01em;color:var(--cream)}
+  h2,.h2{font:500 var(--fs-h2)/var(--lh-h2) var(--serif);letter-spacing:-.005em;color:var(--cream)}
+  h3,.h3{font:600 var(--fs-h3)/1.3 var(--sans);color:var(--cream)}
+  .h1s{font:600 var(--fs-h1s)/1.04 var(--sans);letter-spacing:-.025em}
+  .h2s{font:600 var(--fs-h2s)/1.1 var(--sans);letter-spacing:-.02em}
+  p.body,.body{font:400 var(--fs-body)/var(--lh-body) var(--sans);color:var(--cream82);max-width:34em}
+  .lede{font:400 var(--fs-lede)/1.55 var(--sans);color:var(--cream82);max-width:30em}
+  .statement{font:500 var(--fs-statement)/1.35 var(--serif);font-style:italic;color:var(--cream);max-width:24em}
+
+  .toc{margin-top:44px;display:flex;flex-wrap:wrap;gap:10px 22px;max-width:56em}
+  .toc a{font:600 13px/1.6 var(--sans);letter-spacing:.06em;color:var(--cream58);text-decoration:none;border-bottom:1px solid var(--hair);padding-bottom:2px}
+  .toc a:hover{color:var(--violet-soft)}
+
+  .spec{display:inline-flex;flex-wrap:wrap;gap:6px 8px;line-height:1.5;align-items:center;margin:18px 0 0;font:600 11px/1 var(--sans);letter-spacing:.08em;color:var(--violet-soft);background:rgba(101,33,201,.16);border:1px solid rgba(210,200,255,.22);border-radius:5px;padding:8px 11px;text-transform:uppercase}
+  .spec b{color:var(--cream)}
+  .specimen{margin-top:56px}
+  .specimen + .specimen{margin-top:72px}
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:48px}
+  .sw{border:1px solid var(--hair);border-radius:8px;overflow:hidden}
+  .sw .chip{height:92px}
+  .sw .meta{padding:12px 13px;font:600 12px/1.5 var(--sans);letter-spacing:.04em}
+  .sw .meta span{display:block;font-weight:400;color:var(--cream58)}
+
+  .gradrow{display:grid;grid-template-columns:var(--cols3);gap:24px;margin-top:48px}
+  .grad{border:1px solid var(--hair);border-radius:8px;overflow:hidden}
+  .grad .chip{height:120px}
+  .grad .meta{padding:14px 15px;font:600 13px/1.6 var(--sans)}
+  .grad .meta span{display:block;font-weight:400;color:var(--cream58);font-size:13px}
+
+  figure.photo{margin-top:56px}
+  figure.photo img{width:100%;display:block;border-radius:4px}
+  figcaption{border-top:1px solid var(--hair);margin-top:14px;padding-top:12px;font:400 var(--fs-figcap)/1.5 var(--sans);color:var(--cream58);max-width:46em}
+  figcaption b{color:var(--cream82);font-weight:600}
+  .photogrid{display:grid;grid-template-columns:var(--cols2);gap:44px 32px;margin-top:56px}
+  .photogrid figure.photo{margin-top:0}
+  .prov{display:block;margin-top:4px;color:rgba(251,248,243,.42);font-size:12px;letter-spacing:.02em}
+  .bandcount{display:inline;margin:0 0 0 12px;color:rgba(251,248,243,.42);font-size:12px;letter-spacing:.02em;font-weight:400}
+  .treat{margin-top:44px;font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);padding-bottom:10px;border-bottom:1px solid var(--hair)}
+  .treat .bandcount{text-transform:none;letter-spacing:.02em}
+  .treat + .photogrid,.treat + figure.photo{margin-top:28px}
+  .pend{margin-top:28px;border:1px dashed rgba(210,200,255,.28);border-radius:4px;padding:34px 28px;font:400 15px/1.6 var(--sans);color:var(--cream58)}
+  .pend b{color:var(--cream82);font-weight:600}
+
+  ul.zlist{list-style:none;margin-top:34px;max-width:34em}
+  ul.zlist li{position:relative;padding:11px 0 11px 34px;color:var(--cream82)}
+  ul.zlist li::before{content:"";position:absolute;left:0;top:1.22em;width:16px;height:2px;background:var(--violet-glint)}
+  ol.zlist{list-style:none;counter-reset:z;margin-top:34px;max-width:34em}
+  ol.zlist li{counter-increment:z;position:relative;padding:14px 0 14px 46px;color:var(--cream82);border-bottom:1px solid var(--hair)}
+  ol.zlist li::before{content:counter(z,decimal-leading-zero);position:absolute;left:0;top:14px;font:600 14px/1.65 var(--sans);color:var(--violet-soft);letter-spacing:.05em}
+
+  dl.zdef{margin-top:34px;max-width:38em}
+  dl.zdef .row{display:grid;grid-template-columns:var(--defcols);gap:24px;padding:18px 0;border-bottom:1px solid var(--hair)}
+  body.vm dl.zdef .row{gap:8px}
+  dl.zdef dt{font:600 17px/1.5 var(--sans);color:var(--cream)}
+  dl.zdef dd{font:400 17px/1.6 var(--sans);color:var(--cream82)}
+
+  .faq{margin-top:48px;max-width:44em;border-top:1px solid var(--hair)}
+  .faq details{border-bottom:1px solid var(--hair)}
+  .faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:24px 0;font:600 var(--fs-faqq)/1.45 var(--sans);color:var(--cream)}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";flex:none;font:400 26px/1 var(--sans);color:var(--violet-soft);transition:transform .2s}
+  .faq details[open] summary::after{transform:rotate(45deg)}
+  .faq .a{padding:0 0 28px;max-width:40em}
+  .faq .a p{font:400 17px/1.65 var(--sans);color:var(--cream82)}
+  .faq .a p + p{margin-top:14px}
+
+  table.law{width:100%;border-collapse:collapse;margin-top:48px;font:400 15px/1.5 var(--sans)}
+  table.law th{font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cream58);text-align:left;padding:0 18px 14px 0;border-bottom:1px solid var(--hair)}
+  table.law td{padding:14px 18px 14px 0;border-bottom:1px solid var(--hair);color:var(--cream82);vertical-align:top}
+  table.law td:first-child{color:var(--cream);font-weight:600}
+
+  .statband{display:grid;grid-template-columns:var(--cols3);gap:32px;margin-top:56px;padding:56px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+  body.vm .statband{gap:36px;padding:44px 0}
+  .stat .n{font:600 var(--fs-statn)/1 var(--sans);letter-spacing:-.02em;color:var(--cream)}
+  .stat .n em{font-style:normal;color:var(--violet-soft)}
+  .stat .l{margin-top:12px;font:600 14px/1.4 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--cream58)}
+  .caveat{margin-top:22px;font:400 14px/1.55 var(--sans);color:var(--cream58);max-width:46em}
+
+  .bignum{font:600 var(--fs-bignum)/1 var(--sans);letter-spacing:-.03em;color:var(--cream)}
+  .bignum em{font-style:normal;color:var(--violet-soft)}
+  .price .n{font:600 var(--fs-price)/1 var(--sans);letter-spacing:-.02em;color:var(--cream)}
+  .price .per{font:400 17px/1 var(--sans);color:var(--cream58);margin-left:6px}
+  .freq .n{font:600 var(--fs-freq)/1 var(--sans);letter-spacing:-.02em;color:var(--cream)}
+  .freq .hz{font:400 24px/1 var(--sans);color:var(--violet-soft);margin-left:10px}
+  .numrow{display:grid;grid-template-columns:var(--cols2);gap:56px;margin-top:56px}
+
+  blockquote.testi{margin-top:56px;max-width:36em}
+  blockquote.testi .q{font:500 var(--fs-testiq)/1.4 var(--serif);font-style:italic;color:var(--cream)}
+  blockquote.testi .who{margin-top:24px;font:600 13px/1.6 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cream)}
+  blockquote.testi .who span{display:block;font-weight:400;letter-spacing:.04em;text-transform:none;color:var(--cream58)}
+
+  blockquote.letter{margin-top:56px;max-width:36em;border-left:1px solid var(--hair);padding-left:var(--pad-letter)}
+  blockquote.letter p{font:500 var(--fs-letter)/1.6 var(--serif);font-style:italic;color:var(--cream82)}
+  blockquote.letter p + p{margin-top:18px}
+  blockquote.letter p b{color:var(--cream);font-weight:600}
+  blockquote.letter .who{margin-top:28px;font:600 13px/1.6 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cream);font-style:normal}
+  blockquote.letter .who span{display:block;font-weight:400;letter-spacing:.04em;text-transform:none;color:var(--cream58)}
+
+  .quotestrip{display:grid;grid-template-columns:var(--cols3);gap:40px;margin-top:56px}
+  .quotestrip .qs{border-top:1px solid var(--hair);padding-top:22px}
+  .quotestrip .pq{font:500 20px/1.45 var(--serif);font-style:italic;color:var(--cream)}
+  .quotestrip .who{margin-top:14px;font:600 12px/1.6 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--cream58)}
+
+  .testirow{display:grid;grid-template-columns:var(--cols3);gap:40px;margin-top:64px}
+  .testicard img{width:var(--testiw);display:block;margin:0 0 4px}
+  .testicard .rule{border-top:1px solid var(--hair);padding-top:18px}
+  .testicard .pq{font:500 22px/1.4 var(--serif);font-style:italic;color:var(--cream)}
+  .testicard .who{margin-top:16px;font:600 12px/1.6 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cream)}
+  .testicard .who span{display:block;font-weight:400;letter-spacing:.03em;text-transform:none;color:var(--cream58)}
+
+  .apps{display:grid;grid-template-columns:var(--cols3);gap:40px;margin-top:64px}
+  .appshot img{width:100%;display:block;border-radius:22px;border:1px solid rgba(251,248,243,.18)}
+  .appshot .l{margin-top:16px;font:600 13px/1.5 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cream58);text-align:center}
+
+  .phonewrap{display:grid;grid-template-columns:var(--phonecols);gap:56px;align-items:center;margin-top:56px}
+  body.vm .phonewrap{gap:36px}
+  .phonewrap img{width:100%;max-width:370px;display:block;margin:0 auto}
+
+  .btn{display:inline-block;font:600 16px/1 var(--sans);letter-spacing:.02em;color:#fff;background:linear-gradient(160deg,var(--violet),var(--violet-deep));border-radius:10px;padding:17px 30px;text-decoration:none}
+  .btn.ghost{background:none;border:1px solid rgba(251,248,243,.35);color:var(--cream)}
+  .btnrow{display:flex;gap:16px;margin-top:44px;flex-wrap:wrap}
+
+  .note{margin-top:26px;font:400 14px/1.55 var(--sans);color:var(--cream40);max-width:46em}
+  .logo{height:22px;display:block;margin-bottom:60px}
+  .grid2{display:grid;grid-template-columns:var(--cols2);gap:var(--gap-grid2)}
+
+  .demo{margin-top:64px;border:1px dashed rgba(210,200,255,.28);border-radius:12px;padding:var(--pad-demo)}
+  .demo .tag{font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:44px}
+
+  .readcol{max-width:700px}
+  .readcol h3{margin-top:44px}
+  .readcol p{font:400 var(--fs-body)/1.7 var(--sans);color:var(--cream82)}
+  .readcol p + p{margin-top:22px}
+
+  .liblink{display:inline-block;margin-top:44px;font:600 15px/1.4 var(--sans);letter-spacing:.04em;color:var(--violet-soft);text-decoration:none;border:1px solid rgba(210,200,255,.3);border-radius:10px;padding:16px 24px}
+  .liblink span{color:var(--cream58);font-weight:400}
+
+  .divider-filament{display:block;width:100%;max-width:1140px;margin:0 auto;height:64px}
+</style>
+</head>
+<body>
+
+<div class="badge">STYLEGUIDE-7 <span>· THE BUILDER'S KIT · WORLD OF COLOR, ONE TREATMENT · PLACEHOLDER COPY EXCEPT WHERE MARKED</span></div>
+<div class="viewtoggle" role="group" aria-label="Preview width">
+  <button type="button" id="vt-desk" class="on">DESKTOP</button>
+  <button type="button" id="vt-mob">MOBILE 375</button>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <img class="logo" src="/inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+    <div class="eyebrow">Site Design System · The Complete Builder's Kit</div>
+    <h1>Everything the site builder grabs, in the order they grab it.</h1>
+    <p class="lede" style="margin-top:34px">The kit, reorganized around the builder's hand: foundations first, then every copy block, then proof, then imagery, then a section assembled. The toggle above renders the whole page in either of its two real states: desktop on the 1140 grid, designed at 1440, or the true 375 mobile column with real values, never scaled. The photographic library now lives on its own page. Copy is placeholder unless marked BANKED.</p>
+    <nav class="toc">
+      <a href="#laws">Laws</a>
+      <a href="#color">Color</a>
+      <a href="#gradients">Gradients</a>
+      <a href="#type">Type</a>
+      <a href="#grid">Grid</a>
+      <a href="#paragraphs">Paragraphs</a>
+      <a href="#lists">Lists</a>
+      <a href="#numbers">Numbers</a>
+      <a href="#lengths">Lengths</a>
+      <a href="#longshort">Long &amp; Short</a>
+      <a href="#proof">Testimonials</a>
+      <a href="#faq">FAQ</a>
+      <a href="#photo">Photography</a>
+      <a href="#frequencies">Frequencies</a>
+      <a href="#appscreens">App Screens</a>
+      <a href="#phone">The Phone</a>
+      <a href="#assembled">Assembled</a>
+    </nav>
+  </div>
+</header>
+
+<div class="part"><div class="wrap"><div class="pn">Part One · Foundations</div><div class="pt">The laws, the tokens, the type, the grid. Read before building anything.</div></div></div>
+
+<section id="laws">
+  <div class="wrap">
+    <div class="eyebrow">01 · The World</div>
+    <h2>Twelve laws, none negotiable</h2>
+    <ul class="zlist">
+      <li>The ground is near-black. Photography is black and white, hard sun, real blacks and blown whites.</li>
+      <li>The scene is black and white; the color pops out of it so it is art. Events are few, and every one is lit: a light effect, alive, never paint.</li>
+      <li>Violet is the site accent. The other three colors exist and appear only when the content is theirs.</li>
+      <li>Cast light may land on hands, hair, fabric, and environment. A face takes a slight shine at most. A face is never the carrier.</li>
+      <li>Light needs no source. An invented or absent source is legal; color may simply arrive on a person or a scene.</li>
+      <li>Silhouettes are legal when the color event is our hue, bright, and thumbnail-legible. People in daylight are lit: bright skin, squints, crisp cast shadows.</li>
+      <li>Drawn frequency is frozen everywhere until the wave lane lands. When it lands, waves come from code, never from generation.</li>
+      <li>No fills or panels over photography. Type sits on the stage ground, photos breathe alone.</li>
+      <li>Numbers are always Switzer. The serif never touches a digit.</li>
+      <li>The wordmark is the real asset, cream on dark, never re-typeset.</li>
+      <li>Gradients are linear and token-born. No radial glows, no gradient page grounds, no gradient text. Reading copy lives in a 700px column.</li>
+      <li>No charts anywhere until the site exists and the content is decided.</li>
+    </ul>
+    <p class="note">Sources: the 2026-08-12 eval-board pass (28 world-color YES), the R27 through R33 keeper taps and law corrections, the R33 merge to one treatment (Michael 2026-08-14), the color-integrity audit and correction lane, design/tokens.json.</p>
+  </div>
+</section>
+
+<section id="color">
+  <div class="wrap">
+    <div class="eyebrow">02 · Color</div>
+    <h2>Locked tokens only</h2>
+    <p class="body" style="margin-top:30px">From design/tokens.json, the single source of truth. The stage and cream carry ninety percent of the site. The four frequency colors arrive like the parasol arrives: carried, lit, singular.</p>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#0B0712"></div><div class="meta">Stage<span>#0B0712 · the ground</span></div></div>
+      <div class="sw"><div class="chip" style="background:#1A1620"></div><div class="meta">Ink<span>#1A1620 · lifted panels</span></div></div>
+      <div class="sw"><div class="chip" style="background:#FBF8F3"></div><div class="meta">MoonDust<span>#FBF8F3 · type, wordmark</span></div></div>
+      <div class="sw"><div class="chip" style="background:#FFFFFF"></div><div class="meta">Bleach<span>#FFFFFF · blown whites</span></div></div>
+      <div class="sw"><div class="chip" style="background:#6521C9"></div><div class="meta">Core Violet<span>#6521C9 · the accent</span></div></div>
+      <div class="sw"><div class="chip" style="background:#B90044"></div><div class="meta">Love Rose<span>#B90044 · event only</span></div></div>
+      <div class="sw"><div class="chip" style="background:#FF9112"></div><div class="meta">Vitality Amber<span>#FF9112 · event only</span></div></div>
+      <div class="sw"><div class="chip" style="background:#12A56E"></div><div class="meta">Abundance Emerald<span>#12A56E · event only</span></div></div>
+    </div>
+    <p class="note">On the dark stage, accent text uses Violet Soft #D2C8FF for legibility; the vivid #6521C9 is for graphic surfaces, buttons and drawn waves. Ratios: roughly 90 percent stage and cream, 10 percent color, of which violet takes nearly all.</p>
+  </div>
+</section>
+
+<section id="gradients">
+  <div class="wrap">
+    <div class="eyebrow">03 · Gradients</div>
+    <h2>Three recipes, all linear, all from tokens</h2>
+    <p class="body" style="margin-top:30px">The gradient system already exists in design/tokens.json; the site inherits it unchanged. Every gradient is linear, built from locked tokens, and lives on a graphic surface: a button, a drawn wave, a small identity element. The page ground never becomes a gradient, and nothing glows.</p>
+    <div class="gradrow">
+      <div class="grad"><div class="chip" style="background:linear-gradient(160deg,#6521C9,#38007A)"></div><div class="meta">Functional<span>primary → deep, same hue · #6521C9 → #38007A · buttons, controls, active states. ~90% of gradient use.</span></div></div>
+      <div class="grad"><div class="chip" style="background:linear-gradient(160deg,#6521C9,#A737C8)"></div><div class="meta">Frequency<span>primary → gradEnd, analogous · #6521C9 → #A737C8 · a frequency's own identity: drawn waves, tiles. Each band has its own gradEnd.</span></div></div>
+      <div class="grad"><div class="chip" style="background:linear-gradient(160deg,#6521C9,#B90044)"></div><div class="meta">Brand<span>primary → a different primary · hero moments, marketing identity only. Never inside app UI, and rare on the site.</span></div></div>
+    </div>
+    <table class="law">
+      <tr><th>Never</th><th>Why</th></tr>
+      <tr><td>Radial glow behind content</td><td>The killed "dark void + violet glow" is the generic AI look. Dead on arrival.</td></tr>
+      <tr><td>Gradient washes over photography</td><td>Photos breathe alone. Color in a photo is carried by a subject, not applied.</td></tr>
+      <tr><td>Gradient text</td><td>Type is cream or violet soft, always flat.</td></tr>
+      <tr><td>Gradient page grounds</td><td>The stage is flat #0B0712. Air and hairlines create depth, not glow.</td></tr>
+    </table>
+    <div class="spec">Gradients · linear only · 160deg default · token pairs only · graphic surfaces only</div>
+  </div>
+</section>
+
+<section id="type">
+  <div class="wrap">
+    <div class="eyebrow">04 · Type</div>
+    <h2>Two voices: the serif speaks, Switzer works</h2>
+    <p class="body" style="margin-top:30px">Cormorant Garamond carries the big human statements. Switzer carries everything functional: body, labels, captions, and every number. Both weights of every headline exist in both fonts; the Switzer twin is the fallback pending the font license call.</p>
+
+    <div class="specimen">
+      <div class="eyebrow" style="margin-bottom:10px">Eyebrow · Section kicker</div>
+      <div class="spec">Switzer 600 · <b>13px</b> desktop · <b>12px</b> mobile · tracking .18em · uppercase · Violet Soft</div>
+    </div>
+
+    <div class="specimen">
+      <div class="h1">Headline one, the serif</div>
+      <div class="spec">H1 · Cormorant 500 · <b>84 / 1.02</b> desktop · <b>44 / 1.05</b> mobile · tracking -.01em</div>
+    </div>
+    <div class="specimen">
+      <div class="h1s">Headline one, Switzer twin</div>
+      <div class="spec">H1-S · Switzer 600 · <b>72 / 1.04</b> desktop · <b>40</b> mobile · tracking -.025em</div>
+    </div>
+
+    <div class="specimen">
+      <div class="h2">Headline two carries a section</div>
+      <div class="spec">H2 · Cormorant 500 · <b>52 / 1.08</b> desktop · <b>32 / 1.12</b> mobile</div>
+    </div>
+    <div class="specimen">
+      <div class="h2s">Headline two, Switzer twin</div>
+      <div class="spec">H2-S · Switzer 600 · <b>44 / 1.1</b> desktop · <b>28</b> mobile · tracking -.02em</div>
+    </div>
+
+    <div class="specimen">
+      <h3>Headline three is Switzer, always</h3>
+      <div class="spec">H3 · Switzer 600 · <b>22 / 1.3</b> desktop · <b>19</b> mobile</div>
+    </div>
+
+    <div class="specimen">
+      <div class="stat"><div class="n" style="font:600 64px/1 var(--sans);letter-spacing:-.02em">98.6<em style="font-style:normal;color:var(--violet-soft)">%</em></div></div>
+      <div class="spec">Stat digits · Switzer 600 · <b>64</b> desktop · <b>42</b> mobile · digits never serif</div>
+    </div>
+  </div>
+</section>
+
+<section id="grid">
+  <div class="wrap">
+    <div class="eyebrow">05 · Grid and Rhythm</div>
+    <h2>Air is the luxury</h2>
+    <p class="body" style="margin-top:30px">Desktop is designed at a 1440 viewport on the 1140 content grid. Mobile is designed at the true 375 floor and judged on iPhone mini first, always. The toggle at the top of this page renders both states with their real values.</p>
+    <table class="law">
+      <tr><th>Property</th><th>Desktop</th><th>Mobile (375 floor)</th></tr>
+      <tr><td>Design viewport</td><td>1440px</td><td>375×812</td></tr>
+      <tr><td>Content max width</td><td>1140px</td><td>100% minus gutters</td></tr>
+      <tr><td>Reading column</td><td>700px, centered</td><td>100% minus gutters</td></tr>
+      <tr><td>Text measure</td><td colspan="2">34em max everywhere; no line of text ever spans the full grid</td></tr>
+      <tr><td>Gutters</td><td>32px</td><td>24px</td></tr>
+      <tr><td>Section padding</td><td>120px top and bottom</td><td>72px top and bottom</td></tr>
+      <tr><td>Heading to intro gap</td><td>30px</td><td>24px</td></tr>
+      <tr><td>Photo to caption gap</td><td>14px + hairline</td><td>14px + hairline</td></tr>
+      <tr><td>Hairline</td><td colspan="2">1px, cream at 13% opacity, the only divider in the system</td></tr>
+    </table>
+    <ul class="zlist" style="margin-top:48px">
+      <li>On mobile, every card and grid stacks single-column.</li>
+      <li>The testimonial photo drops to 150px.</li>
+      <li>One primary button per screen holds at both sizes.</li>
+      <li>Mobile is never a scaled desktop; every value above is its own decision.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="part"><div class="wrap"><div class="pn">Part Two · Copy Blocks</div><div class="pt">Every form a piece of writing is allowed to take, with realistic copy in each.</div></div></div>
+
+<section id="paragraphs">
+  <div class="wrap">
+    <div class="eyebrow">06 · Paragraph Forms</div>
+    <h2>Five ways a paragraph is allowed to exist</h2>
+    <p class="body" style="margin-top:30px">Every block of prose on the site is one of these five forms. The builder never invents a sixth. Copy below is placeholder, shaped like the real thing.</p>
+
+    <div class="specimen">
+      <h3>1 · The lede</h3>
+      <p class="lede" style="margin-top:22px">Music tuned to the moment you were born, playing under your whole day.</p>
+      <div class="spec">Lede · Switzer 400 · <b>23 / 1.55</b> desktop · <b>19</b> mobile · max 30em · one per section, optional</div>
+    </div>
+
+    <div class="specimen">
+      <h3>2 · The body paragraph</h3>
+      <p class="body" style="margin-top:22px">Your birth chart holds four frequencies that are yours alone. We turn them into music you can actually live with: while you walk, work, cook, or drive.</p>
+      <div class="spec">Body · Switzer 400 · <b>19 / 1.65</b> desktop · <b>17 / 1.6</b> mobile · max 34em · max 55 words</div>
+    </div>
+
+    <div class="specimen">
+      <h3>3 · The statement</h3>
+      <p class="statement" style="margin-top:22px">You have been listening to everyone else's frequency.</p>
+      <div class="spec">Statement · Cormorant 500 italic · <b>30 / 1.35</b> desktop · <b>24</b> mobile · max 12 words · max one per section</div>
+    </div>
+
+    <div class="specimen">
+      <h3>4 · The long-form paragraph</h3>
+      <p class="body" style="margin-top:22px;max-width:38em;line-height:1.7">Only inside the 700px reading column: FAQ answers, story pages, policy pages. A long-form paragraph is allowed to breathe past the 55-word marketing ceiling and carry a full thought, the way this one does, because the reader who reaches a reading page has already decided to read. It still ends before it wanders, and an H3 subhead arrives every three to four paragraphs so the column never becomes a wall.</p>
+      <div class="spec">Long-form · Switzer 400 · <b>19 / 1.7</b> · reading column only · subhead every 3-4 paragraphs · full example in section 10</div>
+    </div>
+
+    <div class="specimen">
+      <h3>5 · The note</h3>
+      <p class="note" style="margin-top:22px">Results reflect members who used the product as designed. Fine print, caveats, sources, legal: quiet cream at forty percent, never load-bearing.</p>
+      <div class="spec">Note · Switzer 400 · <b>14 / 1.55</b> · cream 40% · caveats that must travel use cream 58%</div>
+    </div>
+  </div>
+</section>
+
+<section id="lists">
+  <div class="wrap">
+    <div class="eyebrow">07 · Lists</div>
+    <h2>Four list forms, each with one job</h2>
+    <p class="body" style="margin-top:30px">Copy in every example is placeholder, written the way real site copy will be written: front-loaded, concrete, short.</p>
+    <div class="grid2" style="margin-top:30px">
+      <div>
+        <h3>The tick: benefits and rules</h3>
+        <ul class="zlist">
+          <li>Four frequencies, calculated from your birth chart.</li>
+          <li>Real music, your frequency woven through every track.</li>
+          <li>About nine minutes a day, wherever your day happens.</li>
+          <li>Works with headphones, speakers, or the car stereo.</li>
+        </ul>
+        <div class="spec">Marker · <b>16×2px</b> Violet Glint · text Switzer body · 12 words max · 3 to 6 items</div>
+      </div>
+      <div>
+        <h3>The counter: sequences</h3>
+        <ol class="zlist">
+          <li>Enter your birth date, time, and place.</li>
+          <li>We calculate your four personal frequencies.</li>
+          <li>Press play and get on with your day.</li>
+        </ol>
+        <div class="spec">Counter · Switzer 600 <b>14px</b> · leading-zero style · steps the reader will actually follow</div>
+      </div>
+    </div>
+
+    <div style="margin-top:80px">
+      <h3>The definition list: features and facts</h3>
+      <p class="body" style="margin-top:18px">When each item needs a name and an explanation: what's included, how the frequencies differ, plan details. Term left, description right; the pair stacks on mobile.</p>
+      <dl class="zdef">
+        <div class="row"><dt>Immersions</dt><dd>Full-length music with your frequency inside it, made for everyday listening.</dd></div>
+        <div class="row"><dt>Keys</dt><dd>Short, single-frequency tracks for when you want one thing turned up.</dd></div>
+        <div class="row"><dt>Your chart</dt><dd>The birth data behind your four frequencies, shown in plain language.</dd></div>
+      </dl>
+      <div class="spec">Definition · term Switzer 600 <b>17px</b> cream · description 17px cream 82% · 180px term column desktop, stacked mobile · terms 2-3 words · descriptions 25 words max</div>
+    </div>
+
+    <div style="margin-top:80px">
+      <h3>The FAQ accordion: questions</h3>
+      <p class="body" style="margin-top:18px">The fourth list form is the FAQ, specified in full in section 12. Questions closed by default, one open at a time is the builder's choice, plus marker rotates to a close.</p>
+    </div>
+  </div>
+</section>
+
+<section id="numbers">
+  <div class="wrap">
+    <div class="eyebrow">08 · Numbers</div>
+    <h2>Every way a number appears</h2>
+    <p class="body" style="margin-top:30px">One law above all: numbers are always Switzer. The serif never touches a digit, anywhere, at any size. Six forms cover every number on the site.</p>
+
+    <div class="specimen">
+      <h3>1 · The stat band</h3>
+      <div class="statband">
+        <div class="stat"><div class="n">98.6<em>%</em></div><div class="l">Would recommend it</div></div>
+        <div class="stat"><div class="n">84<em>%</em></div><div class="l">Called it life-changing</div></div>
+        <div class="stat"><div class="n">7</div><div class="l">Measured outcomes</div></div>
+      </div>
+      <p class="caveat">From our 52-week study of 300 people. The life-changing figure and the seven outcomes are among members who used it as designed: about nine minutes a day, balanced across all four frequencies. BANKED: these are the locked beta numbers, and this caveat always travels with them.</p>
+      <div class="spec">Stat band · digits Switzer 600 <b>64/42</b> · unit in Violet Soft · labels 14px uppercase below, never above · caveat always travels</div>
+    </div>
+
+    <div class="specimen">
+      <h3>2 · The big single stat</h3>
+      <div class="bignum" style="margin-top:34px">98.6<em>%</em></div>
+      <p class="body" style="margin-top:20px">One number carrying a whole section. Used at most once per page, with its label in the surrounding copy, not stacked beneath it.</p>
+      <div class="spec">Big single stat · Switzer 600 · <b>120</b> desktop · <b>64</b> mobile · max one per page</div>
+    </div>
+
+    <div class="specimen">
+      <h3>3 · Numbers inline</h3>
+      <p class="body" style="margin-top:22px">In running copy, data stays in digits: 300 people, 52 weeks, 7 measured outcomes. Small counts that are voice, not data, may be spelled: four frequencies, two voices. Never mix the two treatments in one sentence.</p>
+      <div class="spec">Inline · digits for data · spelled only for small counts that are voice · no ordinal suffixes in headlines</div>
+    </div>
+
+    <div class="specimen">
+      <h3>4 · Prices</h3>
+      <div class="demo" style="margin-top:34px">
+        <div class="tag">Demo · placeholder values · real prices come from the offer canon only</div>
+        <div class="numrow" style="margin-top:0">
+          <div class="price"><span class="n">$199</span><span class="per">/ year</span></div>
+          <div class="price"><span class="n">$24</span><span class="per">/ month</span></div>
+        </div>
+      </div>
+      <div class="spec">Price · Switzer 600 <b>56/44</b> · currency symbol same size as digits · period unit small, cream 58%, never uppercase · no decimals unless the price has them</div>
+    </div>
+
+    <div class="specimen">
+      <h3>5 · Dates</h3>
+      <p class="body" style="margin-top:22px">On the site a date is written out: August 13, 2026. Never numeric shorthand, never ordinal suffixes. In compact UI the month may shorten: Aug 13, 2026.</p>
+      <div class="spec">Date · spelled month, digit day, digit year · Switzer, same size as its surrounding text</div>
+    </div>
+
+    <div class="specimen">
+      <h3>6 · The frequency readout</h3>
+      <div class="demo" style="margin-top:34px">
+        <div class="tag">Demo · placeholder value · real readouts come from the app, never invented for copy</div>
+        <div class="freq"><span class="n">612.4</span><span class="hz">Hz</span></div>
+      </div>
+      <div class="spec">Frequency readout · digits Switzer 600 <b>76/52</b> · one decimal · Hz in Violet Soft, 24px, never uppercase HERTZ · the number is the hero, the unit whispers</div>
+    </div>
+  </div>
+</section>
+
+<section id="lengths">
+  <div class="wrap">
+    <div class="eyebrow">09 · Copy Segment Lengths</div>
+    <h2>How long anything is allowed to be</h2>
+    <p class="body" style="margin-top:30px">Identical limits on desktop and mobile. The design assumes these lengths; copy that exceeds them changes the design, so it goes back to the copy lane instead.</p>
+    <table class="law">
+      <tr><th>Element</th><th>Limit</th><th>Rule</th></tr>
+      <tr><td>H1</td><td>4 to 9 words</td><td>One line at desktop, never three lines anywhere.</td></tr>
+      <tr><td>Subhead / lede</td><td>22 words max</td><td>Two lines max. One idea, no comma chains.</td></tr>
+      <tr><td>Section intro</td><td>45 words max</td><td>Two to three sentences under an H2, then stop.</td></tr>
+      <tr><td>Body paragraph</td><td>55 words max</td><td>One to three sentences. Air between paragraphs is part of the design.</td></tr>
+      <tr><td>Statement</td><td>12 words max</td><td>One sentence, serif italic, one per section at most.</td></tr>
+      <tr><td>Photo caption</td><td>14 words max</td><td>One to two lines. Names what is seen, adds one fact.</td></tr>
+      <tr><td>Pull quote</td><td>30 words max</td><td>The approved Pull from the testimonial bank.</td></tr>
+      <tr><td>Medium testimonial</td><td>60 words max</td><td>The banked Short version, quoted whole.</td></tr>
+      <tr><td>Full testimonial</td><td>90 words per paragraph</td><td>Letter form only, trimmed with ellipses from the banked Full.</td></tr>
+      <tr><td>List item</td><td>12 words max</td><td>Front-load the noun. No trailing clauses.</td></tr>
+      <tr><td>Definition row</td><td>25 words max</td><td>Term is 2-3 words; the description ends cleanly.</td></tr>
+      <tr><td>FAQ question</td><td>12 words max</td><td>Written as the customer asks it, first person.</td></tr>
+      <tr><td>FAQ answer on site</td><td>120 words max</td><td>The banked Short version. The Long lives on the support page.</td></tr>
+      <tr><td>Stat label</td><td>4 words max</td><td>Uppercase, under the number, never above it.</td></tr>
+      <tr><td>Button</td><td>2 to 4 words</td><td>A verb first. One primary button per screen.</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="longshort">
+  <div class="wrap">
+    <div class="eyebrow">10 · Long Copy and Short Copy</div>
+    <h2>Two reading modes, two widths</h2>
+    <p class="body" style="margin-top:30px">Marketing sections are short copy: headline, two paragraphs, a list, a button, composed on the 1140px grid. Reading pages, meaning FAQ answers, the story and policies, are long copy: a single 700px column where the type relaxes and subheads pace the scroll. Desktop text never runs wider than this column.</p>
+
+    <div class="demo">
+      <div class="tag">Long-form reading column · BANKED copy · canonical answer #28, confirmed</div>
+      <div class="readcol">
+        <div class="eyebrow">Support · Getting Set Up</div>
+        <div class="h2">Do I need headphones?</div>
+        <p style="margin-top:34px">Headphones are preferred but not necessary. What matters is that you use a speaker that lets the frequency come through cleanly, which means clear midrange, balanced sound, and low distortion at normal volume.</p>
+        <p>This means that any speaker that costs about $75 or more (JBL Flip or Charge, Bose SoundLink, Sonos Roam or Move, Marshall, a mid-tier Anker Soundcore), almost any car stereo, or any decent pair of headphones will be fine. Apple EarPods are excellent.</p>
+        <h3>What to avoid</h3>
+        <p>Phone speakers, laptop speakers, and very small cheap Bluetooth speakers. They strip the low-end warmth, over-process the audio, flatten the sound, and lose detail.</p>
+        <p>Then just listen while you walk, work, cook, or drive. What matters is how much you listen over time.</p>
+      </div>
+    </div>
+    <div class="spec">Reading column · max <b>700px</b> centered · body 19/1.7 · H3 subhead every 3-4 paragraphs · no photos wider than the column</div>
+
+    <p class="body" style="margin-top:56px">Short copy is the assembled-section pattern in section 18: nothing in a marketing section ever exceeds the lengths table, and the whole section reads in under thirty seconds.</p>
+  </div>
+</section>
+
+<div class="part"><div class="wrap"><div class="pn">Part Three · Proof</div><div class="pt">Real quotes, real numbers, at the size the moment needs.</div></div></div>
+
+<section id="proof">
+  <div class="wrap">
+    <div class="eyebrow">11 · Testimonials at Three Lengths</div>
+    <h2>Blurb, medium, long</h2>
+    <p class="body" style="margin-top:30px">Every testimonial in the bank carries three approved lengths: the Pull, the Short, and the Full. The site uses them as blurb, medium, and long. Every quote below is a real approved endorsement; never two proof patterns back to back.</p>
+
+    <div class="specimen">
+      <h3>1 · The blurb: the approved Pull</h3>
+      <div class="quotestrip">
+        <div class="qs">
+          <div class="pq">"Zodiac.fm is way ahead of the curve."</div>
+          <div class="who">Maya Shetreat, MD</div>
+        </div>
+        <div class="qs">
+          <div class="pq">"This isn't just sound - it is an energetic recalibration."</div>
+          <div class="who">Sabrina Truscott</div>
+        </div>
+        <div class="qs">
+          <div class="pq">"If you're tired of living out of tune with yourself, this is your invitation home."</div>
+          <div class="who">Rhonda Britten</div>
+        </div>
+      </div>
+      <div class="spec">Blurb · the banked Pull only · Cormorant italic <b>20</b> · name Switzer caps 58% · three across desktop, stacked mobile</div>
+
+      <div class="testirow">
+        <div class="testicard">
+          <img src="/site/assets/refs/testi-rhonda-britten.png" alt="Rhonda Britten">
+          <div class="rule">
+            <div class="pq">"If you're tired of living out of tune with yourself, this is your invitation home."</div>
+            <div class="who">Rhonda Britten<span>Author of "Fearless Living," Emmy Award-Winner</span></div>
+          </div>
+        </div>
+        <div class="testicard">
+          <img src="/site/assets/refs/testi-maya-shetreat.png" alt="Maya Shetreat, MD">
+          <div class="rule">
+            <div class="pq">"Zodiac.fm is way ahead of the curve."</div>
+            <div class="who">Maya Shetreat, MD<span>Adult and Pediatric Neurologist, Best-Selling Author</span></div>
+          </div>
+        </div>
+        <div class="testicard">
+          <img src="/site/assets/refs/testi-sabrina-truscott.png" alt="Sabrina Truscott">
+          <div class="rule">
+            <div class="pq">"This isn't just sound - it is an energetic recalibration."</div>
+            <div class="who">Sabrina Truscott<span>Entrepreneur, Owner at Satori Method Academy</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="spec">Blurb with face · transparent cutout on the stage, person untouched · pull quote Cormorant italic <b>22</b> · titled people lead</div>
+    </div>
+
+    <div class="specimen">
+      <h3>2 · The medium: the banked Short</h3>
+      <blockquote class="testi">
+        <div class="q">"Instead of 10 paid members, I got 30 paid members in 30 days. Within 45 days, we had almost 40 paid members. It felt like the floodgates of abundance, prosperity, and purpose opened."</div>
+        <div class="who">Jennifer K. Hill<span>Global Wellness Leader, Founder, OptiMatch</span></div>
+      </blockquote>
+      <div class="spec">Medium · the banked Short version, quoted whole · Cormorant 500 italic <b>30 / 1.4</b> desktop · <b>24</b> mobile · name Switzer 600 caps · title below in cream 58%</div>
+    </div>
+
+    <div class="specimen">
+      <h3>3 · The long: the letter</h3>
+      <blockquote class="letter">
+        <p>"I've spent decades helping people break through fear and step into their authentic power. What I know for sure is that most of us are walking around disconnected from who we really are. We're living someone else's frequency. That's what stopped me cold about Zodiac.fm.</p>
+        <p>These aren't just pretty sounds or generic meditation tracks. This is your cosmic blueprint translated into frequency. Your birth chart — that map of exactly who you came here to be — becomes the sound of you…</p>
+        <p>This isn't about fixing yourself. You don't need fixing. This is about tuning back into the frequency you were born to be — and that's the most radical act of self-love there is. <b>If you're tired of living out of tune with yourself, this is your invitation home."</b></p>
+        <div class="who">Rhonda Britten<span>Author of "Fearless Living," Emmy Award-Winner · Founder, Fearless Living Institute</span></div>
+      </blockquote>
+      <div class="spec">The letter · one per page max · Cormorant italic <b>21 / 1.6</b> · hairline left rule · ellipsis-trimmed from the banked Full · closing line bolded</div>
+    </div>
+
+    <div class="specimen">
+      <h3>3b · The long: the case study</h3>
+      <div class="demo">
+        <div class="tag">Demo · placeholder copy · real case studies come from the banked testimonial masters only</div>
+        <div class="eyebrow">Member Story</div>
+        <div class="h2">Placeholder headline naming the result</div>
+        <p class="body" style="margin-top:30px">Two sentences of context in our voice: who this member is and where they started. Written from the banked Full, never invented.</p>
+        <blockquote class="testi" style="margin-top:44px">
+          <div class="q">"A placeholder quote in their words, the turning point of the story, thirty words or fewer."</div>
+        </blockquote>
+        <p class="body" style="margin-top:44px">One closing paragraph in our voice: what changed, stated plainly, with the caveat if the claim needs one.</p>
+        <div class="statband" style="grid-template-columns:1fr 1fr;max-width:560px">
+          <div class="stat"><div class="n">30</div><div class="l">Placeholder stat</div></div>
+          <div class="stat"><div class="n">45</div><div class="l">Placeholder stat</div></div>
+        </div>
+        <div class="who" style="margin-top:44px;font:600 13px/1.6 var(--sans);letter-spacing:.14em;text-transform:uppercase">Placeholder Name<span style="display:block;font-weight:400;letter-spacing:.04em;text-transform:none;color:var(--cream58)">Placeholder title</span></div>
+      </div>
+      <div class="spec">Case study · our voice frames, their words quoted · one quote, one stat pair max · built only from a banked Full with Michael's go</div>
+    </div>
+
+    <p class="note">Cutouts sit directly on the stage ground with no panel behind them. The dual-gel treatment is banked and waits until the site design calls for it. Nobody is assigned a band color. All quotes and lengths come from winners/testimonials.md, the one testimonial home.</p>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow">12 · FAQ</div>
+    <h2>Questions in their voice, answers in ours</h2>
+    <p class="body" style="margin-top:30px">Questions are written the way customers ask them. On-site answers are the banked Short versions from the canonical answer bank; the full Long versions live on the support page. Both example answers below are BANKED and confirmed, and the third is placeholder to show a closed state.</p>
+    <div class="faq">
+      <details open>
+        <summary>I don't know my exact birth time. Can I still use it?</summary>
+        <div class="a">
+          <p>This is our most common question, so you are not alone. The answer is that you can absolutely use the product even if you do not know your birth time. Your birth time does in fact fine-tune a part of how we calculate your frequencies.</p>
+          <p>However, depending on your configuration, a couple of minutes or even a couple of hours will not dramatically affect your calculation. The perfect frequency is better, but if it is in range, it will still have an amplifying effect.</p>
+          <p>More importantly, if you are not getting an experience, we will work with you through trial and error until you get an undeniable experience. This includes expanding your refund window, just make sure to communicate.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Do I need headphones?</summary>
+        <div class="a">
+          <p>Headphones, like Apple EarPods, are preferred. But you can use speakers, as long as you pick a model that lets the frequency come through cleanly, which means clear midrange, balanced sound, and low distortion at normal volume. Any Bluetooth speaker that costs $75 or more is totally acceptable. Your car stereo will work just fine, too!</p>
+          <p>Just not phone or laptop speakers. They blur everything together, so the tone gets lost.</p>
+        </div>
+      </details>
+      <details>
+        <summary>A placeholder question showing the closed state?</summary>
+        <div class="a"><p>Placeholder answer. Real entries come from the canonical bank only.</p></div>
+      </details>
+    </div>
+    <div class="spec">FAQ · question Switzer 600 <b>18/17</b> · plus marker violet soft, rotates 45° open · answer 17/1.65 cream 82% · 5 to 8 questions per page · answers from the canonical bank only</div>
+  </div>
+</section>
+
+<div class="part"><div class="wrap"><div class="pn">Part Four · Imagery</div><div class="pt">The photographic system, the frozen wave, the screens, the phone.</div></div></div>
+
+<section id="photo">
+  <div class="wrap">
+    <span id="lightcasting"></span>
+    <div class="eyebrow">13 · The Photographic System</div>
+    <h2>Five categories, one treatment. Come with a band, leave with a frame.</h2>
+    <p class="statement" style="margin-top:30px">The scene is black and white. The color is the event.</p>
+    <p class="body" style="margin-top:30px">The system is organized for retrieval. Every photograph belongs to one of five categories — the four frequencies, then multicolor — and every one is the same treatment. <b>World of Color</b> lets the world carry the hue: a parasol, a dress, a lit sign, or cast light landing on hands, hair, fabric, the environment. Cast light is a color source inside the treatment, not a second treatment. One wheel, five categories, the method chosen frame by frame.</p>
+    <ul class="zlist">
+      <li>Photos sit directly on the stage: 4px radius, no borders, no panels, no overlays. Full-width for hero moments, two-up for supporting frames.</li>
+      <li>The color is lit, never paint. One band per frame is the default; light needs no visible source, and an invented source is legal.</li>
+      <li>Cast light may land on hands, hair, fabric, and environment. A face takes a slight shine at most. A face is never the carrier.</li>
+      <li>More than one band: the Full Wheel appears as four objects, four people, or four lit events, never a wash; in group scenes each person may carry their own band.</li>
+      <li>Every frame audits onto the locked wheel spans before it ships.</li>
+    </ul>
+    <div class="spec">Caption · Switzer 400 · <b>14 / 1.5</b> desktop · <b>13</b> mobile · cream 58% · hairline rule above · max 14 words</div>
+    <a class="liblink" href="/site/styleguide-7-library">Open the photographic library → <span>the complete inventory: every category, one treatment, every frame approved and audited — and the testimonial bank</span></a>
+
+    <h3 style="margin-top:96px">Core Violet <span class="bandcount">the internal band: alone with the music</span></h3>
+    <figure class="photo">
+      <img src="/site/assets/refs/ref-parasol.jpg" alt="Woman on a bench under a violet parasol, black and white plaza, hard sun">
+      <figcaption><b>Violet Parasol.</b> The hero form: full-width, one lit event, the caption whispering below.</figcaption>
+    </figure>
+    <div class="photogrid">
+      <figure class="photo">
+        <img src="/site/assets/refs/ref-crosswalk.jpg" alt="Woman in a violet dress crossing a black and white street in hard sun">
+        <figcaption><b>Core violet, carried.</b> The color belongs to her, the world stays monochrome.</figcaption>
+      </figure>
+      <figure class="photo">
+        <img src="/site/assets/r27/v-turntable-lit.jpg" alt="Black turntable by a window, violet light spilling across the cabinet">
+        <figcaption><b>One black turntable,</b> one violet window light.</figcaption>
+      </figure>
+    </div>
+
+    <h3 style="margin-top:96px">Love Rose <span class="bandcount">connection: people together</span></h3>
+    <div class="photogrid">
+      <figure class="photo">
+        <img src="/site/assets/refs/ref-rose-spin.jpg" alt="Woman in a rose dress spinning mid-dance, skirt flared to a full disc, laughing crowd">
+        <figcaption><b>Love rose, kinetic.</b> Energy is grammar too: motion, laughter, hard light.</figcaption>
+      </figure>
+      <figure class="photo">
+        <img src="/site/assets/refs/ref-record-rose.jpg" alt="Rose vinyl record standing upright in black and white sand, sun flaring behind its edge">
+        <figcaption><b>Rose pressed in vinyl,</b> held against the sun.</figcaption>
+      </figure>
+    </div>
+    <div class="photogrid">
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/lc/arrival-spin-t1.jpg" alt="A joyful arrival hug spin, the lifted woman lit in rose against a grey street">
+        <figcaption><b>Arrival Spin.</b> The cast light finds her; the street never leaves grey.</figcaption>
+      </figure>
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/lc/rooftop-toast-rose-t2.jpg" alt="Friends toasting on a rooftop at night, the toast moment lit in rose, the skyline grey">
+        <figcaption><b>Rooftop Toast.</b> One band, one moment lit, the skyline stays monochrome.</figcaption>
+      </figure>
+    </div>
+
+    <h3 style="margin-top:96px">Vitality Amber <span class="bandcount">movement: bodies in motion</span></h3>
+    <div class="photogrid">
+      <figure class="photo">
+        <img src="/site/assets/r29/a-runner-dawn-loud.jpg" alt="Runner silhouetted on a pier against a gold sunrise, light on the water">
+        <figcaption><b>Dawn run.</b> The one warm light in the system is a real sunrise.</figcaption>
+      </figure>
+      <figure class="photo">
+        <img src="/site/assets/refs/ref-boombox-puddle.jpg" alt="Boombox on wet concrete steps in hard sun, its amber-lit tape window mirrored in the puddle below">
+        <figcaption><b>The music lives in the reflection.</b> Amber only where it plays.</figcaption>
+      </figure>
+    </div>
+    <div class="photogrid">
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/lc/fort-reveal-amber-t2.jpg" alt="A blanket-fort reveal, the child inside lit amber like a lantern, the room grey">
+        <figcaption><b>Fort Reveal.</b> The child glows like a lantern; the room stays grey.</figcaption>
+      </figure>
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/lc/dawn-swimmer-amber-t3.jpg" alt="A swimmer at dawn in open water, a wide amber light across her and the water, the rest grey">
+        <figcaption><b>Dawn Swimmer.</b> An approved wide-window exception, ruled for this frame only.</figcaption>
+      </figure>
+    </div>
+
+    <h3 style="margin-top:96px">Abundance Emerald <span class="bandcount">exchange: hands, work, go</span></h3>
+    <div class="photogrid">
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/sg5lib/cc1-r17-hour-abundance-emerald-go-cc1.jpg" alt="Person in headphones on a wet night street, every traffic light emerald">
+        <figcaption><b>Green lights, go.</b> Every signal in the frame says the same thing.</figcaption>
+      </figure>
+      <figure class="photo">
+        <img src="/site/assets/r27/e-device-stoop.jpg" alt="Speaker with an emerald ring light sitting on a stone stoop at night">
+        <figcaption><b>Stoop speaker.</b> Emerald arrives where it plays.</figcaption>
+      </figure>
+    </div>
+
+    <h3 style="margin-top:96px">Multicolor <span class="bandcount">more than one band in the frame</span></h3>
+    <div class="photogrid">
+      <figure class="photo">
+        <img src="/site/assets/cc1/r21-sun3-wild-four-caps-dive-cc1.jpg" alt="Four swimmers diving in one line, caps in violet, rose, amber and emerald">
+        <figcaption><b>All four colors, one frame.</b> The Full Wheel pattern, where the whole system appears at once.</figcaption>
+      </figure>
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-umbrellas-cc1.jpg" alt="Four beach umbrellas on white sand in violet, emerald, amber and rose">
+        <figcaption><b>Four Beach Umbrellas.</b> Four objects carry the wheel; the sand stays white and black.</figcaption>
+      </figure>
+    </div>
+    <figure class="photo">
+      <img loading="lazy" src="/site/assets/lc/umbrella-run-cc1.jpg" alt="Three friends laughing under one black umbrella in night rain, one lit violet, one rose, one amber, the wet street reflecting all three">
+      <figcaption><b>Umbrella Run.</b> <span class="prov">The standard for cast light in group scenes, approved 2026-08-13, corrected cc1</span></figcaption>
+    </figure>
+    <div class="photogrid">
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/lc/stoop-cards-cc1.jpg" alt="Grandmother and grandson playing cards on a brownstone stoop, she lit rose, he lit violet, the street grey">
+        <figcaption><b>Stoop Cards.</b> She carries rose, he carries violet, the stoop carries neither.</figcaption>
+      </figure>
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/lc/kitchen-trio-cc1.jpg" alt="Three generations laughing at a stove, grandmother lit amber, mother rose, boy violet, the kitchen dark">
+        <figcaption><b>Kitchen Trio.</b> Three generations, three bands, one grey kitchen.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="frequencies">
+  <div class="wrap">
+    <div class="eyebrow">14 · The Frequencies, In Context</div>
+    <h2>The wave is drawn by code, never generated</h2>
+    <p class="body" style="margin-top:30px">Frequency is frozen. The old production references, wave E and water-3, fell in the 2026-08-12 eval pass; a dedicated lane owns cracking the wave. Until it lands, no drawn frequency ships anywhere on the site: no smoke, no wisps, no composited waves over photography. The one surviving direction is black and white and drier than smoke, a charcoal print, not a plume.</p>
+
+    <h3 style="margin-top:64px">The filament divider</h3>
+    <p class="body" style="margin-top:18px">At interface scale the wave becomes a single code-drawn filament: an SVG whisper used as a section divider or a quiet signature near the footer. Hairline weight, violet, never animated to attract, never repeated down the page.</p>
+    <div style="margin-top:44px;border:1px dashed rgba(210,200,255,.28);border-radius:12px;padding:40px 32px">
+      <svg class="divider-filament" viewBox="0 0 1140 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A single hairline violet frequency wave">
+        <defs>
+          <linearGradient id="fil" x1="0" y1="0" x2="1140" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#7A4AE0" stop-opacity="0"/>
+            <stop offset=".18" stop-color="#7A4AE0" stop-opacity=".55"/>
+            <stop offset=".5" stop-color="#D2C8FF" stop-opacity=".85"/>
+            <stop offset=".82" stop-color="#7A4AE0" stop-opacity=".55"/>
+            <stop offset="1" stop-color="#7A4AE0" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M0 32 C 120 32, 160 14, 250 20 S 400 54, 505 44 S 640 8, 745 18 S 900 50, 990 40 S 1100 30, 1140 32" stroke="url(#fil)" stroke-width="1.5"/>
+      </svg>
+    </div>
+    <div class="spec">Filament · inline SVG · stroke 1.5px · violet-glint fading to nothing at both ends · one per page region · smoke-body waves stay in rendered frames, never in UI</div>
+
+    <p class="note">Bases come from photography; the wave layer is composited in code with numeric gates (identity untouched, hue in band, clearance held). Gen-drawn waves are banned by evidence: every attempt rendered neon.</p>
+  </div>
+</section>
+
+<section id="appscreens">
+  <div class="wrap">
+    <div class="eyebrow">15 · In-App Screens</div>
+    <h2>Real screens, shown as objects of light</h2>
+    <p class="body" style="margin-top:30px">App screenshots are always real captures from staging, never mockups, so the site can never promise an interface that doesn't exist. In the monochrome world the screen is the loudest color on the page, so it stands alone on the stage: rounded, hairline-edged, nothing behind it.</p>
+    <div class="apps">
+      <div class="appshot"><img src="/site/assets/refs/app-home.png" alt="Zodiac app Immersions screen, Core tone with song cards"><div class="l">Immersions</div></div>
+      <div class="appshot"><img src="/site/assets/refs/app-results.png" alt="Zodiac app results screen"><div class="l">Results</div></div>
+      <div class="appshot"><img src="/site/assets/refs/app-progress.png" alt="Zodiac app My Zodiac progress screen"><div class="l">My Zodiac</div></div>
+    </div>
+    <ul class="zlist" style="margin-top:56px">
+      <li>Captured from staging at the 375×812 floor, retina.</li>
+      <li>Radius 22, one hairline edge, no drop shadow, no glow.</li>
+      <li>Never placed over photography, never tilted or perspective-warped.</li>
+      <li>For hero moments, the screen rides the rendered phone below.</li>
+    </ul>
+    <div class="spec">App screen · real staging capture only · radius <b>22px</b> · hairline edge cream 18% · three-up desktop, stacked mobile</div>
+  </div>
+</section>
+
+<section id="phone">
+  <div class="wrap">
+    <div class="eyebrow">16 · The Phone</div>
+    <h2>The screen is the only full-color object</h2>
+    <div class="phonewrap">
+      <img src="/site/assets/refs/phone-hero-transparent.png" alt="Zodiac app on a rendered phone, transparent background">
+      <div>
+        <p class="body">The hero device is our rendered phone with true transparency, dropped straight on the stage. In a monochrome world the living screen is the loudest color on the page, so it needs nothing behind it.</p>
+        <ul class="zlist">
+          <li>Any new angle or pose is one script line away.</li>
+          <li>Smoke and wave dressing come from the code engines.</li>
+          <li>Never place the phone over photography.</li>
+        </ul>
+        <div class="btnrow">
+          <a class="btn" href="#">Placeholder CTA</a>
+          <a class="btn ghost" href="#">Secondary</a>
+        </div>
+        <div class="spec" style="margin-top:26px">Primary btn · Switzer 600 <b>16px</b> · violet functional gradient · radius 10 · one per screen</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="part"><div class="wrap"><div class="pn">Part Five · Assembly</div><div class="pt">The pieces, composed the way a real section composes.</div></div></div>
+
+<section id="assembled" style="border-bottom:none">
+  <div class="wrap">
+    <div class="eyebrow">17 · A Section, Assembled</div>
+    <h2>How the pieces sit together</h2>
+    <p class="body" style="margin-top:30px">Everything above, composed the way a real site section composes: eyebrow, headline, intro paragraphs, a photo with its caption, a list, one button. The dashed border marks the demo; nothing inside it is approved language.</p>
+
+    <div class="demo">
+      <div class="tag">Demo · placeholder copy throughout</div>
+      <div class="eyebrow">Your Frequencies</div>
+      <div class="h2">Music tuned to the moment you were born</div>
+      <p class="body" style="margin-top:30px">Your birth chart holds four frequencies that are yours alone. We turn them into music you can live with.</p>
+      <p class="body" style="margin-top:22px">Not another meditation app: real songs, your frequency inside them, playing under the day you were already having.</p>
+      <figure class="photo">
+        <img src="/site/assets/refs/ref-crosswalk.jpg" alt="Woman in a violet dress crossing a black and white street in hard sun">
+        <figcaption><b>The caption names the frame.</b> Fourteen words at most, under the hairline.</figcaption>
+      </figure>
+      <ul class="zlist">
+        <li>Four frequencies, calculated from your birth chart.</li>
+        <li>About nine minutes a day, wherever your day happens.</li>
+        <li>Headphones, speakers, or the car stereo.</li>
+      </ul>
+      <div class="btnrow">
+        <a class="btn" href="#">Hear your frequency</a>
+        <a class="btn ghost" href="#">How it works</a>
+      </div>
+    </div>
+
+    <p class="note" style="margin-top:60px">Styleguide 7 · The Builder's Kit · the photographic system merged to one treatment per Michael's R33 taps 2026-08-14: five categories (the four frequencies, then multicolor), all of them <b>World of Color</b> — cast light is a color source inside the treatment, not a treatment of its own, and "Light Casting" is retired as a name · the face law: cast light may land on hands, hair, fabric and environment, a face takes a slight shine at most, a face is never the carrier · previously approved cast-light frames are grandfathered and re-filed into their category pools with provenance intact · the complete inventory lives in <a href="/site/styleguide-7-library" style="color:var(--violet-soft)">the photographic library</a>, same structure, which now also carries the testimonial bank for retrieval · carries forward from styleguide-6: the desktop/mobile toggle (1140 grid designed at 1440, true 375 column), the numbers section, testimonials at three lengths · styleguide-6-1, 6, 5-1 and 5 are preserved as prior cuts and styleguide-2 remains the control · fonts are trial licenses, mockups only · design authority: design/tokens.json + the referent board · copy is placeholder except blocks marked BANKED (canonical answers #28 and #39, locked beta numbers, approved endorsements and their banked Pull/Short/Full lengths).</p>
+  </div>
+</section>
+
+<script>
+  (function(){
+    var d=document.getElementById('vt-desk'),m=document.getElementById('vt-mob');
+    function set(mobile){
+      document.body.classList.toggle('vm',mobile);
+      d.classList.toggle('on',!mobile);
+      m.classList.toggle('on',mobile);
+    }
+    d.addEventListener('click',function(){set(false)});
+    m.addEventListener('click',function(){set(true)});
+    if(new URLSearchParams(location.search).get('view')==='mobile')set(true);
+  })();
+</script>
+
+</body>
+</html>
