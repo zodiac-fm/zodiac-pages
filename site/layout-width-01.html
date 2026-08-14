@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm Layout Width Specimen</title>
+<meta name="description" content="A responsive specimen for the Zodiac.fm content grid, reading column, text measure, gutters, rhythm, caption gap, and hairline.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  @font-face{font-family:'Switzer';src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype');font-weight:400;font-display:swap}
+  @font-face{font-family:'Switzer';src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype');font-weight:600;font-display:swap}
+
+  :root{
+    --stage:#0B0712;
+    --cream:#FBF8F3;
+    --cream-82:rgba(251,248,243,.82);
+    --cream-58:rgba(251,248,243,.58);
+    --cream-40:rgba(251,248,243,.40);
+    --hair:rgba(251,248,243,.13);
+    --violet:#6521C9;
+    --violet-deep:#38007A;
+    --violet-soft:#D2C8FF;
+    --violet-glint:#7A4AE0;
+    --rose:#B90044;
+    --amber:#FF9112;
+    --emerald:#12A56E;
+    --gutter:32px;
+    --section-space:120px;
+    --intro-gap:30px;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Switzer',Helvetica,Arial,sans-serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--stage);scroll-behavior:smooth}
+  body{min-width:320px;background:var(--stage);color:var(--cream);font-family:var(--sans);font-size:19px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  html,body{scrollbar-width:none}
+  html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+  button{font:inherit}
+
+  .hud{position:fixed;z-index:30;right:16px;bottom:16px;display:flex;align-items:center;gap:8px;padding:7px 8px 7px 11px;background:rgba(11,7,18,.76);box-shadow:0 0 0 1px var(--hair);border-radius:8px;backdrop-filter:blur(12px)}
+  .hud-output{font:600 10px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--cream-58)}
+  .hud button{appearance:none;border:0;border-radius:5px;padding:8px 10px;background:transparent;color:var(--cream-58);font:600 10px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+  .hud button[aria-pressed="true"]{background:rgba(101,33,201,.28);color:var(--violet-soft)}
+  .hud button:hover,.hud button:focus-visible{background:rgba(101,33,201,.48);outline:1px solid var(--violet-soft);outline-offset:2px}
+
+  .content{width:min(1140px,calc(100% - (var(--gutter) * 2)));margin-inline:auto;position:relative}
+  .reading{width:min(700px,100%);margin-inline:auto;position:relative}
+  .measure{max-width:34em}
+  .measure-center{max-width:34em;margin-inline:auto}
+
+  .guide-box{position:relative}
+  .show-guides .guide-box{box-shadow:0 0 0 1px var(--hair)}
+  .guide-box::before{content:attr(data-guide);position:absolute;z-index:3;top:0;left:0;transform:translateY(-100%);padding:6px 8px;background:var(--stage);color:var(--violet-soft);font:600 10px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;opacity:0;pointer-events:none}
+  .show-guides .guide-box::before{opacity:1}
+
+  .ruler{height:1px;background:transparent;position:relative;margin-bottom:40px}
+  .ruler::before,.ruler::after{content:"";position:absolute;top:-4px;width:1px;height:9px;background:var(--hair)}
+  .ruler::before,.ruler::after{opacity:0}
+  .show-guides .ruler{background:var(--hair)}
+  .show-guides .ruler::before,.show-guides .ruler::after{opacity:1}
+  .ruler::before{left:0}.ruler::after{right:0}
+  .ruler-label{position:absolute;left:50%;top:10px;transform:translateX(-50%);padding:4px 8px;background:var(--stage);color:var(--cream-40);font:600 10px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;opacity:0}
+  .show-guides .ruler-label{opacity:1}
+
+  .eyebrow{font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:26px}
+  h1,h2{font-family:var(--serif);font-weight:500;letter-spacing:-.01em;text-wrap:balance}
+  h1{font-size:clamp(54px,6vw,84px);line-height:1.02;max-width:10.4em}
+  h2{font-size:52px;line-height:1.08;max-width:11.5em}
+  h3{font:600 22px/1.3 var(--sans);max-width:24em}
+  p{max-width:34em;color:var(--cream-82)}
+  .intro{margin-top:var(--intro-gap);font-size:23px;line-height:1.55;max-width:30em}
+  .body-copy{font-size:19px;line-height:1.7}
+  .body-copy + .body-copy{margin-top:22px}
+  .micro{font:600 11px/1.45 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--cream-40);max-width:34em}
+
+  header{padding:96px 0 var(--section-space)}
+  .brand-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:96px}
+  .logo{display:block;width:116px;height:auto}
+  .placeholder{font:600 10px/1 var(--sans);letter-spacing:.15em;text-transform:uppercase;color:var(--cream-40)}
+  header .intro{margin-bottom:52px}
+  .hero-key{display:flex;flex-wrap:wrap;gap:9px}
+  .chip{display:inline-flex;align-items:center;min-height:32px;padding:8px 10px;background:rgba(101,33,201,.14);box-shadow:0 0 0 1px rgba(210,200,255,.18);border-radius:5px;color:var(--violet-soft);font:600 10px/1.25 var(--sans);letter-spacing:.09em;text-transform:uppercase}
+
+  section{padding:var(--section-space) 0}
+  section .intro{margin-bottom:64px}
+
+  .grid-demo{min-height:430px;padding:50px 0;display:grid;grid-template-columns:repeat(12,1fr);gap:20px}
+  .show-guides .grid-demo{background-image:linear-gradient(90deg,transparent calc(100% - 1px),rgba(210,200,255,.07) 0);background-size:calc((100% + 20px)/12) 100%}
+  .grid-copy{grid-column:1 / span 7;align-self:start}
+  .grid-copy h3{margin-bottom:20px}
+  .grid-note{grid-column:9 / -1;align-self:end;padding-top:18px}
+  .grid-note p{font-size:14px;line-height:1.55;color:var(--cream-58)}
+  .grid-note strong{display:block;margin-bottom:8px;color:var(--cream);font:600 12px/1.3 var(--sans);letter-spacing:.08em;text-transform:uppercase}
+
+  .reading-sample{padding:0}
+  .reading-sample h3{margin-bottom:22px}
+  .reading-sample .micro{margin-top:34px}
+
+  .photo-field{position:relative;aspect-ratio:7/4;overflow:hidden;background:
+    radial-gradient(circle at 72% 38%,rgba(101,33,201,.98) 0 4%,rgba(101,33,201,.2) 4.5% 17%,transparent 34%),
+    linear-gradient(132deg,#111015 0%,#2b292e 48%,#0d0b10 100%)}
+  .photo-field::before{content:"";position:absolute;inset:-18%;background:linear-gradient(112deg,transparent 30%,rgba(251,248,243,.23) 49%,rgba(251,248,243,.04) 55%,transparent 70%);filter:blur(22px);opacity:.78;transform:rotate(-5deg)}
+  .photo-field::after{content:"PLACEHOLDER IMAGE · 700PX COLUMN";position:absolute;left:22px;bottom:20px;color:rgba(251,248,243,.58);font:600 10px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase}
+  figcaption{margin-top:14px;padding-top:12px;border-top:1px solid var(--hair);color:var(--cream-58);font-size:14px;line-height:1.5;max-width:34em}
+  figcaption strong{color:var(--cream-82);font-weight:600}
+
+  .rhythm-demo{display:grid;grid-template-columns:minmax(0,700px) minmax(220px,1fr);gap:72px;align-items:end}
+  .rhythm-card h3{margin-bottom:var(--intro-gap)}
+  .rhythm-card p + p{margin-top:22px}
+  .spacing-stack{display:grid;gap:18px}
+  .spacing-row{padding-bottom:14px}
+  .spacing-row:last-child{padding-bottom:0}
+  .spacing-row b{display:block;color:var(--cream);font:600 13px/1.3 var(--sans)}
+  .spacing-row span{color:var(--cream-58);font-size:13px}
+
+  footer{padding:64px 0 110px}
+  footer .content{display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
+  footer p{font-size:13px;line-height:1.55;color:var(--cream-40)}
+  footer .endmark{font:500 36px/1 var(--serif);color:var(--cream)}
+
+  @media(max-width:760px){
+    :root{--gutter:24px;--section-space:72px;--intro-gap:24px}
+    body{font-size:17px}
+    .hud{position:absolute;right:24px;top:24px;bottom:auto}
+    .hud-output{display:none}
+    header{padding:72px 0}
+    .brand-row{margin-bottom:64px}
+    .logo{width:104px}
+    .brand-row .placeholder{display:none}
+    h1{font-size:44px;line-height:1.05;max-width:8.8em}
+    h2{font-size:32px;line-height:1.12}
+    h3{font-size:19px}
+    .intro{font-size:19px;line-height:1.55}
+    .body-copy{font-size:17px;line-height:1.6}
+    section .intro{margin-bottom:48px}
+    .ruler{margin-bottom:34px}
+    .ruler-label{font-size:9px}
+    .grid-demo{min-height:440px;padding:44px 0;grid-template-columns:1fr;background-image:none}
+    .grid-copy,.grid-note{grid-column:1}
+    .grid-note{align-self:end}
+    .photo-field{aspect-ratio:327/236}
+    .photo-field::after{left:14px;bottom:13px;max-width:220px;line-height:1.4}
+    figcaption{font-size:13px}
+    .rhythm-demo{grid-template-columns:1fr;gap:52px}
+    footer{padding:52px 0 90px}
+    footer .content{display:block}
+    footer .endmark{margin-top:22px;font-size:30px}
+  }
+
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="hud" aria-label="Layout guide controls">
+  <output class="hud-output" id="viewportValue">Viewport</output>
+  <button id="guideToggle" type="button" aria-pressed="false">Show guides</button>
+</div>
+
+<header id="top">
+  <div class="content guide-box" data-guide="Content frame · 1140px max">
+    <div class="brand-row">
+      <img class="logo" src="/inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+      <div class="placeholder">Layout specimen 01 · fake text</div>
+    </div>
+    <div class="measure guide-box" data-guide="Text measure · 34em max">
+      <div class="eyebrow">A responsive width specimen</div>
+      <h1>This sentence knows when to stop.</h1>
+      <p class="intro">Placeholder language sits inside the real system, so you can feel the width before a single approved word is written.</p>
+    </div>
+    <div class="hero-key" aria-label="Key measurements">
+      <span class="chip">1440 desktop</span>
+      <span class="chip">375 × 812 mobile</span>
+      <span class="chip">1140 content</span>
+      <span class="chip">700 reading</span>
+      <span class="chip">34em measure</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="content-frame">
+    <div class="content guide-box" data-guide="Content frame · 1140px max">
+      <div class="ruler"><span class="ruler-label" id="contentValue">1140px content frame</span></div>
+      <div class="measure">
+        <div class="eyebrow">01 · The content frame</div>
+        <h2>The grid is wide. The language is not.</h2>
+        <p class="intro">A full content frame gives composition room to breathe. Text still stops at thirty-four ems, leaving the rest of the grid available for image, rhythm, and contrast.</p>
+      </div>
+      <div class="grid-demo">
+        <div class="grid-copy measure guide-box" data-guide="Copy · 34em max">
+          <h3>Seven columns can carry the thought.</h3>
+          <p class="body-copy">Orenda velit praeceps, asterum quieta sub nocte. Lumen fictum moves through the paragraph without asking the eye to cross the whole page.</p>
+          <p class="body-copy">This second fragment is equally imaginary. Its job is to show a comfortable reading length inside a much wider compositional field.</p>
+        </div>
+        <aside class="grid-note">
+          <strong>The remaining grid stays useful</strong>
+          <p>It can hold a note, image, stat, or deliberate emptiness. It never stretches the paragraph.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="reading-column">
+    <div class="content">
+      <div class="reading guide-box" data-guide="Reading column · 700px max">
+        <div class="ruler"><span class="ruler-label" id="readingValue">700px reading column</span></div>
+        <div class="eyebrow">02 · The reading column</div>
+        <h2>A centered column for the longer breath.</h2>
+        <p class="intro">At desktop, the reading column holds at seven hundred pixels. At mobile, it simply becomes the viewport minus the twenty-four-pixel gutters.</p>
+        <div class="reading-sample measure guide-box" data-guide="Paragraph · 34em max">
+          <h3>Placeholder chapter</h3>
+          <p class="body-copy">Velora ipsum noctis, where one invented phrase gives way to another. The exact words do not matter here. The cadence does. A person can move from the beginning of the line to the end without losing their place.</p>
+          <p class="body-copy">Nimora sed talis, quiet and unhurried. A paragraph may be small, but it still needs enough room around it to feel intentional instead of stranded.</p>
+          <p class="micro">Reading column · 700px max · text remains 34em max</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="image-caption">
+    <div class="content">
+      <div class="reading guide-box" data-guide="Image + caption · 700px max">
+        <div class="eyebrow">03 · Image and caption</div>
+        <h2>The caption begins after fourteen pixels.</h2>
+        <p class="intro">The image shares the reading column. Its caption starts after a fourteen-pixel gap and one cream hairline at thirteen percent opacity.</p>
+        <figure>
+          <div class="photo-field" role="img" aria-label="Abstract near-black placeholder image with one violet light event"></div>
+          <figcaption><strong>Placeholder caption.</strong> Fourteen pixels, one hairline, then a short line of context.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="vertical-rhythm">
+    <div class="content guide-box" data-guide="Section · 120px / 72px padding">
+      <div class="rhythm-demo">
+        <div class="rhythm-card measure">
+          <div class="eyebrow">04 · Vertical rhythm</div>
+          <h2>Air is not what is left over.</h2>
+          <p class="intro">It is a measured part of the system. Each section has one hundred twenty pixels above and below on desktop, seventy-two on mobile.</p>
+          <p class="body-copy">Headlines and introductions are separated by thirty pixels on desktop and twenty-four on mobile. No extra divider is needed to make the hierarchy legible.</p>
+        </div>
+        <div class="spacing-stack" aria-label="Responsive spacing values">
+          <div class="spacing-row"><b>Section padding</b><span>120px desktop · 72px mobile</span></div>
+          <div class="spacing-row"><b>Heading to intro</b><span>30px desktop · 24px mobile</span></div>
+          <div class="spacing-row"><b>Outer gutters</b><span>32px desktop · 24px mobile</span></div>
+          <div class="spacing-row"><b>Divider</b><span>1px cream · 13% opacity</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="content">
+    <p class="measure">All copy on this page is placeholder language. This specimen demonstrates dimensions and rhythm only.</p>
+    <div class="endmark">End of measure.</div>
+  </div>
+</footer>
+
+<script>
+  const viewportValue = document.getElementById('viewportValue');
+  const contentValue = document.getElementById('contentValue');
+  const readingValue = document.getElementById('readingValue');
+  const guideToggle = document.getElementById('guideToggle');
+
+  function updateMeasurements(){
+    const viewport = document.documentElement.clientWidth;
+    const content = document.querySelector('.content').getBoundingClientRect().width;
+    const reading = document.querySelector('.reading').getBoundingClientRect().width;
+    viewportValue.textContent = `${Math.round(viewport)}px viewport`;
+    contentValue.textContent = `${Math.round(content)}px content frame`;
+    readingValue.textContent = `${Math.round(reading)}px reading column`;
+    document.querySelectorAll('.content.guide-box').forEach((box)=>box.dataset.guide=`Content frame · ${Math.round(content)}px ${viewport <= 760 ? 'fluid' : 'max'}`);
+    document.querySelectorAll('.reading.guide-box').forEach((box)=>box.dataset.guide=`Reading column · ${Math.round(reading)}px ${viewport <= 760 ? 'fluid' : 'max'}`);
+  }
+
+  guideToggle.addEventListener('click',()=>{
+    const on = document.body.classList.toggle('show-guides');
+    guideToggle.textContent = on ? 'Hide guides' : 'Show guides';
+    guideToggle.setAttribute('aria-pressed',String(on));
+  });
+
+  addEventListener('resize',updateMeasurements,{passive:true});
+  updateMeasurements();
+</script>
+</body>
+</html>
