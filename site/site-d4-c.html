@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm · Home Concept D4-C · One World, Five Weathers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype'); font-weight:400; }
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype'); font-weight:600; }
+
+  :root{
+    /* silver-white — the photograph's own white, no warm cast */
+    --paper:#F6F5F2;
+    --ink:#141412;
+    --ink78:rgba(20,20,18,.78);
+    --ink56:rgba(20,20,18,.56);
+    --ink38:rgba(20,20,18,.38);
+    --hair:rgba(20,20,18,.12);
+    /* the four frequencies — wheel primaries, functional color only */
+    --core:#6521C9; --love:#B90044; --vitality:#FF9112; --abundance:#12A56E;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+
+    --fs-body:19px; --lh-body:1.65;
+    --fs-h1:88px; --lh-h1:1.03;
+    --fs-h2:52px; --lh-h2:1.08;
+    --fs-lede:23px;
+    --fs-eyebrow:13px;
+    --pad-wrap:32px;
+    --pad-section:120px;
+    --fs-stat:124px; --fs-freq:28px;
+    --fs-quote:28px;
+    --cols3:1fr 1fr 1fr; --cols4:1fr 1fr 1fr 1fr;
+  }
+  @media(max-width:640px){
+    :root{
+      --fs-body:17px; --lh-body:1.6;
+      --fs-h1:46px; --lh-h1:1.06;
+      --fs-h2:33px; --lh-h2:1.12;
+      --fs-lede:19px;
+      --fs-eyebrow:12px;
+      --pad-wrap:24px;
+      --pad-section:76px;
+      --fs-stat:76px; --fs-freq:22px;
+      --fs-quote:22px;
+      --cols3:1fr;
+    }
+  }
+  body.vm{
+    --fs-body:17px; --lh-body:1.6;
+    --fs-h1:46px; --lh-h1:1.06;
+    --fs-h2:33px; --lh-h2:1.12;
+    --fs-lede:19px;
+    --fs-eyebrow:12px;
+    --pad-wrap:24px;
+    --pad-section:76px;
+    --fs-stat:76px; --fs-freq:22px;
+    --fs-quote:22px;
+    --cols3:1fr;
+  }
+  body.vm .wrap{max-width:375px}
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  /* the ground IS a photograph: fixed backdrop, panning slowly down its own frame as you scroll */
+  .ground{position:fixed;inset:0;z-index:0;background:var(--paper);overflow:hidden}
+  header,section,footer{position:relative;z-index:1}
+  .ground img{width:100%;height:auto;min-height:118%;object-fit:cover;will-change:transform}
+  @media (prefers-reduced-motion: reduce){.ground img{transform:none !important}}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink78);font-family:var(--sans);font-size:var(--fs-body);line-height:var(--lh-body);-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad-wrap)}
+  .col{max-width:700px}
+
+  /* ---------- nav: visible on every viewport, no pill ---------- */
+  nav{position:fixed;top:0;left:0;right:0;z-index:40;background:rgba(246,245,242,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;padding:16px var(--pad-wrap);max-width:1140px;margin:0 auto}
+  .wordmark{font-family:var(--serif);font-weight:600;font-size:24px;letter-spacing:.06em;color:var(--ink)}
+  .nav-links{display:flex;align-items:center;gap:26px;font-size:15px;color:var(--ink56)}
+  .nav-links a:hover{color:var(--ink)}
+  .nav-links .go{color:var(--ink);border-bottom:1px solid var(--ink38);padding-bottom:1px}
+  @media(max-width:640px){
+    .nav-in{padding:13px 16px}
+    .wordmark{font-size:19px}
+    .nav-links{gap:13px;font-size:13px}
+    .nav-links .go{display:none}
+  }
+  body.vm .nav-in{padding:13px 16px}
+  body.vm .wordmark{font-size:19px}
+  body.vm .nav-links{gap:13px;font-size:13px}
+  body.vm .nav-links .go{display:none}
+
+  /* ---------- shared type ---------- */
+  .eyebrow{font-size:var(--fs-eyebrow);letter-spacing:.22em;text-transform:uppercase;color:var(--ink38);margin-bottom:26px}
+  h1{font-family:var(--serif);font-weight:600;font-size:var(--fs-h1);line-height:var(--lh-h1);color:var(--ink);letter-spacing:.005em;max-width:900px}
+  h2{font-family:var(--serif);font-weight:600;font-size:var(--fs-h2);line-height:var(--lh-h2);color:var(--ink);max-width:820px}
+  h1 em,h2 em{font-style:italic;font-weight:500}
+  .lede{font-size:var(--fs-lede);color:var(--ink78);line-height:1.55;max-width:640px}
+  .quiet{color:var(--ink56)}
+  .tiny{font-size:14px;color:var(--ink38);line-height:1.5}
+  .num{font-family:var(--sans);font-weight:600}
+  section{padding:var(--pad-section) 0;position:relative}
+  .textlink{color:var(--ink56);border-bottom:1px solid var(--hair);padding-bottom:2px;transition:color .3s,border-color .3s}
+  .textlink:hover{color:var(--ink);border-color:var(--ink)}
+  .biglink{font-family:var(--serif);font-style:italic;font-weight:600;font-size:26px;color:var(--ink);border-bottom:1px solid var(--ink38);padding-bottom:3px;transition:border-color .3s}
+  .biglink:hover{border-color:var(--ink)}
+
+  /* fade-up */
+  .fu{opacity:0;transform:translateY(26px);transition:opacity 1.1s cubic-bezier(.2,.6,.2,1),transform 1.1s cubic-bezier(.2,.6,.2,1)}
+  .fu.in{opacity:1;transform:none}
+
+  /* ---------- photographs: the world itself, never framed, always bleeding ---------- */
+  .field{position:relative;width:100%;overflow:hidden}
+  .field img{width:100%;object-fit:cover;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 26%,#000 80%,transparent 100%);
+    mask-image:linear-gradient(180deg,transparent 0%,#000 26%,#000 80%,transparent 100%)}
+  /* darker passages breathe in and out of the silver air; the dissolve band stays short so it never greys */
+  .field.deep img{
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 28%,#000 76%,transparent 96%);
+    mask-image:linear-gradient(180deg,transparent 0%,#000 28%,#000 76%,transparent 96%)}
+  /* insets feather on all four edges — never a frame line (law 13) */
+  .field.softedge img{
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 16%,#000 84%,transparent 100%),linear-gradient(90deg,transparent 0%,#000 16%,#000 84%,transparent 100%);
+    -webkit-mask-composite:source-in;
+    mask-image:linear-gradient(180deg,transparent 0%,#000 16%,#000 84%,transparent 100%),linear-gradient(90deg,transparent 0%,#000 16%,#000 84%,transparent 100%);
+    mask-composite:intersect}
+
+  /* ---------- hero: the day. Type in the air, the jacaranda street rising into the fold.
+     On mobile the fold is headline + photograph only (law 14); lede and links follow the picture. ---------- */
+  .hero{display:flex;flex-direction:column;padding-top:168px;padding-bottom:0}
+  .hero .wrap{width:100%} /* auto-margin flex items shrink-to-fit; pin them back to the 1140 frame (law 7) */
+  .hero .hh{order:1}
+  .hero .hero-after{order:2}
+  .hero .field{order:3}
+  .hero .lede{margin:28px 0 0}
+  .hero .linkrow{display:flex;align-items:center;gap:28px;flex-wrap:wrap;margin-top:32px}
+  .hero .field{margin-top:44px}
+  .hero .field img{height:76vh;min-height:420px;max-height:760px;object-position:center 58%;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 82%,transparent 100%);
+    mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 82%,transparent 100%)}
+  @media(max-width:640px){
+    .hero{padding-top:96px}
+    .hero .field{order:2;margin-top:26px}
+    .hero .hero-after{order:3;margin-top:8px}
+    .hero .field img{height:52vh;min-height:340px}
+  }
+  body.vm .hero{padding-top:96px}
+  body.vm .hero .field{order:2;margin-top:26px}
+  body.vm .hero .hero-after{order:3;margin-top:8px}
+  body.vm .hero .field img{height:420px;min-height:0}
+
+  /* ---------- the reading: the beach. Four colors as real objects, then the instrument ---------- */
+  .reading{padding-top:0;margin-top:40px}
+  .reading .field img{height:640px;object-position:center 62%;
+    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 93%,transparent 100%);
+    mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 93%,transparent 100%)}
+  @media(max-width:640px){.reading .field img{height:380px}}
+  body.vm .reading .field img{height:380px}
+  .spectrum{max-width:700px;margin:56px auto 0;display:block}
+  .spectrum text{font-family:var(--sans)}
+  .spectrum .mk{font-size:13px;font-weight:600}
+  .spectrum .ax{font-size:11px;font-weight:400}
+  /* the SVG scales down on mobile: type inside it scales up to stay legible */
+  @media(max-width:640px){.spectrum .mk{font-size:26px}.spectrum .ax{font-size:19px}.spectrum .stems line{stroke-width:5}}
+  body.vm .spectrum .mk{font-size:26px}
+  body.vm .spectrum .ax{font-size:19px}
+  body.vm .spectrum .stems line{stroke-width:5}
+  .freqs{display:grid;grid-template-columns:var(--cols4);gap:36px;margin-top:34px}
+  @media(max-width:640px){.freqs{grid-template-columns:1fr 1fr;gap:28px}}
+  body.vm .freqs{grid-template-columns:1fr 1fr;gap:28px}
+  .freq{text-align:center}
+  .freq .tick{display:inline-block;width:20px;height:4px;border-radius:2px;margin-bottom:10px}
+  .freq h3{font-family:var(--serif);font-weight:600;font-size:24px;color:var(--ink)}
+  .freq .hz{font-size:var(--fs-freq);font-weight:600;color:var(--ink);letter-spacing:.01em;margin-top:4px}
+  .freq .hz small{font-size:.55em;font-weight:400;color:var(--ink56);letter-spacing:.06em}
+  .freq .band{font-size:14px;color:var(--ink56);margin-top:6px}
+  .freq .domain{font-size:14px;color:var(--ink38);margin-top:2px}
+  .sample-note{margin-top:44px;text-align:center}
+
+  /* ---------- proof field ---------- */
+  .prooffield{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:56px}
+  @media(max-width:900px){.prooffield{grid-template-columns:1fr}}
+  body.vm .prooffield{grid-template-columns:1fr}
+  .proof-label{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink38);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--hair)}
+  .proof-quote{font-family:var(--serif);font-size:22px;font-style:italic;color:var(--ink);line-height:1.4}
+  .proof-name{margin-top:14px;font-size:14px;color:var(--ink56)}
+  .proof-stat{font-size:56px;font-weight:600;color:var(--ink)}
+  .members li{list-style:none;padding:7px 0;font-size:16px;color:var(--ink78);border-bottom:1px solid var(--hair)}
+  .members li:last-child{border-bottom:0}
+
+  /* ---------- journey ---------- */
+  .journey{overflow:hidden}
+  .steps{display:grid;grid-template-columns:var(--cols3);gap:48px;margin-top:64px}
+  .step .n{font-size:15px;font-weight:600;color:var(--ink38);letter-spacing:.14em;margin-bottom:14px}
+  .step h3{font-family:var(--serif);font-weight:600;font-size:26px;color:var(--ink);margin-bottom:10px}
+  .step p{color:var(--ink56);font-size:17px;max-width:620px}
+  .journey .field{margin-top:76px}
+  .journey .field img{height:520px;object-position:center 30%}
+  @media(max-width:640px){.journey .field img{height:300px}}
+  body.vm .journey .field img{height:300px}
+
+  /* ---------- marquee ---------- */
+  .marquee{overflow:hidden;padding:34px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+  .mq-track{display:flex;gap:72px;width:max-content;animation:mq 75s linear infinite}
+  @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .mq{font-family:var(--serif);font-style:italic;font-size:21px;color:var(--ink56);white-space:nowrap}
+  .mq b{font-family:var(--sans);font-style:normal;font-weight:400;font-size:13px;color:var(--ink38);letter-spacing:.06em;margin-left:12px}
+
+  /* ---------- indoors: the world moves in with you ---------- */
+  .indoors .field{margin-top:70px}
+  .indoors .field img{height:560px;object-position:center 46%}
+  @media(max-width:640px){.indoors .field img{height:340px}}
+  body.vm .indoors .field img{height:340px}
+  .devicegrid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;margin-top:70px}
+  @media(max-width:900px){.devicegrid{grid-template-columns:1fr;gap:36px}}
+  body.vm .devicegrid{grid-template-columns:1fr;gap:36px}
+  .devicegrid .field img{height:480px}
+  @media(max-width:640px){.devicegrid .field img{height:340px}}
+  body.vm .devicegrid .field img{height:340px}
+  .devicegrid p{max-width:620px}
+
+  /* ---------- trio ---------- */
+  .trio{display:grid;grid-template-columns:var(--cols3);gap:48px;margin-top:64px}
+  .tcard{border-top:1px solid var(--hair);padding-top:34px;display:flex;flex-direction:column}
+  .tcard .face{width:128px;height:128px;margin-bottom:22px}
+  .tcard .face img{width:100%;height:100%;object-fit:contain;object-position:left bottom}
+  .tcard blockquote{font-family:var(--serif);font-size:var(--fs-quote);font-style:italic;line-height:1.35;color:var(--ink);flex:1;max-width:620px}
+  .tcard .who{margin-top:26px;font-size:15px;color:var(--ink78)}
+  .tcard .who small{display:block;color:var(--ink38);font-size:13.5px;margin-top:3px;line-height:1.45}
+
+  /* ---------- rain: the grey days, and what holds ---------- */
+  .rain{padding-top:0}
+  .rain .field img{height:600px;object-position:center 42%}
+  @media(max-width:640px){.rain .field img{height:380px}}
+  body.vm .rain .field img{height:380px}
+  .rain .wrap{margin-top:26px}
+  .truths{margin-top:56px}
+  .truth{display:grid;grid-template-columns:220px 1fr;gap:36px;padding:34px 0;border-top:1px solid var(--hair)}
+  @media(max-width:640px){.truth{grid-template-columns:1fr;gap:10px}}
+  body.vm .truth{grid-template-columns:1fr;gap:10px}
+  .truth h3{font-family:var(--serif);font-weight:600;font-size:23px;color:var(--ink)}
+  .truth p{color:var(--ink56);max-width:620px}
+
+  /* reading air: a soft pocket of the photograph's own white behind late-page text,
+     so the column keeps near-white air wherever the ground drifts darker (law 11) */
+  .airveil{position:relative}
+  .airveil::before{content:'';position:absolute;inset:-150px -260px;z-index:-1;
+    background:radial-gradient(94% 94% at 50% 46%,rgba(246,245,242,.92),rgba(246,245,242,0) 82%)}
+
+  /* ---------- study ---------- */
+  .study{display:grid;grid-template-columns:auto 1fr;gap:72px;align-items:center}
+  @media(max-width:900px){.study{grid-template-columns:1fr;gap:32px}}
+  body.vm .study{grid-template-columns:1fr;gap:32px}
+  .study .stat{font-size:var(--fs-stat);font-weight:600;color:var(--ink);line-height:1}
+
+  /* ---------- evening: where this came from ---------- */
+  .story{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+  @media(max-width:900px){.story{grid-template-columns:1fr;gap:40px}}
+  body.vm .story{grid-template-columns:1fr;gap:40px}
+  .story .field img{height:500px}
+  @media(max-width:640px){.story .field img{height:340px}}
+  body.vm .story .field img{height:340px}
+  .story p{max-width:620px}
+
+  /* ---------- membership ---------- */
+  .memb{padding:56px 0;text-align:center}
+  .memb p{color:var(--ink56);font-size:17px;max-width:700px;margin:0 auto}
+
+  /* ---------- finale: the light comes back. Invitation in the white ---------- */
+  .finale{text-align:center;padding-top:0}
+  .finale .field{margin-bottom:64px}
+  .finale .field img{height:460px;object-position:center 55%}
+  @media(max-width:640px){.finale .field img{height:280px}}
+  body.vm .finale .field img{height:280px}
+  .finale h2{font-size:var(--fs-h1);line-height:var(--lh-h1);margin:0 auto}
+  .finale .biglink{display:inline-block;margin-top:40px}
+
+  footer{padding:56px 0 80px;border-top:1px solid var(--hair)}
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;font-size:14px;color:var(--ink38)}
+  .foot a:hover{color:var(--ink78)}
+  .foot .fl{display:flex;gap:24px;flex-wrap:wrap}
+
+  .badge{position:fixed;left:16px;bottom:16px;z-index:60;background:rgba(246,245,242,.9);border:1px solid var(--hair);color:var(--ink38);font-size:11px;letter-spacing:.18em;padding:7px 12px;border-radius:6px}
+
+  @media (prefers-reduced-motion: reduce){
+    .mq-track{animation:none}
+    .fu{opacity:1;transform:none;transition:none}
+  }
+  /* render-rig switch: ?static=1 disables entrance motion so full-page captures are truthful */
+  body.static .fu{opacity:1 !important;transform:none !important;transition:none !important}
+  body.static .mq-track{animation:none}
+</style>
+</head>
+<body id="top">
+<div class="ground" aria-hidden="true"><img src="assets/d4/d4-backdrop.jpg" alt=""></div>
+<div class="badge">CONCEPT · D4-C</div>
+
+<nav>
+  <div class="nav-in">
+    <a class="wordmark" href="#top">Zodiac.fm</a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#voices">Voices</a>
+      <a href="#login" title="Member login">Login</a>
+      <a class="go" href="#start">Get started</a>
+    </div>
+  </div>
+</nav>
+
+<!-- 1 · DAY. The world is in the fold: violet street, one listener walking. -->
+<header class="hero">
+  <div class="wrap hh">
+    <p class="eyebrow">In a 52-week internal study · <span class="num">98.6%</span> of completers would recommend it</p>
+    <h1>Your chart has a sound.<br><em>We composed it.</em></h1>
+  </div>
+  <div class="wrap hero-after">
+    <p class="lede">Zodiac reads your birth chart, translates it into four Orientation Frequencies, and composes real music around them. Music that exists for exactly one person.</p>
+    <div class="linkrow">
+      <a class="biglink" href="#start">Find your frequencies</a>
+      <a class="textlink" href="#how">How it works</a>
+    </div>
+  </div>
+  <div class="field">
+    <img src="assets/d4c/d4c-hero-jacaranda.jpg" alt="A listener walking under a street of violet jacaranda trees in a silver-white world">
+  </div>
+</header>
+
+<!-- 2 · THE BEACH. The reading: four colors as real objects, then the instrument. -->
+<section class="reading">
+  <div class="field fu">
+    <img src="assets/d4/d4-boards.jpg" alt="Four surfboards — violet, emerald, amber, rose — planted in white sand, high-key black and white">
+  </div>
+  <div class="wrap">
+    <div class="fu" style="text-align:center;margin-top:26px">
+      <p class="eyebrow" style="margin-bottom:10px">What a reading looks like</p>
+      <h2 style="margin:0 auto">Four frequencies. <em>Every one of them yours.</em></h2>
+    </div>
+    <svg class="spectrum fu" viewBox="0 0 700 132" role="img" aria-label="A sample reading placed on the audible spectrum: Love 301.7 Hz, Core 486.2 Hz, Vitality 652.4 Hz, Abundance 812.9 Hz">
+      <line x1="14" y1="100" x2="686" y2="100" stroke="rgba(20,20,18,.22)" stroke-width="1"/>
+      <g stroke="rgba(20,20,18,.22)" stroke-width="1">
+        <line x1="14" y1="100" x2="14" y2="106"/><line x1="182" y1="100" x2="182" y2="106"/>
+        <line x1="350" y1="100" x2="350" y2="106"/><line x1="518" y1="100" x2="518" y2="106"/>
+        <line x1="686" y1="100" x2="686" y2="106"/>
+      </g>
+      <g fill="rgba(20,20,18,.38)" text-anchor="middle">
+        <text class="ax" x="14" y="124">0</text><text class="ax" x="182" y="124">250</text><text class="ax" x="350" y="124">500</text>
+        <text class="ax" x="518" y="124">750</text><text class="ax" x="698" y="124" text-anchor="end">1000 Hz</text>
+      </g>
+      <!-- four marks: position is the frequency, color is the identity -->
+      <g class="stems" stroke-width="3" stroke-linecap="round">
+        <line x1="216.7" y1="100" x2="216.7" y2="46" stroke="#B90044"/>
+        <line x1="340.7" y1="100" x2="340.7" y2="46" stroke="#6521C9"/>
+        <line x1="452.4" y1="100" x2="452.4" y2="46" stroke="#FF9112"/>
+        <line x1="560.3" y1="100" x2="560.3" y2="46" stroke="#12A56E"/>
+      </g>
+      <g text-anchor="middle">
+        <text class="mk" x="216.7" y="32" fill="#B90044">301.7</text>
+        <text class="mk" x="340.7" y="32" fill="#6521C9">486.2</text>
+        <text class="mk" x="452.4" y="32" fill="#FF9112">652.4</text>
+        <text class="mk" x="560.3" y="32" fill="#12A56E">812.9</text>
+      </g>
+    </svg>
+    <div class="freqs fu">
+      <div class="freq">
+        <span class="tick" style="background:var(--core)"></span>
+        <h3>Core</h3>
+        <div class="hz num">486.2 <small>Hz</small></div>
+        <div class="band">Solar Plexus band</div>
+        <div class="domain">Who you are</div>
+      </div>
+      <div class="freq">
+        <span class="tick" style="background:var(--abundance)"></span>
+        <h3>Abundance</h3>
+        <div class="hz num">812.9 <small>Hz</small></div>
+        <div class="band">Crown band</div>
+        <div class="domain">Opportunity</div>
+      </div>
+      <div class="freq">
+        <span class="tick" style="background:var(--vitality)"></span>
+        <h3>Vitality</h3>
+        <div class="hz num">652.4 <small>Hz</small></div>
+        <div class="band">Throat band</div>
+        <div class="domain">Your energy</div>
+      </div>
+      <div class="freq">
+        <span class="tick" style="background:var(--love)"></span>
+        <h3>Love</h3>
+        <div class="hz num">301.7 <small>Hz</small></div>
+        <div class="band">Root band</div>
+        <div class="domain">How you relate</div>
+      </div>
+    </div>
+    <p class="tiny sample-note">A sample reading. Yours comes from your birth date, time, and place.</p>
+  </div>
+</section>
+
+<!-- 3 · compact proof field -->
+<section>
+  <div class="wrap">
+    <div class="prooffield fu">
+      <div>
+        <div class="proof-label">Authority</div>
+        <p class="proof-quote">&ldquo;Most personal growth asks us to think differently. Zodiac.fm invites us to experience ourselves differently.&rdquo;</p>
+        <p class="proof-name">Srini Pillay, M.D. · Harvard-trained psychiatrist, brain-imaging researcher</p>
+      </div>
+      <div>
+        <div class="proof-label">The study</div>
+        <p class="proof-stat num">84%</p>
+        <p class="tiny">of members who used it as designed called it life-changing. 52-week internal beta: <span class="num">300</span> started, <span class="num">278</span> completed.</p>
+      </div>
+      <div>
+        <div class="proof-label">Members</div>
+        <ul class="members">
+          <li>Zehra Ashary · London</li>
+          <li>Ellen Grimaldi · Mission, KS</li>
+          <li>Jonathan D. O&rsquo;Connor</li>
+          <li>Sofia Andrade</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 · the journey: still in the sun, the dive -->
+<section id="how" class="journey">
+  <div class="wrap">
+    <div class="fu">
+      <p class="eyebrow">The journey</p>
+      <h2>Three steps. <em>Then it plays.</em></h2>
+    </div>
+    <div class="steps fu">
+      <div class="step">
+        <div class="n num">01</div>
+        <h3>Tell us when and where you were born</h3>
+        <p>Date, time, and place. That is the whole ask.</p>
+      </div>
+      <div class="step">
+        <div class="n num">02</div>
+        <h3>Hear your four frequencies</h3>
+        <p>Core, Love, Vitality, Abundance. Real numbers, on the spot, before anything else.</p>
+      </div>
+      <div class="step">
+        <div class="n num">03</div>
+        <h3>Live with your music</h3>
+        <p>Your frequencies, composed into music you can play every day.</p>
+      </div>
+    </div>
+  </div>
+  <div class="field fu">
+    <img src="assets/d4/d4-caps.jpg" alt="Four swimmers mid-dive under a huge white sky, caps in violet, emerald, amber, rose">
+  </div>
+</section>
+
+<!-- 5a · the crowd of voices -->
+<section style="padding:0">
+  <div class="marquee">
+    <div class="mq-track">
+      <span class="mq">&ldquo;Feels like coming home to myself.&rdquo;<b>KATIE WELLS</b></span>
+      <span class="mq">&ldquo;Zodiac unblocked me.&rdquo;<b>JENNIFER K. HILL</b></span>
+      <span class="mq">&ldquo;It&rsquo;s just&hellip; You. Without distortion, distraction, or dissonance.&rdquo;<b>JESSE ELDER</b></span>
+      <span class="mq">&ldquo;It gives me focus and reminds me of who I am.&rdquo;<b>RACHEL WAYTE</b></span>
+      <span class="mq">&ldquo;Without doing anything but listening, I become a different person.&rdquo;<b>JOEY VAILLANCOURT</b></span>
+      <span class="mq">&ldquo;Every time I use this technology, I am coming home.&rdquo;<b>ALEX NAZAROV</b></span>
+      <span class="mq">&ldquo;I have never experienced change in self as I have with this experience.&rdquo;<b>PAUL TRIBE</b></span>
+      <span class="mq">&ldquo;Feels like coming home to myself.&rdquo;<b>KATIE WELLS</b></span>
+      <span class="mq">&ldquo;Zodiac unblocked me.&rdquo;<b>JENNIFER K. HILL</b></span>
+      <span class="mq">&ldquo;It&rsquo;s just&hellip; You. Without distortion, distraction, or dissonance.&rdquo;<b>JESSE ELDER</b></span>
+      <span class="mq">&ldquo;It gives me focus and reminds me of who I am.&rdquo;<b>RACHEL WAYTE</b></span>
+      <span class="mq">&ldquo;Without doing anything but listening, I become a different person.&rdquo;<b>JOEY VAILLANCOURT</b></span>
+      <span class="mq">&ldquo;Every time I use this technology, I am coming home.&rdquo;<b>ALEX NAZAROV</b></span>
+      <span class="mq">&ldquo;I have never experienced change in self as I have with this experience.&rdquo;<b>PAUL TRIBE</b></span>
+    </div>
+  </div>
+</section>
+
+<!-- 6 · INDOORS. The world moves in with you; the music lives where you live. -->
+<section class="indoors">
+  <div class="wrap">
+    <div class="fu">
+      <p class="eyebrow">Where it lives</p>
+      <h2>It moves in <em>with you.</em></h2>
+      <p class="quiet col" style="margin-top:22px">Attics, kitchens, headphones on the floor at midnight. Your music is not a session you book. It is played in the rooms of your life, as many minutes a day as you can give it.</p>
+    </div>
+  </div>
+  <div class="field deep fu">
+    <img src="assets/d4c/d4c-attic.jpg" alt="A woman laughing over a spinning record in an attic, her face lit rose by the groove">
+  </div>
+  <div class="wrap">
+    <div class="devicegrid fu">
+      <div class="field softedge">
+        <img src="assets/d4c/d4c-phone.jpg" alt="A phone on a wooden desk beside a turntable, its screen glowing violet in a black-and-white room">
+      </div>
+      <div>
+        <p class="eyebrow" style="margin-bottom:14px">The instrument</p>
+        <h2 style="font-size:36px">Press play. <em>That is the practice.</em></h2>
+        <p class="quiet" style="margin-top:18px">The app carries your four frequencies and the music composed on them. It shows you your balance across the four, and what to play next. No streaks, no scores against other people.</p>
+        <p style="margin-top:26px"><a class="textlink" href="#how">See the three steps</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 · human proof preview -->
+<section id="voices">
+  <div class="wrap">
+    <div class="fu">
+      <p class="eyebrow">People with names and faces</p>
+      <h2>They said it <em>better than we could.</em></h2>
+    </div>
+    <div class="trio fu">
+      <div class="tcard">
+        <div class="face"><img src="assets/d4/d4-face-srini.png" alt="Srini Pillay"></div>
+        <blockquote>&ldquo;Through personalized frequencies rather than language alone, it provides another pathway into self-awareness.&rdquo;</blockquote>
+        <p class="who">Srini Pillay, M.D.<small>Harvard-trained psychiatrist, brain-imaging researcher</small></p>
+      </div>
+      <div class="tcard">
+        <div class="face"><img src="assets/d4/d4-face-debra.png" alt="Debra Silverman"></div>
+        <blockquote>&ldquo;This music tickled my soul and reminded me that there&rsquo;s such a connection between vibration, the stars and the sounds that are coordinated by higher intelligence. Give it a try — you&rsquo;ll love it.&rdquo;</blockquote>
+        <p class="who">Debra Silverman<small>Astrologer to Sting, Jennifer Aniston, and More</small></p>
+      </div>
+      <div class="tcard">
+        <div class="face"><img src="assets/d4/d4-face-zehra.png" alt="Zehra Ashary"></div>
+        <blockquote>&ldquo;It lets you finally feel the parts of yourself you have only ever read about.&rdquo;</blockquote>
+        <p class="who">Zehra Ashary<small>Kundalini Practitioner, London</small></p>
+      </div>
+    </div>
+    <p style="margin-top:44px" class="fu"><a class="textlink" href="#voices">All of them, with full names and faces</a></p>
+  </div>
+</section>
+
+<!-- 8 · RAIN. The grey days, and what holds through them. -->
+<section class="rain">
+  <div class="field deep fu">
+    <img src="assets/d4c/d4c-rain.jpg" alt="A man reading in an armchair by a rain-streaked window, a radio glowing violet beside him">
+  </div>
+  <div class="wrap">
+    <div class="fu">
+      <p class="eyebrow">Before you start</p>
+      <h2>Three honest things.</h2>
+    </div>
+    <div class="truths airveil fu">
+      <div class="truth">
+        <h3>Taste is real</h3>
+        <p>The music is composed around your frequencies, and taste is still taste. Some members love their sound on the first listen. Some grow into it.</p>
+      </div>
+      <div class="truth">
+        <h3>Birth time matters</h3>
+        <p>An exact birth time sharpens part of your reading. Close still works, and we will help you work with what you have.</p>
+      </div>
+      <div class="truth">
+        <h3>It compounds</h3>
+        <p>The study results came from people who listened at least nine minutes a day on average, kept in balance across their frequencies. This is a practice, and it builds.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · study preview -->
+<section>
+  <div class="wrap">
+    <div class="study airveil fu">
+      <div class="stat num">84%</div>
+      <div class="col">
+        <p class="eyebrow" style="margin-bottom:14px">The study</p>
+        <p class="lede">Of the members who used Zodiac as designed for a year, <span class="num">84%</span> called it life-changing.</p>
+        <p class="quiet" style="margin-top:16px">Our own 52-week internal beta: <span class="num">300</span> people started, <span class="num">278</span> completed. As designed means at least nine minutes a day on average, in balance. We report it exactly that way. <a class="textlink" href="#how">Read the study</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · EVENING. Where this came from. -->
+<section>
+  <div class="wrap">
+    <div class="story fu">
+      <div>
+        <p class="eyebrow">Where this came from</p>
+        <h2>It started with <em>one question.</em></h2>
+        <p class="quiet" style="margin-top:22px">If your chart describes who you are, what does it sound like? The rest is composing, testing, and listening to members. No robes. No guru. A music company.</p>
+        <p style="margin-top:28px"><a class="textlink" href="#top">Zodiac&rsquo;s story</a></p>
+      </div>
+      <div class="field softedge">
+        <img src="assets/d4c/d4c-dusk.jpg" alt="A woman listening at her window as the sky outside turns luminous violet dusk">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 · quiet membership line -->
+<section class="memb">
+  <div class="wrap airveil">
+    <p>Zodiac is a paid membership. The details, and every straight answer, live on <a class="textlink" href="#top">Pricing</a> and <a class="textlink" href="#top">Questions</a>.</p>
+  </div>
+</section>
+
+<!-- 12 · FINALE. The light comes back: white sand, four umbrellas, the invitation. -->
+<section class="finale" id="start">
+  <div class="field fu">
+    <img src="assets/d4/d4-umbrellas.jpg" alt="Four beach umbrellas — violet, emerald, amber, rose — on white sand from above">
+  </div>
+  <div class="wrap">
+    <div class="fu">
+      <h2>The symphony has been<br>playing your part all along.<br><em>Come hear it.</em></h2>
+      <a class="biglink" href="#start">Find your frequencies</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div class="wordmark" style="font-size:19px">Zodiac.fm</div>
+    <div class="fl">
+      <a href="#how">How it works</a>
+      <a href="#voices">Voices</a>
+      <a href="#top">Pricing</a>
+      <a href="#top">Questions</a>
+      <a href="#top">Terms</a>
+      <a href="#top">Privacy</a>
+      <a href="#login" id="login">Login</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // mobile state for the verification rig: ?view=mobile renders the true 375 column
+  if (new URLSearchParams(location.search).get('view') === 'mobile') document.body.classList.add('vm');
+  if (new URLSearchParams(location.search).get('static') === '1') document.body.classList.add('static');
+  // the photograph pans down its own frame as the page descends: air -> sand -> ripple shadows
+  (function(){
+    var g = document.querySelector('.ground img'); if(!g) return;
+    var ticking = false;
+    function pan(){
+      ticking = false;
+      var over = g.getBoundingClientRect().height - window.innerHeight;
+      if (over <= 0) { g.style.transform = 'none'; return; }
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var p = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+      g.style.transform = 'translate3d(0,' + (-over * p) + 'px,0)';
+    }
+    function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(pan); } }
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      addEventListener('scroll', onScroll, {passive:true}); addEventListener('resize', onScroll); pan();
+    }
+  })();
+  // fade-up on scroll
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.12});
+  document.querySelectorAll('.fu').forEach(function(el){ io.observe(el); });
+</script>
+</body>
+</html>
