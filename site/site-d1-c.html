@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm · Site Concept D1-C · The Broadside</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  /* Concept D1-C · The Broadside · macrostructure: Manifesto — declaration type is the imagery */
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype'); font-weight:400; }
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype'); font-weight:600; }
+
+  :root{
+    --stage:#0B0712; --ink:#1A1620;
+    --cream:#FBF8F3; --cream82:rgba(251,248,243,.82); --cream58:rgba(251,248,243,.58); --cream40:rgba(251,248,243,.40);
+    --hair:rgba(251,248,243,.13);
+    --violet:#6521C9; --violet-deep:#38007A; --violet-soft:#D2C8FF; --violet-glint:#7A4AE0;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+
+    --fs-body:19px; --lh-body:1.65;
+    --fs-h1:84px; --lh-h1:1.02;
+    --fs-h2:52px; --lh-h2:1.08;
+    --fs-lede:23px;
+    --fs-statement:30px;
+    --fs-eyebrow:13px; --mb-eyebrow:26px;
+    --pad-wrap:32px;
+    --pad-section:120px;
+    --fs-bignum:120px;
+    --fs-letter:21px; --pad-letter:40px;
+    --fs-figcap:14px;
+    --defcols:180px 1fr;
+  }
+  @media(max-width:640px){
+    :root{
+      --fs-body:17px; --lh-body:1.6;
+      --fs-h1:44px; --lh-h1:1.05;
+      --fs-h2:32px; --lh-h2:1.12;
+      --fs-lede:19px;
+      --fs-statement:24px;
+      --fs-eyebrow:12px; --mb-eyebrow:20px;
+      --pad-wrap:24px;
+      --pad-section:72px;
+      --fs-bignum:64px;
+      --fs-letter:19px; --pad-letter:24px;
+      --fs-figcap:13px;
+      --defcols:1fr;
+    }
+  }
+  body.vm{
+    --fs-body:17px; --lh-body:1.6;
+    --fs-h1:44px; --lh-h1:1.05;
+    --fs-h2:32px; --lh-h2:1.12;
+    --fs-lede:19px;
+    --fs-statement:24px;
+    --fs-eyebrow:12px; --mb-eyebrow:20px;
+    --pad-wrap:24px;
+    --pad-section:72px;
+    --fs-bignum:64px;
+    --fs-letter:19px; --pad-letter:24px;
+    --fs-figcap:13px;
+    --defcols:1fr;
+  }
+  body.vm .wrap{max-width:375px}
+  body.vm::before,body.vm::after{content:"";position:fixed;top:0;bottom:0;width:1px;background:var(--hair);z-index:1;pointer-events:none}
+  body.vm::before{left:calc(50% - 188px)}
+  body.vm::after{left:calc(50% + 187px)}
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--stage);color:var(--cream);font-family:var(--sans);font-size:var(--fs-body);line-height:var(--lh-body);-webkit-font-smoothing:antialiased;overflow-x:clip}
+
+  .badge{position:fixed;top:14px;right:14px;z-index:50;font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--violet-soft);background:rgba(11,7,18,.85);border:1px solid rgba(210,200,255,.3);border-radius:6px;padding:9px 12px;backdrop-filter:blur(6px)}
+  .badge span{color:var(--cream40)}
+  .viewtoggle{position:fixed;top:14px;left:14px;z-index:50;display:flex;background:rgba(11,7,18,.85);border:1px solid rgba(210,200,255,.3);border-radius:6px;overflow:hidden;backdrop-filter:blur(6px)}
+  .viewtoggle button{font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--cream58);background:none;border:0;padding:9px 14px;cursor:pointer}
+  .viewtoggle button.on{color:var(--stage);background:var(--violet-soft)}
+  @media(max-width:640px){.viewtoggle{display:none}}
+
+  .wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad-wrap)}
+
+  /* Masthead as a print head: wordmark over a double rule */
+  header{padding:52px 0 0}
+  header .row{display:flex;align-items:baseline;justify-content:space-between;gap:24px;border-bottom:1px solid var(--hair);padding-bottom:18px;position:relative}
+  header .row::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1px;background:var(--hair)}
+  header .logo{height:20px;display:block}
+  header .date{font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--cream58)}
+
+  .eyebrow{font:600 var(--fs-eyebrow)/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:var(--mb-eyebrow)}
+  h1{font:500 var(--fs-h1)/var(--lh-h1) var(--serif);letter-spacing:-.01em;color:var(--cream)}
+  h2{font:500 var(--fs-h2)/var(--lh-h2) var(--serif);letter-spacing:-.005em;color:var(--cream)}
+  p.body{font:400 var(--fs-body)/var(--lh-body) var(--sans);color:var(--cream82);max-width:34em}
+  p.body + p.body{margin-top:22px}
+  .lede{font:400 var(--fs-lede)/1.55 var(--sans);color:var(--cream82);max-width:30em}
+  .statement{font:500 var(--fs-statement)/1.35 var(--serif);font-style:italic;color:var(--cream);max-width:24em}
+  .note{font:400 14px/1.55 var(--sans);color:var(--cream40);max-width:46em}
+  .caveat{font:400 14px/1.55 var(--sans);color:var(--cream58);max-width:46em}
+
+  .masthead{padding:120px 0 110px;border-bottom:1px solid var(--hair)}
+  body.vm .masthead{padding:84px 0 72px}
+  .masthead h1{max-width:10.5em}
+  .masthead .lede{margin-top:34px}
+
+  section{padding:var(--pad-section) 0;border-bottom:1px solid var(--hair)}
+
+  /* The declaration pair: claim in serif, answer in Switzer, hairline between */
+  .decl{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+  @media(max-width:900px){.decl{grid-template-columns:1fr}}
+  body.vm .decl{grid-template-columns:1fr;gap:28px}
+  .decl h2{max-width:9em}
+
+  ol.zlist{list-style:none;counter-reset:z;margin-top:44px;max-width:34em}
+  ol.zlist li{counter-increment:z;position:relative;padding:14px 0 14px 46px;color:var(--cream82);border-bottom:1px solid var(--hair)}
+  ol.zlist li::before{content:counter(z,decimal-leading-zero);position:absolute;left:0;top:14px;font:600 14px/1.65 var(--sans);color:var(--violet-soft);letter-spacing:.05em}
+
+  dl.zdef{margin-top:44px;max-width:38em}
+  dl.zdef .row{display:grid;grid-template-columns:var(--defcols);gap:24px;padding:18px 0;border-bottom:1px solid var(--hair)}
+  body.vm dl.zdef .row{gap:8px}
+  dl.zdef dt{font:600 17px/1.5 var(--sans);color:var(--cream)}
+  dl.zdef dd{font:400 17px/1.6 var(--sans);color:var(--cream82)}
+  dl.zdef.zdef-wide{max-width:none;display:grid;grid-template-columns:1fr 1fr;gap:0 72px}
+  @media(max-width:900px){dl.zdef.zdef-wide{grid-template-columns:1fr}}
+  body.vm dl.zdef.zdef-wide{grid-template-columns:1fr}
+
+  .bignum{font:600 var(--fs-bignum)/1 var(--sans);letter-spacing:-.03em;color:var(--cream)}
+  .bignum em{font-style:normal;color:var(--violet-soft)}
+
+  blockquote.letter{margin-top:56px;max-width:36em;border-left:1px solid var(--hair);padding-left:var(--pad-letter)}
+  blockquote.letter p{font:500 var(--fs-letter)/1.6 var(--serif);font-style:italic;color:var(--cream82)}
+  blockquote.letter p + p{margin-top:18px}
+  blockquote.letter p b{color:var(--cream);font-weight:600}
+  blockquote.letter .who{margin-top:28px;font:600 13px/1.6 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cream);font-style:normal}
+  blockquote.letter .who span{display:block;font-weight:400;letter-spacing:.04em;text-transform:none;color:var(--cream58)}
+
+  figure.photo{margin-top:56px;max-width:560px}
+  figure.photo img{width:100%;display:block;border-radius:4px}
+  figcaption{border-top:1px solid var(--hair);margin-top:14px;padding-top:12px;font:400 var(--fs-figcap)/1.5 var(--sans);color:var(--cream58)}
+  figcaption b{color:var(--cream82);font-weight:600}
+
+  .divider-filament{display:block;width:100%;max-width:1140px;margin:0 auto;height:64px}
+
+  .btn{display:inline-block;font:600 16px/1 var(--sans);letter-spacing:.02em;color:#fff;background:linear-gradient(160deg,var(--violet),var(--violet-deep));border-radius:10px;padding:17px 30px;text-decoration:none}
+  .btn:focus-visible{outline:2px solid var(--violet-soft);outline-offset:3px}
+
+  footer{padding:72px 0}
+  footer .wrap{display:flex;align-items:baseline;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  footer .logo{height:16px;display:block;opacity:.8}
+  footer nav{display:flex;gap:28px;flex-wrap:wrap}
+  footer nav a{font:400 13px/1.6 var(--sans);color:var(--cream58);text-decoration:none}
+  footer nav a:hover{color:var(--cream)}
+</style>
+</head>
+<body>
+
+<div class="badge">SITE D1-C <span>· THE BROADSIDE · CONCEPT ROUND D1 · PLACEHOLDER COPY EXCEPT BANKED</span></div>
+<div class="viewtoggle" role="group" aria-label="Preview width">
+  <button type="button" id="vt-desk" class="on">DESKTOP</button>
+  <button type="button" id="vt-mob">MOBILE 375</button>
+</div>
+
+<header>
+  <div class="wrap">
+    <div class="row">
+      <img class="logo" src="/inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+      <div class="date">Personal Frequency Music</div>
+    </div>
+  </div>
+</header>
+
+<div class="masthead">
+  <div class="wrap">
+    <h1>You have been listening to everyone else's frequency.</h1>
+    <p class="lede">The radio, the algorithm, the office playlist. All of it tuned to someone. None of it tuned to you.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="decl">
+      <h2>There is a frequency that is yours.</h2>
+      <div>
+        <p class="body">Your birth chart holds four frequencies that are yours alone — calculated from the date, time, and place you arrived.</p>
+        <p class="body">We turn them into real music you can live with. Not another meditation app: real songs, your frequency woven through every track.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 style="max-width:12em">Four frequencies. Four parts of your life.</h2>
+    <dl class="zdef zdef-wide">
+      <div class="row"><dt>Core</dt><dd>The internal band. You, alone with the music.</dd></div>
+      <div class="row"><dt>Love</dt><dd>Connection. The people in the room with you.</dd></div>
+      <div class="row"><dt>Vitality</dt><dd>Movement. The body, awake and going.</dd></div>
+      <div class="row"><dt>Abundance</dt><dd>Exchange. Hands, work, and the green light.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="decl">
+      <h2>Nine minutes a day. That's the practice.</h2>
+      <ol class="zlist" style="margin-top:0">
+        <li>Enter your birth date, time, and place.</li>
+        <li>We calculate your four personal frequencies.</li>
+        <li>Press play and get on with your day.</li>
+      </ol>
+    </div>
+    <figure class="photo">
+      <img src="/site/assets/sg5lib/r27-v-turntable-lit.jpg" alt="Black turntable by a window, violet light spilling across the cabinet">
+      <figcaption><b>One black turntable,</b> one violet window light.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">From Our 52-Week Study</div>
+    <div class="bignum">98.6<em>%</em></div>
+    <p class="body" style="margin-top:28px">of the 300 people in our 52-week study would recommend it. 84% called it life-changing.</p>
+    <p class="caveat" style="margin-top:22px">The life-changing figure is among members who used it as designed: about nine minutes a day, balanced across all four frequencies.</p>
+    <blockquote class="letter">
+      <p>"I've spent decades helping people break through fear and step into their authentic power. What I know for sure is that most of us are walking around disconnected from who we really are. We're living someone else's frequency. That's what stopped me cold about Zodiac.fm.</p>
+      <p>This isn't about fixing yourself. You don't need fixing. This is about tuning back into the frequency you were born to be — and that's the most radical act of self-love there is. <b>If you're tired of living out of tune with yourself, this is your invitation home."</b></p>
+      <div class="who">Rhonda Britten<span>Author of "Fearless Living," Emmy Award-Winner · Founder, Fearless Living Institute</span></div>
+    </blockquote>
+  </div>
+</section>
+
+<section style="border-bottom:none;padding-bottom:60px">
+  <div class="wrap">
+    <div class="decl">
+      <h2>Stop renting someone else's sound.</h2>
+      <div>
+        <p class="body">Three minutes to your four frequencies. The first listen is the proof.</p>
+        <div style="margin-top:34px"><a class="btn" href="#">Hear your frequency</a></div>
+      </div>
+    </div>
+  </div>
+  <svg class="divider-filament" style="margin-top:96px" viewBox="0 0 1140 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A single hairline violet frequency wave">
+    <defs>
+      <linearGradient id="fil" x1="0" y1="0" x2="1140" y2="0" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#7A4AE0" stop-opacity="0"/>
+        <stop offset=".18" stop-color="#7A4AE0" stop-opacity=".55"/>
+        <stop offset=".5" stop-color="#D2C8FF" stop-opacity=".85"/>
+        <stop offset=".82" stop-color="#7A4AE0" stop-opacity=".55"/>
+        <stop offset="1" stop-color="#7A4AE0" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="M0 32 C 120 32, 160 14, 250 20 S 400 54, 505 44 S 640 8, 745 18 S 900 50, 990 40 S 1100 30, 1140 32" stroke="url(#fil)" stroke-width="1.5"/>
+  </svg>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img class="logo" src="/inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+    <nav>
+      <a href="#">The story</a>
+      <a href="#">Support</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </nav>
+    <p class="note">© 2026 Zodiac.fm · Concept D1-C</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var d=document.getElementById('vt-desk'),m=document.getElementById('vt-mob');
+    function set(mobile){document.body.classList.toggle('vm',mobile);d.classList.toggle('on',!mobile);m.classList.toggle('on',mobile);}
+    d.addEventListener('click',function(){set(false)});
+    m.addEventListener('click',function(){set(true)});
+    if(new URLSearchParams(location.search).get('view')==='mobile')set(true);
+  })();
+</script>
+
+</body>
+</html>

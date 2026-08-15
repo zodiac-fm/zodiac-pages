@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm · Site Concept D1-D · The Pressing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  /* Concept D1-D · The Pressing · the wild swing: the site as a record release — tracklist, liner notes, credits */
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype'); font-weight:400; }
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype'); font-weight:600; }
+
+  :root{
+    --stage:#0B0712; --ink:#1A1620;
+    --cream:#FBF8F3; --cream82:rgba(251,248,243,.82); --cream58:rgba(251,248,243,.58); --cream40:rgba(251,248,243,.40);
+    --hair:rgba(251,248,243,.13);
+    --violet:#6521C9; --violet-deep:#38007A; --violet-soft:#D2C8FF; --violet-glint:#7A4AE0;
+    --rose:#B90044; --amber:#FF9112; --emerald:#12A56E;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+
+    --fs-body:19px; --lh-body:1.65;
+    --fs-h1:84px; --lh-h1:1.02;
+    --fs-h2:52px; --lh-h2:1.08;
+    --fs-lede:23px;
+    --fs-statement:30px;
+    --fs-eyebrow:13px; --mb-eyebrow:26px;
+    --pad-wrap:32px;
+    --pad-section:120px;
+    --fs-track:26px;
+    --fs-statn:64px;
+    --fs-figcap:14px;
+    --cols2:1fr 1fr;
+  }
+  @media(max-width:900px){ :root{--cols2:1fr} }
+  @media(max-width:640px){
+    :root{
+      --fs-body:17px; --lh-body:1.6;
+      --fs-h1:44px; --lh-h1:1.05;
+      --fs-h2:32px; --lh-h2:1.12;
+      --fs-lede:19px;
+      --fs-statement:24px;
+      --fs-eyebrow:12px; --mb-eyebrow:20px;
+      --pad-wrap:24px;
+      --pad-section:72px;
+      --fs-track:20px;
+      --fs-statn:42px;
+      --fs-figcap:13px;
+      --cols2:1fr;
+    }
+  }
+  body.vm{
+    --fs-body:17px; --lh-body:1.6;
+    --fs-h1:44px; --lh-h1:1.05;
+    --fs-h2:32px; --lh-h2:1.12;
+    --fs-lede:19px;
+    --fs-statement:24px;
+    --fs-eyebrow:12px; --mb-eyebrow:20px;
+    --pad-wrap:24px;
+    --pad-section:72px;
+    --fs-track:20px;
+    --fs-statn:42px;
+    --fs-figcap:13px;
+    --cols2:1fr;
+  }
+  body.vm .wrap,body.vm .readcol{max-width:375px}
+  body.vm::before,body.vm::after{content:"";position:fixed;top:0;bottom:0;width:1px;background:var(--hair);z-index:1;pointer-events:none}
+  body.vm::before{left:calc(50% - 188px)}
+  body.vm::after{left:calc(50% + 187px)}
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--stage);color:var(--cream);font-family:var(--sans);font-size:var(--fs-body);line-height:var(--lh-body);-webkit-font-smoothing:antialiased;overflow-x:clip}
+
+  .badge{position:fixed;top:14px;right:14px;z-index:50;font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--violet-soft);background:rgba(11,7,18,.85);border:1px solid rgba(210,200,255,.3);border-radius:6px;padding:9px 12px;backdrop-filter:blur(6px)}
+  .badge span{color:var(--cream40)}
+  .viewtoggle{position:fixed;top:14px;left:14px;z-index:50;display:flex;background:rgba(11,7,18,.85);border:1px solid rgba(210,200,255,.3);border-radius:6px;overflow:hidden;backdrop-filter:blur(6px)}
+  .viewtoggle button{font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--cream58);background:none;border:0;padding:9px 14px;cursor:pointer}
+  .viewtoggle button.on{color:var(--stage);background:var(--violet-soft)}
+  @media(max-width:640px){.viewtoggle{display:none}}
+
+  .wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad-wrap)}
+  .readcol{max-width:700px;margin:0 auto;padding:0 var(--pad-wrap)}
+
+  header{padding:52px 0 0}
+  header .row{display:flex;align-items:baseline;justify-content:space-between;gap:24px}
+  header .logo{height:20px;display:block}
+  header .cat{font:600 12px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--cream58)}
+  header .cat b{color:var(--violet-soft);font-weight:600}
+
+  .eyebrow{font:600 var(--fs-eyebrow)/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:var(--mb-eyebrow)}
+  h1{font:500 var(--fs-h1)/var(--lh-h1) var(--serif);letter-spacing:-.01em;color:var(--cream)}
+  h2{font:500 var(--fs-h2)/var(--lh-h2) var(--serif);letter-spacing:-.005em;color:var(--cream)}
+  p.body{font:400 var(--fs-body)/var(--lh-body) var(--sans);color:var(--cream82);max-width:34em}
+  p.body + p.body{margin-top:22px}
+  .lede{font:400 var(--fs-lede)/1.55 var(--sans);color:var(--cream82);max-width:30em}
+  .statement{font:500 var(--fs-statement)/1.35 var(--serif);font-style:italic;color:var(--cream);max-width:24em}
+  .note{font:400 14px/1.55 var(--sans);color:var(--cream40);max-width:46em}
+  .caveat{font:400 14px/1.55 var(--sans);color:var(--cream58);max-width:46em}
+
+  /* Album-cover masthead: the record photo full width, the release title beneath it like a sleeve */
+  .cover{padding:64px 0 0}
+  .cover img{width:100%;display:block;border-radius:4px}
+  .cover .sleeve{display:flex;align-items:baseline;justify-content:space-between;gap:24px;flex-wrap:wrap;border-top:1px solid var(--hair);margin-top:14px;padding-top:14px}
+  .cover .sleeve .t{font:400 var(--fs-figcap)/1.5 var(--sans);color:var(--cream58)}
+  .cover .sleeve .t b{color:var(--cream82);font-weight:600}
+  .cover .sleeve .n{font:600 12px/1.6 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);white-space:nowrap}
+
+  .masthead{padding:96px 0 0}
+  body.vm .masthead{padding:64px 0 0}
+  .masthead h1{max-width:12em}
+  .masthead .lede{margin-top:30px}
+
+  section{padding:var(--pad-section) 0;border-bottom:1px solid var(--hair)}
+
+  /* The tracklist: the four frequencies as sides of a record */
+  .tracks{margin-top:56px;border-top:1px solid var(--hair)}
+  .track{display:grid;grid-template-columns:64px 1fr auto;gap:24px;align-items:baseline;padding:26px 0;border-bottom:1px solid var(--hair)}
+  body.vm .track{grid-template-columns:44px 1fr;row-gap:8px}
+  .track .no{font:600 14px/1.65 var(--sans);color:var(--violet-soft);letter-spacing:.05em}
+  .track .name{font:500 var(--fs-track)/1.2 var(--serif);color:var(--cream)}
+  .track .name .chip{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:14px;vertical-align:baseline}
+  .track .len{font:400 15px/1.65 var(--sans);color:var(--cream58)}
+  body.vm .track .len{grid-column:2}
+  .track .what{grid-column:2;font:400 16px/1.6 var(--sans);color:var(--cream82);max-width:34em}
+  body.vm .track .what{grid-column:1 / -1}
+
+  .vinylgrid{display:grid;grid-template-columns:var(--cols2);gap:44px 32px;margin-top:56px}
+  .vinylgrid figure{margin:0}
+  .vinylgrid img{width:100%;display:block;border-radius:4px}
+  .vinylgrid figcaption{border-top:1px solid var(--hair);margin-top:14px;padding-top:12px;font:400 var(--fs-figcap)/1.5 var(--sans);color:var(--cream58)}
+  .vinylgrid figcaption b{color:var(--cream82);font-weight:600}
+
+  /* Liner notes: the reading column */
+  .liner p{font:400 var(--fs-body)/1.7 var(--sans);color:var(--cream82)}
+  .liner p + p{margin-top:22px}
+  .liner h3{font:600 19px/1.3 var(--sans);color:var(--cream);margin-top:44px;margin-bottom:18px}
+
+  /* Credits: an album-back credits block */
+  .credits{margin-top:44px;max-width:38em}
+  .credits .row{display:grid;grid-template-columns:200px 1fr;gap:24px;padding:15px 0;border-bottom:1px solid var(--hair)}
+  body.vm .credits .row{grid-template-columns:1fr;gap:6px}
+  .credits .k{font:600 12px/1.8 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--cream58)}
+  .credits .v{font:400 17px/1.6 var(--sans);color:var(--cream82)}
+
+  .quotestrip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;margin-top:56px}
+  @media(max-width:900px){.quotestrip{grid-template-columns:1fr}}
+  body.vm .quotestrip{grid-template-columns:1fr}
+  .quotestrip .qs{border-top:1px solid var(--hair);padding-top:22px}
+  .quotestrip .pq{font:500 20px/1.45 var(--serif);font-style:italic;color:var(--cream)}
+  .quotestrip .who{margin-top:14px;font:600 12px/1.6 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--cream58)}
+
+  .statband{display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;margin-top:56px;padding:56px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+  @media(max-width:900px){.statband{grid-template-columns:1fr;gap:36px}}
+  body.vm .statband{grid-template-columns:1fr;gap:36px;padding:44px 0}
+  .stat .n{font:600 var(--fs-statn)/1 var(--sans);letter-spacing:-.02em;color:var(--cream)}
+  .stat .n em{font-style:normal;color:var(--violet-soft)}
+  .stat .l{margin-top:12px;font:600 14px/1.4 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--cream58)}
+
+  .btn{display:inline-block;font:600 16px/1 var(--sans);letter-spacing:.02em;color:#fff;background:linear-gradient(160deg,var(--violet),var(--violet-deep));border-radius:10px;padding:17px 30px;text-decoration:none}
+  .btn:focus-visible{outline:2px solid var(--violet-soft);outline-offset:3px}
+
+  footer{padding:72px 0}
+  footer .wrap{display:flex;align-items:baseline;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  footer .logo{height:16px;display:block;opacity:.8}
+  footer nav{display:flex;gap:28px;flex-wrap:wrap}
+  footer nav a{font:400 13px/1.6 var(--sans);color:var(--cream58);text-decoration:none}
+  footer nav a:hover{color:var(--cream)}
+</style>
+</head>
+<body>
+
+<div class="badge">SITE D1-D <span>· THE PRESSING · CONCEPT ROUND D1 · WILD SWING · PLACEHOLDER COPY EXCEPT BANKED</span></div>
+<div class="viewtoggle" role="group" aria-label="Preview width">
+  <button type="button" id="vt-desk" class="on">DESKTOP</button>
+  <button type="button" id="vt-mob">MOBILE 375</button>
+</div>
+
+<header>
+  <div class="wrap">
+    <div class="row">
+      <img class="logo" src="/inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+      <div class="cat">Catalog <b>ZFM-001</b> · A Record Made of You</div>
+    </div>
+  </div>
+</header>
+
+<div class="masthead">
+  <div class="wrap">
+    <h1>Your first pressing.</h1>
+    <p class="lede">One listener. Four frequencies. Cut from the date, time, and place you were born.</p>
+  </div>
+</div>
+
+<div class="cover">
+  <div class="wrap">
+    <img src="/site/assets/sg5lib/r27-v-turntable-black.jpg" alt="A black turntable on the stage, monochrome, hard light">
+    <div class="sleeve">
+      <div class="t"><b>Recorded from the sky over your birthplace.</b> Performed in real songs you can live with.</div>
+      <div class="n">33⅓ · Personal Frequency Music</div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Side A · Your Four Frequencies</div>
+    <h2>The tracklist is you</h2>
+    <div class="tracks">
+      <div class="track">
+        <div class="no">A1</div>
+        <div class="name"><span class="chip" style="background:linear-gradient(160deg,#6521C9,#A737C8)"></span>Core</div>
+        <div class="len">The internal band</div>
+        <div class="what">You, alone with the music. The frequency underneath all the others.</div>
+      </div>
+      <div class="track">
+        <div class="no">A2</div>
+        <div class="name"><span class="chip" style="background:linear-gradient(160deg,#B90044,#CF4090)"></span>Love</div>
+        <div class="len">Connection</div>
+        <div class="what">The people in the room with you, and the ones on their way.</div>
+      </div>
+      <div class="track">
+        <div class="no">A3</div>
+        <div class="name"><span class="chip" style="background:linear-gradient(160deg,#FF9112,#FFC251)"></span>Vitality</div>
+        <div class="len">Movement</div>
+        <div class="what">The body awake: the run, the lift, the early water.</div>
+      </div>
+      <div class="track">
+        <div class="no">A4</div>
+        <div class="name"><span class="chip" style="background:linear-gradient(160deg,#12A56E,#46D99A)"></span>Abundance</div>
+        <div class="len">Exchange</div>
+        <div class="what">Hands, work, the handoff, and every light saying go.</div>
+      </div>
+    </div>
+    <p class="note" style="margin-top:26px">Side B is pressed after your first listen: the balance your week actually needs.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">The Pressing Plant</div>
+    <h2>Cut in color, played in a monochrome world</h2>
+    <div class="vinylgrid">
+      <figure>
+        <img src="/site/assets/sg5lib/r29-a-record-needledrop.jpg" alt="A needle dropping onto a record, amber glint in the groove">
+        <figcaption><b>The needle drop.</b> Your frequency starts where the groove starts.</figcaption>
+      </figure>
+      <figure>
+        <img src="/site/assets/sg5lib/eval-r23-hero-record-rose.jpg" alt="A rose vinyl record held against the light">
+        <figcaption><b>Rose, pressed.</b> One band per record, one record per part of your life.</figcaption>
+      </figure>
+      <figure>
+        <img src="/site/assets/sg5lib/cc1-r28-attic-vinyl-rose-cc1.jpg" alt="Crate-digging in an attic, one rose sleeve lit among monochrome records">
+        <figcaption><b>The crate.</b> Yours is the one that isn't grey.</figcaption>
+      </figure>
+      <figure>
+        <img src="/site/assets/sg5lib/r29-e-turntable-lid.jpg" alt="A turntable lid catching emerald light">
+        <figcaption><b>The lid, emerald.</b> The player takes the color of what it plays.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="readcol">
+    <div class="eyebrow">Liner Notes</div>
+    <div class="liner">
+      <p>Every record you own was tuned to a reference pitch chosen a century ago, for orchestras, by committee. Every song on the radio is mixed for the average ear in the average room. You have spent your whole life listening to music tuned for everyone.</p>
+      <h3>This one is tuned for you</h3>
+      <p>Your birth chart holds four frequencies that are yours alone. We weave them through real songs — while you walk, work, cook, or drive. About nine minutes a day is the practice. What matters is how much you listen over time.</p>
+    </div>
+    <div class="credits">
+      <div class="row"><div class="k">Written by</div><div class="v">The sky over your birthplace</div></div>
+      <div class="row"><div class="k">Performed by</div><div class="v">Real musicians, in real songs</div></div>
+      <div class="row"><div class="k">Tuned to</div><div class="v">Your four personal frequencies</div></div>
+      <div class="row"><div class="k">Runtime</div><div class="v">About nine minutes a day</div></div>
+      <div class="row"><div class="k">Format</div><div class="v">Streaming, everywhere your day happens</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">The Reviews</div>
+    <h2>What the first listeners said</h2>
+    <div class="quotestrip">
+      <div class="qs">
+        <div class="pq">"Zodiac.fm is way ahead of the curve."</div>
+        <div class="who">Maya Shetreat, MD</div>
+      </div>
+      <div class="qs">
+        <div class="pq">"This isn't just sound - it is an energetic recalibration."</div>
+        <div class="who">Sabrina Truscott</div>
+      </div>
+      <div class="qs">
+        <div class="pq">"If you're tired of living out of tune with yourself, this is your invitation home."</div>
+        <div class="who">Rhonda Britten</div>
+      </div>
+    </div>
+    <div class="statband">
+      <div class="stat"><div class="n">98.6<em>%</em></div><div class="l">Would recommend it</div></div>
+      <div class="stat"><div class="n">84<em>%</em></div><div class="l">Called it life-changing</div></div>
+      <div class="stat"><div class="n">7</div><div class="l">Measured outcomes</div></div>
+    </div>
+    <p class="caveat" style="margin-top:22px">From our 52-week study of 300 people. The life-changing figure and the seven outcomes are among members who used it as designed: about nine minutes a day, balanced across all four frequencies.</p>
+  </div>
+</section>
+
+<section style="border-bottom:none">
+  <div class="wrap">
+    <p class="statement">Every pressing is one of one. Yours has been waiting.</p>
+    <div style="margin-top:44px"><a class="btn" href="#">Press play on yours</a></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img class="logo" src="/inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+    <nav>
+      <a href="#">The story</a>
+      <a href="#">Support</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </nav>
+    <p class="note">© 2026 Zodiac.fm · Concept D1-D</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var d=document.getElementById('vt-desk'),m=document.getElementById('vt-mob');
+    function set(mobile){document.body.classList.toggle('vm',mobile);d.classList.toggle('on',!mobile);m.classList.toggle('on',mobile);}
+    d.addEventListener('click',function(){set(false)});
+    m.addEventListener('click',function(){set(true)});
+    if(new URLSearchParams(location.search).get('view')==='mobile')set(true);
+  })();
+</script>
+
+</body>
+</html>

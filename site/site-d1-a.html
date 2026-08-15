@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm · Site Concept D1-A · The Monograph</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  /* Concept D1-A · The Monograph · macrostructure: air-led editorial · tokens: design/tokens.json via styleguide-7-3 */
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype'); font-weight:400; }
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype'); font-weight:600; }
+
+  :root{
+    --stage:#0B0712; --ink:#1A1620;
+    --cream:#FBF8F3; --cream82:rgba(251,248,243,.82); --cream58:rgba(251,248,243,.58); --cream40:rgba(251,248,243,.40);
+    --hair:rgba(251,248,243,.13);
+    --violet:#6521C9; --violet-deep:#38007A; --violet-soft:#D2C8FF; --violet-glint:#7A4AE0;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+
+    --fs-body:19px; --lh-body:1.65;
+    --fs-h1:84px; --lh-h1:1.02;
+    --fs-h2:52px; --lh-h2:1.08;
+    --fs-lede:23px;
+    --fs-statement:30px;
+    --fs-eyebrow:13px; --mb-eyebrow:26px;
+    --pad-wrap:32px;
+    --pad-chapter:180px;
+    --pad-section:120px;
+    --fs-bignum:120px;
+    --fs-testiq:30px;
+    --fs-figcap:14px;
+  }
+  @media(max-width:640px){
+    :root{
+      --fs-body:17px; --lh-body:1.6;
+      --fs-h1:44px; --lh-h1:1.05;
+      --fs-h2:32px; --lh-h2:1.12;
+      --fs-lede:19px;
+      --fs-statement:24px;
+      --fs-eyebrow:12px; --mb-eyebrow:20px;
+      --pad-wrap:24px;
+      --pad-chapter:104px;
+      --pad-section:72px;
+      --fs-bignum:64px;
+      --fs-testiq:24px;
+      --fs-figcap:13px;
+    }
+  }
+  body.vm{
+    --fs-body:17px; --lh-body:1.6;
+    --fs-h1:44px; --lh-h1:1.05;
+    --fs-h2:32px; --lh-h2:1.12;
+    --fs-lede:19px;
+    --fs-statement:24px;
+    --fs-eyebrow:12px; --mb-eyebrow:20px;
+    --pad-wrap:24px;
+    --pad-chapter:104px;
+    --pad-section:72px;
+    --fs-bignum:64px;
+    --fs-testiq:24px;
+    --fs-figcap:13px;
+  }
+  body.vm .wrap,body.vm .readcol{max-width:375px}
+  body.vm::before,body.vm::after{content:"";position:fixed;top:0;bottom:0;width:1px;background:var(--hair);z-index:1;pointer-events:none}
+  body.vm::before{left:calc(50% - 188px)}
+  body.vm::after{left:calc(50% + 187px)}
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--stage);color:var(--cream);font-family:var(--sans);font-size:var(--fs-body);line-height:var(--lh-body);-webkit-font-smoothing:antialiased;overflow-x:clip}
+
+  .badge{position:fixed;top:14px;right:14px;z-index:50;font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--violet-soft);background:rgba(11,7,18,.85);border:1px solid rgba(210,200,255,.3);border-radius:6px;padding:9px 12px;backdrop-filter:blur(6px)}
+  .badge span{color:var(--cream40)}
+  .viewtoggle{position:fixed;top:14px;left:14px;z-index:50;display:flex;background:rgba(11,7,18,.85);border:1px solid rgba(210,200,255,.3);border-radius:6px;overflow:hidden;backdrop-filter:blur(6px)}
+  .viewtoggle button{font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--cream58);background:none;border:0;padding:9px 14px;cursor:pointer}
+  .viewtoggle button.on{color:var(--stage);background:var(--violet-soft)}
+  @media(max-width:640px){.viewtoggle{display:none}}
+
+  .wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad-wrap)}
+  .readcol{max-width:700px;margin:0 auto;padding:0 var(--pad-wrap)}
+
+  .eyebrow{font:600 var(--fs-eyebrow)/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:var(--mb-eyebrow)}
+  h1{font:500 var(--fs-h1)/var(--lh-h1) var(--serif);letter-spacing:-.01em;color:var(--cream)}
+  h2{font:500 var(--fs-h2)/var(--lh-h2) var(--serif);letter-spacing:-.005em;color:var(--cream)}
+  p.body{font:400 var(--fs-body)/var(--lh-body) var(--sans);color:var(--cream82);max-width:34em}
+  p.body + p.body{margin-top:22px}
+  .lede{font:400 var(--fs-lede)/1.55 var(--sans);color:var(--cream82);max-width:30em}
+  .statement{font:500 var(--fs-statement)/1.35 var(--serif);font-style:italic;color:var(--cream);max-width:24em}
+  .note{font:400 14px/1.55 var(--sans);color:var(--cream40);max-width:46em}
+  .caveat{font:400 14px/1.55 var(--sans);color:var(--cream58);max-width:46em}
+
+  /* Monograph masthead: the wordmark alone, then air, then one line */
+  header{padding:64px 0 0;text-align:center}
+  header .logo{height:20px;display:inline-block}
+  .masthead{padding:200px 0 240px;text-align:center}
+  @media(max-width:640px){.masthead{padding:120px 0 140px}}
+  body.vm .masthead{padding:120px 0 140px}
+  .masthead .eyebrow{margin-bottom:34px}
+  .masthead h1{max-width:13em;margin:0 auto}
+
+  .chapter{padding:var(--pad-chapter) 0;border-top:1px solid var(--hair)}
+  .chapter.center{text-align:center}
+  .chapter.center .statement,.chapter.center .lede{margin-left:auto;margin-right:auto}
+
+  figure.photo{margin:0}
+  figure.photo img{width:100%;display:block;border-radius:4px}
+  figcaption{border-top:1px solid var(--hair);margin-top:14px;padding-top:12px;font:400 var(--fs-figcap)/1.5 var(--sans);color:var(--cream58);max-width:46em}
+  figcaption b{color:var(--cream82);font-weight:600}
+
+  ol.zlist{list-style:none;counter-reset:z;margin-top:44px;max-width:34em}
+  ol.zlist li{counter-increment:z;position:relative;padding:14px 0 14px 46px;color:var(--cream82);border-bottom:1px solid var(--hair)}
+  ol.zlist li::before{content:counter(z,decimal-leading-zero);position:absolute;left:0;top:14px;font:600 14px/1.65 var(--sans);color:var(--violet-soft);letter-spacing:.05em}
+
+  .bignum{font:600 var(--fs-bignum)/1 var(--sans);letter-spacing:-.03em;color:var(--cream)}
+  .bignum em{font-style:normal;color:var(--violet-soft)}
+
+  blockquote.testi{margin:64px auto 0;max-width:36em}
+  blockquote.testi .q{font:500 var(--fs-testiq)/1.4 var(--serif);font-style:italic;color:var(--cream)}
+  blockquote.testi .who{margin-top:24px;font:600 13px/1.6 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cream)}
+  blockquote.testi .who span{display:block;font-weight:400;letter-spacing:.04em;text-transform:none;color:var(--cream58)}
+
+  .phone{width:100%;max-width:330px;display:block;margin:56px auto 0}
+
+  .btn{display:inline-block;font:600 16px/1 var(--sans);letter-spacing:.02em;color:#fff;background:linear-gradient(160deg,var(--violet),var(--violet-deep));border-radius:10px;padding:17px 30px;text-decoration:none}
+  .btn:hover{background:linear-gradient(160deg,#7A4AE0,var(--violet-deep))}
+  .btn:focus-visible{outline:2px solid var(--violet-soft);outline-offset:3px}
+  .textlink{font:600 15px/1.4 var(--sans);letter-spacing:.04em;color:var(--violet-soft);text-decoration:none;border-bottom:1px solid rgba(210,200,255,.3);padding-bottom:3px}
+  .textlink:hover{border-bottom-color:var(--violet-soft)}
+  .textlink:focus-visible{outline:2px solid var(--violet-soft);outline-offset:3px}
+
+  footer{padding:96px 0 72px;border-top:1px solid var(--hair);text-align:center}
+  footer .logo{height:16px;display:inline-block;margin-bottom:26px;opacity:.8}
+  footer .note{margin:0 auto}
+  footer nav{margin-top:22px;display:flex;justify-content:center;gap:28px;flex-wrap:wrap}
+  footer nav a{font:400 13px/1.6 var(--sans);color:var(--cream58);text-decoration:none}
+  footer nav a:hover{color:var(--cream)}
+</style>
+</head>
+<body>
+
+<div class="badge">SITE D1-A <span>· THE MONOGRAPH · CONCEPT ROUND D1 · PLACEHOLDER COPY EXCEPT BANKED</span></div>
+<div class="viewtoggle" role="group" aria-label="Preview width">
+  <button type="button" id="vt-desk" class="on">DESKTOP</button>
+  <button type="button" id="vt-mob">MOBILE 375</button>
+</div>
+
+<header>
+  <img class="logo" src="/inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+</header>
+
+<div class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Personal Frequency Music</div>
+    <h1>Music tuned to the moment you were born.</h1>
+  </div>
+</div>
+
+<section class="chapter center">
+  <div class="wrap">
+    <p class="statement">You have been listening to everyone else's frequency.</p>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="readcol">
+    <div class="eyebrow">The Idea</div>
+    <p class="body">Your birth chart holds four frequencies that are yours alone. We turn them into real music you can live with — while you walk, work, cook, or drive.</p>
+    <p class="body">Not another meditation app. Real songs, your frequency woven through every track, playing under the day you were already having.</p>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="wrap">
+    <figure class="photo">
+      <img src="/site/assets/sg5lib/eval-r19-sun-core-violet-parasol.jpg" alt="Woman on a bench under a violet parasol, black and white plaza, hard sun">
+      <figcaption><b>The world stays monochrome.</b> Your frequency is the one thing in color.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="readcol">
+    <div class="eyebrow">How It Works</div>
+    <h2>Three steps, then it plays</h2>
+    <ol class="zlist">
+      <li>Enter your birth date, time, and place.</li>
+      <li>We calculate your four personal frequencies.</li>
+      <li>Press play and get on with your day.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="chapter center">
+  <div class="wrap">
+    <div class="eyebrow">From Our 52-Week Study</div>
+    <div class="bignum">98.6<em>%</em></div>
+    <p class="lede" style="margin:28px auto 0">of members would recommend it — and 84% called it life-changing.</p>
+    <p class="caveat" style="margin:26px auto 0">From our 52-week study of 300 people. The life-changing figure is among members who used it as designed: about nine minutes a day, balanced across all four frequencies.</p>
+    <blockquote class="testi">
+      <div class="q">"Instead of 10 paid members, I got 30 paid members in 30 days. Within 45 days, we had almost 40 paid members. It felt like the floodgates of abundance, prosperity, and purpose opened."</div>
+      <div class="who">Jennifer K. Hill<span>Global Wellness Leader, Founder, OptiMatch</span></div>
+    </blockquote>
+  </div>
+</section>
+
+<section class="chapter center">
+  <div class="wrap">
+    <div class="eyebrow">The App</div>
+    <h2 style="max-width:14em;margin:0 auto">Your frequencies, in your pocket</h2>
+    <img class="phone" src="/site/assets/refs/phone-hero-transparent.png" alt="Zodiac app on a rendered phone">
+    <p class="body" style="margin:44px auto 0;text-align:center">Full-length music with your frequency inside it, made for everyday listening. About nine minutes a day, wherever your day happens.</p>
+  </div>
+</section>
+
+<section class="chapter center" style="padding-bottom:220px">
+  <div class="wrap">
+    <p class="statement" style="margin:0 auto">The sound of you, playing under your whole day.</p>
+    <div style="margin-top:56px"><a class="btn" href="#">Hear your frequency</a></div>
+    <div style="margin-top:34px"><a class="textlink" href="#">How it works</a></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img class="logo" src="/inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+    <nav>
+      <a href="#">The story</a>
+      <a href="#">Support</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </nav>
+    <p class="note" style="margin-top:26px">© 2026 Zodiac.fm · Concept D1-A · placeholder copy except banked numbers and endorsements</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var d=document.getElementById('vt-desk'),m=document.getElementById('vt-mob');
+    function set(mobile){document.body.classList.toggle('vm',mobile);d.classList.toggle('on',!mobile);m.classList.toggle('on',mobile);}
+    d.addEventListener('click',function(){set(false)});
+    m.addEventListener('click',function(){set(true)});
+    if(new URLSearchParams(location.search).get('view')==='mobile')set(true);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm · Site Concept D1-B · The Exhibition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  /* Concept D1-B · The Exhibition · macrostructure: Photographic — the image dominates every fold, text annotates */
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype'); font-weight:400; }
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype'); font-weight:600; }
+
+  :root{
+    --stage:#0B0712; --ink:#1A1620;
+    --cream:#FBF8F3; --cream82:rgba(251,248,243,.82); --cream58:rgba(251,248,243,.58); --cream40:rgba(251,248,243,.40);
+    --hair:rgba(251,248,243,.13);
+    --violet:#6521C9; --violet-deep:#38007A; --violet-soft:#D2C8FF; --violet-glint:#7A4AE0;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+
+    --fs-body:19px; --lh-body:1.65;
+    --fs-h1:84px; --lh-h1:1.02;
+    --fs-h2:52px; --lh-h2:1.08;
+    --fs-lede:23px;
+    --fs-statement:30px;
+    --fs-eyebrow:13px; --mb-eyebrow:26px;
+    --pad-wrap:32px;
+    --pad-section:120px;
+    --pad-fold:96px;
+    --fs-statn:64px;
+    --fs-figcap:14px;
+    --cols3:1fr 1fr 1fr;
+    --testiw:200px;
+  }
+  @media(max-width:900px){ :root{--cols3:1fr;--testiw:180px} }
+  @media(max-width:640px){
+    :root{
+      --fs-body:17px; --lh-body:1.6;
+      --fs-h1:44px; --lh-h1:1.05;
+      --fs-h2:32px; --lh-h2:1.12;
+      --fs-lede:19px;
+      --fs-statement:24px;
+      --fs-eyebrow:12px; --mb-eyebrow:20px;
+      --pad-wrap:24px;
+      --pad-section:72px;
+      --pad-fold:64px;
+      --fs-statn:42px;
+      --fs-figcap:13px;
+      --cols3:1fr;
+      --testiw:150px;
+    }
+  }
+  body.vm{
+    --fs-body:17px; --lh-body:1.6;
+    --fs-h1:44px; --lh-h1:1.05;
+    --fs-h2:32px; --lh-h2:1.12;
+    --fs-lede:19px;
+    --fs-statement:24px;
+    --fs-eyebrow:12px; --mb-eyebrow:20px;
+    --pad-wrap:24px;
+    --pad-section:72px;
+    --pad-fold:64px;
+    --fs-statn:42px;
+    --fs-figcap:13px;
+    --cols3:1fr;
+    --testiw:150px;
+  }
+  body.vm .wrap{max-width:375px}
+  body.vm::before,body.vm::after{content:"";position:fixed;top:0;bottom:0;width:1px;background:var(--hair);z-index:1;pointer-events:none}
+  body.vm::before{left:calc(50% - 188px)}
+  body.vm::after{left:calc(50% + 187px)}
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--stage);color:var(--cream);font-family:var(--sans);font-size:var(--fs-body);line-height:var(--lh-body);-webkit-font-smoothing:antialiased;overflow-x:clip}
+
+  .badge{position:fixed;top:64px;right:14px;z-index:50;font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--violet-soft);background:rgba(11,7,18,.85);border:1px solid rgba(210,200,255,.3);border-radius:6px;padding:9px 12px;backdrop-filter:blur(6px)}
+  .badge span{color:var(--cream40)}
+  .viewtoggle{position:fixed;top:64px;left:14px;z-index:50;display:flex;background:rgba(11,7,18,.85);border:1px solid rgba(210,200,255,.3);border-radius:6px;overflow:hidden;backdrop-filter:blur(6px)}
+  .viewtoggle button{font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--cream58);background:none;border:0;padding:9px 14px;cursor:pointer}
+  .viewtoggle button.on{color:var(--stage);background:var(--violet-soft)}
+  @media(max-width:640px){.viewtoggle{display:none}}
+
+  .wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad-wrap)}
+
+  .topbar{position:sticky;top:0;z-index:40;background:rgba(11,7,18,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:15px;padding-bottom:15px}
+  .topbar .logo{height:18px;display:block}
+  .topbar a.cta{font:600 13px/1 var(--sans);letter-spacing:.06em;color:#fff;background:linear-gradient(160deg,var(--violet),var(--violet-deep));border-radius:8px;padding:11px 18px;text-decoration:none}
+  .topbar a.cta:focus-visible{outline:2px solid var(--violet-soft);outline-offset:3px}
+
+  .eyebrow{font:600 var(--fs-eyebrow)/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:var(--mb-eyebrow)}
+  h1{font:500 var(--fs-h1)/var(--lh-h1) var(--serif);letter-spacing:-.01em;color:var(--cream)}
+  h2{font:500 var(--fs-h2)/var(--lh-h2) var(--serif);letter-spacing:-.005em;color:var(--cream)}
+  p.body{font:400 var(--fs-body)/var(--lh-body) var(--sans);color:var(--cream82);max-width:34em}
+  .lede{font:400 var(--fs-lede)/1.55 var(--sans);color:var(--cream82);max-width:30em}
+  .statement{font:500 var(--fs-statement)/1.35 var(--serif);font-style:italic;color:var(--cream);max-width:24em}
+  .note{font:400 14px/1.55 var(--sans);color:var(--cream40);max-width:46em}
+  .caveat{font:400 14px/1.55 var(--sans);color:var(--cream58);max-width:46em}
+
+  .masthead{padding:96px 0 72px}
+  .masthead h1{max-width:11em}
+  .masthead .lede{margin-top:30px}
+
+  /* The exhibition fold: one image, then a small annotation beneath. The photo does the speaking. */
+  .fold{padding:var(--pad-fold) 0 0}
+  .fold img{width:100%;display:block;border-radius:4px}
+  .fold .annot{display:flex;gap:24px;align-items:baseline;justify-content:space-between;flex-wrap:wrap;border-top:1px solid var(--hair);margin-top:14px;padding-top:14px}
+  .fold .annot .cap{font:400 var(--fs-figcap)/1.5 var(--sans);color:var(--cream58);max-width:34em}
+  .fold .annot .cap b{color:var(--cream82);font-weight:600}
+  .fold .annot .tag{font:600 12px/1.6 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);white-space:nowrap}
+  .fold .say{margin-top:44px;max-width:34em}
+  .fold .say p.body + p.body{margin-top:18px}
+
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:32px;padding-top:var(--pad-fold)}
+  @media(max-width:900px){.duo{grid-template-columns:1fr}}
+  body.vm .duo{grid-template-columns:1fr}
+  .duo figure{margin:0}
+  .duo img{width:100%;display:block;border-radius:4px}
+  .duo figcaption{border-top:1px solid var(--hair);margin-top:14px;padding-top:12px;font:400 var(--fs-figcap)/1.5 var(--sans);color:var(--cream58)}
+  .duo figcaption b{color:var(--cream82);font-weight:600}
+
+  .apps{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:56px;max-width:760px}
+  @media(max-width:900px){.apps{grid-template-columns:1fr;max-width:370px}}
+  body.vm .apps{grid-template-columns:1fr;max-width:327px}
+  .appshot img{width:100%;display:block;border-radius:22px;border:1px solid rgba(251,248,243,.18)}
+  .appshot .l{margin-top:16px;font:600 13px/1.5 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cream58);text-align:center}
+
+  .statband{display:grid;grid-template-columns:var(--cols3);gap:32px;margin-top:56px;padding:56px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+  .stat .n{font:600 var(--fs-statn)/1 var(--sans);letter-spacing:-.02em;color:var(--cream)}
+  .stat .n em{font-style:normal;color:var(--violet-soft)}
+  .stat .l{margin-top:12px;font:600 14px/1.4 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--cream58)}
+
+  .testirow{display:grid;grid-template-columns:var(--cols3);gap:40px;margin-top:64px}
+  .testicard img{width:var(--testiw);display:block;margin:0 0 4px}
+  .testicard .rule{border-top:1px solid var(--hair);padding-top:18px}
+  .testicard .pq{font:500 22px/1.4 var(--serif);font-style:italic;color:var(--cream)}
+  .testicard .who{margin-top:16px;font:600 12px/1.6 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cream)}
+  .testicard .who span{display:block;font-weight:400;letter-spacing:.03em;text-transform:none;color:var(--cream58)}
+
+  section.block{padding:var(--pad-section) 0;border-top:1px solid var(--hair);margin-top:var(--pad-fold)}
+
+  .btn{display:inline-block;font:600 16px/1 var(--sans);letter-spacing:.02em;color:#fff;background:linear-gradient(160deg,var(--violet),var(--violet-deep));border-radius:10px;padding:17px 30px;text-decoration:none}
+  .btn:focus-visible{outline:2px solid var(--violet-soft);outline-offset:3px}
+  .btn.ghost{background:none;border:1px solid rgba(251,248,243,.35);color:var(--cream)}
+  .btnrow{display:flex;gap:16px;margin-top:44px;flex-wrap:wrap}
+
+  footer{padding:72px 0;border-top:1px solid var(--hair)}
+  footer .wrap{display:flex;align-items:baseline;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  footer .logo{height:16px;display:block;opacity:.8}
+  footer nav{display:flex;gap:28px;flex-wrap:wrap}
+  footer nav a{font:400 13px/1.6 var(--sans);color:var(--cream58);text-decoration:none}
+  footer nav a:hover{color:var(--cream)}
+</style>
+</head>
+<body>
+
+<div class="badge">SITE D1-B <span>· THE EXHIBITION · CONCEPT ROUND D1 · PLACEHOLDER COPY EXCEPT BANKED</span></div>
+<div class="viewtoggle" role="group" aria-label="Preview width">
+  <button type="button" id="vt-desk" class="on">DESKTOP</button>
+  <button type="button" id="vt-mob">MOBILE 375</button>
+</div>
+
+<div class="topbar">
+  <div class="wrap">
+    <img class="logo" src="/inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+    <a class="cta" href="#">Hear your frequency</a>
+  </div>
+</div>
+
+<div class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Personal Frequency Music</div>
+    <h1>The world in black and white. You in color.</h1>
+    <p class="lede">Your birth chart holds four frequencies that are yours alone. We turn them into music you can live with.</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="fold" style="padding-top:0">
+    <img src="/site/assets/sg5lib/eval-r19-sun-core-violet-parasol.jpg" alt="Woman on a bench under a violet parasol, black and white plaza, hard sun">
+    <div class="annot">
+      <div class="cap"><b>Your frequency is the one thing in color.</b> Everything else is everyone else's.</div>
+      <div class="tag">Core · Alone With the Music</div>
+    </div>
+  </div>
+
+  <div class="fold">
+    <img src="/site/assets/sg5lib/cc1-r28-core-floor-listening-alone-cc1.jpg" alt="Someone lying on the floor listening in headphones, lit violet, the room monochrome">
+    <div class="annot">
+      <div class="cap"><b>Nine minutes a day, wherever your day happens.</b> While you walk, work, cook, or drive.</div>
+      <div class="tag">Core · The Daily Listen</div>
+    </div>
+    <div class="say">
+      <p class="body">Not another meditation app. Real songs, your frequency woven through every track, playing under the day you were already having.</p>
+    </div>
+  </div>
+
+  <div class="fold">
+    <img src="/site/assets/sg5lib/cc1-r28-love-porch-reunion-cc1.jpg" alt="A porch reunion embrace, the pair lit rose, the street monochrome">
+    <div class="annot">
+      <div class="cap"><b>Four frequencies, four parts of your life.</b> Connection is one of them.</div>
+      <div class="tag">Love · Connection</div>
+    </div>
+  </div>
+
+  <div class="duo">
+    <figure>
+      <img src="/site/assets/sg5lib/r29-a-runner-dawn-loud.jpg" alt="Runner silhouetted on a pier against a gold sunrise, light on the water">
+      <figcaption><b>Vitality.</b> Movement, and the body waking up.</figcaption>
+    </figure>
+    <figure>
+      <img src="/site/assets/sg5lib/cc1-r17-hour-abundance-emerald-go-cc1.jpg" alt="Person in headphones on a wet night street, every traffic light emerald">
+      <figcaption><b>Abundance.</b> Every light in the frame says go.</figcaption>
+    </figure>
+  </div>
+
+  <section class="block">
+    <div class="eyebrow">The App</div>
+    <h2>Real screens, not promises</h2>
+    <p class="body" style="margin-top:30px">Enter your birth date, time, and place. We calculate your four personal frequencies. Press play and get on with your day.</p>
+    <div class="apps">
+      <div class="appshot"><img src="/site/assets/d1/app-immersions-2026-08-15.png" alt="Zodiac app Immersions screen, real staging capture: Core tone with song cards"><div class="l">Immersions</div></div>
+      <div class="appshot"><img src="/site/assets/d1/app-playlist-2026-08-15.png" alt="Zodiac app Playlist screen, real staging capture: songs across all four frequency bands"><div class="l">Playlist</div></div>
+    </div>
+    <p class="note" style="margin-top:26px">Real captures from the live app, taken August 15, 2026. Never mockups.</p>
+  </section>
+
+  <section class="block">
+    <div class="eyebrow">The Numbers</div>
+    <h2>From our 52-week study</h2>
+    <div class="statband">
+      <div class="stat"><div class="n">98.6<em>%</em></div><div class="l">Would recommend it</div></div>
+      <div class="stat"><div class="n">84<em>%</em></div><div class="l">Called it life-changing</div></div>
+      <div class="stat"><div class="n">7</div><div class="l">Measured outcomes</div></div>
+    </div>
+    <p class="caveat" style="margin-top:22px">From our 52-week study of 300 people. The life-changing figure and the seven outcomes are among members who used it as designed: about nine minutes a day, balanced across all four frequencies.</p>
+    <div class="testirow">
+      <div class="testicard">
+        <img src="/site/assets/refs/testi-rhonda-britten.png" alt="Rhonda Britten">
+        <div class="rule">
+          <div class="pq">"If you're tired of living out of tune with yourself, this is your invitation home."</div>
+          <div class="who">Rhonda Britten<span>Author of "Fearless Living," Emmy Award-Winner</span></div>
+        </div>
+      </div>
+      <div class="testicard">
+        <img src="/site/assets/refs/testi-maya-shetreat.png" alt="Maya Shetreat, MD">
+        <div class="rule">
+          <div class="pq">"Zodiac.fm is way ahead of the curve."</div>
+          <div class="who">Maya Shetreat, MD<span>Adult and Pediatric Neurologist, Best-Selling Author</span></div>
+        </div>
+      </div>
+      <div class="testicard">
+        <img src="/site/assets/refs/testi-sabrina-truscott.png" alt="Sabrina Truscott">
+        <div class="rule">
+          <div class="pq">"This isn't just sound - it is an energetic recalibration."</div>
+          <div class="who">Sabrina Truscott<span>Entrepreneur, Owner at Satori Method Academy</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="fold">
+    <img src="/site/assets/lc/umbrella-run-cc1.jpg" alt="Three friends laughing under one black umbrella in night rain, one lit violet, one rose, one amber, the wet street reflecting all three">
+    <div class="annot">
+      <div class="cap"><b>Everyone carries their own.</b> Same rain, different frequencies.</div>
+      <div class="tag">The Full Wheel</div>
+    </div>
+  </div>
+
+  <section class="block" style="border-bottom:none">
+    <p class="statement">Come back to the frequency that was always yours.</p>
+    <div class="btnrow">
+      <a class="btn" href="#">Hear your frequency</a>
+      <a class="btn ghost" href="#">How it works</a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <img class="logo" src="/inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+    <nav>
+      <a href="#">The story</a>
+      <a href="#">Support</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </nav>
+    <p class="note">© 2026 Zodiac.fm · Concept D1-B</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var d=document.getElementById('vt-desk'),m=document.getElementById('vt-mob');
+    function set(mobile){document.body.classList.toggle('vm',mobile);d.classList.toggle('on',!mobile);m.classList.toggle('on',mobile);}
+    d.addEventListener('click',function(){set(false)});
+    m.addEventListener('click',function(){set(true)});
+    if(new URLSearchParams(location.search).get('view')==='mobile')set(true);
+  })();
+</script>
+
+</body>
+</html>
