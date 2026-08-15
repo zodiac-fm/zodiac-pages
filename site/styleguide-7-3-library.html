@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm Asset Library 7-3 · World of Color + The Testimonial Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype'); font-weight:400; }
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype'); font-weight:600; }
+
+  :root{
+    --stage:#0B0712; --cream:#FBF8F3; --cream82:rgba(251,248,243,.82); --cream58:rgba(251,248,243,.58); --cream40:rgba(251,248,243,.40);
+    --hair:rgba(251,248,243,.13);
+    --violet:#6521C9; --violet-deep:#38007A; --violet-soft:#D2C8FF; --violet-glint:#7A4AE0;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--stage);color:var(--cream);font-family:var(--sans);font-size:19px;line-height:1.65;-webkit-font-smoothing:antialiased}
+
+  .badge{position:fixed;top:14px;right:14px;z-index:50;font:600 11px/1 var(--sans);letter-spacing:.14em;color:var(--violet-soft);background:rgba(11,7,18,.85);border:1px solid rgba(210,200,255,.3);border-radius:6px;padding:9px 12px;backdrop-filter:blur(6px)}
+  .badge span{color:var(--cream40)}
+
+  .wrap{max-width:1140px;margin:0 auto;padding:0 32px}
+  section{padding:120px 0;border-bottom:1px solid var(--hair)}
+  header.masthead{padding:110px 0 90px;border-bottom:1px solid var(--hair)}
+
+  .eyebrow{font:600 13px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:26px}
+  h1,.h1{font:500 84px/1.02 var(--serif);letter-spacing:-.01em;color:var(--cream)}
+  h2,.h2{font:500 52px/1.08 var(--serif);letter-spacing:-.005em;color:var(--cream)}
+  h3,.h3{font:600 22px/1.3 var(--sans);color:var(--cream)}
+  p.body,.body{font:400 19px/1.65 var(--sans);color:var(--cream82);max-width:34em}
+  .lede{font:400 23px/1.55 var(--sans);color:var(--cream82);max-width:30em}
+  .statement{font:500 30px/1.35 var(--serif);font-style:italic;color:var(--cream);max-width:24em}
+
+  .spec{display:inline-flex;flex-wrap:wrap;gap:6px 8px;line-height:1.5;align-items:center;margin:18px 0 0;font:600 11px/1 var(--sans);letter-spacing:.08em;color:var(--violet-soft);background:rgba(101,33,201,.16);border:1px solid rgba(210,200,255,.22);border-radius:5px;padding:8px 11px;text-transform:uppercase}
+  .spec b{color:var(--cream)}
+
+  figure.photo{margin-top:56px}
+  figure.photo img{width:100%;display:block;border-radius:4px}
+  figcaption{border-top:1px solid var(--hair);margin-top:14px;padding-top:12px;font:400 14px/1.5 var(--sans);color:var(--cream58);max-width:46em}
+  figcaption b{color:var(--cream82);font-weight:600}
+  .photogrid{display:grid;grid-template-columns:1fr 1fr;gap:44px 32px;margin-top:56px}
+  .photogrid figure.photo{margin-top:0}
+  .libgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:36px}
+  .libgrid .photo{margin:0}
+  .prov{display:block;margin-top:4px;color:rgba(251,248,243,.42);font-size:12px;letter-spacing:.02em}
+  .bandcount{display:inline;margin:0 0 0 12px;color:rgba(251,248,243,.42);font-size:12px;letter-spacing:.02em;font-weight:400}
+
+  .treat{margin-top:64px;font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);padding-bottom:10px;border-bottom:1px solid var(--hair)}
+  .treat .bandcount{text-transform:none;letter-spacing:.02em}
+  .treat + .libgrid,.treat + .photogrid{margin-top:28px}
+  .treat + figure.photo{margin-top:28px}
+  .pend{margin-top:28px;border:1px dashed rgba(210,200,255,.28);border-radius:4px;padding:34px 28px;font:400 15px/1.6 var(--sans);color:var(--cream58)}
+  .pend b{color:var(--cream82);font-weight:600}
+
+  ul.zlist{list-style:none;margin-top:34px;max-width:34em}
+  ul.zlist li{position:relative;padding:11px 0 11px 34px;color:var(--cream82)}
+  ul.zlist li::before{content:"";position:absolute;left:0;top:1.22em;width:16px;height:2px;background:var(--violet-glint)}
+
+  .note{margin-top:26px;font:400 14px/1.55 var(--sans);color:var(--cream40);max-width:46em}
+  .logo{height:22px;display:block;margin-bottom:60px}
+
+  .liblink{display:inline-block;margin-top:44px;font:600 15px/1.4 var(--sans);letter-spacing:.04em;color:var(--violet-soft);text-decoration:none;border:1px solid rgba(210,200,255,.3);border-radius:10px;padding:16px 24px}
+  .liblink span{color:var(--cream58);font-weight:400}
+
+  /* the testimonial bank: rules and air, same as the frames */
+  .subhead{margin-top:80px;font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);padding-bottom:10px;border-bottom:1px solid var(--hair)}
+  .subhead .bandcount{text-transform:none;letter-spacing:.02em}
+  .num{font-family:var(--sans);font-style:normal;font-weight:400;font-size:.94em;letter-spacing:0}
+
+  .facerow{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:40px}
+  .facecard img{width:150px;display:block;margin:0 0 4px}
+  .facecard .rule{border-top:1px solid var(--hair);padding-top:18px}
+  .facecard .pq{font:500 22px/1.4 var(--serif);font-style:italic;color:var(--cream)}
+
+  .qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:40px 32px;margin-top:44px}
+  .qcard{border-top:1px solid var(--hair);padding-top:22px}
+  .qcard .pq{font:500 20px/1.45 var(--serif);font-style:italic;color:var(--cream)}
+  .facecard .who,.qcard .who{margin-top:16px;font:600 12px/1.6 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cream)}
+  .facecard .who span,.qcard .who span{display:block;font-weight:400;letter-spacing:.03em;text-transform:none;color:var(--cream58)}
+
+  .banklist{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;margin-top:28px}
+  .banklist .q{padding:16px 0;border-bottom:1px solid var(--hair)}
+  .banklist .q .pq{font:500 18px/1.45 var(--serif);font-style:italic;color:var(--cream82)}
+  .banklist .q .who{margin-top:8px;font:600 11px/1.5 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--cream58)}
+  .banklist .q .who span{letter-spacing:.03em;text-transform:none;font-weight:400;color:rgba(251,248,243,.42)}
+  .banklist .q .who i{font-style:normal;letter-spacing:.06em;color:rgba(251,248,243,.42)}
+
+  /* three banked lengths per quote: the lead is serif, the rest are labeled reference text */
+  .lt{font:600 10px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:rgba(251,248,243,.42);margin-bottom:8px}
+  .qlen{margin-top:14px}
+  .qlen .lt{margin-bottom:5px}
+  .qlen .qt{font:400 14px/1.62 var(--sans);color:var(--cream58)}
+  .banklist .q .qlen .qt{font-size:13.5px}
+
+  @media(max-width:1024px){
+    .libgrid{grid-template-columns:1fr 1fr}
+    .qgrid{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:640px){
+    .facerow{grid-template-columns:1fr;gap:44px}
+    .qgrid{grid-template-columns:1fr;gap:32px}
+    .banklist{grid-template-columns:1fr;gap:0}
+    .subhead{margin-top:56px}
+    body{font-size:17px}
+    .wrap{padding:0 24px}
+    section{padding:72px 0}
+    header.masthead{padding:84px 0 60px}
+    h1,.h1{font-size:44px;line-height:1.05}
+    h2,.h2{font-size:32px;line-height:1.12}
+    h3,.h3{font-size:19px}
+    p.body,.body{font-size:17px;line-height:1.6}
+    .lede{font-size:19px}
+    .statement{font-size:24px}
+    .eyebrow{font-size:12px;margin-bottom:20px}
+    .photogrid{grid-template-columns:1fr;gap:44px}
+    .libgrid{grid-template-columns:1fr;gap:36px}
+    figcaption{font-size:13px}
+  }
+</style>
+</head>
+<body>
+
+<div class="badge">STYLEGUIDE-7-3 LIBRARY <span>· WORLD OF COLOR, ONE TREATMENT · EVERY FRAME APPROVED AND AUDITED · + THE TESTIMONIAL BANK</span></div>
+
+<header class="masthead">
+  <div class="wrap">
+    <img class="logo" src="/inapp/app-assets/logo-cream.svg" alt="zodiac.fm">
+    <div class="eyebrow">Site Design System · The Asset Library</div>
+    <h1>Every approved frame and every approved quote, organized for retrieval.</h1>
+    <p class="lede" style="margin-top:34px">The complete bank, filed the way a builder retrieves: five categories — the four frequencies, then multicolor — and one treatment, World of Color. <span class="num">103</span> frames in all; every one passed Michael's eye and the color-integrity audit against the locked tokens, and drifted frames appear only as their corrected cc1 versions. The testimonial bank is filed by the same categories underneath, so a builder comes with a band and leaves with a frame and a quote. The rules live at the bottom of the page: one wheel, the world lights it.</p>
+    <a class="liblink" href="/site/styleguide-7-3">← Back to the builder's kit <span>styleguide-7-3, every component, the laws at the bottom</span></a>
+  </div>
+</header>
+
+<section id="violet">
+  <div class="wrap">
+    <div class="eyebrow">01 · Core Violet</div>
+    <h2>Alone with the music <span class="bandcount"><span class="num">21</span> frames</span></h2>
+    <p class="body" style="margin-top:30px">The internal band: alone with the music, reading, the mind's own room.</p>
+
+    <div class="libgrid" style="margin-top:44px">
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r19-sun-core-violet-parasol.jpg" alt="Woman on a bench under a violet parasol, black and white plaza, hard sun"><figcaption><b>Violet Parasol.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-core-violet-crosswalk.jpg" alt="Woman in a violet dress crossing a sunlit black and white street"><figcaption><b>Crosswalk From Above.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r17-hour-core-violet-dusk.jpg" alt="Silhouetted person at a window filled with violet dusk light"><figcaption><b>Violet Hour.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r18-day-core-jacaranda-walk-cc1.jpg" alt="Person walking a street under violet jacaranda trees, petals on the pavement"><figcaption><b>Jacaranda Walk.</b> <span class="prov">Approved 2026-08-12, eval board, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r18-day-core-stained-glass.jpg" alt="Person in headphones on a chair, violet stained-glass light across the floor"><figcaption><b>Stained Glass Light.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r21-sun3-core-violet-doubledutch.jpg" alt="Girl jumping a violet skipping rope held by two boys, hard sun"><figcaption><b>Double Dutch in Violet.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-v-person-glass.jpg" alt="Woman by a bright window, violet stained-glass light falling on her face"><figcaption><b>Stained-Glass Portrait.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r27-v-landscape-dusk-cc1.jpg" alt="Wet city avenue at dusk, violet sky reflected down the empty road"><figcaption><b>Violet Dusk Avenue.</b> <span class="prov">R27 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-v-people-neon.jpg" alt="Children jumping rope on a night sidewalk under a violet neon ring"><figcaption><b>Neon Jump Rope.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r28-core-dawn-journal.jpg" alt="Woman writing in a journal beside a speaker, violet light on the page"><figcaption><b>Dawn Journal.</b> <span class="prov">R28 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r28-core-window-reading-cc1.jpg" alt="Older man reading a book in an armchair by a rain-streaked window, violet light on his face and the radio beside him"><figcaption><b>Window Reading.</b> <span class="prov">R28 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r28-core-floor-listening-alone-cc1.jpg" alt="Young man lying back beside a turntable with eyes closed, violet light on his upturned face, room monochrome"><figcaption><b>Floor Listening.</b> <span class="prov">R28 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r30-act-climber-violet.jpg" alt="Woman on a climbing wall reaching out, violet light across her arm"><figcaption><b>The Climber.</b> <span class="prov">R30 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r30-act-pool-skater-violet.jpg" alt="Skater riding an empty pool bowl, violet light across his chest and arms"><figcaption><b>Pool Skater.</b> <span class="prov">R30 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r31-con-double-dutch-v2.jpg" alt="Girl smiling mid-air inside a violet double-dutch rope at night, two turners holding the lit cords, street monochrome"><figcaption><b>Double Dutch, Lit Ropes.</b> <span class="prov">R31 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r31-act-wall-painter-v2.jpg" alt="Woman on a stepladder rolling paint on a ceiling edge, violet light down her raised arm and overalls, the wall monochrome"><figcaption><b>The Wall Painter.</b> <span class="prov">R31 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r23-hero-earbuds-violet.jpg" alt="Open earbuds case on concrete, violet buds above a black and white skyline"><figcaption><b>Violet Earbuds Case.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-cinema-phone-wood.jpg" alt="Phone glowing violet on a wood table beside a turntable"><figcaption><b>Phone on Wood.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-v-turntable-black.jpg" alt="Turntable with a violet lid on a stand, violet light on the wall"><figcaption><b>Violet-Lid Turntable.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-v-turntable-lit.jpg" alt="Black turntable by a window, violet light spilling across the cabinet"><figcaption><b>Black Turntable, Violet Window Light.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r28-dev-turntable-violet-cc1.jpg" alt="Close-up of a stylus in a record groove under violet light"><figcaption><b>Turntable in Violet Light.</b> <span class="prov">R28 keeper, corrected cc1</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="rose">
+  <div class="wrap">
+    <div class="eyebrow">02 · Love Rose</div>
+    <h2>People together <span class="bandcount"><span class="num">24</span> frames</span></h2>
+    <p class="body" style="margin-top:30px">Connection: people together, and the things that bring them together.</p>
+
+    <div class="libgrid" style="margin-top:44px">
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r21-sun3-love-rose-spin.jpg" alt="Couple dancing outdoors, her rose skirt flared into a full disc"><figcaption><b>Rose Spin.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r17-hour-love-rose-diner.jpg" alt="Two people at a diner table under a rose neon sign and lit jukebox"><figcaption><b>Rose Diner.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r18-day-love-laundry-rose-cc1.jpg" alt="Rose dress on a laundry line between black and white fire escapes"><figcaption><b>Rose on the Line.</b> <span class="prov">Approved 2026-08-12, eval board, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r19-sun-love-laundry-rose-cc1.jpg" alt="Rose dress on a washing line with white sheets, tenement wall behind"><figcaption><b>Laundry in the Sun.</b> <span class="prov">Approved 2026-08-12, eval board, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-love-rose-awning.jpg" alt="Woman at a cafe table under a rose awning on a sunlit street"><figcaption><b>Rose Awning.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r27-r-people-lanterns-cc1.jpg" alt="Couple dancing on a rooftop under a string of rose paper lanterns"><figcaption><b>Lantern Slow Dance.</b> <span class="prov">R27 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-r-landscape-motel.jpg" alt="Roadside motel at night under a rose neon sign, wet road reflecting it"><figcaption><b>Pink Motel Sign.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r28-love-sofa-singalong.jpg" alt="Two women laughing into a hairbrush beside a boombox, rose light on them"><figcaption><b>Sofa Singalong.</b> <span class="prov">R28 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r28-love-kitchen-slow-dance.jpg" alt="Couple holding each other in a kitchen beside a turntable, rose light"><figcaption><b>Kitchen Slow Dance.</b> <span class="prov">R28 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r28-love-doorstep-hug.jpg" alt="Two people hugging in a doorway, rose light on their faces, boombox behind"><figcaption><b>Doorstep Hug.</b> <span class="prov">R28 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r28-love-porch-reunion-cc1.jpg" alt="Two older men laughing together on a porch swing, rose light on their faces, a boombox on the sill behind them"><figcaption><b>Porch Reunion.</b> <span class="prov">R28 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r30-con-porch-braiding-rose.jpg" alt="Woman braiding a smiling girl's hair on a porch, rose light on their faces"><figcaption><b>Porch Braiding.</b> <span class="prov">R30 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r30-act-couch-carry-rose.jpg" alt="Two men laughing as they carry a couch up a stairwell, rose light on them"><figcaption><b>Couch Carry.</b> <span class="prov">R30 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r30-act-cartwheel-rose-cc1.jpg" alt="Person upside down mid-cartwheel on wet sand, rose clothing, mirrored below"><figcaption><b>Cartwheel Reflection.</b> <span class="prov">R30 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-doorway-crate-rose.jpg" alt="Man holding a crate of records in a doorway, one rose record showing"><figcaption><b>Doorway Crate, Rose.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r23-hero-record-rose.jpg" alt="Rose vinyl record standing in sand, sun flaring behind its edge"><figcaption><b>Rose Pressed in Vinyl.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-r-device-earbuds.jpg" alt="Open earbuds case on marble with a rose indicator light"><figcaption><b>Earbuds on Marble.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-r-record-label.jpg" alt="Turntable playing a black record with a rose center label"><figcaption><b>Pink Label on Black Vinyl.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r28-dev-sleeve-rose-cc1.jpg" alt="Record sleeve glowing rose beside a black vinyl record, rose reflection in the grooves"><figcaption><b>Rose Sleeve.</b> <span class="prov">R28 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r28-attic-vinyl-rose-cc1.jpg" alt="Woman leaning close over an attic turntable smiling, rose light on her face and hair"><figcaption><b>Attic Vinyl, Rose.</b> <span class="prov">R28 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r29-r-turntable-signlight.jpg" alt="Turntable by a night window, rose sign light falling across it"><figcaption><b>Turntable in Sign Light.</b> <span class="prov">R29 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/lc/arrival-spin-t1.jpg" alt="A joyful arrival hug spin, the lifted woman lit in rose against a grey street"><figcaption><b>Arrival Spin.</b> <span class="prov">Love rose · locked keeper, R31 grade</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/lc/rooftop-toast-rose-t2.jpg" alt="Friends toasting on a rooftop at night, the toast moment lit in rose, the skyline grey"><figcaption><b>Rooftop Toast.</b> <span class="prov">Love rose · rebanded, approved 2026-08-13</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r31-con-beach-circle-rose.jpg" alt="Friends seated in a circle on a night beach, rose light on two faces and their hands, the rest falling to silhouette"><figcaption><b>Beach Circle.</b> <span class="prov">R31 keeper</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="amber">
+  <div class="wrap">
+    <div class="eyebrow">03 · Vitality Amber</div>
+    <h2>Bodies in motion <span class="bandcount"><span class="num">18</span> frames</span></h2>
+    <p class="body" style="margin-top:30px">Movement: bodies in motion, dawn light, the working city.</p>
+
+    <div class="libgrid" style="margin-top:44px">
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r18-day-vitality-dawn-gold-cc1.jpg" alt="Runner on a boardwalk bridge at sunrise, gold light down the planks"><figcaption><b>Dawn Gold.</b> <span class="prov">Approved 2026-08-12, eval board, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-vitality-sunshine-shaft.jpg" alt="Person running through a shaft of gold sun in a dark alley"><figcaption><b>Sunshine Shaft.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-a-person-shaft.jpg" alt="Breakdancer frozen on one hand in a gold alley shaft, friends watching"><figcaption><b>B-Boy in the Amber Shaft.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r29-a-runner-dawn-loud.jpg" alt="Runner silhouetted on a pier against a gold sunrise, light on the water"><figcaption><b>Dawn Runner.</b> <span class="prov">R29 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-a-landscape-dawn.jpg" alt="Empty boardwalk pier running out to a gold sunrise over water"><figcaption><b>Dawn Boardwalk.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r19-sun-vitality-amber-brass-cc1.jpg" alt="Young man playing a brass trumpet on a sunlit sidewalk, two men listening"><figcaption><b>Brass in the Sun.</b> <span class="prov">Approved 2026-08-12, eval board, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r28-vit-studio-leap.jpg" alt="Dancer leaping in a studio, amber light thrown from a speaker below"><figcaption><b>Studio Leap.</b> <span class="prov">R28 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r28-vit-stair-sprint.jpg" alt="Woman running down stadium steps, amber light from a boombox beside her"><figcaption><b>Stair Sprint.</b> <span class="prov">R28 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r28-vit-garage-lift.jpg" alt="Man lifting a loaded barbell in a garage, amber light from a boombox behind"><figcaption><b>Garage Lift.</b> <span class="prov">R28 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-boombox-puddle-amber.jpg" alt="Boombox on wet concrete steps, its amber tape window mirrored in the puddle"><figcaption><b>Boombox in the Puddle.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-a-device-sill.jpg" alt="Boombox on a windowsill with rain on the glass, amber tape window lit"><figcaption><b>Boombox on the Rainy Sill.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r23-hero-speaker-amber-cc1.jpg" alt="Wooden speaker on a stone ledge against clouds, amber light on the cone"><figcaption><b>Amber Speaker.</b> <span class="prov">Approved 2026-08-12, eval board, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r28-dev-radio-amber.jpg" alt="Vintage radio on a wooden table, amber dial glowing across the grain"><figcaption><b>Amber Radio.</b> <span class="prov">R28 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-groove-glint-amber.jpg" alt="Close-up of a stylus in a record groove, amber glint along the grooves"><figcaption><b>Groove Glint.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r28-attic-vinyl-amber.jpg" alt="Woman leaning close to a turntable in an attic, amber light on her face"><figcaption><b>Attic Vinyl, Amber.</b> <span class="prov">R28 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r29-a-record-needledrop.jpg" alt="Hand lowering a tonearm onto a spinning record, amber light in the groove"><figcaption><b>Needle Drop.</b> <span class="prov">R29 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/lc/fort-reveal-amber-t2.jpg" alt="A blanket-fort reveal, the child inside lit amber like a lantern, the room grey"><figcaption><b>Fort Reveal.</b> <span class="prov">Vitality amber · approved 2026-08-13</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/lc/dawn-swimmer-amber-t3.jpg" alt="A swimmer at dawn in open water, a wide amber light across her and the water, the rest grey"><figcaption><b>Dawn Swimmer.</b> <span class="prov">Vitality amber · approved wide-window exception, 2026-08-13 — ruled for this frame only, not a precedent</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="emerald">
+  <div class="wrap">
+    <div class="eyebrow">04 · Abundance Emerald</div>
+    <h2>Hands, work, go <span class="bandcount"><span class="num">22</span> frames</span></h2>
+    <p class="body" style="margin-top:30px">Exchange: hands, work, and every light saying go.</p>
+
+    <div class="libgrid" style="margin-top:44px">
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r17-hour-abundance-emerald-go-cc1.jpg" alt="Person in headphones on a wet night street, every traffic light emerald"><figcaption><b>Green Lights, Go.</b> <span class="prov">Approved 2026-08-12, eval board, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-e-people-crossing.jpg" alt="People crossing at an emerald walk signal, black and white street in sun"><figcaption><b>Green Light Crossing.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-abundance-emerald-bicycle.jpg" alt="Emerald bicycle against a white wall, person in headphones sitting beside it"><figcaption><b>Emerald Bicycle.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r21-sun3-abundance-emerald-ball-cc1.jpg" alt="Four kids jumping for an emerald football against a bright sky"><figcaption><b>Emerald Ball.</b> <span class="prov">Approved 2026-08-12, eval board, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r28-abn-market-handoff.jpg" alt="Market vendor handing a bag of produce to a young man, emerald light"><figcaption><b>Market Handoff.</b> <span class="prov">R28 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r28-abn-workshop-handover.jpg" alt="Older carpenter handing a finished small chair to a smiling young woman across a workbench, emerald light on both faces and a speaker behind"><figcaption><b>Workshop Handover.</b> <span class="prov">R28 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r28-abn-bakery-dawn-cc1.jpg" alt="Flour-dusted baker sliding a board of loaves from a brick oven, emerald light on his face and the radio shelf"><figcaption><b>Bakery at Dawn.</b> <span class="prov">R28 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r34-abn-market-handoff-hands-a2.jpg" alt="Market vendor and customer both holding a paper bag, emerald light exactly where their hands meet on the handles"><figcaption><b>Market Handoff, Hands.</b> <span class="prov">R34 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r34-abn-ticket-booth-solo.jpg" alt="Single traveler at a night ticket booth, the green ticket and both hands lit at the pass"><figcaption><b>Ticket Booth, Solo.</b> <span class="prov">R34 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r34-abn-first-sale-parcel-a2.jpg" alt="Shop girl handing a wrapped parcel with an emerald bow to a customer on a grey street"><figcaption><b>First Sale, Bow.</b> <span class="prov">R34 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r30-con-park-chess-emerald.jpg" alt="Two older men at a park chess table, one throwing his hands up, emerald light"><figcaption><b>Park Chess.</b> <span class="prov">R30 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r30-con-workshop-hug-emerald.jpg" alt="Two aproned makers in a workshop, arm around a shoulder, emerald light"><figcaption><b>Workshop Hug.</b> <span class="prov">R30 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r30-act-clay-wheel-emerald.jpg" alt="Woman shaping a pot on a potter's wheel, emerald light on her face and hands"><figcaption><b>Clay Wheel.</b> <span class="prov">R30 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-e-landscape-harbor.jpg" alt="Night harbor with an emerald beacon streaking its light across the water"><figcaption><b>Harbor Beacon.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r23-hero-speaker-emerald-cc1.jpg" alt="Emerald portable speaker on a diving board over lit water"><figcaption><b>Emerald Speaker.</b> <span class="prov">Approved 2026-08-12, eval board, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-e-device-stoop.jpg" alt="Speaker with an emerald ring light sitting on a stone stoop at night"><figcaption><b>Stoop Speaker.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r28-dev-speaker-emerald.jpg" alt="Wooden speaker on a dark floor, an emerald shaft of light across it"><figcaption><b>Speaker in Emerald Light.</b> <span class="prov">R28 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-dashboard-earbuds-emerald.jpg" alt="Earbuds case on a car dashboard, emerald light reflected in the windscreen"><figcaption><b>Dashboard Earbuds.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/eval-r23-hero-record-emerald.jpg" alt="Emerald vinyl record leaning against a white wall in hard sun"><figcaption><b>Emerald Record.</b> <span class="prov">Approved 2026-08-12, eval board</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-e-record-lean.jpg" alt="Black record leaning in a bare room, emerald light pooled on the floor"><figcaption><b>Leaning Record, Emerald Pool.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r28-attic-vinyl-emerald.jpg" alt="Woman leaning over a turntable in an attic, emerald light on her face"><figcaption><b>Attic Vinyl, Emerald.</b> <span class="prov">R28 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r29-e-turntable-lid.jpg" alt="Turntable with an emerald lid open, shelved records behind it"><figcaption><b>Emerald Lid Turntable.</b> <span class="prov">R29 keeper</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="multicolor">
+  <div class="wrap">
+    <div class="eyebrow">05 · Multicolor</div>
+    <h2>More than one band in the frame <span class="bandcount"><span class="num">18</span> frames</span></h2>
+    <p class="body" style="margin-top:30px">Two grammars, one treatment. The Full Wheel puts all four bands in a frame as four objects, four people, four lit events, never a wash. Group scenes put a different band on each person.</p>
+
+    <div class="libgrid" style="margin-top:44px">
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r21-sun3-wild-four-caps-dive-cc1.jpg" alt="Four swimmers diving in one line, caps in violet, rose, amber and emerald"><figcaption><b>Four Caps, One Dive.</b> <span class="prov">Approved 2026-08-12, eval board, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-umbrellas-cc1.jpg" alt="Four beach umbrellas on white sand in violet, emerald, amber and rose"><figcaption><b>Four Beach Umbrellas.</b> <span class="prov">R27 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-laundry-cc1.jpg" alt="Alley laundry line with four garments in violet, emerald, amber and rose"><figcaption><b>Four-Color Laundry Line.</b> <span class="prov">R27 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r27-m-crate.jpg" alt="Crate of records with four labels in violet, emerald, amber and rose"><figcaption><b>Record Crate, Four Labels.</b> <span class="prov">R27 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-caps-echo-cc1.jpg" alt="Four swimmers launching from starting blocks, caps in the four colors"><figcaption><b>Four Swim Caps at the Blocks.</b> <span class="prov">R27 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r29-m-kites.jpg" alt="Four kites over black and white dunes in violet, emerald, amber and rose"><figcaption><b>Four Kites.</b> <span class="prov">R29 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r29-m-kayaks.jpg" alt="Four kayaks seen from above in violet, emerald, amber and rose"><figcaption><b>Four Kayaks.</b> <span class="prov">R29 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r29-m-runners-bridge.jpg" alt="Four runners on a bridge in violet, emerald, amber and rose vests"><figcaption><b>Runners on the Bridge.</b> <span class="prov">R29 keeper</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-boards-cc1.jpg" alt="Four surfboards upright in the sand in violet, emerald, amber and rose"><figcaption><b>Four Surfboards.</b> <span class="prov">R29 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-awnings-cc1.jpg" alt="Cobbled market street with awnings in violet, emerald, amber and rose"><figcaption><b>Four Market Awnings.</b> <span class="prov">R29 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-sails-cc1.jpg" alt="Four small sailboats with violet, emerald, amber and rose sails"><figcaption><b>Four Sails.</b> <span class="prov">R29 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-headphone-wall-v3-take2-cc1.jpg" alt="Wall of black headphones with four lit in violet, emerald, amber and rose"><figcaption><b>Headphone Wall, Four Lit Up.</b> <span class="prov">R29 keeper, corrected cc1</span></figcaption></figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-spine-shelf-v3-take4-cc1.jpg" alt="Shelved records with four sleeves lit in violet, emerald, amber and rose"><figcaption><b>Record Shelf, Four Lit Records.</b> <span class="prov">R29 keeper, corrected cc1</span></figcaption></figure>
+    </div>
+
+    <figure class="photo">
+      <img loading="lazy" src="/site/assets/lc/umbrella-run-cc1.jpg" alt="Three friends laughing under one black umbrella in night rain, one lit violet, one rose, one amber, the wet street reflecting all three">
+      <figcaption><b>Umbrella Run.</b> <span class="prov">The standard for cast light in group scenes, approved 2026-08-13, corrected cc1</span></figcaption>
+    </figure>
+    <div class="photogrid">
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/lc/stoop-cards-cc1.jpg" alt="Grandmother and grandson playing cards on a brownstone stoop, she lit rose, he lit violet, the street grey">
+        <figcaption><b>Stoop Cards.</b> <span class="prov">Rose + violet · approved 2026-08-13, corrected cc1</span></figcaption>
+      </figure>
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/lc/kitchen-trio-cc1.jpg" alt="Three generations laughing at a stove, grandmother lit amber, mother rose, boy violet, the kitchen dark">
+        <figcaption><b>Kitchen Trio.</b> <span class="prov">Amber + rose + violet · approved 2026-08-13, corrected cc1</span></figcaption>
+      </figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r31-con-sprinkler-multi.jpg" alt="Three kids running through a lawn sprinkler under a grey sky, one lit violet, one rose, one amber with amber spray"><figcaption><b>Sprinkler, Three Colors.</b> <span class="prov">Violet + rose + amber · R31 keeper</span></figcaption>
+      </figure>
+      <figure class="photo lib"><img loading="lazy" src="/site/assets/sg5lib/r31-con-barn-spin-multi.jpg" alt="Three dancers clapping and laughing in a dark barn, one lit violet, one rose, one amber"><figcaption><b>Barn Spin, Three Bands.</b> <span class="prov">Violet + rose + amber · R31 keeper</span></figcaption>
+      </figure>
+    </div>
+
+
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="wrap">
+    <div class="eyebrow">06 · The Testimonial Bank</div>
+    <h2>Come with a band, leave with a quote.</h2>
+    <p class="body" style="margin-top:30px">Same retrieval grammar as the photographs: the quotes are filed by the same categories, so the band that picked the frame picks the words beside it. <b>winners/testimonials.md</b> remains the one home and the master for all three approved lengths — Pull, Short, Full. This page mirrors every banked length, labeled on each quote, so a builder leaves with the exact cut that fits the slot. Synced <span class="num">2026</span>-<span class="num">08</span>-<span class="num">14</span>.</p>
+    <div class="subhead">Named Authority <span class="bandcount">22 endorsements</span></div>
+    <div class="facerow">
+      <div class="facecard">
+        <img loading="lazy" src="/site/assets/refs/testi-rhonda-britten.png" alt="Rhonda Britten">
+        <div class="rule">
+          <div class="lt">PULL</div><div class="pq">"If you're tired of living out of tune with yourself, this is your invitation home."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"When I listen to Zodiac.fm, my whole nervous system relaxes into recognition. Like coming home to myself."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I've spent decades helping people break through fear and step into their authentic power. What I know for sure is that most of us are walking around disconnected from who we really are. We're living someone else's frequency. That's what stopped me cold about Zodiac.fm. These aren't just pretty sounds or generic meditation tracks. This is your cosmic blueprint translated into frequency. Your birth chart — that map of exactly who you came here to be — becomes the sound of you. I put on my core frequency track and something shifted. Not some woo-woo magic, but real resonance. Like my nervous system finally exhaled and said, 'Oh, there you are.' Because fear scrambles your signal. Makes you forget your own frequency. But when you're literally hearing the sound of your authentic self? Fear doesn't stand a chance. The abundance track didn't make me rich overnight. It made me remember I already am abundant in ways that matter. The love frequencies? They didn't bring me a soulmate. They helped me recognize I'm already whole. This isn't about fixing yourself. You don't need fixing. This is about tuning back into the frequency you were born to be — and that's the most radical act of self-love there is. If you're tired of living out of tune with yourself, this is your invitation home."</div></div>
+          <div class="who">Rhonda Britten<span>Author of "Fearless Living," Emmy Award-Winner, Founder, Fearless Living Institute</span></div>
+        </div>
+      </div>
+      <div class="facecard">
+        <img loading="lazy" src="/site/assets/refs/testi-maya-shetreat.png" alt="Maya Shetreat, MD">
+        <div class="rule">
+          <div class="lt">PULL</div><div class="pq">"Zodiac.fm is way ahead of the curve."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Employing vibration and frequency for our well-being is the future. And Zodiac.fm is way ahead of the curve."</div></div>
+          <div class="who">Maya Shetreat, MD<span>Adult and Pediatric Neurologist, Expert Astrologer, Best-Selling Author</span></div>
+        </div>
+      </div>
+      <div class="facecard">
+        <img loading="lazy" src="/site/assets/refs/testi-sabrina-truscott.png" alt="Sabrina Truscott">
+        <div class="rule">
+          <div class="lt">PULL</div><div class="pq">"This isn't just sound - it is an energetic recalibration."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"My husband Tristan, a Qigong master, said: 'I could feel the vibrations moving through my system. It felt aligned to me.' That's when I knew this isn't just sound - it is an energetic recalibration."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I'm very picky about energy tools… and my husband Tristan, a Qigong master, is even more sensitive. After trying his personalized frequencies he said: 'I could feel the vibrations moving through my system. It felt aligned to me.' That's when I knew this isn't just sound - it is an energetic recalibration."</div></div>
+          <div class="who">Sabrina Truscott<span>Entrepreneur, Owner at Satori Method Academy</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="qgrid">
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"Most personal growth asks us to think differently. Zodiac.fm invites us to experience ourselves differently."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"What interests me about Zodiac.fm is not that it tells people who they are, but that it may help them access aspects of themselves that have always been there. Through personalized frequencies rather than language alone, it provides another pathway into self-awareness."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Psychology shows that the identities we construct can become so rigid that they limit what we notice, how we think, and even the possibilities we perceive. What interests me about Zodiac.fm is not that it tells people who they are, but that it may help them access aspects of themselves that have always been there. Through personalized frequencies rather than language alone, it provides another pathway into self-awareness. When people become more coherent with themselves, they often make clearer decisions, relate more authentically, and experience greater presence."</div></div>
+        <div class="who">Srini Pillay, M.D.<span>Harvard-trained psychiatrist, brain-imaging researcher</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"This music tickled my soul… Give it a try — you'll love it."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"This music tickled my soul and reminded me that there's such a connection between vibration, the stars and the sounds that are coordinated by higher intelligence. Give it a try — you'll love it."</div></div>
+        <div class="who">Debra Silverman<span>Astrologer to Sting, Jennifer Aniston, and More</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"The transformations I've witnessed are remarkable."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Zodiac.fm is brilliant. … The transformations I've witnessed are remarkable. Highly recommended!"</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Zodiac.fm is brilliant. Tuning into the energetic signature of the moment we were born and then using that imprint to re-align us…simply brilliant. The transformations I've witnessed are remarkable. Highly recommended!"</div></div>
+        <div class="who">Dr. Pedram Shojai<span>Best-Selling Author, The Urban Monk</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"Feels like coming home to myself."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Listening to my frequency immersion feels like coming home to myself. It's the part of my day where I slow down, tune in, and let everything else fall away. … It's not just 'me time'…it's the reset that helps me become the version of me I want to bring to the world."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Listening to my frequency immersion feels like coming home to myself. It's the part of my day where I slow down, tune in, and let everything else fall away. I notice my intuition is sharper, my nervous system softer, and I show up more grounded…for my family, my work, and myself. It's not just 'me time'…it's the reset that helps me become the version of me I want to bring to the world."</div></div>
+        <div class="who">Katie Wells<span>Founder, Wellness Mama, Best-Selling Author</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"Bypassing the mind and speaking directly to the body."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Zodiac core frequencies translate this unique imprint into sound, bypassing the mind and speaking directly to the body. … What I experienced was subtle yet undeniable: a deep sense of alignment, renewed energy, clearer focus, and an ease with what is. I highly recommend this work to anyone seeking a more embodied connection to themselves."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Many years ago, I experienced Robert Monroe's Gateway program at the Monroe Institute—a powerful exploration of sound frequencies designed to synchronize the brain and expand awareness. While profoundly impactful, those frequencies were not individualized. This is where core frequency work becomes extraordinary. Through Human Design, we begin to understand our unique energetic imprint—how we are designed to make decisions, express our purpose, and move through life. But understanding alone isn't transformation. It must be felt. Zodiac core frequencies translate this unique imprint into sound, bypassing the mind and speaking directly to the body. When I first received mine, I listened without expectation—late into the night, early in the morning, in moments of exhaustion and lack of inspiration. What I experienced was subtle yet undeniable: a deep sense of alignment, renewed energy, clearer focus, and an ease with what is. I highly recommend this work to anyone seeking a more embodied connection to themselves. BTW I listened to the Galactic Slumber when I wrote this (-:"</div></div>
+        <div class="who">Barbara Ditlow<span>Human Design Mentor, Master Practitioner, Trained/Certified/Endorsed by Ra Uru Hu</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"It's just… You. Without distortion, distraction, or dissonance."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"<span class="num">2</span> minutes in, I was grinning ear to ear — shocked, actually — at how very wrong I was. … it's just… You. Without distortion, distraction, or dissonance."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"After a few obsessed decades in the growth game, there's not too much I haven't seen. So when I plugged in my headphones and loaded up the first session, I'll admit to being skeptical. I mean, how different could this be? <span class="num">2</span> minutes in, I was grinning ear to ear — shocked, actually — at how very wrong I was. This stuff puts into living sound what I've been feeling and teaching for a long time. How can I say it…it's just… You. Without distortion, distraction, or dissonance. Just a weirdly familiar authentic essence — maybe what you used to feel like when you were a kid, before life got hard and stress became normal. There's so much we still don't know about what it means to be human. But this experience — to me anyway — feels like what humans can really be."</div></div>
+        <div class="who">Jesse Elder<span>Coach to 8-figure Entrepreneurs</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"I have received multiple unexpected new very lucrative opportunities since I began tuning in."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"This has been a total game changer for me. … I have received multiple unexpected new very lucrative opportunities since I began tuning in."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"This has been a total game changer for me. The abundance-focused music has upleveled my meditation practice and helped me create a powerful energetic shift every day. I have received multiple unexpected new very lucrative opportunities since I began tuning in."</div></div>
+        <div class="who">Leanne Ely<span>Best-Selling Author, Founder, Saving Dinner</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"Zodiac unblocked me."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Instead of <span class="num">10</span> paid members, I got <span class="num">30</span> paid members in <span class="num">30</span> days. Within <span class="num">45</span> days, we had almost <span class="num">40</span> paid members. It felt like the floodgates of abundance, prosperity, and purpose opened."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I was at my wits' end. My co-founder had died unexpectedly, an eight-figure acquisition offer had fallen through, and I had put over $<span class="num">100,000</span> into the business. I prayed for a sign and asked for <span class="num">10</span> paid members if I was meant to grow the community. Then I started listening to Zodiac every night before bed. Instead of <span class="num">10</span> paid members, I got <span class="num">30</span> paid members in <span class="num">30</span> days. Within <span class="num">45</span> days, we had almost <span class="num">40</span> paid members. It felt like the floodgates of abundance, prosperity, and purpose opened."</div></div>
+        <div class="who">Jennifer K. Hill<span>Global Wellness Leader, Founder, OptiMatch</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"allowed me to slip into my flow state MUCH easier while having a greater sense of calm and ease"</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I've been using Zodiac for over a month now and having it on in the background while I work has allowed me to slip into my flow state MUCH easier while having a greater sense of calm and ease — absolutely NEVER going to work again without it playing in the background! Thank you for an amazing product!!"</div></div>
+        <div class="who">Alex Kikel<span>Trainer to Olympians and Professional Athletes</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"Without doing anything but listening, I become a different person."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Without doing anything but listening, I become a different person. I shift into the version of me I actually want to be."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Without doing anything but listening, I become a different person. I shift into the version of me I actually want to be. I can tap into different frequencies based on what I need — abundance when I'm visualizing, love when I want to connect with people, core when I need to realign."</div></div>
+        <div class="who">Joey Vaillancourt<span>VP of Marketing, BiOptimizers</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"Every time I use this technology, I am coming home."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Zodiac.fm is my anchor. I've explored Kabbalah, Human Design, Gene Keys — but this is the only practice that brings me into full embodiment. … Every time I use this technology, I am coming home."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Zodiac.fm is my anchor. I've explored Kabbalah, Human Design, Gene Keys — but this is the only practice that brings me into full embodiment. When I hear the tone, my body remembers, my soul recalibrates. It doesn't just tell me who I am — it lets me feel it. Every time I use this technology, I am coming home."</div></div>
+        <div class="who">Alex Nazarov<span>Marketing Strategist &amp; Conscious Leadership Builder</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"I have never experienced change in self as I have with this experience."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I have tried a lot of different meditation and sound healing techniques, from Holosync, to apps like Waking Up, The Tapping Solution, MindSpa, Balance, Headspace, and Insight Timer…yet I haven't had anything quite so profoundly powerful and transformative as Zodiac.fm in such a short amount of practice. … I have never experienced change in self as I have with this experience."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I have tried a lot of different meditation and sound healing techniques, from Holosync, to apps like Waking Up, The Tapping Solution, MindSpa, Balance, Headspace, and Insight Timer…yet I haven't had anything quite so profoundly powerful and transformative as Zodiac.fm in such a short amount of practice. My experience thus far has been incredible. From my first experience using my frequency I felt ecstatic, to then be challenged with my rational mind, to then continue and become totally immersed in a transformation of stepping into my power. I have never experienced change in self as I have with this experience. A friend said the other day that my frequency had changed! And I know this to be true. Thank you for this amazing gift. I use this multiple times a day."</div></div>
+        <div class="who">Paul Tribe<span>Addictions Counselor</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"I went from ranting and complaining in my pages to writing in a way that felt hopeful and solutions oriented in only <span class="num">9</span> minutes."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"From day <span class="num">1</span> of Zodiac.fm I could feel the difference in my energy. … I went from ranting and complaining in my pages to writing in a way that felt hopeful and solutions oriented in only <span class="num">9</span> minutes. … Highly recommend!"</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"From day <span class="num">1</span> of Zodiac.fm I could feel the difference in my energy. I journal for an hour every morning - mostly a brain dump to get all of my negative thoughts out before I start my day. Instead of writing in silence like I usually do, I decided to play my core frequency while I was journaling. I noticed the effects immediately. I went from ranting and complaining in my pages to writing in a way that felt hopeful and solutions oriented in only <span class="num">9</span> minutes. I was blown away and immediately started sharing this powerful transformation with all my Human Design clients. They were all genuinely elated to have frequency music specific to their birth time. Highly recommend!"</div></div>
+        <div class="who">Tangie Nadimi<span>Founder, Feel Good Human Design</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"Zodiac.fm works at the frequency level underneath the pattern."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Insight is powerful. But insight alone does not create integration. Zodiac.fm works at the frequency level underneath the pattern. Instead of just studying your blueprint, you begin resonating with it."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"You can know your Human Design. You can contemplate your Gene Keys. You can understand your shadow to gift pathway perfectly…But you can still feel stuck. As a practitioner, I see this all the time. Insight is powerful. But insight alone does not create integration. Zodiac.fm works at the frequency level underneath the pattern. Instead of just studying your blueprint, you begin resonating with it. So if you are serious about embodying your work instead of just analyzing it, this is the missing layer…and an amazing sound experience!"</div></div>
+        <div class="who">Summer Phoenix<span>Human Design and Gene Keys Practitioner</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"I immediately noticed a difference down to the cellular level."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I am so impressed with how I immediately noticed a difference down to the cellular level with Zodiac.fm. I have never seen, or heard, anything like it. … As the Founder of Light-Filled Astrology™, a certifying organization, I am very careful about what I endorse."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I am so impressed with how I immediately noticed a difference down to the cellular level with Zodiac.fm. I have never seen, or heard, anything like it. I love working to music without lyrics and this is truly next level. As the Founder of Light-Filled Astrology™, a certifying organization, I am very careful about what I endorse. This is something anyone and everyone who is interested in alignment must check out. See, or really hear, for yourself!"</div></div>
+        <div class="who">Naomi Fox Reina<span>Human Design Guide Mentor, Founder, Light-Filled Co</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"It gives me focus and reminds me of who I am."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I have found listening to the personalised tracks really powerful — either as I'm falling asleep, cooking, walking, or to have on whilst I am working. It gives me focus and reminds me of who I am."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"As someone who works in the field of sound and vibrations, I was immediately drawn to Zodiac FM and being able to access my own personalised birth frequencies. I have found listening to the personalised tracks really powerful — either as I'm falling asleep, cooking, walking, or to have on whilst I am working. It gives me focus and reminds me of who I am."</div></div>
+        <div class="who">Rachel Wayte<span>World Renowned Frequency Healer / Energy Healer and Spiritual Mentor</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"IT IS PRECISION Frequency!!"</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I am highly impressed with Zodiac FM. IT IS PRECISION Frequency!! It took my birth information and was able to create the frequencies that are very specific to me. … It has become part of my daily routine!"</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I am highly impressed with Zodiac FM. IT IS PRECISION Frequency!! It took my birth information and was able to create the frequencies that are very specific to me. I can immediately start feeling the impact of each track and feel the electric energy running through my body. It has become part of my daily routine!"</div></div>
+        <div class="who">Yun Rhee<span>CEO and Founder, The Elevated Human Experience</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"The cutting-edge tool I didn't know I needed."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Zodiac FM blew my mind! … I've got four personal frequencies, and when I played the vitality one, I felt an immediate energy shift. This is the cutting-edge tool I didn't know I needed — now I can't get enough!"</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Zodiac FM blew my mind! I discovered I could listen to frequencies uniquely aligned to my birth chart — something I never imagined possible. I've got four personal frequencies, and when I played the vitality one, I felt an immediate energy shift. This is the cutting-edge tool I didn't know I needed — now I can't get enough!"</div></div>
+        <div class="who">Anja Zibert<span>Founder, Rebels Rising</span></div>
+      </div>
+      <div class="qcard">
+        <div class="lt">PULL</div><div class="pq">"It's like a little cheat code for experiencing your authentic vibration."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"It's like a little cheat code for experiencing your authentic vibration. Because it's personalized to you, not generic. I use it every day. This one earned it."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"It's like a little cheat code for experiencing your authentic vibration. Because it's personalized to you, not generic. I use it every day. During meditation, during visualization, sometimes I'll just sit down and breathe with it for five minutes. And I don't usually plug anything. This one earned it."</div></div>
+        <div class="who">David McEwen<span>Transformation Thought Leader, Over 12 Million YouTube Views</span></div>
+      </div>
+    </div>
+    <div class="subhead">Identity · Core <span class="bandcount">the internal band: alone with the music · 20 quotes</span></div>
+    <div class="banklist">
+      <div class="q"><div class="lt">PULL</div><div class="pq">"My Eeyore mind is gone. I let life in now. My wife even says I'm softer."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I've done plant medicine, coaching, ultra-marathons — everything. But this? It dissolved my tension. … I can literally feel the shift in my body and nervous system when I hit play. It's like having a sonic blueprint of who I am…on repeat."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I've done plant medicine, coaching, ultra-marathons — everything. But this? It dissolved my tension. My Eeyore mind is gone. I let life in now. My wife even says I'm softer. I didn't expect anything, but it changed the way I experience life. That automatic resistance I had…it just faded. Now I let things in. I used to see all the negatives in any plan. Now I just say yes. The static is gone. I finally feel like myself. Zodiac.fm has become one of the most powerful tools in my daily life — both personally and professionally. As someone who's deeply immersed in quantum wellness, frequency medicine, and human optimization, I've tried just about every modality out there. I can literally feel the shift in my body and nervous system when I hit play. I've used it to enhance my workouts, deepen meditation, and even recover faster from stress. It's like having a sonic blueprint of who I am…on repeat. I recommend it to anyone looking to live more intentionally, align their energy, or just experience music in a completely new way."</div></div><div class="who">Todd Shipman<span> · Founder &amp; CEO, Quantum Wellness Leader</span></div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Two weeks in, I feel more grounded, present, and aligned. I can't explain exactly how it works. I only know what I've experienced."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I've used Zodiac.fm every day for two weeks, and the difference surprised me. More focus, more presence, more alignment in my life and my work. When I skipped two days during my daughter's wedding, I felt it: less centered, less connected. I can't explain exactly how it works. I only know what I've experienced."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I've been using Zodiac.fm every day for the past two weeks, and honestly, I wasn't expecting to notice such a significant difference. What I've experienced is a greater sense of focus, presence, and alignment in my daily life and work. I feel more grounded, more connected, and more intentional in how I show up. Interestingly, during my daughter's wedding weekend (a beautiful and joy-filled experience) I didn't use it for two days. Even surrounded by all that love and celebration, I noticed a difference in my energy. I felt less centered and less connected to the state I've become accustomed to over the previous two weeks. I can't explain exactly how it works. I only know what I've experienced. For me, it has become a simple daily practice that helps me begin the day feeling more aligned with myself and my work. That's why I'm excited to be partnering with Zodiac.fm and sharing it with my community."</div></div><div class="who">Camille L. Miller<span> · Founder, Soul Professional® Movement</span></div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"It lets you finally feel the parts of yourself you have only ever read about."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"When I heard my frequencies for the first time, something in my chest unlocked. … I am one of the top five users on the platform because I honestly cannot imagine my life without this now."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"When I heard my frequencies for the first time, something in my chest unlocked. I started listening every day, sometimes for hours, because quietly everything in my life responded…my meditations, my breathwork, my emotional processing. I am one of the top five users on the platform because I honestly cannot imagine my life without this now. I tell everyone about Zodiac.fm because people need to know this exists: it lets you finally feel the parts of yourself you have only ever read about."</div></div><div class="who">Zehra Ashary<span> · Kundalini Practitioner, London</span></div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Oh there you are, Hilary, I found you."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Ive only had this product for about a week, and Im changed. … I literally had a moment of enlightenment this morning where i looked in the mirror and said 'oh there you are Hilary, I found you......' I am blown away."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Ive only had this product for about a week, and Im changed. This is absolutely rediculously good. I literally had a moment of enlightenment this morning where i looked in the mirror and said 'oh there you are Hilary, I found you......' I am blown away. Now of course im doing lots of things around my self-care and self-love practices (your product appeals to that type of audience), however these frequencies have played such a significant part in my journey. Thank you for this amazing experience that i can now tune into everyday. High quality results for a high quality investment. Lost for words, but just wanted to say thank you"</div></div><div class="who">Hilary Wilson</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I feel like ME again."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I'm just finishing my first week and I can't begin to explain how different I feel compared to just <span class="num">5</span> days ago. I feel like ME. I feel like the person I've been trying to get back to for so long without forcing anything."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I'm just finishing my first week and I can't begin to explain how different I feel compared to just <span class="num">5</span> days ago. I feel like ME. I feel like the person I've been trying to get back to for so long without forcing anything. It's just happening so naturally. Im not second guessing it or myself anymore for that matter. By now I'd have forgotten about something I had purchased online that I was 'supposed' to do every day but this is just becoming part of my days and nights and I'm just so grateful."</div></div><div class="who">Amber Hedrick</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Simply by listening, I feel tuned into a positive frequency zone."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"What I love about Zodiac music is that I don't have to force myself to create positive emotions. Simply by listening, I feel tuned into a positive frequency zone. From that frequency, the world reflected back to me also shifts into one filled with positivity, love, and kind people."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"When I discovered Zodiac, I felt genuinely excited, so I purchased it immediately and started listening. I can truly feel that it reduces mental chatter and helps me stay focused in the present moment. It makes perfect sense, doesn't it? Since each of us is born in a different place, at a different time, it is only natural that every person has their own unique frequencies that feel harmonious and comforting. By listening to music infused with those frequencies, I believe we naturally become calmer and enter a more positive state. In the past, I used to create positive emotions by consciously imagining joyful experiences and elevating my feelings. Nowadays, more and more people are beginning to understand that our emotions act as a mirror that reflects our reality. What I love about Zodiac music is that I don't have to force myself to create positive emotions. Simply by listening, I feel tuned into a positive frequency zone. From that frequency, the world reflected back to me also shifts into one filled with positivity, love, and kind people. Before speaking in public or going to work, I listen to the fast-paced track “Kindred Sprites” to raise my energy before taking action. The results are dramatically different. For meditation, I listen to “Starseed,” and when I go to sleep, I listen to “Galactic Slumber.” I use different tracks depending on what I want to experience. Of course it works — when you're able to easily enter the vortex simply by listening to frequencies that resonate with you, miracles become a natural part of the universe. Discovering Zodiac gave me the same feeling I had when I first discovered “The Secret.”"</div></div><div class="who">Ai Ninomiya</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I kid you not, from the first <span class="num">631</span> Hz tonal ring in my ears, it's as if my soul comes alive"</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"The core immersions hit something withIN ME that no other sound has been able to. I kid you not, from the first <span class="num">631</span> Hz tonal ring in my ears, it's as if my soul comes alive; the musical cords within me vibrating, dancing, humming, singing, rejoicing - and I am finally able to feel myself, my soul, entirely present within this avatar body."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I've been listening to sound frequencies for a little over three years now after doing a deep dive into the healing properties of sound and sound frequencies. Only now am I able to see the people-pleasing, holder-of-others'-emotions and keeper-of-peace identity I adopted as an <span class="num">8</span> year old child interwoven into every relationship, every decision, every interaction throughout my whole life. Which brings me to stumbling upon you all at zodiac.fm. I don't want to call it divine timing, but I'm not sure how else to describe it. The core immersions hit something withIN ME that no other sound has been able to. I kid you not, from the first <span class="num">631</span> Hz tonal ring in my ears, it's as if my soul comes alive; the musical cords within me vibrating, dancing, humming, singing, rejoicing - and I am finally able to feel myself, my soul, entirely present within this avatar body. It's almost as if these immersions are able to LINK everything - all the work done with my inner child, all the countless hours of self-help reading, all the quantum field deep dives taken, all the 'expanded consciousness' webinars attended - everything comes together and CONNECTS WITHIN me the second the Elysian Surge track starts! The tears come streaming down my face and I let them. My body effortlessly moves with the music and I dance. I don't care who's watching. The feeling is damn near inexplicable. And I dont want it to end. I am finally WHOLE!"</div></div><div class="who">Ellen Grimaldi</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I felt confident, calm and strong."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"In situations where I was distrustful of myself, fearful even, the day I first listened to the frequencies I felt confident, calm and strong. I also felt more compassion and love for those around me. The effect was real and too obvious not to notice."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I felt from day one the effect of these wonderful frequencies. It's amazing how many things that I've hardly overcome emotionally, in these few days since I've been listening, seem to ease up, as if everything is flowing. It's amazing! I listened to two hours a day while working. Thank you for these good changes you have made in my life. I wish you much inspiration so that more and more people can be helped through you. … I was also very surprised by the effect of the frequencies. In situations where I was distrustful of myself, fearful even, the day I first listened to the frequencies, in one of those situations, I felt confident, calm and strong. In addition, I felt more compassion and love for those around me. It seems unbelievable to me, but the effect was real and too obvious not to notice. I will continue to listen because I want to feel more of such wonderful effects."</div></div><div class="who">Dana Ghita</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I probably just experienced one of the most important <span class="num">9</span> minutes of the year!"</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"What a beautiful gift you have created. … I probably just experienced one of the most important <span class="num">9</span> minutes of the year!"</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"What a beautiful gift you have created. Effortless becoming the resonance of vibration. I literally cannot wait to experience more from Zodiac FM. I probably just experienced one of the most important <span class="num">9</span> minutes of the year! I hope you recognize this gift you have birthed into being is exactly what is needed for embodied awakening, i.e. living awake."</div></div><div class="who">Rene</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I feel more centered and grounded and connected during and after listening to the CVF immersions."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"This has been a subtle and profound new practice I have incorporated into my daily life! I feel more centered and grounded and connected during and after listening to the CVF immersions."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I've been listening to my unique zodiac.fm immersions for about six months now. From the onset the frequencies resonated with me and I felt more grounded... a next-level application of some serious complexities merging astrology and consciousness and my unique blueprint... Highly recommend! I'll keep listening and keep vibing!"</div></div><div class="who">Kevin Knabe</div></div>
+      <div class="q"><div class="lt">FULL</div><div class="pq">"With the very first soundscape, I unexpectedly started crying, it caught me completely off guard, but in a meaningful way."</div><div class="who">Teresa</div></div>
+      <div class="q"><div class="lt">FULL</div><div class="pq">"It felt like a 'coming home to myself' experience."</div><div class="who">Laura</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I cried a good cry the first time I listened to one of the Core Frequencies"</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I cried a good cry the first time I listened to one of the Core Frequencies... I felt so light and peaceful with Love and Cosmic Drift."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I cried a good cry the first time I listened to one of the Core Frequencies... I felt so light and peaceful with Love and Cosmic Drift. This also happened to me when I listened to Tibetan monks perform in a concert hall about <span class="num">30</span> years ago."</div></div><div class="who">Karen</div></div>
+      <div class="q"><div class="lt">FULL</div><div class="pq">"I really appreciate all the work you do with zodiac.fm, it has been life changing!"</div><div class="who">Jonathan</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"The Zodiac personalized frequency immersion has brought me a sense of calm and alignment with my inner self and with my birth frequency."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"The Zodiac personalized frequency immersion has brought me a sense of calm and alignment with my inner self and with my birth frequency. I've been watching life unfold in a beautiful way since I started listening to it daily."</div></div><div class="who">Sofia</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"It helps me get much deeper, quicker."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"This has been such a great addition to my morning routine as well as any other time throughout the day that I need to ground and re-center myself. … It helps me get much deeper, quicker."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"This has been such a great addition to my morning routine as well as any other time throughout the day that I need to ground and re-center myself. I have especially found it helpful to do right before meditating. It helps me get much deeper, quicker."</div></div><div class="who">Brenton</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"The frequency recordings helped me to align to myself."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"The frequency recordings helped me to align to myself. … I notably found myself able to stay completely in the witness/observer mode without going back to reaction. Very powerful."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"The frequency recordings helped me to align to myself. After a <span class="num">25</span>-minute meditation with the frequency, I notably found myself able to stay completely in the witness/observer mode without going back to reaction. Very powerful."</div></div><div class="who">Nicole</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I can literally feel the shift of my frequency."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I can literally feel the shift of my frequency. … I highly recommend this beautiful tool."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I can literally feel the shift of my frequency. It has helped me to close cycles of old timelines that surfaced emotions I had surpassed. I highly recommend this beautiful tool."</div></div><div class="who">Karla</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"It made so much sense and made me feel at home."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I loved it so much — it was really exciting to hear my own frequency. It made so much sense and made me feel at home."</div></div><div class="who">Kaeya</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Just listened to <span class="num">3</span> immersions — feels like coming home."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Just listened to <span class="num">3</span> immersions — feels like coming home. This is amazing! I was always looking for ways to make astrology more tangible and transformational."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Just listened to <span class="num">3</span> immersions — feels like coming home. This is amazing! I was always looking for ways to make astrology more tangible and transformational. Thank you for this recommendation."</div></div><div class="who">Sarah</div></div>
+    </div>
+    <div class="subhead">Relationships · Love <span class="bandcount">connection: people together · 6 quotes</span></div>
+    <div class="banklist">
+      <div class="q"><div class="lt">PULL</div><div class="pq">"My wife especially loves the man I am turning into since subscribing."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"A lot of people around me have seen the shift in my energy since listening to my vibrations. My wife especially loves the man I am turning into since subscribing."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Hi Jen. I have to say thank you so very much for the email introducing Zodiac.fm. A lot of people around me have seen the shift in my energy since listening to my vibrations. My wife especially loves the man I am turning into since subscribing. I can't thank you enough! [The 'make dinner' story, Intercom <span class="num">2026</span>-<span class="num">05</span>-<span class="num">18:</span>] Yesterday, I asked my wife who is a paying student of Kathleen Cameron, if she has noticed that my engery has changed since I started listening to Zodiac.fm. She replied emphatically, <span class="num">100%</span> she has noticed. She said I'm suggesting to help her with things around the house that in our <span class="num">13</span> <span class="num">1</span>/<span class="num">2</span> years of being together, I never have done before, like me suggesting to make dinner. She has always asked me to do so, and I have agreed, but I have never on my own, suggested it, until I started listening to my frequencies. [The 'caught myself' line, Intercom <span class="num">2026</span>-<span class="num">05</span>-<span class="num">14:</span>] My wife did comment on how she was happy that I caught myself this morning when I got angry. Something that hasn't really happened before."</div></div><div class="who">Ken Hoffman<span> · Operations Manager, WNY Dyslexia Specialists</span></div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I am seeing a huge difference in how much more loving I am. I'm more affectionate, more grounded."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I am seeing a huge difference in how much more loving I am. I'm more affectionate, more grounded, and when I skip a few days, I feel it. This is the only sound healing that's made just for me."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I am seeing a huge difference in how much more loving I am. I'm more affectionate, more grounded, and when I skip a few days, I feel it. This is the only sound healing that's made just for me. It fast-tracked clarity in my relationship. I knew who I was, so I saw him more clearly. That foggy feeling was gone. It's subtle, but after a couple days without it, something feels off. When I listen again, I'm lighter. I smile more. I care more."</div></div><div class="who">Amy Wilcox</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I'm softening, more loving, and more willing to stand my ground."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I'm softening, more loving, allowing more, and more willing to stand my ground where I need to."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I feel like I'm softening, more loving, allowing more, and also more willing to stand my ground where I need to, without so many excuses. / my eyes were wide open, senses intact."</div></div><div class="who">Anne Mehr</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"its so magical to witness not only the shift in me but my clients"</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I love Zodiac FM as part of my daily routine. It helps me stabilize and it makes it easy for me since I wear hearing aids and I can connect at any moment in my day. … As a hairstylist I've experimented listening while with clients and its so magical to witness not only the shift in me but my clients."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I love Zodiac FM as part of my daily routine. It helps me stabilize and it makes it easy for me since I wear hearing aids and I can connect at any moment in my day. Also, as an astrology fanatic, this is extremely cool. Thank you for creating this masterpiece. [Also, Intercom:] Im hard of hearing and im able to use the Bluetooth on my hearing aids to listen many times throughout the day... As a hairstylist I've experimented listening while with clients and its so magical to witness not only the shift in me but my clients."</div></div><div class="who">Jennifer Rodriguez</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Something opened up a little in my heart and solar plexus a few days ago and I could connect and communicate noticeably better with a friend in conversation."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Something opened up a little in my heart and solar plexus a few days ago and I could connect and communicate noticeably better with a friend in conversation. Also, some opportunities are starting to manifest. So it's definitely working!"</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I did have a noticeable stronger connection with a horse in a nearby pasture and I also feel a little more connection to my chickens and even to insects and spiders, which is awesome. Something opened up a little in my heart and solar plexus a few days ago and I could connect and communicate noticeably better with a friend in conversation. Also, some opportunities are starting to manifest. So it's definitely working!"</div></div><div class="who">Steven Dens</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"open some doors to emotional healing that I knew was needed but I couldn't tap in and this frequency music has helped."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"open some doors to emotional healing that I knew was needed but I couldn't tap in and this frequency music has helped. Thank you for this gift."</div></div><div class="who">Janine</div></div>
+    </div>
+    <div class="subhead">Energy · Vitality <span class="bandcount">movement: the body's own supply · 18 quotes</span></div>
+    <div class="banklist">
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I started using Zodiac.fm five days a week, and the results have been amazing."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I started using Zodiac.fm five days a week, and the results have been amazing. … I can feel more energy immediately … At night, the Love frequency helps me drift off into deep, restorative sleep much faster than before."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I started using Zodiac.fm five days a week, and the results have been amazing. I start my mornings with the Core frequency, and it's extremely helpful for my physical balance and I can feel more energy immediately that helps get my day moving. At night, the Love frequency helps me drift off into deep, restorative sleep much faster than before. I'm actually remembering my dreams more frequently, and they're more vivid and positive. It's given me a sense of control and peace over my daily routine that is an indispensable part of my healing journey."</div></div><div class="who">Nate Anaez Zeleznick<span> · 2024 U.S. Wellness Coach of the Year</span></div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"The acupuncture points on my feet lit up — exactly where I felt the tingling when I listened."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Zodiac.fm is like a birth note on steroids. I could feel the energy in my feet and arms — it was physical. … The acupuncture points on my feet lit up — exactly where I felt the tingling when I listened."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Zodiac.fm is like a birth note on steroids. I could feel the energy in my feet and arms — it was physical. I ran before-and-after scans using my resonance equipment and saw clear, visual shifts after just nine minutes. I could literally see the energy shift in my body. The acupuncture points on my feet lit up — exactly where I felt the tingling when I listened."</div></div><div class="who">Pam Kinzinger<span> · Sound &amp; Resonance Healing Practitioner</span></div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"It's clean. It's practical. It's perfect as it is."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I have been using Zodiac for about <span class="num">6</span> months now. I love it. … I love the Galactic Slumber... I use it at least <span class="num">4</span> times per week to go to sleep and I feel like it really sets me up for a good night's rest."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I have been using Zodiac for about <span class="num">6</span> months now. I love it. For me, it helps especially well with nervous system regulation. I love the Galactic Slumber... I use it at least <span class="num">4</span> times per week to go to sleep and I feel like it really sets me up for a good night's rest. (also: It's clean. It's practical. It's perfect as it is.) [Fuller version, Social Proof Doc:] I have noticed that I feel much more balanced and my nervous system feels more regulated. I am more easily able to let go of stress and anxiety or move through them to a space of trust and knowing. From this place, I feel like I can make healthier decisions that are in response to a circumstance or situation rather than reacting and regretting my decision later."</div></div><div class="who">Tanya Rex</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Just a few minutes of listening helps me feel grounded in my body and connected to my own energy."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"The Core Frequency, in particular, has become a regular part of my morning and evening routines. Just a few minutes of listening helps me feel grounded in my body and connected to my own energy."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I'm a big fan of ZodiacFM's personalized frequencies which are based on my unique birth chart. The Core Frequency, in particular, has become a regular part of my morning and evening routines. Just a few minutes of listening helps me feel grounded in my body and connected to my own energy."</div></div><div class="who">Denise Kennedy</div></div>
+      <div class="q"><div class="lt">FULL</div><div class="pq">"It's fantastic! I feel it working at the cellular level!"</div><div class="who">Molly</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"it electrifies every cell in my body, courses through my veins like magic"</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"It's a sensation that I crave to experience over and over; it electrifies every cell in my body, courses through my veins like magic, and speaks to my soul in a vibrant, ancient language that feels both familiar and thrillingly mysterious."</div></div><div class="who">Neda</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I find that these frequencies offer a comforting connection to my inner self, serving as an effortless <span class="num">9</span>-minute daily alignment practice."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I find that these frequencies offer a comforting connection to my inner self, serving as an effortless <span class="num">9</span>-minute daily alignment practice. … I wholeheartedly recommend Zodiac Core Frequencies to anyone looking to connect with a deeper sense of themselves."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I find that these frequencies offer a comforting connection to my inner self, serving as an effortless <span class="num">9</span>-minute daily alignment practice. This experience isn't something to be overanalyzed — it's simply about resting in the moment and allowing the process to unfold. I wholeheartedly recommend Zodiac Core Frequencies to anyone looking to connect with a deeper sense of themselves."</div></div><div class="who">Amy</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Zodiac FM has made it easy for me to calibrate my energy at the start of my day."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Zodiac FM has made it easy for me to calibrate my energy at the start of my day. I love the pockets I get to sink deeper into my inner world."</div></div><div class="who">Sophie</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Wow — literally felt something shift within the first ten seconds of listening."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Wow — literally felt something shift within the first ten seconds of listening. Thank you for bringing this into my awareness."</div></div><div class="who">Kate</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"First tune caused shivers throughout the body."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"First tune caused shivers throughout the body. Now, <span class="num">2</span> hours into listening and integrating, I can say that it's either a well-cooked placebo, or it works."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Signed up this morning after I saw Jesse's post. First tune caused shivers throughout the body. Now, <span class="num">2</span> hours into listening and integrating, I can say that it's either a well-cooked placebo, or it works."</div></div><div class="who">Giedrius</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Powerful feelings within the body and mind."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"The only comparison or point of reference that I have is sound healing sessions with mushrooms and MDMA. Powerful feelings within the body and mind."</div></div><div class="who">Luis</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Focus is easier and emotions are more chill."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Instant warming sensation around the womb area and what could be called the sacral chakra energy center. A quieting much like when I have listened to brown noise — reducing background thoughts, like an old speaker blowing out. … Focus is easier and emotions are more chill."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"Observations of what was experienced: Instant warming sensation around the womb area and what could be called the sacral chakra energy center. A quieting much like when I have listened to brown noise — reducing background thoughts, like an old speaker blowing out. Voices can still be heard, however very muffled. A feeling that translated in the imagination as DNA coding being rewritten on an energetic level. Focus is easier and emotions are more chill. Utilized the love frequencies to begin changing feelings around certain situations and finding a slightly faster mental resolution. Also, the sense of equilibrium was off a bit at first — like the body's center of gravity got recalibrated and is finding itself again. Curious to see what happens after this first day."</div></div><div class="who">Rhiannon</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"it was the first night of uninterrupted full <span class="num">8.5</span> hrs I've had in over <span class="num">6</span>mths"</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I did the <span class="num">1</span>st night of core deep sleep, it was the first night of uninterrupted full <span class="num">8.5</span> hrs I've had in over <span class="num">6</span>mths, and so naturally I woke up and got a years subscription lol."</div></div><div class="who">Calla</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I have been using the Vitality Frequency every day for over an hour, mind is much clearer"</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I have been using the Vitality Frequency every day for over an hour, mind is much clearer and body feels not so anxious."</div></div><div class="who">John</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Helps to navigate past day's stress and worries and put my mind at rest."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I usually listen during my morning nature walks and even as a wind-down at night. Helps to navigate past day's stress and worries and put my mind at rest."</div></div><div class="who">Earnest</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"It has a very positive impact in regards to clearing out fog in the brain."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I meditate for <span class="num">25</span> minutes using zodiac.fm each morning... It has a very positive impact in regards to clearing out fog in the brain."</div></div><div class="who">Nicole</div></div>
+      <div class="q"><div class="lt">FULL</div><div class="pq">"it has provided so much peace and clarity and think its an mazing app."</div><div class="who">Rhea</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I just feel so much calmer and more grounded already…another level of me, after <span class="num">7</span>–<span class="num">8</span> days of use."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"It's such an interesting area, and it all makes sense to me — why wouldn't it?! I'm actually really superexcited about it! … I just feel so much calmer and more grounded already…another level of me, after <span class="num">7</span>–<span class="num">8</span> days of use."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"It's such an interesting area, and it all makes sense to me — why wouldn't it?! I'm actually really superexcited about it! And will spread the word in the Gothenburg area, in Sweden, for sure! I just feel so much calmer and more grounded already…another level of me, after <span class="num">7</span>–<span class="num">8</span> days of use."</div></div><div class="who">Anci</div></div>
+    </div>
+    <div class="subhead">Opportunity · Abundance <span class="bandcount">exchange: work, offers, flow · 7 quotes</span></div>
+    <div class="banklist">
+      <div class="q"><div class="lt">PULL</div><div class="pq">"The abundance is through the roof, especially with work."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"When I listen to Zodiac, the abundance is through the roof!!! Especially with work (paying projects)... … I had a new project waiting for me in my emails. Perfect!"</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"When I listen to Zodiac, the abundance is through the roof!!! Especially with work (paying projects)... I listened to the new tracks this morning. I went to the gym. I came back. I had a new project waiting for me in my emails. Perfect!"</div></div><div class="who">Patricia Brigidi</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"It helped me center more efficiently."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"The frequencies helped me center more efficiently... by tuning yourself to your Divine frequency."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"The frequencies helped me center more efficiently, it can aid in manifesting or anything that you do by tuning yourself to your Divine frequency. I appreciate what you've done here."</div></div><div class="who">Alexander Molina II</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"In week one, I was offered a dream position; by week three, insights flowed daily."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"While listening, I've had otherworldly visualizations and felt real shifts in my life from the very first week. … In week one, I was offered a dream position; by week three, insights flowed daily."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"While listening, I've had otherworldly visualizations and felt real shifts in my life from the very first week. Friends and family noticed the change in my presence. In week one, I was offered a dream position; by week three, insights flowed daily. The feeling these audios give me is pure home where nothing else matters."</div></div><div class="who">Hilary DiMassimo</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I feel the copy POURING out of me and I'm writing it faster and feeling it more deeply than I ever have."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I have been using my zodiac music to write copy for my business and I'm LOVING it!!! ... I feel the copy POURING out of me and I'm writing it faster and feeling it more deeply than I ever have."</div></div><div class="who">Cytel</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I worked joyfully until <span class="num">1</span> a.m. without even noticing the time pass."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"The first night I experimented with my core frequency, I couldn't sleep and was so creative! I came up with a new concept for my new business and I see the benefits now. … I worked joyfully until <span class="num">1</span> a.m. without even noticing the time pass."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"The first night I experimented with my core frequency, I couldn't sleep and was so creative! I came up with a new concept for my new business and I see the benefits now. [Fuller, Intercom:] One night I had a work session while listening to my frequency, and I was so energized and focused that I ended up creating an entirely new service for my company... I worked joyfully until <span class="num">1</span> a.m. without even noticing the time pass."</div></div><div class="who">Valerie</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I won employee of the month at school."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I love the little joys I experience since I've started listening: I won employee of the month at school. Had a unexpected delivery from my family back home (different states). … Clearer mind help me sort thru my busy brain being a teacher."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I listen to the <span class="num">5</span>/<span class="num">9</span> min during my breaks. I keep a pot of air buds in my purse for the occasion. I enjoy the grounding each frequency brings me. I love the little joys I experience since I've started listening: I won employee of the month at school. Had a unexpected delivery from my family back home (different states). Not feeling so anxious. Clearer mind help me sort thru my busy brain being a teacher. My daughter finally getting support she needs and entitled to. Energy to declutter some spots in my house. Not feeling the need to hold on to things too tight. I am hoping it will help with my driving anxiety and pursuing my license finally (big goal)."</div></div><div class="who">Natosha</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Although it was not audible, my entire body felt an energetic resonance."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I shared my abundance frequency number and he started generating that frequency in the room. Although it was not audible, my entire body felt an energetic resonance. It was amazing."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I've been listening to the Galactic Slumber track almost every night as I fall asleep. I rotate between Core, Love, Vitality, and Abundance frequencies and fall asleep really quickly. Recently I was visiting someone who had a frequency generator. I shared my abundance frequency number and he started generating that frequency in the room. Although it was not audible, my entire body felt an energetic resonance. It was amazing."</div></div><div class="who">Sharon</div></div>
+    </div>
+    <div class="subhead">General · Product + Service <span class="bandcount">the product itself, the music, the service · 14 quotes</span></div>
+    <div class="banklist">
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I felt like I came home to myself."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"I literally felt my nervous system exhale. Sleep improved. Focus sharpened. … The second I came back to the app, I felt like myself again."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"As someone who's meditated for years, I thought I knew grounding…until this. I literally felt my nervous system exhale. Sleep improved. Focus sharpened. I even stopped using it for a week as a test, and whew — the difference was loud. The second I came back to the app, I felt like myself again. Within minutes, my nervous system just took an exhale. I felt like I came home to myself. People have even asked me, 'What are you doing? You seem different — calmer, more present.'"</div></div><div class="who">Hillary Porta<span> · Women's Executive Coach</span></div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I thought it sounded woo-woo. I get it, I thought so too. Still, it gives me something."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"You don't read insights. You listen to them... … If you think this sounds hocus-pocus or slightly woo-woo: I get it. I thought so too. Still. It gives me something."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"ZodiacFM translates your birth chart into personalized sound frequencies. You don't read insights. You listen to them... No beats. No guidance. No story. Just resonance. If you think this sounds hocus-pocus or slightly woo-woo: I get it. I thought so too. Still. It gives me something."</div></div><div class="who">Raf Stevens</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"a product that works effectively right off of the bat and customer service to match!! Zodiac.fm is doing it right."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Michael went above and beyond the call to ensure that I was satisfied with my results-which I was!!!- … This is a rare combination in today's consumer world: a product that works effectively right off of the bat and customer service to match!! Zodiac.fm is doing it right."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I found zodiac.fm to be exceptionally flexible towards customer support issues. I had to give my account up, due to a lack of funding. Michael from Customer Services made a very generous offer to save my frequency results from my preliminary test. Should I be able to return and set up my account, again, there would be no need to go through another preliminary test to determine which frequencies work best for me. Michael went above and beyond the call to ensure that I was satisfied with my results-which I was!!!- and to determine how he might be able to help me with my goals to lower stress. More than anything else, he accommodated my caretaking schedule with great patience and consideration. This is a rare combination in today's consumer world: a product that works effectively right off of the bat and customer service to match!! Zodiac.fm is doing it right."</div></div><div class="who">Lola L. Schiefelbein</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Customer support responded right away and resolved my problem… Zodiac.fm really stands behind their service."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"When I had a technical issue with the app, I reached out for help. Customer support responded right away and resolved my problem..."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"When I had a technical issue with the app, I reached out for help. Customer support responded right away and resolved my problem... Zodiac.fm really stands behind their service."</div></div><div class="who">Seth Dinoi</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"The most significant breakthrough in birth chart technology in decades."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"The most significant breakthrough in birth chart technology in decades. … It's a must-have for any astrology fan."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"The most significant breakthrough in birth chart technology in decades. Zodiac.fm transforms your chart into the sound of you. It's a must-have for any astrology fan."</div></div><div class="who">Astrology.tv</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Hearing your own frequencies is a powerful reminder that we're not separate from the natural world."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"Zodiac.fm offers a fascinating way to experience the cosmic rhythms we're all a part of. Hearing your own frequencies is a powerful reminder that we're not separate from the natural world. The platform makes these ancient tools accessible in a modern, practical way, and we've seen how powerful that can be for personal growth and deeper connection."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"At Ecoversity, we're passionate about helping people reconnect with nature, both around them and within them. Zodiac.fm offers a fascinating way to experience the cosmic rhythms we're all a part of. Hearing your own frequencies is a powerful reminder that we're not separate from the natural world. The platform makes these ancient tools accessible in a modern, practical way, and we've seen how powerful that can be for personal growth and deeper connection. We're grateful to collaborate with a project that shares our commitment to conscious learning and transformation."</div></div><div class="who">Ecoversity</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"What your numbers reveal, Zodiac.fm makes real."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"What your numbers reveal, Zodiac.fm makes real. Your chart's truths reveal your unique gifts through sonic alchemy. Highly recommended."</div></div><div class="who">The Numerologist</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"Some friends actually noticed me radiating differently."</div>
+        <div class="qlen"><div class="lt">SHORT</div><div class="qt">"My experience so far is something beyond words. It is magical. … Some friends actually noticed me radiating differently. I can truly say that the app came into my life in a pivotal moment and is one of the best investments I have made."</div></div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"My experience so far is something beyond words. It is magical. Listening to my immersions daily just sets a positive undertone for my days, and the more days pass by listening, the easier it gets to tune into that natural joy, into myself. I did a couple days of pause during the holidays when I got slowly exhausted, but now that I am back at it again, the extra layers of color come back into my life shining. I feel it helps with staying true and kind to myself when in the past I would have chosen self-abandonment, guilt and shame. It aids in choosing healthy instead of vice. It evokes a tiny, jolly, playful bolt of light within myself. Some friends actually noticed me radiating differently. I can truly say that the app came into my life in a pivotal moment and is one of the best investments I have made."</div></div><div class="who">Laura-Izabella</div></div>
+      <div class="q"><div class="lt">FULL</div><div class="pq">"I love the frequencies. I love the simple interface. I love the content."</div><div class="who">Scott</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I use this almost every single day, multiple times a day."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I absolutely love what you've created! ... I use this almost every single day, multiple times a day. Thank you so much for bringing this into the world, it's made a real difference for me."</div></div><div class="who">Mikael</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"super clear instructions and enough warmth and personality that I feel connected and invested"</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I'm loving the immersions... super clear instructions and enough warmth and personality that I feel connected and invested. Looking forward to being part of the journey and seeing your startup grow into huge success."</div></div><div class="who">Jenni</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"yours is the first I have heard that makes you want to listen for any length of time"</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I have always believed that sound will be the way to healing and yours is the first I have heard that makes you want to listen for any length of time... Elysian is my favourite."</div></div><div class="who">Mel</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"It's unlike any other music I've listened to and I absolutely love it"</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"It's unlike any other music I've listened to and I absolutely love it... I don't want to stop listening I wear my headphones a good bit of the day and all night."</div></div><div class="who">LeAnne</div></div>
+      <div class="q"><div class="lt">PULL</div><div class="pq">"I haven't even listened to the frequencies. And yet, I feel them coming through your email."</div>
+        <div class="qlen"><div class="lt">FULL</div><div class="qt">"I haven't even listened to the frequencies. And yet, I feel them coming through your email. Blessings."</div></div><div class="who">Bekah</div></div>
+    </div>
+    <p class="note" style="margin-top:44px">Every banked length appears here, labeled; <b>winners/testimonials.md</b> stays the master — a length missing on a quote means no banked cut exists, never a display choice. Case studies are built only from a banked Full with Michael's go. Quarantined quotes never ship, in any length. Full attributions and clearance states live in <b>winners/testimonials.md</b>, the one home; a surname joins here when the master clears it.</p>
+    <div class="spec" style="margin-top:72px">The bank · <b>103</b> World of Color frames, one treatment · every frame PASS or corrected cc1 on the color-integrity audit (two recorded sub-visible notes: a fringe on Stoop Cards, 0.11% of frame, and a stray warm cluster on Workshop Handover, under 1%; the two R34 keepers Michael tapped over their WARN rows stand on his call) · the R34 winners landed 2026-08-15 and the photo lane is closed — no pending gen rounds (Blanket Stars and First Sale parcel-lit stay parked) · plus the testimonial bank mirrored from winners/testimonials.md at all three lengths</div>
+    <p class="note" style="margin-top:60px">Styleguide-<span class="num">7</span> Library · merged to one treatment per Michael's R<span class="num">33</span> taps <span class="num">2026</span>-<span class="num">08</span>-<span class="num">14</span>: five categories, the four frequencies then multicolor, all of them <b>World of Color</b> — cast light is a color source inside the treatment, not a treatment of its own · previously approved cast-light frames are grandfathered and re-filed into their category pools with their provenance intact · the inventory is <span class="num">103</span> frames, and Umbrella Run is still the named standard for cast light in group scenes · the guide lives at <a href="/site/styleguide-7-3" style="color:var(--violet-soft)">/site/styleguide-<span class="num">7</span>-<span class="num">2</span></a> · every frame here is approved and audited; drifted frames appear only as corrected cc<span class="num">1</span> · the testimonial home is <b>winners/testimonials.md</b>, and this page mirrors every banked length — Pull, Short and Full · design authority: design/tokens.json + the referent board.</p>
+  </div>
+</section>
+
+<section id="rules" style="border-bottom:none">
+  <div class="wrap">
+    <div class="eyebrow">The Rules</div>
+    <h2>One wheel, the world lights it</h2>
+    <p class="statement" style="margin-top:30px">The scene is black and white. The color pops out of it, lit, so it is art.</p>
+    <p class="body" style="margin-top:30px">Every category above is the same treatment, <b>World of Color</b>: the world carries the hue. A parasol, a dress, a lit sign, or cast light landing on hands, hair, fabric, the environment. Cast light is a color source inside the treatment, not a treatment of its own; the method is chosen frame by frame.</p>
+    <ul class="zlist">
+      <li>The events are few. One band per frame is the default.</li>
+      <li>The color is lit, never paint.</li>
+      <li>Cast light may land on faces, hands, hair, fabric, and environment. Never a pure mask, and never a frame where only faces carry the color: the scene makes the pop, in context.</li>
+      <li>Light needs no visible source; an invented or absent source is legal — the event must still read as light, alive, not paint.</li>
+      <li>Both device grammars are legal: the colored object, and the black object under colored light.</li>
+      <li>Silhouettes are legal when the hue is ours and loud.</li>
+      <li>Cast light stays a small vivid event: keep the world unmistakably black and white around it — wide color makes people look like they are already in color, and the read dies.</li>
+      <li>The multi-color grammar: the Full Wheel appears as four objects, four people, or four lit events, never a wash; in group scenes different people may each carry a different band.</li>
+      <li>Community and connection scenes are Love rose, never Core violet.</li>
+      <li>Amber is the danger band: keep enough black and white in frame or the treatment reads as an ordinary color photo.</li>
+      <li>Every frame audits onto the locked wheel spans, the same standing gate as the whole library.</li>
+    </ul>
+    <p class="note">Frames banked before <span class="num">2026</span>-<span class="num">08</span>-<span class="num">14</span> were judged under the prior cast-light rules and stand as approved; these rules bind future frames.</p>
+    <p class="note" style="margin-top:24px">The library grows: the R31 fix round (<span class="num">12</span> slots), <span class="num">7</span> frames in the correction lane, and gen round R34 — the emerald cast-light fix round under the new face law — join as they pass.</p>
+  </div>
+</section>
+
+</body>
+</html>
