@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Zodiac Reach Out</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:#F6F1E8; --paper:#FBF8F3; --white:#FFFFFF; --mist:#EEE9E0;
+      --ink:#1A1620; --muted:#716B76; --line:#DED6C8;
+      --violet:#6521C9; --violet-deep:#38007A; --violet-tint:#EFECFF; --violet-soft:#D2C8FF;
+      --rose:#B90044; --rose-tint:#FFE8EA; --amber:#C25500; --amber-tint:#FFEADA;
+      --emerald:#0A7A52; --emerald-tint:#DCF4E8;
+      --serif:'Cormorant Garamond',Georgia,serif;
+      --sans:'Switzer',-apple-system,'Helvetica Neue',sans-serif;
+      --shadow:0 20px 60px rgba(45,30,16,.10);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+    button,input,select{font:inherit}
+    button,a{touch-action:manipulation}
+    button{color:inherit}
+    a{color:var(--violet);text-underline-offset:3px}
+    .app{min-height:100vh}
+    .topbar{height:72px;display:flex;align-items:center;gap:24px;padding:0 30px;border-bottom:1px solid var(--line);background:rgba(251,248,243,.94);position:sticky;top:0;z-index:40;backdrop-filter:blur(14px)}
+    .logo{width:126px;height:auto;display:block}
+    .top-title{font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;padding-left:24px;border-left:1px solid var(--line)}
+    .top-status{margin-left:auto;display:flex;align-items:center;gap:9px;color:var(--emerald);font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+    .top-status::before{content:"";width:8px;height:8px;border-radius:50%;background:#12A56E;box-shadow:0 0 0 4px var(--emerald-tint)}
+    .shell{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:calc(100vh - 72px)}
+    .rail{border-right:1px solid var(--line);padding:30px 18px 40px;position:sticky;top:72px;height:calc(100vh - 72px);overflow:auto;background:rgba(246,241,232,.75)}
+    .rail-label,.eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--violet)}
+    .channel-list{display:flex;flex-direction:column;gap:5px;margin-top:16px}
+    .channel-button{display:grid;grid-template-columns:11px 1fr auto;align-items:center;gap:10px;width:100%;padding:11px 10px;border:0;border-radius:9px;background:transparent;text-align:left;cursor:pointer;transition:.18s ease}
+    .channel-button:hover{background:var(--paper)}
+    .channel-button.active{background:var(--white);box-shadow:0 2px 12px rgba(26,22,32,.06)}
+    .channel-dot{width:8px;height:8px;border-radius:50%;background:var(--channel,var(--violet))}
+    .channel-name{font-size:13px;font-weight:600;min-width:0}
+    .channel-count{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+    .rail-note{border-top:1px solid var(--line);margin-top:24px;padding:20px 10px 0;color:var(--muted);font-size:11.5px;line-height:1.55}
+    .rail-note b{display:block;color:var(--ink);margin-bottom:5px}
+    .main{padding:40px clamp(22px,4vw,64px) 80px;min-width:0}
+    .hero{padding-bottom:32px;border-bottom:1px solid var(--line)}
+    h1{font-family:var(--serif);font-size:clamp(42px,5vw,70px);line-height:.95;letter-spacing:-.035em;font-weight:600;margin:10px 0 16px;max-width:14ch}
+    .hero-copy{max-width:780px;color:#4F4954;font-size:15.5px;line-height:1.65;margin:0}
+    .stat-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-bottom:1px solid var(--line)}
+    .stat{padding:22px 16px;border-right:1px solid var(--line);margin:0}
+    .stat:first-child{padding-left:0}
+    .stat:last-child{border-right:0;padding-right:0}
+    .stat-value{font-size:26px;font-weight:600;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+    .stat-label{font-size:10.5px;color:var(--muted);font-weight:700;letter-spacing:.11em;text-transform:uppercase;margin-top:3px}
+    .controls{padding:26px 0 18px;position:sticky;top:72px;background:linear-gradient(var(--cream) 84%,rgba(246,241,232,0));z-index:20}
+    .search-wrap{position:relative}
+    .search-wrap svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--muted)}
+    .search{width:100%;height:52px;border:1px solid var(--line);border-radius:12px;background:var(--white);padding:0 48px;font-size:14px;outline:none;box-shadow:0 4px 18px rgba(26,22,32,.04)}
+    .search:focus{border-color:var(--violet);box-shadow:0 0 0 3px var(--violet-tint)}
+    .clear-search{position:absolute;right:10px;top:9px;width:34px;height:34px;border:0;border-radius:50%;background:transparent;color:var(--muted);cursor:pointer;display:none}
+    .clear-search.visible{display:block}
+    .filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .filter-select{appearance:none;-webkit-appearance:none;height:38px;border:1px solid var(--line);border-radius:999px;background-color:var(--white);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23716B76' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding:0 34px 0 13px;color:#4F4954;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 2px 10px rgba(26,22,32,.035)}
+    .filter-select:focus-visible{outline:3px solid var(--violet-tint);border-color:var(--violet)}
+    .result-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:18px 0 14px}
+    .result-title{font-family:var(--serif);font-size:30px;line-height:1.1;font-weight:600;margin:0}
+    .result-count{font-size:12px;color:var(--muted);white-space:nowrap}
+    .records{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+    .record{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;padding:22px 4px;display:grid;grid-template-columns:minmax(190px,1.15fr) minmax(180px,1fr) minmax(170px,1.2fr) 28px;gap:24px;text-align:left;cursor:pointer;transition:.15s ease;align-items:center}
+    .record:hover,.record:focus-visible{background:rgba(255,255,255,.62);padding-left:14px;padding-right:14px;outline:none}
+    .record-name{font-family:var(--serif);font-size:24px;line-height:1.05;font-weight:600;margin:0 0 7px}
+    .record-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+    .chip{display:inline-flex;align-items:center;min-height:22px;border-radius:999px;padding:3px 8px;background:var(--paper);border:1px solid var(--line);font-size:9.5px;line-height:1;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#56505B}
+    .chip.p1{background:var(--rose-tint);border-color:#F5BEC9;color:var(--rose)}
+    .chip.direct{background:var(--emerald-tint);border-color:#A6DFC5;color:var(--emerald)}
+    .chip.dnc{background:var(--amber);border-color:var(--amber);color:var(--white);box-shadow:0 2px 8px rgba(194,85,0,.16)}
+    .record-channel{font-size:11px;color:var(--muted);margin-bottom:7px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+    .record-relationship,.record-angle{font-size:12.5px;color:#514B56;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .record-arrow{font-size:23px;color:var(--violet);line-height:1}
+    .empty{padding:64px 20px;text-align:center;border-bottom:1px solid var(--line);color:var(--muted)}
+    .footer-note{margin-top:36px;padding:20px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:24px;color:var(--muted);font-size:11.5px;line-height:1.6}
+    .footer-note p{max-width:700px;margin:0}
+    .footer-links{white-space:nowrap;display:flex;gap:12px}
+    .backdrop{position:fixed;inset:0;background:rgba(11,7,18,.28);z-index:70;opacity:0;pointer-events:none;transition:.2s ease}
+    .backdrop.open{opacity:1;pointer-events:auto}
+    .drawer{position:fixed;z-index:80;right:0;top:0;height:100vh;width:min(600px,100%);background:var(--paper);box-shadow:none;transform:translateX(101%);transition:transform .27s cubic-bezier(.2,.8,.2,1);overflow:auto}
+    .drawer.open{transform:translateX(0);box-shadow:-20px 0 70px rgba(11,7,18,.18)}
+    .drawer-head{position:sticky;top:0;z-index:2;background:rgba(251,248,243,.96);backdrop-filter:blur(12px);height:70px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 26px}
+    .drawer-close{margin-left:auto;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--white);cursor:pointer;font-size:20px;line-height:1}
+    .drawer-close:focus-visible{outline:2px solid var(--violet);outline-offset:1px;border-color:transparent}
+    .drawer-body{padding:34px 34px 70px}
+    .drawer h2{font-family:var(--serif);font-size:43px;line-height:.98;letter-spacing:-.025em;font-weight:600;margin:10px 0 16px}
+    .drawer-chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:28px}
+    .dossier-section{border-top:1px solid var(--line);padding:22px 0}
+    .dossier-label{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--violet);margin-bottom:9px}
+    .dossier-text{font-size:14px;line-height:1.68;color:#443E48;margin:0;white-space:pre-wrap}
+    .route-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+    .route{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:46px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--white);font-size:12px;font-weight:650;text-decoration:none;color:var(--ink)}
+    .route:hover{text-decoration:none}
+    .route:focus-visible{outline:3px solid var(--violet-soft);outline-offset:2px;border-color:var(--violet)}
+    .route-note{display:grid;gap:3px;padding:8px 1px 10px;border-bottom:1px solid var(--line);font-size:11px;color:var(--muted)}
+    .route-note strong{color:var(--ink);font-size:12px;font-weight:650}
+    .source-link{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;min-height:42px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--white);font-size:12px;font-weight:650;text-decoration:none;color:var(--ink)}
+    .source-link:hover{text-decoration:none}.source-link:focus-visible{outline:3px solid var(--violet-soft);outline-offset:2px;border-color:var(--violet)}
+    .workflow{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--violet);border-radius:12px;padding:16px 17px;margin-top:8px}
+    .workflow-row{display:grid;grid-template-columns:100px 1fr;gap:14px;padding:7px 0;font-size:12.5px}
+    .workflow-row span:first-child{color:var(--muted)}
+    .no-send{margin-top:18px;background:var(--amber-tint);color:#844400;border:1px solid #F0C18E;border-radius:9px;padding:11px 13px;font-size:11.5px;font-weight:650;line-height:1.5}
+    body.drawer-open{overflow:hidden}
+    body.capture-full .topbar,body.capture-full .rail,body.capture-full .controls{position:static}
+    body.capture-full .rail{height:auto}
+    body.capture-full .shell{min-height:0}
+    body.capture-full .app,body.capture-full .main{background:var(--cream)}
+    body.capture-full .backdrop{display:none}
+    body.capture-dossier{overflow:visible}
+    body.capture-dossier .app,body.capture-dossier .backdrop{display:none}
+    body.capture-dossier .drawer{position:absolute;height:auto;min-height:100vh;overflow:visible}
+    body.capture-dossier .drawer-head{position:static}
+    @media (max-width:1000px){
+      .shell{grid-template-columns:1fr}.rail{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:14px 18px;overflow:hidden}.rail-label,.rail-note{display:none}.channel-list{margin:0;flex-direction:row;overflow:auto;padding-bottom:3px}.channel-button{display:flex;width:auto;flex:0 0 auto;padding:9px 10px}.channel-count{margin-left:3px}.record{grid-template-columns:minmax(170px,1.1fr) minmax(160px,1fr) minmax(160px,1fr) 28px}
+    }
+    @media (max-width:720px){
+      .topbar{height:60px;padding:0 17px;gap:15px}.logo{width:106px}.top-title{padding-left:15px;font-size:10px}.top-status{font-size:0;gap:0}.top-status::before{display:none}.top-status::after{content:"Research · Aug 15";font-size:8.5px}.shell{min-height:calc(100vh - 60px)}.main{padding:24px 18px 60px}.hero{padding-bottom:22px}h1{font-size:42px;margin-top:8px;margin-bottom:12px}.hero-copy{font-size:14px;line-height:1.5}.stat-row{grid-template-columns:repeat(6,1fr)}.stat{grid-column:span 3;padding:13px 8px;margin:0}.stat:nth-child(2){border-right:0}.stat:nth-child(n+3){grid-column:span 2;border-top:1px solid var(--line)}.stat:nth-child(5){border-right:0}.stat-value{font-size:20px}.stat-label{font-size:8.5px}.controls{top:60px;padding-top:14px}.filter-row{display:grid;grid-template-columns:1fr 1fr}.filter-select{width:100%}.filter-select:first-child{grid-column:1/-1}.record{grid-template-columns:1fr 24px;gap:5px 12px;padding:13px 2px}.record-name{font-size:21px;margin-bottom:5px}.record > div:nth-child(2){grid-column:1/-1;padding-right:12px}.record > div:nth-child(3){display:none}.record-channel{font-size:9px;margin-bottom:2px}.record-relationship{-webkit-line-clamp:1;font-size:11.5px}.record-arrow{grid-column:2;grid-row:1;align-self:center}.footer-note{flex-direction:column}.footer-links{white-space:normal;flex-wrap:wrap}.drawer-body{padding:28px 22px 60px}.drawer h2{font-size:31px;max-width:none}.drawer .name-tail{display:block}.drawer .name-separator{display:none}.route-grid{grid-template-columns:1fr}
+    }
+    @media (max-width:1000px){.rail{position:relative;top:auto}.rail::after{content:'›';position:absolute;right:4px;top:50%;transform:translateY(-50%);width:32px;height:38px;display:flex;align-items:center;justify-content:flex-end;padding-right:4px;background:linear-gradient(90deg,rgba(246,241,232,0),var(--cream) 55%);color:var(--violet);font-size:22px;font-weight:600;pointer-events:none}.channel-list{scrollbar-width:none;padding-right:38px}.channel-list::-webkit-scrollbar{display:none}body.capture-full .rail::after{display:none}}
+    @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <script>{const capture=new URLSearchParams(location.search).get('capture');document.body.classList.toggle('capture-full',capture==='full');document.body.classList.toggle('capture-dossier',capture==='dossier')}</script>
+  <div class="app">
+    <header class="topbar">
+      <img class="logo" src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm">
+      <div class="top-title">Reach Out</div>
+      <div class="top-status">Research base · Aug 15</div>
+    </header>
+    <div class="shell">
+      <aside class="rail" aria-label="Outreach channels">
+        <div class="rail-label">Channels</div>
+        <nav class="channel-list" id="channelList"></nav>
+        <div class="rail-note"><b>Relationship-safe by design</b>Debra's endorsement can establish relevance. It never implies she introduced the prospect, approved the campaign, or will participate in outreach.</div>
+      </aside>
+      <main class="main">
+        <section class="hero">
+          <div>
+            <div class="eyebrow">Relationship atlas · 2026</div>
+            <h1>Find the warmest path in.</h1>
+            <p class="hero-copy">Click any name for the exact association, public route, partner signal, risk boundary, and best next move.</p>
+          </div>
+        </section>
+        <section class="stat-row" aria-label="Database summary">
+          <div class="stat"><div class="stat-value" id="statRecords">...</div><div class="stat-label">Records</div></div>
+          <div class="stat"><div class="stat-value" id="statChannels">...</div><div class="stat-label">Channels</div></div>
+          <div class="stat"><div class="stat-value" id="statDirect">...</div><div class="stat-label">Direct / warm</div></div>
+          <div class="stat"><div class="stat-value" id="statRoutes">...</div><div class="stat-label">Public routes</div></div>
+          <div class="stat"><div class="stat-value" id="statP1">...</div><div class="stat-label">P1 records</div></div>
+        </section>
+        <section class="controls" aria-label="Contact filters">
+          <div class="search-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m16.2 16.2 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input class="search" id="search" type="search" placeholder="Search contacts or angles" autocomplete="off">
+            <button class="clear-search" id="clearSearch" aria-label="Clear search">×</button>
+          </div>
+          <div class="filter-row">
+            <select class="filter-select" id="relationshipFilter" aria-label="Filter by relationship"><option value="">All relationships</option></select>
+            <select class="filter-select" id="priorityFilter" aria-label="Filter by priority"><option value="">All priorities</option><option>P1</option><option>P2</option><option>P3</option></select>
+            <select class="filter-select" id="statusFilter" aria-label="Filter by status"><option value="">All statuses</option></select>
+          </div>
+        </section>
+        <section>
+          <div class="result-head">
+            <h2 class="result-title" id="resultTitle">All channels</h2>
+            <div class="result-count" id="resultCount"></div>
+          </div>
+          <div class="records" id="records" aria-live="polite"></div>
+        </section>
+        <footer class="footer-note">
+          <p>One row represents one person or organization inside one channel. Repeats across channels are intentional because the relationship evidence and opening angle can be different. No outreach has been sent or authorized from this base.</p>
+          <div class="footer-links"><a href="data/reach-out-v1.csv">Sheet-ready CSV</a><a href="data/reach-out-v1.json">Structured data</a></div>
+        </footer>
+      </main>
+    </div>
+  </div>
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true" aria-labelledby="drawerTitle" role="dialog">
+    <div class="drawer-head"><div class="eyebrow">Contact dossier</div><button class="drawer-close" id="drawerClose" aria-label="Close dossier">×</button></div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </aside>
+  <script>
+    const DATA_URL = 'data/reach-out-v1.json';
+    const colors = ['#6521C9','#B90044','#C25500','#0A7A52'];
+    const state = { data:null, channel:'', query:'', relationship:'', priority:'', status:'', selected:null };
+    const $ = id => document.getElementById(id);
+    const esc = value => String(value ?? '').replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+    const firstUrl = value => (String(value || '').match(/https?:\/\/[^\s|)>,]+/) || [])[0]?.replace(/[.,;]$/,'') || '';
+    const firstEmail = value => (String(value || '').match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i) || [])[0] || '';
+    const clampText = (value, fallback='Not yet documented.') => value ? esc(value) : `<span style="color:var(--muted)">${fallback}</span>`;
+    const excerpt = (value, limit=150) => {
+      const text = String(value || '');
+      if (text.length <= limit) return text;
+      const cut = text.slice(0, limit + 1).replace(/\s+\S*$/, '').trim().replace(/[.,;:!?\"'”’]+$/,'');
+      return `${cut}…`;
+    };
+    const chipClass = record => record.relationship_level === 'Direct / warm' ? 'direct' : '';
+
+    function channelButton(channel, index){
+      const button = document.createElement('button');
+      button.className = 'channel-button' + (state.channel === channel.channel_id ? ' active' : '');
+      button.dataset.channel = channel.channel_id;
+      button.innerHTML = `<span class="channel-dot" style="--channel:${colors[index % colors.length]}"></span><span class="channel-name">${esc(channel.channel)}</span><span class="channel-count">${channel.count}</span>`;
+      button.addEventListener('click', () => { state.channel = state.channel === channel.channel_id ? '' : channel.channel_id; render(); window.scrollTo({top:0,behavior:'smooth'}); });
+      return button;
+    }
+
+    function populateFilters(){
+      const values = key => [...new Set(state.data.records.map(r => r[key]).filter(Boolean))].sort();
+      values('relationship_level').forEach(value => $('relationshipFilter').insertAdjacentHTML('beforeend', `<option>${esc(value)}</option>`));
+      values('status').forEach(value => $('statusFilter').insertAdjacentHTML('beforeend', `<option>${esc(value)}</option>`));
+    }
+
+    function filtered(){
+      const q = state.query.trim().toLowerCase();
+      return state.data.records.filter(record => {
+        if (state.channel && record.channel_id !== state.channel) return false;
+        if (state.relationship && record.relationship_level !== state.relationship) return false;
+        if (state.priority && record.priority !== state.priority) return false;
+        if (state.status && record.status !== state.status) return false;
+        if (!q) return true;
+        return ['name','channel','relationship','partner_signal','best_angle','public_contact','section'].some(key => String(record[key] || '').toLowerCase().includes(q));
+      });
+    }
+
+    function render(){
+      $('channelList').replaceChildren(...state.data.channels.map(channelButton));
+      const rows = filtered();
+      const currentChannel = state.data.channels.find(c => c.channel_id === state.channel);
+      $('resultTitle').textContent = currentChannel ? currentChannel.channel : state.query ? 'Search results' : 'All channels';
+      $('resultCount').textContent = `${rows.length} ${rows.length === 1 ? 'record' : 'records'}`;
+      $('clearSearch').classList.toggle('visible', Boolean(state.query));
+      if (!rows.length){ $('records').innerHTML = '<div class="empty">No records match these filters.</div>'; return; }
+      $('records').innerHTML = rows.map(record => `
+        <button class="record" data-id="${esc(record.contact_id)}" aria-label="Open ${esc(record.name)} dossier">
+          <div><h3 class="record-name">${esc(record.name)}</h3><div class="record-meta"><span class="chip ${record.priority.toLowerCase()}">${esc(record.priority)}</span><span class="chip ${chipClass(record)}">${esc(record.relationship_level)}</span>${record.do_not_contact ? '<span class="chip dnc">Do not contact</span>' : ''}</div></div>
+          <div><div class="record-channel">${esc(record.channel)}</div><div class="record-relationship">${clampText(excerpt(record.relationship,92))}</div></div>
+          <div><div class="record-channel">Best opening</div><div class="record-angle">${clampText(excerpt(record.best_angle,100))}</div></div>
+          <div class="record-arrow" aria-hidden="true">›</div>
+        </button>`).join('');
+      $('records').querySelectorAll('.record').forEach(button => button.addEventListener('click', () => openDrawer(button.dataset.id)));
+    }
+
+    function route(label, value, kind='url'){
+      const url = kind === 'email' ? (firstEmail(value) ? `mailto:${firstEmail(value)}` : firstUrl(value)) : firstUrl(value);
+      if (!value) return `<div class="route-note"><strong>${esc(label)}</strong><span>Not listed</span></div>`;
+      if (!url) return `<div class="route-note"><strong>${esc(label)}</strong><span>${esc(value)}</span></div>`;
+      return `<a class="route" href="${esc(url)}" target="_blank" rel="noopener"><span>${esc(label)}</span><span>↗</span></a>`;
+    }
+
+    function dossierSection(label, value, fallback){
+      return `<section class="dossier-section"><div class="dossier-label">${esc(label)}</div><p class="dossier-text">${clampText(value, fallback)}</p></section>`;
+    }
+
+    function displayName(value){
+      const text = String(value || '');
+      const divider = text.indexOf(' / ');
+      if (divider < 0) return esc(text);
+      return `${esc(text.slice(0,divider))}<span class="name-tail"><span class="name-separator"> / </span>${esc(text.slice(divider + 3))}</span>`;
+    }
+
+    function evidenceSection(record){
+      const value = record.evidence || record.source_urls.join(' | ');
+      const url = firstUrl(value);
+      const display = url ? String(value).replace(url,'').replace(/^[\s|:-]+|[\s|:-]+$/g,'') : value;
+      let domain = '';
+      if (url) { try { domain = new URL(url).hostname.replace(/^www\./,''); } catch {} }
+      return `<section class="dossier-section"><div class="dossier-label">Evidence</div>${display ? `<p class="dossier-text">${esc(display)}</p>` : ''}${url ? `<a class="source-link" href="${esc(url)}" target="_blank" rel="noopener"><span>Open source · ${esc(domain)}</span><span>↗</span></a>` : `<p class="dossier-text">${esc(value || `Source record: ${record.source_file}`)}</p>`}</section>`;
+    }
+
+    function workflowNext(record){
+      if (record.do_not_contact) return 'Hold. Do not draft or contact until this record is explicitly cleared.';
+      if (!record.next_action) return 'Qualify the relationship before drafting.';
+      if (record.next_action === record.best_angle) return 'Verify fit and the public route, then prepare a tailored draft.';
+      return record.next_action;
+    }
+
+    function openDrawer(id, pushHash=true){
+      const record = state.data.records.find(r => r.contact_id === id);
+      if (!record) return;
+      state.selected = record;
+      $('drawerBody').innerHTML = `
+        <div class="eyebrow">${esc(record.channel)} · ${esc(record.section || record.channel_type)}</div>
+        <h2 id="drawerTitle">${displayName(record.name)}</h2>
+        <div class="drawer-chips"><span class="chip ${record.priority.toLowerCase()}">${esc(record.priority)}</span><span class="chip ${chipClass(record)}">${esc(record.relationship_level)}</span>${record.status !== record.relationship_level ? `<span class="chip">${esc(record.status)}</span>` : ''}${record.do_not_contact ? '<span class="chip dnc">Do not contact</span>' : ''}</div>
+        <section class="dossier-section"><div class="dossier-label">Public routes</div><div class="route-grid">${route('Website',record.website)}${route('LinkedIn',record.linkedin)}${route('Instagram',record.instagram)}${route('Contact',record.public_contact,'email')}</div></section>
+        ${dossierSection('Exact association',record.relationship,'No relationship statement has been captured yet.')}
+        ${dossierSection('Partner and affiliate signal',record.partner_signal,'No public partner signal has been captured yet.')}
+        ${dossierSection('Best opening',record.best_angle,'Qualify the relationship and current activity before drafting.')}
+        ${evidenceSection(record)}
+        ${dossierSection('Caution and boundary',record.caution,'Use only the documented relationship. Do not imply an introduction, endorsement, or result that is not recorded.')}
+        <section class="dossier-section"><div class="dossier-label">Workflow fields</div><div class="workflow"><div class="workflow-row"><span>Status</span><strong>${esc(record.status)}</strong></div><div class="workflow-row"><span>Priority</span><strong>${esc(record.priority)}</strong></div><div class="workflow-row"><span>Owner</span><strong>${esc(record.owner || 'Unassigned')}</strong></div><div class="workflow-row"><span>Last touch</span><strong>${esc(record.last_contacted || 'None recorded')}</strong></div><div class="workflow-row"><span>Next action</span><strong>${esc(workflowNext(record))}</strong></div><div class="workflow-row"><span>Do not contact</span><strong>${record.do_not_contact ? 'YES' : 'No'}</strong></div></div><div class="no-send">No send action is connected. Email automation remains off until inbox access, approved templates, consent rules, and a send approval gate are added.</div></section>`;
+      $('drawer').classList.add('open'); $('backdrop').classList.add('open'); $('drawer').setAttribute('aria-hidden','false'); document.body.classList.add('drawer-open');
+      if (pushHash) history.replaceState(null,'',`#${encodeURIComponent(record.contact_id)}`);
+      setTimeout(() => $('drawerClose').focus(), 50);
+    }
+
+    function closeDrawer(clearHash=true){
+      $('drawer').classList.remove('open'); $('backdrop').classList.remove('open'); $('drawer').setAttribute('aria-hidden','true'); document.body.classList.remove('drawer-open'); state.selected=null;
+      if (clearHash) history.replaceState(null,'',location.pathname + location.search);
+    }
+
+    async function init(){
+      const response = await fetch(DATA_URL);
+      if (!response.ok) throw new Error('Could not load contact base.');
+      state.data = await response.json();
+      $('statRecords').textContent = state.data.records.length;
+      $('statChannels').textContent = state.data.channels.length;
+      $('statDirect').textContent = state.data.records.filter(r => r.relationship_level === 'Direct / warm').length;
+      $('statRoutes').textContent = state.data.records.filter(r => r.public_contact || r.website || r.linkedin || r.instagram).length;
+      $('statP1').textContent = state.data.records.filter(r => r.priority === 'P1').length;
+      populateFilters(); render();
+      const hash = decodeURIComponent(location.hash.slice(1)); if (hash) openDrawer(hash,false);
+    }
+    $('search').addEventListener('input', event => { state.query = event.target.value; render(); });
+    $('clearSearch').addEventListener('click', () => { state.query=''; $('search').value=''; $('search').focus(); render(); });
+    $('relationshipFilter').addEventListener('change', event => { state.relationship=event.target.value; render(); });
+    $('priorityFilter').addEventListener('change', event => { state.priority=event.target.value; render(); });
+    $('statusFilter').addEventListener('change', event => { state.status=event.target.value; render(); });
+    $('drawerClose').addEventListener('click', () => closeDrawer()); $('backdrop').addEventListener('click', () => closeDrawer());
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && state.selected) closeDrawer(); });
+    window.addEventListener('hashchange', () => { const hash=decodeURIComponent(location.hash.slice(1)); if (hash) openDrawer(hash,false); else closeDrawer(false); });
+    init().catch(error => { $('records').innerHTML = `<div class="empty">${esc(error.message)}</div>`; });
+  </script>
+</body>
+</html>
