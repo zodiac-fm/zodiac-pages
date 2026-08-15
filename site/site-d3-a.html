@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm · Home Concept D3-A · Summer Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype'); font-weight:400; }
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype'); font-weight:600; }
+
+  :root{
+    /* the paper — white sand */
+    --paper:#FBF8F3;
+    --ink:#16140F;
+    --ink78:rgba(22,20,15,.78);
+    --ink56:rgba(22,20,15,.56);
+    --ink38:rgba(22,20,15,.38);
+    --hair:rgba(22,20,15,.13);
+    --violet:#6521C9; --violet-hi:#8A4BE8;
+    --rose:#B90044; --rose-hi:#CF4090;
+    --amber:#FF9112; --amber-hi:#FFC251;
+    --emerald:#12A56E; --emerald-hi:#46D99A;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+
+    --fs-body:19px; --lh-body:1.65;
+    --fs-h1:92px; --lh-h1:1.02;
+    --fs-h2:54px; --lh-h2:1.08;
+    --fs-lede:23px;
+    --fs-eyebrow:13px;
+    --pad-wrap:32px;
+    --pad-section:130px;
+    --fs-stat:130px; --fs-freq:30px;
+    --fs-quote:29px;
+    --cols3:1fr 1fr 1fr; --cols4:1fr 1fr 1fr 1fr;
+    --boardH:320px;
+  }
+  @media(max-width:640px){
+    :root{
+      --fs-body:17px; --lh-body:1.6;
+      --fs-h1:48px; --lh-h1:1.05;
+      --fs-h2:34px; --lh-h2:1.12;
+      --fs-lede:19px;
+      --fs-eyebrow:12px;
+      --pad-wrap:24px;
+      --pad-section:80px;
+      --fs-stat:80px; --fs-freq:24px;
+      --fs-quote:23px;
+      --cols3:1fr;
+      --boardH:190px;
+    }
+  }
+  body.vm{
+    --fs-body:17px; --lh-body:1.6;
+    --fs-h1:48px; --lh-h1:1.05;
+    --fs-h2:34px; --lh-h2:1.12;
+    --fs-lede:19px;
+    --fs-eyebrow:12px;
+    --pad-wrap:24px;
+    --pad-section:80px;
+    --fs-stat:80px; --fs-freq:24px;
+    --fs-quote:23px;
+    --cols3:1fr;
+    --boardH:190px;
+  }
+  body.vm .wrap{max-width:375px}
+  body.vm .nav-links a:not(.cta){display:none}
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink78);font-family:var(--sans);font-size:var(--fs-body);line-height:var(--lh-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 var(--pad-wrap)}
+  .col{max-width:700px}
+
+  /* ---------- nav ---------- */
+  nav{position:fixed;top:0;left:0;right:0;z-index:40;background:rgba(251,248,243,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--hair)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;padding:16px var(--pad-wrap);max-width:1240px;margin:0 auto}
+  .wordmark{font-family:var(--serif);font-weight:600;font-size:24px;letter-spacing:.06em;color:var(--ink)}
+  .nav-links{display:flex;align-items:center;gap:28px;font-size:15px;color:var(--ink56)}
+  .nav-links a:hover{color:var(--ink)}
+  .cta{display:inline-block;background:var(--violet);color:#FBF8F3;border-radius:999px;padding:11px 24px;font-weight:600;font-size:15px;letter-spacing:.01em;transition:background .3s,transform .3s}
+  .cta:hover{background:#54189E;transform:translateY(-1px);color:#FBF8F3}
+  @media(max-width:900px){.nav-links a:not(.cta){display:none}}
+
+  /* ---------- shared type ---------- */
+  .eyebrow{font-size:var(--fs-eyebrow);letter-spacing:.22em;text-transform:uppercase;color:var(--ink38);margin-bottom:26px}
+  h1{font-family:var(--serif);font-weight:600;font-size:var(--fs-h1);line-height:var(--lh-h1);color:var(--ink);letter-spacing:.005em}
+  h2{font-family:var(--serif);font-weight:600;font-size:var(--fs-h2);line-height:var(--lh-h2);color:var(--ink)}
+  h1 em,h2 em{font-style:italic;font-weight:500}
+  .lede{font-size:var(--fs-lede);color:var(--ink78);line-height:1.55}
+  .quiet{color:var(--ink56)}
+  .tiny{font-size:14px;color:var(--ink38);line-height:1.5}
+  .num{font-family:var(--sans);font-weight:600}
+  section{padding:var(--pad-section) 0;position:relative}
+  .hairline{border-top:1px solid var(--hair)}
+  .textlink{color:var(--ink56);border-bottom:1px solid var(--hair);padding-bottom:2px;transition:color .3s,border-color .3s}
+  .textlink:hover{color:var(--ink);border-color:var(--ink)}
+
+  /* fade-up */
+  .fu{opacity:0;transform:translateY(26px);transition:opacity 1.1s cubic-bezier(.2,.6,.2,1),transform 1.1s cubic-bezier(.2,.6,.2,1)}
+  .fu.in{opacity:1;transform:none}
+
+  /* ---------- hero: type on paper, nothing over a photo ---------- */
+  .hero{padding-top:216px;padding-bottom:96px}
+  @media(max-width:640px){.hero{padding-top:150px;padding-bottom:64px}}
+  body.vm .hero{padding-top:150px;padding-bottom:64px}
+  .hero .lede{max-width:640px;margin:32px 0 44px}
+  .btn-row{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+  .cta.big{padding:16px 34px;font-size:17px}
+
+  /* ---------- the four boards — the sample reading, planted in the sand ---------- */
+  .boards{display:grid;grid-template-columns:var(--cols4);gap:36px;margin-top:64px}
+  @media(max-width:640px){.boards{grid-template-columns:1fr 1fr;gap:28px}}
+  body.vm .boards{grid-template-columns:1fr 1fr;gap:28px}
+  .board .slab{height:var(--boardH);border-radius:200px;width:72%;max-width:150px;margin:0 auto;position:relative}
+  .board .slab::after{content:"";position:absolute;top:6%;left:46%;width:7%;height:88%;background:rgba(251,248,243,.5);border-radius:99px}
+  .b-core .slab{background:linear-gradient(168deg,var(--violet-hi) 0%,var(--violet) 62%)}
+  .b-love .slab{background:linear-gradient(168deg,var(--rose-hi) 0%,var(--rose) 62%)}
+  .b-vit .slab{background:linear-gradient(168deg,var(--amber-hi) 0%,var(--amber) 62%)}
+  .b-abn .slab{background:linear-gradient(168deg,var(--emerald-hi) 0%,var(--emerald) 62%)}
+  .board .shadow{width:64%;max-width:130px;height:18px;margin:-8px auto 0;background:radial-gradient(ellipse at center,rgba(22,20,15,.20),transparent 66%)}
+  .board .label{text-align:center;margin-top:26px}
+  .board h3{font-family:var(--serif);font-weight:600;font-size:24px;color:var(--ink)}
+  .board .hz{font-size:var(--fs-freq);font-weight:600;color:var(--ink);letter-spacing:.01em;margin-top:4px}
+  .board .hz small{font-size:.55em;font-weight:400;color:var(--ink56);letter-spacing:.06em}
+  .board .band{font-size:14px;color:var(--ink56);margin-top:6px}
+  .board .domain{font-size:14px;color:var(--ink38);margin-top:2px}
+  .sample-note{margin-top:52px;text-align:center}
+
+  /* ---------- proof field ---------- */
+  .prooffield{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:56px}
+  @media(max-width:900px){.prooffield{grid-template-columns:1fr}}
+  body.vm .prooffield{grid-template-columns:1fr}
+  .proof-label{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink38);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--hair)}
+  .proof-quote{font-family:var(--serif);font-size:22px;font-style:italic;color:var(--ink);line-height:1.4}
+  .proof-name{margin-top:14px;font-size:14px;color:var(--ink56)}
+  .proof-stat{font-size:56px;font-weight:600;color:var(--ink)}
+  .members li{list-style:none;padding:7px 0;font-size:16px;color:var(--ink78);border-bottom:1px solid var(--hair)}
+  .members li:last-child{border-bottom:0}
+
+  /* ---------- prints: photos sit ON the paper, never under copy ---------- */
+  .print{margin-top:64px}
+  .print img{width:100%;height:460px;object-fit:cover;mix-blend-mode:multiply;filter:brightness(1.07) contrast(.95)}
+  @media(max-width:640px){.print img{height:300px}}
+  body.vm .print img{height:300px}
+  .cap{font-size:13.5px;color:var(--ink38);margin-top:14px;letter-spacing:.02em}
+
+  /* ---------- journey ---------- */
+  .steps{display:grid;grid-template-columns:var(--cols3);gap:48px;margin-top:64px}
+  .step .n{font-size:15px;font-weight:600;color:var(--ink38);letter-spacing:.14em;margin-bottom:14px}
+  .step h3{font-family:var(--serif);font-weight:600;font-size:26px;color:var(--ink);margin-bottom:10px}
+  .step p{color:var(--ink56);font-size:17px}
+
+  /* ---------- marquee ---------- */
+  .marquee{overflow:hidden;padding:34px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+  .mq-track{display:flex;gap:72px;width:max-content;animation:mq 75s linear infinite}
+  @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  .mq{font-family:var(--serif);font-style:italic;font-size:21px;color:var(--ink56);white-space:nowrap}
+  .mq b{font-family:var(--sans);font-style:normal;font-weight:400;font-size:13px;color:var(--ink38);letter-spacing:.06em;margin-left:12px}
+
+  /* ---------- trio ---------- */
+  .trio{display:grid;grid-template-columns:var(--cols3);gap:48px;margin-top:64px}
+  .tcard{border-top:1px solid var(--hair);padding-top:34px;display:flex;flex-direction:column}
+  .tcard .face{width:84px;height:84px;border-radius:50%;overflow:hidden;background:rgba(22,20,15,.05);margin-bottom:26px}
+  .tcard .face img{width:100%;height:100%;object-fit:cover;object-position:top center;filter:grayscale(1) contrast(1.02) brightness(1.04)}
+  .tcard blockquote{font-family:var(--serif);font-size:var(--fs-quote);font-style:italic;line-height:1.35;color:var(--ink);flex:1}
+  .tcard .who{margin-top:26px;font-size:15px;color:var(--ink78)}
+  .tcard .who small{display:block;color:var(--ink38);font-size:13.5px;margin-top:3px;line-height:1.45}
+
+  /* ---------- honest ---------- */
+  .truths{margin-top:56px}
+  .truth{display:grid;grid-template-columns:220px 1fr;gap:36px;padding:34px 0;border-top:1px solid var(--hair)}
+  @media(max-width:640px){.truth{grid-template-columns:1fr;gap:10px}}
+  body.vm .truth{grid-template-columns:1fr;gap:10px}
+  .truth h3{font-family:var(--serif);font-weight:600;font-size:23px;color:var(--ink)}
+  .truth p{color:var(--ink56);max-width:620px}
+
+  /* ---------- study ---------- */
+  .study{display:grid;grid-template-columns:auto 1fr;gap:72px;align-items:center}
+  @media(max-width:900px){.study{grid-template-columns:1fr;gap:32px}}
+  body.vm .study{grid-template-columns:1fr;gap:32px}
+  .study .stat{font-size:var(--fs-stat);font-weight:600;color:var(--ink);line-height:1}
+
+  /* ---------- story ---------- */
+  .story{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+  @media(max-width:900px){.story{grid-template-columns:1fr;gap:40px}}
+  body.vm .story{grid-template-columns:1fr;gap:40px}
+  .story .print{margin-top:0}
+  .story .print img{height:460px}
+  @media(max-width:640px){.story .print img{height:300px}}
+  body.vm .story .print img{height:300px}
+
+  /* ---------- membership ---------- */
+  .memb{padding:56px 0;text-align:center}
+  .memb p{color:var(--ink56);font-size:17px}
+
+  /* ---------- finale: print above, invitation on paper below ---------- */
+  .finale{text-align:center}
+  .finale .print{margin-top:0;margin-bottom:72px}
+  .finale .print img{height:480px;object-position:center 40%}
+  @media(max-width:640px){.finale .print img{height:300px}}
+  body.vm .finale .print img{height:300px}
+  .finale h2{font-size:var(--fs-h1);line-height:var(--lh-h1)}
+  .finale .cta{margin-top:44px}
+
+  footer{padding:56px 0 80px;border-top:1px solid var(--hair)}
+  .foot{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;font-size:14px;color:var(--ink38)}
+  .foot a:hover{color:var(--ink78)}
+  .foot .fl{display:flex;gap:24px;flex-wrap:wrap}
+
+  .badge{position:fixed;left:16px;bottom:16px;z-index:60;background:rgba(251,248,243,.9);border:1px solid var(--hair);color:var(--ink38);font-size:11px;letter-spacing:.18em;padding:7px 12px;border-radius:6px}
+
+  @media (prefers-reduced-motion: reduce){
+    .mq-track{animation:none}
+    .fu{opacity:1;transform:none;transition:none}
+  }
+  /* render-rig switch: ?static=1 disables entrance motion so full-page captures are truthful */
+  body.static .fu{opacity:1 !important;transform:none !important;transition:none !important}
+  body.static .mq-track{animation:none}
+</style>
+</head>
+<body id="top">
+<div class="badge">CONCEPT · D3-A</div>
+
+<nav>
+  <div class="nav-in">
+    <a class="wordmark" href="#top">Zodiac.fm</a>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#voices">Testimonials</a>
+      <a href="#login" title="Member login">Login</a>
+      <a class="cta" href="#start">Get Started</a>
+    </div>
+  </div>
+</nav>
+
+<!-- 1 · hero: one-breath definition + primary action. Type on paper. -->
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">In a 52-week internal study · <span class="num">98.6%</span> of completers would recommend it</p>
+    <h1>Your chart has a sound.<br><em>We composed it.</em></h1>
+    <p class="lede">Zodiac reads your birth chart, translates it into four Orientation Frequencies, and composes real music around them. Music that exists for exactly one person.</p>
+    <div class="btn-row">
+      <a class="cta big" href="#start">Find your frequencies</a>
+      <a class="textlink" href="#how">How it works</a>
+    </div>
+  </div>
+</header>
+
+<!-- 4 · sample four-frequency result: four colors planted in the sand -->
+<section class="hairline">
+  <div class="wrap">
+    <div class="fu">
+      <p class="eyebrow">What a reading looks like</p>
+      <h2>Four frequencies. <em>Every one of them yours.</em></h2>
+    </div>
+    <div class="boards fu">
+      <div class="board b-core">
+        <div class="slab"></div><div class="shadow"></div>
+        <div class="label">
+          <h3>Core</h3>
+          <div class="hz num">486.2 <small>Hz</small></div>
+          <div class="band">Solar Plexus band</div>
+          <div class="domain">Who you are</div>
+        </div>
+      </div>
+      <div class="board b-love">
+        <div class="slab"></div><div class="shadow"></div>
+        <div class="label">
+          <h3>Love</h3>
+          <div class="hz num">301.7 <small>Hz</small></div>
+          <div class="band">Root band</div>
+          <div class="domain">How you relate</div>
+        </div>
+      </div>
+      <div class="board b-vit">
+        <div class="slab"></div><div class="shadow"></div>
+        <div class="label">
+          <h3>Vitality</h3>
+          <div class="hz num">652.4 <small>Hz</small></div>
+          <div class="band">Throat band</div>
+          <div class="domain">Your energy</div>
+        </div>
+      </div>
+      <div class="board b-abn">
+        <div class="slab"></div><div class="shadow"></div>
+        <div class="label">
+          <h3>Abundance</h3>
+          <div class="hz num">812.9 <small>Hz</small></div>
+          <div class="band">Crown band</div>
+          <div class="domain">Opportunity</div>
+        </div>
+      </div>
+    </div>
+    <p class="tiny sample-note">A sample reading. Yours comes from your birth date, time, and place.</p>
+  </div>
+</section>
+
+<!-- 3 · compact proof field: authority / study / members, visibly distinct -->
+<section class="hairline">
+  <div class="wrap">
+    <div class="prooffield fu">
+      <div>
+        <div class="proof-label">Authority</div>
+        <p class="proof-quote">&ldquo;Most personal growth asks us to think differently. Zodiac.fm invites us to experience ourselves differently.&rdquo;</p>
+        <p class="proof-name">Srini Pillay, M.D. · Harvard-trained psychiatrist, brain-imaging researcher</p>
+      </div>
+      <div>
+        <div class="proof-label">The study</div>
+        <p class="proof-stat num">84%</p>
+        <p class="tiny">of members who used it as designed called it life-changing. 52-week internal beta: <span class="num">300</span> started, <span class="num">278</span> completed.</p>
+      </div>
+      <div>
+        <div class="proof-label">Members</div>
+        <ul class="members">
+          <li>Zehra Ashary · London</li>
+          <li>Ellen Grimaldi · Mission, KS</li>
+          <li>Jonathan D. O&rsquo;Connor</li>
+          <li>Sofia Andrade</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 · the three-step journey -->
+<section id="how" class="hairline">
+  <div class="wrap">
+    <div class="fu">
+      <p class="eyebrow">The journey</p>
+      <h2>Three steps. <em>Then it plays.</em></h2>
+    </div>
+    <div class="print fu">
+      <img src="assets/sg5lib/cc1-r19-sun-love-laundry-rose-cc1.jpg" alt="White laundry on a line in full sun, one rose dress among the sheets, black and white" style="object-position:center 22%">
+      <p class="cap">From the Zodiac world · one color per moment, in daylight</p>
+    </div>
+    <div class="steps fu">
+      <div class="step">
+        <div class="n num">01</div>
+        <h3>Tell us when and where you were born</h3>
+        <p>Date, time, and place. That is the whole ask.</p>
+      </div>
+      <div class="step">
+        <div class="n num">02</div>
+        <h3>Hear your four frequencies</h3>
+        <p>Core, Love, Vitality, Abundance. Real numbers, on the spot, before anything else.</p>
+      </div>
+      <div class="step">
+        <div class="n num">03</div>
+        <h3>Live with your music</h3>
+        <p>Your frequencies, composed into music you can play every day. <a class="textlink" href="#how">See how it works</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6a · the crowd of voices -->
+<section style="padding:0">
+  <div class="marquee">
+    <div class="mq-track">
+      <span class="mq">&ldquo;Feels like coming home to myself.&rdquo;<b>KATIE WELLS</b></span>
+      <span class="mq">&ldquo;Zodiac unblocked me.&rdquo;<b>JENNIFER K. HILL</b></span>
+      <span class="mq">&ldquo;It&rsquo;s just&hellip; You. Without distortion, distraction, or dissonance.&rdquo;<b>JESSE ELDER</b></span>
+      <span class="mq">&ldquo;It gives me focus and reminds me of who I am.&rdquo;<b>RACHEL WAYTE</b></span>
+      <span class="mq">&ldquo;Without doing anything but listening, I become a different person.&rdquo;<b>JOEY VAILLANCOURT</b></span>
+      <span class="mq">&ldquo;Every time I use this technology, I am coming home.&rdquo;<b>ALEX NAZAROV</b></span>
+      <span class="mq">&ldquo;I have never experienced change in self as I have with this experience.&rdquo;<b>PAUL TRIBE</b></span>
+      <span class="mq">&ldquo;Feels like coming home to myself.&rdquo;<b>KATIE WELLS</b></span>
+      <span class="mq">&ldquo;Zodiac unblocked me.&rdquo;<b>JENNIFER K. HILL</b></span>
+      <span class="mq">&ldquo;It&rsquo;s just&hellip; You. Without distortion, distraction, or dissonance.&rdquo;<b>JESSE ELDER</b></span>
+      <span class="mq">&ldquo;It gives me focus and reminds me of who I am.&rdquo;<b>RACHEL WAYTE</b></span>
+      <span class="mq">&ldquo;Without doing anything but listening, I become a different person.&rdquo;<b>JOEY VAILLANCOURT</b></span>
+      <span class="mq">&ldquo;Every time I use this technology, I am coming home.&rdquo;<b>ALEX NAZAROV</b></span>
+      <span class="mq">&ldquo;I have never experienced change in self as I have with this experience.&rdquo;<b>PAUL TRIBE</b></span>
+    </div>
+  </div>
+</section>
+
+<!-- 6b · human proof preview -->
+<section id="voices">
+  <div class="wrap">
+    <div class="fu">
+      <p class="eyebrow">People with names and faces</p>
+      <h2>They said it <em>better than we could.</em></h2>
+    </div>
+    <div class="trio fu">
+      <div class="tcard">
+        <div class="face"><img src="/inapp/app-assets-welcome/srini-pillay.png" alt="Srini Pillay"></div>
+        <blockquote>&ldquo;Through personalized frequencies rather than language alone, it provides another pathway into self-awareness.&rdquo;</blockquote>
+        <p class="who">Srini Pillay, M.D.<small>Harvard-trained psychiatrist, brain-imaging researcher</small></p>
+      </div>
+      <div class="tcard">
+        <div class="face"><img src="/landers/reveal-assets/testimonial-headshots-transparent-white/debra-silverman.png" alt="Debra Silverman"></div>
+        <blockquote>&ldquo;This music tickled my soul and reminded me that there&rsquo;s such a connection between vibration, the stars and the sounds that are coordinated by higher intelligence. Give it a try — you&rsquo;ll love it.&rdquo;</blockquote>
+        <p class="who">Debra Silverman<small>Astrologer to Sting, Jennifer Aniston, and More</small></p>
+      </div>
+      <div class="tcard">
+        <div class="face"><img src="/landers/reveal-assets/img-images_testimonials_zehra-ashary-d2c.png" alt="Zehra Ashary"></div>
+        <blockquote>&ldquo;It lets you finally feel the parts of yourself you have only ever read about.&rdquo;</blockquote>
+        <p class="who">Zehra Ashary<small>Kundalini Practitioner, London</small></p>
+      </div>
+    </div>
+    <p style="margin-top:44px" class="fu"><a class="textlink" href="#voices">All of them, with full names and faces</a></p>
+  </div>
+</section>
+
+<!-- 7 · honest expectation setting -->
+<section class="hairline">
+  <div class="wrap">
+    <div class="fu">
+      <p class="eyebrow">Before you start</p>
+      <h2>Three honest things.</h2>
+    </div>
+    <div class="truths fu">
+      <div class="truth">
+        <h3>Taste is real</h3>
+        <p>The music is composed around your frequencies, and taste is still taste. Some members love their sound on the first listen. Some grow into it.</p>
+      </div>
+      <div class="truth">
+        <h3>Birth time matters</h3>
+        <p>An exact birth time sharpens part of your reading. Close still works, and we will help you work with what you have.</p>
+      </div>
+      <div class="truth">
+        <h3>It compounds</h3>
+        <p>The study results came from people who listened at least nine minutes a day on average, kept in balance across their frequencies. This is a practice, and it builds.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 · study preview -->
+<section>
+  <div class="wrap">
+    <div class="study fu">
+      <div class="stat num">84%</div>
+      <div class="col">
+        <p class="eyebrow" style="margin-bottom:14px">The study</p>
+        <p class="lede">Of the members who used Zodiac as designed for a year, <span class="num">84%</span> called it life-changing.</p>
+        <p class="quiet" style="margin-top:16px">Our own 52-week internal beta: <span class="num">300</span> people started, <span class="num">278</span> completed. As designed means at least nine minutes a day on average, in balance. We report it exactly that way. <a class="textlink" href="#how">Read the study</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 · discovery and no-guru story -->
+<section class="hairline">
+  <div class="wrap">
+    <div class="story fu">
+      <div>
+        <p class="eyebrow">Where this came from</p>
+        <h2>It started with <em>one question.</em></h2>
+        <p class="quiet" style="margin-top:22px">If your chart describes who you are, what does it sound like? The rest is composing, testing, and listening to members. No robes. No guru. A music company.</p>
+        <p style="margin-top:28px"><a class="textlink" href="#top">Zodiac&rsquo;s story</a></p>
+      </div>
+      <div class="print">
+        <img src="assets/sg5lib/cc1-r18-day-core-jacaranda-walk-cc1.jpg" alt="A person walking under jacaranda trees in bright daylight, the blossoms violet in a black and white street">
+        <p class="cap">From the Zodiac world · a listener under the jacarandas</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 · quiet membership line -->
+<section class="memb hairline">
+  <div class="wrap">
+    <p>Zodiac is a paid membership. The details, and every straight answer, live on <a class="textlink" href="#top">Pricing</a> and <a class="textlink" href="#top">Questions</a>.</p>
+  </div>
+</section>
+
+<!-- 11 · final invitation: print above, words on paper -->
+<section class="finale hairline" id="start">
+  <div class="wrap">
+    <div class="print fu">
+      <img src="assets/sg5lib/cc1-r30-act-cartwheel-rose-cc1.jpg" alt="A cartwheel on a bright beach in black and white, the dress rose">
+      <p class="cap">From the Zodiac world · rose, in full daylight</p>
+    </div>
+    <div class="fu">
+      <h2>The symphony has been<br>playing your part all along.<br><em>Come hear it.</em></h2>
+      <a class="cta big" href="#start">Find your frequencies</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div class="wordmark" style="font-size:19px">Zodiac.fm</div>
+    <div class="fl">
+      <a href="#how">How it works</a>
+      <a href="#voices">Testimonials</a>
+      <a href="#top">Pricing</a>
+      <a href="#top">Questions</a>
+      <a href="#top">Terms</a>
+      <a href="#top">Privacy</a>
+      <a href="#login" id="login">Login</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // mobile state for the verification rig: ?view=mobile renders the true 375 column
+  if (new URLSearchParams(location.search).get('view') === 'mobile') document.body.classList.add('vm');
+  if (new URLSearchParams(location.search).get('static') === '1') document.body.classList.add('static');
+  // fade-up on scroll
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.12});
+  document.querySelectorAll('.fu').forEach(function(el){ io.observe(el); });
+</script>
+</body>
+</html>
