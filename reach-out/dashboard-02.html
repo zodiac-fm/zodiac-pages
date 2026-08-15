@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Zodiac Reach Out · Action Desk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard-02.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <img class="logo" src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm">
+      <div class="top-title">Reach Out</div>
+      <div class="save-state" id="saveState"><span></span>Ready</div>
+    </header>
+
+    <div class="shell">
+      <aside class="rail" aria-label="Outreach channels">
+        <div class="rail-label">Channels</div>
+        <nav class="channel-list" id="channelList"></nav>
+        <div class="rail-note">
+          <b>Relationship-safe by design</b>
+          Debra's endorsement can establish relevance. It never implies an introduction, campaign approval, or Debra participation.
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="hero">
+          <div class="eyebrow">Relationship action desk · 2026</div>
+          <h1>Know the relationship. Make the next move.</h1>
+          <p>Open a contact, use the <strong>+</strong> layers, and move from verified context to an owned next action without losing the evidence underneath.</p>
+          <div class="resource-line">
+            <span>Working layer</span>
+            <strong id="storageLabel">Saved in this browser</strong>
+            <a href="https://docs.google.com/spreadsheets/d/12AyU9cEdlZaogCQKoYpdK4DMVOyyRV3r5KITJhezAaw" target="_blank" rel="noopener">Open Google Sheet ↗</a>
+          </div>
+        </section>
+
+        <section class="stat-row" aria-label="Workflow summary">
+          <div class="stat"><div class="stat-value" id="statRecords">...</div><div class="stat-label">Records</div></div>
+          <div class="stat"><div class="stat-value" id="statActive">...</div><div class="stat-label">In motion</div></div>
+          <div class="stat"><div class="stat-value" id="statDrafts">...</div><div class="stat-label">Drafts</div></div>
+          <div class="stat"><div class="stat-value" id="statReview">...</div><div class="stat-label">For review</div></div>
+          <div class="stat"><div class="stat-value" id="statDnc">...</div><div class="stat-label">Do not contact</div></div>
+        </section>
+
+        <section class="controls" aria-label="Contact filters">
+          <div class="search-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m16.2 16.2 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input class="search" id="search" type="search" placeholder="Search people, organizations, relationship context, or next actions" autocomplete="off">
+            <button class="clear-search" id="clearSearch" aria-label="Clear search">×</button>
+          </div>
+          <div class="filter-row">
+            <select class="filter-select" id="relationshipFilter" aria-label="Filter by relationship"><option value="">All relationships</option></select>
+            <select class="filter-select" id="priorityFilter" aria-label="Filter by priority"><option value="">All priorities</option><option>P1</option><option>P2</option><option>P3</option></select>
+            <select class="filter-select" id="statusFilter" aria-label="Filter by status"><option value="">All workflow stages</option></select>
+            <select class="filter-select" id="ownerFilter" aria-label="Filter by owner"><option value="">All owners</option></select>
+          </div>
+        </section>
+
+        <section>
+          <div class="result-head">
+            <div><div class="eyebrow" id="resultEyebrow">Full relationship base</div><h2 id="resultTitle">All channels</h2></div>
+            <div class="result-count" id="resultCount"></div>
+          </div>
+          <div class="records" id="records" aria-live="polite"></div>
+        </section>
+
+        <footer class="footer-note">
+          <p>One row is one contact inside one channel. Cross-channel repeats remain intentional. Working edits stay separate from the verified relationship base, and no email or external message can be sent from this desk.</p>
+          <div><a href="data/reach-out-v1.json">Structured base</a></div>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true" aria-labelledby="drawerTitle" role="dialog">
+    <div class="drawer-head">
+      <div><div class="eyebrow">Contact workspace</div><div class="drawer-context" id="drawerContext"></div></div>
+      <button class="drawer-close" id="drawerClose" aria-label="Close contact workspace">×</button>
+    </div>
+    <div class="drawer-body" id="drawerBody"></div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="dashboard-02.js"></script>
+</body>
+</html>
