@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Zodiac Media Buying</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f5f2ea;
+    --panel:#fbf9f4;
+    --ink:#181613;
+    --ink-soft:#4c463c;
+    --ink-faint:#7a7264;
+    --line:#ddd6c8;
+    --accent:#6d5bd0;
+    --gold:#a8812f;
+    --serif:"Cormorant Garamond", Georgia, serif;
+    --sans:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:0 24px 120px}
+
+  header{padding:64px 0 40px;border-bottom:1px solid var(--line)}
+  .badge{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:4px 10px;border-radius:3px;margin-bottom:20px}
+  .badge.phase{background:transparent;color:var(--ink-faint);border:1px solid var(--line);margin-left:6px}
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(38px,6vw,54px);line-height:1.08;letter-spacing:-.01em}
+  .sub{margin-top:14px;color:var(--ink-soft);max-width:620px}
+
+  .toc{margin:36px 0 0;padding:20px 24px;background:var(--panel);border:1px solid var(--line);border-radius:8px}
+  .toc p{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px}
+  .toc a{display:block;color:var(--ink);text-decoration:none;padding:4px 0;font-weight:500}
+  .toc a:hover{color:var(--accent)}
+  .toc a span{color:var(--ink-faint);font-weight:400;margin-right:10px;font-variant-numeric:tabular-nums}
+
+  section{padding-top:64px}
+  .kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:8px}
+  h2{font-family:var(--serif);font-weight:600;font-size:clamp(28px,4.5vw,38px);line-height:1.12;margin-bottom:18px}
+  h3{font-size:19px;font-weight:650;margin:40px 0 10px}
+  h4{font-size:15px;font-weight:650;margin:26px 0 8px;color:var(--ink)}
+  p{margin:10px 0;color:var(--ink-soft)}
+  p strong,li strong{color:var(--ink)}
+  ul,ol{margin:10px 0 10px 22px;color:var(--ink-soft)}
+  li{margin:6px 0}
+  em{font-style:italic}
+  .lede{font-size:18px;color:var(--ink);max-width:680px}
+
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:14.5px}
+  th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);text-align:left;padding:10px 12px;border-bottom:2px solid var(--ink)}
+  td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-soft)}
+  td:first-child{color:var(--ink);font-weight:600}
+  .tablewrap{overflow-x:auto}
+
+  .script{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:6px;padding:22px 26px;margin:18px 0;font-size:15px}
+  .script .to{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:10px}
+  .script p{color:var(--ink-soft)}
+  .script ol,.script ul{margin-left:20px}
+
+  .note{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px 20px;margin:18px 0;font-size:14px;color:var(--ink-faint)}
+  .note strong{color:var(--ink-soft)}
+
+  .rule-card{border:1px solid var(--line);border-radius:8px;padding:20px 24px;margin:14px 0;background:#fff}
+  .rule-card h4{margin:0 0 6px}
+  .divider{border:none;border-top:1px solid var(--line);margin:56px 0 0}
+  footer{margin-top:80px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--ink-faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <span class="badge">Zodiac.fm &mdash; Internal</span><span class="badge phase">Collection phase &middot; nothing locked</span>
+  <h1>Media Buying</h1>
+  <p class="sub">The working playbook. We are just beginning to develop this plan &mdash; this page collects the material as it comes in. Pricing and platform figures are the source&rsquo;s, unverified.</p>
+  <nav class="toc">
+    <p>On this page</p>
+    <a href="#partners"><span>01</span>Partners / Dark Post and Delist</a>
+    <a href="#sourcing"><span>02</span>Creator Sourcing &amp; Recruitment</a>
+  </nav>
+</header>
+
+<section id="partners">
+  <p class="kicker">Section 01</p>
+  <h2>Partners / Dark Post and Delist</h2>
+  <p class="lede">Paid ads that run under a mini-celebrity&rsquo;s handle without ever touching their public presence: <strong>dark posts</strong> on Meta, <strong>unlisted (delisted) videos</strong> on YouTube.</p>
+
+  <h3>The Dark Post Model</h3>
+  <ul>
+    <li><strong>What it is:</strong> Paid ads running under the mini-celebrity&rsquo;s handle (<code>@MiniCelebrity</code>).</li>
+    <li><strong>Where it lives:</strong> Exclusively inside targeted user feeds. It never touches or clutters their public Instagram grid, Facebook timeline, or YouTube channel homepage.</li>
+    <li><strong>Who controls what:</strong> The creator gives one-time account approval and uploads unlisted files. The brand edits all media, writes all copy, sets ad budgets, controls targeting, and manages DM automation via ManyChat.</li>
+  </ul>
+
+  <h3>The Master Platform Matrix</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Platform</th><th>Best uploading method</th><th>Visibility</th><th>What the creator/manager does</th></tr>
+    <tr><td>Meta (FB/IG)</td><td><strong>WE upload</strong> directly inside Meta Ads Manager using their handle.</td><td>Dark post (unpublished)</td><td>One-time approval in Business Settings or the IG app.</td></tr>
+    <tr><td>YouTube</td><td><strong>THEY upload</strong> directly to their own YouTube channel.</td><td>Unlisted video</td><td>Uploads the unlisted file + pastes our 10-digit Google Ads ID.</td></tr>
+  </table>
+  </div>
+  <div class="note"><strong>Why YouTube flips:</strong> Google&rsquo;s ad engine keys on channel-ownership signals. A creator-uploaded video runs as a native Creator Partnership Ad (source cites up to 20% higher Shorts conversion vs. brand uploads &mdash; unverified), carries their avatar and subscriber badge in the ad frame, unlocks retargeting + lookalike Data Segments from their viewers, and can be linked instantly via a Shared Video Code.</div>
+
+  <h3>Platform Prerequisites</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Platform</th><th>What our brand needs</th><th>What the creator needs</th></tr>
+    <tr><td>Meta (FB/IG)</td><td>Meta Business Manager + Ads Manager + ManyChat account</td><td>Instagram Professional (Creator/Business) account</td></tr>
+    <tr><td>YouTube</td><td>Google Ads account (10-digit Customer ID)</td><td>YouTube channel (YouTube Studio access)</td></tr>
+  </table>
+  </div>
+
+  <h3>Approval Scripts &mdash; Self-Managed Creators (Phone)</h3>
+
+  <h4>Script A: Meta approval (send via IG DM / email)</h4>
+  <div class="script">
+    <p class="to">Subject: Quick 30-sec ad approval for our campaign 🚀</p>
+    <p>Hey <strong>[Creator Name]</strong>!</p>
+    <p>To run our upcoming ads under your handle, we use Meta&rsquo;s official <strong>Partnership Ads</strong> tool.</p>
+    <p>🔒 <strong>Reassurance:</strong> This is an &ldquo;ads-only&rdquo; permission. It <strong>will not</strong> post anything to your public Instagram grid or feed. We run these purely as background &ldquo;dark posts&rdquo;.</p>
+    <p><strong>30-second setup:</strong></p>
+    <ol>
+      <li>Make sure your IG is a <strong>Creator or Business account</strong> (<em>Settings &rarr; Account type &rarr; Switch to Professional</em>).</li>
+      <li>Open Instagram &rarr; go to your <strong>Profile</strong> &rarr; tap the <strong>Menu (&equiv;)</strong> in the top right.</li>
+      <li>Tap <strong>Creator tools and controls</strong> (or <em>Business tools</em>).</li>
+      <li>Tap <strong>Partnership ads</strong> &rarr; <strong>Ad partners</strong>.</li>
+      <li>Under <strong>Pending Requests</strong>, look for <strong>@[YourBrandHandle]</strong> and tap <strong>Approve</strong>.</li>
+    </ol>
+    <p>Once approved, we handle everything else! Let me know when it&rsquo;s done 🙌</p>
+  </div>
+
+  <h4>Script B: YouTube unlisted upload (send via DM / email)</h4>
+  <div class="script">
+    <p class="to">Subject: YouTube unlisted video setup</p>
+    <p>Hey <strong>[Creator Name]</strong>!</p>
+    <p>For YouTube, we&rsquo;re running our ads natively from your channel so it appears as an organic feature.</p>
+    <p>🔒 <strong>Reassurance:</strong> The video will be set to <strong>Unlisted</strong>. It will <strong>not</strong> notify your subscribers or show up on your channel homepage.</p>
+    <p><strong>Two steps:</strong></p>
+    <ol>
+      <li><strong>Link Google Ads:</strong> In YouTube Studio desktop, go to <strong>Settings &rarr; Channel &rarr; Advanced &rarr; Link Account</strong>, enter our Google Ads ID <strong>[XXX-XXX-XXXX]</strong>, and hit Save.</li>
+      <li><strong>Upload the video:</strong> Upload the edited video we sent you, set Visibility to <strong>UNLISTED</strong>, then send us the video URL.</li>
+    </ol>
+  </div>
+
+  <h3>Approval Scripts &mdash; Managers &amp; Agencies (Desktop)</h3>
+  <p>At this level the artist isn&rsquo;t tapping around on their phone &mdash; a digital manager, PR agency, or social media director handles everything from a desktop via Meta Business Suite / Business Manager. Desktop-native versions:</p>
+
+  <h4>Meta &mdash; Option A: the 1-click &ldquo;Requests&rdquo; approval (fastest)</h4>
+  <p>Send after you trigger the request from your Ads Manager:</p>
+  <div class="script">
+    <p class="to">To [Manager/Agency Name]</p>
+    <p>To approve our Partnership Ad request on desktop so we can run our campaign under @[ArtistHandle] without touching your public feed:</p>
+    <ol>
+      <li>Go to <strong>business.facebook.com</strong> on a desktop browser.</li>
+      <li>Click <strong>Settings</strong> (the gear icon at the bottom left).</li>
+      <li>Click <strong>Requests</strong> in the left sidebar menu (under the Business Portfolio section).</li>
+      <li>Go to the <strong>Received</strong> tab, find the pending request from <strong>[Your Brand / Business Manager Name]</strong>, and click <strong>Approve</strong>.</li>
+    </ol>
+    <p>This grants our ad account background access to launch dark posts using the handle, leaving the main profile grid completely untouched.</p>
+  </div>
+
+  <h4>Meta &mdash; Option B: sharing partner access via Business ID (if they initiate)</h4>
+  <p>If their agency prefers to push access to you directly, give them your 15-digit Meta Business Portfolio ID (Business Settings &rarr; Business Info):</p>
+  <div class="script">
+    <p class="to">To [Manager/Agency Name]</p>
+    <ol>
+      <li>Go to <strong>business.facebook.com</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Partners</strong>.</li>
+      <li>Click <strong>Add</strong> &rarr; <strong>Give a partner access to your assets</strong>.</li>
+      <li>Enter our Meta Business ID: <strong>[YOUR-15-DIGIT-BUSINESS-ID]</strong>.</li>
+      <li>Under <strong>Assets</strong>, select <strong>@[ArtistHandle]</strong> (Instagram account &amp; Facebook page).</li>
+      <li>Toggle ON <strong>Create / Manage Ads (Partnership Ads)</strong> and click <strong>Save Changes</strong>.</li>
+    </ol>
+  </div>
+
+  <h4>YouTube &mdash; the manager version (they still upload)</h4>
+  <p><strong>Locked rule: on YouTube, the creator&rsquo;s side always uploads &mdash; never us.</strong> The video must live on their channel to keep channel authority, the Creator Partnership Ad classification, and the viewer Data Segments. An earlier brand-uploads-via-Editor-access draft is superseded.</p>
+  <div class="script">
+    <p class="to">To [Manager/Agency Name]</p>
+    <p>For YouTube, Google&rsquo;s ad engine requires the video to be uploaded natively by <strong>@[ArtistChannel]</strong> so the ad retains full channel authority and subscriber signals.</p>
+    <p>🔒 <strong>This will not touch your channel grid or notify subscribers.</strong></p>
+    <p><strong>Instructions (takes 60 seconds):</strong></p>
+    <ol>
+      <li>Log into <strong>studio.youtube.com</strong> on desktop and upload the video file we provided.</li>
+      <li>Set the Visibility to <strong>UNLISTED</strong>.</li>
+      <li>Under the video settings / permissions tab, select <strong>Link to Google Ads</strong> (or generate a <strong>Shared Video Code</strong>).</li>
+      <li>Enter our 10-digit Google Ads ID <strong>[XXX-XXX-XXXX]</strong> and send us the video URL.</li>
+    </ol>
+    <p><em>Once sent, our media team handles all ad bidding, targeting, and traffic management from our dashboard.</em></p>
+  </div>
+
+  <h3>What We Do: Creative &amp; Campaign Execution</h3>
+
+  <h4>Step 1 &mdash; Asset collection</h4>
+  <p>Ask the creator for raw, unedited footage or high-res photos via Google Drive/Dropbox (holding headphones, reacting to an audio clip, talking about tuning their music).</p>
+
+  <h4>Step 2 &mdash; In-house production &amp; editing</h4>
+  <ul>
+    <li><strong>Video hooks:</strong> Chop the raw video into 3&ndash;5 different 3-second hook variations.</li>
+    <li><strong>On-screen overlays:</strong> Captions, dynamic audio visualizers, screen recordings of the 250&ndash;950&nbsp;Hz frequency dial inside zodiac.fm.</li>
+    <li><strong>Static assets:</strong> High-contrast quote cards (<em>&ldquo;Why @Artist uses Zodiac.fm&rdquo;</em>), text-message screenshots, 4:5 vertical photo ads.</li>
+    <li><strong>Aspect ratios:</strong> 9:16 (Reels/Shorts/Stories) and 4:5 (Feed).</li>
+  </ul>
+
+  <h4>Step 3 &mdash; Launching on Meta Ads Manager</h4>
+  <ol>
+    <li>Create a campaign (Objective: <strong>Sales</strong> or <strong>App Promotion</strong>).</li>
+    <li>At the <strong>Ad Level</strong>, toggle ON <strong>Partnership Ad</strong> and select the creator&rsquo;s identity.</li>
+    <li>Select <strong>Create Ad</strong> (keeps it an unpublished dark post).</li>
+    <li>Upload the edited video/photo asset.</li>
+    <li>Set the destination: <strong>Option 1</strong> &mdash; landing page at <code>zodiac.fm/artistname</code>. <strong>Option 2</strong> &mdash; CTA <strong>&ldquo;Send Instagram Message&rdquo;</strong>, Partner App &rarr; ManyChat, automated bot flow delivers app links inside DMs.</li>
+  </ol>
+
+  <h4>Step 4 &mdash; Launching on YouTube (Google Ads)</h4>
+  <ol>
+    <li>Grab the unlisted video URL uploaded by the creator.</li>
+    <li>Open Google Ads &rarr; create a <strong>Video Campaign</strong> (sub-type: <em>Drive Conversions</em> or <em>Shorts</em>).</li>
+    <li>Paste the unlisted YouTube URL into the ad setup.</li>
+    <li>Set the CTA button to <strong>&ldquo;Download&rdquo;</strong> or <strong>&ldquo;Listen Now&rdquo;</strong> pointing to the zodiac.fm landing page.</li>
+    <li>Launch. The ad displays the creator&rsquo;s avatar and handle while Google Ads manages traffic, bidding, and conversions.</li>
+  </ol>
+
+  <hr class="divider">
+</section>
+
+<section id="sourcing">
+  <p class="kicker">Section 02</p>
+  <h2>Creator Sourcing &amp; Recruitment</h2>
+  <p class="lede">Skip the traditional influencer agency ($5,000&ndash;$15,000/month retainers to make phone calls). Since we handle all ad execution, media buying, and editing in-house, we only need a partner for <strong>sourcing, outreach, and signed agreements</strong>.</p>
+
+  <h3>Option 1 &mdash; Whitelisting Marketplaces (lowest cost &amp; fastest)</h3>
+  <p>Platforms built to recruit creators who already know how to grant Meta Partnership Ad and YouTube permissions.</p>
+  <div class="rule-card">
+    <h4>Insense.pro</h4>
+    <p>Post a brief for musicians, ambient creators, or string players willing to grant Partnership Ad access; creators apply or get matched. Built-in workflow specifically for ad whitelisting &mdash; creators know going in they&rsquo;re granting ad account access. Roughly $300&ndash;$400/month platform fee, or pay-per-campaign.</p>
+  </div>
+  <div class="rule-card">
+    <h4>Collabstr</h4>
+    <p>Free-to-browse marketplace, searchable by niche (<em>Musicians, Wellness, Instrumentalists</em>). No subscription &mdash; pay only when you hire. Message creators directly: <em>&ldquo;We pay $X for 1 raw video + Partnership Ad access.&rdquo;</em></p>
+  </div>
+
+  <h3>Option 2 &mdash; Commission-Based Creator Scouts (best value)</h3>
+  <p>Instead of a retainer, hire a freelance creator scout on a <strong>bounty model</strong> (pay-per-signed-artist):</p>
+  <ol>
+    <li>Search Upwork, Fiverr Pro, or LinkedIn for <em>&ldquo;Influencer Outreach Specialist&rdquo;</em>, <em>&ldquo;Music Talent Scout&rdquo;</em>, or <em>&ldquo;Creator Partnerships Manager&rdquo;</em>.</li>
+    <li>Offer a <strong>performance hybrid</strong>: $200&ndash;$500/month base to cover hours/tools, plus a <strong>$50&ndash;$100 bounty for every artist</strong> who signs the license agreement and completes the Meta/YouTube permission setup.</li>
+  </ol>
+  <p>Fixed agency cost becomes a variable performance cost: the scout spends all day DMing talent and emailing managers; real money moves only when an artist actually grants access.</p>
+
+  <h3>Option 3 &mdash; Micro-Agencies &amp; Boutique Talent Brokers</h3>
+  <div class="tablewrap">
+  <table>
+    <tr><th>Agency type</th><th>What they charge</th><th>What they do</th></tr>
+    <tr><td>Traditional agency <em>(avoid)</em></td><td>$5,000&ndash;$15,000+/mo retainer</td><td>Full management, strategy, posting, events (overkill).</td></tr>
+    <tr><td>Boutique whitelisting agency</td><td>$1,000&ndash;$2,000/mo or % of deal size</td><td>Recruits, handles legal contracts, clears ad access, hands files to us.</td></tr>
+    <tr><td>Platform + managed service <em>(e.g. InfluencerHero)</em></td><td>$500&ndash;$1,200/mo</td><td>Automated outreach emails to thousands of niche creators.</td></tr>
+  </table>
+  </div>
+
+  <h3>Source&rsquo;s Summary Recommendation</h3>
+  <ol>
+    <li><strong>Immediate start:</strong> Insense.pro or Collabstr to grab 5&ndash;10 creators quickly with zero long-term commitments.</li>
+    <li><strong>Long-term scaling:</strong> a talent scout on Upwork with a ~$75 bounty per signed artist, building a constant pipeline of world-music, ambient, and string artists who hand Partnership Ad permissions directly to the media buyer.</li>
+  </ol>
+  <div class="note"><strong>Open decision:</strong> self-serve platform first (Insense) vs. freelance scout on bounty. Not yet chosen.</div>
+</section>
+
+<footer>
+  Zodiac.fm internal working document &middot; collection phase &middot; updated August 2026
+</footer>
+
+</div>
+</body>
+</html>
