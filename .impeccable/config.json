@@ -1,0 +1,9 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [
+      "site-d4-e-sun-*.html"
+    ],
+    "ignoreValues": []
+  }
+}
