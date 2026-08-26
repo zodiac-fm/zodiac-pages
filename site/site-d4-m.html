@@ -37,7 +37,7 @@
     --fs-quote:24px;
     --pad-wrap:32px;
     --pad-section:110px;
-    --fs-stat:58px;
+    --fs-stat:44px;
   }
   /* THE OLDER-AUDIENCE FLOOR (his 2026-08-25 markup): on the phone everything
      runs a notch larger with a little more air, as long as the eye still knows
@@ -109,9 +109,6 @@
   .shead{max-width:960px;margin-bottom:44px}
   .cue{display:flex;align-items:center;gap:12px;font-size:var(--fs-cue);letter-spacing:.24em;text-transform:uppercase;color:var(--ink38);margin-bottom:20px}
   .cue::before{content:'';width:9px;height:9px;border-radius:50%;background:currentColor;opacity:.55}
-  .cue .tick{display:inline-flex;gap:3px;align-items:center}
-  .cue .tick i{display:block;width:9px;height:3px;border-radius:1.5px}
-  @media(min-width:900px){.cue .tick{margin-top:2px}}
   @media(min-width:900px){
     .shead{display:grid;grid-template-columns:150px minmax(0,760px);gap:34px;align-items:start}
     .cue{margin-bottom:0;padding-top:16px;flex-direction:column;align-items:flex-start;gap:10px}
@@ -146,11 +143,6 @@
   .field img{width:100%;object-fit:cover;
     -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 24%,#000 82%,transparent 100%);
     mask-image:linear-gradient(180deg,transparent 0%,#000 24%,#000 82%,transparent 100%)}
-  .field.softedge img{
-    -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%),linear-gradient(90deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
-    -webkit-mask-composite:source-in;
-    mask-image:linear-gradient(180deg,transparent 0%,#000 14%,#000 86%,transparent 100%),linear-gradient(90deg,transparent 0%,#000 14%,#000 86%,transparent 100%);
-    mask-composite:intersect}
 
   /* LAW 45 / his 2026-08-25 instruction: every photo carries its permanent
      number, bottom right, on the round page itself — he reviews by number. */
@@ -226,11 +218,6 @@
   [data-band="love"]{--bd:var(--love)}
   [data-band="vitality"]{--bd:var(--vitality)}
   [data-band="abundance"]{--bd:var(--abundance)}
-  [data-band] > div > .kick,[data-band] .kick{color:var(--bd)}
-  .tul{display:block;width:88px;height:3px;border-radius:2px;margin:11px 0 0 3px;background:var(--bd)}
-  .vrow .tul{width:104px}
-  .bandchip{position:absolute;left:9px;top:9px;z-index:7;width:12px;height:12px;border-radius:2px;
-    background:var(--bd);box-shadow:0 1px 4px rgba(20,20,18,.30)}
   .pq{font-family:var(--serif);font-size:var(--fs-quote);line-height:1.4;color:var(--ink56);font-style:italic}
   .pq b{font-weight:600;font-style:italic;color:var(--ink)}
   /* the absorbed lander molecule: the RESULT leads as a bold serif line, the
@@ -303,21 +290,21 @@
   .crow .cname{font-family:var(--sans)}
   .crow .cname b{display:block;font-size:21px;font-weight:600;color:var(--ink);letter-spacing:.002em}
   .crow .cname span{display:block;font-size:13.5px;color:var(--ink78);margin-top:4px}
-  .crow .cwave img{width:100%;height:94px;object-fit:contain;object-position:left center}
-  .crow .chz{text-align:right;font-family:var(--sans);font-weight:600;font-size:38px;color:var(--ink);letter-spacing:-.012em}
+  .crow .cwave img{width:100%;height:124px;object-fit:contain;object-position:left center}
+  .crow .chz{text-align:right;font-family:var(--sans);font-weight:600;font-size:30px;color:var(--ink);letter-spacing:-.012em}
   .crow .chz small{font-size:15px;font-weight:400;color:var(--ink56);margin-left:4px;letter-spacing:0}
   @media(max-width:640px){
     .chart{padding:6px 0 0}
     .crow{grid-template-columns:minmax(0,1fr) 112px;gap:8px;padding:20px 0}
     .crow .cwave{grid-column:1 / -1;order:3}
-    .crow .cwave img{height:62px}
+    .crow .cwave img{height:86px}
     .crow .chz{font-size:28px}
     .crow .cname b{font-size:19px}
   }
   body.vm .chart{padding:6px 0 0}
   body.vm .crow{grid-template-columns:minmax(0,1fr) 112px;gap:8px;padding:20px 0}
   body.vm .crow .cwave{grid-column:1 / -1;order:3}
-  body.vm .crow .cwave img{height:62px}
+  body.vm .crow .cwave img{height:86px}
   body.vm .crow .chz{font-size:28px}
   body.vm .crow .cname b{font-size:19px}
 
@@ -329,8 +316,8 @@
     #world{padding-top:60px;padding-bottom:84px}
     #results{padding-top:86px;padding-bottom:70px}
     #study{padding-top:84px;padding-bottom:70px}
-    #more-results{padding-top:70px;padding-bottom:66px}
-    #music{padding-top:84px;padding-bottom:76px}
+    #more-results{padding-top:70px;padding-bottom:34px}
+    #music{padding-top:52px;padding-bottom:76px}
     #story{padding-top:84px;padding-bottom:96px}
     .finale{padding-top:94px}
   }
@@ -344,7 +331,6 @@
   .step .field{margin-bottom:20px}
   .step .field img{height:250px}
   .step .kick{margin-bottom:10px}
-  .step .kick i{display:inline-block;width:18px;height:4px;border-radius:2px;margin-right:8px;vertical-align:2px}
   .step h3{margin-bottom:8px}
   .step p{color:var(--ink56);font-size:17px}
   @media(max-width:900px){
@@ -360,8 +346,7 @@
   .scenes{display:grid;grid-template-columns:1fr 1fr;gap:56px 40px;margin-top:12px;max-width:1040px}
   .scene .field img{height:420px}
   .scene figcaption{margin-top:14px;display:flex;align-items:baseline;gap:12px;font-size:14.5px;color:var(--ink56)}
-  .scene figcaption img{height:20px;width:96px;object-fit:contain;object-position:left center;position:relative;top:3px}
-  .scene figcaption b{color:var(--bd,var(--ink));font-weight:600;font-size:14.5px}
+  .scene figcaption b{color:var(--ink);font-weight:600;font-size:14.5px}
   @media(max-width:900px){.scenes{grid-template-columns:1fr;gap:48px}.scene .field img{height:400px}}
   body.vm .scenes{grid-template-columns:1fr;gap:48px}
   body.vm .scene .field img{height:400px}
@@ -421,7 +406,7 @@
   body.vm .rlead .tlead{font-size:22px}
 
   /* the scroller: unmissable — and SLOWED (his markup: "could slow down") */
-  .mq{margin-top:52px;padding:24px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 11%,#000 89%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 11%,#000 89%,transparent 100%)}
+  .mq{margin-top:44px;padding:22px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 11%,#000 89%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 11%,#000 89%,transparent 100%)}
   .mq-track{display:flex;gap:56px;width:max-content;animation:mqmove 150s linear infinite}
   .mq:hover .mq-track{animation-play-state:paused}
   body.static .mq-track,body.vm .mq-track{animation-duration:240s}
@@ -440,8 +425,7 @@
   .stat{font-size:var(--fs-stat);font-family:var(--sans);font-weight:600;color:var(--ink);line-height:1;letter-spacing:-.01em}
   .study-grid{gap:44px}
   .stat small{font-size:.30em;font-weight:600;color:var(--ink56)}
-  .stat .sul{display:block;width:74px;height:4px;border-radius:2px;margin-top:14px;background:var(--bd)}
-  .statlbl{margin-top:14px;font-size:15px;color:var(--ink56);max-width:360px}
+  .statlbl{margin-top:14px;font-size:15.5px;color:var(--ink78);max-width:360px}
   @media(max-width:900px){.study-grid{grid-template-columns:1fr;gap:40px}}
   body.vm .study-grid{grid-template-columns:1fr;gap:40px}
 
@@ -453,29 +437,33 @@
     -webkit-mask-composite:source-in;
     mask-image:linear-gradient(180deg,transparent 0%,#000 16%,#000 84%,transparent 100%),linear-gradient(90deg,transparent 0%,#000 12%,#000 88%,transparent 100%);
     mask-composite:intersect}
-  .otitle{position:relative;z-index:3;font-size:16px;font-weight:600;color:var(--ink);margin:20px 0 22px}
-  .otitle small{display:block;font-weight:400;font-size:13px;color:var(--ink56);margin-top:3px}
+  .otitle{position:relative;z-index:3;font-size:17px;font-weight:600;color:#0C0C0A;margin:20px 0 22px}
+  .otitle small{display:block;font-weight:400;font-size:13.5px;color:var(--ink78);margin-top:3px}
   .orow{position:relative;z-index:3;display:grid;grid-template-columns:300px minmax(0,1fr) 92px;align-items:center;gap:22px;padding:13px 0}
-  .orow + .orow{border-top:1px solid rgba(20,20,18,.08)}
-  .orow .olbl{font-size:15.5px;color:var(--ink)}
+  .orow + .orow{border-top:1px solid rgba(20,20,18,.20)}
+  .orow .olbl{font-size:16px;font-weight:500;color:#0C0C0A}
   /* hairline TRACK, solid token BAR (nsd-050) — the D4-J light-streak bars and
      the D4-L beam fills are both retired here: a bar is an object now. */
-  .orow .obar{height:18px;border-radius:0;background:transparent;overflow:hidden;
-    border-bottom:1px solid rgba(20,20,18,.16)}
+  .orow .obar{height:30px;border-radius:0;background:transparent;overflow:hidden;
+    border-bottom:1px solid rgba(20,20,18,.34)}
   /* the bar is SUNLIGHT on the panel (his call: photographic tone, never flat
      vector fills): a baked beam of warm-white light with grain and a bloom at
      its leading edge, reaching as far as the number says. */
-  .orow .obar i{display:block;height:14px;border-radius:0;width:0;transition:width 1.4s cubic-bezier(.2,.6,.2,1);
-    background:var(--bc);background-size:100% 100%}
-  .orow:nth-of-type(1) .obar i{--bc:var(--core)}
-  .orow:nth-of-type(2) .obar i{--bc:var(--love)}
-  .orow:nth-of-type(3) .obar i{--bc:var(--vitality)}
-  .orow:nth-of-type(4) .obar i{--bc:var(--abundance)}
-  .orow:nth-of-type(5) .obar i{--bc:var(--core)}
-  .orow:nth-of-type(6) .obar i{--bc:var(--love)}
-  .orow:nth-of-type(7) .obar i{--bc:var(--vitality)}
-  .orow .oval{text-align:right;font-family:var(--sans);font-weight:600;font-size:28px;color:var(--ink);letter-spacing:-.012em}
-  .orow .oval small{font-size:13px;font-weight:400;color:var(--ink56)}
+  /* the bar is an OBJECT on the silver, not a UI fill: solid token at full
+     saturation, real weight, its own sheen along the length, and the shadow a
+     thing sitting in this page's light would actually cast. */
+  .orow .obar i{display:block;height:29px;border-radius:0;width:0;transition:width 1.4s cubic-bezier(.2,.6,.2,1);
+    background:var(--bc) url('assets/d4m/d4m-chart-bar-core.png') left center/100% 100% no-repeat;
+    box-shadow:0 2px 5px rgba(20,20,18,.16)}
+  .orow:nth-of-type(1) .obar i{--bc:var(--core);background-image:url('assets/d4m/d4m-chart-bar-core.png')}
+  .orow:nth-of-type(2) .obar i{--bc:var(--love);background-image:url('assets/d4m/d4m-chart-bar-love.png')}
+  .orow:nth-of-type(3) .obar i{--bc:var(--vitality);background-image:url('assets/d4m/d4m-chart-bar-vitality.png')}
+  .orow:nth-of-type(4) .obar i{--bc:var(--abundance);background-image:url('assets/d4m/d4m-chart-bar-abundance.png')}
+  .orow:nth-of-type(5) .obar i{--bc:var(--core);background-image:url('assets/d4m/d4m-chart-bar-core.png')}
+  .orow:nth-of-type(6) .obar i{--bc:var(--love);background-image:url('assets/d4m/d4m-chart-bar-love.png')}
+  .orow:nth-of-type(7) .obar i{--bc:var(--vitality);background-image:url('assets/d4m/d4m-chart-bar-vitality.png')}
+  .orow .oval{text-align:right;font-family:var(--sans);font-weight:600;font-size:29px;color:#0C0C0A;letter-spacing:-.012em}
+  .orow .oval small{font-size:13px;font-weight:400;color:var(--ink78)}
   @media(max-width:640px){
     .ochart{padding:8px 0 0;margin-top:46px}
     .orow{grid-template-columns:minmax(0,1fr) 74px;gap:10px;padding:14px 0}
@@ -567,7 +555,7 @@
      with the photographic keepers — the songs appear IN CONTEXT instead, on a
      real phone in real light). One wide lead frame, then the two object
      portraits as a level pair. ---------- */
-  .mlead .field img{height:520px;object-fit:cover;object-position:50% 42%}
+  .mlead .field img{height:576px;object-fit:cover;object-position:50% 45%}
   .mlead figcaption{max-width:520px}
   .mpair{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:44px;max-width:1040px}
   .mpair .field img{height:330px;object-fit:cover;object-position:50% 55%}
@@ -600,6 +588,45 @@
     mask-image:linear-gradient(180deg,transparent 0%,#000 17%,#000 100%)}
   footer{background:transparent;padding:34px 0 44px;font-size:13.5px;color:var(--ink-fine)}
   footer .shell{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+
+  /* ═══ THE LIGHT SCORE (nsd-061, nsd-062) ═══════════════════════════════════
+     No screen reads flat. The page's ground is a journey — a lit passage, then
+     honest neutral, then lit again — and each chapter's air leans FAINT toward
+     the token that owns its content while every object keeps FULL intensity.
+     Every value is near-white (238-254), so the field breathes without ever
+     dropping into grey, and all of it is painted BEHIND the chapter's content,
+     which is why nothing here can veil a photograph, a face, a pop, or text. */
+  header.hero{background:radial-gradient(120% 90% at 78% 6%,#FFFDFF 0%,rgba(255,253,255,0) 62%),linear-gradient(180deg,#FDF9FF 0%,#F7F3FA 100%)}  /* core · L* 98.3-96.2 · the fold leads the walking order on violet — the violet board is first in the row */
+  #voices{background:linear-gradient(180deg,#F7F3FA 0%,#FDF1F2 10%,#F9EDEE 100%)}  /* love · L* 96.2-94.8 · three authority voices; Debra's love sits at the centre of the three */
+  #frequencies{background:linear-gradient(180deg,#F9EDEE 0%,#F3EFF6 10%,#FBF7FE 100%)}  /* core · L* 94.8-97.6 · the chart opens on Core; the poster screen takes the page's cleanest air */
+  #how{background:radial-gradient(90% 70% at 96% 4%,#FBFFFC 0%,rgba(251,255,252,0) 58%),linear-gradient(180deg,#FBF7FE 0%,#F1FAF5 10%,#EAF3ED 100%)}  /* abundance · L* 97.6-94.9 · three steps closing on the emerald spoon; one window sun top-right */
+  #world{background:radial-gradient(80% 60% at 92% 8%,#FFFAF4 0%,rgba(255,250,244,0) 60%),linear-gradient(180deg,#EAF3ED 0%,#F7EFE9 10%,#FFF7F1 100%)}  /* vitality · L* 94.9-97.8 · the day chapter: gold afternoon, the trumpet out loud in the sun */
+  #results{background:linear-gradient(180deg,#FFF7F1 0%,#F2FBF6 10%,#EBF4EE 100%)}  /* abundance · L* 97.8-95.3 · Jennifer opens the wall on abundance and Leanne closes it there */
+  #study{background:linear-gradient(180deg,#EBF4EE 0%,#F4F0F8 10%,#FBF7FE 100%)}  /* core · L* 95.3-97.6 · the numbers: 98.6 is the violet stat and the bars open on violet */
+  #more-results{background:linear-gradient(180deg,#FBF7FE 0%,#FFF5F6 10%,#FAEEEF 100%)}  /* love · L* 97.6-95.1 · the wall returns and closes on Rhonda's invitation home */
+  #music{background:radial-gradient(70% 80% at 12% 88%,#FFF7EC 0%,rgba(255,247,236,0) 62%),linear-gradient(180deg,#FAEEEF 0%,#F8EFEA 10%,#FCF4EE 100%)}  /* vitality · L* 95.1-96.6 · evening indoors, one lamp low and left; P-109's amber glow owns this chapter */
+  #story{background:radial-gradient(60% 70% at 46% 74%,#FFF1F3 0%,rgba(255,241,243,0) 64%),linear-gradient(180deg,#FCF4EE 0%,#FEF3F3 10%,#F8ECED 100%)}  /* love · L* 96.6-94.3 · the attic's own dim rose light on the spinning record */
+  #finale{background:radial-gradient(90% 80% at 84% 10%,#FAFFFB 0%,rgba(250,255,251,0) 60%),linear-gradient(180deg,#F8ECED 0%,#E8F1EC 10%,#F4FDF7 100%)}  /* abundance · L* 94.3-98.4 · opportunity: the lift back into full daylight under the umbrella chord */
+  footer{background:linear-gradient(180deg,#F4FDF7 0%,#F0F9F3 100%)}
+
+  #more-results{padding-bottom:26px}
+  #voices{padding-bottom:26px}
+
+  /* ═══ THE COMPOSED POPS (nsd-058) ═════════════════════════════════════════
+     A wall of quotes used to run three screens with no colour in view. These
+     are not decorations: each is a photograph in the steps-props grammar — the
+     b/w world, one genuinely coloured object at its true token, crisp, lit by
+     its own scene's light — set into the wall's rhythm at its own width. */
+  .interlude{position:relative;z-index:3;margin:26px 0 0;max-width:1040px}
+  .interlude .field img{height:470px}
+  .interlude figcaption{margin-top:12px;font-family:var(--sans);font-size:14px;
+    color:var(--ink56);letter-spacing:.005em}
+  .interlude figcaption b{color:var(--ink);font-weight:600;font-size:14.5px}
+  @media(max-width:900px){.interlude{margin:36px 0}.interlude .field img{height:270px}}
+  body.vm .interlude{margin:36px 0}
+  body.vm .interlude .field img{height:270px}
+
 </style>
 </head>
 <body>
@@ -628,8 +655,8 @@
   </div>
   <div class="field">
     <picture>
-      <source media="(max-width:640px)" srcset="assets/d4j/d4j-hero-mobile.jpg">
-      <img src="assets/d4e/d4e-hero-h8.jpg" alt="A smiling listener in large headphones on a sunlit white beach, holding up a phone with her Zodiac playlist playing — the sun merging into the light above her head, four surfboards in violet, emerald, amber, and rose standing in the sand behind her">
+      <source media="(max-width:640px)" srcset="assets/d4m/d4m-hero1-mobile.jpg">
+      <img src="assets/d4m/d4m-hero1.jpg" alt="A smiling listener in large headphones on a sunlit white beach, holding up a phone with her Zodiac playlist playing — the sun merging into the light above her head, four surfboards in violet, emerald, amber, and rose standing in the sand behind her">
     </picture>
     <span class="pid">P-123</span>
   </div>
@@ -648,40 +675,44 @@
   <div id="zvoicesl" class="zlight" aria-hidden="true" style="opacity:calc(.8*var(--atmo))"><img src="assets/d4m/d4m-sun-beam-voices.png" alt=""></div>
   <div class="shell">
     <div class="shead fu">
-      <p class="cue">01 · Voices<span class="tick" aria-hidden="true"><i style="background:var(--core)"></i><i style="background:var(--love)"></i><i style="background:var(--vitality)"></i><i style="background:var(--abundance)"></i></span></p>
+      <p class="cue">01 · Voices</p>
       <div>
         <h2>Neuroscientists, Astrologers, and Human&nbsp;Design Authorities Are <em>Tuning&nbsp;In.</em></h2>
       </div>
     </div>
     <div class="vwrap">
       <div class="vrow lead fu" data-band="core">
-        <div class="fport"><img src="assets/d4k/d4k-face-srini.png" alt="Srini Pillay"><span class="bandchip" aria-hidden="true"></span><span class="pid">T-4</span></div>
+        <div class="fport"><img src="assets/d4k/d4k-face-srini.png" alt="Srini Pillay"><span class="pid">T-4</span></div>
         <div>
           <p class="kick">Neuroscience</p>
-          <p class="tlead">Zodiac.fm helps people access aspects of themselves that have always been there.</p><span class="tul" aria-hidden="true"></span>
+          <p class="tlead">Zodiac.fm helps people access aspects of themselves that have always been there.</p>
           <p class="tdetail">Listening to your frequencies bypasses language and creates profound levels of self-awareness and coherence. This leads to clearer decisions, more authentic relationships, and expanded possibilities.</p>
           <p class="pwho">Srini Pillay, M.D.<small>Harvard-trained psychiatrist, brain-imaging researcher</small></p>
         </div>
       </div>
       <hr class="vsep">
       <div class="vrow fu" data-band="love">
-        <div class="fport"><img src="assets/d4k/d4k-face-debra.png" alt="Debra Silverman"><span class="bandchip" aria-hidden="true"></span><span class="pid">T-5</span></div>
+        <div class="fport"><img src="assets/d4m/d4m-face-debra.png" alt="Debra Silverman"><span class="pid">T-5</span></div>
         <div>
           <p class="kick">Astrology</p>
-          <p class="tlead">This music tickled my soul.</p><span class="tul" aria-hidden="true"></span>
+          <p class="tlead">This music tickled my soul.</p>
           <p class="tdetail">&hellip;Give it a try — you&rsquo;ll love it.</p>
           <p class="pwho">Debra Silverman<small>Astrologer to Sting, Jennifer Aniston, and More</small></p>
         </div>
       </div>
       <hr class="vsep">
       <div class="vrow fu" data-band="vitality">
-        <div class="fport"><img src="assets/d4k/d4k-face-barbara.png" alt="Barbara Ditlow"><span class="bandchip" aria-hidden="true"></span><span class="pid">T-8</span></div>
+        <div class="fport"><img src="assets/d4k/d4k-face-barbara.png" alt="Barbara Ditlow"><span class="pid">T-8</span></div>
         <div>
           <p class="kick">Human Design</p>
-          <p class="tlead">Zodiac core frequencies translate this unique imprint into sound, bypassing the mind and speaking directly to the body.</p><span class="tul" aria-hidden="true"></span>
+          <p class="tlead">Zodiac core frequencies translate this unique imprint into sound, bypassing the mind and speaking directly to the body.</p>
           <p class="pwho">Barbara Ditlow<small>Human Design Mentor, Master Practitioner, Trained/Certified/Endorsed by Ra&nbsp;Uru&nbsp;Hu&nbsp;(Founder of Human&nbsp;Design)</small></p>
         </div>
       </div>
+      <figure class="interlude fu">
+        <div class="field"><img src="assets/d4m/d4m-earbuds.jpg" alt="Wireless earbuds open on a pale marble table, a rose light glowing from inside the case"><span class="pid">P-38</span></div>
+        <figcaption><b>Rose, on the table where you left it.</b></figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -691,7 +722,7 @@
 <section id="frequencies">
   <div class="shell">
     <div class="shead fu">
-      <p class="cue">02 · Your Unique Frequencies<span class="tick" aria-hidden="true"><i style="background:var(--core)"></i><i style="background:var(--love)"></i><i style="background:var(--vitality)"></i><i style="background:var(--abundance)"></i></span></p>
+      <p class="cue">02 · Your Unique Frequencies</p>
       <div>
         <h2>Tune Into <em>You.</em></h2>
         <p class="quiet" style="margin-top:18px">Every birth moment carries a measurable signature. Zodiac turns yours into four frequencies: who you are, how you relate, your energy, your opportunity. Each becomes a piece of music that exists for exactly one person.</p>
@@ -700,22 +731,22 @@
     <div class="chart fu">
       <div class="crow">
         <div class="cname"><b>Core</b><span>Who you are</span></div>
-        <div class="cwave"><img src="assets/d4e/d4e-wave-core.png" alt="The Core frequency wave, violet"></div>
+        <div class="cwave"><img src="assets/d4m/d4m-wave-core.png" alt="The Core frequency wave, violet"></div>
         <div class="chz num">486<small>Hz</small></div>
       </div>
       <div class="crow">
         <div class="cname"><b>Love</b><span>How you relate</span></div>
-        <div class="cwave"><img src="assets/d4e/d4e-wave-love.png" alt="The Love frequency wave, rose"></div>
+        <div class="cwave"><img src="assets/d4m/d4m-wave-love.png" alt="The Love frequency wave, rose"></div>
         <div class="chz num">302<small>Hz</small></div>
       </div>
       <div class="crow">
         <div class="cname"><b>Vitality</b><span>Your energy</span></div>
-        <div class="cwave"><img src="assets/d4e/d4e-wave-vitality.png" alt="The Vitality frequency wave, amber"></div>
+        <div class="cwave"><img src="assets/d4m/d4m-wave-vitality.png" alt="The Vitality frequency wave, amber"></div>
         <div class="chz num">652<small>Hz</small></div>
       </div>
       <div class="crow">
         <div class="cname"><b>Abundance</b><span>Opportunity</span></div>
-        <div class="cwave"><img src="assets/d4e/d4e-wave-abundance.png" alt="The Abundance frequency wave, emerald"></div>
+        <div class="cwave"><img src="assets/d4m/d4m-wave-abundance.png" alt="The Abundance frequency wave, emerald"></div>
         <div class="chz num">813<small>Hz</small></div>
       </div>
     </div>
@@ -729,27 +760,27 @@
   <div id="zsteps" class="zlight" aria-hidden="true" style="opacity:calc(.85*var(--atmo))"><img src="assets/d4m/d4m-sun-beam-steps.png" alt=""></div>
   <div class="shell">
     <div class="shead fu">
-      <p class="cue">03 · Three Steps<span class="tick" aria-hidden="true"><i style="background:var(--core)"></i><i style="background:var(--love)"></i><i style="background:var(--vitality)"></i><i style="background:var(--abundance)"></i></span></p>
+      <p class="cue">03 · Three Steps</p>
       <div>
         <h2>How <em>Zodiac.fm</em> works</h2>
       </div>
     </div>
     <div class="steps3">
       <div class="step fu">
-        <div class="field softedge"><img src="assets/d4m/d4m-step1.jpg" alt="A violet desk globe and an open pocket watch on a white windowsill in morning sun"><span class="pid">P-155</span></div>
-        <p class="kick" style="color:var(--core)"><i style="background:var(--core)"></i>Step one</p>
+        <div class="field"><img src="assets/d4m/d4m-step1.jpg" alt="A violet desk globe and an open pocket watch on a white windowsill in morning sun"><span class="pid">P-155</span></div>
+        <p class="kick">Step one</p>
         <h3>Tell us when and where you were born</h3>
         <p>That exact minute has a signature. No mood forms, no personality quiz — date, time, place.</p>
       </div>
       <div class="step fu">
-        <div class="field softedge"><img src="assets/d4m/d4m-step2.jpg" alt="Headphones on sunlit white linen, warm amber light glowing in the near earcup"><span class="pid">P-156</span></div>
-        <p class="kick" style="color:var(--vitality)"><i style="background:var(--vitality)"></i>Step two</p>
+        <div class="field"><img src="assets/d4m/d4m-step2.jpg" alt="Headphones on sunlit white linen, warm amber light glowing in the near earcup"><span class="pid">P-156</span></div>
+        <p class="kick">Step two</p>
         <h3>Hear your four frequencies</h3>
         <p>Core, Love, Vitality, Abundance — four values that are yours for life, and the music composed around them.</p>
       </div>
       <div class="step fu">
-        <div class="field softedge"><img src="assets/d4m/d4m-step3.jpg" alt="A woman in headphones singing joyfully into a wooden spoon in a sun-flooded white kitchen, an emerald mug on the counter"><span class="pid">P-159</span></div>
-        <p class="kick" style="color:var(--abundance)"><i style="background:var(--abundance)"></i>Step three</p>
+        <div class="field"><img src="assets/d4m/d4m-step3.jpg" alt="A woman in headphones singing joyfully into a wooden spoon in a sun-flooded white kitchen, an emerald mug on the counter"><span class="pid">P-159</span></div>
+        <p class="kick">Step three</p>
         <h3>Live with your music</h3>
         <p>Play it while you work, walk, cook, fall asleep. Nine minutes a day is the practice. There is nothing else to learn.</p>
       </div>
@@ -764,7 +795,7 @@
   <div id="zdayl" class="zlight" aria-hidden="true" style="opacity:calc(.85*var(--atmo))"><img src="assets/d4m/d4m-sun-beam-day.png" alt=""></div>
   <div class="shell">
     <div class="shead fu">
-      <p class="cue">04 · Where It Lives<span class="tick" aria-hidden="true"><i style="background:var(--core)"></i><i style="background:var(--love)"></i><i style="background:var(--vitality)"></i><i style="background:var(--abundance)"></i></span></p>
+      <p class="cue">04 · Where It Lives</p>
       <div>
         <h2>It moves in <em>with you.</em></h2>
         <p class="quiet" style="margin-top:18px">Not a session to schedule — a soundtrack that follows your day. A violet street on the morning walk. Brass in the afternoon sun. The record on at home. An emerald ball against the summer sky. The world keeps playing your colors back to you.</p>
@@ -772,20 +803,20 @@
     </div>
     <div class="scenes">
       <figure class="scene fu" data-band="core">
-        <div class="field softedge"><img src="assets/d4m/d4m-tree.jpg" alt="A listener in headphones walking beneath violet jacaranda trees in a silver-white street"><span class="pid">P-125</span></div>
-        <figcaption><img src="assets/d4e/d4e-wave-core.png" alt=""><span><b>Morning, on the walk.</b> Core, in the headphones.</span></figcaption>
+        <div class="field"><img src="assets/d4m/d4m-tree.jpg" alt="A listener in headphones walking beneath violet jacaranda trees in a silver-white street"><span class="pid">P-125</span></div>
+        <figcaption><span><b>Morning, on the walk.</b> Core, in the headphones.</span></figcaption>
       </figure>
       <figure class="scene fu" data-band="vitality">
-        <div class="field softedge"><img src="assets/d4m/d4m-trumpet.jpg" alt="A trumpeter playing a brass horn into the afternoon sun on a silver street" style="object-position:70% 22%"><span class="pid">P-126</span></div>
-        <figcaption><img src="assets/d4e/d4e-wave-vitality.png" alt=""><span><b>Afternoon, out loud.</b> Vitality, in the sun.</span></figcaption>
+        <div class="field"><img src="assets/d4m/d4m-trumpet.jpg" alt="A trumpeter playing a brass horn into the afternoon sun on a silver street" style="object-position:70% 22%"><span class="pid">P-126</span></div>
+        <figcaption><span><b>Afternoon, out loud.</b> Vitality, in the sun.</span></figcaption>
       </figure>
       <figure class="scene fu" data-band="love">
-        <div class="field softedge"><img src="assets/d4m/d4m-dance.jpg" alt="A woman dancing barefoot in a sunlit white room in a deep rose dress, a record turning on the turntable behind her"><span class="pid">P-106</span></div>
-        <figcaption><img src="assets/d4e/d4e-wave-love.png" alt=""><span><b>At home, the record on.</b> Love, out loud.</span></figcaption>
+        <div class="field"><img src="assets/d4m/d4m-dance.jpg" alt="A woman dancing barefoot in a sunlit white room in a deep rose dress, a record turning on the turntable behind her"><span class="pid">P-106</span></div>
+        <figcaption><span><b>At home, the record on.</b> Love, out loud.</span></figcaption>
       </figure>
       <figure class="scene fu" data-band="abundance">
-        <div class="field softedge"><img src="assets/d4m/d4m-ball.jpg" alt="Friends leaping for an emerald ball against a bright summer sky"><span class="pid">P-128</span></div>
-        <figcaption><img src="assets/d4e/d4e-wave-abundance.png" alt=""><span><b>The weekend, mid-air.</b> Abundance, everywhere.</span></figcaption>
+        <div class="field"><img src="assets/d4m/d4m-ball.jpg" alt="Friends leaping for an emerald ball against a bright summer sky"><span class="pid">P-128</span></div>
+        <figcaption><span><b>The weekend, mid-air.</b> Abundance, everywhere.</span></figcaption>
       </figure>
     </div>
   </div>
@@ -796,51 +827,55 @@
 <section id="results">
   <div class="shell">
     <div class="shead fu">
-      <p class="cue">05 · Results<span class="tick" aria-hidden="true"><i style="background:var(--core)"></i><i style="background:var(--love)"></i><i style="background:var(--vitality)"></i><i style="background:var(--abundance)"></i></span></p>
+      <p class="cue">05 · Results</p>
       <div>
         <h2>Then it shows up in work, energy, and <em>who you&nbsp;are.</em></h2>
       </div>
     </div>
     <div class="rgrid">
       <div class="fu rrow rwide rlead" data-band="abundance">
-        <div class="fport"><span class="bandchip" aria-hidden="true"></span><img src="assets/d4m/d4m-face-jennifer.png" alt="Jennifer K. Hill"><span class="pid">T-11</span></div>
+        <div class="fport"><img src="assets/d4m/d4m-face-jennifer.png" alt="Jennifer K. Hill"><span class="pid">T-11</span></div>
         <div>
           <p class="kick">Abundance</p>
-          <p class="tlead">Instead of 10 paid members, I got 30 paid members in 30&nbsp;days.</p><span class="tul" aria-hidden="true"></span>
+          <p class="tlead">Instead of 10 paid members, I got 30 paid members in 30&nbsp;days.</p>
           <p class="tdetail">&hellip;It felt like the floodgates of abundance, prosperity, and purpose opened.</p>
           <p class="pwho">Jennifer K. Hill<small>Global Wellness Leader, Founder, OptiMatch</small></p>
         </div>
       </div>
+      <figure class="interlude fu" style="grid-column:1 / -1">
+        <div class="field"><img src="assets/d4m/d4m-crossing.jpg" alt="People crossing a bright city street under an emerald walk signal"><span class="pid">P-108</span></div>
+        <figcaption><b>Emerald, the morning it says go.</b></figcaption>
+      </figure>
       <div class="fu rrow" data-band="core">
-        <div class="fport"><span class="bandchip" aria-hidden="true"></span><img src="assets/d4k/d4k-face-todd.png" alt="Todd Shipman"><span class="pid">T-23</span></div>
+        <div class="fport"><img src="assets/d4k/d4k-face-todd.png" alt="Todd Shipman"><span class="pid">T-23</span></div>
         <div>
           <p class="kick">Coming home</p>
-          <p class="tlead">My Eeyore mind is gone.</p><span class="tul" aria-hidden="true"></span>
+          <p class="tlead">My Eeyore mind is gone.</p>
           <p class="tdetail">I let life in now. My wife even says I&rsquo;m softer.</p>
           <p class="pwho">Todd Shipman<small>Founder &amp; CEO, Quantum Wellness Leader</small></p>
         </div>
       </div>
       <div class="fu rrow alt" data-band="vitality">
-        <div class="fport"><span class="bandchip" aria-hidden="true"></span><img src="assets/d4k/d4k-face-alexk.png" alt="Alex Kikel"><span class="pid">T-12</span></div>
+        <div class="fport"><img src="assets/d4k/d4k-face-alexk.png" alt="Alex Kikel"><span class="pid">T-12</span></div>
         <div>
           <p class="kick">Flow</p>
-          <p class="tlead">&hellip;having it on in the background while I work has allowed me to slip into my flow state MUCH easier&hellip;</p><span class="tul" aria-hidden="true"></span>
+          <p class="tlead">&hellip;having it on in the background while I work has allowed me to slip into my flow state MUCH easier&hellip;</p>
           <p class="pwho">Alex Kikel<small>Trainer to Olympians and Professional Athletes</small></p>
         </div>
       </div>
       <div class="fu rrow" data-band="core">
-        <div class="fport"><span class="bandchip" aria-hidden="true"></span><img src="assets/d4k/d4k-face-amber.png" alt="Amber Hedrick"><span class="pid">T-27</span></div>
+        <div class="fport"><img src="assets/d4k/d4k-face-amber.png" alt="Amber Hedrick"><span class="pid">T-27</span></div>
         <div>
           <p class="kick">Identity</p>
-          <p class="tlead">I&rsquo;m just finishing my first week &hellip; I feel like ME.</p><span class="tul" aria-hidden="true"></span>
+          <p class="tlead">I&rsquo;m just finishing my first week &hellip; I feel like ME.</p>
           <p class="pwho">Amber Hedrick</p>
         </div>
       </div>
       <div class="fu rrow alt" data-band="abundance">
-        <div class="fport"><span class="bandchip" aria-hidden="true"></span><img src="assets/d4m/d4m-face-leanne.png" alt="Leanne Ely"><span class="pid">T-10</span></div>
+        <div class="fport"><img src="assets/d4m/d4m-face-leanne.png" alt="Leanne Ely"><span class="pid">T-10</span></div>
         <div>
           <p class="kick">Opportunity</p>
-          <p class="tlead">I have received multiple unexpected new very lucrative opportunities since I began tuning&nbsp;in.</p><span class="tul" aria-hidden="true"></span>
+          <p class="tlead">I have received multiple unexpected new very lucrative opportunities since I began tuning&nbsp;in.</p>
           <p class="tdetail">This has been a total game changer for me.</p>
           <p class="pwho">Leanne Ely<small>Best-Selling Author, Founder, Saving Dinner</small></p>
         </div>
@@ -854,7 +889,7 @@
 <section id="study">
   <div class="shell">
     <div class="shead fu">
-      <p class="cue">06 · The Study<span class="tick" aria-hidden="true"><i style="background:var(--core)"></i><i style="background:var(--love)"></i><i style="background:var(--vitality)"></i><i style="background:var(--abundance)"></i></span></p>
+      <p class="cue">06 · The Study</p>
       <div>
         <h2>We ran the numbers <em>for a&nbsp;year.</em></h2>
         <p class="quiet" style="margin-top:18px">A 52-week study of our own members: <span class="num">300</span> people started, <span class="num">278</span> completed. The numbers below are from members who used it as designed — at least nine minutes a day on average, across all four frequencies.</p>
@@ -862,11 +897,11 @@
     </div>
     <div class="study-grid fu air">
       <div>
-        <div class="stat num" data-band="core">98.6<small>%</small><span class="sul" aria-hidden="true"></span></div>
+        <div class="stat num" data-band="core">98.6<small>%</small></div>
         <p class="statlbl">of completers said they would recommend Zodiac.</p>
       </div>
       <div>
-        <div class="stat num" data-band="love">84<small>%</small><span class="sul" aria-hidden="true"></span></div>
+        <div class="stat num" data-band="love">84<small>%</small></div>
         <p class="statlbl">of members who used it as designed for a year called it life-changing.</p>
       </div>
     </div>
@@ -890,46 +925,50 @@
 <section id="more-results">
   <div class="shell">
     <div class="shead fu">
-      <p class="cue">07 · More Results<span class="tick" aria-hidden="true"><i style="background:var(--core)"></i><i style="background:var(--love)"></i><i style="background:var(--vitality)"></i><i style="background:var(--abundance)"></i></span></p>
+      <p class="cue">07 · More Results</p>
       <div>
         <h2>And it keeps <em>showing up.</em></h2>
       </div>
     </div>
     <div class="fu srow" data-band="vitality">
-      <div class="fport"><span class="bandchip" aria-hidden="true"></span><img src="assets/d4k/d4k-face-tangie.png" alt="Tangie Nadimi"><span class="pid">T-16</span></div>
+      <div class="fport"><img src="assets/d4k/d4k-face-tangie.png" alt="Tangie Nadimi"><span class="pid">T-16</span></div>
       <div>
         <p class="kick">Nine minutes</p>
-        <p class="tlead">I went from ranting and complaining in my pages to writing in a way that felt hopeful &hellip; in only 9&nbsp;minutes.</p><span class="tul" aria-hidden="true"></span>
+        <p class="tlead">I went from ranting and complaining in my pages to writing in a way that felt hopeful &hellip; in only 9&nbsp;minutes.</p>
         <p class="tdetail">From day 1 I could feel the difference in my energy.</p>
         <p class="pwho">Tangie Nadimi<small>Founder, Feel Good Human Design</small></p>
       </div>
     </div>
     <hr class="ssep">
     <div class="fu srow" data-band="core">
-      <div class="fport"><span class="bandchip" aria-hidden="true"></span><img src="assets/d4k/d4k-face-maya.png" alt="Maya Shetreat"><span class="pid">T-2</span></div>
+      <div class="fport"><img src="assets/d4k/d4k-face-maya.png" alt="Maya Shetreat"><span class="pid">T-2</span></div>
       <div>
         <p class="kick">Ahead of the curve</p>
-        <p class="tlead">Zodiac.fm is way ahead of the curve.</p><span class="tul" aria-hidden="true"></span>
+        <p class="tlead">Zodiac.fm is way ahead of the curve.</p>
         <p class="tdetail">Employing vibration and frequency for our well-being is the future.</p>
         <p class="pwho">Maya Shetreat, MD<small>Adult and Pediatric Neurologist, Expert Astrologer, Best-Selling Author</small></p>
       </div>
     </div>
     <hr class="ssep">
     <div class="fu srow" data-band="abundance">
-      <div class="fport"><span class="bandchip" aria-hidden="true"></span><img src="assets/d4k/d4k-face-pedram.png" alt="Dr. Pedram Shojai"><span class="pid">T-6</span></div>
+      <div class="fport"><img src="assets/d4k/d4k-face-pedram.png" alt="Dr. Pedram Shojai"><span class="pid">T-6</span></div>
       <div>
         <p class="kick">Witnessed</p>
-        <p class="tlead">Zodiac.fm is brilliant. &hellip; The transformations I&rsquo;ve witnessed are remarkable.</p><span class="tul" aria-hidden="true"></span>
+        <p class="tlead">Zodiac.fm is brilliant. &hellip; The transformations I&rsquo;ve witnessed are remarkable.</p>
         <p class="tdetail">Highly recommended!</p>
         <p class="pwho">Dr. Pedram Shojai<small>Best-Selling Author, The Urban Monk</small></p>
       </div>
     </div>
+    <figure class="interlude fu">
+      <div class="field"><img src="assets/d4m/d4m-groove.jpg" alt="A turntable needle riding the groove, amber light running along the record"><span class="pid">P-59</span></div>
+      <figcaption><b>Amber, nine minutes into the record.</b></figcaption>
+    </figure>
     <hr class="ssep">
     <div class="fu srow big" data-band="love">
-      <div class="fport"><span class="bandchip" aria-hidden="true"></span><img src="assets/d4m/d4m-face-rhonda.png" alt="Rhonda Britten"><span class="pid">T-1</span></div>
+      <div class="fport"><img src="assets/d4m/d4m-face-rhonda.png" alt="Rhonda Britten"><span class="pid">T-1</span></div>
       <div>
         <p class="kick">The invitation</p>
-        <p class="tlead">If you&rsquo;re tired of living out of tune with yourself, this is your invitation&nbsp;home.</p><span class="tul" aria-hidden="true"></span>
+        <p class="tlead">If you&rsquo;re tired of living out of tune with yourself, this is your invitation&nbsp;home.</p>
         <p class="pwho">Rhonda Britten<small>Author of &ldquo;Fearless Living,&rdquo; Emmy Award-Winner</small></p>
       </div>
     </div>
@@ -966,6 +1005,10 @@
       <span class="mqi"><span class="q">&ldquo;The cutting-edge tool I didn&rsquo;t know I needed.&rdquo;</span><span class="n">Anja Žibert</span></span>
       </span>
     </div>
+    <figure class="interlude fu">
+      <div class="field"><img src="assets/d4m/d4m-line.jpg" alt="White laundry on a courtyard line with one rose dress among it"><span class="pid">P-127</span></div>
+      <figcaption><b>Rose, an ordinary Tuesday.</b></figcaption>
+    </figure>
   </div>
 </section>
 
@@ -975,7 +1018,7 @@
 <section id="music">
   <div class="shell">
     <div class="shead fu">
-      <p class="cue">08 · The Music<span class="tick" aria-hidden="true"><i style="background:var(--core)"></i><i style="background:var(--love)"></i><i style="background:var(--vitality)"></i><i style="background:var(--abundance)"></i></span></p>
+      <p class="cue">08 · The Music</p>
       <div>
         <h2>Real music, with <em>your frequencies inside.</em></h2>
         <p class="quiet" style="margin-top:18px">Every track is a full piece of music, not a tone, not a spa loop, with one of your four frequencies running underneath it from the first note to the last. Five minutes between meetings, nine for a real sit, a full hour for deep work or sleep. Press play.</p>
@@ -1034,14 +1077,14 @@
     <div class="story-grid">
       <div class="fu air">
         <div class="shead" style="margin-bottom:0">
-          <p class="cue">09 · Where This Came From<span class="tick" aria-hidden="true"><i style="background:var(--core)"></i><i style="background:var(--love)"></i><i style="background:var(--vitality)"></i><i style="background:var(--abundance)"></i></span></p>
+          <p class="cue">09 · Where This Came From</p>
           <div>
             <h2>It started with <em>one question.</em></h2>
             <p class="quiet" style="margin-top:20px">If the planets reveal who you are, and everything is frequency&hellip; then what would be your unique frequencies? Turns out, the work had been done, we just figured out how to insert them into music so you could experience who you are through sound.</p>
           </div>
         </div>
       </div>
-      <div class="field softedge fu">
+      <div class="field fu">
         <img src="assets/d4m/d4m-attic.jpg" alt="A woman laughing over a spinning record in an attic, her face lit rose by the groove">
         <span class="pid">P-118</span>
       </div>
@@ -1054,7 +1097,7 @@
   <div id="zfinl" class="zlight" aria-hidden="true" style="opacity:calc(.85*var(--atmo))"><img src="assets/d4m/d4m-sun-beam-finale.png" alt=""></div>
   <div class="shell">
     <div class="shead fu">
-      <p class="cue">10 · Come Hear It<span class="tick" aria-hidden="true"><i style="background:var(--core)"></i><i style="background:var(--love)"></i><i style="background:var(--vitality)"></i><i style="background:var(--abundance)"></i></span></p>
+      <p class="cue">10 · Come Hear It</p>
       <div>
         <h2>The symphony has been playing your part all along. <em>Come hear it.</em></h2>
         <p class="quiet" style="margin-top:20px">Zodiac is a paid membership.</p>
@@ -1162,7 +1205,7 @@
     local('zsteps','#how .steps3',30,0.60);
     local('zvoicesl','#voices .vwrap',-40,0.8);
     local('zdayl','#world .scenes',-20,0.85);
-    local('zfinl','.finale .field',40,0.42);
+    local('zfinl','.finale .shead',150,2.10);
     place('zdust1','#frequencies',0,1.0);
     place('zdust2','#study',0,1.0);
   }
