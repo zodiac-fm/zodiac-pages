@@ -1,0 +1,561 @@
+<!doctype html>
+<!--
+  IRIS STYLE GUIDE — the rules, with just enough examples. Walled, non-canon, non-contaminating.
+  Built 2026-08-28. Lives under /site/Iris/ and touches nothing else.
+  The full bank is the parallel library at /site/Iris/styleguide-library.
+  The live, approved library at /site/styleguide-library is UNTOUCHED.
+  Rule chapters are lifted verbatim from the parallel library's Part Two.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iris Style Guide — The Rules</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype'); font-weight:400; }
+  @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype'); font-weight:600; }
+
+  :root{
+    --stage:#0B0712; --cream:#FBF8F3; --cream82:rgba(251,248,243,.82); --cream58:rgba(251,248,243,.58); --cream40:rgba(251,248,243,.40);
+    --hair:rgba(251,248,243,.13);
+    --violet:#6521C9; --violet-deep:#38007A; --violet-soft:#D2C8FF; --violet-glint:#7A4AE0;
+    --amber:#F0B45A;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--stage);color:var(--cream);font-family:var(--sans);font-size:19px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img{max-width:100%}
+
+  .wrap{max-width:1140px;margin:0 auto;padding:0 32px}
+  section{padding:104px 0;border-bottom:1px solid var(--hair)}
+  header.masthead{padding:64px 0 80px;border-bottom:1px solid var(--hair)}
+
+  .eyebrow{font:600 13px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:26px}
+  h1,.h1{font:500 76px/1.03 var(--serif);letter-spacing:-.01em;color:var(--cream)}
+  h2,.h2{font:500 52px/1.08 var(--serif);letter-spacing:-.005em;color:var(--cream)}
+  h3,.h3{font:600 22px/1.3 var(--sans);color:var(--cream)}
+  p.body,.body{font:400 19px/1.65 var(--sans);color:var(--cream82);max-width:34em}
+  .lede{font:400 23px/1.55 var(--sans);color:var(--cream82);max-width:32em}
+  .statement{font:500 27px/1.35 var(--serif);font-style:italic;color:var(--cream);max-width:26em}
+  .num{font-family:var(--sans);font-style:normal;font-weight:400;font-size:.94em;letter-spacing:0}
+  .bandcount{display:inline;margin:0 0 0 14px;color:rgba(251,248,243,.42);font-size:13px;letter-spacing:.02em;font-weight:400;font-family:var(--sans);font-style:normal}
+
+  /* the walled banner */
+  .banner{background:rgba(101,33,201,.20);border:1px solid rgba(210,200,255,.34);border-radius:8px;padding:26px 28px;margin:0 auto;max-width:1140px}
+  .bannerwrap{padding:26px 32px 0}
+  .banner .tag{font:600 12px/1 var(--sans);letter-spacing:.20em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:14px}
+  .banner .line{font:600 25px/1.32 var(--sans);color:var(--cream)}
+  .banner .sub{margin-top:12px;font:400 16px/1.55 var(--sans);color:var(--cream82)}
+  .banner .date{margin-top:12px;font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:rgba(251,248,243,.52)}
+
+  /* frames */
+  .photogrid{display:grid;grid-template-columns:1fr 1fr;gap:52px 32px;margin-top:40px}
+  figure.photo{margin:0}
+  figure.photo img{width:100%;max-width:100%;display:block;border-radius:4px}
+  figcaption{border-top:1px solid var(--hair);margin-top:14px;padding-top:12px;font:400 14px/1.5 var(--sans);color:var(--cream58)}
+  /* Michael's label law: the frame ID rides LARGE on every review surface */
+  figcaption .pid{display:block;color:var(--cream);font:600 30px/1.05 var(--sans);letter-spacing:.02em;margin-bottom:6px}
+  figcaption .ttl{display:block;color:var(--cream);font:600 19px/1.3 var(--sans);margin-bottom:8px}
+  figcaption .recipe{display:block;font:400 14.5px/1.6 var(--sans);color:var(--cream82)}
+  figcaption .recipe i{font-style:normal;font-weight:600;letter-spacing:.14em;font-size:11px;text-transform:uppercase;color:var(--violet-soft);margin-right:8px}
+  figcaption .dual{display:inline-block;margin-bottom:10px;font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--violet-soft);background:rgba(101,33,201,.22);border:1px solid rgba(210,200,255,.26);border-radius:4px;padding:7px 9px}
+  figcaption .flag{display:block;margin-top:12px;font:400 13.5px/1.55 var(--sans);color:rgba(240,180,90,.86);background:rgba(240,180,90,.10);border-left:2px solid var(--amber);border-radius:0 4px 4px 0;padding:10px 12px}
+  figcaption .flag b{display:block;font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:6px}
+
+  ul.zlist{list-style:none;margin-top:30px;max-width:38em}
+  ul.zlist li{position:relative;padding:11px 0 11px 34px;color:var(--cream82)}
+  ul.zlist li::before{content:"";position:absolute;left:0;top:1.22em;width:16px;height:2px;background:var(--violet-glint)}
+  ul.zlist li b{color:var(--cream);font-weight:600}
+
+  .subhead{margin-top:64px;font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);padding-bottom:10px;border-bottom:1px solid var(--hair)}
+  .note{margin-top:24px;font:400 14px/1.55 var(--sans);color:var(--cream40);max-width:46em}
+  .pend{margin-top:26px;border:1px dashed rgba(210,200,255,.28);border-radius:4px;padding:28px 26px;font:400 15px/1.62 var(--sans);color:var(--cream58);max-width:46em}
+  .pend b{color:var(--cream82);font-weight:600}
+
+  /* excluded: text rows, no images */
+  .exrow{border-bottom:1px solid var(--hair);padding:15px 0;display:block}
+  .exrow .pid{display:inline-block;min-width:74px;font:600 17px/1.3 var(--sans);color:var(--cream)}
+  .exrow .ttl{font:600 15px/1.3 var(--sans);color:var(--cream82)}
+  .exrow .recipe{display:block;margin-top:5px;font:400 14px/1.55 var(--sans);color:var(--cream58)}
+  .exrow .verdict{font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:rgba(240,180,90,.8)}
+
+  /* grounds */
+  .grounds{display:grid;grid-template-columns:1fr;gap:52px;margin-top:40px}
+  .gfig img{width:100%;display:block;border-radius:4px}
+  .gfig figcaption .pid{font-size:34px}
+  .reserves{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:52px}
+  .reserves .pid{font-size:20px}
+  .law{margin-top:52px;border:2px solid rgba(240,180,90,.55);background:rgba(240,180,90,.09);border-radius:8px;padding:30px 30px}
+  .law .tag{font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:14px}
+  .law h3{font:600 27px/1.18 var(--sans);color:var(--cream);margin-bottom:16px}
+  .law p{font:400 16px/1.62 var(--sans);color:var(--cream82);max-width:44em}
+  .law .src{margin-top:16px;font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:rgba(240,180,90,.8)}
+  .killline{margin-top:44px;border-top:1px solid var(--hair);padding-top:22px;font:400 15px/1.62 var(--sans);color:var(--cream58);max-width:46em}
+  .killline b{color:var(--cream82);font-weight:600;letter-spacing:.10em;text-transform:uppercase;font-size:12px;display:block;margin-bottom:8px}
+  .gate{margin-top:26px;border:1px solid rgba(210,200,255,.28);border-radius:6px;padding:22px 24px;font:400 15px/1.62 var(--sans);color:var(--cream82);max-width:46em}
+  .gate b{display:block;color:var(--violet-soft);font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px}
+
+  /* ---- PART TWO ---- */
+  .partmark{padding:96px 0 0}
+  .partmark .kick{font:600 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:22px}
+  .partmark h2{font-size:62px;line-height:1.04}
+  .chapnum{font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:24px}
+
+  ol.rules{list-style:none;counter-reset:r;margin-top:36px;max-width:44em}
+  ol.rules li{counter-increment:r;position:relative;padding:16px 0 16px 62px;border-bottom:1px solid var(--hair);font:400 17px/1.6 var(--sans);color:var(--cream82)}
+  ol.rules li::before{content:counter(r);position:absolute;left:0;top:15px;width:42px;text-align:left;font:600 20px/1.3 var(--sans);color:var(--violet-soft);letter-spacing:.02em}
+  ol.rules li b{color:var(--cream);font-weight:600}
+
+  .masterlaw{margin-top:34px;border-left:3px solid var(--violet-glint);padding:6px 0 6px 26px}
+  .masterlaw .t{font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:12px}
+  .masterlaw .l{font:500 33px/1.22 var(--serif);font-style:italic;color:var(--cream);max-width:20em}
+
+  .grouphead{margin-top:44px;max-width:836px;font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);padding-bottom:9px;border-bottom:1px solid var(--hair)}
+  .grouplist{list-style:none;margin-top:6px;max-width:836px}
+  .grouplist li{padding:13px 0;border-bottom:1px solid var(--hair);font:400 16px/1.58 var(--sans);color:var(--cream82)}
+
+  .exfig{margin-top:44px}
+  .exfig img{width:100%;display:block;border-radius:4px;border:1px solid var(--hair)}
+  .exfig figcaption{border-top:1px solid var(--hair);margin-top:14px;padding-top:12px;max-width:46em}
+  .exfig figcaption .ttl{display:block;color:var(--cream);font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px}
+  .exfig figcaption .cap{display:block;font:400 15px/1.6 var(--sans);color:var(--cream82)}
+  .exfig figcaption .cap b{color:rgba(240,180,90,.9);font-weight:600}
+
+  table.jobs{width:100%;border-collapse:collapse;margin-top:36px;font-family:var(--sans)}
+  table.jobs th{text-align:left;font:600 10.5px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--violet-soft);padding:0 16px 12px 0;border-bottom:1px solid var(--hair);vertical-align:bottom}
+  table.jobs td{padding:18px 16px 18px 0;border-bottom:1px solid var(--hair);font:400 14.5px/1.55 var(--sans);color:var(--cream82);vertical-align:top}
+  table.jobs td.job{font:600 15px/1.35 var(--sans);color:var(--cream);letter-spacing:.02em;white-space:nowrap}
+  table.jobs td.dont{color:rgba(240,180,90,.82)}
+  table.jobs td a{color:var(--violet-soft);text-decoration:none;border-bottom:1px solid rgba(210,200,255,.34);white-space:nowrap}
+  table.jobs .dash{color:var(--cream40)}
+
+  .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:32px 24px}
+  .tdef{font:500 19px/1.36 var(--serif);font-style:italic;color:var(--cream);margin-top:12px}
+  .tblock figcaption .pid{font-size:25px}
+  .tblock figcaption .ttl{font-size:16px}
+  .tblock figcaption .recipe{font-size:13.5px;line-height:1.55}
+  .tblock{padding:46px 0;border-top:1px solid var(--hair);display:grid;grid-template-columns:236px 1fr;gap:40px;align-items:start}
+  .tblock:first-of-type{border-top:none;padding-top:26px}
+  .tblock h2{font-size:33px;line-height:1.06}
+  .thead{position:sticky;top:28px}
+  .banline{margin-top:30px;border-left:3px solid rgba(240,180,90,.7);background:rgba(240,180,90,.08);padding:22px 24px;font:400 16px/1.62 var(--sans);color:var(--cream82);max-width:44em;border-radius:0 5px 5px 0}
+  .banline b{color:var(--amber);font-weight:600}
+  .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:34px}
+  .g3 figcaption .pid{font-size:22px}
+  .morelink{display:inline-block;margin-top:32px;font:600 14px/1.4 var(--sans);letter-spacing:.04em;color:var(--violet-soft);text-decoration:none;border:1px solid rgba(210,200,255,.3);border-radius:9px;padding:14px 20px}
+  .morelink span{color:var(--cream58);font-weight:400}
+  @media(max-width:760px){
+    .tblock{display:block;grid-template-columns:none}
+    .thead{position:static}
+    .tgrid{grid-template-columns:1fr;gap:40px;margin-top:24px}
+    .g3{grid-template-columns:1fr;gap:36px}
+    .tsec{padding:56px 0}
+    .tsec h2{font-size:28px}
+    .tdef{font-size:20px}
+  }
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:34px}
+  .toc a{font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--violet-soft);text-decoration:none;border:1px solid rgba(210,200,255,.26);border-radius:5px;padding:9px 11px}
+
+  @media(max-width:1024px){
+    .photogrid{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:760px){
+    .photogrid{grid-template-columns:1fr;gap:44px}
+    .reserves{grid-template-columns:1fr;gap:44px}
+    .bannerwrap{padding:20px 20px 0}
+    .banner{padding:20px 20px}
+    .banner .line{font-size:19px;line-height:1.34}
+    .banner .sub{font-size:15px}
+    body{font-size:17px}
+    .wrap{padding:0 20px}
+    section{padding:64px 0}
+    header.masthead{padding:44px 0 52px}
+    h1,.h1{font-size:38px;line-height:1.06}
+    h2,.h2{font-size:30px;line-height:1.12}
+    p.body,.body{font-size:16px;line-height:1.6}
+    .lede{font-size:18px}
+    .statement{font-size:21px}
+    .eyebrow{font-size:12px;margin-bottom:18px}
+    .law{padding:22px 20px}
+    .law h3{font-size:21px;line-height:1.22}
+    .law p{font-size:15px}
+    figcaption .pid{font-size:26px}
+    figcaption .ttl{font-size:17px}
+    figcaption{font-size:13px}
+    .exrow .pid{display:block;min-width:0;margin-bottom:2px}
+    .partmark{padding:64px 0 0}
+    .partmark h2{font-size:32px;line-height:1.1}
+    .masterlaw .l{font-size:24px}
+    .masterlaw{padding-left:18px}
+    ol.rules li{padding:14px 0 14px 44px;font-size:16px}
+    ol.rules li::before{width:32px;font-size:18px;top:13px}
+    .grouplist li{font-size:15px}
+    /* the jobs table becomes stacked cards */
+    table.jobs,table.jobs tbody,table.jobs tr,table.jobs td{display:block;width:100%}
+    table.jobs thead{display:none}
+    table.jobs tr{border:1px solid var(--hair);border-radius:6px;padding:18px 16px;margin-bottom:18px}
+    table.jobs td{border-bottom:none;padding:0 0 12px 0}
+    table.jobs td:last-child{padding-bottom:0}
+    table.jobs td.job{white-space:normal;font-size:19px;margin-bottom:10px}
+    table.jobs td[data-label]::before{content:attr(data-label);display:block;font:600 10px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:5px}
+    table.jobs td a{white-space:normal}
+  }
+
+  /* --- guide page: shorter than the library by design --- */
+  .wrap{max-width:1000px}
+  section{padding:68px 0}
+  header.masthead{padding:48px 0 56px}
+  .partmark{padding:60px 0 0}
+  .partmark h2{font-size:48px}
+  .exfig{margin-top:34px;max-width:560px}
+  .exfig img{border-radius:3px}
+  ol.rules{margin-top:28px}
+  ol.rules li{padding:13px 0 13px 56px;font-size:16.5px}
+  .grouplist li{padding:11px 0}
+  .law{margin-top:38px;padding:26px 26px}
+  .law h3{font-size:24px}
+  @media(max-width:760px){
+    .wrap{max-width:none}
+    section{padding:52px 0}
+    .partmark h2{font-size:30px}
+    .tblock{padding:40px 0}
+    .tblock h2{font-size:26px}
+    .tdef{font-size:19px}
+    .exfig{max-width:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="bannerwrap">
+  <div class="banner">
+    <div class="tag">Iris lane · walled · not canon</div>
+    <div class="line">IRIS STYLE GUIDE — the rules, with just enough examples. The full bank lives in the parallel library.</div>
+    <div class="sub">This is the page a builder reads top to bottom: the nine treatments with two frames each, then every rule that governs a page. When you need the whole bank — all 83 filed frames, the flags, the gaps, the excluded list — go to the parallel library.</div>
+    <div class="date">Build date · 2026-08-28</div>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Iris Lane · The Style Guide</div>
+    <h1>The rules, and just enough to see them.</h1>
+    <p class="lede" style="margin-top:30px">Two examples per treatment, then the filter, the light and texture laws, the furniture, the proof, the grammar, the job-by-job call sheet, and the ground plates. Nothing here needs the bank open beside it.</p>
+    <a class="morelink" href="/site/Iris/styleguide-library">The parallel library &rarr; <span>every frame, every flag, the gaps and the excluded</span></a>
+  </div>
+</header>
+
+<section class="partmark" style="border-bottom:none;padding-bottom:0">
+  <div class="wrap">
+    <div class="kick">Part One</div>
+    <h2>THE TREATMENTS</h2>
+    <p class="lede" style="margin-top:28px">Nine ways colour enters a picture. Eight are alive. The ninth is banned, and it is named so it stays recognisable.</p>
+  </div>
+</section>
+<section id="treatments">
+  <div class="wrap">
+    <div class="tblock" id="solo">
+      <div class="thead"><div class="chapnum">01</div><h2>SOLO</h2><p class="tdef">SOLO = one real colored thing in a silver world.</p></div>
+      <div class="tgrid">
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-love-rose-awning.jpg" alt="Woman at a cafe table under a rose awning on a sunlit street">
+        <figcaption><b class="pid">P-26</b><span class="ttl">Rose Awning</span><span class="recipe"><i>Recipe</i> rose awning carries the pop; ground kept clean silver.</span></figcaption>
+      </figure>
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-abundance-emerald-bicycle.jpg" alt="Emerald bicycle against a white wall, person in headphones sitting beside it">
+        <figcaption><b class="pid">P-66</b><span class="ttl">Emerald Bicycle</span><span class="recipe"><i>Recipe</i> the bicycle is the emerald object; white wall and rider silver.</span></figcaption>
+      </figure>
+      </div>
+    </div>
+    <div class="tblock" id="chord">
+      <div class="thead"><div class="chapnum">02</div><h2>CHORD</h2><p class="tdef">CHORD = all four colors as four real things.</p></div>
+      <div class="tgrid">
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-boards-cc1.jpg" alt="Four surfboards upright in the sand in violet, emerald, amber and rose">
+        <figcaption><b class="pid">P-94</b><span class="ttl">Four Surfboards</span><span class="recipe"><i>Recipe</i> four boards upright in the sand; sand and sky grey.</span></figcaption>
+      </figure>
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-laundry-cc1.jpg" alt="Alley laundry line with four garments in violet, emerald, amber and rose">
+        <figcaption><b class="pid">P-88</b><span class="ttl">Four-Color Laundry Line</span><span class="recipe"><i>Recipe</i> four garments on one alley line carry the chord, and sun through each one makes every garment its own lamp; brick and sky monochrome.</span></figcaption>
+      </figure>
+      </div>
+    </div>
+    <div class="tblock" id="through">
+      <div class="thead"><div class="chapnum">03</div><h2>THROUGH</h2><p class="tdef">THROUGH = sun passes through a colored thing, the thing becomes the lamp.</p></div>
+      <div class="tgrid">
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/sg5lib/eval-r18-day-core-stained-glass.jpg" alt="Person in headphones on a chair, violet stained-glass light across the floor">
+        <figcaption><b class="pid">P-5</b><span class="ttl">Stained Glass Light</span><span class="recipe"><i>Recipe</i> sun passes through violet stained glass and the glass becomes the lamp; the floor takes the pattern, room silver.</span></figcaption>
+      </figure>
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/sg5lib/eval-r23-hero-record-emerald.jpg" alt="Emerald vinyl record leaning against a white wall in hard sun">
+        <figcaption><b class="pid">P-82</b><span class="ttl">Emerald Record</span><span class="recipe"><i>Recipe</i> the emerald disc is the object against a silver wall, and the translucent vinyl passes hard sunlight through itself — our best THROUGH-outdoors exemplar.</span></figcaption>
+      </figure>
+      </div>
+    </div>
+    <div class="tblock" id="spill">
+      <div class="thead"><div class="chapnum">04</div><h2>SPILL</h2><p class="tdef">SPILL = a colored thing lands its color on the grey beside it.</p></div>
+      <div class="tgrid">
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/sg5lib/eval-r19-sun-core-violet-parasol.jpg" alt="Woman on a bench under a violet parasol, black and white plaza, hard sun">
+        <figcaption><b class="pid">P-1</b><span class="ttl">Violet Parasol</span><span class="recipe"><i>Recipe</i> the violet parasol lands its color on the bench and the woman beneath it; plaza grey.</span></figcaption>
+      </figure>
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-boombox-puddle-amber.jpg" alt="Boombox on wet concrete steps, its amber tape window mirrored in the puddle">
+        <figcaption><b class="pid">P-55</b><span class="ttl">Boombox in the Puddle</span><span class="recipe"><i>Recipe</i> the boombox&#x27;s amber tape window spills into the puddle beside it; concrete silver.</span></figcaption>
+      </figure>
+      </div>
+    </div>
+    <div class="tblock" id="worn">
+      <div class="thead"><div class="chapnum">05</div><h2>WORN</h2><p class="tdef">WORN = color as a real garment, the only way color touches people.</p></div>
+      <div class="tgrid">
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/sg5lib/r29-m-runners-bridge.jpg" alt="Four runners on a bridge in violet, emerald, amber and rose vests">
+        <figcaption><b class="pid">P-93</b><span class="ttl">Runners on the Bridge</span><span class="recipe"><i>Recipe</i> the chord carried entirely as worn garment: four vests on four bodies; bridge and river silver.</span></figcaption>
+      </figure>
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/d4i/d4i-dance.jpg" alt="Dance">
+        <figcaption><b class="pid">P-106</b><span class="ttl">Red Dress Dance</span><span class="recipe"><i>Recipe</i> the red dress is the garment carrying the color; room and record silver.</span></figcaption>
+      </figure>
+      </div>
+    </div>
+    <div class="tblock" id="sun">
+      <div class="thead"><div class="chapnum">06</div><h2>SUN</h2><p class="tdef">SUN = amber as light, never a pop.</p></div>
+      <div class="tgrid">
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/hero-home/hero-home-full-blast.jpg" alt="A woman with large black headphones in a cream knitted sweater, smiling and holding up a real iPhone with the live zodiac.fm playlist, on a blown-out white beach with four surfboards in violet, emerald, amber and rose, the after-noon sun standing high in the middle of the sky and making all the light">
+        <figcaption><b class="pid">P-163</b><span class="ttl">Hero Home</span><span class="recipe"><i>Recipe</i> after-noon sun standing high makes all the light; four boards carry the chord beneath it.</span></figcaption>
+      </figure>
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/sg5lib/r27-a-person-shaft.jpg" alt="Breakdancer frozen on one hand in a gold alley shaft, friends watching">
+        <figcaption><b class="pid">P-48</b><span class="ttl">B-Boy in the Amber Shaft</span><span class="recipe"><i>Recipe</i> the alley shaft is the light source; the b-boy is lit by it, never painted.</span></figcaption>
+      </figure>
+      </div>
+    </div>
+    <div class="tblock" id="silver">
+      <div class="thead"><div class="chapnum">07</div><h2>SILVER</h2>
+      <p class="tdef">SILVER = no color at all, on purpose, the proof treatment.</p></div>
+      <div>
+    <p class="body">No photo-bank frame is filed here. SILVER holds the <b>testimonial T-bank portraits</b> — the black-and-white customer faces that prove the world reads without any colour at all. Skin, cloth and ground all silver: the treatment that proves the palette is a choice and not a crutch.</p>
+    <ul class="zlist">
+      <li><b>/site/assets/d4l/d4l-face-jennifer.png</b> — the current single-face cut</li>
+      <li><b>/site/assets/d4g/</b> — the full twelve-face set</li>
+    </ul>
+      </div>
+    </div>
+    <div class="tblock" id="chip">
+      <div class="thead"><div class="chapnum">08</div><h2>CHIP</h2><p class="tdef">CHIP = the product's own marks carry the color.</p></div>
+      <div class="tgrid">
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/d4e/d4e-phone-h8.jpg" alt="Phone H8">
+        <figcaption><b class="pid">P-124</b><span class="ttl">Phone Over Sand</span><span class="recipe"><i>Recipe</i> the phone&#x27;s own screen marks carry the color over white sand; hand and beach silver.</span></figcaption>
+      </figure>
+      <figure class="photo">
+        <img loading="lazy" src="/site/assets/d4k/d4k-phone-playlist.jpg" alt="Playlist In The Sun">
+        <figcaption><b class="pid">P-160</b><span class="ttl">Playlist In The Sun</span><span class="recipe"><i>Recipe</i> four real track cards on a real phone in window light; the product&#x27;s marks are the only color.</span></figcaption>
+      </figure>
+      </div>
+    </div>
+    <div class="tblock" id="glow">
+      <div class="thead"><div class="chapnum">09 · Banned</div><h2>GLOW</h2>
+      <p class="tdef">GLOW = colored light from nowhere, dead.</p></div>
+      <div>
+    <div class="banline" style="margin-top:0"><b>No frame is shown here, on purpose.</b> A GLOW frame reproduced on a review surface is the thing teaching the wrong lesson. Forty frames sit outside the library on this ruling — nine retired outright, thirty-one queued to be remade with the sun making the light. If you cannot point at what is making the colour, the frame is not finished.</div>
+    <a class="morelink" href="/site/Iris/styleguide-library#excluded">The full excluded list &rarr; <span>nine retire, thirty-one remake in sun</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="partmark" style="border-bottom:none;padding-bottom:0">
+  <div class="wrap">
+    <div class="kick">Part Two</div>
+    <h2>THE RULES</h2>
+    <p class="lede" style="margin-top:28px">Everything that governs a page once the frames are chosen.</p>
+  </div>
+</section>
+<section id="filter">
+  <div class="wrap">
+    <div class="chapnum">Chapter 1</div>
+    <h2>THE FILTER — THE THIRTEEN</h2>
+    <p class="body" style="margin-top:26px">Every frame passes these before it ships. The numbers are the floor; rule 13 is the gate.</p>
+    <ol class="rules">
+      <li>Kill the colour and look — if nothing holds your eye in grey, colour will not rescue it.</li>
+      <li>The coloured thing must stand out even in grey.</li>
+      <li>When a colour looks weak, fix the grey behind it — never the saturation.</li>
+      <li>Never desaturate, always convert — keep the colour master.</li>
+      <li>Colour sits on top of the photograph's own light — a flat inside is paint.</li>
+      <li>Point at what is making the colour — no source, no colour.</li>
+      <li>Quiet everything, let one thing sing.</li>
+      <li>Stand close — the edge gives a fake away.</li>
+      <li>Same texture on both sides of the line.</li>
+      <li>Real colour lands on what sits nearby.</li>
+      <li>Write the recipe down or it will not happen twice.</li>
+      <li>Make a calmer version and let them fight.</li>
+      <li><b>Name the light on a person — colour may kiss skin, never paint it.</b></li>
+    </ol>
+  </div>
+</section>
+<section id="light">
+  <div class="wrap">
+    <div class="chapnum">Chapter 2</div>
+    <h2>LIGHT</h2>
+    <ol class="rules">
+      <li>Start bright — frames and pages open in light.</li>
+      <li>Light is made into the photo at creation, never painted after.</li>
+      <li>Every light has a pointable source.</li>
+      <li>Faces take warm key light only; a real reflection may kiss skin; frequency colour may never paint it.</li>
+      <li>Amber is our sunlight, not a pop.</li>
+    </ol>
+  </div>
+</section>
+<section id="texture">
+  <div class="wrap">
+    <div class="chapnum">Chapter 3</div>
+    <h2>TEXTURE</h2>
+    <ol class="rules">
+      <li>Texture is photographed, never tiled.</li>
+      <li>Busy carries no words — copy sits on a calm zone, always.</li>
+      <li>One grain, frame and page; type is the one exemption.</li>
+      <li>Texture change announces the section — no divider lines.</li>
+      <li>Sharpness is hierarchy — crisp only where the eye should land.</li>
+    </ol>
+  </div>
+</section>
+<section id="furniture">
+  <div class="wrap">
+    <div class="chapnum">Chapter 4</div>
+    <h2>FURNITURE <span class="bandcount">charts, bullets, captions</span></h2>
+    <div class="masterlaw">
+      <div class="t">Master law</div>
+      <div class="l">Colour lives in the mark, never in the font.</div>
+    </div>
+
+    <div class="grouphead">Charts</div>
+    <ul class="grouplist">
+      <li>Ink on paper.</li>
+      <li>A bar wears band colour only when it IS that frequency.</li>
+      <li>Numbers in Switzer, never the serif.</li>
+      <li>One chart style per screen.</li>
+      <li>Ground stays paper, grid whisper-grey.</li>
+    </ul>
+
+    <div class="grouphead">Bullets</div>
+    <ul class="grouplist">
+      <li>A band-coloured mark at full intensity, ink words.</li>
+    </ul>
+
+    <div class="grouphead">Captions</div>
+    <ul class="grouplist">
+      <li>Quiet ink under the photo; a small chip only when the photo belongs to a frequency.</li>
+    </ul>
+
+    <figure class="exfig">
+      <img loading="lazy" src="/site/Iris/assets/examples/study-charts.jpg" alt="The study block from the d4-l page: the headline We ran the numbers for a year, two large figures 98.6% and 84%, and a card of seven horizontal bars on a pale paper ground">
+      <figcaption><span class="ttl">Example · one</span><span class="cap">The study block on d4-l — the current chart grammar. <b>Note: the big numbers must move to Switzer (numbers law); flagged drift.</b></span></figcaption>
+    </figure>
+  </div>
+</section>
+<section id="proof">
+  <div class="wrap">
+    <div class="chapnum">Chapter 5</div>
+    <h2>PROOF <span class="bandcount">testimonials</span></h2>
+    <ol class="rules">
+      <li>Faces pure silver, full contrast, complete crowns, never coloured, never retouched.</li>
+      <li>Colour beside the person, never on them — the frequency chip by the kicker.</li>
+      <li>Full names always; claims may ride.</li>
+      <li>Ground quiet paper — the calmest room in the house.</li>
+    </ol>
+
+    <figure class="exfig">
+      <img loading="lazy" src="/site/Iris/assets/examples/testimonial-chips-spec.png" alt="Two stacked captures of the testimonial section: the control above with plain kickers, and below the same section with a small frequency chip beside each kicker">
+      <figcaption><span class="ttl">Example · one</span><span class="cap">The banked baseline (Panel 10): the page's own frequency chips beside each kicker. Control above, treated below. The deeper treatment remains an open question on Michael's word.</span></figcaption>
+    </figure>
+  </div>
+</section>
+<section id="grammar">
+  <div class="wrap">
+    <div class="chapnum">Chapter 6</div>
+    <h2>PAGE GRAMMAR</h2>
+    <ol class="rules">
+      <li>SILVER is the ground everything sits on; the valley that makes pops detonate.</li>
+      <li>One SOLO per section — the section's voice.</li>
+      <li>THROUGH and SPILL are how a SOLO proves it is real.</li>
+      <li>WORN is the only people move; SUN is the hour, riding every treatment.</li>
+      <li>CHORD bookends only — opener and finale, never the middle.</li>
+      <li>CHIP speaks wherever the product does.</li>
+      <li>The ground serves the section's intent — night, sun, or neutral, anywhere — and never screws with the pop (the ground-pop law above).</li>
+    </ol>
+  </div>
+</section>
+<section id="jobs">
+  <div class="wrap">
+    <div class="chapnum">Chapter 7</div>
+    <h2>PAGE JOBS</h2>
+    <p class="body" style="margin-top:26px">One row per job: what treatment it takes, what light and ground it sits on, which frames to reach for, and what kills it.</p>
+    <table class="jobs">
+      <thead>
+        <tr><th>Job</th><th>Treatment</th><th>Light / Ground</th><th>Do</th><th>Don't</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="job" data-label="Job">HERO</td><td class="" data-label="Treatment">SUN + CHORD + CHIP in one frame</td><td class="" data-label="Light / Ground">Full sun ground</td><td class="" data-label="Do"><a href="/site/Iris/styleguide-library#p-163">P-163</a></td><td class="dont" data-label="Don't">Empty field, person too small</td></tr>
+        <tr><td class="job" data-label="Job">SECTION OPENER</td><td class="" data-label="Treatment">SOLO</td><td class="" data-label="Light / Ground">Ground steps to near-silver behind the pop</td><td class="" data-label="Do"><a href="/site/Iris/styleguide-library#p-26">P-26</a>, <a href="/site/Iris/styleguide-library#p-66">P-66</a></td><td class="dont" data-label="Don't">Two pops in one section</td></tr>
+        <tr><td class="job" data-label="Job">STEP ROW</td><td class="" data-label="Treatment">SOLO per step, colour rotates bands</td><td class="" data-label="Light / Ground"><span class="dash">—</span></td><td class="" data-label="Do"><a href="/site/Iris/styleguide-library#p-155">P-155</a>, <a href="/site/Iris/styleguide-library#p-156">P-156</a>, <a href="/site/Iris/styleguide-library#p-159">P-159</a></td><td class="dont" data-label="Don't">Coloured fonts</td></tr>
+        <tr><td class="job" data-label="Job">DEVICE ROW</td><td class="" data-label="Treatment">SOLO / SUN objects</td><td class="" data-label="Light / Ground"><span class="dash">—</span></td><td class="" data-label="Do"><a href="/site/Iris/styleguide-library#p-109">P-109</a>, <a href="/site/Iris/styleguide-library#p-160">P-160</a></td><td class="dont" data-label="Don't">Glow with no source</td></tr>
+        <tr><td class="job" data-label="Job">PROOF BLOCK</td><td class="" data-label="Treatment">SILVER + CHIP</td><td class="" data-label="Light / Ground">Quiet paper</td><td class="" data-label="Do">The chips spec above</td><td class="dont" data-label="Don't">Colour on a face, whisper-grey quotes</td></tr>
+        <tr><td class="job" data-label="Job">STUDY / CHARTS</td><td class="" data-label="Treatment">Furniture rules</td><td class="" data-label="Light / Ground"><span class="dash">—</span></td><td class="" data-label="Do">Ink bars, Switzer numbers</td><td class="dont" data-label="Don't">Serif numbers, mixed chart styles</td></tr>
+        <tr><td class="job" data-label="Job">QUOTE RIBBON</td><td class="" data-label="Treatment">Full ink or cut; never whisper</td><td class="" data-label="Light / Ground"><span class="dash">—</span></td><td class="" data-label="Do"><span class="dash">—</span></td><td class="dont" data-label="Don't"><span class="dash">—</span></td></tr>
+        <tr><td class="job" data-label="Job">FINALE</td><td class="" data-label="Treatment">CHORD</td><td class="" data-label="Light / Ground">Low warm sun legal</td><td class="" data-label="Do"><a href="/site/Iris/styleguide-library#p-94">P-94</a>, <a href="/site/Iris/styleguide-library#p-130">P-130</a></td><td class="dont" data-label="Don't">A fifth colour</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<section id="grounds" style="border-bottom:none">
+  <div class="wrap">
+    <div class="chapnum">Chapter 8</div>
+    <h2>GROUNDS</h2>
+    <p class="tdef">GROUNDS = clean, subject-free plates a page is built on.</p>
+    <p class="body" style="margin-top:28px">Three plates, so pages stop being built out of photographs that were never shot to be grounds. Wave 1, culled.</p>
+    <div class="g3">
+      <figure class="photo gfig">
+        <img loading="lazy" src="/site/Iris/assets/grounds/ground-sun-a.jpg" alt="Ground plate, sun — subject-free page ground">
+        <figcaption><b class="pid">SUN</b><span class="recipe"><i>Verdict</i> Warm ivory. The sun is white-hearted; amber lives only on the edge.</span></figcaption>
+      </figure>
+      <figure class="photo gfig">
+        <img loading="lazy" src="/site/Iris/assets/grounds/ground-neutral-c.jpg" alt="Ground plate, neutral — subject-free page ground">
+        <figcaption><b class="pid">NEUTRAL</b><span class="recipe"><i>Verdict</i> The nearest honest paper of the wave.</span></figcaption>
+      </figure>
+      <figure class="photo gfig">
+        <img loading="lazy" src="/site/Iris/assets/grounds/ground-night-a.jpg" alt="Ground plate, night — subject-free page ground">
+        <figcaption><b class="pid">NIGHT</b><span class="recipe"><i>Verdict</i> True blacks, real depth, one warm lamp and no second source.</span></figcaption>
+      </figure>
+    </div>
+
+    <div class="law">
+      <div class="tag">Binding on every plate · Michael, 2026-08-28</div>
+      <h3>THE GROUND NEVER SCREWS WITH THE POP</h3>
+      <p>Rule 3 governs: behind any pop the ground steps back to clean near-silver inside the field-tint cap; mood plates live where no pop competes; a warm plate never sits directly behind a SOLO nor behind an amber object; frequency pops never sit on the night plate. Every ground+pop pairing passes the kill-the-color squint and the tint measurement before it ships.</p>
+      <div class="src">Ground-pop law · direct order · binding</div>
+    </div>
+
+    <div class="gate"><b>Next gate — before anything reaches Ansel</b>
+      The copy-zone proof: full-contrast copy placed on each keeper at both viewports, measured, plus a grain match against the page photos.
+    </div>
+
+    <a class="morelink" href="/site/Iris/styleguide-library#grounds">Reserves and the kill list &rarr; <span>the full wave-1 record in the parallel library</span></a>
+  </div>
+</section>
+
+<section id="standing" style="border-bottom:none;padding-top:0">
+  <div class="wrap">
+    <div class="pend"><b>Standing.</b> This page is walled Iris-lane work. It is not canon until Michael says the word, and it replaces nothing. The approved surface remains <b>/site/styleguide-library</b>.</div>
+  </div>
+</section>
+
+</body>
+</html>
