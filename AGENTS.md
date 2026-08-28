@@ -4,7 +4,7 @@ This repo holds the Zodiac.fm in-app prototype (`inapp/app.html` and the app fam
 
 **Rules live in the vault.** Before building here, read the vault's `SESSION.md`, the current seat overlay, `workflows/working-with-michael.md`, `brand/design-system.md`, and `design/tokens.json`. Everything in those applies here too: no em dashes, grounded claims, true-viewport verification, a named accepted control, and exact-source continuity.
 
-Before Michael sees new or materially changed design, run the vault's `workflows/codex-sol-design-review-loop.md` and `code/check_codex_sol_design_review.py`. A captured control, separate Technical PASS, schema-2 review receipt, non-Sol critic `SHIP`, and passing hash-bound receipt are mandatory. Any later edit invalidates that pass.
+Before Michael sees new or materially changed design, run the vault's `workflows/codex-sol-design-review-loop.md` and `code/check_seats.py sol-review`. A captured control, separate Technical PASS, schema-2 review receipt, non-Sol critic `SHIP`, and passing hash-bound receipt are mandatory. Any later edit invalidates that pass.
 
 **You are cleared to build, deploy, commit, and push here without asking.** The only boundaries: don't overwrite another agent's in-flight edits to the same file (a NEW file alongside is always fine), and don't rewrite git history or force-push. Michael's four hard stops still apply (payment info, purchases, deleting real data, sending a message to a person).
 
