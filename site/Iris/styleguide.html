@@ -161,6 +161,55 @@
   .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:34px}
   .toc a{font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--violet-soft);text-decoration:none;border:1px solid rgba(210,200,255,.26);border-radius:5px;padding:9px 11px}
 
+
+  /* ---- THE DICTATION LAYER: spec tables + source tags ---- */
+  table.spec{width:100%;border-collapse:collapse;margin-top:14px;font-family:var(--sans)}
+  table.spec th{text-align:left;font:600 10px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--violet-soft);padding:0 14px 11px 0;border-bottom:1px solid var(--hair);vertical-align:bottom;white-space:nowrap}
+  table.spec td{padding:14px 14px 14px 0;border-bottom:1px solid var(--hair);font:400 13.5px/1.5 var(--sans);color:var(--cream82);vertical-align:top}
+  table.spec td.el{font:600 14px/1.35 var(--sans);color:var(--cream)}
+  table.spec td.el code{display:block;margin-top:4px;font:400 11.5px/1.4 var(--sans);color:var(--cream40);letter-spacing:.02em}
+  table.spec td.tok{color:var(--violet-soft);white-space:nowrap}
+  table.spec td .n{font-variant-numeric:tabular-nums;color:var(--cream)}
+  table.spec .dash{color:var(--cream40)}
+  table.spec tr.grp td{border-bottom:none;padding:26px 0 4px;font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:rgba(240,180,90,.85)}
+
+  .srctag{display:inline-block;margin-right:8px;font:600 10px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;border-radius:3px;padding:5px 7px;vertical-align:1px}
+  .srctag.m{color:#B7E3CE;background:rgba(18,165,110,.16);border:1px solid rgba(18,165,110,.42)}
+  .srctag.p{color:var(--violet-soft);background:rgba(101,33,201,.22);border:1px solid rgba(210,200,255,.30)}
+  .srcnote{margin-top:20px;font:400 14.5px/1.6 var(--sans);color:var(--cream58);max-width:52em}
+  .srcnote b{color:var(--cream82);font-weight:600}
+
+  .twolaws{margin-top:48px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .twolaws .one{border-left:3px solid var(--amber);background:rgba(240,180,90,.08);border-radius:0 6px 6px 0;padding:26px 26px}
+  .twolaws .one .t{font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:14px}
+  .twolaws .one .l{font:500 32px/1.18 var(--serif);font-style:italic;color:var(--cream)}
+
+  ol.howto{list-style:none;counter-reset:h;margin-top:30px;max-width:52em}
+  ol.howto li{counter-increment:h;position:relative;padding:17px 0 17px 66px;border-bottom:1px solid var(--hair);font:400 17px/1.55 var(--sans);color:var(--cream82)}
+  ol.howto li::before{content:counter(h);position:absolute;left:0;top:14px;font:600 26px/1.2 var(--sans);color:var(--violet-soft)}
+  ol.howto li b{color:var(--cream);font-weight:600}
+
+  .bulletdemo{display:flex;flex-wrap:wrap;gap:14px 34px;margin-top:26px;align-items:center}
+  .bulletdemo span{font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--cream82)}
+  .bulletdemo span i{display:inline-block;width:18px;height:4px;border-radius:2px;margin-right:8px;vertical-align:2px}
+  .bulletdemo span.dot i{width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:0}
+
+  @media(max-width:760px){
+    .twolaws{grid-template-columns:1fr;gap:18px}
+    .twolaws .one .l{font-size:23px}
+    ol.howto li{padding:15px 0 15px 46px;font-size:16px}
+    ol.howto li::before{font-size:21px;top:13px}
+    /* spec tables become stacked cards — no sideways scrolling on the phone */
+    table.spec,table.spec tbody,table.spec tr,table.spec td{display:block;width:100%}
+    table.spec thead{display:none}
+    table.spec tr{border:1px solid var(--hair);border-radius:6px;padding:16px 15px;margin-bottom:16px}
+    table.spec tr.grp{border:none;padding:20px 0 0;margin-bottom:6px}
+    table.spec td{border-bottom:none;padding:0 0 10px 0}
+    table.spec td:last-child{padding-bottom:0}
+    table.spec td.el{font-size:17px;margin-bottom:10px}
+    table.spec td[data-label]::before{content:attr(data-label);display:block;font:600 9.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:4px}
+  }
+
   @media(max-width:1024px){
     .photogrid{grid-template-columns:1fr 1fr}
   }
@@ -236,7 +285,7 @@
   <div class="banner">
     <div class="tag">Iris lane · walled · not canon</div>
     <div class="line">IRIS STYLE GUIDE — the rules, with just enough examples. The full bank lives in the parallel library.</div>
-    <div class="sub">This is the page a builder reads top to bottom: the nine treatments with two frames each, then every rule that governs a page. When you need the whole bank — all 83 filed frames, the flags, the gaps, the excluded list — go to the parallel library.</div>
+    <div class="sub">This is the page a builder reads top to bottom: the nine treatments with two frames each, then every rule that governs a page, then the dictated values — typography, bullets and captions measured off the approved d4-l page, never invented. When you need the whole bank — all 79 filed frames, the flags, the gaps, the cuts, the excluded list — go to the parallel library.</div>
     <div class="date">Build date · 2026-08-28</div>
   </div>
 </div>
@@ -245,7 +294,7 @@
   <div class="wrap">
     <div class="eyebrow">Iris Lane · The Style Guide</div>
     <h1>The rules, and just enough to see them.</h1>
-    <p class="lede" style="margin-top:30px">Two examples per treatment, then the filter, the light and texture laws, the furniture, the proof, the grammar, the job-by-job call sheet, and the ground plates. Nothing here needs the bank open beside it.</p>
+    <p class="lede" style="margin-top:30px">Two examples per treatment, then the filter, the light and texture laws, the furniture, the dictation layer — type, bullets and captions at real measured values — the proof, the grammar, the job-by-job call sheet, the ground plates, and the order a page is built in. Nothing here needs the bank open beside it.</p>
     <a class="morelink" href="/site/Iris/styleguide-library">The parallel library &rarr; <span>every frame, every flag, the gaps and the excluded</span></a>
   </div>
 </header>
@@ -352,12 +401,12 @@
       <div class="thead"><div class="chapnum">08</div><h2>CHIP</h2><p class="tdef">CHIP = the product's own marks carry the color.</p></div>
       <div class="tgrid">
       <figure class="photo">
-        <img loading="lazy" src="/site/assets/d4e/d4e-phone-h8.jpg" alt="Phone H8">
-        <figcaption><b class="pid">P-124</b><span class="ttl">Phone Over Sand</span><span class="recipe"><i>Recipe</i> the phone&#x27;s own screen marks carry the color over white sand; hand and beach silver.</span></figcaption>
+        <img loading="lazy" src="/site/assets/hero-recast/hero-recast-phone-clean-v1.jpg" alt="A dark iPhone standing alone on a soft white studio sweep, its screen carrying the live zodiac.fm playlist with three gradient track cards in violet, rose and emerald">
+        <figcaption><b class="pid">P-162</b><span class="ttl">The Hero Phone</span><span class="recipe"><i>Recipe</i> the real app screen, shot clean: three gradient track cards are the whole palette, and the studio sweep stays silver. The product&#x27;s own mark, at product scale.</span></figcaption>
       </figure>
       <figure class="photo">
-        <img loading="lazy" src="/site/assets/d4k/d4k-phone-playlist.jpg" alt="Playlist In The Sun">
-        <figcaption><b class="pid">P-160</b><span class="ttl">Playlist In The Sun</span><span class="recipe"><i>Recipe</i> four real track cards on a real phone in window light; the product&#x27;s marks are the only color.</span></figcaption>
+        <img loading="lazy" src="/site/Iris/assets/examples/chip-kickers.jpg" alt="Three testimonial kickers — Coming Home, Flow, Opportunity — each with a small band-coloured waveform chip beside it in rose, amber and emerald">
+        <figcaption><b class="pid">CHIPS &middot; IN USE</b><span class="ttl">Kickers On The Page</span><span class="recipe"><i>Recipe</i> the same mark at page scale: a small band-coloured waveform beside each kicker, one band per voice. Colour sits beside the person, never on them. Not a bank frame and it carries no P-number &mdash; it is the product mark doing its job on the page.</span></figcaption>
       </figure>
       </div>
     </div>
@@ -461,9 +510,164 @@
     </figure>
   </div>
 </section>
-<section id="proof">
+<section id="typography">
   <div class="wrap">
     <div class="chapnum">Chapter 5</div>
+    <h2>TYPOGRAPHY &mdash; DICTATED</h2>
+    <p class="body" style="margin-top:26px">Every value below is read off <b>/site/site-d4-l.html</b>, the approved page. Nothing here is invented. Where the Iris review shell and d4-l disagree, <b>d4-l wins</b> &mdash; the shell is a review surface, the page is the product.</p>
+
+    <p class="srcnote"><span class="srctag m">Measured</span> <b>d4-l uses no <span style="font-family:var(--sans)">clamp()</span>.</b> It declares a token block on <span style="font-family:var(--sans)">:root</span> and swaps the whole block at <span style="font-family:var(--sans)">max&#x2011;width:640px</span>. So the 375 column is not an interpolation &mdash; it is the second declared set, and it is the same set from 640px down to the floor. Two sizes exist, not a curve.</p>
+
+    <table class="spec">
+      <thead>
+        <tr><th>Element</th><th>Typeface + weight</th><th>1440</th><th>375</th><th>Line-height</th><th>Letter-spacing</th><th>Case</th><th>Colour token</th></tr>
+      </thead>
+      <tbody>
+        <tr class="grp"><td colspan="8">Naming and headings</td></tr>
+        <tr><td class="el" data-label="Element">Wordmark<code>.wordmark</code></td><td data-label="Typeface + weight">Cormorant Garamond 600</td><td data-label="1440"><span class="n">23px</span></td><td data-label="375"><span class="n">18px</span></td><td data-label="Line-height"><span class="n">1.65 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">.06em</span></td><td data-label="Case">As typed</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
+        <tr><td class="el" data-label="Element">H1 / display<code>h1</code></td><td data-label="Typeface + weight">Cormorant Garamond 600 &middot; <i>em</i> italic 500</td><td data-label="1440"><span class="n">82px</span></td><td data-label="375"><span class="n">46px</span></td><td data-label="Line-height"><span class="n">1.02 / 1.05</span></td><td data-label="Letter-spacing"><span class="n">.004em</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
+        <tr><td class="el" data-label="Element">Section head<code>h2</code></td><td data-label="Typeface + weight">Cormorant Garamond 600 &middot; <i>em</i> italic 500</td><td data-label="1440"><span class="n">54px</span></td><td data-label="375"><span class="n">33px</span></td><td data-label="Line-height"><span class="n">1.06 / 1.12</span></td><td data-label="Letter-spacing"><span class="n">.002em</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
+        <tr><td class="el" data-label="Element">Sub head<code>h3</code></td><td data-label="Typeface + weight">Switzer 600</td><td data-label="1440"><span class="n">22px</span></td><td data-label="375"><span class="n">20px</span></td><td data-label="Line-height"><span class="n">1.35</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
+        <tr class="grp"><td colspan="8">Kickers</td></tr>
+        <tr><td class="el" data-label="Element">Kicker &mdash; proof<code>.kick</code></td><td data-label="Typeface + weight">Switzer 600</td><td data-label="1440"><span class="n">11px</span></td><td data-label="375"><span class="n">11px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">.18em</span></td><td data-label="Case">UPPERCASE</td><td class="tok" data-label="Colour token">--ink38 &rarr; .66</td></tr>
+        <tr><td class="el" data-label="Element">Kicker &mdash; chapter cue<code>.cue</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">12px</span></td><td data-label="375"><span class="n">11.5px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">.24em</span></td><td data-label="Case">UPPERCASE</td><td class="tok" data-label="Colour token">--ink38 &rarr; .66</td></tr>
+        <tr><td class="el" data-label="Element">Kicker &mdash; prehead<code>.prehead</code></td><td data-label="Typeface + weight">Switzer 600</td><td data-label="1440"><span class="n">12px</span></td><td data-label="375"><span class="n">11px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">.18em / .16em</span></td><td data-label="Case">UPPERCASE</td><td class="tok" data-label="Colour token">--ink-label &rarr; .66</td></tr>
+        <tr><td class="el" data-label="Element">Kicker &mdash; music<code>.mkick</code></td><td data-label="Typeface + weight">Switzer 600</td><td data-label="1440"><span class="n">11px</span></td><td data-label="375"><span class="n">11px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">.18em</span></td><td data-label="Case">UPPERCASE</td><td class="tok" data-label="Colour token">--ink38 &rarr; .66</td></tr>
+        <tr class="grp"><td colspan="8">Reading copy</td></tr>
+        <tr><td class="el" data-label="Element">Body<code>body</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">18px</span></td><td data-label="375"><span class="n">18px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink78 &rarr; .78</td></tr>
+        <tr><td class="el" data-label="Element">Lede<code>.lede</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">22px</span></td><td data-label="375"><span class="n">20px</span></td><td data-label="Line-height"><span class="n">1.55</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink78 &rarr; .78</td></tr>
+        <tr><td class="el" data-label="Element">Fine print<code>.tiny</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">14px</span></td><td data-label="375"><span class="n">14px</span></td><td data-label="Line-height"><span class="n">1.55</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink-fine &rarr; .66</td></tr>
+        <tr class="grp"><td colspan="8">Quotes and proof</td></tr>
+        <tr><td class="el" data-label="Element">Pull quote<code>.pq</code></td><td data-label="Typeface + weight">Cormorant Garamond 400 italic &middot; <b>b</b> 600 italic</td><td data-label="1440"><span class="n">24px</span></td><td data-label="375"><span class="n">21px</span></td><td data-label="Line-height"><span class="n">1.4</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66 &middot; <b>b</b> --ink</td></tr>
+        <tr><td class="el" data-label="Element">Testimonial quote<code>.tlead</code></td><td data-label="Typeface + weight">Cormorant Garamond 600</td><td data-label="1440"><span class="n">22px base<br>20 / 24 / 27 / 28 by slot</span></td><td data-label="375"><span class="n">19.5px base<br>21 / 22 by slot</span></td><td data-label="Line-height"><span class="n">1.32</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
+        <tr><td class="el" data-label="Element">Testimonial detail<code>.tdetail</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">16.5px</span></td><td data-label="375"><span class="n">16.5px</span></td><td data-label="Line-height"><span class="n">1.55</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66</td></tr>
+        <tr><td class="el" data-label="Element">Name line<code>.pwho</code></td><td data-label="Typeface + weight">Switzer 600</td><td data-label="1440"><span class="n">14px</span></td><td data-label="375"><span class="n">14px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">As typed</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
+        <tr><td class="el" data-label="Element">Role line<code>.pwho small</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">12.5px</span></td><td data-label="375"><span class="n">12.5px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">.02em</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66</td></tr>
+        <tr><td class="el" data-label="Element">Scrolling quote<code>.mqi .q</code></td><td data-label="Typeface + weight">Cormorant Garamond 400 italic</td><td data-label="1440"><span class="n">21px</span></td><td data-label="375"><span class="n">21px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
+        <tr class="grp"><td colspan="8">Captions</td></tr>
+        <tr><td class="el" data-label="Element">Caption &mdash; scene<code>.scene figcaption</code></td><td data-label="Typeface + weight">Switzer 400 &middot; <b>b</b> 600</td><td data-label="1440"><span class="n">14.5px</span></td><td data-label="375"><span class="n">14.5px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66 &middot; <b>b</b> --ink</td></tr>
+        <tr><td class="el" data-label="Element">Caption &mdash; object<code>.mfig figcaption</code></td><td data-label="Typeface + weight">Switzer 400 &middot; <b>b</b> 600 block 16.5px</td><td data-label="1440"><span class="n">15px</span></td><td data-label="375"><span class="n">15px</span></td><td data-label="Line-height"><span class="n">1.5</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66 &middot; <b>b</b> --ink</td></tr>
+        <tr class="grp"><td colspan="8">Numbers &mdash; every one of them Switzer</td></tr>
+        <tr><td class="el" data-label="Element">Big number<code>.stat</code></td><td data-label="Typeface + weight">Switzer 600</td><td data-label="1440"><span class="n">50px<br><small>% sign .32em = 16px</small></span></td><td data-label="375"><span class="n">30px<br><small>% sign .32em = 9.6px</small></span></td><td data-label="Line-height"><span class="n">1</span></td><td data-label="Letter-spacing"><span class="n">-.01em</span></td><td data-label="Case">Figures</td><td class="tok" data-label="Colour token">--ink &middot; sign --ink56</td></tr>
+        <tr><td class="el" data-label="Element">Stat label<code>.statlbl</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">15px</span></td><td data-label="375"><span class="n">15px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66</td></tr>
+        <tr><td class="el" data-label="Element">Chart title<code>.otitle</code></td><td data-label="Typeface + weight">Switzer 600 &middot; <b>small</b> 400 13px</td><td data-label="1440"><span class="n">15px</span></td><td data-label="375"><span class="n">15px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink &middot; small --ink56</td></tr>
+        <tr><td class="el" data-label="Element">Chart label<code>.orow .olbl</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">14.5px</span></td><td data-label="375"><span class="n">14.5px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink78 &rarr; .78</td></tr>
+        <tr><td class="el" data-label="Element">Chart value<code>.orow .oval</code></td><td data-label="Typeface + weight">Switzer 600 &middot; <b>small</b> 400 12px</td><td data-label="1440"><span class="n">19px</span></td><td data-label="375"><span class="n">19px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Figures</td><td class="tok" data-label="Colour token">--ink &middot; small --ink56</td></tr>
+        <tr><td class="el" data-label="Element">Frequency name<code>.crow .cname b</code></td><td data-label="Typeface + weight">Switzer 600 &middot; <b>span</b> 400 12.5px</td><td data-label="1440"><span class="n">17px</span></td><td data-label="375"><span class="n">17px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink &middot; span --ink78</td></tr>
+        <tr><td class="el" data-label="Element">Hz figure<code>.crow .chz</code></td><td data-label="Typeface + weight">Switzer 600 &middot; <b>small</b> 400 13px</td><td data-label="1440"><span class="n">26px</span></td><td data-label="375"><span class="n">21px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Figures</td><td class="tok" data-label="Colour token">--ink &middot; small --ink56</td></tr>
+        <tr class="grp"><td colspan="8">Actionable type</td></tr>
+        <tr><td class="el" data-label="Element">CTA / button<code><span class="dash">none on d4-l</span></code></td><td data-label="Typeface + weight"><span class="dash">&mdash;</span></td><td data-label="1440"><span class="n"><span class="dash">&mdash;</span></span></td><td data-label="375"><span class="n"><span class="dash">&mdash;</span></span></td><td data-label="Line-height"><span class="n"><span class="dash">&mdash;</span></span></td><td data-label="Letter-spacing"><span class="n"><span class="dash">&mdash;</span></span></td><td data-label="Case"><span class="dash">&mdash;</span></td><td class="tok" data-label="Colour token"><span class="dash">&mdash;</span></td></tr>
+        <tr><td class="el" data-label="Element">Text link<code>.textlink</code></td><td data-label="Typeface + weight">Switzer 400 &middot; 1px --hair underline, 2px below</td><td data-label="1440"><span class="n">18px (body)</span></td><td data-label="375"><span class="n">18px (body)</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; --ink on hover</td></tr>
+        <tr><td class="el" data-label="Element">Nav link<code>.nav-links a</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">14.5px</span></td><td data-label="375"><span class="n">12px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66</td></tr>
+      </tbody>
+    </table>
+
+    <div class="subhead">The colour tokens, measured</div>
+    <ul class="zlist">
+      <li><b>--paper</b> #F0F0EF &nbsp;&middot;&nbsp; <b>--ink</b> #141412 &nbsp;&middot;&nbsp; <b>--hair</b> rgba(20,20,18,.12)</li>
+      <li><b>--ink78</b> rgba(20,20,18,.78) &mdash; reading copy and chart labels</li>
+      <li><b>--ink56</b>, <b>--ink38</b>, <b>--ink-fine</b>, <b>--ink-label</b> &mdash; all four resolve to <b>rgba(20,20,18,.66)</b>. The names carry opacities they no longer have: the D4-I contrast audit raised every one of them to .66 and left the names alone. <b>Use the token, never the number in its name.</b></li>
+      <li><b>Bands</b> &mdash; core #6521C9 &nbsp;&middot;&nbsp; love #B90044 &nbsp;&middot;&nbsp; vitality #FF9112 &nbsp;&middot;&nbsp; abundance #12A56E. These are d4-l&#x27;s four. The Iris shell&#x27;s own violet is the same #6521C9; its amber is not d4-l&#x27;s.</li>
+    </ul>
+
+    <div class="banline"><b>Measured drift, flagged not copied.</b> d4-l&#x27;s step kickers set the <i>text</i> to the band colour &mdash; <span style="font-family:var(--sans)">&lt;p class=&quot;kick&quot; style=&quot;color:var(--vitality)&quot;&gt;</span>. That is colour living in a font, which the master law forbids. It is recorded here because it is what the approved page does; it is not dictated forward. The mark carries the band; the words stay ink.</div>
+
+    <div class="twolaws">
+      <div class="one"><div class="t">Law</div><div class="l">Numbers always Switzer, never the serif.</div></div>
+      <div class="one"><div class="t">Law</div><div class="l">Colour never lives in a font.</div></div>
+    </div>
+  </div>
+</section>
+<section id="bullets">
+  <div class="wrap">
+    <div class="chapnum">Chapter 6</div>
+    <h2>BULLETS &mdash; DICTATED</h2>
+    <p class="body" style="margin-top:26px">One law, two built forms. The mark carries the colour and the words stay ink &mdash; so a bullet is a construction question, not a colour question.</p>
+
+    <div class="subhead">Form one &mdash; the step mark <span class="num">measured on d4-l</span></div>
+    <ul class="zlist">
+      <li><b>Shape</b> &mdash; a pill: <b>18px wide, 4px tall, 2px corner radius</b>, <span style="font-family:var(--sans)">display:inline-block</span>.</li>
+      <li><b>Colour</b> &mdash; the band token at <b>full intensity</b>, set inline: <span style="font-family:var(--sans)">background:var(--core)</span>. No tint, no opacity, no gradient.</li>
+      <li><b>Gap to text</b> &mdash; <b>8px</b>, carried by the mark&#x27;s own <span style="font-family:var(--sans)">margin-right</span>, not by a flex gap.</li>
+      <li><b>Seating</b> &mdash; <span style="font-family:var(--sans)">vertical-align:2px</span>: the pill rides two pixels above the baseline so it centres on the cap height of an 11px uppercase kicker.</li>
+      <li><b>Text</b> &mdash; Switzer 600, 11px, .18em, uppercase. Same at 1440 and at 375; d4-l does not step it down.</li>
+      <li><b>Spacing below</b> &mdash; the kicker carries <b>margin-bottom:12px</b> to the head that follows (16px in the music chapter).</li>
+    </ul>
+    <div class="bulletdemo">
+      <span><i style="background:#6521C9"></i>Step one &middot; core</span>
+      <span><i style="background:#FF9112"></i>Step two &middot; vitality</span>
+      <span><i style="background:#12A56E"></i>Step three &middot; abundance</span>
+    </div>
+
+    <div class="subhead">Form two &mdash; the band dot <span class="num">measured on d4-l</span></div>
+    <ul class="zlist">
+      <li><b>Shape</b> &mdash; a circle: <b>7&times;7px, 50% radius</b>, on the song card&#x27;s band line.</li>
+      <li><b>Colour</b> &mdash; the card&#x27;s own band variable at full intensity; the line&#x27;s words take the band&#x27;s ink variable.</li>
+      <li><b>Gap to text</b> &mdash; <b>6px</b>, a flex gap. <b>Text</b> &mdash; Switzer 600, 12.5px.</li>
+    </ul>
+    <div class="bulletdemo">
+      <span class="dot"><i style="background:#6521C9"></i>Core</span>
+      <span class="dot"><i style="background:#B90044"></i>Love</span>
+      <span class="dot"><i style="background:#FF9112"></i>Vitality</span>
+      <span class="dot"><i style="background:#12A56E"></i>Abundance</span>
+    </div>
+
+    <div class="subhead">When the mark rotates, and when it holds one band</div>
+    <ul class="zlist">
+      <li><span class="srctag m">Measured</span> <b>Rotates</b> when the sibling items each <i>are</i> a different frequency. d4-l&#x27;s three-step row runs core &rarr; vitality &rarr; abundance, one band per step, in canon order with love skipped because there are three steps and four bands. A short row skips from the end of the order; it never repeats a band inside one row.</li>
+      <li><span class="srctag m">Measured</span> <b>Holds one band</b> inside a single band&#x27;s own object. Every dot on one song card is that card&#x27;s band, for the whole component.</li>
+      <li><span class="srctag p">Proposed &middot; Iris lane</span> A list that is <b>not about frequency at all</b> takes one neutral mark and never rotates. Rotating band colour through a list that carries no frequency meaning is decoration, and decoration is the thing this system is built to refuse. This is the Iris lane&#x27;s call; d4-l has no such list to measure.</li>
+      <li><span class="srctag p">Proposed &middot; Iris lane</span> The neutral mark: a <b>16&times;2px bar</b> at 34px indent, seated at 1.22em &mdash; the mark this review surface uses on its own lists. Unmeasured on any live page.</li>
+    </ul>
+  </div>
+</section>
+<section id="captions">
+  <div class="wrap">
+    <div class="chapnum">Chapter 7</div>
+    <h2>CAPTIONS &mdash; DICTATED</h2>
+
+    <div class="subhead">Measured on d4-l</div>
+    <ul class="zlist">
+      <li><b>Position</b> &mdash; always below the frame, <b>margin-top:14px</b>. No rule, no box, no tint behind it.</li>
+      <li><b>Size and colour</b> &mdash; scene captions <b>14.5px</b> in <b>--ink56</b> (.66), the lead half in <b>--ink</b> at 600. Object captions <b>15px / 1.5</b> in --ink56, their first line a block title in --ink at 600, <b>16.5px</b>.</li>
+      <li><b>The chip rule</b> &mdash; the frequency waveform sits <b>first, then the words</b>: <b>96&times;20px</b>, <span style="font-family:var(--sans)">object-fit:contain</span>, left-aligned, nudged <b>3px down</b> so it seats on the text baseline, with a <b>12px</b> gap to the words and the whole line aligned <span style="font-family:var(--sans)">align-items:baseline</span>. One chip, one frequency, only when the photo belongs to a band.</li>
+      <li><b>Max-width</b> &mdash; d4-l caps the caption by its column, not by a property: the scenes grid is 1040px across two columns with a 40px gutter, so a caption measures about <b>500px</b> at 1440. The one explicit cap on the page is <b>520px</b> on the lead music caption.</li>
+      <li><b>At 375</b> &mdash; captions do not step down. 14.5px stays 14.5px, the chip stays 96&times;20. d4-l steps headings and stats at 640px and leaves captions alone.</li>
+    </ul>
+
+    <div class="subhead">Measured on this review surface &mdash; and the conflict</div>
+    <ul class="zlist">
+      <li>The parallel library&#x27;s own figcaption: <b>border-top 1px --hair</b>, margin-top 14px, padding-top 12px, Switzer 400 <b>14px / 1.5</b> in --cream58; the recipe line 14.5px / 1.6 in --cream82; the P-number 600 <b>30px</b> (26px at 760 and below); the title 600 <b>19px</b> (17px).</li>
+      <li><b>Conflict, and d4-l wins.</b> The review surface puts a hairline <i>above</i> every caption. d4-l puts nothing above a caption. On a live page there is <b>no rule above a caption</b> &mdash; the hairline is a review device that exists to seat the big P-number under the label law, and it stays on the review surfaces only.</li>
+    </ul>
+
+    <div class="subhead">Proposed &mdash; Iris lane, unmeasured</div>
+    <ul class="zlist">
+      <li><span class="srctag p">Proposed</span> Cap the caption at <b>34em, and never wider than the frame above it</b>. d4-l gets this from its grid; a caption under a full-bleed frame has no grid to protect it.</li>
+      <li><span class="srctag p">Proposed</span> <b>One caption, one job.</b> Either a lead in ink plus a lighter descriptive half on one line (d4-l&#x27;s scene form), or a block title plus a paragraph (d4-l&#x27;s object form). Not both grammars in one chapter &mdash; the one-chart-grammar rule, applied to words.</li>
+    </ul>
+  </div>
+</section>
+<section id="howto">
+  <div class="wrap">
+    <div class="chapnum">Chapter 8</div>
+    <h2>HOW TO BUILD A PAGE</h2>
+    <p class="body" style="margin-top:26px">In order. Each step closes before the next opens.</p>
+    <ol class="howto">
+      <li>List the sections, and write one line saying what each section is <b>for</b>.</li>
+      <li>Give every section its <b>mood and its ground plate</b> &mdash; sun, neutral, or night &mdash; and the ground-pop law binds every pairing.</li>
+      <li>Pick the treatments: <b>one SOLO per section</b>, and CHORD only at the bookends, opener and finale.</li>
+      <li>Pull the frames from the parallel library, or write the making-prompt for what is missing &mdash; the light is made at creation, never painted after.</li>
+      <li>Set the type from the tables above; nothing on the page gets a size that is not in them.</li>
+      <li>Place the furniture by its own rules &mdash; charts, bullets, captions.</li>
+      <li>Run <b>the thirteen</b> on every frame, and the <b>squint test</b> on every ground-and-pop pair.</li>
+      <li>QA both viewports down to the <b>375 floor</b>, then make the calmer version and let the two fight before anything is shown.</li>
+    </ol>
+  </div>
+</section>
+<section id="proof">
+  <div class="wrap">
+    <div class="chapnum">Chapter 9</div>
     <h2>PROOF <span class="bandcount">testimonials</span></h2>
     <ol class="rules">
       <li>Faces pure silver, full contrast, complete crowns, never coloured, never retouched.</li>
@@ -480,7 +684,7 @@
 </section>
 <section id="grammar">
   <div class="wrap">
-    <div class="chapnum">Chapter 6</div>
+    <div class="chapnum">Chapter 10</div>
     <h2>PAGE GRAMMAR</h2>
     <ol class="rules">
       <li>SILVER is the ground everything sits on; the valley that makes pops detonate.</li>
@@ -495,7 +699,7 @@
 </section>
 <section id="jobs">
   <div class="wrap">
-    <div class="chapnum">Chapter 7</div>
+    <div class="chapnum">Chapter 11</div>
     <h2>PAGE JOBS</h2>
     <p class="body" style="margin-top:26px">One row per job: what treatment it takes, what light and ground it sits on, which frames to reach for, and what kills it.</p>
     <table class="jobs">
@@ -506,7 +710,7 @@
         <tr><td class="job" data-label="Job">HERO</td><td class="" data-label="Treatment">SUN + CHORD + CHIP in one frame</td><td class="" data-label="Light / Ground">Full sun ground</td><td class="" data-label="Do"><a href="/site/Iris/styleguide-library#p-163">P-163</a></td><td class="dont" data-label="Don't">Empty field, person too small</td></tr>
         <tr><td class="job" data-label="Job">SECTION OPENER</td><td class="" data-label="Treatment">SOLO</td><td class="" data-label="Light / Ground">Ground steps to near-silver behind the pop</td><td class="" data-label="Do"><a href="/site/Iris/styleguide-library#p-26">P-26</a>, <a href="/site/Iris/styleguide-library#p-66">P-66</a></td><td class="dont" data-label="Don't">Two pops in one section</td></tr>
         <tr><td class="job" data-label="Job">STEP ROW</td><td class="" data-label="Treatment">SOLO per step, colour rotates bands</td><td class="" data-label="Light / Ground"><span class="dash">—</span></td><td class="" data-label="Do"><a href="/site/Iris/styleguide-library#p-155">P-155</a>, <a href="/site/Iris/styleguide-library#p-156">P-156</a>, <a href="/site/Iris/styleguide-library#p-159">P-159</a></td><td class="dont" data-label="Don't">Coloured fonts</td></tr>
-        <tr><td class="job" data-label="Job">DEVICE ROW</td><td class="" data-label="Treatment">SOLO / SUN objects</td><td class="" data-label="Light / Ground"><span class="dash">—</span></td><td class="" data-label="Do"><a href="/site/Iris/styleguide-library#p-109">P-109</a>, <a href="/site/Iris/styleguide-library#p-160">P-160</a></td><td class="dont" data-label="Don't">Glow with no source</td></tr>
+        <tr><td class="job" data-label="Job">DEVICE ROW</td><td class="" data-label="Treatment">SOLO / SUN objects</td><td class="" data-label="Light / Ground"><span class="dash">—</span></td><td class="" data-label="Do"><a href="/site/Iris/styleguide-library#p-109">P-109</a>, <a href="/site/Iris/styleguide-library#p-162">P-162</a></td><td class="dont" data-label="Don't">Glow with no source</td></tr>
         <tr><td class="job" data-label="Job">PROOF BLOCK</td><td class="" data-label="Treatment">SILVER + CHIP</td><td class="" data-label="Light / Ground">Quiet paper</td><td class="" data-label="Do">The chips spec above</td><td class="dont" data-label="Don't">Colour on a face, whisper-grey quotes</td></tr>
         <tr><td class="job" data-label="Job">STUDY / CHARTS</td><td class="" data-label="Treatment">Furniture rules</td><td class="" data-label="Light / Ground"><span class="dash">—</span></td><td class="" data-label="Do">Ink bars, Switzer numbers</td><td class="dont" data-label="Don't">Serif numbers, mixed chart styles</td></tr>
         <tr><td class="job" data-label="Job">QUOTE RIBBON</td><td class="" data-label="Treatment">Full ink or cut; never whisper</td><td class="" data-label="Light / Ground"><span class="dash">—</span></td><td class="" data-label="Do"><span class="dash">—</span></td><td class="dont" data-label="Don't"><span class="dash">—</span></td></tr>
@@ -517,7 +721,7 @@
 </section>
 <section id="grounds" style="border-bottom:none">
   <div class="wrap">
-    <div class="chapnum">Chapter 8</div>
+    <div class="chapnum">Chapter 12</div>
     <h2>GROUNDS</h2>
     <p class="tdef">GROUNDS = clean, subject-free plates a page is built on.</p>
     <p class="body" style="margin-top:28px">Three plates, so pages stop being built out of photographs that were never shot to be grounds. Wave 1, culled.</p>
