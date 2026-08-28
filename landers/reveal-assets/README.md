@@ -60,7 +60,7 @@ Moved to `_archive/` after confirming zero references anywhere in the repo:
 ## Flagged, not touched (ambiguous — Fable's call)
 
 Thirteen `-d2c.png` files are the ONLY version of that person's photo and are
-currently referenced by zero pages: `anja-zibert`, `dr-jill-white`,
+currently referenced by zero pages: `anja-zibert`, `jill-carnahan`,
 `dr-pedram-shojai`, `ellen-grimaldi`, `jennifer-rodriguez`, `jesse-elder`,
 `kevin-knabe`, `maryellen-tribby`, `nate-anaez-zeleznick`, `neda-fakhr`,
 `rachel-wayte`, `sanela-estrella`, `yun-rhee`. These are not stale duplicates
