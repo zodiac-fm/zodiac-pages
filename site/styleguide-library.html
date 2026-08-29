@@ -111,6 +111,9 @@
   .gate{margin-top:26px;border:1px solid rgba(210,200,255,.28);border-radius:6px;padding:22px 24px;font:400 15px/1.62 var(--sans);color:var(--cream82);max-width:46em}
   .gate b{display:block;color:var(--violet-soft);font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px}
 
+  /* inline emphasis inside gate/killline: plain <b> there is the block title, not emphasis */
+  .gate i.em,.killline i.em{font-style:normal;font-weight:600;color:var(--cream)}
+
   /* ---- PART TWO ---- */
   .partmark{padding:96px 0 0}
   .partmark .kick{font:600 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:22px}
@@ -994,8 +997,8 @@
     <h2>THE TESTIMONIAL BANK <span class="bandcount"><span class="num">90</span> entries &middot; synced <span class="num">2026-08-28</span></span></h2>
     <p class="statement" style="margin-top:22px">Come with a band, leave with a quote.</p>
     <p class="body" style="margin-top:30px">The words, filed by the same six categories the bank has always used, so the band that picked the frame picks the sentence beside it. <b>winners/testimonials.md is the one home</b> and the master for all three approved lengths &mdash; Pull, Short, Full. Every quote on this page was re-read off that file on <b>2026-08-28</b>; where the master and the old page disagreed, the master won. Michael&#x27;s 2026-08-22 override edits are in.</p>
-    <div class="gate"><b>How to use a length</b>Pull is the blurb &mdash; a strip, a ribbon, a caption. Short is the medium &mdash; one card, quoted whole. Full is the letter &mdash; one per page, trimmed with ellipses, never rewritten. A quote is never tidied, never paraphrased, and never runs without a first and last name. Two gates ride on the entries that need them: <b>Get the name OK&#x27;d before it runs</b> is genuine feedback whose name has not been cleared for publication yet, and <b>RECORD ONLY</b> is an entry the master holds with no last name at all. Everything unmarked is APPROVED.</div>
-    <div class="killline"><b>Portraits are not shown here</b>The master&#x27;s CURRENT-MEDIA LAW (Michael, 2026-08-16) fails closed: a portrait may only appear on a generated page when the master carries a <span style="font-family:var(--sans)">Current media</span> line with <span style="font-family:var(--sans)">state=CURRENT</span> for that person, and the three faces the old bank displayed &mdash; Rhonda Britten, Maya Shetreat and Sabrina Truscott &mdash; have no such record. The face sets themselves are intact: the single-face cut at <b>/site/assets/d4l/</b>, the twelve-face set at <b>/site/assets/d4g/</b>, and the three cutouts the old bank used at <b>/site/assets/refs/testi-{rhonda-britten,maya-shetreat,sabrina-truscott}.png</b>. SILVER is their treatment.</div>
+    <div class="gate"><b>How to use a length</b>Pull is the blurb &mdash; a strip, a ribbon, a caption. Short is the medium &mdash; one card, quoted whole. Full is the letter &mdash; one per page, trimmed with ellipses, never rewritten. A quote is never tidied, never paraphrased, and never runs without a first and last name. Two gates ride on the entries that need them: <i class="em">Get the name OK&#x27;d before it runs</i> is genuine feedback whose name has not been cleared for publication yet, and <i class="em">RECORD ONLY</i> is an entry the master holds with no last name at all. Everything unmarked is APPROVED.</div>
+    <div class="killline"><b>Portraits are not shown here</b>The master&#x27;s CURRENT-MEDIA LAW (Michael, 2026-08-16) fails closed: a portrait may only appear on a generated page when the master carries a <span style="font-family:var(--sans)">Current media</span> line with <span style="font-family:var(--sans)">state=CURRENT</span> for that person, and the three faces the old bank displayed &mdash; Rhonda Britten, Maya Shetreat and Sabrina Truscott &mdash; have no such record. The face sets themselves are intact: the single-face cut at <i class="em">/site/assets/d4l/</i>, the twelve-face set at <i class="em">/site/assets/d4g/</i>, and the three cutouts the old bank used at <i class="em">/site/assets/refs/testi-{rhonda-britten,maya-shetreat,sabrina-truscott}.png</i>. SILVER is their treatment.</div>
 
     <div class="subhead">Named Authority <span class="bandcount">the doctors, the practitioners, the names that carry weight &middot; <span class="num">24</span> quotes</span></div>
     <div class="tbank">
@@ -1260,7 +1263,7 @@
         <div class="tlen"><div class="lt">FULL</div><div class="tq sans">&ldquo;It's like a little cheat code for experiencing your authentic vibration. Because it's personalized to you, not generic. I use it every day. During meditation, during visualization, sometimes I'll just sit down and breathe with it for five minutes. And I don't usually plug anything. This one earned it.&rdquo;</div></div>
         </div>
       </div>
-      <div class="tentry" id="t-88">
+      <div class="tentry" id="t-87">
         <div class="twho">
           <span class="tid">T-87</span>
           <span class="tname">Dr. Jill Carnahan</span>
@@ -1519,7 +1522,7 @@
         <div class="tlen"><div class="lt">FULL</div><div class="tq sans">&ldquo;Just listened to 3 immersions — feels like coming home. This is amazing! I was always looking for ways to make astrology more tangible and transformational. Thank you for this recommendation.&rdquo;</div></div>
         </div>
       </div>
-      <div class="tentry" id="t-90">
+      <div class="tentry" id="t-91">
         <div class="twho">
           <span class="tid">T-91</span>
           <span class="tname">Sanela Estrella</span>
@@ -1777,7 +1780,7 @@
         <div class="tlen"><div class="lt">FULL</div><div class="tq sans">&ldquo;I usually listen during my morning nature walks and even as a wind-down at night. Helps to navigate past day's stress and worries and put my mind at rest.&rdquo;</div></div>
         </div>
       </div>
-      <div class="tentry" id="t-87">
+      <div class="tentry" id="t-pending-nicole-energy">
         <div class="twho">
           <span class="tid">T&nbsp;PENDING</span>
           <span class="tname">Nicole</span>
@@ -2061,7 +2064,7 @@
     <p class="note" style="margin-top:16px">Listed so the accounting closes and nothing is lost. These are not omissions; they are entries the master itself keeps off a publishable surface.</p>
     <div class="exrow"><span class="pid">&times;4</span> <span class="ttl">Anonymous</span><span class="recipe">Edited audio clips with no allowed name. The DISPLAY RULE (Michael, 2026-07-16) is absolute: never run a nameless testimonial, and never label one &ldquo;name withheld&rdquo;. <span class="verdict">NO NAME</span></span></div>
     <div class="exrow"><span class="pid">&times;2</span> <span class="ttl">Health-claim quarantine</span><span class="recipe">Two entries Michael quarantined in the master. The seat never blocks a testimonial on its own; these were already ruled. <span class="verdict">DO NOT USE</span></span></div>
-    <div class="killline"><b>Sync record &middot; 2026-08-28</b>87 entries carried over from the previous bank, all 87 re-matched to the master by name and quote. <b>14</b> quote texts changed, <b>1</b> length was added and <b>1</b> withdrawn against the stale 2026-08-14 sync; <b>36</b> people gained the last name the master has since cleared, and <b>36</b> entries now carry the name-permission gate the old page did not show at all. Three approved entries the master added after that sync enter under the numbers the asset index already holds for them &mdash; Dr. Jill Carnahan <b>T-87</b>, MaryEllen Tribby <b>T-89</b>, Sanela Estrella <b>T-91</b> (brand/site-asset-index.json is the one home for T numbers; the page never invents one). One duplicate was repaired: the old page stamped <b>T-39</b> on two different people &mdash; Nicole Cottrell keeps T-39, and the Energy Nicole stands unnumbered as <b>T&nbsp;PENDING</b> until the index allocates her. Nothing was renumbered downward and no entry was dropped.</div>
+    <div class="killline"><b>Sync record &middot; 2026-08-28</b>87 entries carried over from the previous bank, all 87 re-matched to the master by name and quote. <i class="em">14</i> quote texts changed, <i class="em">1</i> length was added and <i class="em">1</i> withdrawn against the stale 2026-08-14 sync; <i class="em">36</i> people gained the last name the master has since cleared, and <i class="em">36</i> entries now carry the name-permission gate the old page did not show at all. Three approved entries the master added after that sync enter under the numbers the asset index already holds for them &mdash; Dr. Jill Carnahan <i class="em">T-87</i>, MaryEllen Tribby <i class="em">T-89</i>, Sanela Estrella <i class="em">T-91</i> (brand/site-asset-index.json is the one home for T numbers; the page never invents one). One duplicate was repaired: the old page stamped <i class="em">T-39</i> on two different people &mdash; Nicole Cottrell keeps T-39, and the Energy Nicole stands unnumbered as <i class="em">T&nbsp;PENDING</i> until the index allocates her. Nothing was renumbered downward and no entry was dropped.</div>
   </div>
 </section>
 <section id="standing" style="border-bottom:none;padding-top:0">
