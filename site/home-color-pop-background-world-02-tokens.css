@@ -1,0 +1,42 @@
+/* Hallmark · pre-emit critique: P5 H4 E4 S5 R4 V5
+ * genre: editorial · macrostructure: Long Document · theme: locked Zodiac Color Pop
+ * enrichment: current indexed Zodiac photography · nav: N6 · footer: Ft5
+ */
+:root {
+  --color-paper: oklch(95.4% 0.004 96);
+  --color-paper-clear: oklch(98.2% 0.003 96);
+  --color-paper-pocket: oklch(97.7% 0.004 96 / 0.93);
+  --color-paper-pocket-night: oklch(18.5% 0.012 90 / 0.88);
+  --color-ink: oklch(18.5% 0.009 91);
+  --color-ink-soft: oklch(35% 0.008 91);
+  --color-ink-muted: oklch(47% 0.007 91);
+  --color-hair: oklch(19% 0.009 91 / 0.16);
+  --color-night-ink: oklch(96.7% 0.004 92);
+  --color-night-muted: oklch(86% 0.008 92);
+  --color-focus: oklch(45% 0.21 300);
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Switzer", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4.5rem;
+  --space-4xl: 7rem;
+  --space-5xl: 10rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-body: 1.0625rem;
+  --text-body-lg: clamp(1.08rem, 1.6vw, 1.28rem);
+  --text-quote: clamp(1.35rem, 3.3vw, 2.15rem);
+  --text-h2: clamp(2.55rem, 6.7vw, 5.2rem);
+  --text-h1: clamp(3.25rem, 7.8vw, 7rem);
+  --rule-hair: 1px;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-long: 420ms;
+  --z-base: 1;
+  --z-content: 10;
+  --z-nav: 200;
+}

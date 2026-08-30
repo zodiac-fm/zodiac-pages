@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Zodiac.fm · Connected photographic background world</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/site/home-color-pop-background-world-02-tokens.css">
+  <style>
+    /* Hallmark · genre: editorial · macrostructure: Long Document · theme: locked Zodiac Color Pop
+     * audience: Michael judging one real homepage background world
+     * use: read the continuous atmosphere behind seven complete rooms
+     * enrichment: current indexed Zodiac photography, source-derived weather crops
+     * nav: N6 newspaper masthead, reduced to real-site utility · footer: Ft5 statement
+     */
+    @font-face {
+      font-family: "Switzer";
+      src: url("/landers/reveal-assets/Switzer-Regular.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Switzer";
+      src: url("/landers/reveal-assets/Switzer-Semibold.otf") format("opentype");
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; overflow-x: clip; }
+    html { background: var(--color-paper); }
+    body {
+      min-width: 20rem;
+      background: transparent;
+      color: var(--color-ink);
+      font-family: var(--font-body);
+      font-size: var(--text-body);
+      line-height: 1.62;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-underline-offset: 0.22em; text-decoration-thickness: 0.06em; white-space: nowrap; }
+    a:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 4px; }
+    p, h1, h2, h3, figure, blockquote { margin: 0; }
+    h1, h2, h3 {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      color: inherit;
+      font-family: var(--font-display);
+      font-style: normal;
+      font-weight: 600;
+    }
+    h1 { font-size: var(--text-h1); line-height: 0.88; letter-spacing: -0.04em; }
+    h2 { font-size: var(--text-h2); line-height: 0.93; letter-spacing: -0.03em; }
+    h3 { font-size: clamp(1.45rem, 3vw, 2.2rem); line-height: 1; letter-spacing: -0.02em; }
+    .shell { width: min(100%, 76rem); margin-inline: auto; padding-inline: clamp(var(--space-md), 4vw, var(--space-xl)); }
+    .read { max-width: 47rem; }
+    .lede { max-width: 42rem; font-size: var(--text-body-lg); color: var(--color-ink-soft); }
+    .meta { font-size: var(--text-xs); line-height: 1.35; letter-spacing: 0.11em; text-transform: uppercase; color: var(--color-ink-muted); }
+    .source { margin-block-start: var(--space-md); padding-block-start: var(--space-sm); border-block-start: var(--rule-hair) solid var(--color-hair); font-size: var(--text-xs); color: var(--color-ink-muted); }
+
+    .mast {
+      position: relative;
+      z-index: var(--z-nav);
+      display: grid;
+      gap: var(--space-xs);
+      padding: var(--space-sm) max(var(--space-md), env(safe-area-inset-left)) var(--space-sm) max(var(--space-md), env(safe-area-inset-right));
+      background: var(--color-paper-pocket);
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+    .mast-line { font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-ink-muted); }
+    .mast-main { display: flex; justify-content: space-between; align-items: center; gap: var(--space-md); max-width: 76rem; width: 100%; margin-inline: auto; }
+    .mast-main img { width: 7rem; height: auto; }
+    .mast-main nav { display: flex; gap: var(--space-lg); font-size: var(--text-xs); }
+    .mast-rule { height: 4px; border: 0; border-block: var(--rule-hair) solid var(--color-hair); margin: 0; }
+
+    .continuous-ground {
+      position: fixed;
+      z-index: 0;
+      inset: 0;
+      overflow: hidden;
+      background: var(--color-paper);
+    }
+    .continuous-ground img {
+      width: 100%;
+      height: auto;
+      min-height: 122%;
+      max-width: none;
+      object-fit: cover;
+      will-change: transform;
+    }
+    .mast, .world, .foot-stmt { position: relative; }
+    .world { z-index: 1; isolation: isolate; overflow: hidden; background: transparent; }
+    .weather {
+      position: relative;
+      isolation: isolate;
+      min-height: 48rem;
+      display: grid;
+      align-items: center;
+      overflow: visible;
+    }
+    .weather + .weather { margin-block-start: -8rem; padding-block-start: 8rem; }
+    .weather-layer {
+      position: absolute;
+      z-index: -2;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      object-fit: cover;
+      object-position: var(--weather-position, center);
+      opacity: 1;
+      transform: none;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, var(--color-ink) 12%, var(--color-ink) 84%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0, var(--color-ink) 12%, var(--color-ink) 84%, transparent 100%);
+    }
+    .light-script {
+      position: absolute;
+      z-index: -1;
+      inset-inline: 0;
+      width: 100%;
+      height: var(--light-height, 82%);
+      max-width: none;
+      object-fit: cover;
+      object-position: var(--light-position, center);
+      opacity: var(--light-opacity, 0.72);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+    .environment-crop {
+      position: absolute;
+      z-index: -2;
+      inset: -14rem 0;
+      overflow: hidden;
+      opacity: var(--crop-opacity, 0.34);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0, var(--color-ink) 28%, var(--color-ink) 72%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0, var(--color-ink) 28%, var(--color-ink) 72%, transparent 100%);
+      pointer-events: none;
+    }
+    .environment-crop img {
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      object-fit: cover;
+      object-position: center;
+      filter: grayscale(var(--crop-gray, 0.88)) saturate(var(--crop-saturate, 0.36)) brightness(var(--crop-bright, 1.12)) contrast(var(--crop-contrast, 0.88));
+      transform: scale(var(--crop-scale, 2.6));
+      transform-origin: var(--crop-origin, 90% 60%);
+    }
+    .weather-content { position: relative; z-index: var(--z-content); width: 100%; padding-block: var(--space-5xl); }
+    .pocket {
+      width: min(100%, 47rem);
+      padding: clamp(var(--space-lg), 4vw, var(--space-2xl));
+      background: var(--color-paper-pocket);
+      box-shadow: 0 0 4.5rem 2.25rem var(--color-paper-pocket);
+    }
+    .pocket h2 + .lede, .pocket h1 + .lede { margin-block-start: var(--space-lg); }
+
+    .hero { --weather-position: 50% 15%; min-height: clamp(46rem, 86dvh, 63rem); align-items: end; }
+    .hero .weather-layer { inset: 0; width: 100%; height: 100%; transform: none; -webkit-mask-image: linear-gradient(to bottom, var(--color-ink) 0 76%, transparent 100%); mask-image: linear-gradient(to bottom, var(--color-ink) 0 76%, transparent 100%); }
+    .hero-light { inset-block-start: 0; --light-height: 86%; --light-opacity: 0.76; --light-position: 72% 8%; }
+    .hero .weather-content { padding-block: var(--space-3xl) var(--space-4xl); }
+    .hero-copy { margin-inline-start: auto; }
+    .hero-copy .meta { margin-block-end: var(--space-md); }
+    .hero-copy .lede { max-width: 36rem; }
+
+    .emerald { min-height: 48rem; }
+    .emerald-grid, .puddle-grid, .dance-grid, .study-grid, .night-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-2xl); align-items: center; }
+    .photo-join { position: relative; min-width: 0; }
+    .photo-join img { width: 100%; height: auto; -webkit-mask-image: linear-gradient(to bottom, transparent 0, var(--color-ink) 14%, var(--color-ink) 86%, transparent 100%), linear-gradient(to right, transparent 0, var(--color-ink) 12%, var(--color-ink) 88%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to bottom, transparent 0, var(--color-ink) 14%, var(--color-ink) 86%, transparent 100%), linear-gradient(to right, transparent 0, var(--color-ink) 12%, var(--color-ink) 88%, transparent 100%); mask-composite: intersect; }
+    .emerald .photo-join { width: min(100%, 43rem); }
+    .emerald .pocket { margin-inline-start: auto; }
+
+    .puddle { min-height: 49rem; }
+
+    .dance { min-height: 51rem; }
+    .dance .photo-join { width: min(78vw, 30rem); justify-self: center; }
+    .dance .photo-join img { -webkit-mask-image: linear-gradient(to bottom, transparent 0, var(--color-ink) 10%, var(--color-ink) 84%, transparent 100%), linear-gradient(to right, transparent 0, var(--color-ink) 10%, var(--color-ink) 90%, transparent 100%); -webkit-mask-composite: source-in; mask-image: linear-gradient(to bottom, transparent 0, var(--color-ink) 10%, var(--color-ink) 84%, transparent 100%), linear-gradient(to right, transparent 0, var(--color-ink) 10%, var(--color-ink) 90%, transparent 100%); mask-composite: intersect; }
+
+    .voices { min-height: 72rem; }
+    .voices-head { width: min(100%, 54rem); margin-inline: auto; }
+    .voices-list { display: grid; gap: var(--space-lg); margin-block-start: var(--space-2xl); }
+    .voice {
+      display: grid;
+      grid-template-columns: 6.5rem minmax(0, 1fr);
+      gap: var(--space-md);
+      align-items: start;
+      padding: var(--space-lg);
+      background: var(--color-paper-pocket);
+      box-shadow: 0 0 3rem 1.25rem var(--color-paper-pocket);
+    }
+    .voice-face { position: relative; min-height: 9rem; overflow: hidden; }
+    .voice-face img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 5%; filter: grayscale(1); }
+    .voice-chip { display: flex; align-items: center; gap: var(--space-sm); margin-block-end: var(--space-sm); font-size: var(--text-xs); letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-ink-muted); }
+    .voice-chip img { width: 4.75rem; height: 1rem; object-fit: cover; }
+    .voice blockquote { max-width: 39rem; font-size: var(--text-quote); line-height: 1.14; font-weight: 600; letter-spacing: -0.02em; }
+    .voice-detail { max-width: 39rem; margin-block-start: var(--space-sm); color: var(--color-ink-soft); }
+    .voice-who { margin-block-start: var(--space-md); padding-block-start: var(--space-sm); border-block-start: var(--rule-hair) solid var(--color-hair); font-size: var(--text-sm); font-weight: 600; }
+    .voice-who span { display: block; margin-block-start: var(--space-2xs); font-size: var(--text-xs); font-weight: 400; color: var(--color-ink-muted); }
+
+    .study { --weather-position: 50% 52%; min-height: 65rem; }
+    .study .weather-layer { filter: brightness(1.08) contrast(0.9); }
+    .study-anchor { min-height: 22rem; }
+    .evidence { padding: clamp(var(--space-lg), 4vw, var(--space-2xl)); background: var(--color-paper-pocket); box-shadow: 0 0 4.5rem 2rem var(--color-paper-pocket); }
+    .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-lg); padding-block-end: var(--space-lg); border-block-end: var(--rule-hair) solid var(--color-hair); }
+    .stat b { display: block; font-size: clamp(3rem, 12vw, 5.5rem); line-height: 0.82; letter-spacing: -0.055em; font-variant-numeric: tabular-nums; }
+    .stat span { display: block; margin-block-start: var(--space-sm); font-size: var(--text-sm); color: var(--color-ink-soft); }
+    .outcomes { position: relative; margin-block-start: var(--space-lg); padding: var(--space-lg); overflow: hidden; }
+    .outcomes > img { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; opacity: 0.62; }
+    .outcome { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-xs) var(--space-sm); align-items: end; padding-block: var(--space-sm); border-block-start: var(--rule-hair) solid var(--color-hair); font-size: var(--text-sm); }
+    .outcome b { font-variant-numeric: tabular-nums; }
+    .bar { grid-column: 1 / -1; height: 0.28rem; background: var(--color-hair); }
+    .bar i { display: block; height: 100%; background: var(--color-ink); }
+    .frequency-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-sm); margin-block-start: var(--space-lg); }
+    .frequency-row img { width: 100%; height: 1rem; object-fit: cover; }
+
+    .night { --weather-position: 50% 52%; min-height: 70rem; color: var(--color-night-ink); }
+    .night-rain-layer {
+      position: absolute;
+      z-index: -4;
+      inset: -8rem 0 auto;
+      width: 100%;
+      height: 30rem;
+      max-width: none;
+      object-fit: cover;
+      object-position: 50% 72%;
+      filter: grayscale(0.92) brightness(0.88) contrast(0.92);
+      -webkit-mask-image: linear-gradient(to bottom, var(--color-ink) 0 38%, transparent 100%);
+      mask-image: linear-gradient(to bottom, var(--color-ink) 0 38%, transparent 100%);
+    }
+    .night-chord-layer {
+      position: absolute;
+      z-index: -1;
+      inset: auto -2vw 1rem auto;
+      width: min(68rem, 72vw);
+      height: auto;
+      max-width: none;
+      -webkit-mask-image: radial-gradient(ellipse 76% 78% at 56% 52%, var(--color-ink) 48%, transparent 100%);
+      mask-image: radial-gradient(ellipse 76% 78% at 56% 52%, var(--color-ink) 48%, transparent 100%);
+    }
+    .night .weather-layer { filter: brightness(0.76) contrast(1.08); -webkit-mask-image: linear-gradient(to bottom, transparent 0, var(--color-ink) 14%, var(--color-ink) 100%); mask-image: linear-gradient(to bottom, transparent 0, var(--color-ink) 14%, var(--color-ink) 100%); }
+    .night .weather-content { padding-block-end: var(--space-4xl); }
+    .night .pocket { color: var(--color-night-ink); background: var(--color-paper-pocket-night); box-shadow: 0 0 4rem 2rem var(--color-paper-pocket-night); }
+    .night .lede, .night .meta, .night .source { color: var(--color-night-muted); }
+    .night .source { border-color: color-mix(in oklch, var(--color-night-ink) 18%, transparent); }
+    .night-note { position: absolute; z-index: var(--z-content); inset: auto auto var(--space-3xl) max(var(--space-md), calc((100% - 76rem) / 2)); max-width: 18rem; font-size: var(--text-sm); color: var(--color-night-muted); }
+
+    .foot-stmt { position: relative; z-index: var(--z-content); padding: var(--space-3xl) max(var(--space-md), env(safe-area-inset-left)) max(var(--space-2xl), env(safe-area-inset-bottom)); background: url("/site/assets/sg5lib/r29-r-turntable-signlight.jpg") center 76% / cover; color: var(--color-night-ink); }
+    .foot-stmt__inner { width: min(100%, 76rem); margin-inline: auto; }
+    .foot-stmt__line { max-width: 25ch; font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1; letter-spacing: -0.025em; }
+    .foot-stmt__meta { display: flex; justify-content: space-between; gap: var(--space-md); align-items: baseline; margin-block-start: var(--space-2xl); padding-block-start: var(--space-md); border-block-start: var(--rule-hair) solid color-mix(in oklch, var(--color-night-ink) 18%, transparent); font-size: var(--text-xs); color: var(--color-night-muted); }
+
+    @media (min-width: 48rem) {
+      .mast { padding-inline: max(var(--space-xl), calc((100% - 76rem) / 2)); }
+      .emerald-grid, .puddle-grid, .dance-grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: var(--space-3xl); }
+      .puddle-grid { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); }
+      .puddle .pocket { order: -1; }
+      .voices-list { gap: var(--space-xl); }
+      .voice { grid-template-columns: 9rem minmax(0, 1fr); padding: var(--space-xl); }
+      .voice-face { min-height: 12rem; }
+      .study-grid { grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr); gap: var(--space-3xl); }
+    }
+
+    @media (max-width: 47.99rem) {
+      .mast-line { display: none; }
+      .mast-main nav a:not(:last-child) { display: none; }
+      .mast-main nav { gap: 0; }
+      .weather { min-height: 44rem; }
+      .weather + .weather { margin-block-start: -5rem; padding-block-start: 5rem; }
+      .weather-layer { inset: 0; width: 100%; height: 100%; -webkit-mask-image: linear-gradient(to bottom, transparent 0, var(--color-ink) 10%, var(--color-ink) 86%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0, var(--color-ink) 10%, var(--color-ink) 86%, transparent 100%); }
+      .weather-content { padding-block: var(--space-4xl); }
+      .pocket { width: calc(100% - 1rem); margin-inline: auto; padding: var(--space-xl) var(--space-md); box-shadow: 0 0 2.5rem 1.2rem var(--color-paper-pocket); }
+      .hero { min-height: 48rem; --weather-position: 42% 0%; }
+      .hero .weather-layer { height: 17rem; object-fit: contain; object-position: center top; -webkit-mask-image: linear-gradient(to bottom, var(--color-ink) 0 68%, transparent 100%); mask-image: linear-gradient(to bottom, var(--color-ink) 0 68%, transparent 100%); }
+      .hero .weather-content { padding-block: 14rem var(--space-3xl); }
+      .hero-copy { margin-inline: auto; }
+      .emerald, .puddle, .dance, .study { min-height: 48rem; }
+      .environment-crop { inset-block: -9rem; }
+      .emerald .photo-join, .puddle .photo-join { width: calc(100% + 3rem); margin-inline: -1.5rem; }
+      .dance .photo-join { width: min(90vw, 27rem); }
+      .voices { min-height: 82rem; }
+      .voices-head { width: calc(100% - 1rem); }
+      .voice { grid-template-columns: 5.5rem minmax(0, 1fr); padding: var(--space-md); gap: var(--space-md); }
+      .voice-face { min-height: 8rem; }
+      .voice blockquote { font-size: 1.25rem; }
+      .voice-detail { font-size: 0.98rem; }
+      .study-anchor { min-height: 18rem; }
+      .stats { gap: var(--space-md); }
+      .stat b { font-size: clamp(2.85rem, 15vw, 4.5rem); }
+      .evidence { margin-inline: -0.25rem; padding-inline: var(--space-md); box-shadow: 0 0 2.5rem 1rem var(--color-paper-pocket); }
+      .night { min-height: 68rem; --weather-position: 56% 45%; }
+      .night .pocket { box-shadow: 0 0 2.5rem 1rem var(--color-paper-pocket-night); }
+      .night-rain-layer { inset-block-start: -5rem; height: 24rem; object-position: 50% 68%; }
+      .night-chord-layer { inset: auto -18vw 4rem auto; width: 136vw; }
+      .night-note { inset: auto var(--space-md) 2rem var(--space-md); max-width: 18rem; }
+      .foot-stmt__meta { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-copy { opacity: 0; transform: translateY(8px); animation: settle var(--dur-long) var(--ease-out) 100ms forwards; }
+      @keyframes settle { to { opacity: 1; transform: none; } }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 150ms !important; animation-iteration-count: 1 !important; transition-duration: 150ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="continuous-ground" aria-hidden="true"><img src="/site/assets/d4g/d4g-backdrop.jpg" alt=""></div>
+  <header class="mast">
+    <p class="mast-line">Private background-world study · additive sandbox · 2026</p>
+    <div class="mast-main">
+      <a href="#top" aria-label="Zodiac.fm home"><img src="/inapp/app-assets/logo-black.svg" alt="Zodiac.fm" width="169" height="41"></a>
+      <nav aria-label="Study navigation"><a href="#voices">Voices</a><a href="#study">The study</a><a href="#night">Evening</a></nav>
+    </div>
+    <hr class="mast-rule" aria-hidden="true">
+  </header>
+
+  <main class="world" id="top">
+    <section class="weather hero" aria-labelledby="hero-title">
+      <img class="weather-layer" src="/site/assets/hero-home/hero-home-full-blast.jpg" alt="" width="2200" height="1237" fetchpriority="high">
+      <img class="light-script hero-light" src="/site/assets/d4l/d4l-sun-beam-drift.png" alt="">
+      <div class="weather-content shell">
+        <div class="pocket hero-copy">
+          <p class="meta">Experience yourself in sound</p>
+          <h1 id="hero-title">Music, composed from your birth chart.</h1>
+          <p class="lede">Your exact birth moment becomes four personal frequencies, embedded inside music for meditation, visualization, work, or a walk on the beach.</p>
+          <p class="source">P-163 · SUN + CHORD + CHIP · Beach air carries beyond the photograph into the first reading pocket.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="weather emerald" aria-labelledby="tune-title">
+      <div class="environment-crop" style="--crop-scale:4.7;--crop-origin:100% 18%;--crop-opacity:.3;--crop-gray:.88;--crop-saturate:.32" aria-hidden="true"><img src="/site/assets/sg5lib/eval-r23-hero-record-emerald.jpg" alt=""></div>
+      <img class="light-script" style="inset-block-start:4%;--light-height:88%;--light-opacity:.82;--light-position:58% 50%" src="/site/assets/d4l/d4l-sun-beam-steps.png" alt="">
+      <div class="weather-content shell emerald-grid">
+        <figure class="photo-join"><img src="/site/assets/sg5lib/eval-r23-hero-record-emerald.jpg" alt="Translucent emerald record standing against a rough silver wall in hard sunlight" width="1100" height="880"></figure>
+        <div class="pocket">
+          <h2 id="tune-title">Tune Into You.</h2>
+          <p class="lede">Every birth moment carries a measurable signature. Zodiac turns yours into four frequencies: who you are, how you relate, your energy, your opportunity.</p>
+          <p class="source">P-82 · SOLO + THROUGH · The hard wall, cast shadow, and transmitted emerald light become the room.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="weather puddle" aria-labelledby="how-title">
+      <div class="environment-crop" style="--crop-scale:4.5;--crop-origin:100% 100%;--crop-opacity:.34;--crop-gray:.82;--crop-saturate:.44;--crop-bright:1.07" aria-hidden="true"><img src="/site/assets/sg5lib/eval-r22-refl-boombox-puddle-amber.jpg" alt=""></div>
+      <img class="light-script" style="inset-block-start:3%;--light-height:88%;--light-opacity:.58;--light-position:36% 50%" src="/site/assets/d4l/d4l-sun-beam-dust.png" alt="">
+      <div class="weather-content shell puddle-grid">
+        <div class="pocket">
+          <h2 id="how-title">How Zodiac.fm works.</h2>
+          <p class="lede">Tell us when and where you were born. Hear your four frequencies. Live with your music while you work, walk, cook, or fall asleep.</p>
+          <p class="source">P-55 · SPILL · Wet concrete takes over from the hard wall; the amber cassette is reflected, never pasted.</p>
+        </div>
+        <figure class="photo-join"><img src="/site/assets/sg5lib/eval-r22-refl-boombox-puddle-amber.jpg" alt="Silver boombox on wet concrete with its amber cassette window reflected in a puddle" width="1100" height="880"></figure>
+      </div>
+    </section>
+
+    <section class="weather dance" aria-labelledby="world-title">
+      <div class="environment-crop" style="--crop-scale:3.8;--crop-origin:0% 42%;--crop-opacity:.34;--crop-gray:.96;--crop-saturate:.12;--crop-bright:1.12;--crop-contrast:.94" aria-hidden="true"><img src="/site/assets/d4i/d4i-dance.jpg" alt=""></div>
+      <img class="light-script" style="inset-block-start:4%;--light-height:88%;--light-opacity:.68;--light-position:64% 50%" src="/site/assets/d4l/d4l-sun-beam-day.png" alt="">
+      <div class="weather-content shell dance-grid">
+        <figure class="photo-join"><img src="/site/assets/d4i/d4i-dance.jpg" alt="Woman dancing barefoot in a sunlit silver room in a rose dress beside a turntable" width="1600" height="2000"></figure>
+        <div class="pocket">
+          <h2 id="world-title">It moves in with you.</h2>
+          <p class="lede">Not a session to schedule. A soundtrack that follows your day, with a real rose garment carrying the color while the room stays silver.</p>
+          <p class="source">P-106 · WORN · Window haze and floor shadow warm the passage without tinting the person or the page.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="weather voices" id="voices" aria-labelledby="voices-title">
+      <div class="environment-crop" style="--crop-scale:3.6;--crop-origin:100% 52%;--crop-opacity:.34;--crop-gray:1;--crop-saturate:0;--crop-bright:1.08;--crop-contrast:.98" aria-hidden="true"><img src="/site/assets/d4i/d4i-dance.jpg" alt=""></div>
+      <img class="light-script" style="inset-block-start:2%;--light-height:92%;--light-opacity:.72;--light-position:52% 50%" src="/site/assets/d4l/d4l-sun-beam-voices.png" alt="">
+      <div class="weather-content shell">
+        <div class="pocket voices-head">
+          <h2 id="voices-title">Authorities are tuning in.</h2>
+          <p class="lede">The interior daylight continues into the human room. Faces and copy stay clean; the only color is a true product waveform.</p>
+        </div>
+        <div class="voices-list">
+          <article class="voice">
+            <div class="voice-face"><img src="/site/assets/d4k/d4k-face-srini.png" alt="Srini Pillay" width="500" height="540"></div>
+            <div>
+              <p class="voice-chip"><img src="/site/assets/d4e/d4e-wave-core.png" alt="Core waveform" width="1076" height="226">Neuroscience</p>
+              <blockquote>Zodiac.fm helps people access aspects of themselves that have always been there.</blockquote>
+              <p class="voice-detail">Listening to your frequencies bypasses language and creates profound levels of self-awareness and coherence.</p>
+              <p class="voice-who">Srini Pillay, M.D.<span>Harvard-trained psychiatrist, brain-imaging researcher</span></p>
+            </div>
+          </article>
+          <article class="voice">
+            <div class="voice-face"><img src="/site/assets/d4k/d4k-face-debra.png" alt="Debra Silverman" width="500" height="537"></div>
+            <div>
+              <p class="voice-chip"><img src="/site/assets/d4e/d4e-wave-love.png" alt="Love waveform" width="1076" height="226">Astrology</p>
+              <blockquote>This music tickled my soul.</blockquote>
+              <p class="voice-detail">Give it a try. You’ll love it.</p>
+              <p class="voice-who">Debra Silverman<span>Astrologer to Sting, Jennifer Aniston, and more</span></p>
+            </div>
+          </article>
+          <article class="voice">
+            <div class="voice-face"><img src="/site/assets/d4k/d4k-face-barbara.png" alt="Barbara Ditlow" width="500" height="516"></div>
+            <div>
+              <p class="voice-chip"><img src="/site/assets/d4e/d4e-wave-abundance.png" alt="Abundance waveform" width="1076" height="226">Human Design</p>
+              <blockquote>Zodiac core frequencies translate this unique imprint into sound, bypassing the mind and speaking directly to the body.</blockquote>
+              <p class="voice-who">Barbara Ditlow<span>Human Design mentor and master practitioner</span></p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="weather study" id="study" aria-labelledby="study-title">
+      <img class="weather-layer" src="/site/assets/d4h/d4h-rain-sill.jpg" alt="" width="1600" height="1253">
+      <div class="weather-content shell">
+        <div class="pocket read">
+          <h2 id="study-title">We ran the numbers for a year.</h2>
+          <p class="lede">A 52-week study of our own members: 300 people started, 278 completed. The rain remains around the evidence while the reading surface stays clean.</p>
+        </div>
+        <div class="study-grid">
+          <div class="study-anchor" aria-hidden="true"></div>
+          <div class="evidence">
+            <div class="stats">
+              <p class="stat"><b>98.6%</b><span>of completers would recommend Zodiac.</span></p>
+              <p class="stat"><b>84%</b><span>of as-designed members called it life-changing.</span></p>
+            </div>
+            <div class="outcomes">
+              <img src="/site/assets/d4e/d4e-chart-panel-h8.jpg" alt="" width="1600" height="560">
+              <p class="meta" style="margin-block-end: var(--space-lg)">What came online for them</p>
+              <p class="outcome"><span>Deeper access to themselves</span><b>94%</b><span class="bar"><i style="width:94%"></i></span></p>
+              <p class="outcome"><span>Internal regulation</span><b>92%</b><span class="bar"><i style="width:92%"></i></span></p>
+              <p class="outcome"><span>Sharper instincts</span><b>91%</b><span class="bar"><i style="width:91%"></i></span></p>
+              <p class="outcome"><span>Better relationships and love</span><b>90%</b><span class="bar"><i style="width:90%"></i></span></p>
+              <div class="frequency-row">
+                <img src="/site/assets/d4e/d4e-wave-core.png" alt="Core waveform" width="1076" height="226">
+                <img src="/site/assets/d4e/d4e-wave-love.png" alt="Love waveform" width="1076" height="226">
+                <img src="/site/assets/d4e/d4e-wave-vitality.png" alt="Vitality waveform" width="1076" height="226">
+                <img src="/site/assets/d4e/d4e-wave-abundance.png" alt="Abundance waveform" width="1076" height="226">
+              </div>
+            </div>
+            <p class="source">P-109 · SUN + SPILL + CHIP · Rain turns the silver cooler before evening enters.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="weather night" id="night" aria-labelledby="night-title">
+      <img class="night-rain-layer" src="/site/assets/d4h/d4h-rain-sill.jpg" alt="" width="1600" height="1253">
+      <img class="weather-layer" src="/site/assets/sg5lib/r29-r-turntable-signlight.jpg" alt="" width="1100" height="880">
+      <img class="night-chord-layer" src="/site/assets/sg5lib/cc1-r29-m-spine-shelf-v3-take4-cc1.jpg" alt="Dark record shelf with four sleeves lit in violet, emerald, amber, and rose" width="1100" height="880">
+      <div class="weather-content shell">
+        <div class="pocket read">
+          <h2 id="night-title">Real music, with your frequencies inside.</h2>
+          <p class="lede">The rain cools into a true evening photograph. Rose sign light and four physical record sleeves provide the color; the page never changes into a tinted theme.</p>
+          <p class="source">P-42 + P-98 · EVENING SHELF + final CHORD · The same silver world, after dark.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot-stmt">
+    <div class="foot-stmt__inner">
+      <p class="foot-stmt__line">One photographic world, from first light to evening.</p>
+      <div class="foot-stmt__meta"><span>Zodiac.fm · Private additive background study</span><span>D4-L and the affiliate lander remain untouched.</span></div>
+    </div>
+  </footer>
+  <script>
+    (() => {
+      const plate = document.querySelector('.continuous-ground img');
+      if (!plate || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      let ticking = false;
+      const pan = () => {
+        ticking = false;
+        const over = plate.getBoundingClientRect().height - innerHeight;
+        if (over <= 0) return;
+        const max = document.documentElement.scrollHeight - innerHeight;
+        const progress = max > 0 ? Math.min(scrollY / max, 1) : 0;
+        plate.style.transform = `translate3d(0,${-over * progress}px,0)`;
+      };
+      const requestPan = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(pan);
+      };
+      addEventListener('scroll', requestPan, { passive: true });
+      addEventListener('resize', requestPan);
+      pan();
+    })();
+  </script>
+</body>
+</html>
