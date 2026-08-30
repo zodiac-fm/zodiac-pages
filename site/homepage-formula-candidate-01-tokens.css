@@ -1,0 +1,17 @@
+/* Hallmark · macrostructure: Photographic · tone: high-key silver with causal color · anchor hue: photographed source only */
+:root {
+  --ink: #141412;
+  --ink-soft: rgba(20, 20, 18, .72);
+  --ink-faint: rgba(20, 20, 18, .48);
+  --paper: #f0f0ef;
+  --line: rgba(20, 20, 18, .22);
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Switzer', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --shell: 1180px;
+  --measure: 700px;
+  --gutter: clamp(20px, 4vw, 48px);
+  --space: clamp(72px, 10vw, 152px);
+  --small-space: clamp(36px, 5vw, 76px);
+  --hair: 1px;
+  --radius: 0px;
+}

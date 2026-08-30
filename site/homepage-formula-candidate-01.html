@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Private five-moment homepage formula candidate for Zodiac.fm.">
+  <title>Zodiac.fm · Homepage Formula Candidate 01</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="homepage-formula-candidate-01-tokens.css">
+  <style>
+    /* Hallmark · pre-emit critique: P5 H4 E4 S5 R5 V4 */
+    /* Direction contract: BORROWED AIR / EXPOSURE POCKET. Every moment pairs a local approved photograph with a limited oversized crop of that same photograph as its ambient world, then opens a clean true-neutral silver pocket for reading. */
+    @font-face { font-family: 'Switzer'; src: url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+    @font-face { font-family: 'Switzer'; src: url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-width: 0; overflow-x: clip; background: var(--paper); color: var(--ink); }
+    body { font-family: var(--sans); font-size: 18px; line-height: 1.62; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+    .masthead { position: relative; z-index: 3; width: min(var(--shell), calc(100% - var(--gutter) * 2)); min-height: 74px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .wordmark { width: 112px; height: 30px; display: inline-flex; align-items: center; white-space: nowrap; }
+    .wordmark img { width: 100%; height: 100%; object-fit: contain; object-position: left center; }
+    .nav { display: flex; gap: clamp(12px, 2.3vw, 30px); align-items: center; min-width: 0; }
+    .nav a { min-height: 44px; display: inline-flex; align-items: center; font-size: 13px; color: var(--ink-soft); white-space: nowrap; }
+    .section { position: relative; isolation: isolate; overflow: clip; }
+    .shell { width: min(var(--shell), calc(100% - var(--gutter) * 2)); margin: 0 auto; position: relative; z-index: 2; }
+    .cue, .prehead, .status, .kick { margin: 0; font-size: 11px; font-weight: 600; letter-spacing: .18em; line-height: 1.4; text-transform: uppercase; color: var(--ink-soft); }
+    h1, h2, p { margin-top: 0; }
+    h1, h2 { font-family: var(--serif); font-weight: 600; line-height: 1.02; letter-spacing: -.025em; }
+    h1 { max-width: 690px; margin-bottom: 24px; font-size: clamp(49px, 7.2vw, 92px); }
+    h2 { max-width: 650px; margin-bottom: 22px; font-size: clamp(40px, 5.2vw, 67px); }
+    .lede { max-width: 630px; margin-bottom: 0; font-size: clamp(19px, 2vw, 24px); line-height: 1.5; color: var(--ink-soft); }
+    .copy { max-width: var(--measure); margin-bottom: 0; font-size: clamp(17px, 1.5vw, 20px); color: var(--ink-soft); }
+    .pid { position: absolute; right: 12px; bottom: 12px; z-index: 2; padding: 3px 7px; font-size: 10px; font-weight: 600; line-height: 1; letter-spacing: .08em; color: var(--ink); background: var(--paper); }
+    .ambient { position: absolute; inset: 0; z-index: -2; overflow: hidden; pointer-events: none; }
+    .ambient img { width: 100%; height: 100%; object-fit: cover; }
+    .pocket { position: relative; background: var(--paper); }
+    .hero { padding-bottom: var(--small-space); }
+    .hero-copy { padding: clamp(35px, 6vw, 88px) 0 clamp(32px, 5vw, 62px); }
+    .hero-field { width: 100%; margin: 0; position: relative; overflow: clip; }
+    .hero-field img { width: 100%; height: auto; }
+    .hero-return { width: min(760px, calc(100% - var(--gutter) * 2)); margin: clamp(-86px, -6vw, -42px) auto 0; padding: clamp(30px, 4vw, 56px); position: relative; z-index: 1; }
+    .hero-lede { margin: 0; }
+    .passage { min-height: 760px; padding: var(--space) 0; }
+    .passage .ambient img { object-position: center center; transform: scale(1.19); }
+    .passage-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(30px, 7vw, 110px); }
+    .photo { position: relative; }
+    .passage-photo { min-height: 550px; overflow: clip; }
+    .passage-photo img { width: 100%; height: 100%; min-height: 550px; object-fit: cover; object-position: center top; }
+    .reading { padding: clamp(38px, 5vw, 82px); }
+    .reading .cue { margin-bottom: 18px; }
+    .voices { padding: var(--space) 0; min-height: 1080px; }
+    .voices .ambient img { object-position: center 35%; transform: scale(1.35); opacity: .48; }
+    .voices-head { max-width: var(--measure); padding: clamp(34px, 5vw, 70px); margin-bottom: var(--small-space); }
+    .voices-list { max-width: 920px; margin: 0 auto; padding: 0 clamp(24px, 5vw, 70px); background: var(--paper); }
+    .voice { display: grid; grid-template-columns: minmax(180px, 260px) minmax(0, 1fr); gap: clamp(28px, 6vw, 88px); padding: clamp(34px, 5vw, 72px) 0; border-top: var(--hair) solid var(--line); }
+    .voice:last-child { border-bottom: var(--hair) solid var(--line); }
+    .portrait { position: relative; align-self: start; }
+    .portrait img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; object-position: center top; }
+    .voice .kick { margin-bottom: 12px; }
+    .quote { max-width: 600px; margin-bottom: 16px; font-family: var(--serif); font-size: clamp(23px, 2.5vw, 34px); font-weight: 600; line-height: 1.18; }
+    .detail { max-width: 650px; margin-bottom: 20px; font-size: 16px; color: var(--ink-soft); }
+    .person { margin: 0; font-size: 14px; font-weight: 600; line-height: 1.42; }
+    .person small { display: block; margin-top: 4px; font-size: 12px; font-weight: 400; color: var(--ink-soft); }
+    .wave { width: 76px; height: 18px; object-fit: contain; margin-bottom: 14px; }
+    .study { min-height: 1100px; padding: var(--space) 0; }
+    .study .ambient img { object-position: center; transform: scale(1.25); opacity: .72; }
+    .study .shell { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); align-items: start; gap: clamp(36px, 6vw, 100px); }
+    .study-intro { padding: clamp(34px, 5vw, 70px); }
+    .study-intro .cue { margin-bottom: 18px; }
+    .stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 42px; }
+    .stat { margin: 0; font-size: clamp(42px, 5vw, 66px); font-weight: 600; line-height: 1; letter-spacing: -.06em; }
+    .stat small { font-size: .38em; letter-spacing: 0; }
+    .stat-label { margin: 9px 0 0; font-size: 14px; line-height: 1.43; color: var(--ink-soft); }
+    .chart { position: relative; padding: clamp(32px, 4vw, 58px); background-image: url('/site/assets/d4e/d4e-chart-panel-h8.jpg'); background-size: cover; background-position: center; }
+    .chart h3 { margin: 0 0 4px; font-size: 16px; line-height: 1.4; }
+    .chart-sub { margin: 0 0 27px; font-size: 13px; color: var(--ink-soft); }
+    .chart-rows { display: grid; gap: 15px; }
+    .chart-row { display: grid; grid-template-columns: minmax(150px, 1.2fr) minmax(60px, 2fr) 44px; gap: 15px; align-items: center; }
+    .chart-label { font-size: 14px; line-height: 1.25; color: var(--ink-soft); }
+    .bar { height: 8px; background: var(--line); position: relative; }
+    .bar i { display: block; width: var(--value); height: 100%; background: var(--ink); }
+    .value { font-size: 18px; font-weight: 600; text-align: right; }
+    .value small { font-size: 12px; font-weight: 400; }
+    .frequency-key { display: flex; align-items: center; gap: 10px; margin-top: 26px; font-size: 12px; color: var(--ink-soft); }
+    .frequency-key img { width: 100px; height: 21px; object-fit: contain; }
+    .caveat { grid-column: 1 / -1; max-width: var(--measure); margin: 0; padding: clamp(22px, 3vw, 34px) clamp(24px, 4vw, 48px); font-size: 14px; color: var(--ink-soft); background: var(--paper); }
+    .evening { min-height: 820px; padding: var(--space) 0; background: var(--paper); }
+    .evening .shell { min-height: 700px; position: relative; }
+    .evening-copy { width: min(48%, 560px); padding: clamp(30px, 4vw, 58px); position: absolute; z-index: 1; left: clamp(24px, 5vw, 72px); bottom: clamp(26px, 5vw, 72px); color: var(--ink); }
+    .evening-photo { min-height: 700px; margin: 0; overflow: clip; }
+    .evening-photo img { width: 100%; height: 700px; object-fit: cover; object-position: center; }
+    .evening .cue { margin-bottom: 18px; }
+    .evening h2 { margin-bottom: 20px; }
+    .evening .pid { color: var(--ink); }
+    .silver-return { height: 58px; background: var(--paper); }
+    .status { padding: 15px var(--gutter) 28px; text-align: center; background: var(--paper); }
+    @media (max-width: 760px) {
+      .masthead { min-height: 64px; }
+      .wordmark { width: 94px; height: 26px; }
+      .nav { gap: 10px; }
+      .nav a { font-size: 11px; }
+      .hero-copy { padding-top: 28px; }
+      h1 { font-size: clamp(45px, 13vw, 57px); }
+      h2 { font-size: clamp(38px, 11vw, 48px); }
+      .hero-field { padding: 0; }
+      .hero-field img { object-fit: contain; width: 100%; }
+      .passage, .voices, .study, .evening { min-height: 0; }
+      .passage-grid, .study .shell { grid-template-columns: minmax(0, 1fr); }
+      .passage-grid { gap: 0; }
+      .passage-photo, .passage-photo img { min-height: 0; }
+      .passage-photo img { aspect-ratio: 4 / 5; object-position: center top; }
+      .reading { padding: 44px 26px; }
+      .voices-head, .study-intro { padding: 36px 26px; }
+      .voice { grid-template-columns: minmax(0, 1fr); gap: 22px; padding: 36px 0; }
+      .portrait { width: 112px; }
+      .quote { font-size: 21px; }
+      .detail { font-size: 16px; }
+      .study .shell { gap: 34px; }
+      .chart { padding: 28px 20px; }
+      .chart-row { grid-template-columns: minmax(92px, 1.25fr) minmax(38px, 1fr) 36px; gap: 9px; }
+      .chart-label { font-size: 12px; }
+      .value { font-size: 16px; }
+      .hero-return { width: calc(100% - var(--gutter) * 2); margin-top: -30px; padding: 30px 26px; }
+      .evening .shell { min-height: 790px; }
+      .evening-photo { min-height: 790px; }
+      .evening-photo img { height: 790px; object-position: center; }
+      .evening-copy { width: auto; left: 20px; right: 20px; bottom: 70px; padding: 34px 26px; }
+    }
+    @media (max-width: 374px) { .nav a { font-size: 10px; } .nav { gap: 7px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <a class="wordmark" href="#top" aria-label="Zodiac.fm"><img src="/inapp/app-assets/logo-black.svg" alt=""></a>
+    <nav class="nav" aria-label="Candidate sections"><a href="#voices">Proof</a><a href="#study">Evidence</a><a href="#music">Evening</a></nav>
+  </header>
+  <main id="top">
+    <section class="section hero" aria-labelledby="hero-title">
+      <div class="shell hero-copy">
+        <p class="prehead">Experience yourself in sound</p>
+        <h1 id="hero-title">Music, composed from your birth chart.</h1>
+      </div>
+      <figure class="hero-field"><img src="/site/assets/hero-home/hero-home-full-blast.jpg" alt="Woman in headphones holding a Zodiac.fm playlist phone near four surfboards in afternoon sun"><span class="pid">P-163</span></figure>
+      <div class="shell hero-return pocket"><p class="lede hero-lede">Your exact birth moment becomes four personal frequencies, embedded inside music for meditation, visualization, work, or a walk on the beach.</p></div>
+    </section>
+    <section class="section passage" aria-labelledby="passage-title">
+      <div class="ambient" aria-hidden="true"><img src="/site/assets/d4i/d4i-dance.jpg" alt=""></div>
+      <div class="shell passage-grid">
+        <figure class="photo passage-photo"><img src="/site/assets/d4i/d4i-dance.jpg" alt="Woman in a rose dress moving through a sunlit interior"><span class="pid">P-106</span></figure>
+        <div class="reading pocket"><p class="cue">01 · The day</p><h2 id="passage-title">It moves in with you.</h2><p class="copy">Not a session to schedule — a soundtrack that follows your day. A violet street on the morning walk. Brass in the afternoon sun. The record on at home. An emerald ball against the summer sky. The world keeps playing your colors back to you.</p></div>
+      </div>
+    </section>
+    <section class="section voices" id="voices" aria-labelledby="voices-title">
+      <div class="ambient" aria-hidden="true"><img src="/site/assets/d4i/d4i-dance.jpg" alt=""></div>
+      <div class="shell">
+        <div class="pocket voices-head"><p class="cue">02 · Voices</p><h2 id="voices-title">Neuroscientists, Astrologers, and Human Design Authorities Are Tuning In.</h2></div>
+        <div class="voices-list">
+          <article class="voice"><figure class="portrait"><img src="/site/assets/d4k/d4k-face-srini.png" alt="Srini Pillay"><span class="pid">T-4</span></figure><div><img class="wave" src="/site/assets/d4e/d4e-wave-vitality.png" alt=""><p class="kick">Neuroscience</p><p class="quote">Zodiac.fm helps people access aspects of themselves that have always been there.</p><p class="detail">Listening to your frequencies bypasses language and creates profound levels of self-awareness and coherence. This leads to clearer decisions, more authentic relationships, and expanded possibilities.</p><p class="person">Srini Pillay, M.D.<small>Harvard-trained psychiatrist, brain-imaging researcher</small></p></div></article>
+          <article class="voice"><figure class="portrait"><img src="/site/assets/d4k/d4k-face-debra.png" alt="Debra Silverman"><span class="pid">T-5</span></figure><div><img class="wave" src="/site/assets/d4e/d4e-wave-love.png" alt=""><p class="kick">Astrology</p><p class="quote">This music tickled my soul.</p><p class="detail">…Give it a try — you’ll love it.</p><p class="person">Debra Silverman<small>Astrologer to Sting, Jennifer Aniston, and More</small></p></div></article>
+          <article class="voice"><figure class="portrait"><img src="/site/assets/d4k/d4k-face-barbara.png" alt="Barbara Ditlow"><span class="pid">T-8</span></figure><div><img class="wave" src="/site/assets/d4e/d4e-wave-core.png" alt=""><p class="kick">Human Design</p><p class="quote">Zodiac core frequencies translate this unique imprint into sound, bypassing the mind and speaking directly to the body.</p><p class="person">Barbara Ditlow<small>Human Design Mentor, Master Practitioner, Trained/Certified/Endorsed by Ra Uru Hu (Founder of Human Design)</small></p></div></article>
+        </div>
+      </div>
+    </section>
+    <section class="section study" id="study" aria-labelledby="study-title">
+      <div class="ambient" aria-hidden="true"><img src="/site/assets/sg5lib/eval-r22-refl-boombox-puddle-amber.jpg" alt=""></div>
+      <div class="shell">
+        <div class="pocket study-intro"><p class="cue">03 · The Study</p><h2 id="study-title">We ran the numbers for a year.</h2><p class="copy">A 52-week study of our own members: 300 people started, 278 completed. The numbers below are from members who used it as designed — at least nine minutes a day on average, across all four frequencies.</p><div class="stats"><div><p class="stat">98.6<small>%</small></p><p class="stat-label">of completers said they would recommend Zodiac.</p></div><div><p class="stat">84<small>%</small></p><p class="stat-label">of members who used it as designed for a year called it life-changing.</p></div></div></div>
+        <div class="chart" aria-label="Study outcomes"><span class="pid">G-13</span><span class="pid" style="right:58px">P-55</span><h3>What came online for them</h3><p class="chart-sub">share of as-designed members reporting each shift, week 52</p><div class="chart-rows"><div class="chart-row"><span class="chart-label">Deeper access to themselves</span><span class="bar"><i style="--value:94%"></i></span><span class="value">94<small>%</small></span></div><div class="chart-row"><span class="chart-label">Internal regulation</span><span class="bar"><i style="--value:92%"></i></span><span class="value">92<small>%</small></span></div><div class="chart-row"><span class="chart-label">Sharper instincts</span><span class="bar"><i style="--value:91%"></i></span><span class="value">91<small>%</small></span></div><div class="chart-row"><span class="chart-label">The witness — watching life, not drowning in it</span><span class="bar"><i style="--value:91%"></i></span><span class="value">91<small>%</small></span></div><div class="chart-row"><span class="chart-label">Better relationships and love</span><span class="bar"><i style="--value:90%"></i></span><span class="value">90<small>%</small></span></div><div class="chart-row"><span class="chart-label">Connection to something bigger</span><span class="bar"><i style="--value:90%"></i></span><span class="value">90<small>%</small></span></div><div class="chart-row"><span class="chart-label">Life responds</span><span class="bar"><i style="--value:88%"></i></span><span class="value">88<small>%</small></span></div></div><div class="frequency-key"><img src="/site/assets/d4e/d4e-wave-abundance.png" alt="Frequency waveform">Frequency marks remain the product’s true marks.</div></div>
+        <p class="caveat">“As designed” means at least nine minutes a day on average, with all four frequencies in balance. We report it exactly that way.</p>
+      </div>
+    </section>
+    <section class="section evening" id="music" aria-labelledby="music-title"><div class="shell"><figure class="evening-photo"><img src="/site/assets/sg5lib/r29-r-turntable-signlight.jpg" alt="Turntable at night with a rose window sign reflection"><span class="pid">P-42</span></figure><div class="evening-copy pocket"><p class="cue">04 · The Music</p><h2 id="music-title">Real music, with your frequencies inside.</h2><p class="copy">Every track is a full piece of music, not a tone, not a spa loop, with one of your four frequencies running underneath it from the first note to the last. Five minutes between meetings, nine for a real sit, a full hour for deep work or sleep. Press play.</p></div></div></section>
+    <div class="silver-return" aria-hidden="true"></div>
+  </main>
+  <p class="status">Private formula candidate 01 · review surface only</p>
+</body>
+</html>
