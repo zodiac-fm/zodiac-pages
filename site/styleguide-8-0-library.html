@@ -4,16 +4,14 @@
   This file IS the current style guide library. Edit THIS file — never fork a numbered copy
   and never hand anyone a versioned URL for this surface.
   ZFM-CURRENT: /site/styleguide-library
-  ZFM-INTERNAL-VERSION: 8-1
+  ZFM-INTERNAL-VERSION: 8-0
   To bump the version: copy this file to site/styleguide-<n>-library.html
   as a frozen snapshot FIRST, then edit this file and raise ZFM-INTERNAL-VERSION.
   Rule: Michael, 2026-08-26 — "always just have the current one be the main url string".
   Applies to reference surfaces only (libraries, style guides, directories),
   never to landers, sites, or design rounds, which stay versioned.
 
-  8-1 adds the accepted seven-frame iPhone App Store gallery under its own iPhone App
-  category, with the delivered contact board as sequence authority. 8-0 merged two
-  generations into one: the treatment sort (Iris) is the spine, and the
+  8-0 merges two generations into one: the treatment sort (Iris) is the spine, and the
   subject filing, the build-round frames and the testimonial bank come across from 7-8.
   Every quote was re-synced off winners/testimonials.md on 2026-08-28; the master wins.
   Frame images are referenced at their existing absolute paths; nothing was copied or moved.
@@ -23,7 +21,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zodiac.fm Style Guide Library 8-1 · The Bank + iPhone App + The Testimonial Bank</title>
+<title>Zodiac.fm Style Guide Library 8-0 · The Bank by Treatment + The Testimonial Bank</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
@@ -68,7 +66,6 @@
 
   /* frames */
   .photogrid{display:grid;grid-template-columns:1fr 1fr;gap:52px 32px;margin-top:40px}
-  .appgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:52px 28px;margin-top:40px}
   figure.photo{margin:0}
   figure.photo img{width:100%;max-width:100%;display:block;border-radius:4px}
   figcaption{border-top:1px solid var(--hair);margin-top:14px;padding-top:12px;font:400 14px/1.5 var(--sans);color:var(--cream58)}
@@ -156,11 +153,9 @@
 
   @media(max-width:1024px){
     .photogrid{grid-template-columns:1fr 1fr}
-    .appgrid{grid-template-columns:1fr 1fr}
   }
   @media(max-width:760px){
     .photogrid{grid-template-columns:1fr;gap:44px}
-    .appgrid{grid-template-columns:1fr;gap:44px}
     .reserves{grid-template-columns:1fr;gap:44px}
     .bannerwrap{padding:20px 20px 0}
     .banner{padding:20px 20px}
@@ -239,10 +234,10 @@
 
 <div class="bannerwrap">
   <div class="banner">
-    <div class="tag">Current &middot; one library &middot; version 8-1</div>
-    <div class="line">THE STYLE GUIDE LIBRARY. The approved iPhone App gallery, the bank sorted by treatment, the old subject filing kept as an index, and the testimonial bank.</div>
+    <div class="tag">Current &middot; one library &middot; version 8-0</div>
+    <div class="line">THE STYLE GUIDE LIBRARY. The bank sorted by treatment, the old subject filing kept as an index, and the testimonial bank.</div>
     <div class="sub">This is the one current library. Prior cuts are preserved as numbered snapshots and are never edited again. Run by <b>Iris</b> (art) and <b>Ansel</b> (second eye, builder) on Michael&#x27;s word, <b>2026-08-28</b>. The rules that govern a page live on the style guide at <b>/site/styleguide</b>.</div>
-    <div class="date">Version 8-1 &middot; 2026-08-31</div>
+    <div class="date">Version 8-0 &middot; 2026-08-28</div>
   </div>
 </div>
 
@@ -252,51 +247,10 @@
     <h1>Not what color it is. How the color got in.</h1>
     <p class="lede" style="margin-top:30px">Nine treatments and the evening shelf, then the same bank indexed by subject, then what is missing and what is dead — the gaps and the excluded. After that the build chapters: everything it takes to make a page out of these frames. And at the end, the testimonial bank, every approved length, re-synced off the master. A builder arrives with a job — a hero, a proof block, a quiet moment — and leaves with a frame whose light behaves the way the page needs it to behave, and the words to set beside it.</p>
     <div class="toc">
-      <a href="#iphone-app" style="border-color:rgba(210,200,255,.55);background:rgba(101,33,201,.22)">iPhone App</a><a href="#solo">Solo</a><a href="#chord">Chord</a><a href="#through">Through</a><a href="#spill">Spill</a><a href="#worn">Worn</a><a href="#sun">Sun</a><a href="#silver">Silver</a><a href="#chip">Chip</a><a href="#evening">Evening Shelf</a><a href="#subjects">Find by Subject</a><a href="#grounds">Grounds</a><a href="#gaps">Gaps</a><a href="#excluded">Excluded</a><a href="#parttwo" style="border-color:rgba(210,200,255,.55);background:rgba(101,33,201,.22)">Part Two · Build a Page</a><a href="#testimonials" style="border-color:rgba(210,200,255,.55);background:rgba(101,33,201,.22)">Part Three · Testimonials</a>
+      <a href="#solo">Solo</a><a href="#chord">Chord</a><a href="#through">Through</a><a href="#spill">Spill</a><a href="#worn">Worn</a><a href="#sun">Sun</a><a href="#silver">Silver</a><a href="#chip">Chip</a><a href="#evening">Evening Shelf</a><a href="#subjects">Find by Subject</a><a href="#grounds">Grounds</a><a href="#gaps">Gaps</a><a href="#excluded">Excluded</a><a href="#parttwo" style="border-color:rgba(210,200,255,.55);background:rgba(101,33,201,.22)">Part Two · Build a Page</a><a href="#testimonials" style="border-color:rgba(210,200,255,.55);background:rgba(101,33,201,.22)">Part Three · Testimonials</a>
     </div>
   </div>
 </header>
-<section id="iphone-app">
-  <div class="wrap">
-    <div class="eyebrow">Approved App Store Gallery &middot; <span class="num">7</span> Frames</div>
-    <h2>iPhone App</h2>
-    <p class="lede" style="margin-top:28px">The accepted seven-frame iPhone App Store sequence, preserved exactly as delivered.</p>
-    <figure class="exfig">
-      <img loading="eager" src="/site/assets/iphone-app/ios-app-photos-board.png" alt="The complete accepted seven-frame iPhone App Store gallery in sequence">
-      <figcaption><span class="ttl">Sequence authority</span><span class="cap">The labeled iOS App Photos board. Frames <b>1–7</b> run in this exact order.</span></figcaption>
-    </figure>
-    <div class="appgrid">
-      <figure class="photo" id="iphone-app-01">
-        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-01-promise.png" alt="Music Tuned to You iPhone App Store frame">
-        <figcaption><b class="pid">iPhone &middot; 01</b><span class="ttl">Music Tuned to You</span><span class="recipe"><i>ROLE</i> Promise.</span></figcaption>
-      </figure>
-      <figure class="photo" id="iphone-app-02">
-        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-02-credibility.png" alt="Trusted by Thousands, Recommended by Experts iPhone App Store frame">
-        <figcaption><b class="pid">iPhone &middot; 02</b><span class="ttl">Trusted by Thousands, Recommended by Experts</span><span class="recipe"><i>ROLE</i> Credibility.</span></figcaption>
-      </figure>
-      <figure class="photo" id="iphone-app-03">
-        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-03-just-press-play.png" alt="Just Press Play iPhone App Store frame">
-        <figcaption><b class="pid">iPhone &middot; 03</b><span class="ttl">Just Press Play</span><span class="recipe"><i>ROLE</i> Love Immersions.</span></figcaption>
-      </figure>
-      <figure class="photo" id="iphone-app-04">
-        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-04-combine-frequencies.png" alt="Combine Frequencies iPhone App Store frame">
-        <figcaption><b class="pid">iPhone &middot; 04</b><span class="ttl">Combine Frequencies</span><span class="recipe"><i>ROLE</i> Sole Playlist view.</span></figcaption>
-      </figure>
-      <figure class="photo" id="iphone-app-05">
-        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-05-every-track-tuned.png" alt="Every Track, Tuned to You iPhone App Store frame">
-        <figcaption><b class="pid">iPhone &middot; 05</b><span class="ttl">Every Track, Tuned to You.</span><span class="recipe"><i>ROLE</i> Player.</span></figcaption>
-      </figure>
-      <figure class="photo" id="iphone-app-06">
-        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-06-your-unique-frequencies.png" alt="Your Unique Frequencies iPhone App Store frame">
-        <figcaption><b class="pid">iPhone &middot; 06</b><span class="ttl">Your Unique Frequencies</span><span class="recipe"><i>ROLE</i> Personalized frequency proof.</span></figcaption>
-      </figure>
-      <figure class="photo" id="iphone-app-07">
-        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-07-track-time-balance.png" alt="Track Your Time and Balance iPhone App Store frame">
-        <figcaption><b class="pid">iPhone &middot; 07</b><span class="ttl">Track Your Time and Balance</span><span class="recipe"><i>ROLE</i> Weekly practice and balance.</span></figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
 <section id="solo">
   <div class="wrap">
   <div class="eyebrow">01 · Treatment</div>
@@ -2133,3 +2087,4 @@
 
 </body>
 </html>
+
