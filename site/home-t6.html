@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm · Home Template T6</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="home-t6-tokens.css">
+<style>
+/* =====================================================================
+   HOME TEMPLATE T6 · THE TEMPLATE — THE SCANNABLE PHOTOGRAPH
+   Nine section recipes standing on TWO grounds. This file holds NO copy
+   and NO image path: those live in home-t6-content.js. Every number,
+   colour and length lives in home-t6-tokens.css.
+
+   THE PAGE LAWS (fd-020), enforced here in the markup order itself:
+   1. Scannable — headings and images alone tell the story in order.
+   2. Every image sits beside the sentence it proves.
+   3. In every section the eyebrow leads, the heading leads, the body
+      follows, the images follow. NEVER an image before its heading.
+   4. A section begins with a change of light, never a rule or a card.
+      One section, one ground.
+   ===================================================================== */
+
+@font-face{font-family:'Switzer';src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype');font-weight:400;font-display:block}
+@font-face{font-family:'Switzer';src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype');font-weight:600;font-display:block}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden;background:#0A0A0A}
+body{font-family:var(--sans);font-size:var(--fs-body);line-height:var(--lh-body);
+  color:var(--ink78);background:#0A0A0A;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+
+/* =====================================================================
+   1 · THE TWO GROUNDS. Real photography, neutralised and tiled, so a
+   section stands on film and never on paper. There is no third ground:
+   one section, one ground.
+   ===================================================================== */
+section{position:relative;z-index:1;padding:var(--pad-section) 0;scroll-margin-top:70px;
+  background-repeat:repeat;background-size:var(--ground-tile) var(--ground-tile)}
+section.g-light,footer{background-image:var(--ground-light);
+  --ink:var(--ink-light);--ink78:var(--ink-light-2);--ink56:var(--ink-light-3);--hair:var(--hair-light)}
+section.g-dark{background-image:var(--ground-dark);
+  --ink:var(--ink-dark);--ink78:var(--ink-dark-2);--ink56:var(--ink-dark-3);--hair:var(--hair-dark)}
+/* THE FALL. The close is ONE ground and one light event: the night the
+   page has been in since 05 handed over to the white the sun blows the
+   last frame out with. Nothing is stacked on it; the light simply goes. */
+section.g-fall{background-image:
+  linear-gradient(180deg,#0A0A0A 0px,#0A0A0A calc(100% - var(--fall-hold)),
+                  rgba(10,10,10,0) calc(100% - var(--fall-clear))),
+  var(--ground-light);
+  background-size:100% 100%,var(--ground-tile) var(--ground-tile);
+  background-repeat:no-repeat,repeat;
+  --ink:var(--ink-dark);--ink78:var(--ink-dark-2);--ink56:var(--ink-dark-3);--hair:var(--hair-dark)}
+section.g-fall .dawnside{--ink:var(--ink-light);--ink78:var(--ink-light-2);
+  --ink56:var(--ink-light-3);--hair:var(--hair-light)}
+
+/* THE SUN, on the ground. fd-017: white light, screened, never a hue,
+   never on a face. It sits at the top of the section it opens. */
+.gsun{position:absolute;left:0;right:0;top:0;height:78%;z-index:0;pointer-events:none;
+  mix-blend-mode:screen;background-repeat:no-repeat;background-size:cover;
+  background-position:center top;opacity:.85}
+
+/* THE BURSTS. A light section is not paper: it is sunlit ground. Pure white
+   opens behind every heading and against the top edge of every photograph,
+   and falls away to silver in the body. Light ON the ground, screened —
+   never a plate, never a card, never a rule. Placed by the renderer against
+   the real measured position of the type and the pictures. */
+.burst{position:absolute;left:0;right:0;z-index:0;pointer-events:none;
+  mix-blend-mode:screen;background:#fff}
+.burst.b-head{-webkit-mask-image:radial-gradient(120% 105% at 24% 46%,#fff 0%,#fff 26%,rgba(255,255,255,.60) 52%,rgba(255,255,255,0) 100%);
+              mask-image:radial-gradient(120% 105% at 24% 46%,#fff 0%,#fff 26%,rgba(255,255,255,.60) 52%,rgba(255,255,255,0) 100%)}
+.burst.b-edge{-webkit-mask-image:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.55) 46%,#fff 100%);
+              mask-image:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.55) 46%,#fff 100%)}
+.burst.b-foot{-webkit-mask-image:linear-gradient(0deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.5) 50%,#fff 100%);
+              mask-image:linear-gradient(0deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.5) 50%,#fff 100%)}
+
+/* film grain at 1:1, printed twice: multiplied so its dark speckle lands
+   on the lit ground, screened so its light speckle lands in the shadow. */
+#grain,#grain2{position:fixed;inset:0;z-index:40;pointer-events:none;
+  background-image:var(--filmgrain);background-repeat:repeat;background-size:var(--grain-size)}
+#grain{opacity:var(--grain-op);mix-blend-mode:multiply}
+#grain2{opacity:calc(var(--grain-op) * .82);mix-blend-mode:screen;background-position:97px 53px}
+@media(max-width:640px){#grain{opacity:var(--grain-op-m)}
+  #grain2{opacity:calc(var(--grain-op-m) * .82)}}
+
+/* =====================================================================
+   2 · TYPE
+   ===================================================================== */
+.shell{max-width:var(--shell);margin:0 auto;padding:0 var(--pad-wrap);position:relative;z-index:2}
+
+/* two keys and nothing between them */
+[data-key="dark"]{--ink:var(--ink-dark);--ink78:var(--ink-dark-2);--ink56:var(--ink-dark-3);--hair:var(--hair-dark)}
+[data-key="light"]{--ink:var(--ink-light);--ink78:var(--ink-light-2);--ink56:var(--ink-light-3);--hair:var(--hair-light)}
+
+h1{font-family:var(--serif);font-weight:600;font-size:var(--fs-h1);line-height:var(--lh-h1);
+  color:var(--ink);letter-spacing:-.008em;max-width:12ch}
+h2{font-family:var(--serif);font-weight:600;font-size:var(--fs-h2);line-height:var(--lh-h2);
+  color:var(--ink);max-width:16ch;letter-spacing:-.004em}
+h3{font-family:var(--sans);font-weight:600;font-size:var(--fs-h3);color:var(--ink);line-height:1.3}
+h1 em,h2 em{font-style:italic;font-weight:500}
+.lede{font-size:var(--fs-lede);color:var(--ink78);line-height:1.48;max-width:36ch}
+.quiet{color:var(--ink78);max-width:48ch}
+.tiny{font-size:13px;color:var(--ink56);line-height:1.5;max-width:58ch}
+.num{font-family:var(--sans);font-weight:600;font-variant-numeric:tabular-nums lining-nums}
+.kick{display:block;font-family:var(--sans);font-size:10.5px;font-weight:600;letter-spacing:.20em;
+  text-transform:uppercase;margin-bottom:11px;color:var(--ink78)}
+/* the eyebrow and the section number: ALWAYS on the ground, never over a
+   photograph, and never coloured. */
+.cue{font-family:var(--sans);font-size:var(--fs-cue);font-weight:600;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--ink78);margin-bottom:14px}
+.shead{max-width:900px;margin-bottom:var(--shead-gap)}
+.shead .quiet{margin-top:16px}
+
+.fu{opacity:0;transform:translateY(18px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1)}
+.fu.in,html.static .fu{opacity:1;transform:none}
+
+/* every photograph carries its permanent number, small, bottom right */
+.pid{position:absolute;right:10px;bottom:10px;z-index:8;
+  font:600 10px/1 var(--sans);letter-spacing:.14em;
+  color:#fff;background:rgba(0,0,0,.62);padding:4px 7px;pointer-events:none}
+
+/* THE ONE ACCENT ELEMENT ON THE PAGE (fd-020 / D13): the ask, as the design
+   system's primary button — solid Core Purple, white Switzer, hard corner.
+   One primary per screen, under the hero headline and again at the close. */
+.ask{display:inline-flex;align-items:center;justify-content:center;
+  min-height:var(--btn-h);padding:0 var(--btn-pad);border-radius:2px;
+  border:1px solid var(--accent);background:var(--accent);color:#fff;
+  font-family:var(--sans);font-weight:600;font-size:var(--btn-fs);letter-spacing:.015em;
+  line-height:1.2;text-align:center;
+  transition:background .25s ease,border-color .25s ease}
+.ask:hover,.ask:focus-visible{background:#38007A;border-color:#38007A}
+.ask .arrow{display:inline-block;margin-left:.6em}
+
+/* =====================================================================
+   3 · NAV + FOOTER
+   ===================================================================== */
+nav{position:absolute;top:0;left:0;right:0;z-index:30}
+.nav-in{display:flex;align-items:center;justify-content:space-between;
+  padding:20px var(--pad-wrap);max-width:var(--shell);margin:0 auto}
+.wordmark{font-family:var(--serif);font-weight:600;font-size:23px;letter-spacing:.05em;color:var(--ink)}
+.nav-links{display:flex;align-items:center;gap:24px;font-family:var(--sans);
+  font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--ink)}
+@media(max-width:640px){
+  .nav-in{padding:15px 18px}.wordmark{font-size:18px}.nav-links{gap:12px;font-size:11.5px}
+}
+footer{position:relative;z-index:2;padding:28px 0 32px;font-size:13px;color:var(--ink56);
+  background-repeat:repeat;background-size:var(--ground-tile) var(--ground-tile)}
+footer .shell{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+/* =====================================================================
+   4 · THE PHOTOGRAPH AND ITS LIGHT
+   A frame is full-bleed and hard-edged. It ends in LIGHT: .lj w drives
+   the edge to pure white with a screen, .lj k into shadow with a
+   multiply, and the ground on the other side is already that value.
+   ===================================================================== */
+.fig{position:relative;width:100vw;margin-left:calc(50% - 50vw);overflow:hidden;
+  z-index:1;isolation:isolate;background:#000}
+.fig > img,.fig > picture > img{width:100%;height:var(--h);object-fit:cover;
+  object-position:var(--focal,center);position:relative;z-index:1;
+  filter:var(--grade);transform:scale(var(--zoom,1));transform-origin:var(--focal,center)}
+@media(max-width:640px){
+  .fig > img,.fig > picture > img{object-position:var(--focal-m,var(--focal,center));
+    transform:scale(var(--zoom-m,var(--zoom,1)));transform-origin:var(--focal-m,var(--focal,center))}
+}
+.lj{position:absolute;left:0;right:0;z-index:4;pointer-events:none}
+.lj.w{background:#fff;mix-blend-mode:screen}
+.lj.k{background:#000;mix-blend-mode:multiply}
+.lj.t{top:0;height:var(--jh,var(--join));
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.55) 42%,rgba(0,0,0,0) 100%);
+          mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.55) 42%,rgba(0,0,0,0) 100%)}
+.lj.b{bottom:0;height:var(--jh,var(--join));
+  -webkit-mask-image:linear-gradient(0deg,#000 0%,rgba(0,0,0,.55) 42%,rgba(0,0,0,0) 100%);
+          mask-image:linear-gradient(0deg,#000 0%,rgba(0,0,0,.55) 42%,rgba(0,0,0,0) 100%)}
+
+/* THE SUN IN A PICTURE. White light entering from the top. A screen of
+   pure white can raise a value; it can never add a hue, and it never
+   reaches a face because it lives in the sky. */
+.sun{position:absolute;left:-10%;right:-10%;top:0;height:40%;z-index:3;pointer-events:none;
+  mix-blend-mode:screen;
+  background:linear-gradient(180deg,rgba(255,255,255,1) 0%,rgba(255,255,255,.98) 28%,
+             rgba(255,255,255,.68) 54%,rgba(255,255,255,.26) 78%,rgba(255,255,255,0) 100%)}
+.sun.flare{background:var(--sun-fold) center top/cover no-repeat;height:58%;opacity:.5}
+
+/* THE CAPTION. D11: never over a photograph. Switzer, on the ground,
+   directly beneath the image it explains, in that ground's own key. */
+.gcap{max-width:var(--shell);margin:0 auto;padding:12px var(--pad-wrap) 0;
+  position:relative;z-index:2;
+  font-family:var(--sans);font-size:var(--fs-cap);line-height:1.45;color:var(--ink56)}
+.gcap b{color:var(--ink);font-weight:600}
+.gcap span{display:inline-block;max-width:46ch}
+@media(max-width:640px){.gcap{padding-top:8px}}
+
+/* =====================================================================
+   5 · RECIPE — HERO (00). Full bleed from the top edge, the words set
+   into the sky, the sun entering from the top, the four boards inside
+   the first viewport at 375x812 and at 1440x900 (the phone crop is baked
+   to that frame exactly, so the boards cannot fall out of it).
+   ===================================================================== */
+.hero{padding:0;background-image:none}
+.herotype{position:absolute;left:0;right:0;z-index:6;
+  padding:0 var(--pad-wrap);max-width:var(--shell);margin:0 auto;
+  top:calc(var(--pad-section) + 46px)}
+.herotype .prehead{font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--ink78);margin:0 0 18px}
+.herotype h1{max-width:13ch}
+.herotype .lede{margin-top:20px}
+.herotype .ask{margin-top:24px}
+[data-key="light"].herotype,[data-key="light"].onphoto{
+  text-shadow:0 0 2px rgba(255,255,255,.9),0 0 6px rgba(255,255,255,.85),
+  0 0 18px rgba(255,255,255,.8),0 0 46px rgba(255,255,255,.6)}
+[data-key="dark"].herotype,[data-key="dark"].onphoto{
+  text-shadow:0 0 2px rgba(0,0,0,1),0 0 6px rgba(0,0,0,.95),
+  0 0 18px rgba(0,0,0,.9),0 0 46px rgba(0,0,0,.7)}
+@media(max-width:640px){
+  .herotype{top:86px;padding:0 20px}
+  .herotype .prehead{font-size:10.5px;letter-spacing:.19em;margin-bottom:13px}
+  .herotype .lede{margin-top:15px;max-width:30ch}
+  .herotype .ask{margin-top:18px}
+}
+
+/* =====================================================================
+   6 · RECIPE — VOICES. Three treatments, one recipe. Real faces at a
+   real size, a lead quote large in the serif, names in Switzer, and
+   AIR between the quotes — never a rule, never a card.
+   ===================================================================== */
+.quote{font-family:var(--serif);font-weight:600;font-size:var(--fs-quote);line-height:1.16;
+  color:var(--ink);letter-spacing:-.006em;max-width:20ch}
+.quote.big{font-size:var(--fs-quote-big);max-width:17ch}
+.qdetail{margin-top:9px;font-size:16.5px;line-height:1.5;color:var(--ink78);max-width:40ch}
+.qwho{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink);letter-spacing:.02em}
+.qwho small{display:block;font-weight:400;font-size:11.5px;color:var(--ink56);margin-top:4px;
+  letter-spacing:.03em;max-width:42ch;line-height:1.42}
+.qsig{display:flex;align-items:center;gap:14px;margin-top:12px}
+
+/* the portrait, printed into the ground it lies on */
+.pr{position:relative;flex:0 0 auto;width:var(--pw);height:var(--pw)}
+.pri{position:absolute;inset:0;overflow:hidden;
+  -webkit-mask-image:radial-gradient(ellipse 66% 66% at 50% 44%,#000 54%,rgba(0,0,0,.5) 78%,rgba(0,0,0,0) 100%);
+          mask-image:radial-gradient(ellipse 66% 66% at 50% 44%,#000 54%,rgba(0,0,0,.5) 78%,rgba(0,0,0,0) 100%)}
+.pri img{width:100%;height:100%;object-fit:cover;object-position:center 22%;
+  filter:grayscale(1) contrast(1.2) brightness(1.04)}
+.g-light .pri img{mix-blend-mode:multiply}
+.g-dark .pri img{mix-blend-mode:screen;filter:grayscale(1) contrast(1.16) brightness(.96)}
+.pr .pid{right:-2px;bottom:-2px;font-size:9px;padding:3px 5px;letter-spacing:.1em}
+
+/* 01 — the authorities. The lead quote runs the measure, the two that
+   follow stand under it held to their own margins. */
+.auth-lead{display:grid;grid-template-columns:var(--pw-lead) minmax(0,1fr);gap:26px;
+  align-items:start;max-width:940px}
+.auth-lead .pr{width:var(--pw-lead);height:var(--pw-lead)}
+.auth-rest{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:56px;margin-top:6vh}
+.auth-rest > div:nth-child(2){margin-top:5vh}
+@media(max-width:900px){
+  .auth-lead{grid-template-columns:minmax(0,1fr);gap:18px}
+  .auth-rest{grid-template-columns:minmax(0,1fr);gap:20px;margin-top:20px}
+  .auth-rest > div:nth-child(2){margin-top:0}
+}
+
+/* 05 — the results spread. One lead quote large, the rest falling down
+   the night like light down a wall. */
+.sp-run{display:flex;flex-direction:column;gap:5vh;max-width:var(--shell);margin:0 auto}
+.sp-run .qi{max-width:46ch}
+.sp-run .qi:nth-child(2){margin-left:auto;text-align:right}
+.sp-run .qi:nth-child(2) .quote,.sp-run .qi:nth-child(2) .qdetail{margin-left:auto}
+.sp-run .qi:nth-child(2) .qsig{flex-direction:row-reverse}
+.sp-run .qi:nth-child(3){margin-left:18%}
+.sp-run .qi:nth-child(4){margin-left:auto;text-align:right}
+.sp-run .qi:nth-child(4) .quote,.sp-run .qi:nth-child(4) .qdetail{margin-left:auto}
+.sp-run .qi:nth-child(4) .qsig{flex-direction:row-reverse}
+.sp-run .qi:nth-child(5){margin-left:8%}
+@media(max-width:900px){
+  .sp-run{gap:22px}
+  .sp-run .qi,.sp-run .qi:nth-child(n){margin-left:0;text-align:left}
+  .sp-run .qi:nth-child(n) .quote,.sp-run .qi:nth-child(n) .qdetail{margin-left:0}
+  .sp-run .qi:nth-child(n) .qsig{flex-direction:row}
+}
+
+/* 07 — the dawn. The heading stands in her light; the eyebrow and the
+   four voices stand on the ground under her, in the returning sun. */
+.dawnhead{position:absolute;left:0;right:0;z-index:6;
+  padding:0 var(--pad-wrap);max-width:var(--shell);margin:0 auto}
+.dawnhead.at-top{top:9vh}
+.dawnhead.at-bot{bottom:9vh}
+.dawnhead.to-right{text-align:right}
+.dawnhead.to-right h2{margin-left:auto}
+.sp-burst{max-width:var(--shell);margin:0 auto}
+.sp-burst .qi.big{max-width:none;margin-bottom:6vh}
+.sp-burst .three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:46px;align-items:start}
+.sp-burst .three > div:nth-child(1){padding-top:3vh}
+.sp-burst .three > div:nth-child(3){padding-top:5vh}
+.sp-burst .three .quote{font-size:calc(var(--fs-quote) * .74);max-width:none}
+@media(max-width:900px){
+  .sp-burst .three{grid-template-columns:minmax(0,1fr);gap:20px}
+  .sp-burst .three > div:nth-child(n){padding-top:0}
+  .sp-burst .qi.big{margin-bottom:20px}
+}
+
+/* the scroller of short voices — air above and below it, no rules */
+.mq{margin-top:2vh;padding:0;overflow:hidden;position:relative;z-index:2;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%)}
+.mq-track{display:flex;gap:58px;width:max-content;animation:mqmove 240s linear infinite}
+@keyframes mqmove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){.mq-track{animation:none}}
+.mqi{display:flex;align-items:baseline;gap:14px;white-space:nowrap}
+.mqi .q{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--ink)}
+.mqi .n{font-family:var(--sans);font-size:12px;color:var(--ink56)}
+
+/* =====================================================================
+   7 · RECIPE — FREQUENCIES (02). The one place on this page where the
+   four interface colours are allowed, and they are allowed as the four
+   real waveforms. Drawn on the ground: no plate, no card, no rule.
+   ===================================================================== */
+.chart{max-width:960px;margin-top:2vh}
+.crow{display:grid;grid-template-columns:190px minmax(0,1fr) 118px;align-items:center;
+  gap:24px;padding:16px 0}
+.crow .cname b{display:block;font-family:var(--sans);font-size:16px;font-weight:600;color:var(--ink)}
+.crow .cname span{display:block;font-family:var(--sans);font-size:12.5px;color:var(--ink56);margin-top:3px}
+.crow .cwave img{width:100%;height:58px;object-fit:contain;object-position:left center}
+.crow .chz{text-align:right;font-family:var(--sans);font-weight:600;font-size:27px;color:var(--ink);
+  font-variant-numeric:tabular-nums lining-nums;letter-spacing:-.01em}
+.crow .chz small{font-size:12px;font-weight:400;color:var(--ink56);margin-left:3px}
+@media(max-width:640px){
+  .crow{grid-template-columns:minmax(0,1fr) 92px;gap:2px 10px;padding:6px 0}
+  .crow .cwave{grid-column:1 / -1;order:3;margin-top:4px}
+  .crow .cwave img{height:34px}
+  .crow .chz{font-size:22px}
+}
+
+/* =====================================================================
+   8 · RECIPE — STEPS (03). The heading leads the section. Then each step
+   is ONE UNIT: the numeral set into its photograph, the step heading and
+   body directly beneath that photograph, inside the unit — so a screen
+   edge can never separate a step from its words.
+   ===================================================================== */
+.steps{display:flex;flex-direction:column;gap:0}
+.step{position:relative}
+.step + .step{margin-top:5vh}
+.sphoto{position:relative;width:100vw;margin-left:calc(50% - 50vw);overflow:hidden;background:#000}
+.sphoto img{width:100%;height:var(--h);object-fit:cover;object-position:var(--focal,center);
+  filter:var(--grade);transform:scale(var(--zoom,1));transform-origin:var(--focal,center)}
+@media(max-width:640px){
+  .sphoto img{object-position:var(--focal-m,var(--focal,center));
+    transform:scale(var(--zoom-m,var(--zoom,1)));transform-origin:var(--focal-m,var(--focal,center))}}
+/* the numeral is set INTO the photograph, in the key that photograph's
+   own corner calls for — white where the corner is dark, black where the
+   sun has blown it out. Judged, never chosen by taste. */
+.stepn{position:absolute;z-index:6;pointer-events:none;
+  font-family:var(--sans);font-weight:600;font-size:var(--fs-stepnum);line-height:.78;
+  color:#fff;letter-spacing:-.03em;
+  text-shadow:0 0 14px rgba(0,0,0,.86),0 0 44px rgba(0,0,0,.7),0 2px 6px rgba(0,0,0,.5)}
+.stepn.k-light{color:#0B0B0B;
+  text-shadow:0 0 14px rgba(255,255,255,.92),0 0 44px rgba(255,255,255,.8),0 2px 6px rgba(255,255,255,.6)}
+.stepn.c-bl{left:var(--pad-wrap);bottom:2vh}
+.stepn.c-br{right:var(--pad-wrap);bottom:2vh}
+.stepn.c-tl{left:var(--pad-wrap);top:2.4vh}
+.stepn.c-tr{right:var(--pad-wrap);top:2.4vh}
+.stepw{max-width:var(--shell);margin:0 auto;padding:22px var(--pad-wrap) 0;position:relative;z-index:2}
+.stepw h3{margin-bottom:8px;max-width:24ch}
+.stepw p{color:var(--ink78);max-width:46ch}
+@media(min-width:901px){
+  .stepw{display:grid;grid-template-columns:170px minmax(0,46ch);gap:40px;align-items:start}
+  .stepw .kick{margin-bottom:0;padding-top:6px}
+}
+@media(max-width:640px){.stepw{padding-top:11px}.step + .step{margin-top:18px}}
+
+/* =====================================================================
+   9 · RECIPE — MOMENTS (04) and MUSIC (08). Words first, always. Then
+   the photographs, each with its caption on the ground beneath it.
+   ===================================================================== */
+.mom + .mom{margin-top:4vh}
+@media(max-width:640px){.mom + .mom{margin-top:12px}}
+.proof{margin-top:26px;max-width:52ch}
+@media(max-width:640px){.proof{margin-top:12px}}
+
+/* =====================================================================
+   10 · RECIPE — STUDY (06). Every figure is set in Switzer, never the
+   serif. White bars on the black. Air between the rows, no rules.
+   ===================================================================== */
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:56px;
+  max-width:var(--shell);margin:2vh auto 0;position:relative;z-index:2}
+.stat{font-family:var(--sans);font-size:var(--fs-stat);font-weight:600;color:var(--ink);line-height:.92;
+  letter-spacing:-.028em;font-variant-numeric:tabular-nums lining-nums}
+.stat small{font-size:.34em;font-weight:600;color:var(--ink56)}
+.statlbl{margin-top:14px;font-size:15px;color:var(--ink78);max-width:32ch}
+@media(max-width:900px){.stats{grid-template-columns:1fr;gap:20px}}
+
+.ochart{max-width:var(--shell);margin:5vh auto 0;position:relative;z-index:2}
+.otitle{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink);margin-bottom:20px;
+  letter-spacing:.02em}
+.otitle small{display:block;font-weight:400;font-size:12.5px;color:var(--ink56);margin-top:4px;letter-spacing:.02em}
+.orow{display:grid;grid-template-columns:minmax(0,26ch) minmax(0,1fr) 56px;align-items:center;
+  gap:20px;padding:9px 0}
+.orow .olbl{font-size:14.5px;color:var(--ink78)}
+.orow .obar{height:3px;background:rgba(255,255,255,.14);overflow:hidden}
+.orow .obar i{display:block;height:100%;width:0;background:#fff;
+  transition:width 1.4s cubic-bezier(.2,.6,.2,1)}
+html.static .orow .obar i{transition:none}
+.orow .oval{text-align:right;font-family:var(--sans);font-weight:600;font-size:17px;color:var(--ink);
+  font-variant-numeric:tabular-nums lining-nums}
+.orow .oval small{font-size:11px;font-weight:400;color:var(--ink56)}
+@media(max-width:640px){
+  .ochart{margin-top:18px}
+  .orow{grid-template-columns:minmax(0,1fr) 50px;gap:4px 8px;padding:7px 0}
+  .orow .obar{grid-column:1 / -1;order:3;margin-top:5px}
+  .orow .olbl{font-size:14px}
+}
+
+/* =====================================================================
+   11 · RECIPE — ASIDE (09) and CLOSE (10).
+   ===================================================================== */
+@media(min-width:901px){
+  .aside .shead{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:70px;
+    max-width:none;align-items:start}
+  .aside .shead .cue{grid-column:1;margin-bottom:0}
+  .aside .shead h2{grid-column:1;grid-row:2}
+  .aside .shead .quiet{grid-column:2;grid-row:1 / span 2;margin-top:8px}
+}
+.close{padding-bottom:0}
+.close .dawnside{margin-top:11vh}
+.close .fig{margin-top:6vh}
+@media(max-width:640px){.close .dawnside{margin-top:14vh}.close .fig{margin-top:22px}}
+</style>
+</head>
+<body>
+
+<main id="page"></main>
+
+<footer><div class="shell" id="foot"></div></footer>
+
+<div id="grain" aria-hidden="true"></div>
+<div id="grain2" aria-hidden="true"></div>
+
+<script src="home-t6-content.js"></script>
+<script>
+/* =====================================================================
+   THE RENDERER. It knows shapes, never words.
+   ===================================================================== */
+(function(){
+  var C = window.ZC, P = [];
+  var esc = function(s){ return s == null ? '' : String(s); };
+
+  function joins(f){
+    var s = '';
+    if (f.jt) s += '<i class="lj t ' + f.jt + '"' + (f.jth ? ' style="--jh:' + f.jth + '"' : '') + '></i>';
+    if (f.jb) s += '<i class="lj b ' + f.jb + '"' + (f.jbh ? ' style="--jh:' + f.jbh + '"' : '') + '></i>';
+    return s;
+  }
+
+  /* a photograph. It never carries a caption and it never carries an
+     eyebrow: those stand on the ground (D11). The only type allowed
+     inside a frame is a headline set in the picture's own light. */
+  function fig(f, inside){
+    var st = '--h:var(--wh-' + (f.h || 'scene') + ');--focal:' + (f.focal || 'center')
+      + (f.focalM ? ';--focal-m:' + f.focalM : '')
+      + (f.zoom ? ';--zoom:' + f.zoom : '')
+      + (f.zoomM ? ';--zoom-m:' + f.zoomM : '')
+      + (f.grade ? ';--grade:' + f.grade : '');
+    return '<figure class="fig fu" style="' + st + '">'
+      + (f.srcMobile
+          ? '<picture><source media="(max-width:640px)" srcset="' + f.srcMobile + '"><img src="'
+            + f.src + '" alt="' + esc(f.alt) + '"></picture>'
+          : '<img src="' + f.src + '" alt="' + esc(f.alt) + '">')
+      + (f.sky ? '<i class="sun" aria-hidden="true"></i><i class="sun flare" aria-hidden="true"></i>' : '')
+      + joins(f) + (inside || '')
+      + '<span class="pid">' + esc(f.pid) + '</span></figure>';
+  }
+
+  /* the caption, ON THE GROUND, directly beneath the photograph it
+     explains, so it can always be read. */
+  function gcap(f){
+    if (!f.cap) return '';
+    return '<p class="gcap fu"><span><b>' + f.cap.b + '</b> ' + f.cap.rest + '</span></p>';
+  }
+
+  function shead(b, extra){
+    return '<div class="shead fu">'
+      + (b.cue ? '<p class="cue">' + esc(b.cue) + '</p>' : '')
+      + (b.h ? '<h2>' + b.h + '</h2>' : '')
+      + (b.body ? '<p class="quiet">' + b.body + '</p>' : '')
+      + (extra || '') + '</div>';
+  }
+
+  function portrait(r, lead){
+    return '<span class="pr">'
+      + '<span class="pri"><img src="' + r.src + '" alt="' + esc(r.alt) + '"></span>'
+      + '<span class="pid">' + esc(r.pid) + '</span></span>';
+  }
+  function sig(r){
+    return '<div class="qsig">' + portrait(r)
+      + '<p class="qwho">' + r.who + (r.role ? '<small>' + r.role + '</small>' : '') + '</p></div>';
+  }
+  function quote(r, cls){
+    return (r.kick ? '<p class="kick">' + r.kick + '</p>' : '')
+      + '<p class="quote' + (cls || '') + '">' + r.lead + '</p>'
+      + (r.detail ? '<p class="qdetail">' + r.detail + '</p>' : '')
+      + (r.who ? sig(r) : '');
+  }
+  function ask(c){
+    return '<p class="fu"><a class="ask" href="' + c.href + '">' + c.label
+      + '<span class="arrow" aria-hidden="true">&rarr;</span></a></p>';
+  }
+  function sun(name){
+    return name ? '<i class="gsun" aria-hidden="true" style="background-image:var(--sun-'
+      + name + ')"></i>' : '';
+  }
+  function open(b, cls){
+    return '<section id="' + b.id + '" class="g-' + (b.ground || 'light') + (cls ? ' ' + cls : '') + '">'
+      + sun(b.sun);
+  }
+
+  /* ---------- 00 · HERO ---------- */
+  function hero(b){
+    var type = '<div class="herotype fu">'
+      + (b.prehead ? '<p class="prehead">' + b.prehead + '</p>' : '')
+      + '<h1>' + b.h + '</h1>'
+      + (b.after ? '<p class="lede">' + b.after + '</p>' : '')
+      + '<p><a class="ask" href="' + b.cta.href + '">' + b.cta.label
+      + '<span class="arrow" aria-hidden="true">&rarr;</span></a></p></div>';
+    return '<section id="' + b.id + '" class="hero">' + fig(b.frame, type) + '</section>';
+  }
+
+  /* ---------- VOICES ---------- */
+  function voices(b){
+    if (b.variant === 'authorities'){
+      var lead = b.rows[0], rest = b.rows.slice(1);
+      return open(b) + '<div class="shell">' + shead(b)
+        + '<div class="auth-lead fu">' + portrait(lead, true) + '<div>'
+        + (lead.kick ? '<p class="kick">' + lead.kick + '</p>' : '')
+        + '<p class="quote">' + lead.lead + '</p>'
+        + (lead.detail ? '<p class="qdetail">' + lead.detail + '</p>' : '')
+        + '<p class="qwho" style="margin-top:14px">' + lead.who
+        + (lead.role ? '<small>' + lead.role + '</small>' : '') + '</p></div></div>'
+        + '<div class="auth-rest">'
+        + rest.map(function(r){ return '<div class="fu">' + quote(r) + '</div>'; }).join('')
+        + '</div></div></section>';
+    }
+    if (b.variant === 'spread'){
+      return open(b) + '<div class="shell">' + shead(b) + '<div class="sp-run">'
+        + b.rows.map(function(r, i){
+            return '<div class="qi fu">' + quote(r, i === 0 ? ' big' : '') + '</div>'; }).join('')
+        + '</div></div></section>';
+    }
+    /* dawn (07): the heading stands in her light, the eyebrow and the
+       voices stand on the ground the sun has come back onto. */
+    var big = b.rows.filter(function(r){ return r.size === 'big'; })[0] || b.rows[0];
+    var three = b.rows.filter(function(r){ return r !== big; });
+    var mq = '';
+    if (b.marquee){
+      var run = b.marquee.map(function(m){
+        return '<span class="mqi"><span class="q">' + m.q + '</span><span class="n">' + m.n + '</span></span>';
+      }).join('');
+      mq = '<div class="shell"><div class="mq fu" role="region" aria-label="More voices from members">'
+         + '<div class="mq-track">' + run
+         + '<span aria-hidden="true" style="display:contents">' + run + '</span></div></div></div>';
+    }
+    return '<section id="' + b.id + '" class="g-light" style="padding-top:0">' + sun(b.sun)
+      + fig(b.scene, '<div class="dawnhead onphoto fu at-top"><h2>' + b.h + '</h2></div>')
+      + '<div class="shell" style="padding-top:var(--pad-section)"><p class="cue fu">' + esc(b.cue) + '</p>'
+      + '<div class="sp-burst">'
+      + '<div class="qi big fu">' + quote(big, ' big') + '</div>'
+      + '<div class="three">'
+      + three.map(function(r){ return '<div class="fu">' + quote(r) + '</div>'; }).join('')
+      + '</div></div></div>' + mq + '</section>';
+  }
+
+  /* ---------- 02 · FREQUENCIES ---------- */
+  function freq(b){
+    return open(b) + '<div class="shell">' + shead(b)
+      + '<div class="chart fu">' + b.rows.map(function(r){
+          return '<div class="crow"><div class="cname"><b>' + r.name + '</b><span>' + r.sub + '</span></div>'
+            + '<div class="cwave"><img src="' + r.wave + '" alt="' + esc(r.waveAlt) + '"></div>'
+            + '<div class="chz">' + r.hz + '<small>Hz</small></div></div>'; }).join('')
+      + '</div><p class="tiny fu" style="margin-top:20px">' + b.note + '</p></div></section>';
+  }
+
+  /* ---------- 03 · STEPS ---------- */
+  function steps(b){
+    var cells = b.cells.map(function(c){
+      return '<div class="step fu">'
+        + '<div class="sphoto" style="--h:var(--wh-' + (c.h || 'step') + ');--focal:' + (c.focal || 'center')
+          + (c.focalM ? ';--focal-m:' + c.focalM : '') + (c.zoom ? ';--zoom:' + c.zoom : '')
+          + (c.zoomM ? ';--zoom-m:' + c.zoomM : '') + (c.grade ? ';--grade:' + c.grade : '') + '">'
+        + '<img src="' + c.src + '" alt="' + esc(c.alt) + '">'
+        + '<span class="stepn c-bl">' + c.n + '</span>'
+        + '<span class="pid">' + esc(c.pid) + '</span></div>'
+        + '<div class="stepw">'
+        + (c.kick ? '<p class="kick">' + c.kick + '</p>' : '')
+        + '<div>' + (c.h3 ? '<h3>' + c.h3 + '</h3>' : '') + (c.p ? '<p>' + c.p + '</p>' : '') + '</div>'
+        + '</div></div>';
+    }).join('');
+    return open(b) + '<div class="shell">' + shead(b) + '</div>'
+      + '<div class="steps">' + cells + '</div></section>';
+  }
+
+  /* ---------- 04 · MOMENTS ---------- */
+  function moments(b){
+    return open(b) + '<div class="shell">' + shead(b) + '</div>'
+      + '<div class="mom">' + fig(b.lead) + '</div>'
+      + b.cells.map(function(c){
+          return '<div class="mom">' + fig(c) + gcap(c) + '</div>'; }).join('')
+      + '</section>';
+  }
+
+  /* ---------- 08 · MUSIC ---------- */
+  function music(b){
+    return open(b) + '<div class="shell">' + shead(b)
+      + '<p class="quiet proof fu">' + b.proof + '</p></div>'
+      + '<div class="mom" style="margin-top:4vh">' + fig(b.product) + '</div>'
+      + b.cells.map(function(c){
+          return '<div class="mom">' + fig(c) + gcap(c) + '</div>'; }).join('')
+      + '</section>';
+  }
+
+  /* ---------- 06 · STUDY ---------- */
+  function study(b){
+    return open(b) + '<div class="shell">' + shead(b) + '</div>'
+      + '<div class="shell"><div class="stats fu">' + b.stats.map(function(s){
+          return '<div><div class="stat num">' + s.v + '<small>' + s.u + '</small></div>'
+            + '<p class="statlbl">' + s.label + '</p></div>'; }).join('') + '</div>'
+      + '<div class="ochart fu"><p class="otitle">' + b.chart.title
+      + '<small>' + b.chart.sub + '</small></p>'
+      + b.chart.rows.map(function(r){
+          return '<div class="orow"><span class="olbl">' + r.label + '</span>'
+            + '<span class="obar"><i data-w="' + r.v + '"></i></span>'
+            + '<span class="oval num">' + r.v + '<small>%</small></span></div>'; }).join('')
+      + '</div><p class="tiny fu" style="margin-top:22px">' + b.note + '</p></div></section>';
+  }
+
+  /* ---------- 09 · ASIDE ---------- */
+  function aside(b){
+    return open(b, 'aside') + '<div class="shell">' + shead(b) + '</div></section>';
+  }
+
+  /* ---------- 10 · CLOSE ---------- */
+  function close(b){
+    return open(b, 'close') + '<div class="shell">' + shead(b) + '</div>'
+      + '<div class="shell dawnside">' + ask(b.cta) + '</div>'
+      + fig(b.frame) + '</section>';
+  }
+
+  var R = {hero:hero, voices:voices, freq:freq, steps:steps, moments:moments,
+           music:music, study:study, aside:aside, close:close};
+  C.blocks.forEach(function(b){ P.push(R[b.t](b)); });
+
+  document.title = C.title;
+  document.getElementById('page').innerHTML =
+    '<nav id="nav"><div class="nav-in" id="navin"></div></nav>' + P.join('\n');
+  document.getElementById('navin').innerHTML =
+    '<a class="wordmark" href="#top">' + C.wordmark + '</a><div class="nav-links">'
+    + C.navLinks.map(function(l){ return '<a href="' + l.href + '">' + l.label + '</a>'; }).join('') + '</div>';
+  document.getElementById('foot').innerHTML =
+    '<span class="wordmark" style="font-size:18px">' + C.footer.mark + '</span>'
+    + '<span>' + C.footer.line + '</span>';
+})();
+
+/* =====================================================================
+   BEHAVIOUR
+   The ground of every section is known, so the key of every block of
+   copy is known: there is nothing to measure on the ground. What IS
+   measured is the type that stands INSIDE a photograph — the hero
+   headline, the dawn heading, the three step numerals — because a
+   picture cannot be judged by taste.
+   ===================================================================== */
+(function(){
+  var qs = new URLSearchParams(location.search);
+  if (qs.get('static') === '1') document.documentElement.classList.add('static');
+  var isStatic = document.documentElement.classList.contains('static');
+
+  var cvs = document.createElement('canvas'), cx = null;
+  cvs.width = 30; cvs.height = 16;
+  try { cx = cvs.getContext('2d', {willReadFrequently:true}); } catch(e){}
+
+  function lum(r,g,b){
+    function c(v){ v/=255; return v<=.03928 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4); }
+    return .2126*c(r) + .7152*c(g) + .0722*c(b);
+  }
+  function ratio(a,b){ return (Math.max(a,b)+.05)/(Math.min(a,b)+.05); }
+
+  function readRegion(img, fw, fh, x0, y0, x1, y1){
+    if (!cx || !img.naturalWidth) return null;
+    var cs = getComputedStyle(img);
+    var mq = matchMedia('(max-width:640px)').matches;
+    var zoom = parseFloat(cs.getPropertyValue('--zoom')) || 1;
+    var zm = parseFloat(cs.getPropertyValue('--zoom-m'));
+    if (mq && !isNaN(zm)) zoom = zm;
+    var op = (cs.objectPosition || '50% 50%').trim().split(/\s+/);
+    var px = /%$/.test(op[0]) ? parseFloat(op[0])/100 : .5;
+    var py = /%$/.test(op[1] || '') ? parseFloat(op[1])/100 : .5;
+    var nw = img.naturalWidth, nh = img.naturalHeight;
+    var sc = Math.max(fw/nw, fh/nh);
+    var dw = nw*sc, dh = nh*sc;
+    var ox = (fw - dw)*px, oy = (fh - dh)*py;
+    var tox = px*fw, toy = py*fh;
+    function toSrc(x, y){
+      var ux = (x - tox)/zoom + tox, uy = (y - toy)/zoom + toy;
+      return [(ux - ox)/sc, (uy - oy)/sc];
+    }
+    var a = toSrc(x0,y0), b = toSrc(x1,y1);
+    var sx = Math.max(0, Math.min(nw-2, a[0])), sy = Math.max(0, Math.min(nh-2, a[1]));
+    var sw = Math.max(2, Math.min(nw-sx, b[0]-a[0])), sh = Math.max(2, Math.min(nh-sy, b[1]-a[1]));
+    try {
+      cx.clearRect(0,0,cvs.width,cvs.height);
+      cx.drawImage(img, sx, sy, sw, sh, 0, 0, cvs.width, cvs.height);
+      var d = cx.getImageData(0,0,cvs.width,cvs.height).data, out = [];
+      for (var i=0;i<d.length;i+=4) out.push(lum(d[i],d[i+1],d[i+2]));
+      var hasSun = !!img.parentNode.querySelector('.sun') ||
+                   !!(img.parentNode.parentNode && img.parentNode.parentNode.querySelector('.sun'));
+      for (var j=0;j<out.length;j++){
+        var v = Math.min(1, Math.max(0, (out[j]-.5)*1.18 + .5));
+        if (hasSun){
+          var ry = (Math.floor(j/cvs.width)+.5)/cvs.height;
+          var fy = (y0 + (y1-y0)*ry)/fh;
+          if (fy < .46) v = v + (1-v)*(.98*(1 - fy/.46));
+        }
+        out[j] = v;
+      }
+      return out;
+    } catch(e){ return null; }
+  }
+
+  /* the key a run of type printed into a picture must be set in */
+  function judge(type, frame, img){
+    var fr = frame.getBoundingClientRect(), fw = fr.width, fh = fr.height;
+    var tr = type.getBoundingClientRect(), pad = 8;
+    var x0 = Math.max(0, tr.left - fr.left - pad), x1 = Math.min(fw, tr.right - fr.left + pad);
+    var y0 = Math.max(0, tr.top - fr.top - pad),   y1 = Math.min(fh, tr.bottom - fr.top + pad);
+    var px = readRegion(img, fw, fh, x0, y0, x1, y1);
+    if (!px) return null;
+    var s = px.slice().sort(function(a,b){ return a-b; });
+    var lo = s[Math.floor(s.length*.12)], hi = s[Math.floor(s.length*.88)];
+    var mind = ratio(lo, .0055), minl = ratio(hi, 1);
+    return {key: mind >= minl ? 'light' : 'dark', score: Math.max(mind, minl)};
+  }
+
+  /* the hero headline is FIXED in the sky (the directive puts it there);
+     only the key it is printed in is measured. */
+  function keyFixed(block){
+    var frame = block.closest('.fig'); if (!frame) return;
+    var img = frame.querySelector('img'); if (!img || !img.complete) return;
+    var g = judge(block, frame, img); if (!g) return;
+    block.setAttribute('data-key', g.key);
+    block.setAttribute('data-contrast', g.score.toFixed(2));
+  }
+
+  /* the dawn heading may stand wherever her light is strongest */
+  function place(block){
+    var frame = block.closest('.fig'); if (!frame) return;
+    var img = frame.querySelector('img'); if (!img || !img.complete) return;
+    var best = null;
+    [['at-top',0],['at-bot',0],['at-top',1],['at-bot',1]].forEach(function(cc){
+      block.classList.remove('at-top','at-bot','to-right');
+      block.classList.add(cc[0]); if (cc[1]) block.classList.add('to-right');
+      var g = judge(block, frame, img); if (!g) return;
+      if (!best || g.score > best.score) best = {cls:cc[0], right:!!cc[1], key:g.key, score:g.score};
+    });
+    block.classList.remove('at-top','at-bot','to-right');
+    if (!best){ block.classList.add('at-top'); return; }
+    block.classList.add(best.cls); if (best.right) block.classList.add('to-right');
+    block.setAttribute('data-key', best.key);
+    block.setAttribute('data-contrast', best.score.toFixed(2));
+  }
+
+  function corner(num){
+    var frame = num.closest('.sphoto'); if (!frame) return;
+    var img = frame.querySelector('img'); if (!img || !img.complete) return;
+    var fr = frame.getBoundingClientRect(), fw = fr.width, fh = fr.height;
+    var nr = num.getBoundingClientRect(), nw = nr.width + 18, nh = nr.height + 14;
+    var cands = [['c-bl',0,fh-nh],['c-br',fw-nw,fh-nh],['c-tl',0,0],['c-tr',fw-nw,0]];
+    var best = null;
+    cands.forEach(function(c){
+      var px = readRegion(img, fw, fh, c[1], c[2], c[1]+nw, c[2]+nh);
+      if (!px) return;
+      var s = px.slice().sort(function(a,b){ return a-b; });
+      var lo = s[Math.floor(s.length*.12)], hi = s[Math.floor(s.length*.88)];
+      var white = ratio(hi, 1), black = ratio(lo, .0055);
+      var k = black >= white ? 'light' : 'dark';
+      var sc = Math.max(white, black);
+      if (!best || sc > best.sc) best = {c:c[0], sc:sc, k:k};
+    });
+    if (!best) return;
+    num.classList.remove('c-bl','c-br','c-tl','c-tr','k-light');
+    num.classList.add(best.c);
+    if (best.k === 'light') num.classList.add('k-light');
+    num.setAttribute('data-contrast', best.sc.toFixed(2));
+  }
+
+  /* THE LIGHT ON THE GROUND. A light section is sunlit ground, not paper:
+     white opens behind every heading and against the top edge of every
+     photograph, and falls back to silver in between. Measured off the real
+     boxes after layout, so the light always lands where the page put them. */
+  function bursts(){
+    document.querySelectorAll('.burst').forEach(function(b){ b.remove(); });
+    document.querySelectorAll('section.g-light,section.g-fall').forEach(function(sec){
+      var sr = sec.getBoundingClientRect(), st = sr.top + window.scrollY;
+      function add(cls, top, h, op){
+        if (h <= 0) return;
+        var e = document.createElement('i');
+        e.className = 'burst ' + cls; e.setAttribute('aria-hidden','true');
+        e.style.top = Math.round(Math.max(0, top - st)) + 'px';
+        e.style.height = Math.round(h) + 'px';
+        e.style.opacity = op;
+        sec.appendChild(e);
+      }
+      var isFall = sec.classList.contains('g-fall');
+      sec.querySelectorAll('.shead,.dawnhead,.herotype').forEach(function(hd){
+        if (hd.closest('.fig')) return;
+        /* the close falls out of the night: its heading stands ON the night,
+           and a burst there would screen the night away. */
+        if (isFall) return;
+        var r = hd.getBoundingClientRect(), t = r.top + window.scrollY;
+        var pad = Math.max(80, r.height * .5);
+        add('b-head', t - pad, r.height + pad * 2, '1');
+      });
+      sec.querySelectorAll('.fig,.sphoto').forEach(function(f){
+        var r = f.getBoundingClientRect(), t = r.top + window.scrollY;
+        var h = Math.min(150, Math.max(70, r.height * .28));
+        add('b-edge', t - h, h, '.95');
+        var b = r.bottom + window.scrollY;
+        if (b < st + sr.height - 20) add('b-foot', b, Math.min(90, h * .6), '.60');
+      });
+    });
+  }
+
+  function settle(){
+    document.querySelectorAll('.herotype').forEach(keyFixed);
+    document.querySelectorAll('.dawnhead').forEach(place);
+    document.querySelectorAll('.stepn').forEach(corner);
+    bursts();
+  }
+
+  if (!isStatic){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.06, rootMargin:'0px 0px -5% 0px'});
+    document.querySelectorAll('.fu').forEach(function(el){ io.observe(el); });
+  }
+
+  var bo = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (e.isIntersecting){
+        e.target.querySelectorAll('.obar i').forEach(function(i){ i.style.width = i.dataset.w + '%'; });
+        bo.unobserve(e.target);
+      }
+    });
+  }, {threshold:.25});
+  document.querySelectorAll('.ochart').forEach(function(el){ bo.observe(el); });
+  if (isStatic) document.querySelectorAll('.obar i').forEach(function(i){ i.style.width = i.dataset.w + '%'; });
+
+  function run(){ settle(); requestAnimationFrame(settle); setTimeout(settle, 400); setTimeout(settle, 1400); }
+  if (document.readyState === 'complete') run(); else addEventListener('load', run);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(run);
+  addEventListener('resize', settle);
+})();
+</script>
+</body>
+</html>

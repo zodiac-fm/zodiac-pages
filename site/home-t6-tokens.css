@@ -1,0 +1,163 @@
+/* =====================================================================
+   HOME TEMPLATE T6 · TOKENS ONLY
+   Fable design room, round 6 — THE SCANNABLE PHOTOGRAPH.
+   Nothing here draws; everything here is a number, a colour or a name.
+
+   ROUND 6 PHYSICS. The page is one black-and-white photograph shot in
+   hard sun, and the sun is a character in it: it enters from the top of
+   the opening, goes down through a night passage, comes back at dawn,
+   and blows the last frame out to white. Copy stands in the
+   photograph's light the way a caption stands in a print. Colour exists
+   only as the pop on real objects, and the four interface colours
+   appear exactly once, as the four frequencies.
+
+   ONE SECTION, ONE GROUND. There are exactly two grounds — the white
+   light and the night — plus one fall from the night into pure white at
+   the close. Tan, cream and the sand tile do not exist in this file.
+   ===================================================================== */
+
+:root{
+  /* ---- the wheel (locked tokens; the only colours the page may pop with) */
+  --core:#6521C9;        /* Core · identity · violet   */
+  --love:#B90044;        /* Love · relationships · rose */
+  --vitality:#FF9112;    /* Vitality · energy · amber  */
+  --abundance:#12A56E;   /* Abundance · opportunity · emerald */
+
+  /* the one accent element on the page: the ask, in the app's own violet */
+  --accent:var(--core);
+
+  /* ---- THE TWO GROUNDS. Real photography, neutralised to pure tone and
+     tiled seamlessly, so every section stands on film and never on paper. */
+  --ground-light:url('assets/home-t6/t6-ground-light.jpg');
+  --ground-dark:url('assets/home-t6/t6-ground-dark.jpg');
+  --ground-tile:1200px;
+
+  --filmgrain:url('assets/home-t5/t5-grain.png');
+  --grain-size:320px 320px;   /* 1:1 with the source tile — never scaled up */
+  --grain-op:.30;
+  --grain-op-m:.26;
+
+  /* ---- THE SUN. fd-017: sun is WHITE light. These are the D4-L light
+     assets re-baked with the hue taken out and the falloff kept. */
+  --sun-fold:url('assets/home-t6/t6-sun-fold.png');
+  --sun-day:url('assets/home-t6/t6-sun-day.png');
+  --sun-voices:url('assets/home-t6/t6-sun-voices.png');
+  --sun-finale:url('assets/home-t6/t6-sun-finale.png');
+  --sun-drift:url('assets/home-t6/t6-sun-drift.png');
+
+  /* ---- INK. Two keys, and nothing between them. */
+  --ink-light:#0B0B0B;
+  --ink-light-2:rgba(11,11,11,.86);
+  --ink-light-3:rgba(11,11,11,.72);
+  --hair-light:rgba(11,11,11,.16);
+  --ink-dark:#FFFFFF;
+  --ink-dark-2:rgba(255,255,255,.93);
+  --ink-dark-3:rgba(255,255,255,.78);
+  --hair-dark:rgba(255,255,255,.20);
+
+  --ink:var(--ink-light);
+  --ink78:var(--ink-light-2);
+  --ink56:var(--ink-light-3);
+  --hair:var(--hair-light);
+
+  /* ---- type */
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+
+  --fs-body:18px;  --lh-body:1.6;
+  --fs-h1:76px;    --lh-h1:1.00;
+  --fs-h2:58px;    --lh-h2:1.03;
+  --fs-h3:22px;
+  --fs-lede:21px;
+  --fs-cue:12px;
+  --fs-cap:13px;        /* the caption, on the ground, always Switzer */
+  --fs-quote:36px;
+  --fs-quote-big:52px;
+  --fs-stat:72px;
+  --fs-stepnum:190px;
+
+  /* ---- portraits. Real faces at a real size (fd-020). */
+  --pw-lead:104px;
+  --pw:84px;
+
+  /* ---- rhythm */
+  --pad-wrap:32px;
+  --pad-section:64px;
+  --shead-gap:30px;
+  --shell:1140px;
+
+  /* ---- THE ACTION. The design-system primary button: solid Core Purple,
+     white Switzer, hard 2px corner. One primary per screen. */
+  --btn-h:56px;
+  --btn-pad:34px;
+  --btn-fs:16px;
+
+  /* ---- the grade the page prints its photographs through */
+  --grade:contrast(1.18) brightness(1.01) saturate(1.12);
+  --grade-night:contrast(1.30) brightness(.66) saturate(1.16);
+
+  /* ---- frame heights */
+  --wh-hero:100svh;
+  --wh-scene:60vh;
+  --wh-anchor:88vh;     /* P-93, the anchor scene: the family of four */
+  --wh-dress:96vh;      /* P-106, the whole dress in frame */
+  --wh-dawn:82vh;
+  --wh-step:44vh;
+  --wh-tall:56vh;
+  --wh-night:52vh;
+  --wh-close:94vh;
+
+  /* the light join: a photograph never ends at an edge, it ends in light */
+  --join:22%;
+
+  /* THE FALL at the close, measured from the foot of the section so the
+     night holds under the heading and the ask always stands in the light */
+  --fall-hold:1045px;
+  --fall-clear:965px;
+}
+
+/* ---- THE PHONE FLOOR. 375x812 is where this page is designed and judged. */
+@media(max-width:640px){
+  :root{
+    --fs-h1:38px;   --lh-h1:1.05;
+    --fs-h2:31px;   --lh-h2:1.10;
+    --fs-h3:18.5px;
+    --fs-lede:17.5px;
+    --fs-body:16.5px; --lh-body:1.5;
+    --fs-cue:11px;
+    --fs-cap:13px;
+    --fs-quote:25px;
+    --fs-quote-big:29px;
+    --fs-stat:44px;
+    --fs-stepnum:92px;
+
+    --pw-lead:88px;      /* fd-020 floor for the authorities is 72px */
+    --pw:72px;           /* fd-020 floor for the testimonials is 64px */
+
+    --pad-wrap:22px;
+    --pad-section:20px;
+    --shead-gap:12px;
+
+    --btn-h:52px;
+    --btn-pad:26px;
+    --btn-fs:15px;
+
+    --grain-size:160px 160px;   /* 320px source tile at device 2x = 1:1 */
+    --ground-tile:420px;
+
+    --wh-hero:100svh;
+    --wh-scene:26vh;
+    --wh-anchor:69vh;    /* 560px at 812 — the four of them read as the scene */
+    --wh-dress:60vh;     /* 487px at 812 — the whole dress in frame          */
+    --wh-dawn:50vh;
+    --wh-step:22vh;
+    --wh-tall:25vh;
+    --wh-night:24vh;
+    --wh-close:100svh;   /* the last frame is a full screen, blown to white  */
+
+    --join:20%;
+
+    --fall-hold:990px;
+    --fall-clear:900px;
+  }
+}
