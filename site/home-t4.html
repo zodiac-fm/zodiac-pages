@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm · Home Template T4</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="home-t4-tokens.css">
+<style>
+/* =====================================================================
+   HOME TEMPLATE T4 · THE TEMPLATE
+   Five section recipes — World, Voices, Strip, Numbers, Close — standing
+   inside ONE black-and-white photograph. This file holds NO copy and NO
+   image path: those live in home-t4-content.js. Every number, colour and
+   length lives in home-t4-tokens.css.
+
+   ROUND 4. There is no paper. The ground is a photograph of the day and
+   the page scrolls down it. Sections meet through LIGHT: the sky of one
+   picture blows out into the white the next section stands on, the
+   shadow of one becomes the night below it. Colour is only the pop.
+   ===================================================================== */
+
+@font-face{font-family:'Switzer';src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype');font-weight:400;font-display:block}
+@font-face{font-family:'Switzer';src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype');font-weight:600;font-display:block}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden;background:#0B0B0B}
+body{font-family:var(--sans);font-size:var(--fs-body);line-height:var(--lh-body);
+  color:var(--ink78);background:#0B0B0B;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+
+/* =====================================================================
+   1 · THE GROUND. One photograph — sky, wet sand, deep water, all of it
+   desaturated to nothing and lit — stretched over the whole document, so
+   scrolling the page is scrolling down the picture. Over it, film grain
+   at 1:1 so there is real photographic texture at every scroll position
+   and at every screen size. No tile, no sand, no paper.
+   ===================================================================== */
+#ground{position:absolute;top:0;left:0;right:0;height:100%;z-index:0;
+  background-image:var(--ground);background-repeat:no-repeat;
+  background-position:50% 0;background-size:100% 100%}
+/* ONE grain tile, printed twice: multiplied so its dark speckle lands on the
+   lit ground, screened so its light speckle lands in the shadow. Between them
+   there is photographic grain at 1:1 at every value on the page. */
+#grain,#grain2{position:fixed;inset:0;z-index:3;pointer-events:none;
+  background-image:var(--filmgrain);background-repeat:repeat;background-size:var(--grain-size)}
+#grain{opacity:var(--grain-op);mix-blend-mode:multiply}
+#grain2{opacity:calc(var(--grain-op) * .86);mix-blend-mode:screen;background-position:97px 53px}
+@media(max-width:640px){#grain{opacity:var(--grain-op-m)}
+  #grain2{opacity:calc(var(--grain-op-m) * .86)}}
+
+/* THE LIGHT THAT COMMITS A PASSAGE. Not a plate and not a veil: a wide,
+   feathered fall of sun or of shadow ON the ground, used only where the
+   measured tone under a run of copy sits between the two keys. */
+.expose{position:absolute;left:0;right:0;z-index:0;pointer-events:none}
+.expose.w{background:#fff;mix-blend-mode:screen}
+.expose.k{background:#000;mix-blend-mode:multiply}
+
+/* =====================================================================
+   2 · TYPE. Two keys and nothing between them: the renderer measures the
+   ground under every block and sets the key it is printed in.
+   ===================================================================== */
+.shell{max-width:var(--shell);margin:0 auto;padding:0 var(--pad-wrap);position:relative;z-index:2}
+section{position:relative;z-index:1;padding:var(--pad-section) 0;scroll-margin-top:70px}
+section.join{padding-top:0}
+
+[data-key="dark"]{--ink:var(--ink-dark);--ink78:var(--ink-dark-2);--ink56:var(--ink-dark-3);--hair:var(--hair-dark)}
+[data-key="light"]{--ink:var(--ink-light);--ink78:var(--ink-light-2);--ink56:var(--ink-light-3);--hair:var(--hair-light)}
+
+h1{font-family:var(--serif);font-weight:600;font-size:var(--fs-h1);line-height:var(--lh-h1);
+  color:var(--ink);letter-spacing:-.008em;max-width:11ch}
+h2{font-family:var(--serif);font-weight:600;font-size:var(--fs-h2);line-height:var(--lh-h2);
+  color:var(--ink);max-width:16ch;letter-spacing:-.004em}
+h3{font-family:var(--sans);font-weight:600;font-size:var(--fs-h3);color:var(--ink);line-height:1.32}
+h1 em,h2 em{font-style:italic;font-weight:500}
+.lede{font-size:var(--fs-lede);color:var(--ink78);line-height:1.5;max-width:34ch}
+.quiet{color:var(--ink78);max-width:46ch}
+.tiny{font-size:13.5px;color:var(--ink56);line-height:1.5;max-width:56ch}
+.num{font-family:var(--sans);font-weight:600;font-variant-numeric:tabular-nums lining-nums}
+.kick{display:block;font-family:var(--sans);font-size:10.5px;font-weight:600;letter-spacing:.20em;
+  text-transform:uppercase;margin-bottom:12px;color:var(--ink78)}
+.cue{font-family:var(--sans);font-size:var(--fs-cue);font-weight:600;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--ink78);margin-bottom:16px}
+.shead{max-width:900px;margin-bottom:var(--shead-gap)}
+.shead .quiet{margin-top:18px}
+.textlink{color:var(--ink);border-bottom:1px solid var(--hair);padding-bottom:4px;transition:border-color .3s}
+.textlink:hover{border-color:var(--ink)}
+
+.fu{opacity:0;transform:translateY(20px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1)}
+.fu.in,html.static .fu{opacity:1;transform:none}
+
+/* every photograph carries its permanent number */
+.pid{position:absolute;right:12px;bottom:12px;z-index:8;
+  font:600 10.5px/1 var(--sans);letter-spacing:.14em;
+  color:#fff;background:rgba(0,0,0,.70);padding:5px 8px;pointer-events:none;
+  -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+
+/* =====================================================================
+   3 · NAV + FOOTER. The nav is minimal and sits ON the photograph.
+   ===================================================================== */
+nav{position:absolute;top:0;left:0;right:0;z-index:30}
+.nav-in{display:flex;align-items:center;justify-content:space-between;
+  padding:20px var(--pad-wrap);max-width:var(--shell);margin:0 auto}
+.wordmark{font-family:var(--serif);font-weight:600;font-size:23px;letter-spacing:.05em;color:var(--ink)}
+.nav-links{display:flex;align-items:center;gap:26px;font-size:13.5px;color:var(--ink78)}
+@media(max-width:640px){
+  .nav-in{padding:15px 18px}.wordmark{font-size:18px}.nav-links{gap:13px;font-size:11.5px}
+}
+footer{position:relative;z-index:2;padding:26px 0 32px;font-size:13px;color:var(--ink56)}
+footer .shell{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+/* =====================================================================
+   4 · THE PHOTOGRAPH AND ITS LIGHT
+   A frame is full-bleed and hard-edged. It does not dissolve into paper —
+   there is no paper. It ends in LIGHT: .lj w drives the edge to pure
+   white with a screen, .lj k drives it into shadow with a multiply, and
+   the ground on the other side of that edge is already the same value.
+   ===================================================================== */
+.wframe{position:relative;width:100vw;margin-left:calc(50% - 50vw);overflow:hidden;
+  z-index:1;isolation:isolate;background:#000}
+.wframe > img,.wframe > picture > img{width:100%;height:var(--h);object-fit:cover;
+  object-position:var(--focal,center);position:relative;z-index:1;
+  filter:var(--grade);transform:scale(var(--zoom,1));transform-origin:var(--focal,center)}
+.night .wframe > img,.night .wframe > picture > img{filter:var(--grade-night)}
+@media(max-width:640px){
+  .wframe > img,.wframe > picture > img{object-position:var(--focal-m,var(--focal,center));
+    transform:scale(var(--zoom-m,var(--zoom,1)));transform-origin:var(--focal-m,var(--focal,center))}
+}
+.lj{position:absolute;left:0;right:0;z-index:4;pointer-events:none}
+.lj.w{background:#fff;mix-blend-mode:screen}
+.lj.k{background:#000;mix-blend-mode:multiply}
+.lj.t{top:0;height:var(--jh,var(--join));
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.55) 42%,rgba(0,0,0,0) 100%);
+          mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.55) 42%,rgba(0,0,0,0) 100%)}
+.lj.b{bottom:0;height:var(--jh,var(--join));
+  -webkit-mask-image:linear-gradient(0deg,#000 0%,rgba(0,0,0,.55) 42%,rgba(0,0,0,0) 100%);
+          mask-image:linear-gradient(0deg,#000 0%,rgba(0,0,0,.55) 42%,rgba(0,0,0,0) 100%)}
+
+/* THE SUN. White light, entering from the top of the picture. It sits in
+   the sky. It is never amber and it never tints skin: a screen of pure
+   white can only raise a value, it can never add a hue. */
+.sun{position:absolute;left:-10%;right:-10%;top:0;height:38%;z-index:3;pointer-events:none;
+  mix-blend-mode:screen;
+  background:linear-gradient(180deg,rgba(255,255,255,.99) 0%,rgba(255,255,255,.90) 22%,
+             rgba(255,255,255,.54) 46%,rgba(255,255,255,.20) 72%,rgba(255,255,255,0) 100%)}
+
+/* THE ONE WAVEFORM. A World's frequency, drawn as light across the
+   photograph — thin, like a line of sun lying on water. There is no
+   other waveform anywhere on this page. */
+.wave{position:absolute;left:0;right:0;bottom:14%;height:120px;z-index:5;pointer-events:none;
+  mix-blend-mode:screen;opacity:.92}
+.wave svg{width:100%;height:100%;display:block;overflow:visible}
+.wave path{fill:none;stroke:#fff;stroke-width:var(--wave-w);stroke-linecap:round;
+  filter:drop-shadow(0 0 7px rgba(255,255,255,.95)) drop-shadow(0 0 22px rgba(255,255,255,.55))}
+@media(max-width:640px){.wave{height:76px;bottom:16%}}
+
+/* the caption a moment carries: its frequency, in the picture's own light */
+.wcap{position:absolute;left:0;right:0;z-index:7;padding:0 var(--pad-wrap);
+  max-width:var(--shell);margin:0 auto;
+  font-family:var(--sans);font-size:14px;color:var(--ink78);letter-spacing:.005em}
+.wcap.at-bot{bottom:3.4vh}
+.wcap.at-top{top:3.4vh}
+.wcap.to-right{text-align:right}
+.wcap b{color:var(--ink);font-weight:600}
+.wcapt{display:inline-block;max-width:36ch}
+/* a caption set into a picture carries the picture's own light tight around
+   its letters — the way a caption is set in a print. It follows the letter
+   shapes; it is never a plate. */
+[data-key="dark"].wcap{text-shadow:0 0 3px rgba(0,0,0,.99),0 0 7px rgba(0,0,0,.97),
+  0 0 16px rgba(0,0,0,.90),0 0 34px rgba(0,0,0,.72)}
+[data-key="light"].wcap{text-shadow:0 0 3px rgba(255,255,255,1),0 0 7px rgba(255,255,255,.98),
+  0 0 16px rgba(255,255,255,.94),0 0 34px rgba(255,255,255,.78)}
+@media(max-width:640px){.wcap{font-size:12.5px}.wcap.at-bot{bottom:2.8vh}.wcap.at-top{top:2.8vh}}
+.wframe + .wframe{margin-top:0}
+
+/* =====================================================================
+   5 · RECIPE — WORLD
+   ===================================================================== */
+.hero{padding:0}
+.hero .wframe{margin-top:0}
+/* the headline is SET INTO THE SKY of the photograph — not in a block
+   above it. Its key is measured off the sky it stands in. */
+.herotype{position:absolute;left:0;right:0;z-index:6;
+  padding:0 var(--pad-wrap);max-width:var(--shell);margin:0 auto}
+.herotype.at-top{top:calc(var(--pad-section) + 34px)}
+.herotype.at-bot{bottom:8vh}
+.herotype.to-right{text-align:right}
+.herotype.to-right h1,.herotype.to-right .prehead{margin-left:auto;justify-content:flex-end}
+.herotype.at-bot .prehead{margin-bottom:16px}
+.herotype .prehead{font-family:var(--sans);font-size:11.5px;font-weight:600;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--ink78);margin:0 0 20px}
+[data-key="light"].herotype,[data-key="light"] .sp-onphoto,[data-key="light"].sp-onphoto{
+  text-shadow:0 0 12px rgba(255,255,255,.98),0 0 30px rgba(255,255,255,.92),0 0 70px rgba(255,255,255,.7)}
+[data-key="dark"].herotype,[data-key="dark"] .sp-onphoto,[data-key="dark"].sp-onphoto{
+  text-shadow:0 0 12px rgba(0,0,0,.94),0 0 30px rgba(0,0,0,.85),0 0 70px rgba(0,0,0,.6)}
+.herotype h1{max-width:13ch}
+.sp-onphoto .pr{filter:none}
+@media(max-width:640px){
+  .herotype{padding:0 20px}
+  .herotype.at-top{top:78px}
+  .herotype.at-bot{bottom:7vh}
+  .herotype .prehead{font-size:10.5px;letter-spacing:.19em;margin-bottom:14px}
+  .herotype h1{max-width:13ch}
+}
+.hero-after{padding-top:44px;padding-bottom:0}
+@media(max-width:640px){.hero-after{padding-top:30px}}
+
+/* =====================================================================
+   6 · RECIPE — VOICES, as a magazine spread.
+   One large serif quote standing in the photograph's shadow or on a
+   white burst. The name small in Switzer. The portrait a small
+   monochrome cutout PRINTED into the scene: soft-edged, desaturated,
+   blended into the ground it lies on. No rows. No rules. No cards.
+   ===================================================================== */
+.quote{font-family:var(--serif);font-weight:600;font-size:var(--fs-quote);line-height:1.16;
+  color:var(--ink);letter-spacing:-.006em;max-width:20ch}
+.quote.big{font-size:var(--fs-quote-big);max-width:17ch}
+.qdetail{margin-top:14px;font-size:16.5px;line-height:1.5;color:var(--ink78);max-width:38ch}
+.qwho{margin-top:16px;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink);
+  letter-spacing:.02em}
+.qwho small{display:block;font-weight:400;font-size:11.5px;color:var(--ink56);margin-top:3px;
+  letter-spacing:.03em;max-width:40ch;line-height:1.42}
+
+/* the portrait, printed in */
+.pr{position:relative;flex:0 0 auto;width:var(--pw,86px);height:var(--pw,86px)}
+.pri{position:absolute;inset:0;overflow:hidden;
+  -webkit-mask-image:radial-gradient(ellipse 64% 64% at 50% 44%,#000 50%,rgba(0,0,0,.5) 76%,rgba(0,0,0,0) 100%);
+          mask-image:radial-gradient(ellipse 64% 64% at 50% 44%,#000 50%,rgba(0,0,0,.5) 76%,rgba(0,0,0,0) 100%)}
+.pri img{width:100%;height:100%;object-fit:cover;object-position:center 22%;
+  filter:grayscale(1) contrast(1.24) brightness(1.03)}
+[data-key="light"] .pri img{mix-blend-mode:multiply}
+[data-key="dark"] .pri img{mix-blend-mode:screen;filter:grayscale(1) contrast(1.2) brightness(.92)}
+.pr .pid{right:-4px;bottom:-3px;font-size:9px;padding:3px 5px;letter-spacing:.1em}
+
+/* SPREAD A — "scene". The lead quote stands in the photograph itself;
+   the other two stand in the light below it, held to opposite margins. */
+.spread{position:relative}
+.sp-onphoto{position:absolute;z-index:6;left:0;right:0;
+  padding:0 var(--pad-wrap);max-width:var(--shell);margin:0 auto}
+.sp-onphoto.at-bot{bottom:6.5vh}
+.sp-onphoto.at-top{top:6.5vh}
+.sp-onphoto.to-right{text-align:right}
+.sp-onphoto.to-right .quote,.sp-onphoto.to-right .qdetail{margin-left:auto}
+.sp-onphoto .quote{max-width:17ch}
+.sp-head{display:flex;align-items:flex-end;gap:18px}
+.sp-lead{max-width:44ch;margin-top:26px}
+.sp-lead .qdetail{margin-top:0}
+.sp-rest{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:64px;
+  margin-top:9vh;align-items:start}
+.sp-rest > div:nth-child(2){margin-top:14vh}
+@media(max-width:900px){
+  .sp-rest{grid-template-columns:minmax(0,1fr);gap:34px;margin-top:34px}
+  .sp-rest > div:nth-child(2){margin-top:0;padding-left:14%}
+  .sp-onphoto{padding-bottom:5vh}
+}
+
+/* SPREAD B — "run". Five quotes falling down the ground like light down a
+   wall: alternating margins, no photograph behind them, the portrait
+   printed in beside the name. */
+.sp-run{display:flex;flex-direction:column;gap:9vh;max-width:var(--shell);margin:0 auto}
+.sp-run .qi{max-width:46ch}
+.sp-run .qi:nth-child(2){margin-left:auto;text-align:right}
+.sp-run .qi:nth-child(2) .quote,.sp-run .qi:nth-child(2) .qdetail{margin-left:auto}
+.sp-run .qi:nth-child(3){margin-left:18%}
+.sp-run .qi:nth-child(4){margin-left:auto;text-align:right}
+.sp-run .qi:nth-child(4) .quote,.sp-run .qi:nth-child(4) .qdetail{margin-left:auto}
+.sp-run .qi:nth-child(5){margin-left:8%}
+.qsig{display:flex;align-items:center;gap:15px;margin-top:18px}
+.sp-run .qi:nth-child(2n) .qsig{flex-direction:row-reverse}
+@media(max-width:900px){
+  .sp-run{gap:34px}
+  .sp-run .qi,.sp-run .qi:nth-child(n){margin-left:0;text-align:left}
+  .sp-run .qi:nth-child(2) .quote,.sp-run .qi:nth-child(2) .qdetail,
+  .sp-run .qi:nth-child(4) .quote,.sp-run .qi:nth-child(4) .qdetail{margin-left:0}
+  .sp-run .qi:nth-child(2n) .qsig{flex-direction:row}
+  .sp-run .qi:nth-child(3){margin-left:10%}
+  .sp-run .qi:nth-child(5){margin-left:5%}
+}
+
+/* SPREAD C — "burst". A wall standing on the white burst: one quote set
+   very large across the measure and three held under it in a broken
+   column. Composed against A and B, never a repeat of either. */
+.sp-burst{max-width:var(--shell);margin:0 auto}
+.sp-burst .qi.big{max-width:none;margin-bottom:9vh}
+.sp-burst .three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:52px;align-items:start}
+.sp-burst .three > div:nth-child(1){padding-top:5vh}
+.sp-burst .three > div:nth-child(3){padding-top:9vh}
+.sp-burst .three .quote{font-size:calc(var(--fs-quote) * .72);max-width:none}
+@media(max-width:900px){
+  .sp-burst .three{grid-template-columns:minmax(0,1fr);gap:30px}
+  .sp-burst .three > div:nth-child(n){padding-top:0}
+  .sp-burst .three > div:nth-child(2){padding-left:12%}
+  .sp-burst .qi.big{margin-bottom:32px}
+}
+
+/* the scroller of short voices */
+.mq{margin-top:4vh;padding:12px 0;overflow:hidden;position:relative;z-index:2;
+  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 10%,#000 90%,transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 10%,#000 90%,transparent 100%)}
+.mq-track{display:flex;gap:58px;width:max-content;animation:mqmove 240s linear infinite}
+@keyframes mqmove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){.mq-track{animation:none}}
+.mqi{display:flex;align-items:baseline;gap:14px;white-space:nowrap}
+.mqi .q{font-family:var(--serif);font-style:italic;font-size:21px;color:var(--ink)}
+.mqi .n{font-family:var(--sans);font-size:12px;color:var(--ink56)}
+
+/* =====================================================================
+   7 · RECIPE — STRIP
+   Three variants, all photographic: steps (the numeral set into the
+   image), moments (full-bleed frames with their frequency caption) and
+   aside (the origin, words alone in the last of the night).
+   ===================================================================== */
+.steps{display:flex;flex-direction:column;gap:0}
+.step{position:relative}
+.step .sphoto{position:relative;width:100vw;margin-left:calc(50% - 50vw);overflow:hidden;background:#000}
+.step .sphoto img{width:100%;height:var(--h);object-fit:cover;object-position:var(--focal,center);
+  filter:var(--grade);transform:scale(var(--zoom,1));transform-origin:var(--focal,center)}
+@media(max-width:640px){
+  .step .sphoto img{object-position:var(--focal-m,var(--focal,center));
+    transform:scale(var(--zoom-m,var(--zoom,1)));transform-origin:var(--focal-m,var(--focal,center))}}
+/* the number, in white Switzer, set INTO the photograph */
+.stepn{position:absolute;z-index:6;pointer-events:none;
+  font-family:var(--sans);font-weight:600;font-size:var(--fs-stepnum);line-height:.78;
+  color:#fff;letter-spacing:-.03em;
+  text-shadow:0 0 14px rgba(0,0,0,.88),0 0 46px rgba(0,0,0,.72),0 2px 6px rgba(0,0,0,.55);
+  opacity:.98}
+.stepn.c-bl{left:var(--pad-wrap);bottom:2.2vh}
+.stepn.c-br{right:var(--pad-wrap);bottom:2.2vh}
+.stepn.c-tl{left:var(--pad-wrap);top:2.6vh}
+.stepn.c-tr{right:var(--pad-wrap);top:2.6vh}
+.stepw{max-width:var(--shell);margin:0 auto;padding:26px var(--pad-wrap) 0;position:relative;z-index:2}
+.stepw h3{margin-bottom:9px;max-width:22ch}
+.stepw p{color:var(--ink78);max-width:44ch}
+.step + .step{margin-top:9vh}
+@media(min-width:901px){
+  .stepw{display:grid;grid-template-columns:170px minmax(0,44ch);gap:40px;align-items:start}
+  .stepw .kick{margin-bottom:0;padding-top:6px}
+  .step + .step{margin-top:11vh}
+}
+@media(max-width:640px){.stepw{padding-top:16px}.step + .step{margin-top:38px}}
+
+.moments{display:flex;flex-direction:column;gap:0}
+.moments .m + .m{margin-top:8vh}
+@media(max-width:640px){.moments .m + .m{margin-top:22px}}
+
+.aside{max-width:var(--shell);margin:0 auto;padding:0 var(--pad-wrap);position:relative;z-index:2}
+@media(min-width:901px){
+  .aside .shead{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:70px;
+    max-width:none;align-items:start}
+  .aside .shead .cue{grid-column:1;margin-bottom:0}
+  .aside .shead h2{grid-column:1;grid-row:2}
+  .aside .shead .quiet{grid-column:2;grid-row:1 / span 2;margin-top:8px}
+}
+.bandtail{height:16vh}
+
+/* =====================================================================
+   8 · RECIPE — NUMBERS. Every figure on this page is set in Switzer.
+   Never the serif. These stand on the white bursts of the ground.
+   ===================================================================== */
+.freq{max-width:var(--shell);margin:2vh auto 0;display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));gap:0;position:relative;z-index:2}
+.freq .fq{padding:26px 0 0;position:relative}
+.freq .fq + .fq{padding-left:30px}
+.freq .fq b{display:block;font-family:var(--sans);font-size:15px;font-weight:600;color:var(--ink);
+  letter-spacing:.02em}
+.freq .fq span{display:block;font-family:var(--sans);font-size:12.5px;color:var(--ink56);margin-top:4px}
+.freq .fq .hz{font-family:var(--sans);font-weight:600;font-size:clamp(34px,4.6vw,62px);color:var(--ink);
+  line-height:1;letter-spacing:-.02em;margin-top:18px;font-variant-numeric:tabular-nums lining-nums}
+.freq .fq .hz small{font-size:.30em;font-weight:600;color:var(--ink56);margin-left:4px;letter-spacing:0}
+.freq .fq i{display:block;width:26px;height:26px;border-radius:50%;margin-bottom:20px}
+@media(max-width:640px){
+  .freq{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 18px;margin-top:8px}
+  .freq .fq + .fq{padding-left:0}
+  .freq .fq{padding-top:0}
+  .freq .fq i{width:17px;height:17px;margin-bottom:11px}
+  .freq .fq .hz{font-size:34px;margin-top:10px}
+}
+
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:56px;
+  max-width:var(--shell);margin:2vh auto 0;position:relative;z-index:2}
+.stat{font-family:var(--sans);font-size:var(--fs-stat);font-weight:600;color:var(--ink);line-height:.92;
+  letter-spacing:-.028em;font-variant-numeric:tabular-nums lining-nums}
+.stat small{font-size:.34em;font-weight:600;color:var(--ink56)}
+.statlbl{margin-top:14px;font-size:15px;color:var(--ink78);max-width:32ch}
+@media(max-width:900px){.stats{grid-template-columns:1fr;gap:26px}}
+
+.ochart{max-width:var(--shell);margin:8vh auto 0;position:relative;z-index:2}
+.otitle{font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink);margin-bottom:22px;
+  letter-spacing:.02em}
+.otitle small{display:block;font-weight:400;font-size:12.5px;color:var(--ink56);margin-top:4px;letter-spacing:.02em}
+.orow{display:grid;grid-template-columns:minmax(0,26ch) minmax(0,1fr) 58px;align-items:center;
+  gap:20px;padding:11px 0}
+.orow + .orow{border-top:1px solid var(--hair)}
+.orow .olbl{font-size:14.5px;color:var(--ink78)}
+.orow .obar{height:2px;background:var(--hair);overflow:hidden}
+.orow .obar i{display:block;height:100%;width:0;background:var(--ink);
+  transition:width 1.4s cubic-bezier(.2,.6,.2,1)}
+html.static .orow .obar i{transition:none}
+.orow .oval{text-align:right;font-family:var(--sans);font-weight:600;font-size:17px;color:var(--ink);
+  font-variant-numeric:tabular-nums lining-nums}
+.orow .oval small{font-size:11px;font-weight:400;color:var(--ink56)}
+@media(max-width:640px){
+  .ochart{margin-top:30px}
+  .orow{grid-template-columns:minmax(0,1fr) 52px;gap:4px 8px;padding:8px 0}
+  .orow .obar{grid-column:1 / -1;order:3;margin-top:6px}
+  .orow .olbl{font-size:14px}
+}
+
+/* =====================================================================
+   9 · RECIPE — CLOSE. A World with the ask standing in its light.
+   ===================================================================== */
+.close{padding-bottom:0}
+.close .cta{margin-top:30px;font-size:17px}
+.close .wframe{margin-top:7vh}
+@media(max-width:640px){.close .wframe{margin-top:26px}}
+
+/* THE NIGHT. Not a plate: it is the same photograph, unlit. */
+.night{--ink:var(--ink-dark);--ink78:var(--ink-dark-2);--ink56:var(--ink-dark-3);--hair:var(--hair-dark)}
+</style>
+</head>
+<body>
+
+<div id="ground" aria-hidden="true"></div>
+
+<main id="page"></main>
+
+<footer><div class="shell" id="foot"></div></footer>
+
+<div id="grain" aria-hidden="true"></div>
+<div id="grain2" aria-hidden="true"></div>
+
+<script src="assets/home-t4/t4-tone.js"></script>
+<script src="home-t4-content.js"></script>
+<script>
+/* =====================================================================
+   THE RENDERER. Five recipes. It knows shapes, never words.
+   ===================================================================== */
+(function(){
+  var C = window.ZC, P = [];
+  var esc = function(s){ return s == null ? '' : String(s); };
+  var push = function(s){ P.push(s); };
+
+  /* the one waveform: a World's frequency, drawn as a line of light.
+     amplitude and period are the frequency's own, nothing else. */
+  var FREQ = {core:{a:13,p:2.0}, love:{a:9,p:1.35}, vitality:{a:17,p:2.7}, abundance:{a:11,p:1.7}};
+  function wave(f){
+    if (!f) return '';
+    var k = FREQ[f] || FREQ.core, W = 1000, H = 60, d = '', i;
+    for (i = 0; i <= W; i += 4){
+      var t = i / W;
+      var y = H/2
+        + Math.sin(t * Math.PI * 2 * k.p * 3.0) * k.a
+        + Math.sin(t * Math.PI * 2 * k.p * 7.4 + 1.1) * k.a * .32;
+      y += Math.sin(t * Math.PI) * 0;                       /* no envelope: one flat line of sun */
+      d += (i ? 'L' : 'M') + i + ' ' + y.toFixed(2) + ' ';
+    }
+    return '<div class="wave" aria-hidden="true"><svg viewBox="0 0 ' + W + ' ' + H
+      + '" preserveAspectRatio="none"><path d="' + d + '"/></svg></div>';
+  }
+
+  function joins(f){
+    var s = '';
+    if (f.jt) s += '<i class="lj t ' + f.jt + '"' + (f.jth ? ' style="--jh:' + f.jth + '"' : '') + '></i>';
+    if (f.jb) s += '<i class="lj b ' + f.jb + '"' + (f.jbh ? ' style="--jh:' + f.jbh + '"' : '') + '></i>';
+    return s;
+  }
+
+  function frame(f, extra){
+    var st = '--h:var(--wh-' + (f.h || 'scene') + ');--focal:' + (f.focal || 'center')
+      + (f.focalM ? ';--focal-m:' + f.focalM : '')
+      + (f.zoom ? ';--zoom:' + f.zoom : '')
+      + (f.zoomM ? ';--zoom-m:' + f.zoomM : '')
+      + (f.grade ? ';--grade:' + f.grade : '');
+    return '<figure class="wframe fu"' + (f.fid ? ' id="' + f.fid + '"' : '')
+      + ' style="' + st + '">'
+      + (f.srcMobile
+          ? '<picture><source media="(max-width:640px)" srcset="' + f.srcMobile + '"><img src="'
+            + f.src + '" alt="' + esc(f.alt) + '"></picture>'
+          : '<img src="' + f.src + '" alt="' + esc(f.alt) + '">')
+      + (f.sky ? '<i class="sun" aria-hidden="true"></i>' : '')
+      + joins(f) + wave(f.freq) + (extra || '')
+      + (f.cap ? '<figcaption class="wcap fu at-bot"><span class="wcapt"><b>' + f.cap.b + '</b> '
+          + f.cap.rest + '</span></figcaption>' : '')
+      + '<span class="pid">' + esc(f.pid) + '</span></figure>'
+;
+  }
+
+  function shead(b, extra){
+    return '<div class="shead fu">'
+      + (b.cue ? '<p class="cue">' + esc(b.cue) + '</p>' : '')
+      + (b.h ? '<h2>' + b.h + '</h2>' : '')
+      + (b.body ? '<p class="quiet">' + b.body + '</p>' : '')
+      + (extra || '') + '</div>';
+  }
+
+  function portrait(r, w){
+    return '<span class="pr"' + (w ? ' style="--pw:' + w + '"' : '') + '>'
+      + '<span class="pri"><img src="' + r.src + '" alt="' + esc(r.alt) + '"></span>'
+      + '<span class="pid">' + esc(r.pid) + '</span></span>';
+  }
+  function sig(r){
+    return '<div class="qsig">' + portrait(r)
+      + '<p class="qwho">' + r.who + (r.role ? '<small>' + r.role + '</small>' : '') + '</p></div>';
+  }
+  function quote(r, cls){
+    return (r.kick ? '<p class="kick">' + r.kick + '</p>' : '')
+      + '<p class="quote' + (cls || '') + '">' + r.lead + '</p>'
+      + (r.detail ? '<p class="qdetail">' + r.detail + '</p>' : '')
+      + (r.who ? sig(r) : '');
+  }
+
+  /* ---------- RECIPE: WORLD ---------- */
+  function world(b){
+    var isHero = b.variant === 'hero';
+    if (isHero){
+      var f = b.frames[0];
+      var type = '<div class="herotype fu at-bot">'
+        + (b.prehead ? '<p class="prehead">' + b.prehead + '</p>' : '')
+        + '<h1>' + b.h + '</h1></div>';
+      return '<section id="' + b.id + '" class="hero">'
+        + frame(f, type)
+        + '<div class="shell hero-after fu"><p class="lede">' + b.after + '</p></div></section>';
+    }
+    var frames = (b.frames || []).map(function(f){ return frame(f); }).join('');
+    var words = '<div class="shell">' + shead(b) + '</div>';
+    var proof = b.proof
+      ? '<div class="shell fu" style="margin-top:26px"><p class="quiet">' + b.proof + '</p></div>' : '';
+    var body = (b.order === 'frames-first') ? frames + '<div style="height:2.4vh"></div>' + words + proof
+                                            : words + frames + proof;
+    return '<section id="' + b.id + '" class="wworld' + (b.join ? ' join' : '')
+      + (b.night ? ' night' : '') + '">' + body + '</section>';
+  }
+
+  /* ---------- RECIPE: VOICES — three spreads, one recipe ---------- */
+  function voices(b){
+    var inner = '';
+    if (b.spread === 'scene'){
+      /* the pull quote stands IN the picture; what it goes on to say, and who
+         said it, stand under the picture in the light. The two voices that
+         follow are held to opposite margins so the spread never reads as rows. */
+      var lead = b.rows[0], rest = b.rows.slice(1);
+      inner = '<div class="shell">' + shead(b) + '</div>'
+        + frame(b.scene, '<div class="sp-onphoto fu at-bot">'
+            + (lead.kick ? '<p class="kick">' + lead.kick + '</p>' : '')
+            + '<p class="quote">' + lead.lead + '</p></div>')
+        + '<div class="shell"><div class="sp-lead fu">'
+            + (lead.detail ? '<p class="qdetail">' + lead.detail + '</p>' : '') + sig(lead)
+        + '</div><div class="sp-rest">'
+        + rest.map(function(r){ return '<div class="fu">' + quote(r) + '</div>'; }).join('')
+        + '</div></div>';
+    } else if (b.spread === 'run'){
+      inner = '<div class="shell">' + shead(b) + '</div>'
+        + '<div class="shell"><div class="sp-run">'
+        + b.rows.map(function(r, i){
+            return '<div class="qi fu">' + quote(r, i === 0 ? ' big' : '') + '</div>'; }).join('')
+        + '</div></div>';
+    } else {
+      var big = b.rows.filter(function(r){ return r.size === 'big'; })[0] || b.rows[0];
+      var three = b.rows.filter(function(r){ return r !== big; });
+      inner = '<div class="shell">' + shead(b) + '</div>'
+        + '<div class="shell"><div class="sp-burst">'
+        + '<div class="qi big fu">' + quote(big, ' big') + '</div>'
+        + '<div class="three">'
+        + three.map(function(r){ return '<div class="fu">' + quote(r) + '</div>'; }).join('')
+        + '</div></div></div>';
+    }
+    var mq = '';
+    if (b.marquee){
+      var run = b.marquee.map(function(m){
+        return '<span class="mqi"><span class="q">' + m.q + '</span><span class="n">' + m.n + '</span></span>';
+      }).join('');
+      mq = '<div class="shell"><div class="mq fu" role="region" aria-label="More voices from members">'
+         + '<div class="mq-track">' + run
+         + '<span aria-hidden="true" style="display:contents">' + run + '</span></div></div></div>';
+    }
+    return '<section id="' + b.id + '" class="spread' + (b.night ? ' night' : '') + '">'
+      + inner + mq + '</section>';
+  }
+
+  /* ---------- RECIPE: STRIP ---------- */
+  function strip(b){
+    if (b.variant === 'aside'){
+      return '<section id="' + b.id + '" class="' + (b.join ? 'join ' : '') + (b.night ? 'night' : '') + '">'
+        + '<div class="aside">' + shead(b) + '</div>'
+        + (b.tail ? '<div class="bandtail"></div>' : '') + '</section>';
+    }
+    if (b.variant === 'steps'){
+      var cells = b.cells.map(function(c){
+        return '<div class="step fu">'
+          + '<div class="sphoto" style="--h:var(--wh-' + (c.h || 'step') + ');--focal:' + (c.focal || 'center')
+            + (c.focalM ? ';--focal-m:' + c.focalM : '') + (c.zoom ? ';--zoom:' + c.zoom : '')
+            + (c.zoomM ? ';--zoom-m:' + c.zoomM : '') + (c.grade ? ';--grade:' + c.grade : '') + '">'
+          + '<img src="' + c.src + '" alt="' + esc(c.alt) + '">'
+          + '<span class="stepn c-bl">' + c.n + '</span>'
+          + '<span class="pid">' + esc(c.pid) + '</span></div>'
+          + '<div class="stepw">'
+          + (c.kick ? '<p class="kick">' + c.kick + '</p>' : '')
+          + '<div>' + (c.h3 ? '<h3>' + c.h3 + '</h3>' : '') + (c.p ? '<p>' + c.p + '</p>' : '') + '</div>'
+          + '</div></div>';
+      }).join('');
+      return '<section id="' + b.id + '" class="' + (b.join ? 'join ' : '') + (b.night ? 'night' : '') + '">'
+        + '<div class="shell">' + shead(b) + '</div>'
+        + '<div class="steps">' + cells + '</div></section>';
+    }
+    var ms = b.cells.map(function(c){ return '<div class="m">' + frame(c) + '</div>'; }).join('');
+    return '<section id="' + b.id + '" class="' + (b.join ? 'join ' : '') + (b.night ? 'night' : '') + '">'
+      + (b.cue || b.h ? '<div class="shell">' + shead(b) + '</div>' : '')
+      + '<div class="moments">' + ms + '</div></section>';
+  }
+
+  /* ---------- RECIPE: NUMBERS ---------- */
+  function numbers(b){
+    var body;
+    if (b.variant === 'freq'){
+      body = '<div class="freq fu">' + b.rows.map(function(r){
+        return '<div class="fq"><i style="background:var(--' + r.band + ')"></i>'
+          + '<b>' + r.name + '</b><span>' + r.sub + '</span>'
+          + '<div class="hz num">' + r.hz + '<small>Hz</small></div></div>'; }).join('') + '</div>';
+    } else {
+      body = '<div class="stats fu">' + b.stats.map(function(s){
+          return '<div><div class="stat num">' + s.v + '<small>' + s.u + '</small></div>'
+            + '<p class="statlbl">' + s.label + '</p></div>'; }).join('') + '</div>'
+        + '<div class="ochart fu"><p class="otitle">' + b.chart.title
+        + '<small>' + b.chart.sub + '</small></p>'
+        + b.chart.rows.map(function(r){
+            return '<div class="orow"><span class="olbl">' + r.label + '</span>'
+              + '<span class="obar"><i data-w="' + r.v + '"></i></span>'
+              + '<span class="oval num">' + r.v + '<small>%</small></span></div>'; }).join('')
+        + '</div>';
+    }
+    return '<section id="' + b.id + '"' + (b.join ? ' class="join"' : '') + '>'
+      + '<div class="shell">' + shead(b) + '</div>' + body
+      + (b.note ? '<div class="shell notewrap"><p class="tiny fu" style="margin-top:18px">' + b.note + '</p></div>' : '')
+      + '</section>';
+  }
+
+  /* ---------- RECIPE: CLOSE ---------- */
+  function close(b){
+    return '<section id="' + b.id + '" class="close">'
+      + '<div class="shell">'
+      + shead(b, '<p class="cta"><a class="textlink" href="' + b.cta.href + '">' + b.cta.label + '</a></p>')
+      + '</div>'
+      + b.frames.map(function(f){ return frame(f); }).join('') + '</section>';
+  }
+
+  var R = {world:world, voices:voices, strip:strip, numbers:numbers, close:close};
+  C.blocks.forEach(function(b){ push(R[b.t](b)); });
+
+  document.title = C.title;
+  document.getElementById('page').innerHTML =
+    '<nav id="nav"><div class="nav-in" id="navin"></div></nav>' + P.join('\n');
+  document.getElementById('navin').innerHTML =
+    '<a class="wordmark" href="#top">' + C.wordmark + '</a><div class="nav-links">'
+    + C.navLinks.map(function(l){ return '<a href="' + l.href + '">' + l.label + '</a>'; }).join('') + '</div>';
+  document.getElementById('foot').innerHTML =
+    '<span class="wordmark" style="font-size:18px">' + C.footer.mark + '</span>'
+    + '<span>' + C.footer.line + '</span>';
+})();
+
+/* =====================================================================
+   BEHAVIOUR
+   1. MEASURE THE GROUND. window.T4_TONE is the ground photograph's own
+      luminance profile, sampled down its height and baked beside it. For
+      every block of copy the renderer looks up the tone of the ground it
+      actually stands on and prints it in the key that ground calls for.
+      Where the measurement lands between the two keys, the sun or the
+      shadow is brought over that passage — light on the ground, never a
+      plate under the type.
+   2. reveal, and the growing bars.
+   ===================================================================== */
+(function(){
+  var qs = new URLSearchParams(location.search);
+  if (qs.get('static') === '1') document.documentElement.classList.add('static');
+  var isStatic = document.documentElement.classList.contains('static');
+
+  var TONE = window.T4_TONE || [],
+      TLO  = window.T4_TONE_LO || TONE,
+      THI  = window.T4_TONE_HI || TONE;
+  function at(A, fr){
+    if (!A.length) return .9;
+    var x = Math.max(0, Math.min(.999, fr)) * (A.length - 1);
+    var i = Math.floor(x), t = x - i;
+    return A[i] * (1 - t) + A[Math.min(A.length - 1, i + 1)] * t;
+  }
+  function toneAt(fr){ return at(TONE, fr); }
+  function docTop(el){ return el.getBoundingClientRect().top + window.scrollY; }
+
+  var LIGHT = .62, DARK = .40;   /* the two keys, and the gap between them */
+
+  /* every printed run on this page, keyed one at a time against the ground it
+     actually stands on — not once per section, which would average a passage
+     where the light is still falling. */
+  var BLOCKS = '.shead,.hero-after,.stepw,.freq,.stats,.ochart,.notewrap,.sp-lead,'
+             + '.mq,.qi,.sp-rest > div,.sp-burst .three > div,.nav-in,footer .shell';
+
+  function keyOf(el, H){
+    var top = docTop(el), h = el.getBoundingClientRect().height || 1;
+    var t0 = top / H, t1 = (top + h) / H, n = 11, lo = 1, hi = 0, sum = 0;
+    for (var i = 0; i < n; i++){
+      var f = t0 + (t1 - t0) * (i + .5) / n;
+      lo = Math.min(lo, at(TLO, f)); hi = Math.max(hi, at(THI, f)); sum += toneAt(f);
+    }
+    return {lo:lo, hi:hi, m:sum/n};
+  }
+
+  function key(){
+    var H = document.documentElement.scrollHeight;
+    document.querySelectorAll('.expose').forEach(function(e){ e.remove(); });
+
+    document.querySelectorAll(BLOCKS).forEach(function(el){
+      if (el.closest('.night')){ el.setAttribute('data-key','dark'); return; }
+      if (el.closest('.sp-onphoto') || el.closest('.herotype')) return;
+      var g = keyOf(el, H);
+      if (g.lo >= LIGHT){ el.setAttribute('data-key','light'); return; }
+      if (g.hi <= DARK){ el.setAttribute('data-key','dark'); return; }
+      /* the ground under this run is not committed to either key. Commit it —
+         with the sun or with the shadow, ON the ground, never a plate under
+         the type — and print in the key the light then calls for. */
+      var light = g.m >= .5, op;
+      if (light){                       /* screen: v -> v + (1-v)*op */
+        op = (LIGHT + .10 - g.lo) / Math.max(1e-3, 1 - g.lo);
+      } else {                          /* multiply: v -> v*(1-op)   */
+        op = 1 - (DARK - .10) / Math.max(1e-3, g.hi);
+      }
+      op = Math.max(.05, Math.min(.95, op));
+      el.setAttribute('data-key', light ? 'light' : 'dark');
+      var top = docTop(el), h = el.getBoundingClientRect().height;
+      var pad = Math.max(70, Math.min(300, h * .55));
+      var e = document.createElement('div');
+      e.className = 'expose ' + (light ? 'w' : 'k'); e.setAttribute('aria-hidden','true');
+      e.style.top = Math.round(top - pad) + 'px';
+      e.style.height = Math.round(h + pad * 2) + 'px';
+      e.style.opacity = op.toFixed(3);
+      var mk = 'linear-gradient(180deg,rgba(0,0,0,0) 0%,#000 ' + (pad / (h + pad * 2) * 100).toFixed(1)
+        + '%,#000 ' + (100 - pad / (h + pad * 2) * 100).toFixed(1) + '%,rgba(0,0,0,0) 100%)';
+      e.style.webkitMaskImage = mk; e.style.maskImage = mk;
+      document.body.appendChild(e);
+    });
+
+    onPhoto();
+  }
+
+  /* -------------------------------------------------------------------
+     TYPE STANDING IN A PHOTOGRAPH.
+     A headline set into a picture is not placed by taste. The picture is
+     read — the real pixels of the real crop, through object-fit, through
+     object-position, through the sun that is screened over its top — at
+     both ends of the frame, in both keys. Whichever of those four lands
+     the highest worst-case contrast is the one that gets printed.
+     ------------------------------------------------------------------- */
+  var cvs = document.createElement('canvas'), cx = null;
+  cvs.width = 30; cvs.height = 16;
+  try { cx = cvs.getContext('2d', {willReadFrequently:true}); } catch(e){}
+
+  function lum(r,g,b){
+    function c(v){ v/=255; return v<=.03928 ? v/12.92 : Math.pow((v+.055)/1.055, 2.4); }
+    return .2126*c(r) + .7152*c(g) + .0722*c(b);
+  }
+  function ratio(a,b){ return (Math.max(a,b)+.05)/(Math.min(a,b)+.05); }
+
+  /* read the picture under a rectangle of the FRAME, in frame coordinates */
+  function readRegion(img, fw, fh, x0, y0, x1, y1){
+    if (!cx || !img.naturalWidth) return null;
+    var cs = getComputedStyle(img);
+    var mq = matchMedia('(max-width:640px)').matches;
+    var zoom = parseFloat(cs.getPropertyValue('--zoom')) || 1;
+    var zm = parseFloat(cs.getPropertyValue('--zoom-m'));
+    if (mq && !isNaN(zm)) zoom = zm;
+    var op = (cs.objectPosition || '50% 50%').trim().split(/\s+/);
+    var px = /%$/.test(op[0]) ? parseFloat(op[0])/100 : .5;
+    var py = /%$/.test(op[1] || '') ? parseFloat(op[1])/100 : .5;
+    var nw = img.naturalWidth, nh = img.naturalHeight;
+    var sc = Math.max(fw/nw, fh/nh);                 /* object-fit: cover */
+    var dw = nw*sc, dh = nh*sc;
+    var ox = (fw - dw)*px, oy = (fh - dh)*py;        /* object-position */
+    var tox = px*fw, toy = py*fh;                    /* transform-origin */
+    function toSrc(x, y){                            /* undo the zoom */
+      var ux = (x - tox)/zoom + tox, uy = (y - toy)/zoom + toy;
+      return [(ux - ox)/sc, (uy - oy)/sc];
+    }
+    var a = toSrc(x0,y0), b = toSrc(x1,y1);
+    var sx = Math.max(0, Math.min(nw-2, a[0])), sy = Math.max(0, Math.min(nh-2, a[1]));
+    var sw = Math.max(2, Math.min(nw-sx, b[0]-a[0])), sh = Math.max(2, Math.min(nh-sy, b[1]-a[1]));
+    try {
+      cx.clearRect(0,0,cvs.width,cvs.height);
+      cx.drawImage(img, sx, sy, sw, sh, 0, 0, cvs.width, cvs.height);
+      var d = cx.getImageData(0,0,cvs.width,cvs.height).data, out = [];
+      for (var i=0;i<d.length;i+=4) out.push(lum(d[i],d[i+1],d[i+2]));
+      /* the grade the page prints the picture through, and the white sun
+         screened over its top third — both raise what the type stands on */
+      var hasSun = !!img.parentNode.querySelector('.sun');
+      for (var j=0;j<out.length;j++){
+        var v = Math.min(1, Math.max(0, (out[j]-.5)*1.20 + .5));    /* --grade contrast */
+        if (hasSun){
+          var ry = (Math.floor(j/cvs.width)+.5)/cvs.height;
+          var fy = (y0 + (y1-y0)*ry)/fh;
+          if (fy < .34) v = v + (1-v)*(.92*(1 - fy/.34));           /* screen with white */
+        }
+        out[j] = v;
+      }
+      return out;
+    } catch(e){ return null; }
+  }
+
+  function place(block, frame, img){
+    var fr = frame.getBoundingClientRect(), fw = fr.width, fh = fr.height;
+    /* measure the TYPE, not the container it happens to sit in */
+    var type = block.classList.contains('wcap')
+      ? (block.querySelector('.wcapt') || block) : block;
+    var br = type.getBoundingClientRect();
+    var bh = Math.min(fh*.82, br.height), bw = Math.min(fw, br.width || fw);
+    var bx = Math.max(0, br.left - fr.left);
+    var pad = 8;
+    var best = null;
+    [['at-bot',0],['at-top',0],['at-bot',1],['at-top',1]].forEach(function(cc){
+      var cls = cc[0];
+      block.classList.remove('at-top','at-bot','to-right');
+      block.classList.add(cls); if (cc[1]) block.classList.add('to-right');
+      var tr = type.getBoundingClientRect(), fr2 = frame.getBoundingClientRect();
+      var c = {cls:cls, y0: tr.top - fr2.top - pad, y1: tr.bottom - fr2.top + pad};
+      bx = Math.max(0, tr.left - fr2.left - pad); bw = Math.min(fw - bx, tr.width + pad*2);
+      var px = readRegion(img, fw, fh, bx, Math.max(0,c.y0),
+                          Math.min(fw, bx+bw), Math.min(fh, c.y1));
+      if (!px) return;
+      var srt = px.slice().sort(function(a,b){ return a-b; });
+      var lo = srt[Math.floor(srt.length*.12)], hi = srt[Math.floor(srt.length*.88)];
+      var mind = ratio(lo, .0055);   /* dark ink #0B0B0B on the darkest twelfth */
+      var minl = ratio(hi, 1);       /* white ink on the lightest twelfth       */
+      var k = mind >= minl ? 'light' : 'dark';
+      var score = Math.max(mind, minl);
+      if (!best || score > best.score)
+        best = {cls:c.cls, right:!!cc[1], key:k, score:score, lo:lo, hi:hi};
+    });
+    block.classList.remove('at-top','at-bot','to-right');
+    if (!best) { block.classList.add('at-bot'); return; }
+    block.classList.add(best.cls); if (best.right) block.classList.add('to-right');
+    block.setAttribute('data-key', best.key);
+    block.setAttribute('data-contrast', best.score.toFixed(2));
+    block.setAttribute('data-ground', best.key === 'light' ? best.lo.toFixed(3) : best.hi.toFixed(3));
+  }
+
+  function corner(num, frame, img){
+    var fr = frame.getBoundingClientRect(), fw = fr.width, fh = fr.height;
+    var nr = num.getBoundingClientRect(), nw = nr.width + 18, nh = nr.height + 14;
+    var cands = [['c-bl',0,fh-nh],['c-br',fw-nw,fh-nh],['c-tl',0,0],['c-tr',fw-nw,0]];
+    var best = null;
+    cands.forEach(function(c){
+      var px = readRegion(img, fw, fh, c[1], c[2], c[1]+nw, c[2]+nh);
+      if (!px) return;
+      var srt = px.slice().sort(function(a,b){ return a-b; });
+      var hi = srt[Math.floor(srt.length*.88)];      /* the numeral is WHITE:  */
+      var sc = ratio(hi, 1);                         /* judge its worst ground */
+      if (!best || sc > best.sc) best = {c:c[0], sc:sc};
+    });
+    if (!best) return;
+    num.classList.remove('c-bl','c-br','c-tl','c-tr');
+    num.classList.add(best.c);
+    num.setAttribute('data-contrast', best.sc.toFixed(2));
+  }
+
+  function onPhoto(){
+    document.querySelectorAll('.herotype,.sp-onphoto,.wcap').forEach(function(b){
+      var frame = b.closest('.wframe'); if (!frame) return;
+      var img = frame.querySelector('img'); if (!img || !img.complete) return;
+      place(b, frame, img);
+    });
+    document.querySelectorAll('.stepn').forEach(function(n){
+      var frame = n.closest('.sphoto'); if (!frame) return;
+      var img = frame.querySelector('img'); if (!img || !img.complete) return;
+      corner(n, frame, img);
+    });
+  }
+
+  if (!isStatic){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.06, rootMargin:'0px 0px -5% 0px'});
+    document.querySelectorAll('.fu').forEach(function(el){ io.observe(el); });
+  }
+
+  var bo = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (e.isIntersecting){
+        e.target.querySelectorAll('.obar i').forEach(function(i){ i.style.width = i.dataset.w + '%'; });
+        bo.unobserve(e.target);
+      }
+    });
+  }, {threshold:.25});
+  document.querySelectorAll('.ochart').forEach(function(el){ bo.observe(el); });
+  if (isStatic) document.querySelectorAll('.obar i').forEach(function(i){ i.style.width = i.dataset.w + '%'; });
+
+  function settle(){ key(); requestAnimationFrame(key); setTimeout(key, 400); setTimeout(key, 1400); }
+  if (document.readyState === 'complete') settle(); else addEventListener('load', settle);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(settle);
+  addEventListener('resize', key);
+  key();
+})();
+</script>
+</body>
+</html>

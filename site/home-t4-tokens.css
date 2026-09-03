@@ -1,0 +1,129 @@
+/* =====================================================================
+   HOME TEMPLATE T4 · TOKENS ONLY
+   Fable design room, round 4. Nothing here draws; everything here is a
+   number, a colour or a name.
+
+   ROUND 4 PHYSICS. The page is ONE black-and-white photograph and you
+   scroll through its day. There is no paper. The ground between the
+   photographs is the site's own sky, wet sand and water, desaturated to
+   nothing and lit, so it is silver, true black, and pure white where the
+   sun blows out. Colour exists only as the pop on real objects.
+   Tan, cream and the sand tile are gone from this file entirely.
+   ===================================================================== */
+
+:root{
+  /* ---- the wheel (locked tokens; the only colours the page may pop with) */
+  --core:#6521C9;        /* Core · identity · violet   */
+  --love:#B90044;        /* Love · relationships · rose */
+  --vitality:#FF9112;    /* Vitality · energy · amber  */
+  --abundance:#12A56E;   /* Abundance · opportunity · emerald */
+
+  /* ---- THE GROUND. One photograph, nine thousand pixels of day, stretched
+     over the whole document so scrolling the page is scrolling the picture.
+     Built by scratchpad/home-t1/make_ground_r4.py from d4-ground-sky,
+     d4-ground-sand, d4-ground-puresand and refs/water-3. */
+  --ground:url('assets/home-t4/t4-ground.jpg');
+  --filmgrain:url('assets/home-t4/t4-grain.png');
+  --grain-size:320px 320px;   /* 1:1 with the source tile — never scaled up */
+  --grain-op:.34;
+  --grain-op-m:.30;
+
+  /* ---- INK. Two keys, and nothing between them. A block of copy is set in
+     whichever key the ground under it measures into; the renderer does the
+     measuring against the ground's own tone profile. */
+  --ink-light:#0B0B0B;
+  --ink-light-2:rgba(11,11,11,.84);
+  --ink-light-3:rgba(11,11,11,.74);
+  --hair-light:rgba(11,11,11,.22);
+  --ink-dark:#FFFFFF;
+  --ink-dark-2:rgba(255,255,255,.92);
+  --ink-dark-3:rgba(255,255,255,.80);
+  --hair-dark:rgba(255,255,255,.26);
+
+  --ink:var(--ink-light);
+  --ink78:var(--ink-light-2);
+  --ink56:var(--ink-light-3);
+  --hair:var(--hair-light);
+
+  /* ---- type */
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+
+  --fs-body:18px;  --lh-body:1.62;
+  --fs-h1:78px;    --lh-h1:1.00;
+  --fs-h2:60px;    --lh-h2:1.02;
+  --fs-h3:22px;
+  --fs-lede:22px;
+  --fs-cue:12px;
+  --fs-quote:38px;      /* the magazine quote */
+  --fs-quote-big:56px;
+  --fs-stat:74px;
+  --fs-stepnum:210px;   /* the step numeral, set into the photograph */
+
+  /* ---- rhythm */
+  --pad-wrap:32px;
+  --pad-section:96px;
+  --shead-gap:40px;
+  --shell:1140px;
+
+  /* ---- the light join. A photograph does not end at an edge: its sky
+     blows out into the white the next section stands on, and its shadow
+     becomes the night below it. These are the depths of that crossing,
+     as a proportion of the frame. */
+  --join:26%;
+  --join-soft:16%;
+
+  /* ---- THE GRADE. Measured against the library reference,
+     sg5lib/r29-m-runners-bridge and eval-r20-sun2-love-rose-awning:
+     nothing but grey, true blacks, blown whites, the pop untouched. */
+  --grade:contrast(1.20) brightness(1.00) saturate(1.14);
+  --grade-night:contrast(1.32) brightness(.62) saturate(1.18);
+
+  /* ---- frame heights */
+  --wh-hero:100svh;
+  --wh-scene:96vh;
+  --wh-tall:104vh;
+  --wh-mid:62vh;
+  --wh-night:92vh;
+  --wh-close:104vh;
+  --wh-step:56vh;
+  --wh-spread:104vh;
+
+  /* ---- the one waveform: the World's frequency, drawn as light */
+  --wave-w:1.6px;
+  --wave-glow:0 0 14px rgba(255,255,255,.92);
+}
+
+/* ---- THE PHONE FLOOR. 375x812 is where this page is designed and judged. */
+@media(max-width:640px){
+  :root{
+    --fs-h1:39px;   --lh-h1:1.03;
+    --fs-h2:33px;   --lh-h2:1.10;
+    --fs-h3:19px;
+    --fs-lede:18.5px;
+    --fs-body:17px; --lh-body:1.5;
+    --fs-cue:11px;
+    --fs-quote:26px;
+    --fs-quote-big:31px;
+    --fs-stat:44px;
+    --fs-stepnum:104px;
+
+    --pad-wrap:22px;
+    --pad-section:40px;
+    --shead-gap:20px;
+
+    --grain-size:160px 160px;   /* 320px source tile at device 2x = 1:1 */
+
+    --wh-hero:100svh;
+    --wh-scene:74vh;
+    --wh-tall:80vh;
+    --wh-mid:44vh;
+    --wh-night:88vh;
+    --wh-close:78vh;
+    --wh-step:50vh;
+    --wh-spread:72vh;
+
+    --join:22%;
+    --join-soft:14%;
+  }
+}
