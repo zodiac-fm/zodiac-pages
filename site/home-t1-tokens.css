@@ -1,0 +1,141 @@
+/* =====================================================================
+   HOME TEMPLATE T1 · TOKENS ONLY
+   Fable design room, round 1. Nothing here draws; everything here is a
+   number, a colour or a name. Change the look of every instance from
+   this file; change what the page SAYS from home-t1-content.js.
+   Colour values follow brand/design-system.md and design/tokens.json.
+   ===================================================================== */
+
+:root{
+  /* ---- the wheel (locked tokens; the only colours the page may pop with) */
+  --core:#6521C9;        /* Core · identity · violet   */
+  --love:#B90044;        /* Love · relationships · rose*/
+  --vitality:#FF9112;    /* Vitality · energy · amber  */
+  --abundance:#12A56E;   /* Abundance · opportunity · emerald */
+  --core-ink:#6521C9; --love-ink:#B90044; --vitality-ink:#C25500; --abundance-ink:#0A7A52;
+
+  /* ---- THE SHEET. One sunlit sand ground, two tones plus real grain.
+     The tones are re-written live by the dusk engine; these are DAY. */
+  --sand-day-base:#E6E0D4;
+  --sand-day-hi:#FCFAF6;
+  --sand-dusk-base:#262130;   /* the violet hour, same sand, no colour switch */
+  --sand-dusk-hi:#493F5B;
+  --sand-base:var(--sand-day-base);
+  --sand-hi:var(--sand-day-hi);
+
+  --grain:url('assets/home-t1-sand-grain.png');
+  --grain-size:972px 149px;    /* 1:1 with the source grain — never scaled up */
+  --grain-pan:0px;             /* the sheet drifts under the reader */
+
+  /* ---- ink. DAY values; the dusk engine steps these to cream. */
+  --ink:#141412;
+  --ink78:rgba(20,20,18,.80);
+  --ink56:rgba(20,20,18,.68);
+  --ink38:rgba(20,20,18,.66);
+  --hair:rgba(20,20,18,.14);
+  --frame-line:rgba(20,20,18,.18);
+  --frame-fill:#F2F0EA;
+  --frame-shadow:0 18px 40px rgba(96,74,40,.16);
+
+  /* ---- type (base page canon, unchanged) */
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+
+  --fs-body:18px;  --lh-body:1.62;
+  --fs-h1:82px;    --lh-h1:1.02;
+  --fs-h2:54px;    --lh-h2:1.06;
+  --fs-h3:22px;
+  --fs-lede:22px;
+  --fs-cue:12px;
+  --fs-lead:24px;      /* the testimonial result line */
+  --fs-lead-big:28px;
+  --fs-stat:50px;
+
+  /* ---- rhythm */
+  --pad-wrap:32px;
+  --pad-section:104px;
+  --shead-gap:40px;
+  --shell:1140px;
+
+  /* ---- the dissolve band: sand eats into every World photo.
+     Directive floor 80px, ceiling 240px at desktop. */
+  --dis-h:130px;
+  --dis-h-hero:56px;    /* the hero band never reaches the face */
+  --dis-h-close:120px;
+
+  /* ---- World frame heights (photographs are cropped by token, never by hand) */
+  --wh-hero:auto;      /* the anchor scene is never cropped ... */
+  --wh-hero-max:76vh;  /* ... but it never eats more than one screen either */
+  --wh-scene:530px;
+  --wh-dusk:92vh;      /* the dusk arrives as a screen, not a picture */
+  --wh-close:520px;
+
+  /* ---- DUSK. The fall of light, expressed as a tone curve on the sand.
+     brightness pulls the sheet down, contrast pushes the GRAIN up, so the
+     grain is more present at dusk than at noon. No hue switch. */
+  --dusk-bright:.433;
+  --dusk-contrast:3.12;
+  --dusk-sat:.72;
+  --dusk-hue:0;
+  /* quiet sand on each side of the dusk World, wide enough that the whole
+     crossing happens with nothing but sand and photography on the screen */
+  --dusk-gap-top:280px;
+  --dusk-gap-bot:300px;
+
+  /* ---- Strip: hard-edged contact photographs */
+  --sh-tall:300px;
+  --sh-mid:230px;
+  --sh-wide:280px;
+  --sh-two:230px;      /* a strip of two, side by side on the phone */
+  --strip-gap:44px;
+  --strip-stagger:52px;
+
+  /* ---- portraits */
+  --port-lead:330px;
+  --port-row:196px;
+}
+
+/* THE PHONE FLOOR — the older-audience sizes the base page locked, held.
+   Lengths tighten so the whole sheet stays under the 12,000px ceiling. */
+@media(max-width:640px){
+  :root{
+    --fs-h1:46px;   --lh-h1:1.05;
+    --fs-h2:31px;   --lh-h2:1.12;
+    --fs-h3:20px;
+    --fs-lede:19px;
+    --fs-cue:11.5px;
+    --fs-lead:20px;
+    --fs-lead-big:21.5px;
+    --fs-stat:30px;
+    --lh-body:1.50;
+
+    --pad-wrap:22px;
+    --pad-section:17px;
+    --shead-gap:12px;
+
+    --grain-size:486px 74.5px;   /* half-tile on 2x screens = grain at 1:1 device px */
+
+    --dis-h:70px;
+    --dis-h-hero:26px;
+    --dis-h-close:64px;
+
+    --wh-hero:272px;
+    --wh-hero-max:none;
+    --wh-scene:188px;
+    --wh-dusk:86vh;
+    --wh-close:470px;
+
+    --dusk-gap-top:180px;
+    --dusk-gap-bot:236px;
+
+    --sh-tall:110px;
+    --sh-mid:132px;
+    --sh-wide:130px;
+    --sh-two:148px;
+    --strip-gap:16px;
+    --strip-stagger:0px;
+
+    --port-lead:114px;
+    --port-row:96px;
+  }
+}

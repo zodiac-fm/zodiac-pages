@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zodiac.fm · Home Template T2</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="home-t2-tokens.css">
+<style>
+/* =====================================================================
+   HOME TEMPLATE T2 · THE TEMPLATE
+   Five section recipes — World, Voices, Strip, Numbers, Close — and one
+   sunlit sand sheet they all stand on. This file holds NO copy and NO
+   image path. Those live in home-t2-content.js. Every number, colour and
+   length lives in home-t1-tokens.css.
+   ===================================================================== */
+
+@font-face{font-family:'Switzer';src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype');font-weight:400;font-display:block}
+@font-face{font-family:'Switzer';src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype');font-weight:600;font-display:block}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:var(--sans);font-size:var(--fs-body);line-height:var(--lh-body);
+  color:var(--ink78);background:var(--sand-day-base);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+
+/* =====================================================================
+   1 · THE SHEET. One continuous sunlit sand ground, real photographic
+   grain, viewport-locked so the grain is present at every scroll
+   position. Everything sand on this page — the ground and every
+   dissolve band over a photograph — is built from THIS one recipe, so
+   the grain of a band is in perfect register with the grain of the
+   ground behind it. That is what "grain-matched" means here.
+   ===================================================================== */
+.sand{
+  background-color:var(--sand-day-base);
+  background-image:var(--grain);
+  background-repeat:repeat;
+  background-size:var(--grain-size);
+  background-attachment:scroll;
+  background-position:0 var(--sand-y,0px);
+  filter:var(--sand-filter,none);
+}
+/* the sheet runs the whole length of the document, not the height of a window,
+   and every other sand surface on the page is offset into the SAME sheet, so a
+   dissolve band, a printed photograph and the ground behind it share one grain
+   in exact register. */
+#sheet{position:absolute;top:0;left:0;right:0;height:100%;z-index:0}
+
+/* THE HORIZON OF SHADOW. The dusk is not a filter on the page, it is a band of
+   the sheet itself lying in shadow: even across the full width, straight
+   linear falloff, and nothing outside it changes tone. */
+#duskband{position:absolute;left:0;right:0;z-index:0;pointer-events:none;
+  filter:var(--dusk-filter)}
+
+/* =====================================================================
+   2 · TYPE — exactly as the base page sets it.
+   ===================================================================== */
+.shell{max-width:var(--shell);margin:0 auto;padding:0 var(--pad-wrap);position:relative}
+h1{font-family:var(--serif);font-weight:600;font-size:var(--fs-h1);line-height:var(--lh-h1);color:var(--ink);letter-spacing:.004em;max-width:700px}
+h2{font-family:var(--serif);font-weight:600;font-size:var(--fs-h2);line-height:var(--lh-h2);color:var(--ink);max-width:760px;letter-spacing:.002em}
+h3{font-family:var(--sans);font-weight:600;font-size:var(--fs-h3);color:var(--ink);line-height:1.35}
+h1 em,h2 em{font-style:italic;font-weight:500}
+.lede{font-size:var(--fs-lede);color:var(--ink78);line-height:1.55;max-width:620px}
+.quiet{color:var(--ink56);max-width:620px}
+.tiny{font-size:14px;color:var(--ink38);line-height:1.55;max-width:620px}
+.num{font-family:var(--sans);font-weight:600;font-variant-numeric:tabular-nums lining-nums}
+.kick{display:block;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px;color:var(--ink38)}
+.textlink{color:var(--ink);border-bottom:1px solid var(--hair);padding-bottom:3px;transition:border-color .3s}
+.textlink:hover{border-color:var(--ink)}
+
+section{position:relative;z-index:1;padding:var(--pad-section) 0;scroll-margin-top:80px}
+section.join{padding-top:0}
+
+/* the scan spine: cue column left, claim right (desktop), stacked on phone */
+.shead{max-width:960px;margin-bottom:var(--shead-gap)}
+.cue{display:flex;align-items:center;gap:12px;font-size:var(--fs-cue);letter-spacing:.24em;
+  text-transform:uppercase;color:var(--ink38);margin-bottom:20px}
+.cue::before{content:'';width:9px;height:9px;border-radius:50%;background:currentColor;opacity:.55}
+@media(min-width:900px){
+  .shead{display:grid;grid-template-columns:150px minmax(0,760px);gap:34px;align-items:start}
+  .cue{margin-bottom:0;padding-top:16px;flex-direction:column;align-items:flex-start;gap:10px}
+}
+.shead .quiet,.shead .lede{margin-top:18px}
+
+/* fade-up */
+.fu{opacity:0;transform:translateY(24px);transition:opacity 1s cubic-bezier(.2,.6,.2,1),transform 1s cubic-bezier(.2,.6,.2,1)}
+.fu.in,html.static .fu{opacity:1;transform:none}
+
+/* every photograph carries its permanent number — Michael reviews by number */
+.pid{position:absolute;right:10px;bottom:10px;z-index:6;
+  font:600 11px/1 var(--sans);letter-spacing:.12em;color:#141412;
+  background:rgba(246,245,242,.86);border:1px solid rgba(20,20,18,.20);
+  border-radius:3px;padding:4px 7px;pointer-events:none}
+
+/* =====================================================================
+   3 · NAV + FOOTER
+   ===================================================================== */
+nav{position:fixed;top:0;left:0;right:0;z-index:40;border-bottom:1px solid var(--hair);
+  opacity:var(--nav-op,1);transition:opacity .25s linear}
+nav .sand{position:absolute;inset:0;z-index:-1}
+.nav-in{display:flex;align-items:center;justify-content:space-between;padding:15px var(--pad-wrap);max-width:var(--shell);margin:0 auto}
+.wordmark{font-family:var(--serif);font-weight:600;font-size:23px;letter-spacing:.06em;color:var(--ink)}
+.nav-links{display:flex;align-items:center;gap:24px;font-size:14.5px;color:var(--ink56)}
+.nav-links a:hover{color:var(--ink)}
+@media(max-width:640px){
+  .nav-in{padding:12px 16px}.wordmark{font-size:18px}.nav-links{gap:12px;font-size:12px}
+}
+footer{position:relative;z-index:1;padding:20px 0 26px;font-size:13.5px;color:var(--ink38)}
+footer .shell{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+/* =====================================================================
+   4 · RECIPE — WORLD
+   A photograph is not placed on the page; it is printed onto the sheet.
+   The sand advances over its top and bottom edges through a two-part
+   grain dissolve: a solid sand tongue (.dis) and, running past it, a
+   speckled edge of the same sand (.disg) whose coverage is cut by the
+   grain itself. No blur. No cream. No plate.
+   ===================================================================== */
+.wframe{position:relative;width:100vw;margin-left:calc(50% - 50vw);overflow:hidden;z-index:1;isolation:isolate}
+/* the paper the photograph is printed on: the same sheet, in register */
+.wframe::before{content:'';position:absolute;inset:0;z-index:0;
+  background-color:var(--sand-day-base);background-image:var(--grain);background-repeat:repeat;
+  background-size:var(--grain-size);background-attachment:scroll;
+  background-position:0 var(--sand-y,0px);filter:var(--sand-filter,none)}
+.wframe > picture{display:block;position:relative;z-index:1}
+/* PRINT PHYSICS: multiply, so the photograph's own whites ARE the paper's
+   whites and the grain runs through the whole picture, not only its edges.
+   The lift is applied BEFORE the blend so midtones and faces stay open. */
+.wframe > img,.wframe > picture > img{width:100%;height:var(--h);object-fit:cover;
+  object-position:var(--focal,center);position:relative;z-index:1;
+  mix-blend-mode:var(--print,multiply);filter:var(--print-lift)}
+.wframe .pid{right:14px;bottom:14px}
+
+.dis,.disg{position:absolute;left:-2px;right:-2px;z-index:3;pointer-events:none}
+.dis{height:var(--dis-pc);
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 24%,rgba(0,0,0,.62) 56%,rgba(0,0,0,0) 96%);
+          mask-image:linear-gradient(180deg,#000 0%,#000 24%,rgba(0,0,0,.62) 56%,rgba(0,0,0,0) 96%)}
+.disg{height:calc(var(--dis-pc) * 1.10);
+  -webkit-mask-image:var(--grain),linear-gradient(180deg,#000 0%,#000 46%,rgba(0,0,0,0) 100%);
+          mask-image:var(--grain),linear-gradient(180deg,#000 0%,#000 46%,rgba(0,0,0,0) 100%);
+  -webkit-mask-size:var(--grain-size),100% 100%;
+          mask-size:var(--grain-size),100% 100%;
+  -webkit-mask-repeat:repeat,no-repeat;mask-repeat:repeat,no-repeat;
+  -webkit-mask-composite:source-in;mask-composite:intersect}
+.dis.b,.disg.b{transform:scaleY(-1)}
+.dis.t,.disg.t{top:0}
+.dis.b,.disg.b{bottom:0}
+/* the crop decides where the band may land; a frame with no ground above its
+   subject asks for no band at all and lets the print physics do the work */
+.dis.t{height:calc(var(--dis-pc) * var(--dt,1))}
+.disg.t{height:calc(var(--dis-pc) * var(--dt,1) * 1.10)}
+.dis.b{height:calc(var(--dis-pc) * var(--db,1))}
+.disg.b{height:calc(var(--dis-pc) * var(--db,1) * 1.10)}
+
+/* the World words */
+.wworld .wframe{margin-top:0}
+.wcap{max-width:var(--shell);margin:16px auto 0;padding:0 var(--pad-wrap);
+  display:flex;align-items:baseline;gap:12px;font-size:14.5px;color:var(--ink56)}
+.wcap img{height:20px;width:96px;object-fit:contain;object-position:left center;position:relative;top:3px;flex:0 0 auto}
+.wcap b{color:var(--ink);font-weight:600}
+.wcap + .shell.popline{margin-top:56px}
+.popline{margin-bottom:18px}
+.wframe + .wframe{margin-top:54px}
+@media(max-width:640px){.wframe + .wframe{margin-top:40px}.wcap + .shell.popline{margin-top:40px}.popline{margin-bottom:14px}.wcap{font-size:13.5px;gap:9px}.wcap img{width:72px;height:17px}}
+
+/* the hero: prehead, one H1, then the anchor scene, then the promise */
+.hero{padding-top:calc(var(--pad-section) + 58px);padding-bottom:0}
+.prehead{display:flex;align-items:center;gap:14px;font-size:12px;font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ink38);margin:0 0 22px}
+.hero .wframe{margin-top:42px}
+.hero .wframe > img,.hero .wframe > picture > img{max-height:var(--wh-hero-max,none)}
+
+.hero-after{padding-top:38px}
+@media(max-width:640px){
+  .hero{padding-top:calc(var(--pad-section) + 26px)}
+  .prehead{font-size:11px;letter-spacing:.16em;margin-bottom:18px}
+  .hero .wframe{margin-top:26px}.hero-after{padding-top:26px}
+}
+/* the pop bar: the anchor scenes name all four wheel colours at once,
+   the moment scenes carry exactly one. Interface colour, never on the photo. */
+.pops{display:flex;gap:0;height:3px;width:180px;margin-bottom:20px}
+.pops i{flex:1}
+.pops.one{width:52px}
+@media(max-width:640px){.pops{width:148px;margin-bottom:16px}}
+
+/* =====================================================================
+   5 · RECIPE — VOICES
+   One spine. A framed portrait, the result line, the detail, the name.
+   The lead breaks the run at full scale; hairlines seat the rest.
+   ===================================================================== */
+.vwrap{max-width:1040px}
+.vrow{display:grid;grid-template-columns:var(--port-row) minmax(0,1fr);gap:34px;align-items:center}
+.vrow .fport{width:var(--port-row);height:var(--port-row)}
+.vrow.lead,.vrow.big{grid-template-columns:var(--port-lead) minmax(0,1fr);gap:44px}
+.vrow.lead .fport,.vrow.big .fport{width:var(--port-lead);height:var(--port-lead)}
+.vsep{border:0;border-top:1px solid var(--hair);margin:38px 0}
+.fport{position:relative;flex:0 0 auto;background:var(--frame-fill);border:1px solid var(--frame-line);
+  border-radius:2px;overflow:hidden;box-shadow:var(--frame-shadow)}
+.fport img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.fport .pid{right:8px;bottom:8px}
+.tlead{font-family:var(--serif);font-weight:600;font-size:var(--fs-lead);line-height:1.32;color:var(--ink);max-width:648px}
+.vrow.lead .tlead,.vrow.big .tlead{font-size:var(--fs-lead-big)}
+.tdetail{margin-top:9px;font-size:18px;line-height:1.55;color:var(--ink56);max-width:600px}
+.pwho{margin-top:14px;padding-top:11px;border-top:1px solid var(--hair);font-size:15px;color:var(--ink);font-weight:600;max-width:600px}
+.pwho small{display:block;font-weight:400;font-size:14px;color:var(--ink56);margin-top:2px;letter-spacing:.02em}
+@media(max-width:900px){
+  .vrow{display:block}
+  .vrow::after{content:'';display:block;clear:both}
+  .vrow .fport{float:left;margin:0 16px 6px 0}
+  .vrow.lead .fport,.vrow.big .fport{float:none;margin:0 0 16px 0}
+  .vrow .pwho{overflow:hidden}
+  .vsep{margin:11px 0}
+  .tdetail{font-size:17px;margin-top:6px}
+  .pwho{margin-top:9px;padding-top:7px}
+}
+
+/* the four waveforms, as a witness line under the claim */
+.witness{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;
+  width:min(680px,100%);margin:0 0 38px 184px;position:relative;z-index:3}
+.witness img{width:100%;height:28px;object-fit:contain;object-position:left center}
+@media(max-width:899px){.witness{margin:0 0 12px 0;gap:9px}.witness img{height:22px}}
+
+/* the scroller */
+.mq{margin-top:30px;padding:15px 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  overflow:hidden;position:relative;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 11%,#000 89%,transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 11%,#000 89%,transparent 100%)}
+.mq-track{display:flex;gap:56px;width:max-content;animation:mqmove 240s linear infinite}
+@keyframes mqmove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){.mq-track{animation:none}}
+.mqi{display:flex;align-items:baseline;gap:14px;white-space:nowrap}
+.mqi .q{font-family:var(--serif);font-style:italic;font-size:21px;color:var(--ink)}
+.mqi .n{font-size:13px;color:var(--ink56)}
+
+/* =====================================================================
+   6 · RECIPE — STRIP
+   A hard-edged contact strip. No mask, no dissolve, no rounding: these
+   photographs are prints laid on the sand. The cells are deliberately
+   uneven and staggered so the strip can never read as a grid of
+   identical thumbnails.
+   ===================================================================== */
+.strip{display:grid;gap:var(--strip-gap);max-width:1040px;align-items:start}
+.strip.n1{grid-template-columns:minmax(0,1fr)}
+.strip.n2{grid-template-columns:minmax(0,1.06fr) minmax(0,.94fr)}
+.strip.n3{grid-template-columns:minmax(0,1.08fr) minmax(0,.96fr) minmax(0,1fr)}
+.strip.n4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.scell{position:relative}
+.strip.stag .scell:nth-child(2){margin-top:var(--strip-stagger)}
+.strip.stag .scell:nth-child(3){margin-top:calc(var(--strip-stagger) * 2)}
+.sphoto{position:relative;overflow:hidden}
+.sphoto img{width:100%;height:var(--h);object-fit:cover;object-position:var(--focal,center)}
+.scell .kick{margin-top:20px;margin-bottom:10px}
+.scell .kick i{display:inline-block;width:18px;height:4px;border-radius:0;margin-right:8px;vertical-align:2px}
+.scell h3{margin-bottom:8px}
+.scell p{color:var(--ink56);font-size:18px}
+.scap{margin-top:14px;display:flex;align-items:baseline;gap:12px;font-size:14.5px;color:var(--ink56)}
+.scap img{height:20px;width:96px;object-fit:contain;object-position:left center;position:relative;top:3px;flex:0 0 auto}
+.scap b{color:var(--ink);font-weight:600;display:block}
+@media(max-width:900px){
+  .strip.n3,.strip.n4{grid-template-columns:minmax(0,1fr)}
+  .strip.n2{grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);gap:14px}
+  .strip.n2 .sphoto{--h:var(--sh-two) !important}
+  .strip.n2 .scap{font-size:13px;gap:0;flex-direction:column}
+  .strip.n2 .scap img{width:64px;height:15px;top:0;margin-bottom:5px}
+  .strip.stag .scell:nth-child(n){margin-top:0}
+  .scell p{font-size:17px}
+  /* a strip of three reads as a contact list on the phone: print left, words right */
+  .strip.n3 .scell{display:grid;grid-template-columns:126px minmax(0,1fr);gap:15px;align-items:start}
+  .strip.n3 .scell .kick{margin-top:0}
+  .strip.n3 .scell .sphoto{grid-row:span 4}
+}
+/* the origin cell: one print, held off the spine, never centred */
+.strip.aside{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:64px;align-items:center;max-width:1140px}
+.strip.aside .swords{padding-right:10px}
+@media(max-width:900px){.strip.aside{grid-template-columns:minmax(0,1fr);gap:32px}}
+
+/* =====================================================================
+   7 · RECIPE — NUMBERS
+   Every figure on this page is set in Switzer. Never the serif.
+   ===================================================================== */
+.chart{max-width:930px;margin-top:8px}
+.crow{display:grid;grid-template-columns:172px minmax(0,1fr) 132px;align-items:center;gap:22px;padding:12px 0}
+.crow + .crow{border-top:1px solid var(--hair)}
+.crow .cname b{display:block;font-size:17px;font-weight:600;color:var(--ink)}
+.crow .cname span{display:block;font-size:13px;color:var(--ink56);margin-top:2px}
+.crow .cwave img{width:100%;height:64px;object-fit:contain;object-position:left center}
+.crow .chz{text-align:right;font-size:26px;color:var(--ink)}
+.crow .chz small{font-size:13px;font-weight:400;color:var(--ink56);margin-left:3px}
+@media(max-width:640px){
+  .crow{grid-template-columns:minmax(0,1fr) 96px;gap:6px;padding:7px 0}
+  .crow .cwave{grid-column:1 / -1;order:3}
+  .crow .cwave img{height:30px}
+  .crow .chz{font-size:21px}
+}
+.stats{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:44px;align-items:start;max-width:1040px}
+.stat{font-size:var(--fs-stat);font-weight:600;color:var(--ink);line-height:1;letter-spacing:-.01em}
+.stat small{font-size:.32em;font-weight:600;color:var(--ink56)}
+.statlbl{margin-top:12px;font-size:15px;color:var(--ink56);max-width:360px}
+@media(max-width:900px){.stats{grid-template-columns:1fr;gap:18px}}
+.ochart{max-width:930px;margin-top:52px}
+.otitle{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:18px}
+.otitle small{display:block;font-weight:400;font-size:13px;color:var(--ink56);margin-top:3px}
+.orow{display:grid;grid-template-columns:250px minmax(0,1fr) 64px;align-items:center;gap:18px;padding:9px 0}
+.orow + .orow{border-top:1px solid var(--hair)}
+.orow .olbl{font-size:15px;color:var(--ink78)}
+.orow .obar{height:14px;background:var(--hair);overflow:hidden}
+.orow .obar i{display:block;height:100%;width:0;background:var(--ink);transition:width 1.4s cubic-bezier(.2,.6,.2,1)}
+html.static .orow .obar i{transition:none}
+.orow .oval{text-align:right;font-size:19px;color:var(--ink)}
+.orow .oval small{font-size:12px;font-weight:400;color:var(--ink56)}
+@media(max-width:640px){
+  .ochart{margin-top:22px}
+  .orow{grid-template-columns:minmax(0,1fr) 56px;gap:7px;padding:7px 0}
+  .orow .obar{grid-column:1 / -1;order:3}
+  .orow .olbl{font-size:15px}
+}
+
+/* =====================================================================
+   8 · RECIPE — CLOSE. A World with the ask on it.
+   ===================================================================== */
+.close{padding-bottom:0}
+.close .shead{margin-bottom:0}
+.close .wframe{margin-top:54px}
+.close .dis{height:calc(var(--dis-pc-close) * var(--dt,1))}
+.close .disg{height:calc(var(--dis-pc-close) * var(--dt,1) * 1.10)}
+.close .dis.b{height:calc(var(--dis-pc-close) * var(--db,1))}
+.close .disg.b{height:calc(var(--dis-pc-close) * var(--db,1) * 1.10)}
+.close .cta{margin-top:26px}
+@media(max-width:640px){.close .wframe{margin-top:34px}}
+
+/* =====================================================================
+   9 · DUSK. The Music World arrives as the light falling on the SAME
+   sand. No colour switch, no dark plate: the sheet's own tone curve is
+   pulled down while the grain contrast is pushed up, so the grain is
+   MORE present at dusk, not less. Reading colour steps once, in the
+   middle of the fall, where nothing but photography is on screen.
+   ===================================================================== */
+/* inside the horizon of shadow: the sheet the dusk World is printed on, and
+   the bands that dissolve its edges, are the SAME sand lying in shadow. The
+   night photograph itself is not multiplied into that shadow - it has no
+   whites to give back and multiply would only close it up (item 1 ceiling). */
+[data-dusk="in"]::before,[data-dusk="in"] .dis,[data-dusk="in"] .disg{filter:var(--dusk-filter)}
+[data-dusk="in"] > img{mix-blend-mode:normal;filter:none}
+[data-dusk="in"] .pid{color:#F7F3EA;background:rgba(20,18,16,.60);border-color:rgba(247,243,234,.30)}
+
+/* the quiet sand on each side of the dusk World */
+.duskgap{padding-top:var(--dusk-gap-top) !important}
+.duskspacer{height:var(--dusk-gap-bot)}
+</style>
+</head>
+<body>
+
+<div id="sheet" class="sand" aria-hidden="true"></div>
+
+<nav id="nav"><div class="sand" aria-hidden="true"></div><div class="nav-in" id="navin"></div></nav>
+
+<main id="page"></main>
+
+<footer><div class="shell" id="foot"></div></footer>
+
+<script src="home-t2-content.js"></script>
+<script>
+/* =====================================================================
+   THE RENDERER. Five recipes. It knows shapes, never words.
+   ===================================================================== */
+(function(){
+  var C = window.ZC, P = [];
+  var esc = function(s){ return s == null ? '' : String(s); };
+  var push = function(s){ P.push(s); };
+
+  var WHEEL = ['core','love','vitality','abundance'];
+  function pops(pop){
+    if (!pop) return '';
+    if (pop === 'quad') return '<div class="pops">' + WHEEL.map(function(k){
+      return '<i style="background:var(--' + k + ')"></i>'; }).join('') + '</div>';
+    return '<div class="pops one"><i style="background:var(--' + pop + ')"></i></div>';
+  }
+  function shead(b, extra){
+    var inner = (b.h ? '<h2>' + b.h + '</h2>' : '')
+      + (b.body ? '<p class="quiet">' + b.body + '</p>' : '')
+      + (extra || '');
+    return '<div class="shead fu">'
+      + (b.cue ? '<p class="cue">' + esc(b.cue) + '</p>' : '<div></div>')
+      + '<div>' + inner + '</div></div>';
+  }
+  function witness(){
+    return '<figure class="witness fu" role="img" aria-label="The four Zodiac frequency waveforms: Core, Love, Vitality, and Abundance">'
+      + WHEEL.map(function(k){ return '<img src="assets/d4e/d4e-wave-' + k + '.png" alt="" aria-hidden="true">'; }).join('')
+      + '</figure>';
+  }
+  function bands(){
+    return '<i class="dis t sand"></i><i class="disg t sand"></i>'
+         + '<i class="dis b sand"></i><i class="disg b sand"></i>';
+  }
+  function frame(f, cls){
+    var band = (f.dt === undefined ? '' : ';--dt:' + f.dt) + (f.db === undefined ? '' : ';--db:' + f.db);
+    return '<figure class="wframe fu ' + (cls || '') + '" style="--h:var(--wh-' + (f.h || 'scene') + ');--focal:' + (f.focal || 'center') + band + '"'
+      + (f.dusk ? ' data-dusk="' + f.dusk + '"' : '') + '>'
+      + (f.srcMobile
+          ? '<picture><source media="(max-width:640px)" srcset="' + f.srcMobile + '"><img src="' + f.src + '" alt="' + esc(f.alt) + '"></picture>'
+          : '<img src="' + f.src + '" alt="' + esc(f.alt) + '">')
+      + bands()
+      + '<span class="pid">' + esc(f.pid) + '</span></figure>'
+      + (f.cap ? '<figcaption class="wcap fu">'
+          + (f.cap.wave ? '<img src="' + f.cap.wave + '" alt="">' : '')
+          + '<span><b>' + f.cap.b + '</b> ' + f.cap.rest + '</span></figcaption>' : '');
+  }
+
+  /* ---------- RECIPE: WORLD ---------- */
+  function world(b){
+    var isHero = b.variant === 'hero';
+    var words = '<div class="shell">'
+      + (isHero
+          ? pops(b.pop) + (b.prehead ? '<p class="prehead">' + b.prehead + '</p>' : '') + '<h1 class="fu">' + b.h + '</h1>'
+          : shead(b))
+      + '</div>';
+    var frames = b.frames ? b.frames.map(function(f, i){
+        return (!isHero && f.pop ? '<div class="shell popline">' + pops(f.pop) + '</div>' : '') + frame(f);
+      }).join('') : '';
+    var after = b.after ? '<div class="shell hero-after fu"><p class="lede">' + b.after + '</p></div>' : '';
+    var proof = b.proof ? '<div class="shell fu" style="margin-top:26px"><p class="quiet">' + b.proof + '</p></div>' : '';
+    var hasDusk = !!(b.frames && b.frames.some(function(f){ return f.dusk; }));
+    var body = (b.order === 'frames-first')
+      ? frames + '<div class="' + (hasDusk ? 'duskspacer' : '') + '" style="' + (hasDusk ? '' : 'height:var(--shead-gap)') + '"></div>' + words + proof
+      : words + frames + after + proof;
+    return '<section id="' + b.id + '" class="wworld' + (isHero ? ' hero' : '') + (b.join ? ' join' : '') + (hasDusk ? ' duskgap' : '') + '">'
+      + body + '</section>';
+  }
+
+  /* ---------- RECIPE: VOICES ---------- */
+  function voices(b){
+    var rows = b.rows.map(function(r, i){
+      var sep = (b.sep && i) ? '<hr class="vsep">' : '';
+      return sep + '<div class="vrow fu ' + (r.size || '') + '">'
+        + '<div class="fport"><img src="' + r.src + '" alt="' + esc(r.alt) + '"><span class="pid">' + esc(r.pid) + '</span></div>'
+        + '<div>'
+        + (r.kick ? '<p class="kick">' + r.kick + '</p>' : '')
+        + '<p class="tlead">' + r.lead + '</p>'
+        + (r.detail ? '<p class="tdetail">' + r.detail + '</p>' : '')
+        + (r.who ? '<p class="pwho">' + r.who + (r.role ? '<small>' + r.role + '</small>' : '') + '</p>' : '')
+        + '</div></div>';
+    }).join('');
+    var mq = '';
+    if (b.marquee){
+      var run = b.marquee.map(function(m){
+        return '<span class="mqi"><span class="q">' + m.q + '</span><span class="n">' + m.n + '</span></span>'; }).join('');
+      mq = '<div class="mq fu" role="region" aria-label="More voices from members"><div class="mq-track">'
+         + run + '<span aria-hidden="true" style="display:contents">' + run + '</span></div></div>';
+    }
+    return '<section id="' + b.id + '"' + (b.join ? ' class="join"' : '') + '><div class="shell">'
+      + shead(b) + (b.waves ? witness() : '')
+      + '<div class="vwrap">' + rows + '</div></div>' + mq + '</section>';
+  }
+
+  /* ---------- RECIPE: STRIP ---------- */
+  function strip(b){
+    var cells = b.cells.map(function(c){
+      return '<div class="scell fu">'
+        + '<div class="sphoto" style="--h:var(--sh-' + (c.h || 'mid') + ');--focal:' + (c.focal || 'center') + '">'
+        + '<img src="' + c.src + '" alt="' + esc(c.alt) + '"><span class="pid">' + esc(c.pid) + '</span></div>'
+        + (c.kick ? '<p class="kick"' + (c.band ? ' style="color:var(--' + c.band + '-ink)"' : '') + '>'
+            + (c.band ? '<i style="background:var(--' + c.band + ')"></i>' : '') + c.kick + '</p>' : '')
+        + (c.h3 ? '<h3>' + c.h3 + '</h3>' : '')
+        + (c.p ? '<p>' + c.p + '</p>' : '')
+        + (c.cap ? '<p class="scap">' + (c.cap.wave ? '<img src="' + c.cap.wave + '" alt="">' : '')
+            + '<span><b>' + c.cap.b + '</b> ' + c.cap.rest + '</span></p>' : '')
+        + '</div>';
+    }).join('');
+    var head = (b.cue || b.h || b.body);
+    if (b.aside){
+      return '<section id="' + b.id + '"' + (b.join ? ' class="join"' : '') + '><div class="shell">'
+        + '<div class="strip aside"><div class="swords fu">' + shead(b).replace('shead fu','shead') + '</div>' + cells + '</div>'
+        + '</div></section>';
+    }
+    return '<section id="' + b.id + '" class="' + (b.join ? 'join' : '') + '"'
+      + (b.dusk ? ' data-dusk="' + b.dusk + '"' : '') + '><div class="shell">'
+      + (head ? shead(b) : '')
+      + '<div class="strip n' + b.cells.length + (b.stagger ? ' stag' : '') + '">' + cells + '</div>'
+      + '</div></section>';
+  }
+
+  /* ---------- RECIPE: NUMBERS ---------- */
+  function numbers(b){
+    var body = '';
+    if (b.variant === 'freq'){
+      body = '<div class="chart fu">' + b.rows.map(function(r){
+        return '<div class="crow"><div class="cname"><b>' + r.name + '</b><span>' + r.sub + '</span></div>'
+          + '<div class="cwave"><img src="' + r.wave + '" alt="' + esc(r.waveAlt) + '"></div>'
+          + '<div class="chz num">' + r.hz + '<small>Hz</small></div></div>'; }).join('') + '</div>';
+    } else {
+      body = '<div class="stats fu">' + b.stats.map(function(s){
+          return '<div><div class="stat num">' + s.v + '<small>' + s.u + '</small></div>'
+            + '<p class="statlbl">' + s.label + '</p></div>'; }).join('') + '</div>'
+        + '<div class="ochart fu"><p class="otitle">' + b.chart.title + '<small>' + b.chart.sub + '</small></p>'
+        + b.chart.rows.map(function(r){
+            return '<div class="orow"><span class="olbl">' + r.label + '</span>'
+              + '<span class="obar"><i data-w="' + r.v + '"></i></span>'
+              + '<span class="oval num">' + r.v + '<small>%</small></span></div>'; }).join('')
+        + '</div>';
+    }
+    return '<section id="' + b.id + '"' + (b.join ? ' class="join"' : '') + '><div class="shell">'
+      + shead(b) + (b.waves ? witness() : '') + body
+      + (b.note ? '<p class="tiny fu" style="margin-top:12px">' + b.note + '</p>' : '')
+      + '</div></section>';
+  }
+
+  /* ---------- RECIPE: CLOSE ---------- */
+  function close(b){
+    return '<section id="' + b.id + '" class="close"><div class="shell">' + pops(b.pop)
+      + shead(b, '<p class="cta"><a class="textlink" href="' + b.cta.href + '">' + b.cta.label + '</a></p>')
+      + '</div>' + b.frames.map(function(f){ return frame(f); }).join('') + '</section>';
+  }
+
+  var R = {world:world, voices:voices, strip:strip, numbers:numbers, close:close};
+  C.blocks.forEach(function(b){ push(R[b.t](b)); });
+
+  document.title = C.title;
+  document.getElementById('page').innerHTML = P.join('\n');
+  document.getElementById('navin').innerHTML =
+    '<a class="wordmark" href="#top">' + C.wordmark + '</a><div class="nav-links">'
+    + C.navLinks.map(function(l){ return '<a href="' + l.href + '">' + l.label + '</a>'; }).join('') + '</div>';
+  document.getElementById('foot').innerHTML =
+    '<span class="wordmark" style="font-size:19px">' + C.footer.mark + '</span><span>' + C.footer.line + '</span>';
+})();
+
+/* =====================================================================
+   BEHAVIOUR: reveal, the growing bars, the drifting sheet, the dusk.
+   ===================================================================== */
+(function(){
+  var qs = new URLSearchParams(location.search);
+  if (qs.get('static') === '1') document.documentElement.classList.add('static');
+  var isStatic = document.documentElement.classList.contains('static');
+
+  if (!isStatic){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.08, rootMargin:'0px 0px -6% 0px'});
+    document.querySelectorAll('.fu').forEach(function(el){ io.observe(el); });
+  }
+
+  var bo = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (e.isIntersecting){
+        e.target.querySelectorAll('.obar i').forEach(function(i){ i.style.width = i.dataset.w + '%'; });
+        bo.unobserve(e.target);
+      }
+    });
+  }, {threshold:.25});
+  document.querySelectorAll('.ochart').forEach(function(el){ bo.observe(el); });
+  if (isStatic) document.querySelectorAll('.obar i').forEach(function(i){ i.style.width = i.dataset.w + '%'; });
+
+  /* ---- THE SHEET, IN DOCUMENT COORDINATES -----------------------------
+     One sheet of sand runs the whole length of the page. Every other sand
+     surface - the paper each World photograph is printed on, every dissolve
+     band, and the horizon of shadow - is the same sheet, offset into it by its
+     own document position, so all of them share one grain in exact register.
+     No scroll handler, no per-frame tone: the page renders the same at every
+     scroll position and in a still. */
+  var root = document.documentElement, cs = getComputedStyle(root);
+  var sheet = document.getElementById('sheet');
+  var duskFrame = document.querySelector('[data-dusk="in"]');
+  var duskBand = null;
+
+  function docTop(el){ return Math.round(el.getBoundingClientRect().top + window.scrollY); }
+
+  function layoutSand(){
+    var H = document.documentElement.scrollHeight;
+    if (sheet) sheet.style.height = H + 'px';
+
+    document.querySelectorAll('.wframe').forEach(function(f){
+      f.style.setProperty('--sand-y', (-docTop(f)) + 'px');
+    });
+    document.querySelectorAll('.dis,.disg').forEach(function(b){
+      b.style.setProperty('--sand-y', (-docTop(b)) + 'px');
+    });
+
+    if (duskFrame){
+      var padT = parseFloat(cs.getPropertyValue('--dusk-band-top')) || 160;
+      var padB = parseFloat(cs.getPropertyValue('--dusk-band-bot')) || 200;
+      var t = docTop(duskFrame), h = duskFrame.getBoundingClientRect().height;
+      if (!h) return;
+      var top = t - padT, tot = h + padT + padB;
+      if (!duskBand){
+        duskBand = document.createElement('div');
+        duskBand.id = 'duskband'; duskBand.className = 'sand';
+        duskBand.setAttribute('aria-hidden','true');
+        document.body.appendChild(duskBand);
+      }
+      duskBand.style.top = top + 'px';
+      duskBand.style.height = tot + 'px';
+      duskBand.style.setProperty('--sand-y', (-top) + 'px');
+      /* straight horizontal falloff: nothing, then full depth at the photo's
+         top edge, held through it, back to daylight padB below it */
+      var mk = 'linear-gradient(180deg,rgba(0,0,0,0) 0%,#000 ' + (padT/tot*100).toFixed(2)
+        + '%,#000 ' + ((padT+h)/tot*100).toFixed(2) + '%,rgba(0,0,0,0) 100%)';
+      duskBand.style.webkitMaskImage = mk; duskBand.style.maskImage = mk;
+    }
+  }
+
+  function settle(){ layoutSand(); requestAnimationFrame(layoutSand);
+                     setTimeout(layoutSand, 500); setTimeout(layoutSand, 1500); }
+  if (document.readyState === 'complete') settle(); else addEventListener('load', settle);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(settle);
+  addEventListener('resize', layoutSand);
+  layoutSand();
+})();
+</script>
+</body>
+</html>
