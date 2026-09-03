@@ -210,7 +210,11 @@ footer .shell{display:flex;align-items:center;justify-content:space-between;gap:
   text-transform:uppercase;color:var(--ink78);margin:0 0 18px}
 .herotype h1{max-width:13ch}
 .herotype .lede{margin-top:20px}
-.herotype .ask{margin-top:24px}
+/* where the copy stands is part of the light: top left in the white for the
+   high sun and the late sun, centred in the white above her when the sun is
+   behind her head. */
+.herotype.h-cc{text-align:center}
+.herotype.h-cc h1,.herotype.h-cc .lede{margin-left:auto;margin-right:auto}
 [data-key="light"].herotype,[data-key="light"].onphoto{
   text-shadow:0 0 2px rgba(255,255,255,.9),0 0 6px rgba(255,255,255,.85),
   0 0 18px rgba(255,255,255,.8),0 0 46px rgba(255,255,255,.6)}
@@ -218,7 +222,12 @@ footer .shell{display:flex;align-items:center;justify-content:space-between;gap:
   text-shadow:0 0 2px rgba(0,0,0,1),0 0 6px rgba(0,0,0,.95),
   0 0 18px rgba(0,0,0,.9),0 0 46px rgba(0,0,0,.7)}
 @media(max-width:640px){
-  .herotype{top:86px;padding:0 20px}
+  /* the words stand in the sun directly above her, so the opening reads as
+     one photograph — sun, then type in its light, then the scene — and never
+     as a block of type sitting on top of a picture. */
+  .herotype{top:auto;bottom:51vh;padding:0 20px}
+  .herotype .lede{max-width:31ch}
+  .herotype.h-cc .lede{max-width:29ch}
   .herotype .prehead{font-size:10.5px;letter-spacing:.19em;margin-bottom:13px}
   .herotype .lede{margin-top:15px;max-width:30ch}
   .herotype .ask{margin-top:18px}
@@ -517,12 +526,12 @@ html.static .orow .obar i{transition:none}
 
   /* ---------- 00 · HERO ---------- */
   function hero(b){
-    var type = '<div class="herotype fu">'
+    /* eyebrow, headline, lede. No button: in the opening it sat on her head,
+       and the ask belongs at the close. */
+    var type = '<div class="herotype fu h-' + (b.pos || 'tl') + '">'
       + (b.prehead ? '<p class="prehead">' + b.prehead + '</p>' : '')
       + '<h1>' + b.h + '</h1>'
-      + (b.after ? '<p class="lede">' + b.after + '</p>' : '')
-      + '<p><a class="ask" href="' + b.cta.href + '">' + b.cta.label
-      + '<span class="arrow" aria-hidden="true">&rarr;</span></a></p></div>';
+      + (b.after ? '<p class="lede">' + b.after + '</p>' : '') + '</div>';
     return '<section id="' + b.id + '" class="hero">' + fig(b.frame, type) + '</section>';
   }
 

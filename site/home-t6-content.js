@@ -44,8 +44,19 @@ var MARQUEE = [
   {q:'“The cutting-edge tool I didn’t know I needed.”', n:'Anja Žibert'}
 ];
 
-/* the one accent element on the page: the existing ask, twice. */
+/* the one accent element on the page: the existing ask. It lives at the
+   close only — in the opening it sat on her head, so the hero carries the
+   eyebrow, the headline and the lede and nothing else. */
 var ASK = {label:'Find your frequencies at zodiac.fm', href:'https://zodiac.fm'};
+
+/* THE OPENING, IN THREE LIGHTS. One template, one copy block; the sky, the
+   light layer and where the copy stands are the only differences.
+     ?hero=a  HIGH SUN, TOP LEFT      copy top left in the white
+     ?hero=b  SUN BEHIND HER          copy centred in the white above her
+     ?hero=c  LATE SUN, TOP RIGHT     copy top left in the silver           */
+var HERO = (new URLSearchParams(location.search).get('hero') || 'a').toLowerCase();
+if (['a','b','c'].indexOf(HERO) < 0) HERO = 'a';
+var HERO_POS = {a:'tl', b:'cc', c:'tl'}[HERO];
 
 /* =====================================================================
    INSTANCE A
@@ -66,11 +77,17 @@ var ZC_A = {
     prehead:'Experience yourself in sound',
     h:'Music, composed from <em>your birth&nbsp;chart.</em>',
     after:'Your exact birth moment becomes four personal frequencies, embedded inside music for meditation, visualization, work, or a walk on the beach.',
-    cta:ASK,
+    pos:HERO_POS,
+    /* ART DIRECTED PER BREAKPOINT. The wide frame cannot fill a phone: on a
+       375 screen the four boards and the listener span 1692 source pixels, so
+       the picture can only ever be a third of the viewport. The phone gets
+       P-163, the same woman on the same beach, cropped from the phone's edge
+       to the second board — she and the product fill the bottom half. The
+       desktop, which has the width for it, keeps P-123 and all four boards. */
     frame:{
-      pid:'P-123', h:'hero', focal:'50% 50%', focalM:'50% 100%', grade:'none',
-      src:T6 + 'p-123-hero.jpg',
-      srcMobile:T6 + 'p-123-hero-phone.jpg',
+      pid:'P-163 · P-123', h:'hero', focal:'50% 50%', focalM:'50% 100%', grade:'none',
+      src:T6 + 'p-123-hero-' + HERO + '.jpg',
+      srcMobile:T6 + 'p-163-hero-' + HERO + '-phone.jpg',
       alt:'A smiling listener in large headphones on a sunlit white beach, holding up a phone with her Zodiac playlist playing, four surfboards in violet, emerald, amber and rose standing in the sand behind her'
     }
   },
@@ -338,8 +355,8 @@ ZC_B.title = 'Zodiac.fm · Home Template T6 · Instance B';
   /* EDIT 1 — swap the hero photograph. One object, no template change. */
   byId('top').frame = {
     pid:'P-163', h:'hero', focal:'50% 50%', focalM:'50% 100%', grade:'none',
-    src:T6 + 'p-163-hero.jpg',
-    srcMobile:T6 + 'p-163-hero-phone.jpg',
+    src:T6 + 'p-163-hero-' + HERO + '.jpg',
+    srcMobile:T6 + 'p-163-hero-' + HERO + '-phone.jpg',
     alt:'A smiling listener in large headphones on a sunlit white beach, holding up a phone with her Zodiac playlist playing — the sun merging into the light above her head, four surfboards in violet, emerald, amber, and rose standing in the sand behind her'
   };
 
