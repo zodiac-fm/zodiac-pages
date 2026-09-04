@@ -1,0 +1,72 @@
+{
+ "version": 1,
+ "note": "Locked constants a checker enforces. Each cites the ledger directive that created it. Prose is not a constant; if it is not here it is not enforced.",
+ "constants": {
+  "testimonial_shape": {
+   "ledger": "fd-043 clause 1",
+   "why": "A short testimonial is one quote in one font, like Barbara's. A long testimonial keeps its lead line and its paragraph. The fix was only ever Debra's; generalising it broke Srini on home-t8.",
+   "row_marker": "class=\"vrow",
+   "quote_class": "tlead",
+   "detail_class": "tdetail",
+   "one_quote_one_font": [
+    "Debra Silverman",
+    "Barbara Ditlow"
+   ],
+   "keeps_lead_and_detail": [
+    "Srini Pillay"
+   ],
+   "unfiled": "The Srini exception (a long testimonial keeps its lead line and its paragraph) is a real correction with no ledger row yet; it is enforced from here until it is filed."
+  },
+  "no_numbered_section_labels": {
+   "ledger": "fd-028",
+   "why": "The numbered eyebrow labels (01 Voices, 02 Your Unique Frequencies) are system furniture a visitor does not need.",
+   "forbidden_class": "cue"
+  },
+  "no_call_to_action": {
+   "ledger": "fd-033",
+   "why": "No button in the nav, under the hero, or at the close on the home page. No violet fill.",
+   "forbidden_classes": [
+    "cta",
+    "btn-primary",
+    "button-cta"
+   ]
+  },
+  "hero_frame": {
+   "ledger": "fd-049, fd-050, fd-052",
+   "why": "The hero is the one place a stranger sees the product. Three separate lineages shipped a retired hero because nothing stopped them.",
+   "asset": "P-177",
+   "files": [
+    "hero-home-real-screen-01.jpg",
+    "hero-home-real-screen-01-mobile.jpg"
+   ],
+   "acceptance_test": "The lady in the cream knitted sweater, with a real modern iPhone at true 19.5:9 proportion, at believable size in her hand, carrying the current real app screen.",
+   "screen_source": "P-179 iPhone Real Screen 01 - playlist-ios-app-iphone-2026-09-03.png, unmodified, proportions preserved exactly",
+   "forbidden": [
+    "a sleeveless tank top on the hero woman",
+    "a home-button phone body",
+    "a screen aspect wider than 0.47",
+    "a drawn or warped phone in place of a photographed one"
+   ]
+  },
+  "hero_device_plate": {
+   "ledger": "fd-036, fd-049",
+   "why": "A phone on a page is a registered device-plate frame, never a painted or warped phone.",
+   "asset": "P-178",
+   "files": [
+    "hero-phone-real-screen-01.jpg"
+   ]
+  },
+  "retired_is_unreachable": {
+   "ledger": "fd-052",
+   "why": "The library is the gate. A retired number may stay on the pages that already carried it and may never appear anywhere new.",
+   "enforced_by": "python3 code/check_design_qa.py asset-ids  (rule 4, RETIRED NUMBER IN NEW USE)",
+   "retired_heroes": {
+    "P-163": "P-177",
+    "P-164": "P-178",
+    "P-123": "P-177",
+    "P-161": "P-177",
+    "P-104": "P-177"
+   }
+  }
+ }
+}

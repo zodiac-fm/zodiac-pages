@@ -745,11 +745,19 @@
      in section pixels, which clears every body block on the left and rakes
      down the print column on the right. */
   #voices{--ph:137.9%;--pt:0%;--pl:-32.22%}
+  /* PHONE, round 2. The first anchoring put the beam's source above the frame,
+     so the violet read as a fill. The phone plate is now a different crop - a
+     28px sliver of oak, the sheet's own top edge, and the band scaled so its
+     warm rim and its soft upper edge are INSIDE the frame: the rim rakes across
+     the headline, the band falls over the top of Srini's print and dies into
+     even paper 54px above his first line. The plate's foot is carried to
+     #F0F0EF, which is the section's own ground, so the sheet simply continues
+     below the plate with no seam. */
   @media(max-width:640px){
-    #voices{--ph:145.92%;--pt:-45.92%;--pl:auto}
+    #voices{--ph:42.37%;--pt:0%;--pl:auto}
     .vscene img,.vlight img{left:auto;right:0}
   }
-  body.vm #voices{--ph:145.92%;--pt:-45.92%;--pl:auto}
+  body.vm #voices{--ph:42.37%;--pt:0%;--pl:auto}
   body.vm .vscene img,body.vm .vlight img{left:auto;right:0}
 
   /* the PRINT: the real silver portrait, untouched, given a white border and a
@@ -814,10 +822,10 @@
   </div>
   <div class="field">
     <picture>
-      <source media="(max-width:640px)" srcset="assets/home-t7/hero-mobile.jpg">
-      <img src="assets/home-t7/hero-h8.jpg" alt="A smiling listener in large headphones on a sunlit white beach, holding up a phone with her Zodiac playlist playing — the sun merging into the light above her head, four surfboards in violet, emerald, amber, and rose standing in the sand behind her">
+      <source media="(max-width:640px)" srcset="assets/hero-home/hero-home-real-screen-01-mobile.jpg">
+      <img src="assets/hero-home/hero-home-real-screen-01.jpg" alt="A smiling listener in a cream knitted sweater and large headphones on a sunlit white beach, holding up a real iPhone showing the live zodiac.fm Playlist — the sun merging into the light above her head, four surfboards in violet, emerald, amber, and rose standing in the sand behind her">
     </picture>
-    <span class="pid">P-123</span>
+    <span class="pid">P-177</span>
   </div>
   <div id="zsun" class="zlight" aria-hidden="true" style="opacity:calc(.95*var(--atmo))"><img src="assets/d4l/d4l-sun-beam-fold.png" alt=""></div>
   <div id="zdrift" class="zlight" aria-hidden="true" style="opacity:calc(.9*var(--atmo))"><img src="assets/d4l/d4l-sun-beam-drift.png" alt=""></div>
@@ -835,7 +843,7 @@
        desktop plate above; both anchored so the band never crosses body copy. -->
   <div class="vscene" aria-hidden="true">
     <picture>
-      <source media="(max-width:640px)" srcset="assets/home-t8/voices-plate-phone.jpg">
+      <source media="(max-width:640px)" srcset="assets/home-t8/voices-plate-phone-v2.jpg">
       <img src="assets/home-t8/voices-plate-desk.jpg" alt="">
     </picture>
   </div>
@@ -879,8 +887,8 @@
        falls across the prints and the headline exactly as it falls on paper. -->
   <div class="vlight" aria-hidden="true">
     <picture>
-      <source media="(max-width:640px)" srcset="assets/home-t8/voices-light-phone.png">
-      <img src="assets/home-t8/voices-light-desk.png" alt="">
+      <source media="(max-width:640px)" srcset="assets/home-t8/voices-light-phone-v2.png">
+      <img src="assets/home-t8/voices-light-desk-v2.png" alt="">
     </picture>
   </div>
 </section>
