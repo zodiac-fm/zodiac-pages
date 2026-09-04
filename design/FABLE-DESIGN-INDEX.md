@@ -69,3 +69,4 @@ Each future lock appends exactly one row in this format:
 4. This index is updated at every lock, in the same worker turn as the lock.
 5. Every row cross-references its learning log entry id in
    `working/fable-design-learning-log-v1.md`. A row without an id is incomplete.
+- 2026-09-04 | Hero P-177 · Real Screen 01 | /Users/michaellovitch/zodiac-pages/site/assets/hero-home/hero-home-real-screen-01.jpg | https://zodiac-pages.vercel.app/site/styleguide-library#p-177 | LOCKED | spec: zodiac-pages/design/page-constants.json hero_frame | log entry: 2026-09-04 hero reversion

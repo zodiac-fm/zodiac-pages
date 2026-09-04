@@ -604,11 +604,15 @@
     <h1>Music, composed from <em>your birth&nbsp;chart.</em></h1>
   </div>
   <div class="field">
+    <!-- fd-053 (Michael 2026-09-04): the control's STRUCTURE is frozen (fd-024); its PICTURE is not.
+         This slot served retired P-123 - the tank-top hero with the home-button phone - and because
+         every round copies the control, it carried that picture into home-t7 and home-t8. Re-plated
+         to P-177. Do not point this back at a retired asset; check_design_qa.py asset-ids will fail. -->
     <picture>
-      <source media="(max-width:640px)" srcset="assets/d4j/d4j-hero-mobile.jpg">
-      <img src="assets/d4e/d4e-hero-h8.jpg" alt="A smiling listener in large headphones on a sunlit white beach, holding up a phone with her Zodiac playlist playing — the sun merging into the light above her head, four surfboards in violet, emerald, amber, and rose standing in the sand behind her">
+      <source media="(max-width:640px)" srcset="assets/hero-home/hero-home-real-screen-01-mobile.jpg">
+      <img src="assets/hero-home/hero-home-real-screen-01.jpg" alt="A smiling listener in a cream knitted sweater and large headphones on a sunlit white beach, holding up a real iPhone showing the live zodiac.fm Playlist — the sun merging into the light above her head, four surfboards in violet, emerald, amber, and rose standing in the sand behind her">
     </picture>
-    <span class="pid">P-123</span>
+    <span class="pid">P-177</span>
   </div>
   <div id="zsun" class="zlight" aria-hidden="true" style="opacity:calc(.95*var(--atmo))"><img src="assets/d4l/d4l-sun-beam-fold.png" alt=""></div>
   <div id="zdrift" class="zlight" aria-hidden="true" style="opacity:calc(.9*var(--atmo))"><img src="assets/d4l/d4l-sun-beam-drift.png" alt=""></div>

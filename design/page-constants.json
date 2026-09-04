@@ -67,6 +67,20 @@
     "P-161": "P-177",
     "P-104": "P-177"
    }
+  },
+  "bad_picture_never_stands": {
+   "ledger": "fd-053",
+   "why": "Michael 2026-09-04: \"never let a bad picture stand . they get archived to never use or we get this junk\". Marking a number retired is half the job; the picture has to come off every live surface and the file has to stop being reachable, or the next builder copies whatever the base is actually serving.",
+   "procedure": [
+    "1. Add the number to `retired` in brand/site-asset-index.json.",
+    "2. Re-plate EVERY live surface that shows it to the replacement, in the same session. Live surfaces are the pages listed in build_asset_index.py PAGES: the library, the styleguide, the control, and the current design-room rounds.",
+    "3. Move its file out of the working namespace to site/assets/_retired/ with `git mv`, UNLESS a frozen historical round still references it - those keep what they shipped.",
+    "4. Rebuild the index and run the gate. The number must report NOT IN USE on every live page.",
+    "5. Negative-test it: point a live page back at the retired file and confirm the gate fails, then revert."
+   ],
+   "live_surfaces_are_gated_by": "code/build_asset_index.py PAGES - a surface missing from that list is ungated, and that is how P-163 and P-164 stayed on /site/styleguide after the library had dropped them",
+   "enforced_by": "python3 code/check_design_qa.py asset-ids",
+   "known_gap": "code/archive.py is scoped to the vault repo and refuses paths in zodiac-pages, so step 3 is a manual `git mv` there until the tool takes a repo root."
   }
  }
 }
