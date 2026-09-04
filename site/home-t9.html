@@ -265,7 +265,7 @@
      black and white, because filling a field with colour cancels the pop it
      belongs to. Behind the words, so ink stays ink and contrast holds; behind
      the prints, so no colour ever reaches a face. */
-  #voices{position:relative;overflow:hidden;background:#F0F0EF}
+  #voices{position:relative;overflow:hidden;background:#D9D9D8}
   /* The mark is drawn on the TEXT, not on the paragraph: box-decoration-break
      clone gives every line its own stroke, so it ends where the words end and
      a short last line does not trail a tail of colour across empty paper. */
@@ -277,8 +277,8 @@
        ruled rectangle */
     background-image:
       linear-gradient(to bottom,
-        rgba(240,240,239,.62) 0%, rgba(240,240,239,0) 26%,
-        rgba(240,240,239,0) 74%, rgba(240,240,239,.62) 100%),
+        rgba(217,217,216,.62) 0%, rgba(217,217,216,0) 26%,
+        rgba(217,217,216,0) 74%, rgba(217,217,216,.62) 100%),
       linear-gradient(101deg,
         rgba(224,68,126,.05) 0%,
         rgba(232,98,154,.28) 9%,
@@ -291,29 +291,36 @@
   #voices .lit-faint{padding:.10em .28em;margin:0 -.28em;
     background-image:
       linear-gradient(to bottom,
-        rgba(240,240,239,.55) 0%, rgba(240,240,239,0) 30%,
-        rgba(240,240,239,0) 70%, rgba(240,240,239,.55) 100%),
+        rgba(217,217,216,.55) 0%, rgba(217,217,216,0) 30%,
+        rgba(217,217,216,0) 70%, rgba(217,217,216,.55) 100%),
       linear-gradient(101deg,
-        rgba(224,68,126,.02) 0%,
-        rgba(224,68,126,.11) 12%,
-        rgba(217,59,120,.16) 48%,
-        rgba(224,68,126,.10) 82%,
-        rgba(224,68,126,.02) 100%)}
+        rgba(224,68,126,.04) 0%,
+        rgba(232,98,154,.19) 10%,
+        rgba(224,68,126,.29) 30%,
+        rgba(217,59,120,.33) 47%,
+        rgba(224,68,126,.26) 70%,
+        rgba(232,98,154,.15) 90%,
+        rgba(224,68,126,.03) 100%)}
   /* the print beside the mark takes a whisper of it and throws its shadow away */
   #voices .vrow.lead .fport{box-shadow:-8px 14px 24px rgba(122,12,52,.10),
     inset -1px 0 0 rgba(255,196,216,.60)}
   #voices .vrow:not(.lead) .fport{box-shadow:0 14px 30px rgba(20,20,18,.12)}
 
-  /* ---------- the cut out of the hero (fd-057) ------------------------------
-     The hero ends in full beach sun; that light dies into the top of this
-     section instead of the two grounds meeting as one flat butt joint. It is
-     spent before the headline's first pixel, so no word ever sits on a shift. */
-  #voices::before{content:"";position:absolute;z-index:0;left:0;right:0;top:0;height:104px;
-    pointer-events:none;
-    background:linear-gradient(to bottom,
-      rgba(255,247,231,.85) 0%,
-      rgba(252,246,236,.42) 42%,
-      rgba(240,240,239,0) 100%)}
+  /* ---------- the cut out of the hero (fd-057, committed: Michael 2026-09-04)
+     The hero is blown-out beach sun on the page's own paper. Voices is a room
+     one clear stop down from it, the same neutral grey and not one degree
+     warmer — the cream band that stood here was the failure (fd-060).
+     The page does not butt one sheet against the other: it loses the light
+     across the empty gap between the hero's lede and the headline, and finds
+     it again below the last credential. Both ramps live entirely outside every
+     text block, so no word ever sits on a shift. */
+  #voices::before,#voices::after{content:"";position:absolute;z-index:0;left:0;right:0;
+    pointer-events:none}
+  #voices::before{top:0;height:96px;
+    background:linear-gradient(to bottom, #F0F0EF 0%, rgba(217,217,216,0) 100%)}
+  #voices::after{bottom:0;height:80px;
+    background:linear-gradient(to top, #F0F0EF 0%, rgba(217,217,216,0) 100%)}
+  #voices{padding-top:96px}
 
   /* ---------- the page scans left on desktop (fd-057) ----------------------- */
   @media(min-width:900px){
@@ -321,13 +328,17 @@
     #voices .shead > div{grid-column:auto}
   }
   @media (max-width:640px){
+    #voices{padding-top:72px}
     #voices::before{height:72px}
+    #voices::after{height:64px}
     /* the quote sits beside its print instead of wrapping a single orphan word
        under it; the bio already does this (.vrow .pwho), so the section keeps
        one idiom and the lit line stays a clean block */
     #voices .vrow:not(.lead) .tlead{overflow:hidden}
   }
+  body.vm #voices{padding-top:72px}
   body.vm #voices::before{height:72px}
+  body.vm #voices::after{height:64px}
   body.vm #voices .shead{display:block}
   body.vm #voices .vrow:not(.lead) .tlead{overflow:hidden}
   body.vm #voices .lit::after{height:130px;left:16%;right:16%;filter:blur(20px)}
@@ -385,7 +396,7 @@
 
   /* desktop chapter rhythm: joins measured one at a time (laws 29/30) */
   @media(min-width:901px){
-    #voices{padding-bottom:74px}
+    #voices{padding-bottom:80px}
     #frequencies{padding-top:80px;padding-bottom:60px}
     #how{padding-top:60px;padding-bottom:70px}
     #world{padding-top:60px;padding-bottom:84px}
