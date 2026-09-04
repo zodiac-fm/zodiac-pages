@@ -256,52 +256,79 @@
   .vrow.lead .tlead{font-size:28px}
   .vsep{border:0;border-top:1px solid var(--hair);margin:38px 0}
 
-  /* ---------- POOL (treatment, 2026-09-04) ----------------------------------
-     Colour arrives as light and lands on ONE line of type. The field around it
-     stays black and white: no tint anywhere else in the section, which is what
-     makes it a pop and not shading. Three parts, all behind the words:
-       .lit::after  the throw   - where the light comes from, above and out of frame
-       .lit::before the pool    - its footprint, tapered, centred on the line
-       the print    the bounce  - a rose whisper on the frame edge facing the pool,
-                                  its shadow thrown away from the light
-     Rules it answers: the pop is one thing you can point at; the field is emptied
-     so it can land; light is motivated and one-directional; never on a face. */
+  /* ---------- HIGHLIGHT (treatment, 2026-09-04; fd-054, fd-056) --------------
+     A mark of one brand colour on the line that carries the argument. It does
+     NOT pretend to be light: there is no source, no cone, no beam. Michael,
+     2026-09-04: "this is a text-highlight effect. the highlight does not beam
+     from anywhere it just is."
+     The whole point is the field around it. Everything else in this section is
+     black and white, because filling a field with colour cancels the pop it
+     belongs to. Behind the words, so ink stays ink and contrast holds; behind
+     the prints, so no colour ever reaches a face. */
   #voices{position:relative;overflow:hidden;background:#F0F0EF}
-  #voices .lit{position:relative;isolation:auto}
-  #voices .lit::before{content:"";position:absolute;z-index:-1;pointer-events:none;
-    left:-30px;right:-30px;top:-14px;bottom:-14px;transform:skewX(-2deg);
-    filter:blur(10px);
-    background:linear-gradient(100deg,
-      rgba(224,68,126,0) 0%,
-      rgba(232,98,154,.13) 11%,
-      rgba(224,68,126,.34) 29%,
-      rgba(217,59,120,.47) 45%,
-      rgba(224,68,126,.33) 62%,
-      rgba(232,98,154,.11) 85%,
-      rgba(224,68,126,0) 100%)}
-  #voices .lit::after{content:"";position:absolute;z-index:-1;pointer-events:none;
-    left:20%;right:20%;bottom:calc(100% - 12px);height:300px;
-    filter:blur(30px);
-    clip-path:polygon(46% 0%,54% 0%,78% 100%,22% 100%);
-    background:linear-gradient(to bottom,
-      rgba(245,140,180,.13) 0%,
-      rgba(238,111,160,.06) 58%,
-      rgba(224,68,126,.015) 100%)}
-  /* the prints answer the light: bounce on the edge facing it, shadow away from it */
+  /* The mark is drawn on the TEXT, not on the paragraph: box-decoration-break
+     clone gives every line its own stroke, so it ends where the words end and
+     a short last line does not trail a tail of colour across empty paper. */
+  #voices .lit{
+    -webkit-box-decoration-break:clone;box-decoration-break:clone;
+    padding:.13em .38em;margin:0 -.38em;border-radius:3px;
+    /* two layers: the mark, and a wash of the page's own paper over its top and
+       bottom edges so the stroke softens into the sheet instead of ending in a
+       ruled rectangle */
+    background-image:
+      linear-gradient(to bottom,
+        rgba(240,240,239,.62) 0%, rgba(240,240,239,0) 26%,
+        rgba(240,240,239,0) 74%, rgba(240,240,239,.62) 100%),
+      linear-gradient(101deg,
+        rgba(224,68,126,.05) 0%,
+        rgba(232,98,154,.28) 9%,
+        rgba(224,68,126,.44) 30%,
+        rgba(217,59,120,.50) 47%,
+        rgba(224,68,126,.39) 70%,
+        rgba(232,98,154,.22) 90%,
+        rgba(224,68,126,.04) 100%)}
+  /* the credential is just touched, so the quote still leads (fd-058) */
+  #voices .lit-faint{padding:.10em .28em;margin:0 -.28em;
+    background-image:
+      linear-gradient(to bottom,
+        rgba(240,240,239,.55) 0%, rgba(240,240,239,0) 30%,
+        rgba(240,240,239,0) 70%, rgba(240,240,239,.55) 100%),
+      linear-gradient(101deg,
+        rgba(224,68,126,.02) 0%,
+        rgba(224,68,126,.11) 12%,
+        rgba(217,59,120,.16) 48%,
+        rgba(224,68,126,.10) 82%,
+        rgba(224,68,126,.02) 100%)}
+  /* the print beside the mark takes a whisper of it and throws its shadow away */
   #voices .vrow.lead .fport{box-shadow:-8px 14px 24px rgba(122,12,52,.10),
     inset -1px 0 0 rgba(255,196,216,.60)}
   #voices .vrow:not(.lead) .fport{box-shadow:0 14px 30px rgba(20,20,18,.12)}
+
+  /* ---------- the cut out of the hero (fd-057) ------------------------------
+     The hero ends in full beach sun; that light dies into the top of this
+     section instead of the two grounds meeting as one flat butt joint. It is
+     spent before the headline's first pixel, so no word ever sits on a shift. */
+  #voices::before{content:"";position:absolute;z-index:0;left:0;right:0;top:0;height:104px;
+    pointer-events:none;
+    background:linear-gradient(to bottom,
+      rgba(255,247,231,.85) 0%,
+      rgba(252,246,236,.42) 42%,
+      rgba(240,240,239,0) 100%)}
+
+  /* ---------- the page scans left on desktop (fd-057) ----------------------- */
+  @media(min-width:900px){
+    #voices .shead{display:block;max-width:900px}
+    #voices .shead > div{grid-column:auto}
+  }
   @media (max-width:640px){
-    #voices .lit::before{left:-16px;right:-16px;top:-11px;bottom:-11px;filter:blur(8px)}
+    #voices::before{height:72px}
     /* the quote sits beside its print instead of wrapping a single orphan word
        under it; the bio already does this (.vrow .pwho), so the section keeps
        one idiom and the lit line stays a clean block */
     #voices .vrow:not(.lead) .tlead{overflow:hidden}
-    #voices .lit::after{height:130px;left:16%;right:16%;filter:blur(20px);
-      background:linear-gradient(to bottom,
-        rgba(245,140,180,.11) 0%, rgba(238,111,160,.05) 58%, rgba(224,68,126,.01) 100%)}
   }
-  body.vm #voices .lit::before{left:-16px;right:-16px;top:-11px;bottom:-11px;filter:blur(8px)}
+  body.vm #voices::before{height:72px}
+  body.vm #voices .shead{display:block}
   body.vm #voices .vrow:not(.lead) .tlead{overflow:hidden}
   body.vm #voices .lit::after{height:130px;left:16%;right:16%;filter:blur(20px)}
 
@@ -830,7 +857,7 @@
         <div class="fport"><img src="assets/d4k/d4k-face-srini.png" alt="Srini Pillay"><span class="pid">T-4</span></div>
         <div>
           <p class="kick">Neuroscience</p>
-          <p class="tlead lit">Zodiac.fm helps people access aspects of themselves that have always been there.</p>
+          <p class="tlead"><span class="lit">Zodiac.fm helps people access aspects of themselves that have always been there.</span></p>
           <p class="tdetail">Listening to your frequencies bypasses language and creates profound levels of self-awareness and coherence. This leads to clearer decisions, more authentic relationships, and expanded possibilities.</p>
           <p class="pwho">Srini Pillay, M.D.<small>Harvard-trained psychiatrist, brain-imaging researcher</small></p>
         </div>
@@ -840,8 +867,8 @@
         <div class="fport"><img src="assets/d4k/d4k-face-debra.png" alt="Debra Silverman"><span class="pid">T-5</span></div>
         <div>
           <p class="kick">Astrology</p>
-          <p class="tlead">This music tickled my soul. &hellip;Give it a try — you&rsquo;ll love it.</p>
-          <p class="pwho">Debra Silverman<small>Astrologer to Sting, Jennifer Aniston, and More</small></p>
+          <p class="tlead">This music tickled my soul. &hellip;Give it a try, you&rsquo;ll love it.</p>
+          <p class="pwho">Debra Silverman<small><span class="lit lit-faint">Astrologer to Sting, Jennifer Aniston, and More</span></small></p>
         </div>
       </div>
       <hr class="vsep">
@@ -849,8 +876,8 @@
         <div class="fport"><img src="assets/d4k/d4k-face-barbara.png" alt="Barbara Ditlow"><span class="pid">T-8</span></div>
         <div>
           <p class="kick">Human Design</p>
-          <p class="tlead">Zodiac core frequencies translate this unique imprint into sound, bypassing the mind and speaking directly to the body.</p>
-          <p class="pwho">Barbara Ditlow<small>Human Design Mentor, Master Practitioner, Trained/Certified/Endorsed by Ra&nbsp;Uru&nbsp;Hu&nbsp;(Founder of Human&nbsp;Design)</small></p>
+          <p class="tlead">Zodiac frequencies translate your unique imprint into sound, bypassing the mind and speaking directly to the body.</p>
+          <p class="pwho">Barbara Ditlow<small><span class="lit lit-faint">Human Design Mentor, Master Practitioner, Trained/Certified/Endorsed by Ra&nbsp;Uru&nbsp;Hu&nbsp;(Founder of Human&nbsp;Design)</span></small></p>
         </div>
       </div>
     </div>
