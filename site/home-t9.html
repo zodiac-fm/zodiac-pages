@@ -705,27 +705,15 @@
   /* A.6 the grey slab is gone: the four waves sit on flat paper between hairlines */
   #frequencies .chart{padding:24px 0 18px;margin-top:16px;
     border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
-  #frequencies .crow{grid-template-columns:36px 172px minmax(0,1fr) 132px}
 
   /* E. the frequencies play */
-  .cplayc{position:relative;width:36px}
-  .cplay{width:36px;height:36px;border-radius:50%;padding:0;background:none;cursor:pointer;
-    border:1px solid rgba(20,20,18,.30);color:var(--ink);
-    display:flex;align-items:center;justify-content:center;transition:border-color .3s}
-  .cplay:hover{border-color:var(--ink)}
-  .cplay i{display:block;width:0;height:0;margin-left:3px;
-    border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:10px solid currentColor}
-  .cplay.on i{width:11px;height:12px;margin-left:0;border:0;
-    background:linear-gradient(90deg,currentColor 0 4px,transparent 4px 7px,currentColor 7px 11px)}
   /* J.4: the "Hear it" label is removed at both sizes (at 375 it touched the Core wave). */
   .crow.playing .cwave img{animation:cpulse 1.6s ease-in-out infinite}
   @keyframes cpulse{0%,100%{opacity:.85}50%{opacity:1}}
   @media (prefers-reduced-motion: reduce){.crow.playing .cwave img{animation:none}}
   @media(max-width:640px){
-    #frequencies .crow{grid-template-columns:36px minmax(0,1fr) 96px}
     #frequencies .crow .cwave{grid-column:1 / -1}
   }
-  body.vm #frequencies .crow{grid-template-columns:36px minmax(0,1fr) 96px}
   body.vm #frequencies .crow .cwave{grid-column:1 / -1}
 
   /* F. the proof strip is STRUCK (Iris round 1, J.1): it repeated the night's
@@ -919,26 +907,22 @@
       </div>
     </div>
     <div class="chart fu">
-      <div class="crow" data-clip="assets/home-t7/clip-core.mp3">
-        <div class="cplayc"><button class="cplay" type="button" aria-label="Play a sample of the Core frequency"><i></i></button></div>
+      <div class="crow">
         <div class="cname"><b>Core</b><span>Who you are</span></div>
         <div class="cwave"><img src="assets/d4e/d4e-wave-core.png" alt="The Core frequency wave, violet"></div>
         <div class="chz num">486<small>Hz</small></div>
       </div>
-      <div class="crow" data-clip="assets/home-t7/clip-love.mp3">
-        <div class="cplayc"><button class="cplay" type="button" aria-label="Play a sample of the Love frequency"><i></i></button></div>
+      <div class="crow">
         <div class="cname"><b>Love</b><span>How you relate</span></div>
         <div class="cwave"><img src="assets/d4e/d4e-wave-love.png" alt="The Love frequency wave, rose"></div>
         <div class="chz num">302<small>Hz</small></div>
       </div>
-      <div class="crow" data-clip="assets/home-t7/clip-vitality.mp3">
-        <div class="cplayc"><button class="cplay" type="button" aria-label="Play a sample of the Vitality frequency"><i></i></button></div>
+      <div class="crow">
         <div class="cname"><b>Vitality</b><span>Your energy</span></div>
         <div class="cwave"><img src="assets/d4e/d4e-wave-vitality.png" alt="The Vitality frequency wave, amber"></div>
         <div class="chz num">652<small>Hz</small></div>
       </div>
-      <div class="crow" data-clip="assets/home-t7/clip-abundance.mp3">
-        <div class="cplayc"><button class="cplay" type="button" aria-label="Play a sample of the Abundance frequency"><i></i></button></div>
+      <div class="crow">
         <div class="cname"><b>Abundance</b><span>Opportunity</span></div>
         <div class="cwave"><img src="assets/d4e/d4e-wave-abundance.png" alt="The Abundance frequency wave, emerald"></div>
         <div class="chz num">813<small>Hz</small></div>
@@ -1331,30 +1315,6 @@
   addEventListener('load',all);addEventListener('resize',all);all();})();</script>
 
 <script>
-  /* E. one clip at a time */
-  (function(){
-    var rows=[].slice.call(document.querySelectorAll('#frequencies .crow[data-clip]'));
-    var audios=rows.map(function(r){
-      var a=new Audio(); a.preload='none'; a.src=r.dataset.clip; return a;
-    });
-    function stop(i){
-      audios[i].pause(); audios[i].currentTime=0;
-      rows[i].classList.remove('playing');
-      rows[i].querySelector('.cplay').classList.remove('on');
-    }
-    rows.forEach(function(r,i){
-      var btn=r.querySelector('.cplay');
-      audios[i].addEventListener('ended',function(){ stop(i); });
-      btn.addEventListener('click',function(){
-        var playing=r.classList.contains('playing');
-        rows.forEach(function(_,j){ stop(j); });
-        if(!playing){
-          r.classList.add('playing'); btn.classList.add('on');
-          audios[i].play().catch(function(){ stop(i); });
-        }
-      });
-    });
-  })();
   /* the CONCEPT badge takes its cream variant while the night is behind it */
   (function(){
     var b=document.getElementById('zbadge'); if(!b) return;
