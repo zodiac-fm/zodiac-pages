@@ -336,9 +336,12 @@
   #voices{padding-top:96px}
 
   /* ---------- the page scans left on desktop (fd-057) ----------------------- */
+  /* fd-057: the page scans left. The hero headline starts at the rail, so every
+     section heading starts there — not the Voices heading alone. The 150px
+     column the headings used to be pushed off was empty at every width. */
   @media(min-width:900px){
-    #voices .shead{display:block;max-width:900px}
-    #voices .shead > div{grid-column:auto}
+    .shead{display:block;max-width:900px}
+    .shead > div{grid-column:auto}
   }
   @media (max-width:640px){
     #voices{padding-top:72px}
