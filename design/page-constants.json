@@ -80,7 +80,13 @@
    ],
    "live_surfaces_are_gated_by": "code/build_asset_index.py PAGES - a surface missing from that list is ungated, and that is how P-163 and P-164 stayed on /site/styleguide after the library had dropped them",
    "enforced_by": "python3 code/check_design_qa.py asset-ids",
-   "known_gap": "code/archive.py is scoped to the vault repo and refuses paths in zodiac-pages, so step 3 is a manual `git mv` there until the tool takes a repo root."
+   "known_gap": "code/archive.py is scoped to the vault repo and refuses paths in zodiac-pages, so step 3 is a manual `git mv` there until the tool takes a repo root.",
+   "file_level_supersession": {
+    "why": "A testimonial number is the PERSON, so a bad portrait cannot be retired without retiring the person - and the retired-NUMBER gate therefore waved Debra's broken portrait straight back onto a live page, green, on the day it was replaced. A bad FILE now dies on its own under a number that stays alive.",
+    "declare_in": "brand/site-asset-index.json -> superseded_files: {filename: {replaced_by, reason, superseded, ledger}}",
+    "enforced_by": "python3 code/check_design_qa.py asset-ids  (rule 5b, SUPERSEDED FILE IN NEW USE) - and publish preflight runs it",
+    "semantics": "Allowance is per FILE, not per asset, and only ever SHRINKS: a superseded file may stay on the frozen pages that already carried it and may never appear anywhere new. The failure names the replacement and the reason."
+   }
   }
  }
 }
