@@ -103,6 +103,30 @@
     "Verified 11/11 on 2026-09-05."
    ],
    "scraper_note": "build_asset_index.py and _design_qa/asset_ids.py each carry their own copy of srcs_of(). Keep them in step - patching only one made the gate report a phantom as UNFILED. Both now drop JS-built srcs: a page writing src={'assets/d4e-wave-' + k + '.png'} had been filed as a real asset under that literal name."
+  },
+  "colour_coverage_floor": {
+   "ledger": "fd-037",
+   "why": "No run longer than one phone screen without a real coloured object. A visitor scrolling a silver page needs the colour to arrive before the page reads as empty; two blank screens in a row is where the page stops being a world and becomes a document.",
+   "enforced_by": "python3 code/check_page.py census <url>",
+   "viewport": 375,
+   "screen_px": 812,
+   "run_limit_screens": 1,
+   "min_share_per_screen": 0.002,
+   "real_colour": "chroma = max(R,G,B) - min(R,G,B) >= 18 on 0-255, AND max(R,G,B) >= 40 so photographic shadow and the NIGHT sheet are not counted as colour. The two thresholds are named COLOUR_CHROMA_MIN and COLOUR_MIN_VALUE in code/check_page.py.",
+   "min_share_note": "0.2 percent of a 375x812 screen is about 610 px of real colour - a 25x25 patch. Calibrated on home-t9 2026-09-05, where the measurement is bimodal with nothing in between: every screen carrying a coloured object read 0.43 to 8.26 percent, and every screen without one read exactly 0.0000 percent (highest chroma anywhere in that 5,684 px stretch: 15, under the threshold). The floor is set at half the smallest real-object reading so the verdict does not hinge on one picture's bottom edge. Re-measure it, do not guess it."
+  },
+  "ladder_alternation": {
+   "ledger": "fd-062 clause 3",
+   "why": "No two neighbouring sections share a rung. The ladder is how the page changes rooms; two sections on the same sheet is a join with no light in it, and the reader stops registering the change.",
+   "enforced_by": "python3 code/check_page.py preflight <page.html>",
+   "resolves": "every top-level <section> in DOM order, from the page's own ladder table (#section-id {--sheet:var(--lv-NAME)} and .class {--sheet:...}); a section with no declaration takes the default in background:var(--sheet,var(--lv-day))",
+   "rungs": [
+    "sun",
+    "dawn",
+    "day",
+    "room",
+    "night"
+   ]
   }
  }
 }
