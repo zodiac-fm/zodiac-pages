@@ -86,7 +86,23 @@
     "declare_in": "brand/site-asset-index.json -> superseded_files: {filename: {replaced_by, reason, superseded, ledger}}",
     "enforced_by": "python3 code/check_design_qa.py asset-ids  (rule 5b, SUPERSEDED FILE IN NEW USE) - and publish preflight runs it",
     "semantics": "Allowance is per FILE, not per asset, and only ever SHRINKS: a superseded file may stay on the frozen pages that already carried it and may never appear anywhere new. The failure names the replacement and the reason."
-   }
+   },
+   "what_the_gate_blocks": {
+    "retired_number": "a retired P/G number on any page beyond the frozen ones it already had (rule 4)",
+    "superseded_file": "a specific dead FILE, even under a live person number (rule 5b) - names its replacement",
+    "unfiled_image": "an image on a tracked page with no number (rule 1)",
+    "missing_file": "a page pointing at a file that is not on disk (rule 5) - a broken frame is the same defect as a wrong picture"
+   },
+   "prove_it_still_bites": [
+    "Each rule is proved by making it go RED, never by watching it stay green.",
+    "1. clean repo: python3 code/check_design_qa.py asset-ids  -> PASS",
+    "2. point a live page at assets/d4e/d4e-hero-h8.jpg -> RETIRED NUMBER IN NEW USE",
+    "3. point one at assets/_retired/d4k-face-debra-SUPERSEDED.png -> SUPERSEDED FILE IN NEW USE, and publish preflight -> PUBLISH BLOCKED",
+    "4. point one at a name that does not exist -> UNFILED IMAGE, then rebuild the index -> FILE MISSING ON DISK",
+    "5. restore the page and the index, rebuild, confirm PASS.",
+    "Verified 11/11 on 2026-09-05."
+   ],
+   "scraper_note": "build_asset_index.py and _design_qa/asset_ids.py each carry their own copy of srcs_of(). Keep them in step - patching only one made the gate report a phantom as UNFILED. Both now drop JS-built srcs: a page writing src={'assets/d4e-wave-' + k + '.png'} had been filed as a real asset under that literal name."
   }
  }
 }
