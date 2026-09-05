@@ -273,15 +273,12 @@
   #zdrift,#zbloom{-webkit-mask-image:linear-gradient(to bottom,#000 0,#000 calc(100% - 165px),transparent 100%);
     mask-image:linear-gradient(to bottom,#000 0,#000 calc(100% - 165px),transparent 100%)}
 
-  #voices{position:relative;overflow:hidden;background:#D9D9D8}
+
   /* The mark is drawn on the TEXT, not on the paragraph: box-decoration-break
      clone gives every line its own stroke, so it ends where the words end and
      a short last line does not trail a tail of colour across empty paper. */
   /* the room is darker, so the ink in it is darker: body copy, labels and bios
      hold their separation on this sheet the way they did on the page's paper */
-  #voices .tdetail{color:rgba(20,20,18,.86)}
-  #voices .kick{color:rgba(20,20,18,.52)}
-  #voices .pwho small{color:rgba(20,20,18,.80)}
   #voices .lit{
     -webkit-box-decoration-break:clone;box-decoration-break:clone;
     padding:.13em .38em;margin:0 -.38em;border-radius:3px;
@@ -319,20 +316,61 @@
     inset -2px 0 0 rgba(240,150,182,.55)}
   #voices .vrow:not(.lead) .fport{box-shadow:0 14px 30px rgba(20,20,18,.12)}
 
-  /* ---------- the cut out of the hero (fd-057, committed: Michael 2026-09-04)
-     The hero is blown-out beach sun on the page's own paper. Voices is a room
-     one clear stop down from it, the same neutral grey and not one degree
-     warmer — the cream band that stood here was the failure (fd-060).
-     The page does not butt one sheet against the other: it loses the light
-     across the empty gap between the hero's lede and the headline, and finds
-     it again below the last credential. Both ramps live entirely outside every
-     text block, so no word ever sits on a shift. */
-  #voices::before,#voices::after{content:"";position:absolute;z-index:0;left:0;right:0;
-    pointer-events:none}
-  #voices::before{top:0;height:96px;
-    background:linear-gradient(to bottom, #F0F0EF 0%, rgba(217,217,216,0) 100%)}
-  #voices::after{bottom:0;height:80px;
-    background:linear-gradient(to top, #F0F0EF 0%, rgba(217,217,216,0) 100%)}
+
+  /* ================= THE LADDER =============================================
+     The page is one roll of film and every section is an exposure of it. Five
+     rungs of the SAME neutral light — never a hue, never a warm pixel. A section
+     is assigned a rung; the rung carries the sheet and the inks that hold on it.
+
+     The whole system is the table below. Content changes constantly and never
+     touches this: moving a section up or down the ladder is one line, and the
+     joins take care of themselves because every section fades in from whatever
+     is above it.
+
+       SUN    the page opened up — the beach, the world, the close
+       DAWN   the lift out of the night, the brightest recovery
+       DAY    the page's own paper, the default
+       ROOM   one stop down — indoors, where you lean in and read
+       NIGHT  the bottom of the ladder, the proof passage
+     ------------------------------------------------------------------------ */
+  :root{
+    --lv-sun:#F5F5F4; --lv-dawn:#F7F7F6; --lv-day:#F0F0EF;
+    --lv-room:#D9D9D8; --lv-night:#1A1620;
+    /* the inks that hold on a light sheet */
+    --lv-body:rgba(20,20,18,.78); --lv-label:rgba(20,20,18,.42);
+    --lv-bio:rgba(20,20,18,.64);  --lv-hair:rgba(20,20,18,.12);
+  }
+  main > section,body > section{position:relative;overflow:hidden;
+    background:var(--sheet,var(--lv-day))}
+  /* one ramp per section, at its top, fading in from the rung above it.
+     No section needs to know what comes after it. */
+  main > section::before,body > section::before{content:"";position:absolute;
+    z-index:0;left:0;right:0;top:0;height:var(--ramp,96px);pointer-events:none;
+    background:linear-gradient(to bottom, var(--above,var(--lv-day)) 0%,
+      color-mix(in srgb, var(--above,var(--lv-day)) 0%, transparent) 100%)}
+
+  /* --- the table: which section sits on which rung, and what is above it --- */
+  #voices      {--sheet:var(--lv-room); --above:var(--lv-day)}
+  #frequencies {--sheet:var(--lv-sun);  --above:var(--lv-room)}
+  #how         {--sheet:var(--lv-room); --above:var(--lv-sun)}
+  #world       {--sheet:var(--lv-sun);  --above:var(--lv-room)}
+  #results     {--sheet:var(--lv-night);--above:var(--lv-sun);  --ramp:0}
+  #study       {--sheet:var(--lv-night);--above:var(--lv-night);--ramp:0}
+  #more-results{--sheet:var(--lv-dawn); --above:var(--lv-night);--ramp:0}
+  #music       {--sheet:var(--lv-day);  --above:var(--lv-dawn)}
+  #story       {--sheet:var(--lv-room); --above:var(--lv-day)}
+  .finale      {--sheet:var(--lv-sun);  --above:var(--lv-room)}
+
+  /* the ROOM rung is a stop down, so its ink comes down with it */
+  #voices,#how,#story{--lv-body:rgba(20,20,18,.86); --lv-label:rgba(20,20,18,.52);
+    --lv-bio:rgba(20,20,18,.80); --lv-hair:rgba(20,20,18,.17)}
+  #voices .tdetail,#how .tdetail,#story .tdetail,
+  #voices .quiet,#how .quiet,#story .quiet,
+  #how p,#story p{color:var(--lv-body)}
+  #voices .kick,#how .kick,#story .kick,
+  #how .steps3 .kick{color:var(--lv-label)}
+  #voices .pwho small,#how figcaption,#story figcaption{color:var(--lv-bio)}
+  #voices .vsep,#how hr,#story hr{border-top-color:var(--lv-hair)}
   #voices{padding-top:96px}
 
   /* ---------- the page scans left on desktop (fd-057) ----------------------- */
@@ -345,16 +383,14 @@
   }
   @media (max-width:640px){
     #voices{padding-top:72px}
-    #voices::before{height:72px}
-    #voices::after{height:64px}
+    #voices{--ramp:72px}
     /* the quote sits beside its print instead of wrapping a single orphan word
        under it; the bio already does this (.vrow .pwho), so the section keeps
        one idiom and the lit line stays a clean block */
     #voices .vrow:not(.lead) .tlead{overflow:hidden}
   }
   body.vm #voices{padding-top:72px}
-  body.vm #voices::before{height:72px}
-  body.vm #voices::after{height:64px}
+  body.vm #voices{--ramp:72px}
   body.vm #voices .shead{display:block}
   body.vm #voices .vrow:not(.lead) .tlead{overflow:hidden}
   body.vm #voices .lit::after{height:130px;left:16%;right:16%;filter:blur(20px)}
