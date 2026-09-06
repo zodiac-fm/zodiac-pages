@@ -66,7 +66,12 @@
     "P-123": "P-177",
     "P-161": "P-177",
     "P-104": "P-177"
-   }
+   },
+   "retired_design_room_frames": {
+    "P-184": "P-207",
+    "P-182": "P-206"
+   },
+   "retired_design_room_frames_why": "fd-070, fd-071 (2026-09-06): P-184 was P-160's cut scene with a warped screenshot on a painted phone, never filed in the library; P-182 carried its pop on a coffee cup. Replacements built by workers, filed in the library 8-6, live on home-t11."
   },
   "bad_picture_never_stands": {
    "ledger": "fd-053",
