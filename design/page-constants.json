@@ -40,7 +40,7 @@
     "hero-home-real-screen-01-mobile.jpg"
    ],
    "acceptance_test": "The lady in the cream knitted sweater, with a real modern iPhone at true 19.5:9 proportion, at believable size in her hand, carrying the current real app screen.",
-   "screen_source": "P-179 iPhone Real Screen 01 - playlist-ios-app-iphone-2026-09-03.png, unmodified, proportions preserved exactly",
+   "screen_source": "P-208 The Phone, Frame 04 Build (carrying iPhone Real Screen 01 under the bezel frame); never a separate screen paste",
    "forbidden": [
     "a sleeveless tank top on the hero woman",
     "a home-button phone body",
@@ -49,11 +49,19 @@
    ]
   },
   "hero_device_plate": {
-   "ledger": "fd-036, fd-049",
-   "why": "A phone on a page is a registered device-plate frame, never a painted or warped phone.",
-   "asset": "P-178",
+   "ledger": "fd-036, fd-049, fd-073",
+   "why": "A phone on a page is the registered device-plate frame, never a painted or warped phone. fd-073 (2026-09-06): the device is THE WHOLE PHONE built the App Store Frame 04 way (real screen UNDER the bezel frame at rx 118, island as hardware, 1920 wide, whole body); P-178 retired for a square screenshot pasted over the bezel.",
+   "asset": "P-208",
    "files": [
-    "hero-phone-real-screen-01.jpg"
+    "phone-frame04-build-full.png",
+    "phone-frame04-build-cutout.png"
+   ],
+   "construction": "working/istore-app-visuals/render-frame-04-combine-current-v2.js constants; working/fable-design/device-plate/build_plate.js",
+   "forbidden": [
+    "a screenshot pasted on top of the bezel",
+    "a square screen corner",
+    "the body below 1920 px wide before the final scene resize",
+    "P-178 or any derivative of it"
    ]
   },
   "retired_is_unreachable": {
@@ -65,7 +73,8 @@
     "P-164": "P-178",
     "P-123": "P-177",
     "P-161": "P-177",
-    "P-104": "P-177"
+    "P-104": "P-177",
+    "P-178": "P-208"
    },
    "retired_design_room_frames": {
     "P-184": "P-207",
