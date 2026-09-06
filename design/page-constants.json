@@ -127,6 +127,44 @@
     "room",
     "night"
    ]
+  },
+  "ladder_steps": {
+   "ledger": "fd-064, fd-065",
+   "why": "The ladder only works if the reader can SEE the change of light. Two rungs closer than 4.5 L* are one sheet with extra CSS, a rung that carries a hue tints every photograph standing on it, and a night under L* 22 stops being a room at night and becomes a hole in the page. T9 shipped all three at once: dawn, sun and day sat inside 1.8 L* of each other and the night was a violet #1A1620 at L* 8.11.",
+   "enforced_by": "python3 code/check_page.py preflight <page.html>",
+   "reads": "the five --lv-dawn / --lv-sun / --lv-day / --lv-room / --lv-night hex tokens declared in the page's own CSS. Only a literal hex is read; a rung written as a var() or a colour function is not a measurable step and the rule says so rather than guessing.",
+   "neutral_tolerance": 1,
+   "neutral_rule": "R must equal G, and B must sit within neutral_tolerance of R. fd-062: never a hue, never a warm pixel. The house pattern is R=G with B one less, which is a chroma of 1; T9's night was a chroma of 10 and read violet on every screen.",
+   "light_rungs": [
+    "dawn",
+    "sun",
+    "day",
+    "room"
+   ],
+   "min_step_lstar": 4.5,
+   "min_step_note": "CIELAB L*, sRGB D65, computed in code/check_page.py (_srgb_to_lstar). L* is used and not the hex value because it is perceptual: the same step is the same visible amount of light at the top of the ladder and at the bottom. The four light rungs are SORTED BY LIGHTNESS first and the step is checked between neighbours in that order, so renaming or re-ordering the ladder cannot hide a collapsed pair. Measured 2026-09-05: T10 steps 7.13 / 5.62 / 5.20, T9 steps 8.10 / 1.74 / 0.69.",
+   "night_lstar": [
+    22,
+    34
+   ],
+   "night_lstar_note": "Photographic night, not pitch black (fd-065). The band is the sky of the bank's own night frames, measured 24-34 on 2026-09-05; the floor sits just under the measured low so a slightly deeper night is still allowed and a void is not, and the ceiling is where night stops reading as night. T10's #40403F measures L* 27.06. Re-measure it against the frames, do not guess it."
+  },
+  "night_no_warm_pixels": {
+   "ledger": "fd-065",
+   "why": "No cream, no warm pixel. The night sheet is the one place a warm cast is invisible to the builder and obvious to the eye - the retired --cream ink, an amber bloom, a candlelit gradient all read as neutral in the CSS and as firelight on the screen. A picture may be warm, because a lamp inside a photograph is the photograph; what may never be warm is the page around it.",
+   "enforced_by": "python3 code/check_page.py warm <url>",
+   "scope": "every top-level <section> on the --lv-night rung, at 375 and 1440, over the full stitched render. A page declares the rung either in the section's own class (class=\"set-night\", the T10 form) or in a table of ids (#results{--sheet:var(--lv-night)}, the T9 form); the checker asks the rendered section for its computed --sheet, so neither form can hide from the rule.",
+   "hue_band_deg": [
+    15,
+    70
+   ],
+   "chroma_min": 11,
+   "max_warm_px_outside_img": 0,
+   "warm_pixel": "hue on the HSV circle inside hue_band_deg, AND chroma = max(R,G,B) - min(R,G,B) > chroma_min on 0-255. The defaults are named WARM_HUE_LO, WARM_HUE_HI and WARM_CHROMA_MIN in code/check_page.py; these values are the authority.",
+   "hue_band_note": "15 degrees is past red and 70 is short of green, so the wedge is exactly the cream / amber / gold family and a violet or green cast is another rule's business.",
+   "chroma_note": "12 sits deliberately UNDER the census's COLOUR_CHROMA_MIN of 18: the census hunts a real coloured OBJECT, this hunts a CAST, and a cast is weaker than an object by definition. MEASURED on 2026-09-05, not guessed, and the measurement is bimodal with nothing in between. On T10's clean night, 99 percent of the section sits at chroma 7 or under and 99.9 percent at 11 or under (the 5 percent grain film is the whole of that spread); only 875 pixels of 1,180,875 clear 11, and every one of them is inside a photograph. On T9's night, every warm pixel outside the pictures measures chroma 13 or 14, and 2,236 of the 2,968 in #study are exactly rgba(246,241,232) - the retired --cream ink, verbatim. The threshold is set at 12 because that is the empty gap between the two.",
+   "outside_img_only": "Warm pixels are counted twice: inside the union of the <img> boxes that intersect the section, and outside it. Only the OUTSIDE count decides the verdict. Every visible <img> counts, with no decorative exemption, because the question is about the page and not about the alt text.",
+   "fixed_chrome": "Localized fixed or sticky chrome is hidden before the capture: the browser paints it once per screen, so a stitched full-length render would carry one copy of it per screen lying across the night. Full-bleed fixed layers - the backdrop plate, the grain film - are kept, because a warm cast one of them lays over the section is exactly the defect this rule names."
   }
  }
 }
