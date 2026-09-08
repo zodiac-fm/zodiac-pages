@@ -4,958 +4,1404 @@
   This file IS the current style guide. Edit THIS file — never fork a numbered copy
   and never hand anyone a versioned URL for this surface.
   ZFM-CURRENT: /site/styleguide
-  ZFM-INTERNAL-VERSION: 8-1
+  ZFM-INTERNAL-VERSION: 9-0
   To bump the version: copy this file to site/styleguide-<n>.html
   as a frozen snapshot FIRST, then edit this file and raise ZFM-INTERNAL-VERSION.
   Rule: Michael, 2026-08-26 — "always just have the current one be the main url string".
   Applies to reference surfaces only (libraries, style guides, directories),
   never to landers, sites, or design rounds, which stay versioned.
 
-  8-0 merges two generations into one: the treatment system is the spine, and the
-  tokens, type voices, copy grammar, FAQ, app screens and gradient chapters come
-  across from 7-3, rewritten to the light world. The full bank is the library at
-  /site/styleguide-library.
+  9-0 (2026-09-08) rebuilds this surface as a designer's handbook for building a
+  Zodiac page: the five settings, how a page is lit, the ten section templates,
+  the effects, type and furniture measured off the live page, the never list,
+  and the page recipes. Every picture in it is a crop cut from a live render of
+  site/home-t12.html by code/build_styleguide_crops.py in the vault, so the next
+  lock regenerates them. The guide is now set in the world it teaches — the
+  page's own papers and inks, Switzer, no cream — instead of the dark stage.
+  The photo bank, the picture-judging craft, the light and texture chapters and
+  the testimonial bank move to /site/styleguide-library. 8-1 is frozen at
+  site/styleguide-8-1.html and keeps everything removed here.
+
+  Revised the same day: every section card and every effect now links to the
+  place on the live page that carries it, and on a phone a section card shows
+  its phone crop with the desktop crop behind a toggle.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zodiac.fm Site Styleguide 8-0 · The Treatment System</title>
+<title>The Zodiac Page System · Style Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
 <style>
   @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype'); font-weight:400; }
   @font-face { font-family:'Switzer'; src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype'); font-weight:600; }
 
+  /* The papers and inks are copied from site/home-t12.html so every crop in
+     this guide sits on the real paper it was cut from. */
   :root{
-    --stage:#0B0712; --cream:#FBF8F3; --cream82:rgba(251,248,243,.82); --cream58:rgba(251,248,243,.58); --cream40:rgba(251,248,243,.40);
-    --hair:rgba(251,248,243,.13);
-    --violet:#6521C9; --violet-deep:#38007A; --violet-soft:#D2C8FF; --violet-glint:#7A4AE0;
-    --amber:#F0B45A;
-    --serif:'Cormorant Garamond',Georgia,serif;
+    --dawn:#FFFFFE;
+    --sun:#F0F0EF;
+    --day:#E0E0DF;
+    --room:#CCCCCB;
+    --night:#40403F;
+
+    --paper:var(--sun);
+    --ink:#141412;
+    --ink-strong:rgba(20,20,18,.82);
+    --ink-body:rgba(20,20,18,.74);
+    --ink-label:rgba(20,20,18,.66);
+    --hair:rgba(20,20,18,.14);
+    --hair-firm:rgba(20,20,18,.24);
+
+    --core:#6521C9; --love:#B90044; --vitality:#FF9112; --abundance:#12A56E;
+
     --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
+    --serif:'Cormorant Garamond',Georgia,serif;
   }
+
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{background:var(--stage);color:var(--cream);font-family:var(--sans);font-size:19px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  img{max-width:100%}
+  html{scroll-behavior:smooth;background:var(--paper)}
+  body{background:var(--paper);color:var(--ink-body);font-family:var(--sans);
+       font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img{max-width:100%;display:block}
+  a{color:inherit}
 
-  .wrap{max-width:1140px;margin:0 auto;padding:0 32px}
-  section{padding:104px 0;border-bottom:1px solid var(--hair)}
-  header.masthead{padding:64px 0 80px;border-bottom:1px solid var(--hair)}
+  /* ---------------- shell ---------------- */
+  .frame{max-width:1460px;margin:0 auto;padding:0 22px 120px}
+  @media(min-width:1080px){
+    .frame{display:grid;grid-template-columns:264px minmax(0,1fr);gap:64px;padding:0 44px 140px}
+  }
 
-  .eyebrow{font:600 13px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:26px}
-  h1,.h1{font:500 76px/1.03 var(--serif);letter-spacing:-.01em;color:var(--cream)}
-  h2,.h2{font:500 52px/1.08 var(--serif);letter-spacing:-.005em;color:var(--cream)}
-  h3,.h3{font:600 22px/1.3 var(--sans);color:var(--cream)}
-  p.body,.body{font:400 19px/1.65 var(--sans);color:var(--cream82);max-width:34em}
-  .lede{font:400 23px/1.55 var(--sans);color:var(--cream82);max-width:32em}
-  .statement{font:500 27px/1.35 var(--serif);font-style:italic;color:var(--cream);max-width:26em}
-  .num{font-family:var(--sans);font-style:normal;font-weight:400;font-size:.94em;letter-spacing:0}
-  .bandcount{display:inline;margin:0 0 0 14px;color:rgba(251,248,243,.42);font-size:13px;letter-spacing:.02em;font-weight:400;font-family:var(--sans);font-style:normal}
+  /* ---------------- the contents ---------------- */
+  .rail{display:none}
+  @media(min-width:1080px){
+    .rail{display:block;position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;
+          padding:38px 0 60px;border-right:1px solid var(--hair)}
+  }
+  .rail .railtop{font:600 12px/1.3 var(--sans);letter-spacing:.18em;text-transform:uppercase;
+                 color:var(--ink-label);margin-bottom:20px}
+  nav.contents ol{list-style:none}
+  nav.contents > ol > li{margin-bottom:16px}
+  nav.contents > ol > li > a{display:block;font:600 15px/1.34 var(--sans);color:var(--ink);
+                             text-decoration:none;padding:3px 14px 3px 0}
+  nav.contents > ol > li > a:hover{text-decoration:underline}
+  nav.contents ol ol{margin:5px 0 0}
+  nav.contents ol ol li a{display:block;font:400 13.5px/1.45 var(--sans);color:var(--ink-body);
+                          text-decoration:none;padding:3px 14px 3px 13px;border-left:1px solid var(--hair)}
+  nav.contents ol ol li a:hover{color:var(--ink);border-left-color:var(--ink)}
 
-  /* the masthead banner */
-  .banner{background:rgba(101,33,201,.20);border:1px solid rgba(210,200,255,.34);border-radius:8px;padding:26px 28px;margin:0 auto;max-width:1140px}
-  .bannerwrap{padding:26px 32px 0}
-  .banner .tag{font:600 12px/1 var(--sans);letter-spacing:.20em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:14px}
-  .banner .line{font:600 25px/1.32 var(--sans);color:var(--cream)}
-  .banner .sub{margin-top:12px;font:400 16px/1.55 var(--sans);color:var(--cream82)}
-  .banner .date{margin-top:12px;font:600 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:rgba(251,248,243,.52)}
+  .drawer{margin:0 0 34px;background:var(--day);border-bottom:1px solid var(--hair);
+          position:sticky;top:0;z-index:20}
+  @media(min-width:1080px){.drawer{display:none}}
+  .drawer > summary{list-style:none;cursor:pointer;padding:15px 22px;
+        font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink)}
+  .drawer > summary::-webkit-details-marker{display:none}
+  .drawer > summary::after{content:"▾";float:right;font-size:13px}
+  .drawer[open] > summary::after{content:"▴"}
+  .drawer .drawerin{padding:0 22px 24px;max-height:70vh;overflow-y:auto}
 
-  /* frames */
-  .photogrid{display:grid;grid-template-columns:1fr 1fr;gap:52px 32px;margin-top:40px}
-  figure.photo{margin:0}
-  figure.photo img{width:100%;max-width:100%;display:block;border-radius:4px}
-  figcaption{border-top:1px solid var(--hair);margin-top:14px;padding-top:12px;font:400 14px/1.5 var(--sans);color:var(--cream58)}
-  /* Michael's label law: the frame ID rides LARGE on every review surface */
-  figcaption .pid{display:block;color:var(--cream);font:600 30px/1.05 var(--sans);letter-spacing:.02em;margin-bottom:6px}
-  figcaption .ttl{display:block;color:var(--cream);font:600 19px/1.3 var(--sans);margin-bottom:8px}
-  figcaption .recipe{display:block;font:400 14.5px/1.6 var(--sans);color:var(--cream82)}
-  figcaption .recipe i{font-style:normal;font-weight:600;letter-spacing:.14em;font-size:11px;text-transform:uppercase;color:var(--violet-soft);margin-right:8px}
-  figcaption .dual{display:inline-block;margin-bottom:10px;font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--violet-soft);background:rgba(101,33,201,.22);border:1px solid rgba(210,200,255,.26);border-radius:4px;padding:7px 9px}
-  figcaption .flag{display:block;margin-top:12px;font:400 13.5px/1.55 var(--sans);color:rgba(240,180,90,.86);background:rgba(240,180,90,.10);border-left:2px solid var(--amber);border-radius:0 4px 4px 0;padding:10px 12px}
-  figcaption .flag b{display:block;font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:6px}
+  /* ---------------- masthead ---------------- */
+  header.masthead{padding:54px 0 8px}
+  @media(min-width:1080px){header.masthead{padding:78px 0 8px}}
+  .kicker{font:600 12px/1 var(--sans);letter-spacing:.20em;text-transform:uppercase;
+          color:var(--ink-label);margin-bottom:22px}
+  h1{font:600 54px/1.05 var(--serif);color:var(--ink);letter-spacing:.004em;max-width:16em}
+  @media(min-width:1080px){h1{font-size:74px}}
+  .standfirst{margin-top:26px;font-size:21px;line-height:1.55;color:var(--ink-strong);max-width:34em}
+  .built{margin-top:26px;padding-top:16px;border-top:1px solid var(--hair);
+         font-size:14.5px;color:var(--ink-label);max-width:38em}
 
-  ul.zlist{list-style:none;margin-top:30px;max-width:38em}
-  ul.zlist li{position:relative;padding:11px 0 11px 34px;color:var(--cream82)}
-  ul.zlist li::before{content:"";position:absolute;left:0;top:1.22em;width:16px;height:2px;background:var(--violet-glint)}
-  ul.zlist li b{color:var(--cream);font-weight:600}
+  /* ---------------- chapters and cards ---------------- */
+  .chapter{padding-top:22px}
+  .chaphead{background:var(--room);padding:34px 26px;margin:64px 0 40px}
+  @media(min-width:1080px){.chaphead{padding:42px 40px;margin:96px 0 48px}}
+  .chaphead .cno{font:600 11.5px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;
+                 color:rgba(20,20,18,.70);margin-bottom:16px}
+  .chaphead h2{font:600 34px/1.1 var(--serif);color:var(--ink);max-width:18em}
+  @media(min-width:1080px){.chaphead h2{font-size:46px}}
+  .chaphead p{margin-top:16px;font-size:17px;line-height:1.58;color:rgba(20,20,18,.82);max-width:40em}
+  .totop{display:inline-block;margin-top:20px;font:600 11px/1 var(--sans);letter-spacing:.14em;
+         text-transform:uppercase;color:rgba(20,20,18,.66);text-decoration:none;
+         border-bottom:1px solid var(--hair-firm);padding-bottom:4px}
+  .totop:hover{color:var(--ink)}
 
-  .subhead{margin-top:64px;font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);padding-bottom:10px;border-bottom:1px solid var(--hair)}
-  .note{margin-top:24px;font:400 14px/1.55 var(--sans);color:var(--cream40);max-width:46em}
-  .pend{margin-top:26px;border:1px dashed rgba(210,200,255,.28);border-radius:4px;padding:28px 26px;font:400 15px/1.62 var(--sans);color:var(--cream58);max-width:46em}
-  .pend b{color:var(--cream82);font-weight:600}
+  .card{padding:44px 0;border-top:1px solid var(--hair)}
+  .card:first-of-type{border-top:none;padding-top:8px}
+  .card h3{font:600 25px/1.24 var(--sans);color:var(--ink);letter-spacing:.002em;max-width:22em}
+  .card h3 .quoted{font-family:var(--serif);font-weight:600;font-size:1.12em}
+  .card .sub{margin-top:9px;font-size:16.5px;line-height:1.6;color:var(--ink-body);max-width:40em}
+  p+p{margin-top:14px}
+  .lede{font-size:19px;line-height:1.58;color:var(--ink-strong);max-width:36em}
 
-  /* excluded: text rows, no images */
-  .exrow{border-bottom:1px solid var(--hair);padding:15px 0;display:block}
-  .exrow .pid{display:inline-block;min-width:74px;font:600 17px/1.3 var(--sans);color:var(--cream)}
-  .exrow .ttl{font:600 15px/1.3 var(--sans);color:var(--cream82)}
-  .exrow .recipe{display:block;margin-top:5px;font:400 14px/1.55 var(--sans);color:var(--cream58)}
-  .exrow .verdict{font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:rgba(240,180,90,.8)}
+  ul.plain{list-style:none;max-width:44em;margin-top:20px}
+  ul.plain li{position:relative;padding:11px 0 11px 26px;border-bottom:1px solid var(--hair);
+              font-size:16.5px;line-height:1.58;color:var(--ink-body)}
+  ul.plain li::before{content:"";position:absolute;left:0;top:1.28em;width:13px;height:1px;background:var(--ink-label)}
+  ul.plain li b{color:var(--ink);font-weight:600}
 
-  /* grounds */
-  .grounds{display:grid;grid-template-columns:1fr;gap:52px;margin-top:40px}
-  .gfig img{width:100%;display:block;border-radius:4px}
-  .gfig figcaption .pid{font-size:34px}
-  .reserves{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:52px}
-  .reserves .pid{font-size:20px}
-  .law{margin-top:52px;border:2px solid rgba(240,180,90,.55);background:rgba(240,180,90,.09);border-radius:8px;padding:30px 30px}
-  .law .tag{font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:14px}
-  .law h3{font:600 27px/1.18 var(--sans);color:var(--cream);margin-bottom:16px}
-  .law p{font:400 16px/1.62 var(--sans);color:var(--cream82);max-width:44em}
-  .law .src{margin-top:16px;font:600 11px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:rgba(240,180,90,.8)}
-  .killline{margin-top:44px;border-top:1px solid var(--hair);padding-top:22px;font:400 15px/1.62 var(--sans);color:var(--cream58);max-width:46em}
-  .killline b{color:var(--cream82);font-weight:600;letter-spacing:.10em;text-transform:uppercase;font-size:12px;display:block;margin-bottom:8px}
-  .gate{margin-top:26px;border:1px solid rgba(210,200,255,.28);border-radius:6px;padding:22px 24px;font:400 15px/1.62 var(--sans);color:var(--cream82);max-width:46em}
-  .gate b{display:block;color:var(--violet-soft);font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px}
+  /* the facts strip under a section card */
+  dl.facts{margin-top:22px;display:grid;grid-template-columns:1fr;gap:0}
+  @media(min-width:700px){dl.facts{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:36px}}
+  dl.facts > div{padding:13px 0;border-top:1px solid var(--hair)}
+  dl.facts dt{font:600 10.5px/1 var(--sans);letter-spacing:.17em;text-transform:uppercase;
+              color:var(--ink-label);margin-bottom:7px}
+  dl.facts dd{font-size:16px;line-height:1.55;color:var(--ink-strong)}
+  dl.facts .wide{grid-column:1/-1}
 
-  /* ---- PART TWO ---- */
-  .partmark{padding:96px 0 0}
-  .partmark .kick{font:600 12px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:22px}
-  .partmark h2{font-size:62px;line-height:1.04}
-  .chapnum{font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:24px}
+  /* ---------------- swatches ---------------- */
+  .colours{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:30px}
+  @media(min-width:760px){.colours{grid-template-columns:repeat(4,minmax(0,1fr))}}
+  .colours .sw{border:1px solid var(--hair);display:flex;flex-direction:column}
+  .colours .chipx{height:112px}
+  .colours .nm{padding:13px 14px 16px;background:var(--dawn);flex:1}
+  .colours .nm b{display:block;font:600 16px/1.3 var(--sans);color:var(--ink)}
+  .colours .nm span{display:block;margin-top:5px;font-size:14px;line-height:1.5;color:var(--ink-label)}
 
-  ol.rules{list-style:none;counter-reset:r;margin-top:36px;max-width:44em}
-  ol.rules li{counter-increment:r;position:relative;padding:16px 0 16px 62px;border-bottom:1px solid var(--hair);font:400 17px/1.6 var(--sans);color:var(--cream82)}
-  ol.rules li::before{content:counter(r);position:absolute;left:0;top:15px;width:42px;text-align:left;font:600 20px/1.3 var(--sans);color:var(--violet-soft);letter-spacing:.02em}
-  ol.rules li b{color:var(--cream);font-weight:600}
+  .papers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:28px}
+  @media(min-width:860px){.papers{grid-template-columns:repeat(5,minmax(0,1fr))}}
+  .papers .pp{border:1px solid var(--hair)}
+  .papers .pp .sheet{height:118px;display:flex;align-items:flex-end;padding:12px}
+  .papers .pp .sheet em{font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;font-style:normal}
+  .papers .pp .txt{padding:12px 13px 16px;background:var(--dawn);font-size:14px;line-height:1.5;color:var(--ink-body)}
+  .papers .pp .txt b{display:block;color:var(--ink);font-weight:600;font-size:15px;margin-bottom:5px}
 
-  .masterlaw{margin-top:34px;border-left:3px solid var(--violet-glint);padding:6px 0 6px 26px}
-  .masterlaw .t{font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:12px}
-  .masterlaw .l{font:500 33px/1.22 var(--serif);font-style:italic;color:var(--cream);max-width:20em}
+  /* ---------------- pictures ---------------- */
+  figure{margin:0}
+  .shot img{width:100%;border:1px solid var(--hair)}
+  .shot figcaption{margin-top:10px;font-size:14px;line-height:1.5;color:var(--ink-label);max-width:44em}
+  .shot figcaption b{color:var(--ink);font-weight:600}
 
-  .grouphead{margin-top:44px;max-width:836px;font:600 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--violet-soft);padding-bottom:9px;border-bottom:1px solid var(--hair)}
-  .grouplist{list-style:none;margin-top:6px;max-width:836px}
-  .grouplist li{padding:13px 0;border-bottom:1px solid var(--hair);font:400 16px/1.58 var(--sans);color:var(--cream82)}
+  .pair{display:grid;grid-template-columns:1fr;gap:26px;margin-top:26px;align-items:start}
+  @media(min-width:820px){.pair{grid-template-columns:250px minmax(0,1fr);gap:30px}
+    /* a row whose left column is an explanation, not a phone crop, needs a
+       readable measure: 250px is a caption width, not a paragraph width. */
+    .pair.explain{grid-template-columns:minmax(0,390px) minmax(0,1fr);gap:40px}}
+  .pair .tall{max-height:1180px;overflow:hidden;border:1px solid var(--hair)}
+  .pair .tall img{border:none}
+  .pair .wide{max-height:1180px;overflow:hidden;border:1px solid var(--hair)}
+  .pair .wide img{border:none}
+  /* on a phone a section template is 3 000 px of picture; the card shows the top of
+     it so the chapter stays walkable, and the desktop panel beside it carries more. */
+  @media(max-width:819px){.pair .tall,.pair .wide{max-height:760px}}
+  /* A link from every section card and every effect to the place on the live page
+     that carries it, so a designer can go and look at the real thing. */
+  .seelive{margin-top:15px;font:600 11.5px/1.5 var(--sans);letter-spacing:.13em;text-transform:uppercase}
+  .seelive a{color:var(--ink-strong);text-decoration:none;
+    border-bottom:1px solid var(--hair);padding-bottom:3px}
+  .seelive a:hover{border-bottom-color:var(--ink)}
+  .seelive a::after{content:" \2197";letter-spacing:0}
 
-  .exfig{margin-top:44px}
-  .exfig img{width:100%;display:block;border-radius:4px;border:1px solid var(--hair)}
-  .exfig figcaption{border-top:1px solid var(--hair);margin-top:14px;padding-top:12px;max-width:46em}
-  .exfig figcaption .ttl{display:block;color:var(--cream);font:600 12px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px}
-  .exfig figcaption .cap{display:block;font:400 15px/1.6 var(--sans);color:var(--cream82)}
-  .exfig figcaption .cap b{color:rgba(240,180,90,.9);font-weight:600}
+  /* On a phone a section card shows its phone crop only; the desktop crop sits
+     behind a plain toggle. At desktop width the toggle is opened by script and
+     its label is hidden, so the two crops stand side by side as before. */
+  .deskview{min-width:0}
+  .deskview > summary{list-style:none;cursor:pointer;display:inline-block;
+    padding:10px 16px;background:var(--day);border:1px solid var(--hair);
+    font:600 11.5px/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-strong)}
+  .deskview > summary::-webkit-details-marker{display:none}
+  .deskview > summary::after{content:"+";margin-left:12px;font-size:14px;letter-spacing:0}
+  .deskview[open] > summary::after{content:"\2013"}
+  .deskview .dvbody{margin-top:16px}
+  @media(min-width:820px){
+    .deskview > summary{display:none}
+    .deskview .dvbody{margin-top:0}
+  }
 
-  table.jobs{width:100%;border-collapse:collapse;margin-top:36px;font-family:var(--sans)}
-  table.jobs th{text-align:left;font:600 10.5px/1.3 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--violet-soft);padding:0 16px 12px 0;border-bottom:1px solid var(--hair);vertical-align:bottom}
-  table.jobs td{padding:18px 16px 18px 0;border-bottom:1px solid var(--hair);font:400 14.5px/1.55 var(--sans);color:var(--cream82);vertical-align:top}
-  table.jobs td.job{font:600 15px/1.35 var(--sans);color:var(--cream);letter-spacing:.02em;white-space:nowrap}
-  table.jobs td.dont{color:rgba(240,180,90,.82)}
-  table.jobs td a{color:var(--violet-soft);text-decoration:none;border-bottom:1px solid rgba(210,200,255,.34);white-space:nowrap}
-  table.jobs .dash{color:var(--cream40)}
+  .caplbl{margin-top:9px;font:600 10.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-label)}
 
-  .tgrid{display:grid;grid-template-columns:1fr 1fr;gap:32px 24px}
-  .tdef{font:500 19px/1.36 var(--serif);font-style:italic;color:var(--cream);margin-top:12px}
-  .tblock figcaption .pid{font-size:25px}
-  .tblock figcaption .ttl{font-size:16px}
-  .tblock figcaption .recipe{font-size:13.5px;line-height:1.55}
-  .tblock{padding:46px 0;border-top:1px solid var(--hair);display:grid;grid-template-columns:236px 1fr;gap:40px;align-items:start}
-  .tblock:first-of-type{border-top:none;padding-top:26px}
-  .tblock h2{font-size:33px;line-height:1.06}
-  .thead{position:sticky;top:28px}
-  .banline{margin-top:30px;border-left:3px solid rgba(240,180,90,.7);background:rgba(240,180,90,.08);padding:22px 24px;font:400 16px/1.62 var(--sans);color:var(--cream82);max-width:44em;border-radius:0 5px 5px 0}
-  .banline b{color:var(--amber);font-weight:600}
-  .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:34px}
-  .g3 figcaption .pid{font-size:22px}
-  .morelink{display:inline-block;margin-top:32px;font:600 14px/1.4 var(--sans);letter-spacing:.04em;color:var(--violet-soft);text-decoration:none;border:1px solid rgba(210,200,255,.3);border-radius:9px;padding:14px 20px}
-  .morelink span{color:var(--cream58);font-weight:400}
+  .settingrow{display:grid;grid-template-columns:1fr;gap:24px;margin-top:30px}
+  @media(min-width:760px){.settingrow{grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}}
+  .settingrow figure img{border:1px solid var(--hair)}
+  .settingrow figcaption{margin-top:9px;font-size:13.5px;line-height:1.48;color:var(--ink-label)}
+  .settingrow figcaption b{display:block;color:var(--ink);font:600 11px/1 var(--sans);
+        letter-spacing:.16em;text-transform:uppercase;margin-bottom:6px}
+
+  /* the page's ladder, one row per section */
+  .ladder{margin-top:30px;border-top:1px solid var(--hair)}
+  .ladder .rung{display:grid;grid-template-columns:96px minmax(0,1fr);gap:20px;
+                padding:18px 0;border-bottom:1px solid var(--hair);align-items:center}
+  @media(min-width:760px){.ladder .rung{grid-template-columns:132px minmax(0,1.15fr) minmax(0,1fr);gap:28px}}
+  .ladder .rung img{border:1px solid var(--hair)}
+  .ladder .rung .nm{font:600 16px/1.34 var(--sans);color:var(--ink)}
+  .ladder .rung .st{font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-label);margin-top:8px}
+  @media(min-width:760px){.ladder .rung .st{margin-top:0}}
+  .ladder .rung .fx{font-size:15px;line-height:1.5;color:var(--ink-body)}
+
+  /* ---------------- specimens ---------------- */
+  .spec{padding:26px 0;border-top:1px solid var(--hair)}
+  .spec .nm{font:600 10.5px/1 var(--sans);letter-spacing:.17em;text-transform:uppercase;
+            color:var(--ink-label);margin-bottom:14px}
+  .spec .use{margin-top:12px;font-size:15px;line-height:1.55;color:var(--ink-body);max-width:40em}
+  .sp-h1{font:600 74px/1.02 var(--serif);color:var(--ink);letter-spacing:.004em}
+  .sp-h2{font:600 54px/1.06 var(--serif);color:var(--ink)}
+  .sp-h1 em,.sp-h2 em{font-style:italic;font-weight:500}
+  .sp-lede{font:400 22px/1.55 var(--sans);color:var(--ink-strong);max-width:28em}
+  .sp-body{font:400 18px/1.65 var(--sans);color:var(--ink-body);max-width:34em}
+  .sp-label{font:600 11px/1.65 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-label)}
+  .sp-quote{font:600 28px/1.32 var(--serif);color:var(--ink);max-width:20em}
+  .sp-name{font:600 14px/1.65 var(--sans);color:var(--ink)}
+  .sp-cred{font:400 12.5px/1.62 var(--sans);color:var(--ink-strong);letter-spacing:.02em}
+  .sp-stat{font:600 50px/1 var(--sans);color:var(--ink);letter-spacing:-.01em}
+  .sp-stat small{font-size:.44em;font-weight:600;margin-left:2px}
+  .sp-fine{font:400 14px/1.55 var(--sans);color:var(--ink-label);max-width:36em}
+  .sp-rule{border:0;border-top:1px solid rgba(20,20,18,.17);margin:22px 0;max-width:34em}
   @media(max-width:760px){
-    .tblock{display:block;grid-template-columns:none}
-    .thead{position:static}
-    .tgrid{grid-template-columns:1fr;gap:40px;margin-top:24px}
-    .g3{grid-template-columns:1fr;gap:36px}
-    .tsec{padding:56px 0}
-    .tsec h2{font-size:28px}
-    .tdef{font-size:20px}
-  }
-  .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:34px}
-  .toc a{font:600 11px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--violet-soft);text-decoration:none;border:1px solid rgba(210,200,255,.26);border-radius:5px;padding:9px 11px}
-
-
-  /* ---- THE DICTATION LAYER: spec tables + source tags ---- */
-  table.spec{width:100%;border-collapse:collapse;margin-top:14px;font-family:var(--sans)}
-  table.spec th{text-align:left;font:600 10px/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--violet-soft);padding:0 14px 11px 0;border-bottom:1px solid var(--hair);vertical-align:bottom;white-space:nowrap}
-  table.spec td{padding:14px 14px 14px 0;border-bottom:1px solid var(--hair);font:400 13.5px/1.5 var(--sans);color:var(--cream82);vertical-align:top}
-  table.spec td.el{font:600 14px/1.35 var(--sans);color:var(--cream)}
-  table.spec td.el code{display:block;margin-top:4px;font:400 11.5px/1.4 var(--sans);color:var(--cream40);letter-spacing:.02em}
-  table.spec td.tok{color:var(--violet-soft);white-space:nowrap}
-  table.spec td .n{font-variant-numeric:tabular-nums;color:var(--cream)}
-  table.spec .dash{color:var(--cream40)}
-  table.spec tr.grp td{border-bottom:none;padding:26px 0 4px;font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:rgba(240,180,90,.85)}
-
-  .srctag{display:inline-block;margin-right:8px;font:600 10px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;border-radius:3px;padding:5px 7px;vertical-align:1px}
-  .srctag.m{color:#B7E3CE;background:rgba(18,165,110,.16);border:1px solid rgba(18,165,110,.42)}
-  .srctag.p{color:var(--violet-soft);background:rgba(101,33,201,.22);border:1px solid rgba(210,200,255,.30)}
-  .srcnote{margin-top:20px;font:400 14.5px/1.6 var(--sans);color:var(--cream58);max-width:52em}
-  .srcnote b{color:var(--cream82);font-weight:600}
-
-  .twolaws{margin-top:48px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
-  .twolaws .one{border-left:3px solid var(--amber);background:rgba(240,180,90,.08);border-radius:0 6px 6px 0;padding:26px 26px}
-  .twolaws .one .t{font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:14px}
-  .twolaws .one .l{font:500 32px/1.18 var(--serif);font-style:italic;color:var(--cream)}
-
-  ol.howto{list-style:none;counter-reset:h;margin-top:30px;max-width:52em}
-  ol.howto li{counter-increment:h;position:relative;padding:17px 0 17px 66px;border-bottom:1px solid var(--hair);font:400 17px/1.55 var(--sans);color:var(--cream82)}
-  ol.howto li::before{content:counter(h);position:absolute;left:0;top:14px;font:600 26px/1.2 var(--sans);color:var(--violet-soft)}
-  ol.howto li b{color:var(--cream);font-weight:600}
-
-  .bulletdemo{display:flex;flex-wrap:wrap;gap:14px 34px;margin-top:26px;align-items:center}
-  .bulletdemo span{font:600 11px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--cream82)}
-  .bulletdemo span i{display:inline-block;width:18px;height:4px;border-radius:2px;margin-right:8px;vertical-align:2px}
-  .bulletdemo span.dot i{width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:0}
-
-  @media(max-width:760px){
-    .twolaws{grid-template-columns:1fr;gap:18px}
-    .twolaws .one .l{font-size:23px}
-    ol.howto li{padding:15px 0 15px 46px;font-size:16px}
-    ol.howto li::before{font-size:21px;top:13px}
-    /* spec tables become stacked cards — no sideways scrolling on the phone */
-    table.spec,table.spec tbody,table.spec tr,table.spec td{display:block;width:100%}
-    table.spec thead{display:none}
-    table.spec tr{border:1px solid var(--hair);border-radius:6px;padding:16px 15px;margin-bottom:16px}
-    table.spec tr.grp{border:none;padding:20px 0 0;margin-bottom:6px}
-    table.spec td{border-bottom:none;padding:0 0 10px 0}
-    table.spec td:last-child{padding-bottom:0}
-    table.spec td.el{font-size:17px;margin-bottom:10px}
-    table.spec td[data-label]::before{content:attr(data-label);display:block;font:600 9.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:4px}
+    .sp-h1{font-size:40px;line-height:1.05}
+    .sp-h2{font-size:33px;line-height:1.12}
+    .sp-lede{font-size:20px}
+    .sp-quote{font-size:22px}
+    .sp-stat{font-size:30px}
   }
 
-  @media(max-width:1024px){
-    .photogrid{grid-template-columns:1fr 1fr}
-  }
-  @media(max-width:760px){
-    .photogrid{grid-template-columns:1fr;gap:44px}
-    .reserves{grid-template-columns:1fr;gap:44px}
-    .bannerwrap{padding:20px 20px 0}
-    .banner{padding:20px 20px}
-    .banner .line{font-size:19px;line-height:1.34}
-    .banner .sub{font-size:15px}
-    body{font-size:17px}
-    .wrap{padding:0 20px}
-    section{padding:64px 0}
-    header.masthead{padding:44px 0 52px}
-    h1,.h1{font-size:38px;line-height:1.06}
-    h2,.h2{font-size:30px;line-height:1.12}
-    p.body,.body{font-size:16px;line-height:1.6}
-    .lede{font-size:18px}
-    .statement{font-size:21px}
-    .eyebrow{font-size:12px;margin-bottom:18px}
-    .law{padding:22px 20px}
-    .law h3{font-size:21px;line-height:1.22}
-    .law p{font-size:15px}
-    figcaption .pid{font-size:26px}
-    figcaption .ttl{font-size:17px}
-    figcaption{font-size:13px}
-    .exrow .pid{display:block;min-width:0;margin-bottom:2px}
-    .partmark{padding:64px 0 0}
-    .partmark h2{font-size:32px;line-height:1.1}
-    .masterlaw .l{font-size:24px}
-    .masterlaw{padding-left:18px}
-    ol.rules li{padding:14px 0 14px 44px;font-size:16px}
-    ol.rules li::before{width:32px;font-size:18px;top:13px}
-    .grouplist li{font-size:15px}
-    /* the jobs table becomes stacked cards */
-    table.jobs,table.jobs tbody,table.jobs tr,table.jobs td{display:block;width:100%}
-    table.jobs thead{display:none}
-    table.jobs tr{border:1px solid var(--hair);border-radius:6px;padding:18px 16px;margin-bottom:18px}
-    table.jobs td{border-bottom:none;padding:0 0 12px 0}
-    table.jobs td:last-child{padding-bottom:0}
-    table.jobs td.job{white-space:normal;font-size:19px;margin-bottom:10px}
-    table.jobs td[data-label]::before{content:attr(data-label);display:block;font:600 10px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--violet-soft);margin-bottom:5px}
-    table.jobs td a{white-space:normal}
-  }
+  /* ---------------- never list ---------------- */
+  ol.never{list-style:none;counter-reset:n;margin-top:26px;max-width:46em}
+  ol.never li{counter-increment:n;position:relative;padding:18px 0 18px 52px;
+              border-bottom:1px solid var(--hair)}
+  ol.never li::before{content:counter(n);position:absolute;left:0;top:17px;
+        font:600 19px/1.3 var(--sans);color:var(--ink-label)}
+  ol.never li b{display:block;font:600 17px/1.35 var(--sans);color:var(--ink);margin-bottom:6px}
+  ol.never li span{font-size:16px;line-height:1.56;color:var(--ink-body)}
 
-  /* --- guide page: shorter than the library by design --- */
-  .wrap{max-width:1000px}
-  section{padding:68px 0}
-  header.masthead{padding:48px 0 56px}
-  .partmark{padding:60px 0 0}
-  .partmark h2{font-size:48px}
-  .exfig{margin-top:34px;max-width:560px}
-  .exfig img{border-radius:3px}
-  ol.rules{margin-top:28px}
-  ol.rules li{padding:13px 0 13px 56px;font-size:16.5px}
-  .grouplist li{padding:11px 0}
-  .law{margin-top:38px;padding:26px 26px}
-  .law h3{font-size:24px}
-  @media(max-width:760px){
-    .wrap{max-width:none}
-    section{padding:52px 0}
-    .partmark h2{font-size:30px}
-    .tblock{padding:40px 0}
-    .tblock h2{font-size:26px}
-    .tdef{font-size:19px}
-    .exfig{max-width:none}
-  }
+  /* ---------------- tables ---------------- */
+  .scroller{overflow-x:auto;margin-top:28px;-webkit-overflow-scrolling:touch}
+  table.recipe{width:100%;min-width:640px;border-collapse:collapse}
+  table.recipe th{text-align:left;font:600 10.5px/1.3 var(--sans);letter-spacing:.16em;
+        text-transform:uppercase;color:var(--ink-label);padding:0 18px 12px 0;
+        border-bottom:1px solid var(--hair-firm);vertical-align:bottom;white-space:nowrap}
+  table.recipe td{padding:15px 18px 15px 0;border-bottom:1px solid var(--hair);
+        font-size:15.5px;line-height:1.5;color:var(--ink-body);vertical-align:top}
+  table.recipe td.s{font:600 15.5px/1.4 var(--sans);color:var(--ink)}
+  table.recipe td.g{font:600 10.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;
+        color:var(--ink-label);white-space:nowrap}
+
+  .placeholders{display:grid;grid-template-columns:1fr;gap:16px;margin-top:30px}
+  @media(min-width:760px){.placeholders{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  .ph{border:1px dashed var(--hair-firm);padding:20px 20px 22px}
+  .ph b{display:block;font:600 17px/1.3 var(--sans);color:var(--ink);margin-bottom:8px}
+  .ph span{display:block;font-size:15px;line-height:1.5;color:var(--ink-body)}
+  .ph i{display:block;margin-top:12px;font:600 10px/1 var(--sans);letter-spacing:.16em;
+        text-transform:uppercase;color:var(--ink-label);font-style:normal}
+
+  /* ---------------- the builder's drawer ---------------- */
+  details.builder{margin-top:22px;background:var(--day);border:1px solid var(--hair);max-width:52em}
+  details.builder > summary{cursor:pointer;list-style:none;padding:13px 18px;
+        font:600 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+  details.builder > summary::-webkit-details-marker{display:none}
+  details.builder > summary::after{content:"+";float:right;font-size:15px;line-height:1}
+  details.builder[open] > summary::after{content:"–"}
+  details.builder .bin{padding:2px 18px 20px;font-size:14.5px;line-height:1.6;color:var(--ink-strong)}
+  details.builder .bin p+p{margin-top:10px}
+  details.builder code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;
+        background:rgba(20,20,18,.07);padding:1px 5px;border-radius:2px}
+  details.builder dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:7px 16px;margin-top:8px}
+  details.builder dt{font-weight:600;color:var(--ink)}
+
+  .footnote{margin-top:60px;padding-top:22px;border-top:1px solid var(--hair-firm);
+            font-size:14.5px;line-height:1.6;color:var(--ink-label);max-width:44em}
+  .footnote a{color:var(--ink)}
 </style>
 </head>
 <body>
 
-<div class="bannerwrap">
-  <div class="banner">
-    <div class="tag">Current &middot; one style guide &middot; version 8-0</div>
-    <div class="line">THE STYLE GUIDE &mdash; the rules, with just enough examples. The full bank lives in the library.</div>
-    <div class="sub">This is the page a builder reads top to bottom: the nine treatments with two frames each, then every rule that governs a page &mdash; the filter, light, texture, the furniture, the dictated type, bullets and captions, the build order, the tokens, the two type voices, the copy grammar, the FAQ, the app screens and the scoped gradient rules &mdash; then the proof, the page grammar and the job-by-job call sheet. When you need the whole bank &mdash; every filed frame, the flags, the gaps, the cuts, the excluded list and the testimonial bank &mdash; go to the library.</div>
-    <div class="date">Version 8-0 &middot; 2026-08-28</div>
+<details class="drawer" id="contents-drawer">
+  <summary>Contents</summary>
+  <div class="drawerin">
+    <nav class="contents" aria-label="Contents, phone"></nav>
   </div>
+</details>
+
+<div class="frame" id="top">
+
+  <aside class="rail">
+    <p class="railtop">The Zodiac Page System</p>
+    <nav class="contents" aria-label="Contents, desktop"></nav>
+  </aside>
+
+  <main>
+
+  <header class="masthead">
+    <p class="kicker">Zodiac.fm · style guide</p>
+    <h1>The Zodiac Page System</h1>
+    <p class="standfirst">Every Zodiac page is black-and-white photography on neutral paper.
+      Colour arrives once per section, as one real thing or one real light, and only ever in one
+      of four colours. That is the whole system. Everything below is how you place it.</p>
+    <p class="built">Built from the live home page, home-t12, 2026-09-08. This guide is only ever
+      as current as the page it names: every picture in it is a crop cut from that page as it
+      stands today, and the next lock cuts them again.</p>
+  </header>
+
+  <!-- ============ 0 · THE FOUR COLOURS ============ -->
+  <section class="chapter" id="the-four-colours">
+    <div class="chaphead">
+      <p class="cno">Chapter 0</p>
+      <h2>The four colours, and how to use this guide</h2>
+      <p>There are four colours on a Zodiac page and no others. Three of them are things you can
+        pick up. One of them is light.</p>
+    </div>
+
+    <div class="card" id="the-colours">
+      <h3>The colours</h3>
+      <p class="sub">Named for the four frequencies. One colour per section, and never the same
+        colour in two sections that touch.</p>
+      <div class="colours">
+        <div class="sw"><div class="chipx" style="background:var(--core)"></div>
+          <div class="nm"><b>Core violet</b><span>Who you are. The first colour of the set.</span></div></div>
+        <div class="sw"><div class="chipx" style="background:var(--love)"></div>
+          <div class="nm"><b>Love rose</b><span>How you relate. The proof sections' colour on the home page.</span></div></div>
+        <div class="sw"><div class="chipx" style="background:var(--vitality)"></div>
+          <div class="nm"><b>Vitality amber</b><span>Your energy. This one is sunlight.</span></div></div>
+        <div class="sw"><div class="chipx" style="background:var(--abundance)"></div>
+          <div class="nm"><b>Abundance emerald</b><span>Opportunity. The colour of the open air.</span></div></div>
+      </div>
+      <p class="sub" style="margin-top:26px"><b>Amber is our sunlight and it falls on things.
+        The other three are things.</b> Violet, rose and emerald arrive as an object you can point
+        at — a ball, a dress, a record. Amber arrives as a rim on a shoulder, a glow in an earcup,
+        a halation edge. Amber sitting on bright paper as an object of its own reads as a stain.</p>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <dl>
+          <dt>Core violet</dt><dd><code>#6521C9</code> · <code>--core</code></dd>
+          <dt>Love rose</dt><dd><code>#B90044</code> · <code>--love</code></dd>
+          <dt>Vitality amber</dt><dd><code>#FF9112</code> · <code>--vitality</code></dd>
+          <dt>Abundance emerald</dt><dd><code>#12A56E</code> · <code>--abundance</code></dd>
+        </dl>
+        <p>Declared at <code>:root</code> in <code>site/home-t12.html</code>. Copy the block whole;
+          do not re-pick the values per page.</p>
+      </div></details>
+    </div>
+
+    <div class="card" id="how-to-use-this-guide">
+      <h3>How to use this guide</h3>
+      <ul class="plain">
+        <li><b>Pick a page recipe.</b> The home page is written out in full in the last chapter,
+          and there is a rule there for writing a new one.</li>
+        <li><b>Place the sections.</b> Chapter 3 is the catalogue of templates that already exist,
+          with what each one is for and what content it takes.</li>
+        <li><b>Give each section its setting and its effect.</b> The setting is the light it sits
+          in (chapter 1). The effect is how colour gets onto it (chapter 4). One of each, per
+          section.</li>
+        <li><b>Pull the pictures from the library by number.</b> Never from a folder, never from an
+          old round, never a retired number. The library is the one home for every picture:
+          <a href="/site/styleguide-library">The Zodiac Picture Library</a>.</li>
+      </ul>
+      <a class="totop" href="#top">Back to top</a>
+    </div>
+  </section>
+
+  <!-- ============ 1 · THE FIVE SETTINGS ============ -->
+  <section class="chapter" id="the-five-settings">
+    <div class="chaphead">
+      <p class="cno">Chapter 1</p>
+      <h2>The five settings</h2>
+      <p>A setting is the light a section sits in. There are five, from the whitest paper to a
+        charcoal you can still see into. They are all neutral: not one of them carries a hue.</p>
+    </div>
+
+    <div class="card" id="the-five-papers">
+      <h3>The five papers, light to dark</h3>
+      <div class="papers">
+        <div class="pp"><div class="sheet" style="background:var(--dawn)"><em style="color:var(--ink-label)">Dawn</em></div>
+          <div class="txt"><b>DAWN</b>The whitest paper on the page. Only ever used straight after
+            the night — it is the lights coming back up.</div></div>
+        <div class="pp"><div class="sheet" style="background:var(--sun)"><em style="color:var(--ink-label)">Sun</em></div>
+          <div class="txt"><b>SUN</b>The page thrown open in daylight. The normal paper, and the one
+            this guide is printed on.</div></div>
+        <div class="pp"><div class="sheet" style="background:var(--day)"><em style="color:var(--ink-label)">Day</em></div>
+          <div class="txt"><b>DAY</b>A soft step down from sun. Everyday paper, for a chapter that
+            should sit back a little.</div></div>
+        <div class="pp"><div class="sheet" style="background:var(--room)"><em style="color:var(--ink-label)">Room</em></div>
+          <div class="txt"><b>ROOM</b>Grey paper, blinds half drawn. You lean in to read it, which
+            is exactly what it is for.</div></div>
+        <div class="pp"><div class="sheet" style="background:var(--night)"><em style="color:rgba(255,255,254,.72)">Night</em></div>
+          <div class="txt"><b>NIGHT</b>Charcoal. A room at night that you can still see into — never
+            a black hole, never a void.</div></div>
+      </div>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <dl>
+          <dt>DAWN</dt><dd><code>.set-dawn</code> · <code>--lv-dawn: #FFFFFE</code> · L* 99.98</dd>
+          <dt>SUN</dt><dd><code>.set-sun</code> · <code>--lv-sun: #F0F0EF</code> · L* 94.77</dd>
+          <dt>DAY</dt><dd><code>.set-day</code> · <code>--lv-day: #E0E0DF</code> · L* 89.15</dd>
+          <dt>ROOM</dt><dd><code>.set-room</code> · <code>--lv-room: #CCCCCB</code> · L* 82.02</dd>
+          <dt>NIGHT</dt><dd><code>.set-night</code> · <code>--lv-night: #40403F</code> · L* 27.06</dd>
+        </dl>
+        <p>A section declares its setting as one class on itself. The paper and the ink set both
+          come from that class, and the join to the section above is derived from the previous
+          sibling — so moving a section up or down the page is exactly one edit. House pattern for
+          every paper: red equals green, blue one less, so no setting carries a hue.</p>
+        <p>Ink per setting, against that setting's own paper: body at least 7:1, labels at least
+          4.5:1. On the night the ink is the page's own light — white, then white at 80 and 64
+          percent for body and labels.</p>
+      </div></details>
+    </div>
+
+    <div class="card" id="each-setting-on-the-page">
+      <h3>Each setting, standing on the live page</h3>
+      <p class="sub">The same five papers, cut out of the home page. Phone.</p>
+      <div class="settingrow">
+        <figure><img src="/site/assets/styleguide/9-0/styleguide-crop-setting-dawn-phone.jpg" alt="A section on the whitest paper, a soft rose pool across the top edge, a heading and four portraits below it">
+          <figcaption><b>Dawn</b>“And it keeps showing up.”</figcaption></figure>
+        <figure><img src="/site/assets/styleguide/9-0/styleguide-crop-setting-sun-phone.jpg" alt="A section on the normal page paper carrying a heading, a paragraph and four frequency rows">
+          <figcaption><b>Sun</b>“Tune Into You.”</figcaption></figure>
+        <figure><img src="/site/assets/styleguide/9-0/styleguide-crop-setting-day-phone.jpg" alt="A section on a paper one step below sun, carrying a heading, a paragraph and a photograph of a phone">
+          <figcaption><b>Day</b>“Real music, with your frequencies inside.”</figcaption></figure>
+        <figure><img src="/site/assets/styleguide/9-0/styleguide-crop-setting-room-phone.jpg" alt="A section on grey paper carrying a heading and a framed portrait with a quote beside it">
+          <figcaption><b>Room</b>“Neuroscientists, Astrologers, and Human Design Authorities Are Tuning In.”</figcaption></figure>
+        <figure><img src="/site/assets/styleguide/9-0/styleguide-crop-setting-night-phone.jpg" alt="A section on charcoal, a rose light entering from the top edge, white type and lit portrait frames">
+          <figcaption><b>Night</b>“Then it shows up in work, energy, and who you are.”</figcaption></figure>
+      </div>
+      <a class="totop" href="#top">Back to top</a>
+    </div>
+  </section>
+
+  <!-- ============ 2 · LIGHTING A PAGE ============ -->
+  <section class="chapter" id="lighting-a-page">
+    <div class="chaphead">
+      <p class="cno">Chapter 2</p>
+      <h2>Lighting a page</h2>
+      <p>The settings are not decoration. They are the order the reader moves through, and there
+        are seven rules about how they can follow one another.</p>
+    </div>
+
+    <div class="card" id="the-rules-of-the-ladder">
+      <h3>The rules</h3>
+      <ul class="plain">
+        <li><b>Neighbours never share a setting.</b> Two sections on the same paper read as one long
+          section, and the reader stops noticing they have moved.</li>
+        <li><b>Neighbouring light papers are a clear step apart.</b> If you cannot see the join, it
+          is not a join.</li>
+        <li><b>The night is one scene.</b> If two chapters both belong in the dark, they become one
+          section with parts inside it. Never two nights in a row.</li>
+        <li><b>Dawn only ever follows night.</b> On its own it is just a white page. After the dark
+          it is the lights coming up.</li>
+        <li><b>Into the night is a cut. Out of the night is a cut.</b> Everywhere else the paper
+          fades from the one above, and the fade is finished before the first line of text.</li>
+        <li><b>No warm pixel anywhere on the page.</b> Not in the paper, the ink, a hairline or a
+          frame. Only a lamp inside a photograph may be warm.</li>
+        <li><b>Faces are always silver.</b> Colour never lands on a person's skin — that is what the
+          effects in chapter 4 exist to avoid.</li>
+      </ul>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p>All seven are machine-checked:
+          <code>python3 code/check_page.py preflight &lt;page&gt;</code>,
+          <code>python3 code/check_page.py warm &lt;url&gt;</code>,
+          <code>python3 code/check_page.py ground &lt;url&gt;</code>.</p>
+        <p>The join is one ramp at the top of each section, fading in from <code>--above</code>,
+          which is derived from the previous sibling. A cut is <code>--ramp:0</code> — and the zero
+          must carry a unit, or the whole padding declaration is thrown away.</p>
+        <p>Step floor: at least 4.5 L* between neighbouring light papers. The night stays inside
+          L* 22–34.</p>
+      </div></details>
+    </div>
+
+    <div class="card" id="the-home-pages-ladder">
+      <h3>The home page's ladder</h3>
+      <p class="sub">The rhythm to copy: sun, room, sun, room, sun, then the night, then dawn, then
+        back up into daylight. Ten sections, in page order, at phone scale.</p>
+      <div class="ladder">
+        <div class="rung"><img src="/site/assets/styleguide/9-0/styleguide-crop-ladder-hero-phone.jpg" alt="The top of the home page: a headline over a beach photograph">
+          <div><p class="nm">“Experience Yourself In Sound. Music Tuned to You.”</p><p class="st">Sun</p></div>
+          <p class="fx">Four coloured surfboards in one photograph.</p></div>
+        <div class="rung"><img src="/site/assets/styleguide/9-0/styleguide-crop-ladder-voices-phone.jpg" alt="A heading and a framed portrait on grey paper">
+          <div><p class="nm">“Neuroscientists, Astrologers, and Human Design Authorities Are Tuning In.”</p><p class="st">Room</p></div>
+          <p class="fx">A rose mark on the one quote line that carries the argument.</p></div>
+        <div class="rung"><img src="/site/assets/styleguide/9-0/styleguide-crop-ladder-frequencies-phone.jpg" alt="A heading, a paragraph and four frequency rows on the normal paper">
+          <div><p class="nm">“Tune Into You.”</p><p class="st">Sun</p></div>
+          <p class="fx">All four colours, one per wave, in the chart.</p></div>
+        <div class="rung"><img src="/site/assets/styleguide/9-0/styleguide-crop-ladder-how-phone.jpg" alt="A heading and three still-life photographs on grey paper">
+          <div><p class="nm">“How Zodiac.fm works”</p><p class="st">Room</p></div>
+          <p class="fx">One coloured object inside each of the three still lifes.</p></div>
+        <div class="rung"><img src="/site/assets/styleguide/9-0/styleguide-crop-ladder-world-phone.jpg" alt="A heading, a paragraph and the first of four life scenes">
+          <div><p class="nm">“It moves in with you.”</p><p class="st">Sun</p></div>
+          <p class="fx">Four scenes, one colour each, no two the same.</p></div>
+        <div class="rung"><img src="/site/assets/styleguide/9-0/styleguide-crop-ladder-results-phone.jpg" alt="Charcoal paper with a rose light from the top edge and white type">
+          <div><p class="nm">“Then it shows up in work, energy, and who you are.”</p><p class="st">Night</p></div>
+          <p class="fx">A rose sign light from above, one marked line, and lit bars in the chart.</p></div>
+        <div class="rung"><img src="/site/assets/styleguide/9-0/styleguide-crop-ladder-more-results-phone.jpg" alt="The whitest paper with a rose pool across the top edge">
+          <div><p class="nm">“And it keeps showing up.”</p><p class="st">Dawn</p></div>
+          <p class="fx">A small rose pool at the top edge, and the same mark on the heading.</p></div>
+        <div class="rung"><img src="/site/assets/styleguide/9-0/styleguide-crop-ladder-music-phone.jpg" alt="A heading and a paragraph on a paper one step below sun">
+          <div><p class="nm">“Real music, with your frequencies inside.”</p><p class="st">Day</p></div>
+          <p class="fx">The light comes through the record, and the record becomes the lamp.</p></div>
+        <div class="rung"><img src="/site/assets/styleguide/9-0/styleguide-crop-ladder-story-phone.jpg" alt="A heading and a paragraph on grey paper beside a photograph">
+          <div><p class="nm">“It started with one question.”</p><p class="st">Room</p></div>
+          <p class="fx">The light comes up through the spinning record.</p></div>
+        <div class="rung"><img src="/site/assets/styleguide/9-0/styleguide-crop-ladder-finale-phone.jpg" alt="A closing heading and a link on the normal paper">
+          <div><p class="nm">“The symphony has been playing your part all along. Come hear it.”</p><p class="st">Sun</p></div>
+          <p class="fx">Four coloured umbrellas in one photograph — the set closing where it opened.</p></div>
+      </div>
+      <a class="totop" href="#top">Back to top</a>
+    </div>
+  </section>
+
+  <!-- ============ 3 · THE SECTIONS ============ -->
+  <section class="chapter" id="the-sections">
+    <div class="chaphead">
+      <p class="cno">Chapter 3</p>
+      <h2>The sections</h2>
+      <p>The catalogue of templates that exist today, in the order the home page uses them. Each
+        card says what the section is for, what light it sits in, how colour reaches it, what
+        content it takes, and when to reach for it again.</p>
+    </div>
+
+    <div class="card" id="section-the-hero">
+      <h3><span class="quoted">“Experience Yourself In Sound. Music Tuned to You.”</span></h3>
+      <p class="sub">The opening.</p>
+      <dl class="facts">
+        <div><dt>Job</dt><dd>Says what this is in one breath, and shows a real person holding the real product.</dd></div>
+        <div><dt>Setting</dt><dd>Sun</dd></div>
+        <div><dt>Effect and colour</dt><dd>Four real coloured things in one photograph — all four colours at once.</dd></div>
+        <div><dt>When to reuse it</dt><dd>The top of any page. One headline, one picture, one sentence, nothing else.</dd></div>
+        <div class="wide"><dt>Slots</dt><dd>A two-line headline with the second half in italic · one full-width photograph, uncropped · one sentence of standfirst underneath. Picture: P-177.</dd></div>
+      </dl>
+      <div class="pair">
+        <div><div class="tall"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-hero-phone.jpg" alt="The hero on a phone: headline, beach photograph, one sentence"></div><p class="caplbl">Phone</p></div>
+        <details class="deskview"><summary>Desktop view</summary>
+          <div class="dvbody"><div class="wide"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-hero-desktop.jpg" alt="The hero on a desktop: headline, wide beach photograph with four coloured surfboards, one sentence"></div><p class="caplbl">Desktop</p></div>
+        </details>
+      </div>
+      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b" target="_blank" rel="noopener">See the whole page live</a></p>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p><code>&lt;header class="hero set-sun" id="top"&gt;</code>. The hero is a photograph, so it
+          is NOT painted with <code>--sheet</code>: it carries <code>set-sun</code> only so the
+          section under it derives its join. Do not "fix" that by painting it.</p>
+        <p>Frame: <code>.hero .field img</code> at <code>height:auto</code>, no crop at any window,
+          four-side mask dissolve. Picture number badge is <code>.pid</code>.</p>
+      </div></details>
+    </div>
+
+    <div class="card" id="section-the-voices">
+      <h3><span class="quoted">“Neuroscientists, Astrologers, and Human Design Authorities Are Tuning In.”</span></h3>
+      <p class="sub">The voices.</p>
+      <dl class="facts">
+        <div><dt>Job</dt><dd>Hands the argument to people the reader already trusts, before we have made a claim of our own.</dd></div>
+        <div><dt>Setting</dt><dd>Room</dd></div>
+        <div><dt>Effect and colour</dt><dd>A rose mark on the one line that carries the argument. Everything else in the section is black and white.</dd></div>
+        <div><dt>When to reuse it</dt><dd>This is the <b>regular testimonial block</b>. Three to five voices anywhere on a page.</dd></div>
+        <div class="wide"><dt>Slots</dt><dd>One heading · a lead voice at full size, then two more at half size with a hairline between each · every voice takes a field label, a lead line, an optional detail sentence, a name and a credential. Portraits: T-4, T-5, T-8.</dd></div>
+      </dl>
+      <div class="pair">
+        <div><div class="tall"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-voices-phone.jpg" alt="The voices on a phone: heading, framed portrait, quote, name and credential"></div><p class="caplbl">Phone</p></div>
+        <details class="deskview"><summary>Desktop view</summary>
+          <div class="dvbody"><div class="wide"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-voices-desktop.jpg" alt="The voices on a desktop: a lead portrait beside a marked quote, two smaller voices under hairlines"></div><p class="caplbl">Desktop</p></div>
+        </details>
+      </div>
+      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#voices" target="_blank" rel="noopener">See it live</a></p>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p><code>&lt;section id="voices" class="set-room"&gt;</code>. Rows are <code>.vwrap &gt; .vrow</code>,
+          the first also <code>.lead</code>; hairlines are <code>hr.vsep</code>. The quote is
+          <code>.tlead</code>, the detail <code>.tdetail</code>, the name block <code>.pwho</code>
+          with the credential in a nested <code>&lt;small&gt;</code>.</p>
+        <p>The mark is <code>#voices .lit</code>; the credential mark is
+          <code>.lit.lit-faint</code>. Portrait frames are <code>.fport</code>, square,
+          330&nbsp;px for the lead and 196&nbsp;px for the rest at desktop.</p>
+      </div></details>
+    </div>
+
+    <div class="card" id="section-tune-into-you">
+      <h3><span class="quoted">“Tune Into You.”</span></h3>
+      <p class="sub">The thing itself.</p>
+      <dl class="facts">
+        <div><dt>Job</dt><dd>Explains the product's one idea with a picture of data instead of a paragraph of explanation.</dd></div>
+        <div><dt>Setting</dt><dd>Sun</dd></div>
+        <div><dt>Effect and colour</dt><dd>All four colours at once, one per row of the chart — the chart's version of four real things in one frame.</dd></div>
+        <div><dt>When to reuse it</dt><dd>Any "here is the actual thing" chapter. One chart grammar per screen: if this chart is on the page, no second chart style anywhere near it.</dd></div>
+        <div class="wide"><dt>Slots</dt><dd>One heading · one paragraph · four rows, each a name, a one-line meaning, a wave and a number · one line of fine print under it.</dd></div>
+      </dl>
+      <div class="pair">
+        <div><div class="tall"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-frequencies-phone.jpg" alt="The frequency chapter on a phone: heading, paragraph, four rows each with a name, a wave and a number"></div><p class="caplbl">Phone</p></div>
+        <details class="deskview"><summary>Desktop view</summary>
+          <div class="dvbody"><div class="wide"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-frequencies-desktop.jpg" alt="The frequency chapter on a desktop: four rows, each a name, a coloured wave and a number"></div><p class="caplbl">Desktop</p></div>
+        </details>
+      </div>
+      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#frequencies" target="_blank" rel="noopener">See it live</a></p>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p><code>&lt;section id="frequencies" class="set-sun"&gt;</code>. Rows are
+          <code>.chart &gt; .crow</code>: <code>.cname</code>, <code>.cwave</code>,
+          <code>.chz</code>. The numbers carry <code>.num</code>, which forces Switzer — numbers
+          are never set in the serif.</p>
+      </div></details>
+    </div>
+
+    <div class="card" id="section-how-it-works">
+      <h3><span class="quoted">“How Zodiac.fm works”</span></h3>
+      <p class="sub">Three steps.</p>
+      <dl class="facts">
+        <div><dt>Job</dt><dd>Removes the fear that this is complicated, in three photographs and six sentences.</dd></div>
+        <div><dt>Setting</dt><dd>Room</dd></div>
+        <div><dt>Effect and colour</dt><dd>One real coloured object inside each still life — a violet globe, an amber glow in an earcup, an emerald one.</dd></div>
+        <div><dt>When to reuse it</dt><dd>Any three-step explainer. Photographs, never diagrams; the steps go photographic and away from anything that looks like a normal how-it-works row.</dd></div>
+        <div class="wide"><dt>Slots</dt><dd>One heading · three steps, each a photograph, a step label, a short heading and two sentences. Pictures: P-155, P-156, P-206.</dd></div>
+      </dl>
+      <div class="pair">
+        <div><div class="tall"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-how-phone.jpg" alt="The three steps on a phone, stacked, each a photograph over a short heading"></div><p class="caplbl">Phone</p></div>
+        <details class="deskview"><summary>Desktop view</summary>
+          <div class="dvbody"><div class="wide"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-how-desktop.jpg" alt="The three steps on a desktop, side by side, each a still life over a short heading"></div><p class="caplbl">Desktop</p></div>
+        </details>
+      </div>
+      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#how" target="_blank" rel="noopener">See it live</a></p>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p><code>&lt;section id="how" class="set-room"&gt;</code>, <code>.steps3 &gt; .step</code>,
+          each holding <code>.field.softedge</code> then <code>.kick</code>,
+          <code>&lt;h3&gt;</code> and a paragraph.</p>
+      </div></details>
+    </div>
+
+    <div class="card" id="section-it-moves-in-with-you">
+      <h3><span class="quoted">“It moves in with you.”</span></h3>
+      <p class="sub">The life.</p>
+      <dl class="facts">
+        <div><dt>Job</dt><dd>Shows the product inside a life instead of inside an app. Four moments, four times of day.</dd></div>
+        <div><dt>Setting</dt><dd>Sun</dd></div>
+        <div><dt>Effect and colour</dt><dd>One colour per scene, and no two scenes the same: violet spilling onto a grey street, amber as afternoon light on brass, rose worn as a dress, emerald as a ball in the air.</dd></div>
+        <div><dt>When to reuse it</dt><dd>Any "in your life" gallery. Four scenes is the count; two reads thin and six reads like stock.</dd></div>
+        <div class="wide"><dt>Slots</dt><dd>One heading · one paragraph · four scenes, each a photograph with a small wave mark and a two-part caption. Pictures: P-125, P-126, P-106, P-183 (P-194 on the phone).</dd></div>
+      </dl>
+      <div class="pair">
+        <div><div class="tall"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-world-phone.jpg" alt="The life chapter on a phone: heading, paragraph and the scenes stacked"></div><p class="caplbl">Phone</p></div>
+        <details class="deskview"><summary>Desktop view</summary>
+          <div class="dvbody"><div class="wide"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-world-desktop.jpg" alt="The life chapter on a desktop: four scenes in a grid, each with a caption"></div><p class="caplbl">Desktop</p></div>
+        </details>
+      </div>
+      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#world" target="_blank" rel="noopener">See it live</a></p>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p><code>&lt;section id="world" class="set-sun"&gt;</code>, <code>.scenes &gt; figure.scene</code>,
+          each <code>.field.softedge</code> plus a <code>figcaption</code> carrying the wave image
+          and one sentence.</p>
+      </div></details>
+    </div>
+
+    <div class="card" id="section-the-night">
+      <h3><span class="quoted">“Then it shows up in work, energy, and who you are.”</span> <span style="font-weight:400;color:var(--ink-label)">— with</span> <span class="quoted">“We ran the numbers for a year.”</span> <span style="font-weight:400;color:var(--ink-label)">inside it</span></h3>
+      <p class="sub">The night.</p>
+      <dl class="facts">
+        <div><dt>Job</dt><dd>The heaviest proof on the page, in the one place where the lights go down and the reader has to stop.</dd></div>
+        <div><dt>Setting</dt><dd>Night — one scene, with the study as a part inside it, never a second section</dd></div>
+        <div><dt>Effect and colour</dt><dd>A rose light from off the top edge, one marked quote line, and the chart's bars lit in the same rose.</dd></div>
+        <div><dt>When to reuse it</dt><dd>This is the <b>hero proof block</b>. One per page, placed where the proof is heaviest. Never two nights on one page.</dd></div>
+        <div class="wide"><dt>Slots</dt><dd>One heading · five voices in a staggered grid, the first wide · then, inside the same section: a second heading, a paragraph carrying the study's shape, two big numbers with labels, a seven-row bar chart, and one line of fine print. Portraits: T-11, T-23, T-12, T-27, T-10.</dd></div>
+      </dl>
+      <div class="pair">
+        <div><div class="tall"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-results-phone.jpg" alt="The night on a phone: charcoal, rose light from the top, white type and lit portrait frames"></div><p class="caplbl">Phone</p></div>
+        <details class="deskview"><summary>Desktop view</summary>
+          <div class="dvbody"><div class="wide"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-results-desktop.jpg" alt="The night on a desktop: five voices staggered across charcoal under a rose light"></div><p class="caplbl">Desktop</p></div>
+        </details>
+      </div>
+      <div class="pair">
+        <div><div class="tall"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-study-phone.jpg" alt="The study on a phone: two big numbers and a seven-row bar chart on charcoal"></div><p class="caplbl">The study, phone</p></div>
+        <details class="deskview"><summary>The study, desktop view</summary>
+          <div class="dvbody"><div class="wide"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-study-desktop.jpg" alt="The study on a desktop: two big numbers side by side and a seven-row bar chart on charcoal"></div><p class="caplbl">The study, desktop</p></div>
+        </details>
+      </div>
+      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#results" target="_blank" rel="noopener">See it live</a></p>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p><code>&lt;section id="results" class="night set-night"&gt;</code> with
+          <code>&lt;div id="study" class="part"&gt;</code> nested inside it — the study is a part,
+          not a sibling section, because the night is one scene.</p>
+        <p><code>#results{--ramp:0}</code> makes the join above it a cut. The light is
+          <code>#results::after</code>, masked; the bars are <code>#study .orow .obar i</code>;
+          the marked line is <code>#results .lit</code>.</p>
+      </div></details>
+    </div>
+
+    <div class="card" id="section-and-it-keeps-showing-up">
+      <h3><span class="quoted">“And it keeps showing up.”</span></h3>
+      <p class="sub">The lights come up.</p>
+      <dl class="facts">
+        <div><dt>Job</dt><dd>Carries the proof past the night, so the dark is not the last thing the reader remembers.</dd></div>
+        <div><dt>Setting</dt><dd>Dawn</dd></div>
+        <div><dt>Effect and colour</dt><dd>A small rose pool entering from the top edge, and the same rose mark on the heading's italic words.</dd></div>
+        <div><dt>When to reuse it</dt><dd>Only ever straight after a night. On its own paper with no night above it, it is just a white page.</dd></div>
+        <div class="wide"><dt>Slots</dt><dd>One heading, with the italic half marked · four voices in a single column with hairlines between · one closing list of short quotes with names only. Portraits: T-16, T-2, T-6, T-1.</dd></div>
+      </dl>
+      <div class="pair">
+        <div><div class="tall"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-more-results-phone.jpg" alt="The dawn section on a phone: a rose pool at the top edge, a marked heading and four voices"></div><p class="caplbl">Phone</p></div>
+        <details class="deskview"><summary>Desktop view</summary>
+          <div class="dvbody"><div class="wide"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-more-results-desktop.jpg" alt="The dawn section on a desktop: a rose pool across the top, a marked heading and four voices in a column"></div><p class="caplbl">Desktop</p></div>
+        </details>
+      </div>
+      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#more-results" target="_blank" rel="noopener">See it live</a></p>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p><code>&lt;section id="more-results" class="set-dawn"&gt;</code>. Rows are
+          <code>.srow</code> with <code>hr.ssep</code> between; the short-quote list is
+          <code>.qlist</code>. The pool is <code>#more-results::after</code>, a radial in the
+          section's colour entering from the top edge.</p>
+      </div></details>
+    </div>
+
+    <div class="card" id="section-real-music">
+      <h3><span class="quoted">“Real music, with your frequencies inside.”</span></h3>
+      <p class="sub">The product.</p>
+      <dl class="facts">
+        <div><dt>Job</dt><dd>Proves this is real music on a real device, and quietly teaches the range of track lengths.</dd></div>
+        <div><dt>Setting</dt><dd>Day</dd></div>
+        <div><dt>Effect and colour</dt><dd>Light coming through a coloured record, so the record itself becomes the lamp.</dd></div>
+        <div><dt>When to reuse it</dt><dd>Any product chapter. The phone is always the library's registered device carrying a real screenshot — never a drawn or warped one.</dd></div>
+        <div class="wide"><dt>Slots</dt><dd>One heading · one paragraph · one lead figure with a caption · two figures side by side, each with a caption. Pictures: P-207, P-109, P-110.</dd></div>
+      </dl>
+      <div class="pair">
+        <div><div class="tall"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-music-phone.jpg" alt="The product chapter on a phone: heading, paragraph and a photograph of a real phone showing the playlist"></div><p class="caplbl">Phone</p></div>
+        <details class="deskview"><summary>Desktop view</summary>
+          <div class="dvbody"><div class="wide"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-music-desktop.jpg" alt="The product chapter on a desktop: a wide photograph of a real phone by a turntable, and two smaller figures below"></div><p class="caplbl">Desktop</p></div>
+        </details>
+      </div>
+      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#music" target="_blank" rel="noopener">See it live</a></p>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p><code>&lt;section id="music" class="set-day"&gt;</code>,
+          <code>figure.mfig.mlead</code> then <code>.mpair &gt; figure.mfig</code>.</p>
+      </div></details>
+    </div>
+
+    <div class="card" id="section-the-story">
+      <h3><span class="quoted">“It started with one question.”</span></h3>
+      <p class="sub">The origin.</p>
+      <dl class="facts">
+        <div><dt>Job</dt><dd>Gives the company a beginning a person can retell, in one paragraph.</dd></div>
+        <div><dt>Setting</dt><dd>Room</dd></div>
+        <div><dt>Effect and colour</dt><dd>Light coming up through a spinning record.</dd></div>
+        <div><dt>When to reuse it</dt><dd>Any origin, founder or "why we exist" chapter. Text on one side, one photograph on the other, and nothing else in the section.</dd></div>
+        <div class="wide"><dt>Slots</dt><dd>One heading · one paragraph · one photograph beside them. Picture: P-118.</dd></div>
+      </dl>
+      <div class="pair">
+        <div><div class="tall"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-story-phone.jpg" alt="The origin chapter on a phone: heading, paragraph and a photograph of a woman over a turntable"></div><p class="caplbl">Phone</p></div>
+        <details class="deskview"><summary>Desktop view</summary>
+          <div class="dvbody"><div class="wide"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-story-desktop.jpg" alt="The origin chapter on a desktop: text on the left, a photograph of a woman over a turntable on the right"></div><p class="caplbl">Desktop</p></div>
+        </details>
+      </div>
+      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#story" target="_blank" rel="noopener">See it live</a></p>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p><code>&lt;section id="story" class="set-room"&gt;</code>, <code>.story-grid</code> with the
+          text block first and <code>.field.softedge</code> second.</p>
+      </div></details>
+    </div>
+
+    <div class="card" id="section-the-finale">
+      <h3><span class="quoted">“The symphony has been playing your part all along. Come hear it.”</span></h3>
+      <p class="sub">The close.</p>
+      <dl class="facts">
+        <div><dt>Job</dt><dd>Ends the page in full daylight, with one plain link and no pressure.</dd></div>
+        <div><dt>Setting</dt><dd>Sun</dd></div>
+        <div><dt>Effect and colour</dt><dd>Four real coloured things in one photograph — the set closing where it opened.</dd></div>
+        <div><dt>When to reuse it</dt><dd>The close of any page. There is no call to action on a Zodiac page; there is a sentence and a link.</dd></div>
+        <div class="wide"><dt>Slots</dt><dd>One heading · two short lines · one text link · one full-width photograph under them. Pictures: P-130 (P-187 on the phone).</dd></div>
+      </dl>
+      <div class="pair">
+        <div><div class="tall"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-finale-phone.jpg" alt="The close on a phone: heading, one line, a link and a photograph of four coloured umbrellas"></div><p class="caplbl">Phone</p></div>
+        <details class="deskview"><summary>Desktop view</summary>
+          <div class="dvbody"><div class="wide"><img src="/site/assets/styleguide/9-0/styleguide-crop-section-finale-desktop.jpg" alt="The close on a desktop: heading, one line, a link and a wide photograph of four coloured beach umbrellas"></div><p class="caplbl">Desktop</p></div>
+        </details>
+      </div>
+      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#finale" target="_blank" rel="noopener">See it live</a></p>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p><code>&lt;section class="finale set-sun" id="finale"&gt;</code>. The link is
+          <code>a.textlink</code> — an underlined text link, never a button.</p>
+      </div></details>
+      <a class="totop" href="#top">Back to top</a>
+    </div>
+  </section>
+
+  <!-- ============ 4 · THE EFFECTS ============ -->
+  <section class="chapter" id="the-effects">
+    <div class="chaphead">
+      <p class="cno">Chapter 4</p>
+      <h2>The effects</h2>
+      <p>How colour gets onto a section. There are three families: colour inside the photograph,
+        colour marked on the type, and light thrown across the section itself. One effect per
+        section, one colour per section, and neighbours never share a colour.</p>
+    </div>
+
+    <div class="card" id="effects-in-the-photograph">
+      <h3>Group A · In the photograph</h3>
+      <p class="sub">The colour is a real object, photographed. Choose pictures for these in the
+        library — every frame there is filed by which of these it carries.</p>
+
+      <div class="pair explain" id="effect-solo">
+        <div><h3 style="font-size:19px">Solo</h3>
+          <p class="sub">One real coloured object in an otherwise silver photograph, with the
+            photograph's own light and shadow still inside the colour.</p>
+          <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#world" target="_blank" rel="noopener">See it live</a></p></div>
+        <figure class="shot"><img src="/site/assets/styleguide/9-0/styleguide-crop-effect-solo-desktop.jpg" alt="Friends leaping for a single emerald ball against a silver summer sky">
+          <figcaption>The ball in the air. <b>Abundance emerald.</b></figcaption></figure>
+      </div>
+
+      <div class="pair explain" id="effect-chord">
+        <div><h3 style="font-size:19px">Chord</h3>
+          <p class="sub">All four colours as four real things in one photograph. Use it at the two
+            ends of a page and nowhere in between.</p>
+          <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#finale" target="_blank" rel="noopener">See it live</a></p></div>
+        <figure class="shot"><img src="/site/assets/styleguide/9-0/styleguide-crop-effect-chord-desktop.jpg" alt="Four beach umbrellas in violet, emerald, amber and rose in white sand">
+          <figcaption>The umbrellas that close the home page. <b>All four.</b></figcaption></figure>
+      </div>
+
+      <div class="pair explain" id="effect-through">
+        <div><h3 style="font-size:19px">Through</h3>
+          <p class="sub">Light passes through a coloured thing and the thing becomes the lamp: a
+            record, a parasol, cloth, glass. This is the room's native effect.</p>
+          <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#music" target="_blank" rel="noopener">See it live</a></p></div>
+        <figure class="shot"><img src="/site/assets/styleguide/9-0/styleguide-crop-effect-through-desktop.jpg" alt="A record with a rose label turning on a turntable, the tonearm down">
+          <figcaption>The record turning. <b>Love rose.</b></figcaption></figure>
+      </div>
+
+      <div class="pair explain" id="effect-spill">
+        <div><h3 style="font-size:19px">Spill</h3>
+          <p class="sub">The coloured thing lands a whisper of itself on the grey beside it. Always
+            with solo or through — without the spill the object looks pasted on.</p>
+          <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#world" target="_blank" rel="noopener">See it live</a></p></div>
+        <figure class="shot"><img src="/site/assets/styleguide/9-0/styleguide-crop-effect-spill-desktop.jpg" alt="A listener walking under violet jacaranda trees, the violet landing on the silver street">
+          <figcaption>The trees, and what they put on the street. <b>Core violet.</b></figcaption></figure>
+      </div>
+
+      <div class="pair explain" id="effect-worn">
+        <div><h3 style="font-size:19px">Worn</h3>
+          <p class="sub">Colour as a real garment. This is the one way colour is allowed to touch a
+            person at all — and it still never touches the face.</p>
+          <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#world" target="_blank" rel="noopener">See it live</a></p></div>
+        <figure class="shot"><img src="/site/assets/styleguide/9-0/styleguide-crop-effect-worn-desktop.jpg" alt="A woman dancing barefoot in a sunlit white room in a deep rose dress">
+          <figcaption>The dress. <b>Love rose.</b></figcaption></figure>
+      </div>
+
+      <div class="pair explain" id="effect-sun">
+        <div><h3 style="font-size:19px">Sun</h3>
+          <p class="sub">Amber as light and never as an object on bright paper: the rim on a
+            shoulder, the halation edge, the glow inside a thing.</p>
+          <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#how" target="_blank" rel="noopener">See it live</a></p></div>
+        <figure class="shot"><img src="/site/assets/styleguide/9-0/styleguide-crop-effect-sun-desktop.jpg" alt="Headphones on sunlit white linen with a warm amber glow inside the near earcup">
+          <figcaption>The lamp inside the earcup. <b>Vitality amber.</b></figcaption></figure>
+      </div>
+    </div>
+
+    <div class="card" id="effects-on-the-type">
+      <h3>Group B · On the type</h3>
+      <div class="pair explain" id="effect-highlight">
+        <div><h3 style="font-size:19px">Highlight</h3>
+          <p class="sub">One colour on the one line that carries the argument. Translucent and
+            tapered, drawn on the words so it ends where the words end. Never a solid block, never
+            a band across the section. At most two lines, usually one.</p>
+          <p class="sub">The credential line under a name may take the same mark far weaker, so the
+            quote still leads. Nothing else in the section carries colour — the mark works because
+            the field around it is empty.</p>
+          <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#voices" target="_blank" rel="noopener">See it live</a></p></div>
+        <div>
+          <figure class="shot" style="margin-bottom:22px"><img src="/site/assets/styleguide/9-0/styleguide-crop-effect-highlight-desktop.png" alt="A quote line with a translucent rose mark drawn behind the words, shown at twice size">
+            <figcaption>The mark on the line that carries the argument, at twice size. <b>Love rose.</b></figcaption></figure>
+          <figure class="shot"><img src="/site/assets/styleguide/9-0/styleguide-crop-effect-highlight-faint-desktop.png" alt="A name and its credential line, the credential carrying the same rose mark much weaker, shown at twice size">
+            <figcaption>The same mark on a credential, far weaker, at twice size.</figcaption></figure>
+        </div>
+      </div>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p>Copy <code>#voices .lit</code> and <code>#voices .lit-faint</code> from
+          <code>site/home-t12.html</code> and swap the colour; the recipe does not change.</p>
+        <p>Two background layers on the text itself: a vertical wash of the section's own paper over
+          the stroke's top and bottom edges, then a tapered gradient tilted about
+          <code>101deg</code> under it. <code>box-decoration-break: clone</code> so every line gets
+          its own stroke. Keep the wash geometry in <b>pixels</b> (about 11&nbsp;px) or a large
+          heading blurs.</p>
+        <p>On the night, wash into the <b>lit</b> charcoal the mark actually sits on, not the
+          declared rung, or the stroke gets a dark lip along both edges. The stroke's centre sits
+          5–7 L* above the lifted sheet.</p>
+      </div></details>
+    </div>
+
+    <div class="card" id="effects-light-on-the-section">
+      <h3>Group C · Light on the section</h3>
+      <p class="sub">Night and dawn only. Four things have to be present, all of them, or it is a
+        tint rather than light: <b>a source you can point at</b>, <b>falloff</b>, <b>rims on the
+        frames facing it</b>, and <b>shadows falling away from it</b>.</p>
+
+      <div class="pair explain" id="effect-sign-light">
+        <div><h3 style="font-size:19px">Sign light</h3>
+          <p class="sub">Night. One coloured light from off the top edge, as if a sign hangs above
+            the wall. The visitor sees a room with a lamp in it, not a coloured page. The words sit
+            in the even part, below where the light is still moving.</p>
+          <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#results" target="_blank" rel="noopener">See it live</a></p></div>
+        <div>
+          <figure class="shot" style="margin-bottom:22px"><img src="/site/assets/styleguide/9-0/styleguide-crop-effect-sign-light-desktop.jpg" alt="The top of a charcoal section, a rose light entering from above and falling off down the wall">
+            <figcaption>The source edge and the falloff.</figcaption></figure>
+          <figure class="shot"><img src="/site/assets/styleguide/9-0/styleguide-crop-effect-sign-frame-desktop.jpg" alt="A framed portrait on charcoal with a bright rim on the edge facing the light and a soft shadow falling away below it">
+            <figcaption>A frame under the same light: <b>rim on the edge facing the source, shadow falling away.</b></figcaption></figure>
+        </div>
+      </div>
+
+      <div class="pair explain" id="effect-lit-meter">
+        <div><h3 style="font-size:19px">Lit meter</h3>
+          <p class="sub">Night, alongside the sign light. A chart's bars become thin lines in the
+            section's colour, brighter than their track. The numbers and the labels stay white —
+            the colour is in the bars and nowhere else.</p>
+          <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#results" target="_blank" rel="noopener">See it live</a></p></div>
+        <figure class="shot"><img src="/site/assets/styleguide/9-0/styleguide-crop-effect-lit-meter-desktop.png" alt="Seven thin rose bars on charcoal with white labels and white percentages">
+          <figcaption>The seven bars. <b>Love rose.</b></figcaption></figure>
+      </div>
+
+      <div class="pair explain" id="effect-first-light">
+        <div><h3 style="font-size:19px">First light</h3>
+          <p class="sub">Dawn. A pool of the colour at the top of the whitest paper, as if the sun
+            is just coming up. The rest of the paper stays pure white and the frames throw long soft
+            shadows downward. Light cannot brighten white, so this is a <b>small footprint at full
+            strength</b> — never a wash across the section.</p>
+          <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#more-results" target="_blank" rel="noopener">See it live</a></p></div>
+        <figure class="shot"><img src="/site/assets/styleguide/9-0/styleguide-crop-effect-first-light-desktop.jpg" alt="The top of the whitest paper with a soft rose pool entering from the top edge and fading to plain white">
+          <figcaption>The pool, and the paper outside it. <b>Love rose.</b></figcaption></figure>
+      </div>
+
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p><b>Sign light.</b> <code>#results::after</code>, <code>inset:0</code>, a masked colour
+          layer. At the top edge the charcoal rises to L* 46–52 carrying chroma 26–36; an ease-out
+          fall through the height of the voices to L* 30–32 by the numbers and plain charcoal at the
+          foot. Never more than 6 L* across any 100&nbsp;px, so the ground check passes under every
+          block. Frame rim two stops: 1&nbsp;px at L* 70–78 in the tint, 1&nbsp;px at L* 50–56
+          inside it, on the edge facing the source. Shadow 10–14&nbsp;px offset at phone, 16–22 at
+          desktop, blur 20–30, at least 10 L* below the sheet.</p>
+        <p><b>Lit meter.</b> <code>#study .orow .obar i{background:…}</code> only. Track, numbers,
+          labels and statistics all stay the night's white ink.</p>
+        <p><b>First light.</b> <code>#more-results::after</code>, a radial entering centred from the
+          top edge, wider than the content column, covering at most the top quarter. Chroma 18–24 at
+          L* 93–96 at its edge, ease-out to plain paper over at least 220&nbsp;px at phone and
+          420&nbsp;px at desktop. Outside the pool the paper measures the plain sheet: under 0.5 L*
+          delta, chroma at most 1. Frame shadows 10–12 L* deep, offset 16&nbsp;px phone /
+          24&nbsp;px desktop, blur 32–44; a 1&nbsp;px rim at L* 92–95 on the top edge of each
+          frame. Pair it with one highlight on the heading's italic words in the same colour.</p>
+      </div></details>
+      <a class="totop" href="#top">Back to top</a>
+    </div>
+  </section>
+
+  <!-- ============ 5 · TYPE, SPACE AND FURNITURE ============ -->
+  <section class="chapter" id="type-space-and-furniture">
+    <div class="chaphead">
+      <p class="cno">Chapter 5</p>
+      <h2>Type, space and furniture</h2>
+      <p>Every specimen below is set at the size the live page actually renders it at desktop, on
+        the normal paper. Headlines and quotes are in the serif; everything else, including every
+        number, is in Switzer.</p>
+    </div>
+
+    <div class="card" id="the-specimens">
+      <h3>The specimens</h3>
+
+      <div class="spec" id="type-headline"><p class="nm">Headline</p>
+        <p class="sp-h1">Experience Yourself In Sound. Music <em>Tuned to You.</em></p>
+        <p class="use">One per page, at the top, in the serif. The italic carries the turn in the
+          sentence.</p>
+        <details class="builder"><summary>For the builder</summary><div class="bin">
+          Cormorant Garamond 600, 82&nbsp;px / 83.64&nbsp;px, letter-spacing 0.328&nbsp;px, colour
+          <code>#141412</code>; 40&nbsp;px / 42&nbsp;px at phone. Token <code>--fs-h1</code>.
+        </div></details>
+      </div>
+
+      <div class="spec" id="type-lede"><p class="nm">Lede</p>
+        <p class="sp-lede">Your exact birth moment becomes four personal frequencies, embedded
+          inside music for meditation, visualization, work, or a walk on the beach.</p>
+        <p class="use">One sentence under the headline. Larger than body, in Switzer, and never
+          more than about two lines.</p>
+        <details class="builder"><summary>For the builder</summary><div class="bin">
+          Switzer 400, 22&nbsp;px / 34.1&nbsp;px, colour <code>rgba(20,20,18,.82)</code>;
+          20&nbsp;px / 31&nbsp;px at phone. Token <code>--fs-lede</code>, class <code>.lede</code>.
+        </div></details>
+      </div>
+
+      <div class="spec" id="type-section-heading"><p class="nm">Section heading</p>
+        <p class="sp-h2">It moves in <em>with you.</em></p>
+        <p class="use">One per section, in the serif, with the italic on the phrase that turns.</p>
+        <details class="builder"><summary>For the builder</summary><div class="bin">
+          Cormorant Garamond 600, 54&nbsp;px / 57.24&nbsp;px, letter-spacing 0.108&nbsp;px;
+          33&nbsp;px / 36.96&nbsp;px at phone. Token <code>--fs-h2</code>.
+        </div></details>
+      </div>
+
+      <div class="spec" id="type-body"><p class="nm">Body</p>
+        <p class="sp-body">Not a session to schedule — a soundtrack that follows your day. A violet
+          street on the morning walk. Brass in the afternoon sun. The record on at home. The world
+          keeps playing your colors back to you.</p>
+        <p class="use">The paragraph under a section heading. It holds its measure at every width:
+          it does not grow to fill a wide screen.</p>
+        <details class="builder"><summary>For the builder</summary><div class="bin">
+          Switzer 400, 18&nbsp;px / 29.7&nbsp;px, colour <code>rgba(20,20,18,.74)</code> for the
+          lede under a heading and <code>.78</code> for plain body; measure capped at
+          <code>620px</code>. Same size at phone, line-height 29.16&nbsp;px.
+        </div></details>
+      </div>
+
+      <div class="spec" id="type-label"><p class="nm">Label</p>
+        <p class="sp-label">Neuroscience</p>
+        <p class="use">The small line above a quote or a step. Uppercase, wide letter-spacing, and
+          quiet — it is a signpost, never a headline.</p>
+        <details class="builder"><summary>For the builder</summary><div class="bin">
+          Switzer 600, 11&nbsp;px / 18.15&nbsp;px, letter-spacing 1.98&nbsp;px, uppercase, colour
+          <code>rgba(20,20,18,.70)</code>. Class <code>.kick</code>.
+        </div></details>
+      </div>
+
+      <div class="spec" id="type-quote"><p class="nm">Quote, name and credential</p>
+        <p class="sp-quote">Zodiac.fm helps people access aspects of themselves that have always
+          been there.</p>
+        <hr class="sp-rule">
+        <p class="sp-name">Srini Pillay, M.D.</p>
+        <p class="sp-cred">Harvard-trained psychiatrist, brain-imaging researcher</p>
+        <p class="use">The result leads as a bold serif line; the detail follows lighter; a hairline
+          seats the name, with the credential under it. One glance per voice.</p>
+        <details class="builder"><summary>For the builder</summary><div class="bin">
+          Quote: Cormorant Garamond 600, 28&nbsp;px / 36.96&nbsp;px on a lead row, 22&nbsp;px on the
+          rest (<code>.tlead</code>). Detail: Switzer 400, 16.5&nbsp;px / 25.575&nbsp;px
+          (<code>.tdetail</code>). Name: Switzer 600, 14&nbsp;px (<code>.pwho</code>). Credential:
+          Switzer 400, 12.5&nbsp;px / 20.625&nbsp;px, letter-spacing 0.25&nbsp;px
+          (<code>.pwho small</code>).
+        </div></details>
+      </div>
+
+      <div class="spec" id="type-numbers"><p class="nm">The big numbers</p>
+        <p class="sp-stat">98.6<small>%</small></p>
+        <p class="use"><b>Every number on a Zodiac page is set in Switzer, never in the serif.</b>
+          The serif's figures are decorative and a statistic is not decorative. The unit rides small
+          and tight beside the figure.</p>
+        <figure class="shot" style="margin-top:22px"><img src="/site/assets/styleguide/9-0/styleguide-crop-type-numbers-desktop.png" alt="Four chart rows, each a name, a coloured wave and a number set in the plain typeface">
+          <figcaption>Numbers in a chart, on the live page: plain typeface, aligned right, unit small.</figcaption></figure>
+        <details class="builder"><summary>For the builder</summary><div class="bin">
+          Switzer 600, 50&nbsp;px, letter-spacing −0.5&nbsp;px; 30&nbsp;px at phone. Token
+          <code>--fs-stat</code>. The class <code>.num</code> forces the sans family on any figure
+          that lands inside serif copy — apply it to every statistic, frequency and percentage.
+        </div></details>
+      </div>
+
+      <div class="spec" id="type-fine-print"><p class="nm">Fine print</p>
+        <p class="sp-fine">*Sample frequencies. Yours come from your birth date, time, and place.</p>
+        <p class="use">Caveats and captions stay quiet, but never below the contrast floor. A
+          caveat that travels with a number travels with it everywhere.</p>
+        <details class="builder"><summary>For the builder</summary><div class="bin">
+          Switzer 400, 14&nbsp;px / 21.7&nbsp;px, colour <code>rgba(20,20,18,.66)</code> — measured
+          at 5.73:1 on the normal paper. Class <code>.tiny</code>.
+        </div></details>
+      </div>
+    </div>
+
+    <div class="card" id="space-and-furniture">
+      <h3>Space and furniture</h3>
+
+      <div class="pair explain" id="the-left-rail">
+        <div><h3 style="font-size:19px">The left rail</h3>
+          <p class="sub">On desktop, <b>every heading on the page starts exactly where the hero
+            headline starts.</b> One vertical line runs the whole page, and nothing crosses it.
+            Labels sit in the margin to the left of it; the heading, the paragraph and the pictures
+            all begin on it.</p></div>
+        <figure class="shot"><img src="/site/assets/styleguide/9-0/styleguide-crop-type-rail-desktop.jpg" alt="A section heading and paragraph both starting on the same vertical line as the page's headline">
+          <figcaption>The heading and the paragraph, both on the rail.</figcaption></figure>
+      </div>
+
+      <div class="pair explain" id="the-portrait-frame">
+        <div><h3 style="font-size:19px">The portrait frame</h3>
+          <p class="sub"><b>A frame sits one step above the paper it is on.</b> Every face on a page
+            is a square framed portrait — the whole head, a hairline border, a deliberate ground
+            brighter than the section's own paper, and a soft shadow. No cut-out heads, no fading
+            edges: those crop people badly and it looks wrong.</p>
+          <p class="sub">Faces are always silver. The frame may take a rim of the section's colour
+            on the edge facing a light; the face never does.</p></div>
+        <figure class="shot"><img src="/site/assets/styleguide/9-0/styleguide-crop-type-frame-desktop.jpg" alt="A square framed portrait on grey paper, its own ground brighter than the paper, with a hairline border and a soft shadow">
+          <figcaption>A framed portrait on the grey paper.</figcaption></figure>
+      </div>
+
+      <div class="pair explain" id="hairlines-and-rules">
+        <div><h3 style="font-size:19px">Hairlines</h3>
+          <p class="sub">One hairline weight on the whole page, in the page's own ink and never in a
+            colour. It separates one voice from the next and seats a name under a quote. It is never
+            a box: nothing on a Zodiac page is enclosed in a border.</p>
+          <hr class="sp-rule">
+        </div>
+        <div>
+          <details class="builder" style="margin-top:0"><summary>For the builder</summary><div class="bin">
+            <p><b>Rail.</b> At 1440 the headline and every section heading both start at
+              182&nbsp;px, inside a 1140&nbsp;px shell with 32&nbsp;px gutters; at 375 both start at
+              22&nbsp;px. The section head is a grid of a 150&nbsp;px label column and a
+              760&nbsp;px text column above 900&nbsp;px wide.</p>
+            <p><b>Frame.</b> <code>.fport</code>: background <code>#F1F1F0</code>, border
+              <code>1px rgba(20,20,18,.16)</code>, radius <code>3px</code>, shadow
+              <code>0 20px 44px rgba(20,20,18,.14)</code> in proof sections. Image
+              <code>object-fit:cover; object-position:center top</code>.</p>
+            <p><b>Hairline.</b> <code>1px</code> at <code>rgba(20,20,18,.17)</code> on the grey
+              paper; <code>--lv-hair</code> resolves per setting, from <code>.12</code> on the
+              lightest papers to <code>.18</code> white on the night.</p>
+          </div></details>
+        </div>
+      </div>
+      <a class="totop" href="#top">Back to top</a>
+    </div>
+  </section>
+
+  <!-- ============ 6 · NEVER ON A PAGE ============ -->
+  <section class="chapter" id="never-on-a-page">
+    <div class="chaphead">
+      <p class="cno">Chapter 6</p>
+      <h2>Never on a page</h2>
+      <p>Eight things. Each one has been tried and each one broke the page.</p>
+    </div>
+
+    <div class="card" id="the-never-list">
+      <ol class="never">
+        <li><b>Coloured light from nowhere</b><span>A tint, a filter, a gradient, a cone with no
+          source. If you cannot point at what is making the colour, it is not light — it is a
+          stain, and the reader feels it even if they cannot name it.</span></li>
+        <li><b>A section or a box filled or tinted with colour</b><span>Filling the field cancels
+          the pop it belongs to. The colour only reads because everything around it is black and
+          white; fill the field and there is nothing left for it to land against.</span></li>
+        <li><b>Chips beside labels</b><span>Small coloured markers next to a kicker or a step
+          label. They look like a system and they are decoration. The colour belongs in the
+          photograph or on the line of type, not in furniture.</span></li>
+        <li><b>Cream, or any warm pixel in the chrome</b><span>Paper, ink, hairlines and frames are
+          all neutral. Only a lamp inside a photograph may be warm.</span></li>
+        <li><b>Colour on a face</b><span>Never, in any colour, at any strength. Faces are always
+          silver. The one thing that may touch a person is a colour they are wearing.</span></li>
+        <li><b>A painted or warped phone</b><span>A phone on any page is the library's registered
+          device carrying a real screen. A drawn phone, a stretched screenshot or a mocked-up
+          device is never used anywhere.</span></li>
+        <li><b>A call to action on the home page</b><span>There is a sentence and a plain text
+          link. No button, no banner, no urgency.</span></li>
+        <li><b>A retired picture</b><span>A retired number may stay on the pages that already
+          carried it when it was retired, and may appear nowhere new — not from an old folder, not
+          from an archive, not from a superseded round. The library lists every retired number and
+          its replacement.</span></li>
+      </ol>
+
+      <figure class="shot" style="margin-top:36px;max-width:820px">
+        <img src="/site/assets/sg-treatments/pool-dont-home-t8.jpg" alt="A rejected section: a flat pale lavender band tinting the whole block, with no source, no falloff and no shadow">
+        <figcaption><b>The one picture of what not to do.</b> A flat band tinting the whole block:
+          no source, no falloff, no shadow, and no monochrome left for the colour to land against.
+          Michael, on this frame: “filling it all in is complete violation on monochrome with color
+          pop.” Library number P-198.</figcaption>
+      </figure>
+      <a class="totop" href="#top">Back to top</a>
+    </div>
+  </section>
+
+  <!-- ============ 7 · PAGE RECIPES ============ -->
+  <section class="chapter" id="page-recipes">
+    <div class="chaphead">
+      <p class="cno">Chapter 7</p>
+      <h2>Page recipes</h2>
+      <p>One page is written out in full. The rest are named, with their job, and nothing else —
+        they are not built yet, and when they are they follow this same language.</p>
+    </div>
+
+    <div class="card" id="recipe-home">
+      <h3>Home — complete</h3>
+      <div class="scroller">
+        <table class="recipe">
+          <thead><tr><th>Section</th><th>Setting</th><th>Effect</th><th>Colour</th></tr></thead>
+          <tbody>
+            <tr><td class="s">Experience Yourself In Sound. Music Tuned to You.</td><td class="g">Sun</td><td>Chord — four real things in one photograph</td><td>All four</td></tr>
+            <tr><td class="s">Neuroscientists, Astrologers, and Human Design Authorities Are Tuning In.</td><td class="g">Room</td><td>Highlight — one marked line</td><td>Love rose</td></tr>
+            <tr><td class="s">Tune Into You.</td><td class="g">Sun</td><td>Chord — one colour per row of the chart</td><td>All four</td></tr>
+            <tr><td class="s">How Zodiac.fm works</td><td class="g">Room</td><td>Solo — one coloured object per still life</td><td>Violet, amber, emerald</td></tr>
+            <tr><td class="s">It moves in with you.</td><td class="g">Sun</td><td>Spill, sun, worn, solo — one per scene</td><td>Violet, amber, rose, emerald</td></tr>
+            <tr><td class="s">Then it shows up in work, energy, and who you are. <span style="font-weight:400;color:var(--ink-label)">(with “We ran the numbers for a year.” inside it)</span></td><td class="g">Night</td><td>Sign light + highlight + lit meter</td><td>Love rose</td></tr>
+            <tr><td class="s">And it keeps showing up.</td><td class="g">Dawn</td><td>First light + highlight</td><td>Love rose</td></tr>
+            <tr><td class="s">Real music, with your frequencies inside.</td><td class="g">Day</td><td>Through — the light comes through the record</td><td>Love rose</td></tr>
+            <tr><td class="s">It started with one question.</td><td class="g">Room</td><td>Through — the light comes up through the record</td><td>Love rose</td></tr>
+            <tr><td class="s">The symphony has been playing your part all along. Come hear it.</td><td class="g">Sun</td><td>Chord — four real things in one photograph</td><td>All four</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card" id="recipe-for-a-new-page">
+      <h3>The rule for a new page</h3>
+      <ul class="plain">
+        <li><b>Write the section list first</b>, in plain sentences: what each section is for, in
+          the order a reader meets them.</li>
+        <li><b>Alternate the settings</b> so no two neighbours match. Sun, room, sun, room is the
+          opening rhythm that works.</li>
+        <li><b>Put the night where the proof is heaviest</b>, and only once.</li>
+        <li><b>Put dawn straight after the night</b>, and nowhere else.</li>
+        <li><b>End on sun.</b></li>
+        <li><b>Then give each section one colour and one effect</b>, matched to its setting: the
+          light papers carry colour inside their photographs; the room carries a photograph or a
+          marked line; the night carries the sign light, a marked line and, if there is a chart,
+          the lit bars; dawn carries first light and a marked line.</li>
+        <li><b>Neighbours never share a colour.</b> Amber lights; it never sits.</li>
+        <li><b>Pull every picture from the library by number</b>, and check it is not retired.</li>
+      </ul>
+    </div>
+
+    <div class="card" id="the-other-pages">
+      <h3>The other pages</h3>
+      <p class="sub">Not yet built. Each one follows the same language: a section list, a setting
+        for each, one colour and one effect per section.</p>
+      <div class="placeholders">
+        <div class="ph" id="recipe-corporate"><b>Corporate</b><span>What this company is, for people who are deciding whether to work with it.</span><i>Sections: none yet</i></div>
+        <div class="ph" id="recipe-content"><b>Content</b><span>The writing: one article, and the index that holds them.</span><i>Sections: none yet</i></div>
+        <div class="ph" id="recipe-questions"><b>Q&amp;A</b><span>Straight answers to the questions people actually ask before they join.</span><i>Sections: none yet</i></div>
+        <div class="ph" id="recipe-about"><b>About</b><span>Who made this, and why they are the people to have made it.</span><i>Sections: none yet</i></div>
+        <div class="ph" id="recipe-reviews"><b>Reviews</b><span>The whole bank of member voices, not the selection a page makes.</span><i>Sections: none yet</i></div>
+        <div class="ph" id="recipe-landing"><b>Landing page</b><span>One argument, one audience, one decision at the end of it.</span><i>Sections: none yet</i></div>
+        <div class="ph" id="recipe-results"><b>Results</b><span>A member's own four frequencies, given back to them.</span><i>Sections: none yet</i></div>
+        <div class="ph" id="recipe-birth-chart"><b>Birth chart</b><span>The chart the frequencies came from, readable by someone who has never seen one.</span><i>Sections: none yet</i></div>
+        <div class="ph" id="recipe-quiz"><b>Quiz</b><span>The questions that lead someone to their own frequencies.</span><i>Sections: none yet</i></div>
+      </div>
+      <a class="totop" href="#top">Back to top</a>
+    </div>
+  </section>
+
+  <!-- ============ 8 · THE INDEX FOR MACHINES ============ -->
+  <section class="chapter" id="the-index-for-machines">
+    <div class="chaphead">
+      <p class="cno">Chapter 8</p>
+      <h2>The index for machines</h2>
+      <p>Everything above is also written into this page as structured data, so a person or a
+        program handed this address can read the whole system without scraping the layout.</p>
+    </div>
+
+    <div class="card" id="about-the-index">
+      <h3>What it is</h3>
+      <p class="sub">A block of structured data at the end of this page lists every chapter and
+        every card on it, each with its own link and a one-line summary. Each card on this page
+        carries a permanent link of its own, so you can point someone straight at a single rule.
+        The companion index of every picture — number, name, file, effect, colour and subject —
+        lives on <a href="/site/styleguide-library">The Zodiac Picture Library</a>.</p>
+      <details class="builder"><summary>For the builder</summary><div class="bin">
+        <p>Read it with
+          <code>JSON.parse(document.getElementById('zfm-index').textContent)</code>. Shape:
+          <code>{page, built_from, built_on, colours[], settings[], effects[], chapters[{id, name,
+          summary, cards[{id, name, summary}]}]}</code>. Every <code>id</code> is an element id in
+          this document.</p>
+      </div></details>
+      <a class="totop" href="#top">Back to top</a>
+    </div>
+  </section>
+
+  <p class="footnote">The Zodiac Page System · built from the live home page, home-t12, on
+    2026-09-08 · the pictures come from
+    <a href="/site/styleguide-library">The Zodiac Picture Library</a>, which is the one home for
+    every image number.</p>
+
+  </main>
 </div>
 
-<header class="masthead">
-  <div class="wrap">
-    <div class="eyebrow">Site Design System &middot; The Style Guide</div>
-    <h1>The rules, and just enough to see them.</h1>
-    <p class="lede" style="margin-top:30px">Two examples per treatment, then the filter, the light and texture laws, the furniture, the dictation layer — type, bullets and captions at real measured values — the order a page is built in, the tokens, the two type voices, the copy grammar and its ceilings, the FAQ, the app screens, the gradient scope, then the proof, the page grammar and the job-by-job call sheet. Nothing here needs the bank open beside it.</p>
-    <a class="morelink" href="/site/styleguide-library">The library &rarr; <span>every frame, every flag, the gaps, the excluded and the testimonial bank</span></a>
-  </div>
-</header>
+<script type="application/json" id="zfm-index">
+{
+  "page": "The Zodiac Page System",
+  "url": "/site/styleguide",
+  "built_from": "site/home-t12.html",
+  "built_on": "2026-09-08",
+  "one_line": "Every Zodiac page is black-and-white photography on neutral paper; colour arrives once per section as one real thing or one real light, in one of four colours.",
+  "colours": [
+    {"name": "Core violet", "hex": "#6521C9", "kind": "object", "means": "who you are"},
+    {"name": "Love rose", "hex": "#B90044", "kind": "object", "means": "how you relate"},
+    {"name": "Vitality amber", "hex": "#FF9112", "kind": "light", "means": "your energy"},
+    {"name": "Abundance emerald", "hex": "#12A56E", "kind": "object", "means": "opportunity"}
+  ],
+  "settings": [
+    {"name": "DAWN", "class": "set-dawn", "paper": "#FFFFFE", "lstar": 99.98, "use": "the whitest paper; only ever straight after NIGHT"},
+    {"name": "SUN", "class": "set-sun", "paper": "#F0F0EF", "lstar": 94.77, "use": "the normal page paper, daylight"},
+    {"name": "DAY", "class": "set-day", "paper": "#E0E0DF", "lstar": 89.15, "use": "a soft step below sun"},
+    {"name": "ROOM", "class": "set-room", "paper": "#CCCCCB", "lstar": 82.02, "use": "grey paper, blinds half drawn, lean in to read"},
+    {"name": "NIGHT", "class": "set-night", "paper": "#40403F", "lstar": 27.06, "use": "charcoal you can see into; one scene per page"}
+  ],
+  "effects": [
+    {"id": "effect-solo", "name": "Solo", "group": "in the photograph", "one_line": "one real coloured object in an otherwise silver photograph"},
+    {"id": "effect-chord", "name": "Chord", "group": "in the photograph", "one_line": "all four colours as four real things in one photograph"},
+    {"id": "effect-through", "name": "Through", "group": "in the photograph", "one_line": "light passes through a coloured thing and the thing becomes the lamp"},
+    {"id": "effect-spill", "name": "Spill", "group": "in the photograph", "one_line": "the coloured thing lands a whisper of itself on the grey beside it"},
+    {"id": "effect-worn", "name": "Worn", "group": "in the photograph", "one_line": "colour as a real garment, the one way colour touches a person"},
+    {"id": "effect-sun", "name": "Sun", "group": "in the photograph", "one_line": "amber as light only: a rim, a halation edge, a glow inside a thing"},
+    {"id": "effect-highlight", "name": "Highlight", "group": "on the type", "one_line": "one colour marked on the one line that carries the argument"},
+    {"id": "effect-sign-light", "name": "Sign light", "group": "light on the section", "setting": "NIGHT", "one_line": "one coloured light from off the top edge, with falloff, rims and shadows"},
+    {"id": "effect-lit-meter", "name": "Lit meter", "group": "light on the section", "setting": "NIGHT", "one_line": "chart bars become thin lit lines in the section's colour"},
+    {"id": "effect-first-light", "name": "First light", "group": "light on the section", "setting": "DAWN", "one_line": "a small pool of colour at the top of the whitest paper, at full strength"}
+  ],
+  "never": [
+    "coloured light from nowhere",
+    "a section or box filled or tinted with colour",
+    "chips beside labels",
+    "cream or any warm pixel in the chrome",
+    "colour on a face",
+    "a painted or warped phone",
+    "a call to action on the home page",
+    "a retired picture number"
+  ],
+  "chapters": [
+    {"id": "the-four-colours", "name": "The four colours, and how to use this guide", "summary": "The four brand colours, which of them is light, and the four steps for using this guide.", "cards": [
+      {"id": "the-colours", "name": "The colours", "summary": "Core violet, Love rose, Vitality amber, Abundance emerald; amber falls on things, the other three are things."},
+      {"id": "how-to-use-this-guide", "name": "How to use this guide", "summary": "Pick a recipe, place the sections, give each a setting and an effect, pull pictures from the library by number."}
+    ]},
+    {"id": "the-five-settings", "name": "The five settings", "summary": "The five neutral papers a section can sit on, light to dark.", "cards": [
+      {"id": "the-five-papers", "name": "The five papers, light to dark", "summary": "Dawn, sun, day, room and night, with what each one is for."},
+      {"id": "each-setting-on-the-page", "name": "Each setting, standing on the live page", "summary": "One real section from the home page on each of the five papers, at phone size."}
+    ]},
+    {"id": "lighting-a-page", "name": "Lighting a page", "summary": "The rules for ordering sections, and the home page's ladder to copy.", "cards": [
+      {"id": "the-rules-of-the-ladder", "name": "The rules", "summary": "Neighbours never share a setting; the night is one scene; dawn only after night; into and out of the night is a cut; no warm pixel; faces always silver."},
+      {"id": "the-home-pages-ladder", "name": "The home page's ladder", "summary": "All ten sections in page order with their setting and their effect, at phone scale."}
+    ]},
+    {"id": "the-sections", "name": "The sections", "summary": "The catalogue of section templates, with job, setting, effect, slots and when to reuse each.", "cards": [
+      {"id": "section-the-hero", "name": "Experience Yourself In Sound. Music Tuned to You.", "summary": "The opening. Sun. Chord. Headline, one uncropped photograph, one sentence."},
+      {"id": "section-the-voices", "name": "Neuroscientists, Astrologers, and Human Design Authorities Are Tuning In.", "summary": "The regular testimonial block. Room. Highlight in rose. Three voices, one at full size."},
+      {"id": "section-tune-into-you", "name": "Tune Into You.", "summary": "The thing itself. Sun. All four colours in a four-row chart."},
+      {"id": "section-how-it-works", "name": "How Zodiac.fm works", "summary": "Three photographic steps. Room. One coloured object inside each still life."},
+      {"id": "section-it-moves-in-with-you", "name": "It moves in with you.", "summary": "The life gallery. Sun. Four scenes, one colour each."},
+      {"id": "section-the-night", "name": "Then it shows up in work, energy, and who you are.", "summary": "The hero proof block, with the study inside it. Night. Sign light, one marked line, lit bars."},
+      {"id": "section-and-it-keeps-showing-up", "name": "And it keeps showing up.", "summary": "Proof after the night. Dawn. First light plus a marked heading."},
+      {"id": "section-real-music", "name": "Real music, with your frequencies inside.", "summary": "The product chapter. Day. Through. The registered device carrying a real screen."},
+      {"id": "section-the-story", "name": "It started with one question.", "summary": "The origin. Room. Through. Text one side, one photograph the other."},
+      {"id": "section-the-finale", "name": "The symphony has been playing your part all along. Come hear it.", "summary": "The close. Sun. Chord. One line, one text link, one photograph."}
+    ]},
+    {"id": "the-effects", "name": "The effects", "summary": "How colour gets onto a section: in the photograph, on the type, or as light on the section.", "cards": [
+      {"id": "effects-in-the-photograph", "name": "Group A, in the photograph", "summary": "Solo, chord, through, spill, worn and sun, each on a live frame that carries it."},
+      {"id": "effects-on-the-type", "name": "Group B, on the type", "summary": "The highlight: one colour on the one line that carries the argument, shown at twice size."},
+      {"id": "effects-light-on-the-section", "name": "Group C, light on the section", "summary": "Sign light, lit meter and first light, and the four things that make it light and not a tint."}
+    ]},
+    {"id": "type-space-and-furniture", "name": "Type, space and furniture", "summary": "Every type size measured off the live page, plus the left rail, the portrait frame and hairlines.", "cards": [
+      {"id": "the-specimens", "name": "The specimens", "summary": "Headline, lede, section heading, body, label, quote, name, credential, the big numbers and fine print."},
+      {"id": "space-and-furniture", "name": "Space and furniture", "summary": "Every heading starts on the hero headline's line; a frame sits one step above its paper; one hairline weight."}
+    ]},
+    {"id": "never-on-a-page", "name": "Never on a page", "summary": "Eight things that have each been tried and each broke the page.", "cards": [
+      {"id": "the-never-list", "name": "The never list", "summary": "Light from nowhere, fills and tints, chips, cream, colour on a face, painted phones, calls to action, retired pictures."}
+    ]},
+    {"id": "page-recipes", "name": "Page recipes", "summary": "The home page written out in full, the rule for a new page, and the pages not yet built.", "cards": [
+      {"id": "recipe-home", "name": "Home, complete", "summary": "All ten sections with setting, effect and colour, as one table."},
+      {"id": "recipe-for-a-new-page", "name": "The rule for a new page", "summary": "Write the section list, alternate the settings, one night, dawn after it, end on sun, one colour and one effect each."},
+      {"id": "the-other-pages", "name": "The other pages", "summary": "Corporate, content, Q&A, about, reviews, landing page, results, birth chart and quiz: named, not yet built.", "placeholders": [
+        {"id": "recipe-corporate", "name": "Corporate", "status": "not yet built", "job": "What this company is, for people deciding whether to work with it.", "sections": []},
+        {"id": "recipe-content", "name": "Content", "status": "not yet built", "job": "The writing: one article, and the index that holds them.", "sections": []},
+        {"id": "recipe-questions", "name": "Q&A", "status": "not yet built", "job": "Straight answers to the questions people ask before they join.", "sections": []},
+        {"id": "recipe-about", "name": "About", "status": "not yet built", "job": "Who made this, and why they are the people to have made it.", "sections": []},
+        {"id": "recipe-reviews", "name": "Reviews", "status": "not yet built", "job": "The whole bank of member voices, not the selection a page makes.", "sections": []},
+        {"id": "recipe-landing", "name": "Landing page", "status": "not yet built", "job": "One argument, one audience, one decision at the end of it.", "sections": []},
+        {"id": "recipe-results", "name": "Results", "status": "not yet built", "job": "A member's own four frequencies, given back to them.", "sections": []},
+        {"id": "recipe-birth-chart", "name": "Birth chart", "status": "not yet built", "job": "The chart the frequencies came from, readable by someone who has never seen one.", "sections": []},
+        {"id": "recipe-quiz", "name": "Quiz", "status": "not yet built", "job": "The questions that lead someone to their own frequencies.", "sections": []}
+      ]}
+    ]},
+    {"id": "the-index-for-machines", "name": "The index for machines", "summary": "This block, and how to read it.", "cards": [
+      {"id": "about-the-index", "name": "What it is", "summary": "Where the data lives, its shape, and where the picture index lives."}
+    ]}
+  ]
+}
+</script>
 
-<section class="partmark" style="border-bottom:none;padding-bottom:0">
-  <div class="wrap">
-    <div class="kick">Part One</div>
-    <h2>THE TREATMENTS</h2>
-    <p class="lede" style="margin-top:28px">Nine ways colour enters a picture. Eight are alive. The ninth is banned, and it is named so it stays recognisable.</p>
-  </div>
-</section>
-<section id="treatments">
-  <div class="wrap">
-    <div class="tblock" id="solo">
-      <div class="thead"><div class="chapnum">01</div><h2>SOLO</h2><p class="tdef">SOLO = one real colored thing in a silver world.</p></div>
-      <div class="tgrid">
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-love-rose-awning.jpg" alt="Woman at a cafe table under a rose awning on a sunlit street">
-        <figcaption><b class="pid">P-26</b><span class="ttl">Rose Awning</span><span class="recipe"><i>Recipe</i> rose awning carries the pop; ground kept clean silver.</span></figcaption>
-      </figure>
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-abundance-emerald-bicycle.jpg" alt="Emerald bicycle against a white wall, person in headphones sitting beside it">
-        <figcaption><b class="pid">P-66</b><span class="ttl">Emerald Bicycle</span><span class="recipe"><i>Recipe</i> the bicycle is the emerald object; white wall and rider silver.</span></figcaption>
-      </figure>
-      </div>
-    </div>
-    <div class="tblock" id="chord">
-      <div class="thead"><div class="chapnum">02</div><h2>CHORD</h2><p class="tdef">CHORD = all four colors as four real things.</p></div>
-      <div class="tgrid">
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-boards-cc1.jpg" alt="Four surfboards upright in the sand in violet, emerald, amber and rose">
-        <figcaption><b class="pid">P-94</b><span class="ttl">Four Surfboards</span><span class="recipe"><i>Recipe</i> four boards upright in the sand; sand and sky grey.</span></figcaption>
-      </figure>
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-laundry-cc1.jpg" alt="Alley laundry line with four garments in violet, emerald, amber and rose">
-        <figcaption><b class="pid">P-88</b><span class="ttl">Four-Color Laundry Line</span><span class="recipe"><i>Recipe</i> four garments on one alley line carry the chord, and sun through each one makes every garment its own lamp; brick and sky monochrome.</span></figcaption>
-      </figure>
-      </div>
-    </div>
-    <div class="tblock" id="through">
-      <div class="thead"><div class="chapnum">03</div><h2>THROUGH</h2><p class="tdef">THROUGH = sun passes through a colored thing, the thing becomes the lamp.</p></div>
-      <div class="tgrid">
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/sg5lib/eval-r18-day-core-stained-glass.jpg" alt="Person in headphones on a chair, violet stained-glass light across the floor">
-        <figcaption><b class="pid">P-5</b><span class="ttl">Stained Glass Light</span><span class="recipe"><i>Recipe</i> sun passes through violet stained glass and the glass becomes the lamp; the floor takes the pattern, room silver.</span></figcaption>
-      </figure>
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/sg5lib/eval-r23-hero-record-emerald.jpg" alt="Emerald vinyl record leaning against a white wall in hard sun">
-        <figcaption><b class="pid">P-82</b><span class="ttl">Emerald Record</span><span class="recipe"><i>Recipe</i> the emerald disc is the object against a silver wall, and the translucent vinyl passes hard sunlight through itself — our best THROUGH-outdoors exemplar.</span></figcaption>
-      </figure>
-      </div>
-    </div>
-    <div class="tblock" id="spill">
-      <div class="thead"><div class="chapnum">04</div><h2>SPILL</h2><p class="tdef">SPILL = a colored thing lands its color on the grey beside it.</p></div>
-      <div class="tgrid">
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/sg5lib/eval-r19-sun-core-violet-parasol.jpg" alt="Woman on a bench under a violet parasol, black and white plaza, hard sun">
-        <figcaption><b class="pid">P-1</b><span class="ttl">Violet Parasol</span><span class="recipe"><i>Recipe</i> the violet parasol lands its color on the bench and the woman beneath it; plaza grey.</span></figcaption>
-      </figure>
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-boombox-puddle-amber.jpg" alt="Boombox on wet concrete steps, its amber tape window mirrored in the puddle">
-        <figcaption><b class="pid">P-55</b><span class="ttl">Boombox in the Puddle</span><span class="recipe"><i>Recipe</i> the boombox&#x27;s amber tape window spills into the puddle beside it; concrete silver.</span></figcaption>
-      </figure>
-      </div>
-    </div>
-    <div class="tblock" id="worn">
-      <div class="thead"><div class="chapnum">05</div><h2>WORN</h2><p class="tdef">WORN = color as a real garment, the only way color touches people.</p></div>
-      <div class="tgrid">
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/sg5lib/r29-m-runners-bridge.jpg" alt="Four runners on a bridge in violet, emerald, amber and rose vests">
-        <figcaption><b class="pid">P-93</b><span class="ttl">Runners on the Bridge</span><span class="recipe"><i>Recipe</i> the chord carried entirely as worn garment: four vests on four bodies; bridge and river silver.</span></figcaption>
-      </figure>
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/d4i/d4i-dance.jpg" alt="Dance">
-        <figcaption><b class="pid">P-106</b><span class="ttl">Red Dress Dance</span><span class="recipe"><i>Recipe</i> the red dress is the garment carrying the color; room and record silver.</span></figcaption>
-      </figure>
-      </div>
-    </div>
-    <div class="tblock" id="sun">
-      <div class="thead"><div class="chapnum">06</div><h2>SUN</h2><p class="tdef">SUN = amber as light, never a pop.</p></div>
-      <div class="tgrid">
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/hero-home/hero-home-real-screen-01.jpg" alt="A woman with large black headphones in a cream knitted sweater, smiling and holding up a real iPhone whose screen carries the live zodiac.fm Playlist, on a blown-out white beach with four surfboards in violet, emerald, amber and rose, the after-noon sun standing high in the middle of the sky and making all the light">
-        <figcaption><b class="pid">P-177</b><span class="ttl">Hero Home &middot; Real Screen 01</span><span class="recipe"><i>Recipe</i> after-noon sun standing high makes all the light; four boards carry the chord beneath it.</span></figcaption>
-      </figure>
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/sg5lib/r27-a-person-shaft.jpg" alt="Breakdancer frozen on one hand in a gold alley shaft, friends watching">
-        <figcaption><b class="pid">P-48</b><span class="ttl">B-Boy in the Amber Shaft</span><span class="recipe"><i>Recipe</i> the alley shaft is the light source; the b-boy is lit by it, never painted.</span></figcaption>
-      </figure>
-      </div>
-    </div>
-    <div class="tblock" id="silver">
-      <div class="thead"><div class="chapnum">07</div><h2>SILVER</h2>
-      <p class="tdef">SILVER = no color at all, on purpose, the proof treatment.</p></div>
-      <div>
-    <p class="body">No photo-bank frame is filed here. SILVER holds the <b>testimonial T-bank portraits</b> — the black-and-white customer faces that prove the world reads without any colour at all. Skin, cloth and ground all silver: the treatment that proves the palette is a choice and not a crutch.</p>
-    <ul class="zlist">
-      <li><b>/site/assets/d4l/d4l-face-jennifer.png</b> — the current single-face cut</li>
-      <li><b>/site/assets/d4g/</b> — the full twelve-face set</li>
-    </ul>
-      </div>
-    </div>
-    <div class="tblock" id="chip">
-      <div class="thead"><div class="chapnum">08</div><h2>CHIP</h2><p class="tdef">CHIP = the product's own marks carry the color.</p></div>
-      <div class="tgrid">
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/hero-recast/phone-frame04-build-full.png" alt="The whole iPhone built the App Store Frame 04 way, standing on the white studio sweep, its screen carrying the live zodiac.fm Playlist of 2026-09-03: Play All (17) and the Quiet Success, Starseed, Elysian Surge and Cosmic Drift track cards in rose, violet, amber and emerald">
-        <figcaption><b class="pid">P-208</b><span class="ttl">The Phone &middot; Frame 04 Build</span><span class="recipe"><i>Recipe</i> the real shipped app screen, shot clean: the true Playlist &mdash; Play All (17), true track order, true waveforms &mdash; and the studio sweep stays silver. The product&#x27;s own mark, at product scale.</span></figcaption>
-      </figure>
-      <figure class="photo">
-        <img loading="lazy" src="/site/Iris/assets/examples/chip-kickers.jpg" alt="Three testimonial kickers — Coming Home, Flow, Opportunity — each with a small band-coloured waveform chip beside it in rose, amber and emerald">
-        <figcaption><b class="pid">CHIPS &middot; IN USE</b><span class="ttl">Kickers On The Page</span><span class="recipe"><i>Recipe</i> the same mark at page scale: a small band-coloured waveform beside each kicker, one band per voice. Colour sits beside the person, never on them. Not a bank frame and it carries no P-number &mdash; it is the product mark doing its job on the page.</span></figcaption>
-      </figure>
-      </div>
-    </div>
-    <div class="tblock" id="highlight">
-      <div class="thead"><div class="chapnum">09</div><h2>HIGHLIGHT</h2><p class="tdef">HIGHLIGHT = one brand colour marked on the line that carries the argument; the field around it stays black and white.</p></div>
-      <div class="tgrid">
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/sg-treatments/pool-do-home-t9.jpg" alt="The Voices section of home-t9: a rose highlight drawn across the first quote line by line, the rest of the section pure black and white">
-        <figcaption><b class="pid">P-197 &middot; DO</b><span class="ttl">The Mark On The Line</span><span class="recipe"><i>Recipe</i> the mark is drawn on the TEXT, never on the paragraph box: <code>box-decoration-break: clone</code> gives every line its own stroke, so it ends where the words end and a short last line trails no colour across empty paper. Tapered at both ends, tilted a couple of degrees, and its top and bottom edges washed back into the page&#x27;s own paper so it is not a ruled rectangle. It does NOT pretend to be light &mdash; there is no source, no cone, no beam (Michael: "the highlight does not beam from anywhere it just is"). ONE line per section, and the credential beneath may take the same mark at a fraction of the strength so the quote still leads. One of the four colours, swappable. Never on a face. A page frame, not a photograph: the treatment doing its job on home-t9.</span></figcaption>
-      </figure>
-      <figure class="photo">
-        <img loading="lazy" src="/site/assets/sg-treatments/pool-dont-home-t8.jpg" alt="The rejected Voices section of home-t8: a flat pale lavender band tinting the whole section with no source, no falloff and no shadow">
-        <figcaption><b class="pid">P-198 &middot; DON&#x27;T</b><span class="ttl">Shading, Not A Mark</span><span class="recipe"><i>Recipe</i> the failure this treatment replaces: the whole field tinted, so there is no monochrome left for the colour to land against. Michael, 2026-09-04: "filling it all in is complete violation on monochrome with color pop." A pop is made by emptying the field, not by filling it. A page frame, not a photograph: the rejected home-t8 Voices kept as the failure exemplar.</span></figcaption>
-      </figure>
-      </div>
-    </div>
-    <div class="tblock" id="glow">
-      <div class="thead"><div class="chapnum">10 · Banned</div><h2>GLOW</h2>
-      <p class="tdef">GLOW = colored light from nowhere, dead.</p></div>
-      <div>
-    <div class="banline" style="margin-top:0"><b>No frame is shown here, on purpose.</b> A GLOW frame reproduced on a review surface is the thing teaching the wrong lesson. Forty frames sit outside the library on this ruling — nine retired outright, thirty-one queued to be remade with the sun making the light. If you cannot point at what is making the colour, the frame is not finished.</div>
-    <a class="morelink" href="/site/styleguide-library#excluded">The full excluded list &rarr; <span>nine retire, thirty-one remake in sun</span></a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="partmark" style="border-bottom:none;padding-bottom:0">
-  <div class="wrap">
-    <div class="kick">Part Two</div>
-    <h2>THE RULES</h2>
-    <p class="lede" style="margin-top:28px">Everything that governs a page once the frames are chosen.</p>
-  </div>
-</section>
-<section id="filter">
-  <div class="wrap">
-    <div class="chapnum">Chapter 1</div>
-    <h2>THE FILTER — THE THIRTEEN</h2>
-    <p class="body" style="margin-top:26px">Every frame passes these before it ships. The numbers are the floor; rule 13 is the gate.</p>
-    <ol class="rules">
-      <li>Kill the colour and look — if nothing holds your eye in grey, colour will not rescue it.</li>
-      <li>The coloured thing must stand out even in grey.</li>
-      <li>When a colour looks weak, fix the grey behind it — never the saturation.</li>
-      <li>Never desaturate, always convert — keep the colour master.</li>
-      <li>Colour sits on top of the photograph's own light — a flat inside is paint.</li>
-      <li>Point at what is making the colour — no source, no colour.</li>
-      <li>Quiet everything, let one thing sing.</li>
-      <li>Stand close — the edge gives a fake away.</li>
-      <li>Same texture on both sides of the line.</li>
-      <li>Real colour lands on what sits nearby.</li>
-      <li>Write the recipe down or it will not happen twice.</li>
-      <li>Make a calmer version and let them fight.</li>
-      <li><b>Name the light on a person — colour may kiss skin, never paint it.</b></li>
-    </ol>
-  </div>
-</section>
-<section id="light">
-  <div class="wrap">
-    <div class="chapnum">Chapter 2</div>
-    <h2>LIGHT</h2>
-    <ol class="rules">
-      <li>Start bright — frames and pages open in light.</li>
-      <li>Light is made into the photo at creation, never painted after.</li>
-      <li>Every light has a pointable source.</li>
-      <li>Faces take warm key light only; a real reflection may kiss skin; frequency colour may never paint it.</li>
-      <li>Amber is our sunlight, not a pop.</li>
-    </ol>
-  </div>
-</section>
-<section id="texture">
-  <div class="wrap">
-    <div class="chapnum">Chapter 3</div>
-    <h2>TEXTURE</h2>
-    <ol class="rules">
-      <li>Texture is photographed, never tiled.</li>
-      <li>Busy carries no words — copy sits on a calm zone, always.</li>
-      <li>One grain, frame and page; type is the one exemption.</li>
-      <li>Texture change announces the section — no divider lines.</li>
-      <li>Sharpness is hierarchy — crisp only where the eye should land.</li>
-    </ol>
-  </div>
-</section>
-<section id="furniture">
-  <div class="wrap">
-    <div class="chapnum">Chapter 4</div>
-    <h2>FURNITURE <span class="bandcount">charts, bullets, captions</span></h2>
-    <div class="masterlaw">
-      <div class="t">Master law</div>
-      <div class="l">Colour lives in the mark, not the font &mdash; coloured words are a rare deliberate move, on Michael&#x27;s taste, never a habit.</div>
-    </div>
-
-    <div class="grouphead">Charts</div>
-    <ul class="grouplist">
-      <li>Ink on paper.</li>
-      <li>A bar wears band colour only when it IS that frequency.</li>
-      <li>Numbers in Switzer, never the serif.</li>
-      <li>One chart style per screen.</li>
-      <li>Ground stays paper, grid whisper-grey.</li>
-    </ul>
-
-    <div class="grouphead">Bullets</div>
-    <ul class="grouplist">
-      <li>A band-coloured mark at full intensity, ink words.</li>
-    </ul>
-
-    <div class="grouphead">Captions</div>
-    <ul class="grouplist">
-      <li>Quiet ink under the photo; a small chip only when the photo belongs to a frequency.</li>
-    </ul>
-
-    <figure class="exfig">
-      <img loading="lazy" src="/site/Iris/assets/examples/study-charts.jpg" alt="The study block from the d4-l page: the headline We ran the numbers for a year, two large figures 98.6% and 84%, and a card of seven horizontal bars on a pale paper ground">
-      <figcaption><span class="ttl">Example · one</span><span class="cap">The study block on d4-l — the current chart grammar. <b>Note: the big numbers must move to Switzer (numbers law); flagged drift.</b></span></figcaption>
-    </figure>
-  </div>
-</section>
-<section id="typography">
-  <div class="wrap">
-    <div class="chapnum">Chapter 5</div>
-    <h2>TYPOGRAPHY &mdash; DICTATED</h2>
-    <p class="body" style="margin-top:26px">Every value below is read off <b>/site/site-d4-l.html</b>, the approved page. Nothing here is invented. Where the Iris review shell and d4-l disagree, <b>d4-l wins</b> &mdash; the shell is a review surface, the page is the product.</p>
-
-    <p class="srcnote"><span class="srctag m">Measured</span> <b>d4-l uses no <span style="font-family:var(--sans)">clamp()</span>.</b> It declares a token block on <span style="font-family:var(--sans)">:root</span> and swaps the whole block at <span style="font-family:var(--sans)">max&#x2011;width:640px</span>. So the 375 column is not an interpolation &mdash; it is the second declared set, and it is the same set from 640px down to the floor. Two sizes exist, not a curve.</p>
-
-    <table class="spec">
-      <thead>
-        <tr><th>Element</th><th>Typeface + weight</th><th>1440</th><th>375</th><th>Line-height</th><th>Letter-spacing</th><th>Case</th><th>Colour token</th></tr>
-      </thead>
-      <tbody>
-        <tr class="grp"><td colspan="8">Naming and headings</td></tr>
-        <tr><td class="el" data-label="Element">Wordmark<code>.wordmark</code></td><td data-label="Typeface + weight">Cormorant Garamond 600</td><td data-label="1440"><span class="n">23px</span></td><td data-label="375"><span class="n">18px</span></td><td data-label="Line-height"><span class="n">1.65 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">.06em</span></td><td data-label="Case">As typed</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
-        <tr><td class="el" data-label="Element">H1 / display<code>h1</code></td><td data-label="Typeface + weight">Cormorant Garamond 600 &middot; <i>em</i> italic 500</td><td data-label="1440"><span class="n">82px</span></td><td data-label="375"><span class="n">46px</span></td><td data-label="Line-height"><span class="n">1.02 / 1.05</span></td><td data-label="Letter-spacing"><span class="n">.004em</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
-        <tr><td class="el" data-label="Element">Section head<code>h2</code></td><td data-label="Typeface + weight">Cormorant Garamond 600 &middot; <i>em</i> italic 500</td><td data-label="1440"><span class="n">54px</span></td><td data-label="375"><span class="n">33px</span></td><td data-label="Line-height"><span class="n">1.06 / 1.12</span></td><td data-label="Letter-spacing"><span class="n">.002em</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
-        <tr><td class="el" data-label="Element">Sub head<code>h3</code></td><td data-label="Typeface + weight">Switzer 600</td><td data-label="1440"><span class="n">22px</span></td><td data-label="375"><span class="n">20px</span></td><td data-label="Line-height"><span class="n">1.35</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
-        <tr class="grp"><td colspan="8">Kickers</td></tr>
-        <tr><td class="el" data-label="Element">Kicker &mdash; proof<code>.kick</code></td><td data-label="Typeface + weight">Switzer 600</td><td data-label="1440"><span class="n">11px</span></td><td data-label="375"><span class="n">11px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">.18em</span></td><td data-label="Case">UPPERCASE</td><td class="tok" data-label="Colour token">--ink38 &rarr; .66</td></tr>
-        <tr><td class="el" data-label="Element">Kicker &mdash; chapter cue<code>.cue</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">12px</span></td><td data-label="375"><span class="n">11.5px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">.24em</span></td><td data-label="Case">UPPERCASE</td><td class="tok" data-label="Colour token">--ink38 &rarr; .66</td></tr>
-        <tr><td class="el" data-label="Element">Kicker &mdash; prehead<code>.prehead</code></td><td data-label="Typeface + weight">Switzer 600</td><td data-label="1440"><span class="n">12px</span></td><td data-label="375"><span class="n">11px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">.18em / .16em</span></td><td data-label="Case">UPPERCASE</td><td class="tok" data-label="Colour token">--ink-label &rarr; .66</td></tr>
-        <tr><td class="el" data-label="Element">Kicker &mdash; music<code>.mkick</code></td><td data-label="Typeface + weight">Switzer 600</td><td data-label="1440"><span class="n">11px</span></td><td data-label="375"><span class="n">11px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">.18em</span></td><td data-label="Case">UPPERCASE</td><td class="tok" data-label="Colour token">--ink38 &rarr; .66</td></tr>
-        <tr class="grp"><td colspan="8">Reading copy</td></tr>
-        <tr><td class="el" data-label="Element">Body<code>body</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">18px</span></td><td data-label="375"><span class="n">18px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink78 &rarr; .78</td></tr>
-        <tr><td class="el" data-label="Element">Lede<code>.lede</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">22px</span></td><td data-label="375"><span class="n">20px</span></td><td data-label="Line-height"><span class="n">1.55</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink78 &rarr; .78</td></tr>
-        <tr><td class="el" data-label="Element">Fine print<code>.tiny</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">14px</span></td><td data-label="375"><span class="n">14px</span></td><td data-label="Line-height"><span class="n">1.55</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink-fine &rarr; .66</td></tr>
-        <tr class="grp"><td colspan="8">Quotes and proof</td></tr>
-        <tr><td class="el" data-label="Element">Pull quote<code>.pq</code></td><td data-label="Typeface + weight">Cormorant Garamond 400 italic &middot; <b>b</b> 600 italic</td><td data-label="1440"><span class="n">24px</span></td><td data-label="375"><span class="n">21px</span></td><td data-label="Line-height"><span class="n">1.4</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66 &middot; <b>b</b> --ink</td></tr>
-        <tr><td class="el" data-label="Element">Testimonial quote<code>.tlead</code></td><td data-label="Typeface + weight">Cormorant Garamond 600</td><td data-label="1440"><span class="n">22px base<br>20 / 24 / 27 / 28 by slot</span></td><td data-label="375"><span class="n">19.5px base<br>21 / 22 by slot</span></td><td data-label="Line-height"><span class="n">1.32</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
-        <tr><td class="el" data-label="Element">Testimonial detail<code>.tdetail</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">16.5px</span></td><td data-label="375"><span class="n">16.5px</span></td><td data-label="Line-height"><span class="n">1.55</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66</td></tr>
-        <tr><td class="el" data-label="Element">Name line<code>.pwho</code></td><td data-label="Typeface + weight">Switzer 600</td><td data-label="1440"><span class="n">14px</span></td><td data-label="375"><span class="n">14px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">As typed</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
-        <tr><td class="el" data-label="Element">Role line<code>.pwho small</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">12.5px</span></td><td data-label="375"><span class="n">12.5px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">.02em</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66</td></tr>
-        <tr><td class="el" data-label="Element">Scrolling quote<code>.mqi .q</code></td><td data-label="Typeface + weight">Cormorant Garamond 400 italic</td><td data-label="1440"><span class="n">21px</span></td><td data-label="375"><span class="n">21px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink #141412</td></tr>
-        <tr class="grp"><td colspan="8">Captions</td></tr>
-        <tr><td class="el" data-label="Element">Caption &mdash; scene<code>.scene figcaption</code></td><td data-label="Typeface + weight">Switzer 400 &middot; <b>b</b> 600</td><td data-label="1440"><span class="n">14.5px</span></td><td data-label="375"><span class="n">14.5px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66 &middot; <b>b</b> --ink</td></tr>
-        <tr><td class="el" data-label="Element">Caption &mdash; object<code>.mfig figcaption</code></td><td data-label="Typeface + weight">Switzer 400 &middot; <b>b</b> 600 block 16.5px</td><td data-label="1440"><span class="n">15px</span></td><td data-label="375"><span class="n">15px</span></td><td data-label="Line-height"><span class="n">1.5</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66 &middot; <b>b</b> --ink</td></tr>
-        <tr class="grp"><td colspan="8">Numbers &mdash; every one of them Switzer</td></tr>
-        <tr><td class="el" data-label="Element">Big number<code>.stat</code></td><td data-label="Typeface + weight">Switzer 600</td><td data-label="1440"><span class="n">50px<br><small>% sign .32em = 16px</small></span></td><td data-label="375"><span class="n">30px<br><small>% sign .32em = 9.6px</small></span></td><td data-label="Line-height"><span class="n">1</span></td><td data-label="Letter-spacing"><span class="n">-.01em</span></td><td data-label="Case">Figures</td><td class="tok" data-label="Colour token">--ink &middot; sign --ink56</td></tr>
-        <tr><td class="el" data-label="Element">Stat label<code>.statlbl</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">15px</span></td><td data-label="375"><span class="n">15px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66</td></tr>
-        <tr><td class="el" data-label="Element">Chart title<code>.otitle</code></td><td data-label="Typeface + weight">Switzer 600 &middot; <b>small</b> 400 13px</td><td data-label="1440"><span class="n">15px</span></td><td data-label="375"><span class="n">15px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink &middot; small --ink56</td></tr>
-        <tr><td class="el" data-label="Element">Chart label<code>.orow .olbl</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">14.5px</span></td><td data-label="375"><span class="n">14.5px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink78 &rarr; .78</td></tr>
-        <tr><td class="el" data-label="Element">Chart value<code>.orow .oval</code></td><td data-label="Typeface + weight">Switzer 600 &middot; <b>small</b> 400 12px</td><td data-label="1440"><span class="n">19px</span></td><td data-label="375"><span class="n">19px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Figures</td><td class="tok" data-label="Colour token">--ink &middot; small --ink56</td></tr>
-        <tr><td class="el" data-label="Element">Frequency name<code>.crow .cname b</code></td><td data-label="Typeface + weight">Switzer 600 &middot; <b>span</b> 400 12.5px</td><td data-label="1440"><span class="n">17px</span></td><td data-label="375"><span class="n">17px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink &middot; span --ink78</td></tr>
-        <tr><td class="el" data-label="Element">Hz figure<code>.crow .chz</code></td><td data-label="Typeface + weight">Switzer 600 &middot; <b>small</b> 400 13px</td><td data-label="1440"><span class="n">26px</span></td><td data-label="375"><span class="n">21px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Figures</td><td class="tok" data-label="Colour token">--ink &middot; small --ink56</td></tr>
-        <tr class="grp"><td colspan="8">Actionable type</td></tr>
-        <tr><td class="el" data-label="Element">CTA / button<code><span class="dash">none on d4-l</span></code></td><td data-label="Typeface + weight"><span class="dash">&mdash;</span></td><td data-label="1440"><span class="n"><span class="dash">&mdash;</span></span></td><td data-label="375"><span class="n"><span class="dash">&mdash;</span></span></td><td data-label="Line-height"><span class="n"><span class="dash">&mdash;</span></span></td><td data-label="Letter-spacing"><span class="n"><span class="dash">&mdash;</span></span></td><td data-label="Case"><span class="dash">&mdash;</span></td><td class="tok" data-label="Colour token"><span class="dash">&mdash;</span></td></tr>
-        <tr><td class="el" data-label="Element">Text link<code>.textlink</code></td><td data-label="Typeface + weight">Switzer 400 &middot; 1px --hair underline, 2px below</td><td data-label="1440"><span class="n">18px (body)</span></td><td data-label="375"><span class="n">18px (body)</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; --ink on hover</td></tr>
-        <tr><td class="el" data-label="Element">Nav link<code>.nav-links a</code></td><td data-label="Typeface + weight">Switzer 400</td><td data-label="1440"><span class="n">14.5px</span></td><td data-label="375"><span class="n">12px</span></td><td data-label="Line-height"><span class="n">1.65 / 1.62 (inherited)</span></td><td data-label="Letter-spacing"><span class="n">0</span></td><td data-label="Case">Sentence</td><td class="tok" data-label="Colour token">--ink56 &rarr; .66</td></tr>
-      </tbody>
-    </table>
-
-    <div class="subhead">The colour tokens, measured</div>
-    <ul class="zlist">
-      <li><b>--paper</b> #F0F0EF &nbsp;&middot;&nbsp; <b>--ink</b> #141412 &nbsp;&middot;&nbsp; <b>--hair</b> rgba(20,20,18,.12)</li>
-      <li><b>--ink78</b> rgba(20,20,18,.78) &mdash; reading copy and chart labels</li>
-      <li><b>--ink56</b>, <b>--ink38</b>, <b>--ink-fine</b>, <b>--ink-label</b> &mdash; all four resolve to <b>rgba(20,20,18,.66)</b>. The names carry opacities they no longer have: the D4-I contrast audit raised every one of them to .66 and left the names alone. <b>Use the token, never the number in its name.</b></li>
-      <li><b>Bands</b> &mdash; core #6521C9 &nbsp;&middot;&nbsp; love #B90044 &nbsp;&middot;&nbsp; vitality #FF9112 &nbsp;&middot;&nbsp; abundance #12A56E. These are d4-l&#x27;s four. The Iris shell&#x27;s own violet is the same #6521C9; its amber is not d4-l&#x27;s.</li>
-    </ul>
-
-    <div class="banline"><b>Ruled — Michael, 2026-08-28: leave it alone.</b> d4-l&#x27;s step kickers set the <i>text</i> to the band colour &mdash; <span style="font-family:var(--sans)">&lt;p class=&quot;kick&quot; style=&quot;color:var(--vitality)&quot;&gt;</span> &mdash; and that stands: colour in the words is allowed every once in a while, deliberately. The default stays the mark carrying the band with the words in ink.</div>
-
-    <div class="twolaws">
-      <div class="one"><div class="t">Law</div><div class="l">Numbers always Switzer, never the serif.</div></div>
-      <div class="one"><div class="t">Law</div><div class="l">Colour never lives in a font.</div></div>
-    </div>
-  </div>
-</section>
-<section id="bullets">
-  <div class="wrap">
-    <div class="chapnum">Chapter 6</div>
-    <h2>BULLETS &mdash; DICTATED</h2>
-    <p class="body" style="margin-top:26px">One law, two built forms. The mark carries the colour and the words stay ink &mdash; so a bullet is a construction question, not a colour question.</p>
-
-    <div class="subhead">Form one &mdash; the step mark <span class="num">measured on d4-l</span></div>
-    <ul class="zlist">
-      <li><b>Shape</b> &mdash; a pill: <b>18px wide, 4px tall, 2px corner radius</b>, <span style="font-family:var(--sans)">display:inline-block</span>.</li>
-      <li><b>Colour</b> &mdash; the band token at <b>full intensity</b>, set inline: <span style="font-family:var(--sans)">background:var(--core)</span>. No tint, no opacity, no gradient.</li>
-      <li><b>Gap to text</b> &mdash; <b>8px</b>, carried by the mark&#x27;s own <span style="font-family:var(--sans)">margin-right</span>, not by a flex gap.</li>
-      <li><b>Seating</b> &mdash; <span style="font-family:var(--sans)">vertical-align:2px</span>: the pill rides two pixels above the baseline so it centres on the cap height of an 11px uppercase kicker.</li>
-      <li><b>Text</b> &mdash; Switzer 600, 11px, .18em, uppercase. Same at 1440 and at 375; d4-l does not step it down.</li>
-      <li><b>Spacing below</b> &mdash; the kicker carries <b>margin-bottom:12px</b> to the head that follows (16px in the music chapter).</li>
-    </ul>
-    <div class="bulletdemo">
-      <span><i style="background:#6521C9"></i>Step one &middot; core</span>
-      <span><i style="background:#FF9112"></i>Step two &middot; vitality</span>
-      <span><i style="background:#12A56E"></i>Step three &middot; abundance</span>
-    </div>
-
-    <div class="subhead">Form two &mdash; the band dot <span class="num">measured on d4-l</span></div>
-    <ul class="zlist">
-      <li><b>Shape</b> &mdash; a circle: <b>7&times;7px, 50% radius</b>, on the song card&#x27;s band line.</li>
-      <li><b>Colour</b> &mdash; the card&#x27;s own band variable at full intensity; the line&#x27;s words take the band&#x27;s ink variable.</li>
-      <li><b>Gap to text</b> &mdash; <b>6px</b>, a flex gap. <b>Text</b> &mdash; Switzer 600, 12.5px.</li>
-    </ul>
-    <div class="bulletdemo">
-      <span class="dot"><i style="background:#6521C9"></i>Core</span>
-      <span class="dot"><i style="background:#B90044"></i>Love</span>
-      <span class="dot"><i style="background:#FF9112"></i>Vitality</span>
-      <span class="dot"><i style="background:#12A56E"></i>Abundance</span>
-    </div>
-
-    <div class="subhead">When the mark rotates, and when it holds one band</div>
-    <ul class="zlist">
-      <li><span class="srctag m">Measured</span> <b>Rotates</b> when the sibling items each <i>are</i> a different frequency. d4-l&#x27;s three-step row runs core &rarr; vitality &rarr; abundance, one band per step, in canon order with love skipped because there are three steps and four bands. A short row skips from the end of the order; it never repeats a band inside one row.</li>
-      <li><span class="srctag m">Measured</span> <b>Holds one band</b> inside a single band&#x27;s own object. Every dot on one song card is that card&#x27;s band, for the whole component.</li>
-      <li><span class="srctag p">Proposed &middot; Iris lane</span> A list that is <b>not about frequency at all</b> takes one neutral mark and never rotates. Rotating band colour through a list that carries no frequency meaning is decoration, and decoration is the thing this system is built to refuse. This is the Iris lane&#x27;s call; d4-l has no such list to measure.</li>
-      <li><span class="srctag p">Proposed &middot; Iris lane</span> The neutral mark: a <b>16&times;2px bar</b> at 34px indent, seated at 1.22em &mdash; the mark this review surface uses on its own lists. Unmeasured on any live page.</li>
-    </ul>
-  </div>
-</section>
-<section id="captions">
-  <div class="wrap">
-    <div class="chapnum">Chapter 7</div>
-    <h2>CAPTIONS &mdash; DICTATED</h2>
-
-    <div class="subhead">Measured on d4-l</div>
-    <ul class="zlist">
-      <li><b>Position</b> &mdash; always below the frame, <b>margin-top:14px</b>. No rule, no box, no tint behind it.</li>
-      <li><b>Size and colour</b> &mdash; scene captions <b>14.5px</b> in <b>--ink56</b> (.66), the lead half in <b>--ink</b> at 600. Object captions <b>15px / 1.5</b> in --ink56, their first line a block title in --ink at 600, <b>16.5px</b>.</li>
-      <li><b>The chip rule</b> &mdash; the frequency waveform sits <b>first, then the words</b>: <b>96&times;20px</b>, <span style="font-family:var(--sans)">object-fit:contain</span>, left-aligned, nudged <b>3px down</b> so it seats on the text baseline, with a <b>12px</b> gap to the words and the whole line aligned <span style="font-family:var(--sans)">align-items:baseline</span>. One chip, one frequency, only when the photo belongs to a band.</li>
-      <li><b>Max-width</b> &mdash; d4-l caps the caption by its column, not by a property: the scenes grid is 1040px across two columns with a 40px gutter, so a caption measures about <b>500px</b> at 1440. The one explicit cap on the page is <b>520px</b> on the lead music caption.</li>
-      <li><b>At 375</b> &mdash; captions do not step down. 14.5px stays 14.5px, the chip stays 96&times;20. d4-l steps headings and stats at 640px and leaves captions alone.</li>
-    </ul>
-
-    <div class="subhead">Measured on this review surface &mdash; and the conflict</div>
-    <ul class="zlist">
-      <li>The library&#x27;s own figcaption: <b>border-top 1px --hair</b>, margin-top 14px, padding-top 12px, Switzer 400 <b>14px / 1.5</b> in --cream58; the recipe line 14.5px / 1.6 in --cream82; the P-number 600 <b>30px</b> (26px at 760 and below); the title 600 <b>19px</b> (17px).</li>
-      <li><b>Conflict, and d4-l wins.</b> The review surface puts a hairline <i>above</i> every caption. d4-l puts nothing above a caption. On a live page there is <b>no rule above a caption</b> &mdash; the hairline is a review device that exists to seat the big P-number under the label law, and it stays on the review surfaces only.</li>
-    </ul>
-
-    <div class="subhead">Proposed &mdash; Iris lane, unmeasured</div>
-    <ul class="zlist">
-      <li><span class="srctag p">Proposed</span> Cap the caption at <b>34em, and never wider than the frame above it</b>. d4-l gets this from its grid; a caption under a full-bleed frame has no grid to protect it.</li>
-      <li><span class="srctag p">Proposed</span> <b>One caption, one job.</b> Either a lead in ink plus a lighter descriptive half on one line (d4-l&#x27;s scene form), or a block title plus a paragraph (d4-l&#x27;s object form). Not both grammars in one chapter &mdash; the one-chart-grammar rule, applied to words.</li>
-    </ul>
-  </div>
-</section>
-<section id="howto">
-  <div class="wrap">
-    <div class="chapnum">Chapter 8</div>
-    <h2>HOW TO BUILD A PAGE</h2>
-    <p class="body" style="margin-top:26px">In order. Each step closes before the next opens.</p>
-    <ol class="howto">
-      <li>List the sections, and write one line saying what each section is <b>for</b>.</li>
-      <li>The ground is <b>the paper</b>. A section&#x27;s mood &mdash; sun, neutral, night &mdash; comes from its photographs and their light, and the ground-pop law binds whatever sits behind a pop.</li>
-      <li>Pick the treatments: <b>one SOLO per section</b>, and CHORD only at the bookends, opener and finale.</li>
-      <li>Pull the frames from the library, or write the making-prompt for what is missing &mdash; the light is made at creation, never painted after.</li>
-      <li>Set the type from the tables above; nothing on the page gets a size that is not in them.</li>
-      <li>Place the furniture by its own rules &mdash; charts, bullets, captions.</li>
-      <li>Run <b>the thirteen</b> on every frame, and the <b>squint test</b> on every ground-and-pop pair.</li>
-      <li>QA both viewports down to the <b>375 floor</b>, then make the calmer version and let the two fight before anything is shown.</li>
-    </ol>
-  </div>
-</section>
-<section id="tokens">
-  <div class="wrap">
-    <div class="chapnum">Chapter 9</div>
-    <h2>TOKENS</h2>
-    <p class="tdef">TOKENS = the only colours that exist. Everything else is a mistake with a hex code.</p>
-    <p class="body" style="margin-top:26px"><b>design/tokens.json is the single source for the band tokens.</b> Nothing on a page gets a colour that is not read out of that file. The four bands are the whole wheel; the paper and the ink are the world they arrive in.</p>
-
-    <div class="grouphead">The four wheel tokens</div>
-    <div class="bulletdemo">
-      <span><i style="background:#6521C9"></i>Core violet &middot; <span class="num">#6521C9</span></span>
-      <span><i style="background:#B90044"></i>Love rose &middot; <span class="num">#B90044</span></span>
-      <span><i style="background:#FF9112"></i>Vitality amber &middot; <span class="num">#FF9112</span></span>
-      <span><i style="background:#12A56E"></i>Abundance emerald &middot; <span class="num">#12A56E</span></span>
-    </div>
-    <ul class="zlist">
-      <li><b>Full intensity or nothing.</b> A band token is used at the value above. There is no tint of a band, no opacity of a band, no lightened band. If it needs to be quieter, it becomes ink.</li>
-      <li><b>A band appears when the content is that band.</b> Violet is the site&#x27;s working accent because most content is Core; the other three arrive when the words beside them are theirs.</li>
-      <li><b>Roughly nine parts paper and ink to one part colour.</b> The valley is what makes the pop detonate &mdash; the same law the frames run on, applied to the page.</li>
-    </ul>
-
-    <div class="grouphead">The site ground</div>
-    <div class="bulletdemo">
-      <span><i style="background:#F0F0EF"></i>Paper &middot; <span class="num">#F0F0EF</span></span>
-      <!-- the ink chip carries a hairline because #141412 is invisible on this dark review shell; the swatch must read, and the token is unchanged -->
-      <span><i style="background:#141412;box-shadow:0 0 0 1px rgba(251,248,243,.34)"></i>Ink &middot; <span class="num">#141412</span></span>
-    </div>
-    <ul class="zlist">
-      <li><b>--paper <span class="num">#F0F0EF</span></b> &mdash; the resting ground, true neutral. Pages are built on it. Sections do not swap it; a section&#x27;s mood comes from its photographs and their light.</li>
-      <li><b>--ink <span class="num">#141412</span></b> &mdash; type, marks, chart bars. The reading opacities and the measured type values are in <a href="#typography">Chapter 5</a>; use the token, never the number in its name.</li>
-      <li><b>--hair</b> rgba(<span class="num">20</span>,<span class="num">20</span>,<span class="num">18</span>,.<span class="num">12</span>) &mdash; one hairline, the only divider the system owns.</li>
-    </ul>
-
-    <div class="banline"><b>The dark stage tokens are the APP world.</b> <span class="num">#0B0712</span> and the panel colours beside it belong to the product interface, and to review surfaces like this one; the SITE ground is the paper. A site page never borrows the app&#x27;s ground.</div>
-
-    <div class="twolaws">
-      <div class="one"><div class="t">Law</div><div class="l">Colour comes out of the token file, never out of a pixel.</div></div>
-      <div class="one"><div class="t">Law</div><div class="l">The ground is the paper.</div></div>
-    </div>
-  </div>
-</section>
-
-<section id="voices">
-  <div class="wrap">
-    <div class="chapnum">Chapter 10</div>
-    <h2>TYPE VOICES &mdash; AND NUMBERS</h2>
-    <p class="tdef">TWO VOICES = the serif speaks, Switzer works.</p>
-    <p class="body" style="margin-top:26px">Two typefaces, and the division between them is a job description, not a taste. The measured sizes for every element are dictated in <a href="#typography">Chapter 5</a>; this chapter is the rule that decides which face an element gets in the first place.</p>
-    <ol class="rules">
-      <li><b>Cormorant Garamond carries the big human statements.</b> The headline, the section head, the pull quote, the testimonial. The places a person is being spoken to.</li>
-      <li><b>Switzer carries everything functional.</b> Body, ledes, kickers, labels, captions, chart furniture, links, buttons, fine print. The places the page is doing a job.</li>
-      <li><b>Numbers are always Switzer.</b> The serif never touches a digit, at any size, anywhere &mdash; inside a serif quote, a figure switches face mid-sentence rather than break the law.</li>
-      <li>Ink on paper. Type does not get a colour to make it interesting; colour lives in the mark beside it.</li>
-      <li>The wordmark is the real asset, never re-typeset.</li>
-    </ol>
-
-    <div class="grouphead">What a number looks like</div>
-    <ul class="grouplist">
-      <li><b>Data stays in digits</b> &mdash; <span class="num">300</span> people, <span class="num">52</span> weeks, <span class="num">7</span> measured outcomes.</li>
-      <li><b>Small counts that are voice may be spelled</b> &mdash; four frequencies, two voices. Never both treatments in one sentence.</li>
-      <li><b>Dates are written out</b> &mdash; August <span class="num">13</span>, <span class="num">2026</span>. No numeric shorthand, no ordinal suffixes; compact UI may shorten the month.</li>
-      <li><b>A unit whispers, the figure is the hero</b> &mdash; the per-cent sign and the Hz sit small and quiet beside their number.</li>
-      <li><b>A stat label sits under its number, never above it</b>, four words at most.</li>
-    </ul>
-
-    <div class="banline"><b>Fonts are trial licenses.</b> Cormorant Garamond and Switzer are on trial and the work they appear in is a mockup. Nothing typeset in them ships to a paying surface until the licence call is made.</div>
-
-    <div class="twolaws">
-      <div class="one"><div class="t">Law</div><div class="l">Numbers always Switzer, never the serif.</div></div>
-      <div class="one"><div class="t">Law</div><div class="l">The serif speaks; Switzer works.</div></div>
-    </div>
-  </div>
-</section>
-
-<section id="copyblocks">
-  <div class="wrap">
-    <div class="chapnum">Chapter 11</div>
-    <h2>PARAGRAPHS, LISTS, LENGTHS</h2>
-    <p class="tdef">COPY GRAMMAR = five ways a paragraph exists, four ways a list exists, and a ceiling on every one of them.</p>
-    <p class="body" style="margin-top:26px">The design assumes these lengths. Copy that runs past them does not stretch the page &mdash; it goes back to the copy lane. A builder never invents a sixth paragraph form.</p>
-
-    <div class="grouphead">The five paragraph forms</div>
-    <ul class="grouplist">
-      <li><b>The lede.</b> One idea, opening a section. At most one per section, and optional. <i>&ldquo;Music tuned to the moment you were born, playing under your whole day.&rdquo;</i></li>
-      <li><b>The body paragraph.</b> One to three sentences, ink on paper, air between them. The air is part of the design, not a gap to fill.</li>
-      <li><b>The statement.</b> Serif italic, one sentence, at most one per section. It is the only place a paragraph is allowed to be dramatic. <i>&ldquo;You have been listening to everyone else&#x27;s frequency.&rdquo;</i></li>
-      <li><b>The long-form paragraph.</b> Reading pages only &mdash; FAQ answers, the story, policies. It may carry a full thought past the marketing ceiling, because the reader who reached a reading page has already decided to read. A subhead lands every three to four paragraphs so the column never becomes a wall.</li>
-      <li><b>The note.</b> Fine print, caveats, sources. Quiet ink, never load-bearing &mdash; except a caveat that must travel with a claim, which sits one step darker so it cannot be skimmed past.</li>
-    </ul>
-
-    <div class="grouphead">The four list forms</div>
-    <ul class="grouplist">
-      <li><b>The step mark</b> &mdash; benefits and rules. The band-coloured pill, ink words, built to the measured values in <a href="#bullets">Chapter 6</a>. Three to six items, twelve words each.</li>
-      <li><b>The counter</b> &mdash; sequences. Numbered steps the reader will actually follow, the figures in Switzer.</li>
-      <li><b>The definition list</b> &mdash; features and facts. Term left, description right; two or three words in the term, twenty-five in the description; the pair stacks on the phone.</li>
-      <li><b>The FAQ</b> &mdash; questions. Its own grammar, in <a href="#faq">Chapter 12</a>.</li>
-    </ul>
-
-    <div class="grouphead">Two reading modes, two widths</div>
-    <ul class="grouplist">
-      <li><b>Short copy</b> is a marketing section: a head, two paragraphs, a list, one button, composed on the page grid. The whole section reads in under thirty seconds.</li>
-      <li><b>Long copy</b> is a reading page: one centred column at <b><span class="num">700</span>px</b>, left-aligned, the type relaxed and subheads pacing the scroll. Nothing on a reading page runs wider than that column.</li>
-      <li><b>Everywhere</b>: text measures at most <b><span class="num">34</span>em</b>. No line of copy ever spans the full grid. Centred text is for short heads and compact closers, never for long copy.</li>
-      <li><b>At the floor</b>: the phone column is judged at <b><span class="num">375</span>&times;<span class="num">812</span></b>, its own decision every time. Mobile is never a scaled desktop.</li>
-    </ul>
-
-    <div class="subhead">How long anything is allowed to be <span class="num">identical on both viewports</span></div>
-    <table class="jobs">
-      <thead>
-        <tr><th>Element</th><th>Limit</th><th>Rule</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="job" data-label="Element">H1</td><td data-label="Limit"><span class="num">4</span> to <span class="num">9</span> words</td><td data-label="Rule">One line on the desktop grid. Never three lines anywhere.</td></tr>
-        <tr><td class="job" data-label="Element">Lede / subhead</td><td data-label="Limit"><span class="num">22</span> words</td><td data-label="Rule">Two lines at most. One idea, no comma chains.</td></tr>
-        <tr><td class="job" data-label="Element">Section intro</td><td data-label="Limit"><span class="num">45</span> words</td><td data-label="Rule">Two or three sentences under the head, then stop.</td></tr>
-        <tr><td class="job" data-label="Element">Body paragraph</td><td data-label="Limit"><span class="num">55</span> words</td><td data-label="Rule">One to three sentences. The air between them is the design.</td></tr>
-        <tr><td class="job" data-label="Element">Statement</td><td data-label="Limit"><span class="num">12</span> words</td><td data-label="Rule">One sentence, serif italic, one per section at most.</td></tr>
-        <tr><td class="job" data-label="Element">Photo caption</td><td data-label="Limit"><span class="num">14</span> words</td><td data-label="Rule">Names what is seen, adds one fact. Built to <a href="#captions">Chapter 7</a>.</td></tr>
-        <tr><td class="job" data-label="Element">Pull quote</td><td data-label="Limit"><span class="num">30</span> words</td><td data-label="Rule">The approved Pull from the bank, never a fresh cut.</td></tr>
-        <tr><td class="job" data-label="Element">Medium testimonial</td><td data-label="Limit"><span class="num">60</span> words</td><td data-label="Rule">The banked Short, quoted whole.</td></tr>
-        <tr><td class="job" data-label="Element">Full testimonial</td><td data-label="Limit"><span class="num">90</span> words a paragraph</td><td data-label="Rule">Letter form only, trimmed with ellipses from the banked Full.</td></tr>
-        <tr><td class="job" data-label="Element">List item</td><td data-label="Limit"><span class="num">12</span> words</td><td data-label="Rule">Front-load the noun. No trailing clauses.</td></tr>
-        <tr><td class="job" data-label="Element">Definition row</td><td data-label="Limit"><span class="num">25</span> words</td><td data-label="Rule">Term is two or three words; the description ends cleanly.</td></tr>
-        <tr><td class="job" data-label="Element">FAQ question</td><td data-label="Limit"><span class="num">12</span> words</td><td data-label="Rule">Written the way the customer asks it, first person.</td></tr>
-        <tr><td class="job" data-label="Element">FAQ answer on site</td><td data-label="Limit"><span class="num">120</span> words</td><td data-label="Rule">The banked Short. The Long lives on the support page.</td></tr>
-        <tr><td class="job" data-label="Element">Stat label</td><td data-label="Limit"><span class="num">4</span> words</td><td data-label="Rule">Under the number, never above it.</td></tr>
-        <tr><td class="job" data-label="Element">Button</td><td data-label="Limit"><span class="num">2</span> to <span class="num">4</span> words</td><td data-label="Rule">A verb first. One primary button per screen.</td></tr>
-      </tbody>
-    </table>
-
-    <div class="masterlaw">
-      <div class="t">Master law</div>
-      <div class="l">Copy that breaks the ceiling changes the design &mdash; so it goes back to the words, not to the layout.</div>
-    </div>
-  </div>
-</section>
-
-<section id="faq">
-  <div class="wrap">
-    <div class="chapnum">Chapter 12</div>
-    <h2>FAQ GRAMMAR</h2>
-    <p class="tdef">FAQ = questions in their voice, answers in ours.</p>
-    <ol class="rules">
-      <li><b>The question is written the way a customer asks it</b> &mdash; first person, plain, twelve words at most. Not the way we would phrase the topic.</li>
-      <li><b>The answer is ours</b> &mdash; the banked Short from the canonical answer bank, never improvised on the page. The Long version lives on the support page.</li>
-      <li>The hardest question goes first, open. Hiding the objection is how a page loses the reader who was closest to buying.</li>
-      <li>Five to eight questions on a page. Past eight it is a support page pretending to be a section.</li>
-      <li>Closed by default, one open at a time; the plus mark rotates to a close. The mark is the only moving part.</li>
-      <li>An answer that needs a caveat carries the caveat inside the answer, not in a note below it.</li>
-    </ol>
-    <div class="banline"><b>Answers come from the bank.</b> If a question has no banked answer, the question does not ship. Writing one on the page is how a promise nobody approved enters the world.</div>
-  </div>
-</section>
-
-<section id="appscreens">
-  <div class="wrap">
-    <div class="chapnum">Chapter 13</div>
-    <h2>APP SCREENS</h2>
-    <p class="tdef">APP SCREENS = real screens, shown as objects of light.</p>
-    <p class="body" style="margin-top:26px">This is <b>CHIP at phone scale</b> &mdash; the treatment where the product&#x27;s own marks carry the colour, in the one place they are already carrying it. On a page made of paper and silver, a live screen is the loudest colour there is, so it stands alone and needs nothing behind it.</p>
-    <ol class="rules">
-      <li><b>Real captures from staging, never mockups.</b> The site can then never promise an interface that does not exist.</li>
-      <li><b>The screen is the only full-colour object in its frame.</b> Everything around it stays silver.</li>
-      <li>Captured at the <span class="num">375</span>&times;<span class="num">812</span> floor, retina. One hairline edge, no drop shadow, no glow.</li>
-      <li>Never placed over photography, never tilted, never perspective-warped.</li>
-      <li><b>Waves are drawn by code, never generated.</b> Every generated attempt rendered neon; the drawn filament is the only wave that ships, and it is a hairline, not a plume.</li>
-    </ol>
-    <div class="banline"><b>The frames for this already exist.</b> <a href="/site/styleguide-library#p-164">P-164</a> is the hero phone shot clean with the real screen; <a href="/site/styleguide-library#p-109">P-109</a> is the object case. The CHIP chapter above shows the same mark doing its job at page scale.</div>
-  </div>
-</section>
-
-<section id="gradients">
-  <div class="wrap">
-    <div class="chapnum">Chapter 14</div>
-    <h2>GRADIENTS <span class="bandcount">app-UI grammar, scoped</span></h2>
-    <p class="tdef">GRADIENTS = button grammar that lives inside a real screen.</p>
-    <p class="body" style="margin-top:26px">The gradient system is real, it is in design/tokens.json, and the app inherits it unchanged. It is included here for one reason: so nobody carries it out of the screen and onto the page. <b>The site page itself never carries a gradient ground and never carries gradient text.</b> A gradient appears on a site page only inside a screenshot of a screen that legitimately has one.</p>
-    <ul class="grouplist">
-      <li><b>Linear only</b>, token pairs only, <span class="num">160</span>deg by default.</li>
-      <li><b>Functional</b> &mdash; primary to deep, one hue. Buttons, controls, active states; nearly all gradient use.</li>
-      <li><b>Frequency</b> &mdash; primary to its own analogous end. A band&#x27;s identity: drawn waves, tiles.</li>
-      <li><b>Brand</b> &mdash; one primary to a different primary. Identity moments only, never inside app UI, and rare.</li>
-    </ul>
-    <div class="grouphead">The never-list</div>
-    <ul class="grouplist">
-      <li><b>No radial glow behind content.</b> The dark-void-plus-violet-glow look is the generic one; it was killed and stays killed.</li>
-      <li><b>No gradient wash over photography.</b> A photograph&#x27;s colour is carried by something in the frame, never applied on top of it.</li>
-      <li><b>No gradient text.</b> Type is ink, flat.</li>
-      <li><b>No gradient page grounds.</b> The ground is the paper. Air and one hairline make the depth.</li>
-    </ul>
-    <div class="banline"><b>If you can see a gradient on a site page and it is not inside a screen, it is a bug.</b></div>
-  </div>
-</section>
-
-<section id="proof">
-  <div class="wrap">
-    <div class="chapnum">Chapter 15</div>
-    <h2>PROOF <span class="bandcount">testimonials</span></h2>
-    <ol class="rules">
-      <li>Faces pure silver, full contrast, complete crowns, never coloured, never retouched.</li>
-      <li>Colour beside the person, never on them — the frequency chip by the kicker.</li>
-      <li>Full names always; claims may ride.</li>
-      <li>Ground quiet paper — the calmest room in the house.</li>
-    </ol>
-
-    <figure class="exfig">
-      <img loading="lazy" src="/site/Iris/assets/examples/testimonial-chips-spec.png" alt="Two stacked captures of the testimonial section: the control above with plain kickers, and below the same section with a small frequency chip beside each kicker">
-      <figcaption><span class="ttl">Example · one</span><span class="cap">The banked baseline (Panel 10): the page's own frequency chips beside each kicker. Control above, treated below. The deeper treatment remains an open question on Michael's word.</span></figcaption>
-    </figure>
-  </div>
-</section>
-<section id="grammar">
-  <div class="wrap">
-    <div class="chapnum">Chapter 16</div>
-    <h2>PAGE GRAMMAR</h2>
-    <ol class="rules">
-      <li>SILVER is the ground everything sits on; the valley that makes pops detonate.</li>
-      <li>One SOLO per section — the section's voice.</li>
-      <li>THROUGH and SPILL are how a SOLO proves it is real.</li>
-      <li>WORN is the only people move; SUN is the hour, riding every treatment.</li>
-      <li>CHORD bookends only — opener and finale, never the middle.</li>
-      <li>CHIP speaks wherever the product does.</li>
-      <li>HIGHLIGHT is how a proof section carries colour: the mark lands on one line, and only there.</li>
-      <li>The ground serves the section's intent — night, sun, or neutral, anywhere — and never screws with the pop (the ground-pop law above).</li>
-    </ol>
-  </div>
-</section>
-<section id="jobs">
-  <div class="wrap">
-    <div class="chapnum">Chapter 17</div>
-    <h2>PAGE JOBS</h2>
-    <p class="body" style="margin-top:26px">One row per job: what treatment it takes, what light and ground it sits on, which frames to reach for, and what kills it.</p>
-    <table class="jobs">
-      <thead>
-        <tr><th>Job</th><th>Treatment</th><th>Light / Ground</th><th>Do</th><th>Don't</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="job" data-label="Job">HERO</td><td class="" data-label="Treatment">SUN + CHORD + CHIP in one frame</td><td class="" data-label="Light / Ground">Full sun ground</td><td class="" data-label="Do"><a href="/site/styleguide-library#p-163">P-163</a></td><td class="dont" data-label="Don't">Empty field, person too small</td></tr>
-        <tr><td class="job" data-label="Job">SECTION OPENER</td><td class="" data-label="Treatment">SOLO</td><td class="" data-label="Light / Ground">Ground steps to near-silver behind the pop</td><td class="" data-label="Do"><a href="/site/styleguide-library#p-26">P-26</a>, <a href="/site/styleguide-library#p-66">P-66</a></td><td class="dont" data-label="Don't">Two pops in one section</td></tr>
-        <tr><td class="job" data-label="Job">STEP ROW</td><td class="" data-label="Treatment">SOLO per step, colour rotates bands</td><td class="" data-label="Light / Ground"><span class="dash">—</span></td><td class="" data-label="Do"><a href="/site/styleguide-library#p-155">P-155</a>, <a href="/site/styleguide-library#p-156">P-156</a>, <a href="/site/styleguide-library#p-159">P-159</a></td><td class="dont" data-label="Don't">Coloured fonts</td></tr>
-        <tr><td class="job" data-label="Job">DEVICE ROW</td><td class="" data-label="Treatment">SOLO / SUN objects</td><td class="" data-label="Light / Ground"><span class="dash">—</span></td><td class="" data-label="Do"><a href="/site/styleguide-library#p-109">P-109</a>, <a href="/site/styleguide-library#p-164">P-164</a></td><td class="dont" data-label="Don't">Glow with no source</td></tr>
-        <tr><td class="job" data-label="Job">PROOF BLOCK</td><td class="" data-label="Treatment">SILVER + CHIP</td><td class="" data-label="Light / Ground">Quiet paper</td><td class="" data-label="Do">The chips spec above</td><td class="dont" data-label="Don't">Colour on a face, whisper-grey quotes</td></tr>
-        <tr><td class="job" data-label="Job">STUDY / CHARTS</td><td class="" data-label="Treatment">Furniture rules</td><td class="" data-label="Light / Ground"><span class="dash">—</span></td><td class="" data-label="Do">Ink bars, Switzer numbers</td><td class="dont" data-label="Don't">Serif numbers, mixed chart styles</td></tr>
-        <tr><td class="job" data-label="Job">QUOTE RIBBON</td><td class="" data-label="Treatment">Full ink or cut; never whisper</td><td class="" data-label="Light / Ground"><span class="dash">—</span></td><td class="" data-label="Do"><span class="dash">—</span></td><td class="dont" data-label="Don't"><span class="dash">—</span></td></tr>
-        <tr><td class="job" data-label="Job">FINALE</td><td class="" data-label="Treatment">CHORD</td><td class="" data-label="Light / Ground">Low warm sun legal</td><td class="" data-label="Do"><a href="/site/styleguide-library#p-94">P-94</a>, <a href="/site/styleguide-library#p-130">P-130</a></td><td class="dont" data-label="Don't">A fifth colour</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-<section id="grounds" style="border-bottom:none">
-  <div class="wrap">
-    <div class="chapnum">Chapter 18</div>
-    <h2>GROUNDS &mdash; DEAD</h2>
-    <p class="tdef">Killed whole by Michael, 2026-08-28: the generated ground-plate experiment is over.</p>
-    <p class="body" style="margin-top:28px">Pages are built on <b>the paper</b> &mdash; the resting silver ground (240/240/239, true neutral). No generated plate sits under a page. The wave-1 record is preserved in the walled working folder; nothing is deleted.</p>
-    <div class="law">
-      <div class="tag">Still binding &middot; Michael, 2026-08-28</div>
-      <h3>THE GROUND NEVER SCREWS WITH THE POP</h3>
-      <p>Rule 3 governs whatever sits behind a pop: the ground steps back to clean near-silver inside the field-tint cap. Warmth beyond about a point exists only inside a pointable lit passage, never in the resting ground. Every ground-and-pop pairing passes the kill-the-colour squint before it ships.</p>
-      <div class="src">Ground-pop law &middot; direct order &middot; binding</div>
-    </div>
-  </div>
-</section>
-
-<section id="standing" style="border-bottom:none;padding-top:0">
-  <div class="wrap">
-    <div class="pend"><b>Standing.</b> This is THE one current style guide. Prior cuts are preserved as numbered snapshots and are never edited again; this file keeps the permanent address <b>/site/styleguide</b>. Run by <b>Iris</b> (art) and <b>Ansel</b> (second eye, builder) on Michael&#x27;s word, <b>2026-08-28</b>.</div>
-  </div>
-</section>
+<script>
+  // The contents is built from the index block, so the table of contents and the
+  // machine index can never drift apart: one of them IS the other.
+  (function(){
+    var data = JSON.parse(document.getElementById('zfm-index').textContent);
+    var html = '<ol>' + data.chapters.map(function(c){
+      return '<li><a href="#' + c.id + '">' + c.name + '</a><ol>' +
+        c.cards.map(function(k){ return '<li><a href="#' + k.id + '">' + k.name + '</a></li>'; }).join('') +
+        '</ol></li>';
+    }).join('') + '</ol>';
+    document.querySelectorAll('nav.contents').forEach(function(n){ n.innerHTML = html; });
+    // The desktop crop on a section card is a toggle on a phone and simply open,
+    // with no label, at desktop width.
+    var wide = window.matchMedia('(min-width:820px)');
+    function syncDesk(){
+      document.querySelectorAll('details.deskview').forEach(function(d){
+        d.open = wide.matches;
+      });
+    }
+    syncDesk();
+    wide.addEventListener('change', syncDesk);
+    // tapping a link in the phone drawer closes it behind you
+    var drawer = document.getElementById('contents-drawer');
+    drawer.addEventListener('click', function(e){
+      if (e.target.tagName === 'A') drawer.removeAttribute('open');
+    });
+  })();
+</script>
 
 </body>
 </html>
