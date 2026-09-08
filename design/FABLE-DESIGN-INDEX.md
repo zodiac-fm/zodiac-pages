@@ -16,7 +16,9 @@ These two URLs are always current. Versions live behind them and are internal.
 Versioned copies present on disk (internal, not the reference URL):
 `site/styleguide-7-6-library.html`, `site/styleguide-8-0-library.html`,
 `site/styleguide-8-1-library.html`, `site/Iris/styleguide.html`,
-`site/Iris/styleguide-library.html`.
+`site/Iris/styleguide-library.html`, `site/styleguide-8-1.html` (style guide,
+frozen before the 9-0 rebuild), `site/styleguide-8-7-library.html` (library,
+frozen before the 9-0 reorganisation).
 
 ## Current design surfaces
 
@@ -74,3 +76,5 @@ Each future lock appends exactly one row in this format:
 - 2026-09-06 | Emerald In The Earcup (P-206, step three, replaces retired P-182) | /Users/michaellovitch/zodiac-pages/site/assets/home-t11/step3-headphones-green.jpg | https://zodiac-pages.vercel.app/site/styleguide-library#p-206 | LOCKED | spec: working/fable-design/p182-remake-directive-v2.md | log entry: fdl-012
 - 2026-09-06 | home-t11 (home-t10 with P-207 and P-206 swapped in; t10 untouched) | /Users/michaellovitch/zodiac-pages/site/home-t11.html | https://zodiac-pages.vercel.app/site/home-t11 | LOCKED, SUPERSEDED as the working anchor by home-t12 (t11 stays live and frozen) | spec: zodiac-pages/design/page-constants.json retired_is_unreachable.retired_design_room_frames | log entry: fdl-012
 - 2026-09-06 | home-t12 (the ladder from home-t11 with the night and dawn sections lit; Michael's pick: night=a rose light from above, dawn=b rose first light from above) | /Users/michaellovitch/zodiac-pages/site/home-t12.html | https://zodiac-pages.vercel.app/site/home-t12?night=a&dawn=b | LOCKED, CURRENT working anchor | spec: working/fable-design/home-t12-directive-v1.md | log entry: fdl-018
+- 2026-09-08 | The Zodiac Page System (style guide, rebuilt to internal version 9-0) | /Users/michaellovitch/zodiac-pages/site/styleguide.html | https://zodiac-pages.vercel.app/site/styleguide | LOCKED | spec: working/fable-design/styleguide-9-0-directive-v1.md | log entry: fdl-019 | boards: working/fable-design/styleguide-9-0-boards/ | tools: working/fable-design/styleguide-9-0-tools/ | snapshot: site/styleguide-8-1.html
+- 2026-09-08 | The Zodiac Picture Library (library, reorganised to internal version 9-0) | /Users/michaellovitch/zodiac-pages/site/styleguide-library.html | https://zodiac-pages.vercel.app/site/styleguide-library | LOCKED | spec: working/fable-design/styleguide-9-0-directive-v1.md | log entry: fdl-019 | boards: working/fable-design/styleguide-9-0-boards/ | tools: working/fable-design/styleguide-9-0-tools/ | snapshot: site/styleguide-8-7-library.html
