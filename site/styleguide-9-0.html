@@ -4,7 +4,7 @@
   This file IS the current style guide. Edit THIS file — never fork a numbered copy
   and never hand anyone a versioned URL for this surface.
   ZFM-CURRENT: /site/styleguide
-  ZFM-INTERNAL-VERSION: 9-1
+  ZFM-INTERNAL-VERSION: 9-0
   To bump the version: copy this file to site/styleguide-<n>.html
   as a frozen snapshot FIRST, then edit this file and raise ZFM-INTERNAL-VERSION.
   Rule: Michael, 2026-08-26 — "always just have the current one be the main url string".
@@ -25,20 +25,6 @@
   Revised the same day: every section card and every effect now links to the
   place on the live page that carries it, and on a phone a section card shows
   its phone crop with the desktop crop behind a toggle.
-
-  9-1 (2026-09-08) closes the gap this surface had from its first publish: it
-  never said what a room does to a photograph or to a testimonial. Chapter 1
-  now opens with the rule that EVERY room takes photographs — a setting is the
-  light a picture sits in, never permission — and carries five new cards, one
-  per setting, each SHOWING a real library frame and a real testimonial
-  standing in that room at phone width and at desktop width, rendered live by
-  this page's own CSS on that setting's real paper. The papers, inks, frame,
-  sign light, first light, rims, shadows and mark are all copied from
-  site/home-t12.html; the only new value is the emerald mark, which is the
-  Voices stroke at the same seven alphas carrying the wheel's emerald. Chapter
-  3's night card now says plainly that its one-picture decision is that
-  section's own call and not a rule of the night. 9-0 is frozen at
-  site/styleguide-9-0.html.
 -->
 <html lang="en">
 <head>
@@ -298,161 +284,6 @@
   .ph i{display:block;margin-top:12px;font:600 10px/1 var(--sans);letter-spacing:.16em;
         text-transform:uppercase;color:var(--ink-label);font-style:normal}
 
-  /* ---------------- a room, standing (chapter 1) --------------------------
-     Two live panels per setting, one 375 wide and one full width, each on the
-     REAL paper with the REAL treatment. Every value below is copied out of
-     site/home-t12.html: the papers and inks from the ladder, the frame from
-     .fport, the sign light and its rims and shadows from #results under
-     night-a, the first light and its long shadows from #more-results under
-     dawn-b, the mark from #voices .lit. Nothing here is invented except the
-     emerald mark, which is the same stroke at the same seven alphas carrying
-     the wheel's own emerald instead of the rose. */
-  .rooms{display:grid;grid-template-columns:1fr;gap:26px;margin-top:26px;align-items:start}
-  @media(min-width:1000px){.rooms{grid-template-columns:375px minmax(0,1fr);gap:34px}}
-  .rmcol{min-width:0}
-  .rmphone{width:375px;max-width:100%}
-  /* Below the two-column width the desktop panel keeps its desktop LAYOUT and is
-     shown small, so the label stays true: what changes between the two panels is
-     the arrangement, and the panel beside it carries the readable text. The
-     overflow rule is the fallback for a browser that ignores the shrink. */
-  @media(max-width:999px){
-    .deskcol{overflow-x:auto;-webkit-overflow-scrolling:touch}
-    .deskcol .rmwide{width:920px;zoom:.40}
-  }
-
-  .rmpaper{position:relative;overflow:hidden;border:1px solid var(--hair);
-    padding:26px 20px 28px;color:var(--dbody)}
-  .rmwide{padding:34px 34px 38px}
-  .rmpaper > *{position:relative;z-index:3}
-
-  .rm-dawn {background:#FFFFFE;--dk:#141412;--dbody:rgba(20,20,18,.72);
-            --dlbl:rgba(20,20,18,.66);--dhair:rgba(20,20,18,.12)}
-  .rm-sun  {background:#F0F0EF;--dk:#141412;--dbody:rgba(20,20,18,.74);
-            --dlbl:rgba(20,20,18,.66);--dhair:rgba(20,20,18,.12)}
-  .rm-day  {background:#E0E0DF;--dk:#141412;--dbody:rgba(20,20,18,.78);
-            --dlbl:rgba(20,20,18,.68);--dhair:rgba(20,20,18,.14)}
-  .rm-room {background:#CCCCCB;--dk:#141412;--dbody:rgba(20,20,18,.82);
-            --dlbl:rgba(20,20,18,.70);--dhair:rgba(20,20,18,.17)}
-  .rm-night{background:#40403F;--dk:#FFFFFE;--dbody:rgba(255,255,254,.80);
-            --dlbl:rgba(255,255,254,.64);--dhair:rgba(255,255,254,.18)}
-
-  /* the light: one overlay per panel, above the paper and below everything read */
-  .rm-night::after,.rm-dawn::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none}
-  /* the sign light, from off the top edge, centred: the fall ACROSS the panel is
-     the ellipse, the fall DOWN it is the mask, and the product is what makes the
-     source a place instead of an edge. */
-  .rm-night::after{
-    background-image:linear-gradient(to right,
-      rgba(139,107,120,0.600) 0%, rgba(139,107,120,0.760) 12%,
-      rgba(139,107,120,0.900) 27%, rgba(139,107,120,1.000) 50%,
-      rgba(139,107,120,0.900) 73%, rgba(139,107,120,0.760) 88%,
-      rgba(139,107,120,0.600) 100%);
-    -webkit-mask-image:linear-gradient(to bottom,
-      rgba(0,0,0,0.9995) 0%, rgba(0,0,0,0.8045) 4%, rgba(0,0,0,0.6167) 8%,
-      rgba(0,0,0,0.4224) 12%, rgba(0,0,0,0.2353) 16%, rgba(0,0,0,0.1900) 26%,
-      rgba(0,0,0,0.1720) 40%, rgba(0,0,0,0.1620) 55%, rgba(0,0,0,0.1500) 70%,
-      rgba(0,0,0,0.1050) 85%, rgba(0,0,0,0.0380) 100%);
-    mask-image:linear-gradient(to bottom,
-      rgba(0,0,0,0.9995) 0%, rgba(0,0,0,0.8045) 4%, rgba(0,0,0,0.6167) 8%,
-      rgba(0,0,0,0.4224) 12%, rgba(0,0,0,0.2353) 16%, rgba(0,0,0,0.1900) 26%,
-      rgba(0,0,0,0.1720) 40%, rgba(0,0,0,0.1620) 55%, rgba(0,0,0,0.1500) 70%,
-      rgba(0,0,0,0.1050) 85%, rgba(0,0,0,0.0380) 100%)}
-  /* the first light: a rose pool anchored on the top edge, ending at alpha zero,
-     so outside the pool the paper is untouched. */
-  .rm-dawn::after{
-    background-image:radial-gradient(72% 24.5% at 50% 0%,
-      rgba(255,233,241,1.0000) 0%, rgba(255,233,241,0.9212) 5%,
-      rgba(255,233,241,0.8449) 10%, rgba(255,233,241,0.7566) 16%,
-      rgba(255,233,241,0.6720) 22%, rgba(255,233,241,0.5781) 29%,
-      rgba(255,233,241,0.4897) 36%, rgba(255,233,241,0.3955) 44%,
-      rgba(255,233,241,0.3090) 52%, rgba(255,233,241,0.2217) 61%,
-      rgba(255,233,241,0.1457) 70%, rgba(255,233,241,0.0761) 80%,
-      rgba(255,233,241,0.0251) 90%, rgba(255,233,241,0.0000) 100%)}
-  @media(min-width:1000px){.rmwide.rm-dawn::after{
-    background-image:radial-gradient(44.5% 24.5% at 50% 0%,
-      rgba(255,233,241,1.0000) 0%, rgba(255,233,241,0.9212) 5%,
-      rgba(255,233,241,0.8449) 10%, rgba(255,233,241,0.7566) 16%,
-      rgba(255,233,241,0.6720) 22%, rgba(255,233,241,0.5781) 29%,
-      rgba(255,233,241,0.4897) 36%, rgba(255,233,241,0.3955) 44%,
-      rgba(255,233,241,0.3090) 52%, rgba(255,233,241,0.2217) 61%,
-      rgba(255,233,241,0.1457) 70%, rgba(255,233,241,0.0761) 80%,
-      rgba(255,233,241,0.0251) 90%, rgba(255,233,241,0.0000) 100%)}}
-
-  /* the frame: one hairline, a ground of its own, a shadow */
-  .rmframe{position:relative;background:#F1F1F0;border:1px solid rgba(20,20,18,.16);
-    border-radius:3px;overflow:hidden;box-shadow:0 20px 44px rgba(20,20,18,.14)}
-  .rmframe img{width:100%;height:100%;object-fit:cover;object-position:center;border:none}
-  .rmland{aspect-ratio:4/3}
-  .rmsq{aspect-ratio:1/1;flex:0 0 auto}
-  .rmsq img{object-position:center top}
-  /* on the night the frame's ground is one step above the charcoal, it takes two
-     rim stops on the edge facing the light and throws a hard shadow away from it */
-  .rm-night .rmframe{background:#50504F;border:1px solid rgba(255,255,254,.18);
-    border-top-color:rgb(144,120,130);
-    box-shadow:0 -1px 0 rgb(203,171,182), 0 18px 24px rgba(10,10,12,0.55)}
-  /* on the dawn every frame throws the long soft shadow, and a frame the pool
-     reaches takes a single rose line on the edge facing it */
-  .rm-dawn .rmframe{box-shadow:0 24px 40px rgba(18,18,18,0.155);
-    border-top-color:rgb(255,233,241)}
-  .rmphone .rm-dawn .rmframe,.rmphone.rm-dawn .rmframe{box-shadow:0 16px 40px rgba(18,18,18,0.155)}
-
-  .rmlbl{font:600 10.5px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;
-    color:var(--dlbl);margin-bottom:14px}
-  .rmcap{margin-top:14px;font-size:14px;line-height:1.52;color:var(--dbody)}
-  .rmsep{border:0;border-top:1px solid var(--dhair);margin:30px 0}
-  .rmvoice{display:grid;grid-template-columns:108px minmax(0,1fr);gap:18px;align-items:start}
-  .rmwide .rmvoice{grid-template-columns:150px minmax(0,1fr);gap:26px;align-items:center}
-  @media(max-width:640px){.rmwide .rmvoice{grid-template-columns:108px minmax(0,1fr);gap:18px}}
-  .rmkick{font:600 10.5px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase;
-    color:var(--dlbl);margin-bottom:10px}
-  .rmquote{font-family:var(--serif);font-weight:600;font-size:19px;line-height:1.34;color:var(--dk)}
-  .rmwide .rmquote{font-size:22px}
-  .rmwho{margin-top:13px;padding-top:10px;border-top:1px solid var(--dhair);
-    font:600 13.5px/1.45 var(--sans);color:var(--dk)}
-  .rmwho small{display:block;font-weight:400;font-size:12.5px;line-height:1.5;
-    color:var(--dbody);margin-top:2px;letter-spacing:.02em}
-
-  /* THE MARK. One colour on the one line that carries the argument, drawn on the
-     text so every line ends where the words end, with a wash of the panel's own
-     paper over its top and bottom edges. */
-  .mk{-webkit-box-decoration-break:clone;box-decoration-break:clone;
-    padding:.13em .38em;margin:0 -.38em;border-radius:3px}
-  .mk-rose{background-image:
-    linear-gradient(to bottom, var(--wash) 0%, var(--wash0) 26%, var(--wash0) 74%, var(--wash) 100%),
-    linear-gradient(101deg,
-      rgba(224,68,126,.05) 0%, rgba(232,98,154,.28) 9%, rgba(224,68,126,.44) 30%,
-      rgba(217,59,120,.50) 47%, rgba(224,68,126,.39) 70%, rgba(232,98,154,.22) 90%,
-      rgba(224,68,126,.04) 100%)}
-  .mk-violet{background-image:
-    linear-gradient(to bottom, var(--wash) 0%, var(--wash0) 26%, var(--wash0) 74%, var(--wash) 100%),
-    linear-gradient(101deg,
-      rgba(146,97,217,.05) 0%, rgba(168,126,226,.28) 9%, rgba(146,97,217,.44) 30%,
-      rgba(137,86,212,.50) 47%, rgba(146,97,217,.39) 70%, rgba(168,126,226,.22) 90%,
-      rgba(146,97,217,.04) 100%)}
-  .mk-emerald{background-image:
-    linear-gradient(to bottom, var(--wash) 0%, var(--wash0) 26%, var(--wash0) 74%, var(--wash) 100%),
-    linear-gradient(101deg,
-      rgba(18,165,110,.05) 0%, rgba(26,195,138,.28) 9%, rgba(18,165,110,.44) 30%,
-      rgba(11,156,104,.50) 47%, rgba(18,165,110,.39) 70%, rgba(26,195,138,.22) 90%,
-      rgba(18,165,110,.04) 100%)}
-  /* the wash is always the paper the mark actually sits on — on the night that is
-     the LIT charcoal, not the plain rung, or the mark would end in a dark lip */
-  .rm-dawn {--wash:rgba(255,255,254,.62);--wash0:rgba(255,255,254,0)}
-  .rm-sun  {--wash:rgba(240,240,239,.62);--wash0:rgba(240,240,239,0)}
-  .rm-day  {--wash:rgba(224,224,223,.62);--wash0:rgba(224,224,223,0)}
-  .rm-room {--wash:rgba(204,204,203,.62);--wash0:rgba(204,204,203,0)}
-  .rm-night{--wash:rgba(84,76,79,.62);--wash0:rgba(84,76,79,0)}
-
-  /* the two plain rules under a room's examples */
-  .roomrule{margin-top:24px;max-width:46em}
-  .roomrule p{padding:13px 0;border-top:1px solid var(--hair);font-size:16px;
-    line-height:1.56;color:var(--ink-body)}
-  .roomrule p b{color:var(--ink);font-weight:600}
-  .working{margin-top:18px;padding:16px 18px;background:var(--dawn);
-    border-left:3px solid var(--hair-firm);font-size:16px;line-height:1.56;
-    color:var(--ink-strong);max-width:44em}
-  .working b{font-weight:600;color:var(--ink)}
-
   /* ---------------- the builder's drawer ---------------- */
   details.builder{margin-top:22px;background:var(--day);border:1px solid var(--hair);max-width:52em}
   details.builder > summary{cursor:pointer;list-style:none;padding:13px 18px;
@@ -565,12 +396,6 @@
       <h2>The five settings</h2>
       <p>A setting is the light a section sits in. There are five, from the whitest paper to a
         charcoal you can still see into. They are all neutral: not one of them carries a hue.</p>
-      <p><b>Every room takes photographs.</b> A setting decides the light a picture sits in and how
-        its colour is handled. It never decides whether a picture is allowed. Portraits are
-        photographs too, and they already stand on the grey paper, in the dark and in the first
-        light of the home page. Working rule, not a law: a section carries one colour, so on the
-        night and on the dawn the light on the paper and the colour inside the photograph should
-        agree.</p>
     </div>
 
     <div class="card" id="the-five-papers">
@@ -626,271 +451,6 @@
           <figcaption><b>Night</b>“Then it shows up in work, energy, and who you are.”</figcaption></figure>
       </div>
       <a class="totop" href="#top">Back to top</a>
-    </div>
-
-    <div class="card" id="pictures-on-the-dawn">
-      <h3>Dawn &middot; a picture in the first light</h3>
-      <p class="sub">The whitest paper on the page, with a small rose pool entering from the top edge. Only ever straight after the night.</p>
-      <div class="rooms">
-        <div class="rmcol">
-          <p class="caplbl">Phone</p>
-          <div class="rmphone">
-            <div class="rmpaper rm-dawn">
-          <p class="rmlbl">A photograph here</p>
-          <div class="rmframe rmland"><img src="/site/assets/sg5lib/r27-r-record-label.jpg" alt="A record turning on a dark deck, its centre label the one rose thing in the frame"></div>
-          <p class="rmcap"><b>Pink Label on Black Vinyl, P-39.</b> A quiet frame: one rose disc at the centre of a black record, and no lamp of its own to argue with the light on the paper. The rose in the picture and the rose of the first light are the same colour, which is why this one and not a brighter neighbour.</p>
-          <hr class="rmsep">
-          <p class="rmlbl">A testimonial here</p>
-          <div class="rmvoice">
-            <div class="rmframe rmsq"><img src="/site/assets/d4k/d4k-face-pedram.png" alt="Dr. Pedram Shojai, a silver portrait"></div>
-            <div>
-              <p class="rmkick">Witnessed</p>
-              <p class="rmquote"><span class="mk mk-rose">The transformations I&rsquo;ve witnessed are remarkable.</span></p>
-              <p class="rmwho">Dr. Pedram Shojai<small>Best-Selling Author, The Urban Monk</small></p>
-            </div>
-          </div>
-        </div>
-          </div>
-        </div>
-        <div class="rmcol deskcol">
-          <p class="caplbl">Desktop</p>
-          <div class="rmpaper rmwide rm-dawn">
-          <p class="rmlbl">A photograph here</p>
-          <div class="rmframe rmland"><img src="/site/assets/sg5lib/r27-r-record-label.jpg" alt="A record turning on a dark deck, its centre label the one rose thing in the frame"></div>
-          <p class="rmcap"><b>Pink Label on Black Vinyl, P-39.</b> A quiet frame: one rose disc at the centre of a black record, and no lamp of its own to argue with the light on the paper. The rose in the picture and the rose of the first light are the same colour, which is why this one and not a brighter neighbour.</p>
-          <hr class="rmsep">
-          <p class="rmlbl">A testimonial here</p>
-          <div class="rmvoice">
-            <div class="rmframe rmsq"><img src="/site/assets/d4k/d4k-face-pedram.png" alt="Dr. Pedram Shojai, a silver portrait"></div>
-            <div>
-              <p class="rmkick">Witnessed</p>
-              <p class="rmquote"><span class="mk mk-rose">The transformations I&rsquo;ve witnessed are remarkable.</span></p>
-              <p class="rmwho">Dr. Pedram Shojai<small>Best-Selling Author, The Urban Monk</small></p>
-            </div>
-          </div>
-        </div>
-        </div>
-      </div>
-      <div class="roomrule">
-        <p><b>Pictures here:</b> The paper does nothing to a picture&rsquo;s colour. What the room adds is direction: every frame throws one long soft shadow away from the light, and a frame the pool actually reaches takes a single rose line along the edge facing it. Choose a quiet picture &mdash; the dawn is the breath after the dark, not a second event.</p>
-        <p><b>Testimonials here:</b> The same construction with a face in it: portrait, frame, the long shadow, and the rim if the light reaches that frame. One line of the quote takes the mark in the section&rsquo;s colour; the face never does.</p>
-      </div>
-      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/styleguide-library#solo" target="_blank" rel="noopener">Find pictures like these in the library</a></p>
-      <details class="builder"><summary>For the builder</summary><div class="bin">
-        <p>The panel is the dawn rung with the dawn ink set. The light is one overlay on the section, a rose pool anchored to the top edge whose last stop ends at zero alpha, so outside the pool the paper is untouched paper. Every frame carries the neutral long shadow, offset 24 at desktop and 16 at phone; only a frame the pool reaches takes the coloured top border.</p><p>Copied from <code>site/home-t12.html</code>: <code>.set-dawn</code>, <code>body.dawn-b #more-results::after</code>, <code>body.dawn-b #more-results .fport</code>, <code>body.dawn-b #more-results .lit</code>.</p>
-      </div></details>
-    </div>
-
-    <div class="card" id="pictures-on-the-sun">
-      <h3>Sun &middot; a picture in daylight</h3>
-      <p class="sub">The page thrown open. The normal paper, and the one this guide is printed on.</p>
-      <div class="rooms">
-        <div class="rmcol">
-          <p class="caplbl">Phone</p>
-          <div class="rmphone">
-            <div class="rmpaper rm-sun">
-          <p class="rmlbl">A photograph here</p>
-          <div class="rmframe rmland"><img src="/site/assets/sg5lib/eval-r23-hero-record-emerald.jpg" alt="A translucent emerald record leaning against a sunlit white wall, everything else black and white"></div>
-          <p class="rmcap"><b>Emerald Record, P-82.</b> One coloured thing in a silver world, in hard daylight against a white wall &mdash; a solo. Sun passes through the disc as well, so the object is its own lamp; the paper does nothing to either.</p>
-          <hr class="rmsep">
-          <p class="rmlbl">A testimonial here</p>
-          <div class="rmvoice">
-            <div class="rmframe rmsq"><img src="/site/assets/d4k/d4k-face-maya.png" alt="Maya Shetreat, a silver portrait"></div>
-            <div>
-              <p class="rmkick">Ahead of the curve</p>
-              <p class="rmquote"><span class="mk mk-emerald">Zodiac.fm is way ahead of the curve.</span></p>
-              <p class="rmwho">Maya Shetreat, MD<small>Adult and Pediatric Neurologist, Expert Astrologer, Best-Selling Author</small></p>
-            </div>
-          </div>
-        </div>
-          </div>
-        </div>
-        <div class="rmcol deskcol">
-          <p class="caplbl">Desktop</p>
-          <div class="rmpaper rmwide rm-sun">
-          <p class="rmlbl">A photograph here</p>
-          <div class="rmframe rmland"><img src="/site/assets/sg5lib/eval-r23-hero-record-emerald.jpg" alt="A translucent emerald record leaning against a sunlit white wall, everything else black and white"></div>
-          <p class="rmcap"><b>Emerald Record, P-82.</b> One coloured thing in a silver world, in hard daylight against a white wall &mdash; a solo. Sun passes through the disc as well, so the object is its own lamp; the paper does nothing to either.</p>
-          <hr class="rmsep">
-          <p class="rmlbl">A testimonial here</p>
-          <div class="rmvoice">
-            <div class="rmframe rmsq"><img src="/site/assets/d4k/d4k-face-maya.png" alt="Maya Shetreat, a silver portrait"></div>
-            <div>
-              <p class="rmkick">Ahead of the curve</p>
-              <p class="rmquote"><span class="mk mk-emerald">Zodiac.fm is way ahead of the curve.</span></p>
-              <p class="rmwho">Maya Shetreat, MD<small>Adult and Pediatric Neurologist, Expert Astrologer, Best-Selling Author</small></p>
-            </div>
-          </div>
-        </div>
-        </div>
-      </div>
-      <div class="roomrule">
-        <p><b>Pictures here:</b> Nothing is done to the picture. It carries its own colour in, the frame is a hairline with a ground of its own and a soft shadow straight down, and the paper stays out of the way. This is the plain case, and the two daylight papers below behave the same.</p>
-        <p><b>Testimonials here:</b> Portrait in its frame, one marked quote line, a name and a credential under it. Nothing is lit and nothing is rimmed, because there is no source in the room.</p>
-      </div>
-      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/styleguide-library#solo" target="_blank" rel="noopener">Find pictures like these in the library</a></p>
-      <details class="builder"><summary>For the builder</summary><div class="bin">
-        <p>The panel is the sun rung with the sun ink set; no overlay, because there is no light in daylight to point at. The frame is <code>.fport</code> verbatim: a self-coloured ground, a hairline border at 16 per cent ink, radius 3, and the section shadow the home page gives every framed portrait.</p><p>The mark is <code>#voices .lit</code> with the seven rose stops swapped for the wheel&rsquo;s emerald at the same seven alphas and the same 101 degrees; the wash layer is this panel&rsquo;s own paper.</p>
-      </div></details>
-    </div>
-
-    <div class="card" id="pictures-on-the-day">
-      <h3>Day &middot; a picture one step down</h3>
-      <p class="sub">A soft step down from sun. Everyday paper, for a chapter that should sit back a little.</p>
-      <div class="rooms">
-        <div class="rmcol">
-          <p class="caplbl">Phone</p>
-          <div class="rmphone">
-            <div class="rmpaper rm-day">
-          <p class="rmlbl">A photograph here</p>
-          <div class="rmframe rmland"><img src="/site/assets/sg5lib/eval-r18-day-core-stained-glass.jpg" alt="A person in headphones sitting alone facing a tall violet stained-glass window, the pattern thrown across the floor, the room otherwise black and white"></div>
-          <p class="rmcap"><b>Stained Glass Light, P-5.</b> Sun passes through the violet glass and the glass becomes the lamp; the floor takes the pattern and the room stays silver. A through. The colour is inside the photograph, so the paper is free to stay neutral.</p>
-          <hr class="rmsep">
-          <p class="rmlbl">A testimonial here</p>
-          <div class="rmvoice">
-            <div class="rmframe rmsq"><img src="/site/assets/faces/t5-face-debra.png" alt="Debra Silverman, a silver portrait"></div>
-            <div>
-              <p class="rmkick">Astrology</p>
-              <p class="rmquote"><span class="mk mk-violet">This music tickled my soul &hellip; Give it a try &mdash; you&rsquo;ll love it.</span></p>
-              <p class="rmwho">Debra Silverman<small>Astrologer to Sting, Jennifer Aniston, and More</small></p>
-            </div>
-          </div>
-        </div>
-          </div>
-        </div>
-        <div class="rmcol deskcol">
-          <p class="caplbl">Desktop</p>
-          <div class="rmpaper rmwide rm-day">
-          <p class="rmlbl">A photograph here</p>
-          <div class="rmframe rmland"><img src="/site/assets/sg5lib/eval-r18-day-core-stained-glass.jpg" alt="A person in headphones sitting alone facing a tall violet stained-glass window, the pattern thrown across the floor, the room otherwise black and white"></div>
-          <p class="rmcap"><b>Stained Glass Light, P-5.</b> Sun passes through the violet glass and the glass becomes the lamp; the floor takes the pattern and the room stays silver. A through. The colour is inside the photograph, so the paper is free to stay neutral.</p>
-          <hr class="rmsep">
-          <p class="rmlbl">A testimonial here</p>
-          <div class="rmvoice">
-            <div class="rmframe rmsq"><img src="/site/assets/faces/t5-face-debra.png" alt="Debra Silverman, a silver portrait"></div>
-            <div>
-              <p class="rmkick">Astrology</p>
-              <p class="rmquote"><span class="mk mk-violet">This music tickled my soul &hellip; Give it a try &mdash; you&rsquo;ll love it.</span></p>
-              <p class="rmwho">Debra Silverman<small>Astrologer to Sting, Jennifer Aniston, and More</small></p>
-            </div>
-          </div>
-        </div>
-        </div>
-      </div>
-      <div class="roomrule">
-        <p><b>Pictures here:</b> Same as the sun: the paper does nothing. The step down only means a picture with a lot of white in it sits on the page instead of dissolving into it, which is the reason to put a bright frame here rather than one rung up.</p>
-        <p><b>Testimonials here:</b> Unchanged from the sun. The ink is a shade stronger on this paper, so the credential under the name still separates cleanly.</p>
-      </div>
-      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/styleguide-library#through" target="_blank" rel="noopener">Find pictures like these in the library</a></p>
-      <details class="builder"><summary>For the builder</summary><div class="bin">
-        <p>The panel is the day rung with the day ink set. No overlay. Frame, mark and voice row are the sun&rsquo;s, unchanged; only the sheet and the four ink values move, and they move together as one class.</p>
-      </div></details>
-    </div>
-
-    <div class="card" id="pictures-on-the-room">
-      <h3>Room &middot; a picture with the blinds half drawn</h3>
-      <p class="sub">Grey paper. You lean in to read it, which is exactly what it is for.</p>
-      <div class="rooms">
-        <div class="rmcol">
-          <p class="caplbl">Phone</p>
-          <div class="rmphone">
-            <div class="rmpaper rm-room">
-          <p class="rmlbl">A photograph here</p>
-          <div class="rmframe rmland"><img src="/site/assets/sg5lib/eval-r22-refl-dashboard-earbuds-emerald.jpg" alt="An emerald earbud case open on a car dashboard, its colour thrown up onto the windscreen, the city beyond in black and white"></div>
-          <p class="rmcap"><b>Dashboard Earbuds, P-81.</b> The emerald case lays its colour onto the glass beside it &mdash; a spill. A picture with its own shade in it reads well on this paper, because the paper is shaded with it.</p>
-          <hr class="rmsep">
-          <p class="rmlbl">A testimonial here</p>
-          <div class="rmvoice">
-            <div class="rmframe rmsq"><img src="/site/assets/d4k/d4k-face-srini.png" alt="Srini Pillay, a silver portrait"></div>
-            <div>
-              <p class="rmkick">Neuroscience</p>
-              <p class="rmquote"><span class="mk mk-emerald">Zodiac.fm helps people access aspects of themselves that have always been there.</span></p>
-              <p class="rmwho">Srini Pillay, M.D.<small>Harvard-trained psychiatrist, brain-imaging researcher</small></p>
-            </div>
-          </div>
-        </div>
-          </div>
-        </div>
-        <div class="rmcol deskcol">
-          <p class="caplbl">Desktop</p>
-          <div class="rmpaper rmwide rm-room">
-          <p class="rmlbl">A photograph here</p>
-          <div class="rmframe rmland"><img src="/site/assets/sg5lib/eval-r22-refl-dashboard-earbuds-emerald.jpg" alt="An emerald earbud case open on a car dashboard, its colour thrown up onto the windscreen, the city beyond in black and white"></div>
-          <p class="rmcap"><b>Dashboard Earbuds, P-81.</b> The emerald case lays its colour onto the glass beside it &mdash; a spill. A picture with its own shade in it reads well on this paper, because the paper is shaded with it.</p>
-          <hr class="rmsep">
-          <p class="rmlbl">A testimonial here</p>
-          <div class="rmvoice">
-            <div class="rmframe rmsq"><img src="/site/assets/d4k/d4k-face-srini.png" alt="Srini Pillay, a silver portrait"></div>
-            <div>
-              <p class="rmkick">Neuroscience</p>
-              <p class="rmquote"><span class="mk mk-emerald">Zodiac.fm helps people access aspects of themselves that have always been there.</span></p>
-              <p class="rmwho">Srini Pillay, M.D.<small>Harvard-trained psychiatrist, brain-imaging researcher</small></p>
-            </div>
-          </div>
-        </div>
-        </div>
-      </div>
-      <div class="roomrule">
-        <p><b>Pictures here:</b> The paper still does nothing to the picture. It is darker than the daylight papers, so a frame with a wide bright field in it &mdash; a sky, a white wall &mdash; becomes the loudest thing in the section. That is right when the picture IS the section&rsquo;s event, as it is here, and wrong beside a heading that is meant to lead.</p>
-        <p><b>Testimonials here:</b> This is the home of the regular testimonial block: one portrait, one marked line, a name and a credential, repeated down a single column with hairlines between. If you are placing testimonials and have no reason to choose, place them here.</p>
-      </div>
-      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/styleguide-library#spill" target="_blank" rel="noopener">Find pictures like these in the library</a></p>
-      <details class="builder"><summary>For the builder</summary><div class="bin">
-        <p>The panel is the room rung with the room ink set, and the mark is the original: <code>#voices .lit</code>, whose wash layer is this paper at 62 per cent. The lead voice on the home page also takes a whisper of the mark on the frame edge (<code>inset -2px 0 0</code>) and throws its shadow away from it.</p>
-      </div></details>
-    </div>
-
-    <div class="card" id="pictures-on-the-night">
-      <h3>Night &middot; a picture under the sign light</h3>
-      <p class="sub">Charcoal. A room at night that you can still see into &mdash; never a black hole, never a void.</p>
-      <div class="rooms">
-        <div class="rmcol">
-          <p class="caplbl">Phone</p>
-          <div class="rmphone">
-            <div class="rmpaper rm-night">
-          <p class="rmlbl">A photograph here</p>
-          <div class="rmframe rmland"><img src="/site/assets/sg5lib/r29-r-turntable-signlight.jpg" alt="A turntable on a sill at night, a rose sign glowing through the window behind it and landing on the deck"></div>
-          <p class="rmcap"><b>Turntable in Sign Light, P-42.</b> The picture carries its own lamp &mdash; a rose sign through a window, landing on the deck &mdash; in the same colour as the light on the paper. That agreement is what stops the room and the frame reading as two different evenings.</p>
-          <hr class="rmsep">
-          <p class="rmlbl">A testimonial here</p>
-          <div class="rmvoice">
-            <div class="rmframe rmsq"><img src="/site/assets/d4l/d4l-face-jennifer.png" alt="Jennifer K. Hill, a silver portrait"></div>
-            <div>
-              <p class="rmkick">Abundance</p>
-              <p class="rmquote"><span class="mk mk-rose">Instead of 10 paid members, I got 30 paid members in 30&nbsp;days.</span></p>
-              <p class="rmwho">Jennifer K. Hill<small>Global Wellness Leader, Founder, OptiMatch</small></p>
-            </div>
-          </div>
-        </div>
-          </div>
-        </div>
-        <div class="rmcol deskcol">
-          <p class="caplbl">Desktop</p>
-          <div class="rmpaper rmwide rm-night">
-          <p class="rmlbl">A photograph here</p>
-          <div class="rmframe rmland"><img src="/site/assets/sg5lib/r29-r-turntable-signlight.jpg" alt="A turntable on a sill at night, a rose sign glowing through the window behind it and landing on the deck"></div>
-          <p class="rmcap"><b>Turntable in Sign Light, P-42.</b> The picture carries its own lamp &mdash; a rose sign through a window, landing on the deck &mdash; in the same colour as the light on the paper. That agreement is what stops the room and the frame reading as two different evenings.</p>
-          <hr class="rmsep">
-          <p class="rmlbl">A testimonial here</p>
-          <div class="rmvoice">
-            <div class="rmframe rmsq"><img src="/site/assets/d4l/d4l-face-jennifer.png" alt="Jennifer K. Hill, a silver portrait"></div>
-            <div>
-              <p class="rmkick">Abundance</p>
-              <p class="rmquote"><span class="mk mk-rose">Instead of 10 paid members, I got 30 paid members in 30&nbsp;days.</span></p>
-              <p class="rmwho">Jennifer K. Hill<small>Global Wellness Leader, Founder, OptiMatch</small></p>
-            </div>
-          </div>
-        </div>
-        </div>
-      </div>
-      <div class="roomrule">
-        <p><b>Pictures here:</b> The room is charcoal and one coloured light enters from off the top edge. The picture keeps its own colour; what the room adds is a bright rim along the frame&rsquo;s top edge, facing the source, and a hard shadow thrown down and away from it. Choose a picture that carries its own lamp, in the light&rsquo;s colour.</p>
-        <p><b>Testimonials here:</b> Exactly the same construction, with a face in the frame. Faces stay silver: the rim sits on the frame and never on the skin, and the one marked line carries the colour instead.</p>
-      </div>
-      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/styleguide-library#evening" target="_blank" rel="noopener">Find pictures like these in the library</a></p>
-      <details class="builder"><summary>For the builder</summary><div class="bin">
-        <p>The panel is the night rung, whose ink is the page&rsquo;s own light. The field is one overlay whose alpha is the product of two gradients &mdash; the background carries the light across the panel, the mask carries it down &mdash; which is what makes the source read as a place rather than an edge. Two rim stops on the top edge, the outer laid just outside the frame by a zero-blur shadow, the inner the frame&rsquo;s own border; both brighter than what they sit on.</p><p>Copied from <code>site/home-t12.html</code>: <code>.set-night</code>, <code>body.night-a #results::after</code>, <code>body.night-a #results .fport</code>, <code>body.night-a #results .lit</code>. The mask table here is the section table compressed to a panel of this height; the shape and the stops are the page&rsquo;s.</p>
-      </div></details>
     </div>
   </section>
 
@@ -1119,7 +679,6 @@
         <div><dt>Setting</dt><dd>Night — one scene, with the study as a part inside it, never a second section</dd></div>
         <div><dt>Effect and colour</dt><dd>A rose light from off the top edge, one marked quote line, and the chart's bars lit in the same rose.</dd></div>
         <div><dt>When to reuse it</dt><dd>This is the <b>hero proof block</b>. One per page, placed where the proof is heaviest. Never two nights on one page.</dd></div>
-        <div class="wide"><dt>A note on pictures</dt><dd>This section carries no picture beyond its five portraits, and that is <b>this section&rsquo;s own call</b> — a sixth frame in among five lit faces was clutter. It is not a rule of the night. The night takes photographs like every other room; see <a href="#pictures-on-the-night">a picture under the sign light</a>.</dd></div>
         <div class="wide"><dt>Slots</dt><dd>One heading · five voices in a staggered grid, the first wide · then, inside the same section: a second heading, a paragraph carrying the study's shape, two big numbers with labels, a seven-row bar chart, and one line of fine print. Portraits: T-11, T-23, T-12, T-27, T-10.</dd></div>
       </dl>
       <div class="pair">
@@ -1761,14 +1320,9 @@
       {"id": "the-colours", "name": "The colours", "summary": "Core violet, Love rose, Vitality amber, Abundance emerald; amber falls on things, the other three are things."},
       {"id": "how-to-use-this-guide", "name": "How to use this guide", "summary": "Pick a recipe, place the sections, give each a setting and an effect, pull pictures from the library by number."}
     ]},
-    {"id": "the-five-settings", "name": "The five settings", "summary": "The five neutral papers a section can sit on, light to dark, and what each one does to a photograph and to a testimonial.", "cards": [
+    {"id": "the-five-settings", "name": "The five settings", "summary": "The five neutral papers a section can sit on, light to dark.", "cards": [
       {"id": "the-five-papers", "name": "The five papers, light to dark", "summary": "Dawn, sun, day, room and night, with what each one is for."},
-      {"id": "each-setting-on-the-page", "name": "Each setting, standing on the live page", "summary": "One real section from the home page on each of the five papers, at phone size."},
-      {"id": "pictures-on-the-dawn", "name": "Dawn, a picture in the first light", "summary": "A rose library frame and a testimonial standing on the whitest paper under the first light, with the long shadow and the rim; phone and desktop."},
-      {"id": "pictures-on-the-sun", "name": "Sun, a picture in daylight", "summary": "An emerald solo frame and a testimonial on the normal paper, where the room does nothing to the picture; phone and desktop."},
-      {"id": "pictures-on-the-day", "name": "Day, a picture one step down", "summary": "A violet through frame and a testimonial on the everyday paper; phone and desktop."},
-      {"id": "pictures-on-the-room", "name": "Room, a picture with the blinds half drawn", "summary": "An emerald spill frame and the regular testimonial block on grey paper; phone and desktop."},
-      {"id": "pictures-on-the-night", "name": "Night, a picture under the sign light", "summary": "A rose frame that carries its own lamp, and a testimonial, on charcoal under the sign light, with rims and shadows; phone and desktop."}
+      {"id": "each-setting-on-the-page", "name": "Each setting, standing on the live page", "summary": "One real section from the home page on each of the five papers, at phone size."}
     ]},
     {"id": "lighting-a-page", "name": "Lighting a page", "summary": "The rules for ordering sections, and the home page's ladder to copy.", "cards": [
       {"id": "the-rules-of-the-ladder", "name": "The rules", "summary": "Neighbours never share a setting; the night is one scene; dawn only after night; into and out of the night is a cut; no warm pixel; faces always silver."},
