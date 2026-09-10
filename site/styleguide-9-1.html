@@ -4,10 +4,9 @@
   This file IS the current style guide. Edit THIS file — never fork a numbered copy
   and never hand anyone a versioned URL for this surface.
   ZFM-CURRENT: /site/styleguide
-  ZFM-INTERNAL-VERSION: 9-2
+  ZFM-INTERNAL-VERSION: 9-1
   To bump the version: copy this file to site/styleguide-<n>.html
   as a frozen snapshot FIRST, then edit this file and raise ZFM-INTERNAL-VERSION.
-  9-2 (2026-09-09, fd-082): the opening carries CURRENT CONTROLS, one linked entry per page type, kept current at every promotion; check_styleguide.py holds the visible links to the index's controls list.
   Rule: Michael, 2026-08-26 — "always just have the current one be the main url string".
   Applies to reference surfaces only (libraries, style guides, directories),
   never to landers, sites, or design rounds, which stay versioned.
@@ -125,13 +124,6 @@
   h1{font:600 54px/1.05 var(--serif);color:var(--ink);letter-spacing:.004em;max-width:16em}
   @media(min-width:1080px){h1{font-size:74px}}
   .standfirst{margin-top:26px;font-size:21px;line-height:1.55;color:var(--ink-strong);max-width:34em}
-.controls{margin-top:22px;padding:18px 20px;border:1px solid var(--hair);background:var(--lv-room,#CCCCCB)}
-  .controls .kicker{margin:0 0 6px}
-  .controls p{margin:0 0 10px;font-size:15px}
-  .controls ul{list-style:none;margin:0;padding:0;columns:2;column-gap:28px}
-  .controls li{font-size:15px;line-height:1.5;break-inside:avoid;padding:3px 0;border-top:1px solid var(--hair)}
-  .controls a{color:inherit;text-decoration:underline;text-underline-offset:3px}
-  @media (max-width:640px){.controls ul{columns:1}}
   .built{margin-top:26px;padding-top:16px;border-top:1px solid var(--hair);
          font-size:14.5px;color:var(--ink-label);max-width:38em}
 
@@ -507,23 +499,6 @@
     <p class="built">Built from the live home page, home-t12, 2026-09-08. This guide is only ever
       as current as the page it names: every picture in it is a crop cut from that page as it
       stands today, and the next lock cuts them again.</p>
-    <div class="controls" id="current-controls">
-      <p class="kicker">Current controls</p>
-      <p>What we are working from, one page type at a time. When a new round is promoted, this
-        list changes in the same session. A page type with no control yet says so.</p>
-      <ul>
-        <li><strong>Home</strong> · <a class="control-link" data-type="home" href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b" target="_blank" rel="noopener">home-t12, night rose sign from above, dawn rose first light</a></li>
-        <li><strong>Corporate</strong> · no control yet</li>
-        <li><strong>Content</strong> · no control yet</li>
-        <li><strong>Q&amp;A</strong> · no control yet</li>
-        <li><strong>About</strong> · no control yet</li>
-        <li><strong>Reviews</strong> · no control yet</li>
-        <li><strong>Landing page</strong> · no control yet</li>
-        <li><strong>Results</strong> · no control yet</li>
-        <li><strong>Birth chart</strong> · no control yet</li>
-        <li><strong>Quiz</strong> · no control yet</li>
-      </ul>
-    </div>
   </header>
 
   <!-- ============ 0 · THE FOUR COLOURS ============ -->
@@ -1745,18 +1720,6 @@
   "url": "/site/styleguide",
   "built_from": "site/home-t12.html",
   "built_on": "2026-09-08",
-  "controls": [
-    {"type": "home", "label": "Home", "control": "home-t12", "url": "https://zodiac-pages.vercel.app/site/home-t12?night=a&dawn=b", "since": "2026-09-06"},
-    {"type": "corporate", "label": "Corporate", "control": null, "url": null},
-    {"type": "content", "label": "Content", "control": null, "url": null},
-    {"type": "qa", "label": "Q&A", "control": null, "url": null},
-    {"type": "about", "label": "About", "control": null, "url": null},
-    {"type": "reviews", "label": "Reviews", "control": null, "url": null},
-    {"type": "landing", "label": "Landing page", "control": null, "url": null},
-    {"type": "results", "label": "Results", "control": null, "url": null},
-    {"type": "birth-chart", "label": "Birth chart", "control": null, "url": null},
-    {"type": "quiz", "label": "Quiz", "control": null, "url": null}
-  ],
   "one_line": "Every Zodiac page is black-and-white photography on neutral paper; colour arrives once per section as one real thing or one real light, in one of four colours.",
   "colours": [
     {"name": "Core violet", "hex": "#6521C9", "kind": "object", "means": "who you are"},
