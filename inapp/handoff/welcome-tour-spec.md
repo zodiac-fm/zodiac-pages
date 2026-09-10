@@ -93,16 +93,23 @@ Entity legend used below: `‹` = `&#8249;`, `›` = `&#8250;`, `✓` = `&#10003
 4. `.subtitle`: `The Sound of You`
 5. Family strip (aria-hidden): `Core` / `Love` / `Vitality` / `Abundance`
 6. CTA: `Start the tour`
-7. Testimonial blockquote: `“Zodiac.fm helps people access aspects of themselves that have always been there. Listening to your frequencies bypasses language and creates profound levels of self-awareness and coherence. This leads to clearer decisions, more authentic relationships, and expanded possibilities.”`
+7. Testimonial blockquote: `“Zodiac.fm helps people access aspects of themselves that have always been there. Thus creating profound levels of self-awareness and coherence.”`
 8. `Srini Pillay, M.D.` / small: `Harvard Neuroscientist & Author`
 
-> **BUILD FROM THIS SPEC, NOT FROM THE PROTOTYPE (2026-09-09).** Srini's credit and his
-> testimonial were corrected by Michael on 2026-09-09, checked with Srini. The frozen
+> **BUILD FROM THIS SPEC, NOT FROM THE PROTOTYPE (2026-09-09).** Srini's credit was corrected
+> by Michael on 2026-09-09, checked with Srini, and it binds every surface. The frozen
 > `welcome-3q` / `welcome-existing1` prototypes still carry the retired byline
 > ("Harvard-trained psychiatrist, brain-imaging researcher") and his superseded 2026-07-27
-> wording; they are deliberately left as shipped. The credit and quote above are the
-> current ones and are what production builds. Source of record: vault
-> `winners/testimonials.md`, the Srini Pillay entry.
+> wording; they are deliberately left as shipped.
+>
+> **The quote here is deliberately not the marketing lead cut.** Michael, 2026-09-09: the app's
+> Srini may differ from the marketing surfaces because everyone seeing this screen has already
+> bought. So this screen carries his App Store cut — Michael's own approved 2026-08-28
+> shortening, two sentences, which fits the `.tm` row card. The three-sentence lead testimonial
+> stays on the marketing surfaces. What is NOT allowed here is the retired byline or his
+> superseded 2026-07-27 wording. Source of record: vault `winners/testimonials.md`, the Srini
+> Pillay entry; directives `working/testimonials-founder-directive-ledger-v1.md`
+> testimonials-fd-001 and testimonials-fd-008.
 
 **Layout (top→bottom):** `.chrome` (empty `<span>` left, Skip right) → `.head` with inline `style="padding-top:14px"` → `.hero` containing a full-width inline SVG `.herowave` (`viewBox="0 0 320 26"`, `preserveAspectRatio="none"`, height 122px; 88px under `max-height:760px`) → `.famstrip` (4 items, `justify-content:space-between`, colored dot `i` + label) → `.sp1` spacer → `.ctawrap` (`margin-top:26px`) → `.sp2` spacer → `.tm` testimonial (72×72px `border-radius:16px` image left, serif italic quote right) → `.sp3` spacer. Head/hero/CTA are left-aligned; CTA is centered horizontally.
 
@@ -722,7 +729,7 @@ Base: `https://zodiac-pages.vercel.app/inapp/`
 
 | # | Screen | Name | Title line | Quote (verbatim) | Image | Treatment |
 |---|---|---|---|---|---|---|
-| 1 | `#s1` | **Srini Pillay, M.D.** | `Harvard Neuroscientist & Author` | `“Zodiac.fm helps people access aspects of themselves that have always been there. Listening to your frequencies bypasses language and creates profound levels of self-awareness and coherence. This leads to clearer decisions, more authentic relationships, and expanded possibilities.”` | `app-assets-welcome/srini-pillay.png` | `.tm` **row card, transparent** — 72×72px `border-radius:16px` image left, serif italic 21px quote right, separated from the screen by a `1px solid var(--hair)` top rule. Left-aligned. Sits below the CTA at the very bottom of the screen. |
+| 1 | `#s1` | **Srini Pillay, M.D.** | `Harvard Neuroscientist & Author` | `“Zodiac.fm helps people access aspects of themselves that have always been there. Thus creating profound levels of self-awareness and coherence.”` | `app-assets-welcome/srini-pillay.png` | `.tm` **row card, transparent** — 72×72px `border-radius:16px` image left, serif italic 21px quote right, separated from the screen by a `1px solid var(--hair)` top rule. Left-aligned. Sits below the CTA at the very bottom of the screen. |
 | 2 | `#s1c` | **Rhonda Britten** | `Author of “Fearless Living,” Emmy Award-Winner` | `“These aren’t just pretty sounds or generic meditation tracks. This is your cosmic blueprint translated into frequency. If you’re tired of living out of tune with yourself, this is your invitation home.”` | `app-assets-welcome/rhonda-britten.jpg` | `.rcard` **centered hero card** — white, `border-radius:20px`, `padding:26px 22px 22px`, `box-shadow:0 10px 30px rgba(26,22,32,.07)`; 84×84px **circular** photo, `object-position:center 22%`, `filter:grayscale(1) contrast(1.05)`; serif italic 18.5px quote centered; attribution centered. This screen is *only* the testimonial + CTA. |
 | 3 | `#s6` | **Barbara Ditlow** | `Human Design Master Practitioner, endorsed by Ra Uru Hu` (non-breaking spaces in "Ra Uru Hu") | `“Understanding alone isn’t transformation. It must be felt. Zodiac core frequencies translate this unique imprint into sound, bypassing the mind and speaking directly to the body.”` | `app-assets-welcome/barbara-ditlow.png` | `.rcard` **centered hero card**, same as Rhonda, plus `#s6 .rcard{margin:auto 0}` so it vertically centers in the leftover space. Comment: "Barbara as the same centered hero moment as Rhonda (SS C13)". |
 | 4 | `#s7a` | **Joey Vaillancourt** | `VP of Marketing, BiOptimizers` | `“Without doing anything but listening, I become a different person. I shift into the version of me I actually want to be. I can tap into different frequencies based on what I need.”` | `app-assets-welcome/joey-vaillancourt.png` | `.tm` **restyled as a white breathing card** (`#s7a .tm`): `background:#fff`, `border:1px solid #efe6d6`, `border-radius:16px`, `padding:11px 13px`, `box-shadow:0 6px 20px rgba(26,22,32,.05)`, `gap:11px`. 72×72px `border-radius:16px` image left, serif italic **15px** quote right. |

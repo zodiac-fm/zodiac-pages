@@ -179,6 +179,21 @@
    "chroma_note": "12 sits deliberately UNDER the census's COLOUR_CHROMA_MIN of 18: the census hunts a real coloured OBJECT, this hunts a CAST, and a cast is weaker than an object by definition. MEASURED on 2026-09-05, not guessed, and the measurement is bimodal with nothing in between. On T10's clean night, 99 percent of the section sits at chroma 7 or under and 99.9 percent at 11 or under (the 5 percent grain film is the whole of that spread); only 875 pixels of 1,180,875 clear 11, and every one of them is inside a photograph. On T9's night, every warm pixel outside the pictures measures chroma 13 or 14, and 2,236 of the 2,968 in #study are exactly rgba(246,241,232) - the retired --cream ink, verbatim. The threshold is set at 12 because that is the empty gap between the two.",
    "outside_img_only": "Warm pixels are counted twice: inside the union of the <img> boxes that intersect the section, and outside it. Only the OUTSIDE count decides the verdict. Every visible <img> counts, with no decorative exemption, because the question is about the page and not about the alt text.",
    "fixed_chrome": "Localized fixed or sticky chrome is hidden before the capture: the browser paints it once per screen, so a stitched full-length render would carry one copy of it per screen lying across the night. Full-bleed fixed layers - the backdrop plate, the grain film - are kept, because a warm cast one of them lays over the section is exactly the defect this rule names."
+  },
+  "retired_credits": {
+   "ledger": "testimonials-fd-001",
+   "why": "Michael corrects a person's credit and it binds forward, but a design round is built by copying the previous round, so the retired credit rides along unless a check fails on it. Frozen rounds keep what they shipped; this only runs on the page under check.",
+   "people": [
+    {
+     "name": "Srini Pillay",
+     "current": "Harvard Neuroscientist & Author",
+     "retired": [
+      "Harvard-trained psychiatrist, brain-imaging researcher",
+      "Harvard-trained psychiatrist and brain-imaging researcher",
+      "Harvard-trained psychiatrist and brain researcher"
+     ]
+    }
+   ]
   }
  }
 }
