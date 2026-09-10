@@ -4,19 +4,9 @@
   This file IS the current style guide. Edit THIS file — never fork a numbered copy
   and never hand anyone a versioned URL for this surface.
   ZFM-CURRENT: /site/styleguide
-  ZFM-INTERNAL-VERSION: 9-3
+  ZFM-INTERNAL-VERSION: 9-2
   To bump the version: copy this file to site/styleguide-<n>.html
   as a frozen snapshot FIRST, then edit this file and raise ZFM-INTERNAL-VERSION.
-  9-3 (2026-09-09, fd-083): the rule that neighbouring sections may never share a colour is
-  replaced by the flexible one Michael called for. It was the seat's own law and the accepted
-  home page breaks it four sections running. The rule now reads: two sections that touch MAY
-  share a colour when the light under them changes and the colour arrives a different way;
-  what fails is the same colour arriving the same way on the same paper twice. Corrected in
-  all three places it was written (the colours card, the effects chapter head, the rule for a
-  new page) and SHOWN in a new card closing chapter 4, cut from the live night and dawn.
-  Currency (fd-084) is now machine-checked: check_design_qa.py pointers holds this banner, the
-  title, this history, the frozen snapshot of the previous version and the live page together.
-  9-2 is frozen at site/styleguide-9-2.html.
   9-2 (2026-09-09, fd-082): the opening carries CURRENT CONTROLS, one linked entry per page type, kept current at every promotion; check_styleguide.py holds the visible links to the index's controls list.
   Rule: Michael, 2026-08-26 — "always just have the current one be the main url string".
   Applies to reference surfaces only (libraries, style guides, directories),
@@ -217,16 +207,6 @@
   /* on a phone a section template is 3 000 px of picture; the card shows the top of
      it so the chapter stays walkable, and the desktop panel beside it carries more. */
   @media(max-width:819px){.pair .tall,.pair .wide{max-height:760px}}
-  /* Two sections that touch, side by side, so the rule about a colour running
-     through a passage of the page is READ OFF THE PAGE and not asserted. Phone
-     crops, because "two sections that touch" is something you meet by scrolling. */
-  .runpair{display:grid;grid-template-columns:1fr;gap:22px;margin-top:26px;align-items:start}
-  @media(min-width:700px){.runpair{grid-template-columns:repeat(2,minmax(0,375px));gap:26px}}
-  .runpair figure{min-width:0}
-  .runpair .runshot{aspect-ratio:375/700;overflow:hidden;border:1px solid var(--hair)}
-  .runpair .runshot img{width:100%;display:block;border:none}
-  .runpair figcaption{margin-top:10px;font-size:14px;line-height:1.5;color:var(--ink-label)}
-  .runpair figcaption b{color:var(--ink);font-weight:600}
   /* A link from every section card and every effect to the place on the live page
      that carries it, so a designer can go and look at the real thing. */
   .seelive{margin-top:15px;font:600 11.5px/1.5 var(--sans);letter-spacing:.13em;text-transform:uppercase}
@@ -557,10 +537,8 @@
 
     <div class="card" id="the-colours">
       <h3>The colours</h3>
-      <p class="sub">Named for the four frequencies. One colour per section &mdash; and two
-        sections that touch may share one, so long as the light under them changes and the colour
-        arrives a different way. <a href="#when-two-sections-share-a-colour">How a colour runs
-        through a passage.</a></p>
+      <p class="sub">Named for the four frequencies. One colour per section, and never the same
+        colour in two sections that touch.</p>
       <div class="colours">
         <div class="sw"><div class="chipx" style="background:var(--core)"></div>
           <div class="nm"><b>Core violet</b><span>Who you are. The first colour of the set.</span></div></div>
@@ -1295,8 +1273,7 @@
       <h2>The effects</h2>
       <p>How colour gets onto a section. There are three families: colour inside the photograph,
         colour marked on the type, and light thrown across the section itself. One effect per
-        section and one colour per section; the last card says what happens when two sections that
-        touch want the same colour.</p>
+        section, one colour per section, and neighbours never share a colour.</p>
     </div>
 
     <div class="card" id="effects-in-the-photograph">
@@ -1450,43 +1427,6 @@
           24&nbsp;px desktop, blur 32–44; a 1&nbsp;px rim at L* 92–95 on the top edge of each
           frame. Pair it with one highlight on the heading's italic words in the same colour.</p>
       </div></details>
-    </div>
-
-    <div class="card" id="when-two-sections-share-a-colour">
-      <h3>When two sections share a colour</h3>
-      <p class="sub">One colour per section. Two sections that touch <b>may</b> carry the same
-        colour, and on the home page four in a row do &mdash; but only because the light underneath
-        them changes and the colour arrives a different way each time.</p>
-      <div class="runpair">
-        <figure>
-          <div class="runshot"><img src="/site/assets/styleguide/9-0/styleguide-crop-ladder-results-phone.jpg" alt="The night section: charcoal paper lit rose from above, a silver portrait, and one quote line carrying a rose mark"></div>
-          <figcaption><b>The night.</b> Rose arrives as a sign hung above the wall: brightest along
-            the top edge, falling away down the charcoal, a thin line on the frame that faces it.
-            One quote line takes the mark.</figcaption>
-        </figure>
-        <figure>
-          <div class="runshot"><img src="/site/assets/styleguide/9-0/styleguide-crop-ladder-more-results-phone.jpg" alt="The dawn section straight after it: the whitest paper with a small rose pool at the top edge and a rose mark on two words of the heading"></div>
-          <figcaption><b>The dawn, straight after it.</b> The same rose, and nothing about it is
-            the same: a small pool at the top of the whitest paper, pure white everywhere else,
-            shadows long and downward. Two words of the heading take the mark.</figcaption>
-        </figure>
-      </div>
-      <div class="roomrule">
-        <p><b>The test is how the colour arrives.</b> If the second section gets its colour by a
-          different means than the first &mdash; a lit wall, then a pool of morning; an object in a
-          photograph, then a marked line &mdash; the colour reads as a thread pulled through a
-          passage of the page, and the passage is stronger for it than it would be with two
-          unrelated colours.</p>
-        <p><b>What actually fails is repetition.</b> The same colour arriving the same way on the
-          same paper twice in a row. Two photographs each holding one rose object, side by side on
-          the same daylight paper, is not a thread &mdash; it is a theme, and the reader stops
-          seeing it by the second one. Change the light, or change the means, or change the
-          colour.</p>
-        <p><b>Colour still never touches a face</b>, however the sections run. The mark goes on the
-          type and the colour goes in the world of the photograph; a portrait stays silver in every
-          room. That one is not flexible.</p>
-      </div>
-      <p class="seelive"><a href="https://zodiac-pages.vercel.app/site/home-t12?night=a&amp;dawn=b#results" target="_blank" rel="noopener">See the run live</a></p>
       <a class="totop" href="#top">Back to top</a>
     </div>
   </section>
@@ -1740,10 +1680,7 @@
           light papers carry colour inside their photographs; the room carries a photograph or a
           marked line; the night carries the sign light, a marked line and, if there is a chart,
           the lit bars; dawn carries first light and a marked line.</li>
-        <li><b>Neighbours may share a colour</b> when the light under them changes and the
-          colour arrives a different way; what fails is the same colour arriving the same way on
-          the same paper twice. <a href="#when-two-sections-share-a-colour">The card that shows
-          it.</a> Amber lights; it never sits.</li>
+        <li><b>Neighbours never share a colour.</b> Amber lights; it never sits.</li>
         <li><b>Pull every picture from the library by number</b>, and check it is not retired.</li>
       </ul>
     </div>
@@ -1889,8 +1826,7 @@
     {"id": "the-effects", "name": "The effects", "summary": "How colour gets onto a section: in the photograph, on the type, or as light on the section.", "cards": [
       {"id": "effects-in-the-photograph", "name": "Group A, in the photograph", "summary": "Solo, chord, through, spill, worn and sun, each on a live frame that carries it."},
       {"id": "effects-on-the-type", "name": "Group B, on the type", "summary": "The highlight: one colour on the one line that carries the argument, shown at twice size."},
-      {"id": "effects-light-on-the-section", "name": "Group C, light on the section", "summary": "Sign light, lit meter and first light, and the four things that make it light and not a tint."},
-      {"id": "when-two-sections-share-a-colour", "name": "When two sections share a colour", "summary": "Two touching sections may carry one colour when the light changes and the colour arrives a different way; the same colour the same way on the same paper twice is what fails."}
+      {"id": "effects-light-on-the-section", "name": "Group C, light on the section", "summary": "Sign light, lit meter and first light, and the four things that make it light and not a tint."}
     ]},
     {"id": "type-space-and-furniture", "name": "Type, space and furniture", "summary": "Every type size measured off the live page, plus the left rail, the portrait frame and hairlines.", "cards": [
       {"id": "the-specimens", "name": "The specimens", "summary": "Headline, lede, section heading, body, label, quote, name, credential, the big numbers and fine print."},
