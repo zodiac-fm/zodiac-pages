@@ -1,0 +1,343 @@
+@font-face{font-family:Switzer;src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype');font-weight:400;font-display:swap}
+@font-face{font-family:Switzer;src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype');font-weight:600;font-display:swap}
+:root{--white:#FFFFFE;--grey:#CCCCCB;--ink:#20201e;--night:#40403f;--muted:#53534f;--line:#cdcdca;--rose:#b42967;--serif:'Cormorant Garamond',Georgia,serif;--sans:Switzer,Arial,sans-serif;--space:clamp(76px,8vw,116px)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--white);color:var(--ink);font:24px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;width:100%;height:auto}figure,blockquote{margin:0}p{margin:0 0 1em}p:last-child{margin-bottom:0}h1,h2,h3{margin:0;font-family:var(--serif);font-weight:600;letter-spacing:-.024em;line-height:1.05;text-wrap:balance}h2{font-size:clamp(48px,4.7vw,68px)}h3{font-size:34px;line-height:1.1}a{color:inherit;text-decoration-thickness:1px;text-underline-offset:5px}a:hover{color:var(--rose)}a:focus-visible{outline:3px solid currentColor;outline-offset:6px}small{font-size:inherit}cite{font-style:normal}.shell{width:calc(100% - 96px);max-width:1200px;margin-inline:auto}
+.site-nav{height:76px}.site-nav>.shell{height:100%;display:flex;align-items:center;justify-content:space-between;gap:24px}.logo{display:block}.logo img{width:150px}.nav-links{display:flex;gap:32px;font-size:17px}.nav-links a{text-decoration:none}.nav-links a:hover{text-decoration:underline}
+.hero{padding-top:34px}.hero>.shell:first-child{padding-bottom:30px}.hero h1{font-size:clamp(68px,7.6vw,110px);line-height:.98}.hero-subtitle{margin:17px 0 0;font:600 clamp(30px,3.1vw,44px)/1.15 var(--serif);letter-spacing:-.015em}.hero-photo{max-width:1200px;width:calc(100% - 96px);margin:auto}.hero-photo img{aspect-ratio:2200/1237}.hero-after{padding-block:44px 72px}.compass{max-width:1120px;font:600 clamp(32px,3vw,44px)/1.2 var(--serif);letter-spacing:-.015em;margin-bottom:22px}.compass span{color:#742957}.hero-explanation{max-width:1050px;font-size:28px;line-height:1.48;letter-spacing:-.01em}
+.chapter{padding-block:var(--space)}.chapter.light>.shell{position:relative}.light+.light{padding-top:0}.light+.light>.shell{border-top:1px solid var(--line);padding-top:var(--space)}.shead{max-width:1040px;margin-bottom:52px}.shead .quiet{max-width:920px;margin-top:24px}.quiet{font-size:26px;line-height:1.5}.tiny{font-size:18px;line-height:1.55;color:var(--muted);margin-top:24px}.kick{font-size:17px;font-weight:600;margin:22px 0 12px}.field{position:relative}
+#voices{padding-top:0}#voices>.shell{border-top:1px solid var(--line);padding-top:68px}#voices h2{font-size:clamp(44px,4.3vw,62px);max-width:1150px}.testimonial{display:grid;grid-template-columns:220px minmax(0,1fr);gap:54px;align-items:start;padding-block:44px;border-bottom:1px solid var(--line)}.testimonial:first-child{padding-top:0}.testimonial:last-child{padding-bottom:0;border-bottom:0}.testimonial.lead{grid-template-columns:300px minmax(0,1fr)}.portrait img{width:100%;height:auto}.discipline{font-size:17px;font-weight:600;line-height:1.35;margin-top:12px}.tlead{font:600 38px/1.15 var(--serif);letter-spacing:-.01em;text-wrap:pretty;margin:0}.lead .tlead{font-size:44px}.tdetail{font-size:24px;line-height:1.5;margin:22px 0 0}.byline{display:block;font-size:22px;line-height:1.4;font-weight:600;margin-top:22px}.byline small{display:block;font-size:20px;font-weight:400;margin-top:3px}.lit{background:rgba(193,65,119,.13);box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:.02em .12em;margin-inline:-.12em}.lit-faint{background:rgba(193,65,119,.10)}
+.chart{border-top:1px solid var(--line)}.crow{display:grid;grid-template-columns:190px minmax(0,1fr) 130px;align-items:center;gap:44px;padding:26px 0;border-bottom:1px solid var(--line)}.cname b{display:block;font-size:27px}.cname span{display:block;font-size:18px;color:var(--muted)}.cwave img{height:70px;object-fit:contain;object-position:left center}.chz{font-size:32px;font-weight:600;text-align:right}.chz small{font-size:17px;font-weight:400;margin-left:5px}
+.steps3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px}.step .field img{aspect-ratio:1/1;object-fit:cover}.step h3{max-width:320px;margin-bottom:16px}.step>p:last-child{font-size:22px;line-height:1.5}.step:nth-child(1) .kick{color:#6532a0}.step:nth-child(2) .kick{color:#815400}.step:nth-child(3) .kick{color:#0a694d}
+.scenes{display:grid;grid-template-columns:1fr 1fr;gap:54px 36px}.scene .field img{aspect-ratio:4/3;object-fit:cover}.scene figcaption{display:flex;align-items:center;gap:18px;margin-top:18px;font-size:20px;line-height:1.45}.scene figcaption>img{width:68px;height:42px;object-fit:contain}.scene figcaption b{display:block}
+.g-night{background:var(--night);color:#fffffe;--line:#747472;--muted:#ededeb;padding-block:112px}.g-night .shead{max-width:1050px}.g-night .testimonial{grid-template-columns:220px minmax(0,1fr)}.g-night .testimonial:first-child{grid-template-columns:300px minmax(0,1fr)}.g-night .tlead{font-size:40px}.g-night .testimonial:first-child .tlead{font-size:52px}.g-night .lit{background:rgba(238,129,167,.20)}.g-night .discipline{color:#f5c4d7}.g-night .byline small{color:#ededeb}.g-night .part{padding-top:132px}.g-night .quiet{color:#ededeb}.study-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-block:54px}.stat{font-size:clamp(84px,8vw,116px);line-height:1;font-weight:600;letter-spacing:-.045em}.stat small{font-size:46px}.statlbl{font-size:24px;max-width:410px;margin-top:20px}.ochart{border-top:1px solid var(--line);padding-top:32px}.otitle{font-size:28px;font-weight:600;margin-bottom:32px}.otitle small{display:block;font-size:18px;font-weight:400;margin-top:6px}.orow{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr) 74px;gap:24px;align-items:center;margin-top:20px;font-size:21px}.obar{height:10px;background:#5c5c59}.obar i{display:block;height:100%;width:var(--value);background:#b8d5c1}.oval{text-align:right;font-weight:600}.oval small{font-size:16px}.g-night .tiny{max-width:920px;margin-top:32px}
+#more-results .shead{margin-bottom:52px}#more-results .testimonial:first-of-type{padding-top:0}.mlead .field{margin-top:12px}.mfig figcaption{font-size:20px;line-height:1.5;margin-top:18px}.mfig figcaption b{display:block}.mpair{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:54px}.mpair .field img{aspect-ratio:4/3;object-fit:cover}.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}.story-grid .shead{margin:0}.story-grid h2{font-size:60px}.story-grid .quiet{font-size:24px}.story-grid .field img{width:100%;height:auto}
+.finale{padding-top:52px;text-align:center}.finale .shead{margin:0 auto 64px;max-width:1160px}.finale h2{font-size:clamp(54px,5vw,76px);line-height:1.05}.finale h2 span{display:block;margin-top:12px}.finale .quiet{margin:24px auto 30px;font-size:24px}.button{display:inline-flex;min-height:56px;align-items:center;justify-content:center;padding:16px 28px;color:#fff;background:var(--ink);font-size:20px;font-weight:600;text-decoration:none;border:1px solid var(--ink);border-radius:4px}.button:hover{background:#65324c;color:#fff}.finale-photo{width:100%;overflow:visible}.finale-photo img{width:100%;height:auto}footer{background:var(--white);padding-block:32px}footer .shell{display:flex;align-items:center;justify-content:space-between;gap:24px}footer span:last-child{font-size:16px;color:var(--muted)}footer .logo img{width:130px}
+@media(max-width:1100px){.shell,.hero-photo{width:calc(100% - 64px)}.testimonial,.g-night .testimonial{grid-template-columns:190px minmax(0,1fr);gap:36px}.testimonial.lead,.g-night .testimonial:first-child{grid-template-columns:250px minmax(0,1fr)}.lead .tlead{font-size:40px}.tlead,.g-night .tlead{font-size:36px}.g-night .testimonial:first-child .tlead{font-size:44px}.steps3{gap:24px}.step>p:last-child{font-size:21px}.story-grid{gap:36px}.story-grid h2{font-size:48px}.hero h1{font-size:8vw}.hero-explanation{font-size:27px}.orow{grid-template-columns:minmax(0,340px) minmax(0,1fr) 64px;gap:20px}}
+@media(max-width:800px){:root{--space:72px}.shell,.hero-photo{width:calc(100% - 48px)}body{font-size:21px}.site-nav{height:72px}.logo img{width:126px}.nav-links{font-size:14px;gap:20px}.hero{padding-top:32px}.hero h1{font-size:64px}.hero-subtitle{font-size:32px}.hero-after{padding-block:32px 56px}.hero-explanation{font-size:23px}.quiet{font-size:23px}.steps3{display:block}.step{display:grid;grid-template-columns:1fr 1fr;gap:0 28px;margin-bottom:42px}.step:last-child{margin-bottom:0}.step .field{grid-row:1/4}.step .kick{margin:0 0 10px}.step h3{font-size:32px}.step>p:last-child{font-size:20px}.testimonial,.testimonial.lead,.g-night .testimonial,.g-night .testimonial:first-child{grid-template-columns:180px minmax(0,1fr);gap:30px}.tlead,.lead .tlead,.g-night .tlead,.g-night .testimonial:first-child .tlead{font-size:34px}.tdetail{font-size:22px}.byline{font-size:21px}.byline small{font-size:19px}.crow{grid-template-columns:150px minmax(0,1fr) 90px;gap:24px}.cname b{font-size:24px}.cname span{font-size:16px}.chz{font-size:28px}.scenes{gap:38px 24px}.scene figcaption{font-size:18px;gap:12px}.scene figcaption>img{width:42px}.g-night{padding-block:80px}.g-night .part{padding-top:90px}.orow{grid-template-columns:minmax(0,1fr) 130px 56px;font-size:19px;gap:16px}.statlbl{font-size:21px}.study-grid{gap:32px}.story-grid{grid-template-columns:1fr}.story-grid .quiet{max-width:640px}.story-grid .field{max-width:640px}.mpair{gap:24px}.finale{padding-top:24px}.finale h2{font-size:58px}}
+@media(max-width:540px){.shell,.hero-photo{width:calc(100% - 40px)}body{font-size:20px;line-height:1.5}.site-nav{height:auto;padding:19px 0}.site-nav>.shell{gap:12px}.logo img{width:106px}.nav-links{font-size:12px;gap:12px}.nav-links a:nth-child(2){font-size:0}.nav-links a:nth-child(2)::after{content:'Frequencies';font-size:12px}.nav-links a:nth-child(3){font-size:0}.nav-links a:nth-child(3)::after{content:'Study';font-size:12px}.hero{padding-top:28px}.hero>.shell:first-child{padding-bottom:25px}.hero h1{font-size:clamp(43px,11.5vw,60px);line-height:1;max-width:100%;text-wrap:balance}.hero-subtitle{font-size:27px;line-height:1.12;max-width:310px;margin-top:15px}.hero-photo{width:100%}.hero-after{padding-block:28px 48px}.compass{font-size:30px;line-height:1.17;margin-bottom:20px}.compass br{display:none}.hero-explanation{font-size:21px;line-height:1.48}h2,#voices h2{font-size:40px;line-height:1.08}h3{font-size:32px}.shead{margin-bottom:34px}.shead .quiet{margin-top:20px}.quiet{font-size:21px;line-height:1.5}#voices>.shell{padding-top:48px}.testimonial,.testimonial.lead,.g-night .testimonial,.g-night .testimonial:first-child{display:block;padding-block:36px}.portrait{max-width:170px;margin-bottom:24px}.testimonial.lead .portrait,.g-night .testimonial:first-child .portrait{max-width:205px}.discipline{font-size:16px;margin-top:10px}.tlead,.lead .tlead,.g-night .tlead,.g-night .testimonial:first-child .tlead{font-size:31px;line-height:1.15}.tdetail{font-size:20px;line-height:1.5;margin-top:18px}.byline{font-size:20px;margin-top:20px}.byline small{font-size:18px;line-height:1.45;margin-top:5px}.tiny{font-size:16px}.crow{grid-template-columns:1fr 90px;gap:12px;padding-block:22px}.cwave{grid-column:1/-1;grid-row:2}.cwave img{height:52px}.cname b{font-size:24px}.cname span{font-size:17px}.chz{font-size:29px}.step{display:block;margin-bottom:44px}.step .field{margin-bottom:22px}.step .field img{aspect-ratio:4/3}.step .kick{margin-bottom:12px;font-size:16px}.step h3{font-size:33px;max-width:100%;margin-bottom:14px}.step>p:last-child{font-size:20px}.scenes{grid-template-columns:1fr;gap:38px}.scene figcaption{font-size:19px;gap:16px}.scene figcaption>img{width:54px}.g-night{padding-block:64px}.g-night .part{padding-top:80px}.study-grid{grid-template-columns:1fr;gap:36px;margin-block:40px}.stat{font-size:94px}.stat small{font-size:40px}.statlbl{font-size:21px;margin-top:14px}.otitle{font-size:25px;line-height:1.3}.otitle small{font-size:16px;margin-top:10px}.orow{grid-template-columns:1fr 55px;gap:10px;font-size:19px;margin-top:24px}.obar{grid-column:1;grid-row:auto;height:8px}.oval{grid-column:2;grid-row:auto;margin-top:-48px}.olbl{grid-column:1/-1;padding-right:52px}.mpair{grid-template-columns:1fr;gap:38px;margin-top:38px}.mfig figcaption{font-size:18px}.story-grid{gap:30px}.story-grid h2{font-size:42px}.story-grid .quiet{font-size:21px}.finale .shead{margin-bottom:38px}.finale h2{font-size:42px;line-height:1.06}.finale h2 br{display:none}.finale h2 span{margin-top:15px}.finale .quiet{font-size:20px;margin-block:22px 26px}.button{font-size:19px;min-height:54px;padding:14px 24px}footer{padding-block:28px}footer .shell{align-items:flex-start;flex-direction:column;gap:14px}footer .logo img{width:115px}footer span:last-child{font-size:15px}}
+.scene .field img{aspect-ratio:auto;object-fit:contain}.stat{letter-spacing:-.035em}.nav-links a{display:flex;align-items:center;min-height:44px}
+@media(max-width:540px){#voices h2{font-size:clamp(34px,10.67vw,40px)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* ==========================================================================
+   T14 · production system draft applied to the T13 page (round 1, 2026-09-12)
+   Three grounds, stage mask, headline in the picture, print portraits,
+   marker highlight, one entry fade. Copy and photos unchanged from T13.
+   ========================================================================== */
+
+/* --- 1. grounds ---------------------------------------------------------- */
+.g-white{background:var(--white);color:var(--ink);--line:#D9D9D7;--muted:#53534f;
+  --mark:.32;--mark-f:.192;--washs:#FFFFFE;--wash0:rgba(255,255,254,0)}
+.g-grey{background:var(--grey);color:var(--ink);--line:#B0B0AE;--muted:#3a3a35;
+  --mark:.30;--mark-f:.18;--washs:#CCCCCB;--wash0:rgba(204,204,203,0)}
+.g-night{background:var(--night);color:#FFFFFE;--line:#747472;--muted:#ededeb;
+  --mark:.28;--mark-f:.168;--washs:#40403F;--wash0:rgba(64,64,63,0)}
+.chapter>.shell{position:relative}
+/* same-ground neighbours keep T13's hairline join; different grounds meet as a
+   flat colour change with no hairline */
+.g-white+.g-white,.g-grey+.g-grey{padding-top:0}
+.g-white+.g-white>.shell,.g-grey+.g-grey>.shell{border-top:1px solid var(--line);padding-top:var(--space)}
+/* voices now changes ground, so its T13 top hairline goes and the chapter
+   rhythm carries the join instead (DEVIATION from T13's 68px, recorded) */
+#voices{padding-top:var(--space)}
+#voices>.shell{border-top:0;padding-top:0}
+.g-night .quiet{color:#ededeb}
+
+/* --- 2. stage picture (reusable) ----------------------------------------- */
+.stage{--mk-l:8%;--mk-r:92%;--mk-t:5%;--mk-b:98%}
+.stage img{
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 var(--mk-l),#000 var(--mk-r),transparent),
+                     linear-gradient(to bottom,transparent,#000 var(--mk-t),#000 var(--mk-b),transparent);
+  mask-image:linear-gradient(to right,transparent,#000 var(--mk-l),#000 var(--mk-r),transparent),
+             linear-gradient(to bottom,transparent,#000 var(--mk-t),#000 var(--mk-b),transparent);
+  -webkit-mask-composite:source-in;mask-composite:intersect;
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+/* this picture's quiet zone, declared per photo: her headphones touch the top
+   edge (y=0) and her sweater the bottom edge (y=100%), so the vertical
+   dissolve is off; the rose board ends at 91.7% so the right wall sits at 95% */
+.hero-photo{--mk-l:8%;--mk-r:95%;--mk-t:0%;--mk-b:100%}
+
+/* --- 3. hero stage + headline in the picture ----------------------------- */
+.hero-photo{max-width:1400px;width:calc(100% - 96px);margin-inline:auto}
+.hero-head{padding-bottom:30px}
+@media(min-width:541px){.hero-photo>.shell{width:100%;max-width:none}}
+@media(max-width:1100px){.hero-photo{width:calc(100% - 64px)}}
+@media(max-width:800px){.hero-photo{width:calc(100% - 48px)}}
+@media(max-width:540px){.hero-photo{width:100%}}
+@media(max-width:799px){.hero h1 br{display:none}}
+/* T16 (fd-105): the 1100px threshold is gone. From 800px up the block sits in
+   the right-hand sky of the desktop plate. The >=1100 clamp is kept as its own
+   rule so the 1100-1440 hero is identical to T15; only 800-1099 is new. */
+@media(min-width:800px){
+  .hero-photo{position:relative}
+  .hero-photo>.hero-head{position:absolute;left:54%;top:4%;width:44%;max-width:none;padding:0;z-index:2}
+  .hero-head h1{font-size:clamp(44px,5.4vw,84px);line-height:.98;max-width:none}
+  .hero-head .hero-subtitle{font-size:clamp(22px,2.8vw,40px);margin-top:17px;max-width:none}
+}
+@media(min-width:1100px){
+  .hero-head h1{font-size:clamp(56px,5.6vw,84px)}
+}
+
+/* --- 4. testimonial: portrait as a print, label above the quote ---------- */
+.portrait img{box-shadow:0 14px 30px rgba(20,20,18,.12)}
+.testimonial.lead .portrait img{box-shadow:0 20px 44px rgba(20,20,18,.14)}
+/* the print needs more lift on #CCCCCB than on white (Fable, round 2) */
+.g-grey .portrait img{box-shadow:0 14px 30px rgba(20,20,18,.16)}
+.g-grey .testimonial.lead .portrait img{box-shadow:0 20px 44px rgba(20,20,18,.20)}
+.g-night .portrait img{box-shadow:0 14px 30px rgba(20,20,18,.35)}
+.g-night .testimonial:first-child .portrait img{box-shadow:0 20px 44px rgba(20,20,18,.35)}
+.discipline{font-size:13px;font-weight:600;line-height:1.35;letter-spacing:.18em;
+  text-transform:uppercase;margin:0 0 18px;color:var(--muted)}
+.g-night .discipline{color:#f5c4d7}
+.testimony blockquote{padding-bottom:18px;border-bottom:1px solid var(--line)}
+
+/* --- 5. marker highlight (never a flat box) ------------------------------ */
+/* two layers: a wash of the ground over the top and bottom edges so the stroke
+   softens into the sheet, and a tapered rose stroke along the phrase */
+.lit{background-color:transparent;
+  padding:.06em .32em;margin-inline:-.32em;border-radius:.3em;
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;
+  background-image:
+    linear-gradient(to bottom,var(--washs) 0,var(--washs) .434em,var(--wash0) .514em,var(--wash0) 1.04em,var(--washs) 1.12em,var(--washs) 100%),
+    linear-gradient(101deg,
+      rgba(193,65,119,calc(var(--mark)*.12)) 0%,
+      rgba(201,86,136,calc(var(--mark)*.70)) 9%,
+      rgba(193,65,119,calc(var(--mark)*1.00)) 30%,
+      rgba(186,58,112,calc(var(--mark)*1.14)) 47%,
+      rgba(193,65,119,calc(var(--mark)*.88)) 70%,
+      rgba(201,86,136,calc(var(--mark)*.54)) 90%,
+      rgba(193,65,119,calc(var(--mark)*.10)) 100%)}
+.g-night .lit{background-color:transparent;
+  background-image:
+    linear-gradient(to bottom,var(--washs) 0,var(--washs) .434em,var(--wash0) .514em,var(--wash0) 1.04em,var(--washs) 1.12em,var(--washs) 100%),
+    linear-gradient(101deg,
+      rgba(238,129,167,calc(var(--mark)*.12)) 0%,
+      rgba(243,152,184,calc(var(--mark)*.70)) 9%,
+      rgba(238,129,167,calc(var(--mark)*1.00)) 30%,
+      rgba(233,118,158,calc(var(--mark)*1.14)) 47%,
+      rgba(238,129,167,calc(var(--mark)*.88)) 70%,
+      rgba(243,152,184,calc(var(--mark)*.54)) 90%,
+      rgba(238,129,167,calc(var(--mark)*.10)) 100%)}
+.lit-faint{--mark:var(--mark-f)}
+/* ?mark=plain — the directive's literal flat-plateau version, for comparison */
+body.mark-plain .lit{mix-blend-mode:multiply;background-image:
+  linear-gradient(90deg,rgba(193,65,119,0) 0,rgba(193,65,119,var(--mark)) 5%,
+                        rgba(193,65,119,var(--mark)) 95%,rgba(193,65,119,0) 100%)}
+body.mark-plain .g-night .lit{mix-blend-mode:normal;background-image:
+  linear-gradient(90deg,rgba(238,129,167,0) 0,rgba(238,129,167,var(--mark)) 5%,
+                        rgba(238,129,167,var(--mark)) 95%,rgba(238,129,167,0) 100%)}
+
+/* --- 6. entry fade (one class, once) ------------------------------------- */
+.fu-on .fu{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.fu-on .fu.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.fu-on .fu{opacity:1;transform:none;transition:none}}
+
+/* ==========================================================================
+   T16 · T15 plus four corrections (round 1, 2026-09-12, fd-105/106/107/108)
+   1. the in-picture headline starts at 800px, not 1100px
+   2. the phone hero runs on the tight 3:4 cut of the plate (crown repaired)
+   3. the rose light is a .lit-top modifier, on charcoal AND on white
+   4. the marker is more vivid on white and grey
+   --- T15 notes kept below ---
+   T15 · T14 plus four changes (round 1, 2026-09-12, fd-100/101/102/103)
+   1. phone hero: the picture carries the headline in its own sky
+   2. the hero explanation sentence is gone (HTML)
+   3. #more-results moves to the white ground (HTML class; no CSS needed —
+      the portraits and the marker take the white values from .g-white)
+   4. one rose light at the top of every charcoal ground
+   ========================================================================== */
+
+/* --- 4. rose light on charcoal ------------------------------------------- */
+/* One gradient on the ground class, no image, reused by every charcoal
+   section. DEVIATION, recorded: the vertical size is a PIXEL length, not the
+   directive's 34%. #results is about 2900px tall at 1440, and 34% of that is
+   a ~1000px pool that spends the light 700px down — more than twice the
+   control's melt. A length keeps the light the same depth on a short charcoal
+   section and a long one, which is the whole point of a ground class. A 420px
+   vertical radius with the clear stop at 72% spends the rose 302px down, the
+   control's ~300 at 1440. Width stays 90% (1296px at 1440 against the
+   control's 1282px pool).
+   MEASURED: peak rgb(103,64,80) = L* 32.1 over the charcoal's L* 27.1, so the
+   band is 5.1 L* deep; #FFFFFE body 8.64:1 and #ededeb body 7.38:1 at the
+   brightest pixel, both over the 7:1 floor. The control's night-a peaks far
+   harder (L* 48.7, 21.6 L* deep) and can only do that because it puts the
+   heading alone in the bright zone — white on it is 4.69:1. */
+/* T16 (fd-107): the light is a MODIFIER, .lit-top, not a property of charcoal,
+   so any ground can carry it. The clear stop reuses each ground's own
+   --wash0 token, which is why one gradient works on white, grey and charcoal.
+   Charcoal raised .30 -> .40; white takes the T12 control's dawn glow. */
+.g-night{background:var(--night)}
+.lit-top{background-image:radial-gradient(ellipse 90% var(--lit-h) at 50% 0%,
+                     rgba(193,65,119,var(--lit-a)),var(--wash0) 72%)}
+/* DEVIATION, recorded: 380px -> 490px. The directive's literal 380px radius
+   with the 72% clear stop spends the light 274px down (measured 263px to the
+   flat ground), but the same directive asks for the T12 control's depth and
+   the control measures 372px at 1440. 490px x .72 = 353px, which lands on it.
+   Colour and alpha are the directive's, untouched. FINDING for round 2: at
+   .20 the peak is rgb(243,217,227) where the control's is rgb(255,233,241) -
+   the control uses a lighter rose, not #C14177 at 20%. */
+.g-white.lit-top{--lit-h:490px;--lit-a:.20}
+.g-grey.lit-top{--lit-h:400px;--lit-a:.26}
+.g-night.lit-top{--lit-h:420px;--lit-a:.40}
+/* --- 4b. the marker on a LIT ground -------------------------------------
+   DEFECT FOUND AND FIXED IN ROUND 1 (not in the directive). The T14 marker is
+   two layers: a tapered rose stroke, and above it a "wash" that paints the
+   GROUND COLOUR over the top and bottom of the highlight box so the stroke
+   reads as a band inside the sheet. That wash is an opaque flat colour, which
+   is correct on a flat ground and wrong the moment the ground carries a
+   gradient: with .lit-top on #more-results the wash painted a hard #FFFFFE
+   rectangle around "showing up." in the middle of the rose dawn glow (and the
+   same, less visibly, on charcoal since T15).
+   FIX: on a lit section the wash layer is dropped and the band is cut out of
+   the stroke itself - background-size/position confine the rose to exactly the
+   .514em..1.04em band the wash used to expose, so the geometry is unchanged
+   and nothing opaque is painted. Cost, recorded: the wash's .08em soft ramp at
+   the band edges becomes a hard edge (3px at the 76px h2, 1.6px at 20px text).
+   Flat grounds keep the T15 marker untouched. */
+.lit-top .lit{background-repeat:no-repeat;background-size:100% .526em;background-position:0 .514em;
+  background-image:
+    linear-gradient(101deg,
+      rgba(193,65,119,calc(var(--mark)*.12)) 0%,
+      rgba(201,86,136,calc(var(--mark)*.70)) 9%,
+      rgba(193,65,119,calc(var(--mark)*1.00)) 30%,
+      rgba(186,58,112,calc(var(--mark)*1.14)) 47%,
+      rgba(193,65,119,calc(var(--mark)*.88)) 70%,
+      rgba(201,86,136,calc(var(--mark)*.54)) 90%,
+      rgba(193,65,119,calc(var(--mark)*.10)) 100%)}
+.g-night.lit-top .lit{background-image:
+    linear-gradient(101deg,
+      rgba(238,129,167,calc(var(--mark)*.12)) 0%,
+      rgba(243,152,184,calc(var(--mark)*.70)) 9%,
+      rgba(238,129,167,calc(var(--mark)*1.00)) 30%,
+      rgba(233,118,158,calc(var(--mark)*1.14)) 47%,
+      rgba(238,129,167,calc(var(--mark)*.88)) 70%,
+      rgba(243,152,184,calc(var(--mark)*.54)) 90%,
+      rgba(238,129,167,calc(var(--mark)*.10)) 100%)}
+
+
+/* --- 1. phone hero: the headline sits in the picture's own sky ----------- */
+/* The phone plate is the 4:5 sky-extended file (P-177's phone companion), so
+   below 800px the stage runs the full viewport width, the placement's ratio
+   becomes 2200/2750, and the hero head is lifted into the new sky. The block
+   is left-aligned on the page margin, starts at 9% of the picture's height
+   and ends well above her headphone crown, which begins at 54%. The nav stays
+   on white above the stage; the picture's own top 18% fades to #FFFFFE so the
+   join to the white ground needs no mask. */
+@media(max-width:799px){
+  /* the tight 3:4 cut of the same plate: she and the phone are 1.571x the T15
+     size at the same viewport width (1400 source px across instead of 2200).
+     DEVIATION, recorded: the side dissolve is OFF on this plate (all four mask
+     stops open). Two reasons, both measured. Her hand reaches the crop's left
+     edge (dark fingers at x=1..20 of 1400), so a left dissolve would cross her
+     - the standing stage rule. And the plate is full-bleed below 800px, so its
+     left and right edges are the VIEWPORT edges, not white ground: a fade
+     there paints a white gradient strip inside a full-bleed photograph and, at
+     375, deletes the whole amber-board sliver (crop x1376-1400 = the last
+     1.7%) that this crop exists to bring in. The dissolve that matters here is
+     the top 20%, baked to #FFFFFE in the file itself. */
+  .hero-photo{position:relative;width:100%;--mk-l:0%;--mk-r:100%;--mk-t:0%;--mk-b:100%}
+  .hero-photo img{aspect-ratio:1400/1857}
+  .hero-photo>.hero-head{position:absolute;left:0;right:0;top:1.5%;z-index:2;
+    width:calc(100% - 48px);max-width:none;margin-inline:auto;padding:0}
+  .hero-head h1{max-width:7.4em}
+  /* the subtitle's 9.4em cap is lifted so it holds ONE line: at 375 a second
+     line puts the block on her headphone crown. margin-top 15px -> 11px buys
+     the last of the clearance (measured gap to the crown: 28.5px) */
+  .hero-head .hero-subtitle{max-width:none;margin-top:11px}
+}
+@media(max-width:540px){
+  .hero-photo>.hero-head{width:calc(100% - 40px)}
+}
+
+/* ==========================================================================
+   T17 · hierarchy under the stage picture (round 1, 2026-09-12, fd-110/111)
+   1. the hero caption (.compass) stops being a third headline and becomes the
+      picture's caption: Switzer 400, muted, smaller than the subhead above it
+   2. the finale runs P-216 and its title is coupled to the picture
+   Everything else is T16, untouched (fd-111: readability stays as it is).
+   ========================================================================== */
+
+/* --- 1. hero caption ----------------------------------------------------- */
+/* Third voice after the headline and the subhead: the sans face, the muted
+   ink, normal weight, generous leading. Only the Acoustic Compass keeps
+   colour, so the phrase carries the emphasis instead of the whole line. */
+/* ROUND 2: one continuous scale from 800px up instead of two steps, so the
+   caption stays under the subhead at EVERY width (the in-picture subhead is
+   clamp(22px,2.8vw,40px), which is only 22.4px at 800 - the 24px step made
+   the caption the louder voice across 800-857px). 2.4vw reaches the 26px
+   ceiling at 1084px. Below 800 the flat 22/21 steps stand.
+   .compass span is weight 400: only 400 and 600 Switzer faces are declared,
+   so 500 resolved to 400 anyway - colour alone carries the phrase.
+   text-wrap:pretty keeps the phone off the orphan "hear." */
+.compass{font:400 clamp(21px,2.4vw,26px)/1.45 var(--sans);letter-spacing:0;
+  color:var(--muted);max-width:30em;margin-bottom:0;text-wrap:pretty}
+.compass span{color:#742957;font-style:normal}
+@media(max-width:799px){.compass{font-size:22px;max-width:none}}
+@media(max-width:540px){.compass{font-size:21px;line-height:1.5}}
+/* the <br> stays exactly as T16 sets it: visible above 540, hidden at <=540
+   (see the T16 rule above; not restated here so there is one owner) */
+
+/* the caption hugs the picture; the air sits below it. Bottom padding is
+   T16's, untouched (72 / 56 / 48). */
+.hero-after{padding-block:14px 72px}
+@media(max-width:800px){.hero-after{padding-block:14px 56px}}
+@media(max-width:799px){.hero-after{padding-top:12px}}
+@media(max-width:540px){.hero-after{padding-block:12px 48px}}
+
+/* --- 2. finale: title coupled to P-216 ----------------------------------- */
+/* The title stays ABOVE the picture (P-216 has no quiet zone deep enough for
+   a two-line headline: the singer's hair enters the sky top centre-right and
+   the peaks begin 12% down). Closing the gap is what couples them. */
+.finale .shead{margin-bottom:28px}
+@media(max-width:799px){.finale .shead{margin-bottom:22px}}
+
+/* ==========================================================================
+   T18 · the message line in the headline's column (round 1, 2026-09-12, fd-112)
+   1-2. .compass stops being a centred caption under the whole plate and sits
+        in the headline's own column, at full ink, so it is read.
+   3.   .mag-caption is DEFINED and UNUSED on this page (fd-112).
+   Everything else is T17, untouched.
+   ========================================================================== */
+
+/* --- 1. the message line sits in the headline's column ------------------- */
+/* .hero-head is absolute at left:54% width:44% of the picture; the caption
+   takes the same 54% start and runs the extra 2% out to the picture's right
+   edge. Below 800 the headline is not in the picture, so nothing changes. */
+/* ROUND 2: the caption box must BE the photo box, or 54% starts somewhere
+   else. .hero-after is a .shell (max-width 1200px) and .hero-photo is
+   max-width 1400px, so the two only coincide while both are calc(100% - 96px)
+   - up to a 1296px viewport. Above that the photo keeps growing and the shell
+   does not: at 1440 the shell was 1200 (left 120) against the photo's 1344
+   (left 48), so 54% landed 5.75px short and the right edge stopped 72px
+   inside the picture. Lifting this one cap makes the boxes identical at every
+   width >=800; the .shell rule everywhere else is untouched. */
+@media(min-width:800px){.hero-after{max-width:1400px}}
+@media(min-width:800px){.compass{margin-left:54%;width:46%;max-width:none}}
+
+/* --- 2. full ink at every width ----------------------------------------- */
+.compass{color:var(--ink)}
+
+/* magazine caption, fd-112 */
+.mag-caption{max-width:60ch;margin:12px auto 0;text-align:center;font:400 20px/1.5 var(--sans);color:var(--muted)}
+
+/* --- ROUND 3: the forced break, and the named phrase ---------------------- */
+/* The <br> only earns its place when the first phrase fits on one line. Below
+   1024 it does not, so the break lands mid-thought and the line reads as two
+   ragged fragments; let the text wrap on its own instead. Supersedes the T16
+   <=540 rule (which stays, harmlessly, as the narrower case of the same). */
+@media(max-width:1023px){.compass br{display:none}}
+/* "Acoustic Compass" is one name; never break it across two lines. */
+.compass span{white-space:nowrap}
+
+/* T19 (Michael 2026-09-12): the message line is centred under the picture on desktop, one line,
+   balanced if it must wrap. Phone unchanged. Supersedes the T18 headline-column placement. */
+@media(min-width:800px){.hero-after{max-width:1400px}.compass{margin-left:0;width:100%;max-width:none;text-align:center;text-wrap:balance}.compass br{display:none}}
+
+/* T20 (Michael 2026-09-12): the hero MESSAGE LINE keeps the T19 caption alignment (centred under
+   the picture) and is one step bigger, still under the subhead at every width. The T19 sizes are
+   the NORMAL caption under photos. */
+.compass{font-size:24px;line-height:1.4}
+@media(min-width:800px){.compass{font-size:clamp(21px,2.75vw,30px)}}
+.mag-caption{text-align:center;font:400 clamp(21px,2.4vw,26px)/1.45 var(--sans);color:var(--ink);margin:14px auto 0;max-width:none;text-wrap:balance}
