@@ -1,0 +1,136 @@
+{
+  "core": {
+    "Root": {
+      "paragraphs": [
+        "Who you are and your life's purpose are most naturally processed through groundedness.",
+        "Your read on issues related to your identity will be most accurate when you are still, steady and grounded.",
+        "Your most trusted route on your life's purpose may be trusting your gut, literally."
+      ],
+      "next": "At {hz} Hz, Core is approaching the Solar Plexus Band, so drive and motion may also help clarify your identity signal."
+    },
+    "Solar Plexus": {
+      "paragraphs": [
+        "Who you are and your life's purpose are most naturally processed through action and drive.",
+        "Insights into your true self tend to happen through motion, and your values get clearer through the initiative you take.",
+        "This is ultimately how you will naturally begin to trust and accept yourself at the Core level."
+      ],
+      "next": "At {hz} Hz, Core is approaching the Throat Band, so articulating by writing or speaking may also help clarify issues at the identity level."
+    },
+    "Throat": {
+      "paragraphs": [
+        "Who you are and your life's purpose are most naturally processed through articulation.",
+        "Insights into your true self and values become more clear through writing and speaking.",
+        "This is ultimately how you will naturally begin to trust and accept yourself at the Core level."
+      ],
+      "next": "At {hz} Hz, Core is approaching the Crown Band, so giving attention to your identity issues by taking a wider perspective and thinking in systems might lend clarity."
+    },
+    "Crown": {
+      "paragraphs": [
+        "Who you are and your life's purpose are most naturally processed through the big picture.",
+        "You tend to recognize yourself by seeing where you fit, and the wider the view, the clearer you get.",
+        "This is ultimately how you will naturally begin to trust and accept yourself at the Core level."
+      ],
+      "next": null
+    }
+  },
+  "love": {
+    "Root": {
+      "paragraphs": [
+        "Who to let in, how close to become, and how you connect tend to clarify while you are grounded and steady.",
+        "You can trust how to approach the connection most accurately through stillness. You can take \"trusting your gut\" literally."
+      ],
+      "next": "At {hz} Hz, Love sits close to the Solar Plexus Band, so taking mini actions may also help you clarify the connection."
+    },
+    "Solar Plexus": {
+      "paragraphs": [
+        "Who to let in, how close to become, and how you connect tend to clarify through drive and motion.",
+        "You can trust how to approach the connection most accurately through action and engagement, either with the person directly or by thinking about the relationship while moving."
+      ],
+      "next": "At {hz} Hz, Love sits close to the Throat Band, so articulating the relationship, by talking through it or journaling, will also bring clarity."
+    },
+    "Throat": {
+      "paragraphs": [
+        "Who to let in, how close to become, and how you connect tend to clarify through articulation and expression.",
+        "You can trust how to approach the connection most accurately by talking it out with yourself, with a friend, or through journaling.",
+        "And being able to express yourself in words, in relationships of any kind, is more important to you than it is to most."
+      ],
+      "next": "At {hz} Hz, Love sits close to the Crown Band, so putting your attention on how this connection fits into the bigger picture will also help you clarify how you connect."
+    },
+    "Crown": {
+      "paragraphs": [
+        "Who to let in, how close to become, and how you connect tend to clarify through perspective, and how the connection fits into an overall system.",
+        "You can trust how to approach the connection most accurately by widening your lens and seeing the bigger picture.",
+        "You might find it helpful to even sketch it out into a mind map of other related connections."
+      ],
+      "next": null
+    }
+  },
+  "vitality": {
+    "Root": {
+      "paragraphs": [
+        "The actions and thoughts that feed and drain your lifeforce are best identified and clarified when you are still, steady and grounded.",
+        "Your most trusted route towards choosing what truly lights you up is in this still, grounded state.",
+        "This is also how you may identify actions which are slowly draining your energy."
+      ],
+      "next": "At {hz} Hz, your Vitality is also close to the Solar Plexus Band, so you may also identify energy drains and enhancers by taking small actions or while moving around."
+    },
+    "Solar Plexus": {
+      "paragraphs": [
+        "The thoughts and actions that feed and drain your lifeforce are best identified and clarified when you are moving and taking action.",
+        "Your most trusted route towards choosing what truly lights you up is through drive and motion.",
+        "This is also how you may identify actions which are slowly draining your energy."
+      ],
+      "next": "At {hz} Hz, your Vitality is also close to the Throat Band, so you may also gain clarity on what feeds and drains you energetically by journaling or talking things out. Using words is important to your process."
+    },
+    "Throat": {
+      "paragraphs": [
+        "The actions and thoughts that feed and drain your lifeforce are best identified and clarified through articulation.",
+        "Your most trusted route towards choosing what truly lights you up is by journaling or putting this recognition into words.",
+        "This is also how you may identify actions which are slowly draining your energy."
+      ],
+      "next": "At {hz} Hz, Vitality is close to the Crown Band, so you may also gain clarity on what feeds and drains you energetically by looking at the bigger picture, or seeing how it fits into a bigger system."
+    },
+    "Crown": {
+      "paragraphs": [
+        "The actions and thoughts that feed and drain your lifeforce are best identified and clarified through seeing the big picture.",
+        "Your most trusted route towards choosing what truly lights you up is by widening your lens and thinking in systems.",
+        "This is also how you may identify actions which are slowly draining your energy."
+      ],
+      "next": null
+    }
+  },
+  "abundance": {
+    "Root": {
+      "paragraphs": [
+        "Recognizing opportunities and your timing are naturally identified and clarified when you are still, steady and grounded.",
+        "Trusting your gut is a real thing here, and is best when nurtured. Make time to settle in while deciding what to move on and when.",
+        "Manifesting is best done when grounded."
+      ],
+      "next": "At {hz} Hz, your Abundance is close to the Solar Plexus Band, so taking one small step first may help clarify the opportunity."
+    },
+    "Solar Plexus": {
+      "paragraphs": [
+        "Recognizing opportunities and your timing are naturally identified and clarified when you take action or are in motion.",
+        "Paying attention to your inner drive and creating micro actions on your opportunities will lead to a more accurate read on what to do and when.",
+        "You manifest through action and drive."
+      ],
+      "next": "At {hz} Hz, your Abundance is close to the Throat Band, so talking or writing it out might clarify the opportunity."
+    },
+    "Throat": {
+      "paragraphs": [
+        "Recognizing opportunities and your timing are naturally identified and clarified when you can talk or write it out.",
+        "Articulating verbally or through a journal will lead to a more accurate read on what to do and when.",
+        "For manifesting, the natural way is to write it out or talk it through with trusted friends and advisors."
+      ],
+      "next": "At {hz} Hz, your Abundance is close to the Crown Band, so trying to get some perspective on the opportunity as a whole might help you gain clarity."
+    },
+    "Crown": {
+      "paragraphs": [
+        "Recognizing opportunities and your timing are more naturally identified and clarified when you widen your lens and see the bigger picture.",
+        "Step back and try to see the opportunity as a whole before deciding if and when to dive in.",
+        "Manifesting will work best for you with mind maps, pictures and systems thinking."
+      ],
+      "next": null
+    }
+  }
+}
