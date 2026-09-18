@@ -1,0 +1,527 @@
+<!doctype html>
+<!--
+  CLASSIFICATION
+  page kind : results page (general)
+  audience  : everybody; built for the iOS app. MOBILE ONLY: judged at 375 and 320.
+  offer     : membership at the Apple list price, and nothing else.
+  CTA target: mid-page buttons jump to #membership; the offer and close buttons
+              go to https://staging.zodiac.fm/begin
+
+  Spec     : working/relaunch-pages-2026-09-17/results-37-argument-v3.md, which
+             replaces every earlier section list. Build rules from round 8.
+  Template : landers/mcewen-26.html + mcewen-26.css, on site/home-t20.css
+  Argument : seventeen blocks. Each is a claim, its substance, and the sentence
+             that makes the next block exist, so the page reads as one chain of
+             reasons rather than a stack of sections.
+  Waves    : drawn here as SVG, one shape per Hz value, so the four frequencies
+             do not read as one raster strip recoloured.
+  Photos   : shown whole in a square. Where a styled card carries a cream field,
+             the field shows; a whole head beats a clean background.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Your Personal Frequency Profile · Zodiac.fm</title>
+  <meta name="description" content="Your four calculated frequencies, what they mean, how listening changes things, what 278 members reported after a year, and the membership that carries all four.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/funnel/general/results-39.css">
+</head>
+<body>
+  <header class="site-head g-white">
+    <div class="shell head-inner">
+      <img class="brand" src="/site/assets/home-t7/logo-black.svg" width="781" height="136" alt="Zodiac.fm">
+    </div>
+  </header>
+
+  <main>
+
+    <!-- 1 · THE PROFILE -->
+    <section class="titleblock g-white" id="top">
+      <div class="shell">
+        <h1>Your Personal Frequency <span class="lit">Profile</span></h1>
+        <p class="whose">Michael Lovitch · March 12, 1984</p>
+        <p class="orient">Four frequencies, calculated from the exact minute and place you were born. Yours for life.</p>
+        <div class="title-rule"></div>
+        <div class="freqs" role="list" aria-label="Your four calculated frequencies">
+          <div class="frow" role="listitem" style="--tone:var(--f-core);--wave:var(--w-core)">
+            <span class="fname">Core</span>
+            <span class="fhz num">422 <small>Hz</small></span>
+            <span class="fwave"><svg class="wv" viewBox="0 0 400 28" preserveAspectRatio="none" width="400" height="28" aria-hidden="true" focusable="false"><path d="M0.00 13.46L1.91 13.05L3.83 12.68L5.74 12.39L7.66 12.08L9.57 11.82L11.48 11.55L13.40 11.55L15.31 11.84L17.22 12.00L19.14 12.09L21.05 12.25L22.97 12.28L24.88 12.08L26.79 11.83L28.71 11.98L30.62 12.17L32.54 11.95L34.45 11.45L36.36 10.85L38.28 10.18L40.19 9.54L42.11 9.38L44.02 9.07L45.93 8.35L47.85 8.20L49.76 8.27L51.67 7.84L53.59 7.80L55.50 8.13L57.42 7.79L59.33 7.27L61.24 6.87L63.16 6.43L65.07 6.37L66.99 6.27L68.90 6.19L70.81 6.24L72.73 6.08L74.64 6.30L76.56 6.51L78.47 6.52L80.38 7.01L82.30 7.36L84.21 7.23L86.12 7.63L88.04 9.04L89.95 10.37L91.87 10.38L93.78 9.61L95.69 8.83L97.61 8.04L99.52 7.63L101.44 7.66L103.35 7.80L105.26 7.72L107.18 7.72L109.09 8.27L111.00 8.73L112.92 8.64L114.83 8.40L116.75 8.00L118.66 7.38L120.57 6.77L122.49 6.13L124.40 5.97L126.32 6.60L128.23 6.84L130.14 6.40L132.06 6.39L133.97 6.47L135.89 6.13L137.80 6.21L139.71 6.74L141.63 7.07L143.54 7.25L145.45 7.11L147.37 7.09L149.28 7.44L151.20 7.08L153.11 6.34L155.02 5.63L156.94 4.51L158.85 3.49L160.77 3.46L162.68 3.35L164.59 3.04L166.51 3.59L168.42 4.00L170.33 3.94L172.25 4.13L174.16 4.72L176.08 5.05L177.99 4.88L179.90 4.69L181.82 4.95L183.73 5.54L185.65 6.07L187.56 6.90L189.47 7.45L191.39 7.28L193.30 7.06L195.22 7.23L197.13 8.39L199.04 9.39L200.96 9.33L202.87 9.38L204.78 9.75L206.70 9.90L208.61 9.22L210.53 8.27L212.44 7.60L214.35 6.68L216.27 6.02L218.18 5.67L220.10 5.33L222.01 4.97L223.92 4.30L225.84 3.64L227.75 3.03L229.67 2.39L231.58 2.34L233.49 2.75L235.41 3.61L237.32 4.92L239.23 5.75L241.15 5.87L243.06 5.44L244.98 4.99L246.89 4.61L248.80 4.32L250.72 4.36L252.63 4.49L254.55 4.77L256.46 5.52L258.37 6.78L260.29 7.27L262.20 6.76L264.11 6.14L266.03 6.09L267.94 6.96L269.86 7.38L271.77 6.85L273.68 6.64L275.60 6.46L277.51 6.21L279.43 6.22L281.34 6.63L283.25 7.52L285.17 7.87L287.08 7.55L289.00 7.37L290.91 7.64L292.82 8.09L294.74 8.29L296.65 8.87L298.56 9.62L300.48 9.32L302.39 8.99L304.31 8.86L306.22 8.52L308.13 8.28L310.05 7.95L311.96 8.33L313.88 9.16L315.79 9.24L317.70 8.86L319.62 8.46L321.53 7.80L323.44 7.37L325.36 7.49L327.27 7.64L329.19 7.81L331.10 7.81L333.01 7.50L334.93 7.62L336.84 7.56L338.76 6.66L340.67 6.14L342.58 6.29L344.50 6.59L346.41 7.07L348.33 7.38L350.24 7.51L352.15 8.08L354.07 8.81L355.98 9.20L357.89 9.54L359.81 9.74L361.72 10.02L363.64 10.28L365.55 10.16L367.46 10.31L369.38 10.75L371.29 11.24L373.21 11.80L375.12 11.93L377.03 11.58L378.95 11.54L380.86 11.82L382.78 11.94L384.69 12.13L386.60 12.43L388.52 12.61L390.43 12.64L392.34 12.56L394.26 12.58L396.17 12.79L398.09 13.08L400.00 13.46L400.00 14.54L398.09 14.92L396.17 15.21L394.26 15.42L392.34 15.44L390.43 15.36L388.52 15.39L386.60 15.57L384.69 15.87L382.78 16.06L380.86 16.18L378.95 16.46L377.03 16.42L375.12 16.07L373.21 16.20L371.29 16.76L369.38 17.25L367.46 17.69L365.55 17.84L363.64 17.72L361.72 17.98L359.81 18.26L357.89 18.46L355.98 18.80L354.07 19.19L352.15 19.92L350.24 20.49L348.33 20.62L346.41 20.93L344.50 21.41L342.58 21.71L340.67 21.86L338.76 21.34L336.84 20.44L334.93 20.38L333.01 20.50L331.10 20.19L329.19 20.19L327.27 20.36L325.36 20.51L323.44 20.63L321.53 20.20L319.62 19.54L317.70 19.14L315.79 18.76L313.88 18.84L311.96 19.67L310.05 20.05L308.13 19.72L306.22 19.48L304.31 19.14L302.39 19.01L300.48 18.68L298.56 18.38L296.65 19.13L294.74 19.71L292.82 19.91L290.91 20.36L289.00 20.63L287.08 20.45L285.17 20.13L283.25 20.48L281.34 21.37L279.43 21.78L277.51 21.79L275.60 21.54L273.68 21.36L271.77 21.15L269.86 20.62L267.94 21.04L266.03 21.91L264.11 21.86L262.20 21.24L260.29 20.73L258.37 21.22L256.46 22.48L254.55 23.23L252.63 23.51L250.72 23.64L248.80 23.68L246.89 23.39L244.98 23.01L243.06 22.56L241.15 22.13L239.23 22.25L237.32 23.08L235.41 24.39L233.49 25.25L231.58 25.66L229.67 25.61L227.75 24.97L225.84 24.36L223.92 23.70L222.01 23.03L220.10 22.67L218.18 22.33L216.27 21.98L214.35 21.32L212.44 20.40L210.53 19.73L208.61 18.78L206.70 18.10L204.78 18.25L202.87 18.62L200.96 18.67L199.04 18.61L197.13 19.61L195.22 20.77L193.30 20.94L191.39 20.72L189.47 20.55L187.56 21.10L185.65 21.93L183.73 22.46L181.82 23.05L179.90 23.31L177.99 23.12L176.08 22.95L174.16 23.28L172.25 23.87L170.33 24.06L168.42 24.00L166.51 24.41L164.59 24.96L162.68 24.65L160.77 24.54L158.85 24.51L156.94 23.49L155.02 22.37L153.11 21.66L151.20 20.92L149.28 20.56L147.37 20.91L145.45 20.89L143.54 20.75L141.63 20.93L139.71 21.26L137.80 21.79L135.89 21.87L133.97 21.53L132.06 21.61L130.14 21.60L128.23 21.16L126.32 21.40L124.40 22.03L122.49 21.87L120.57 21.23L118.66 20.62L116.75 20.00L114.83 19.60L112.92 19.36L111.00 19.27L109.09 19.73L107.18 20.28L105.26 20.28L103.35 20.20L101.44 20.34L99.52 20.37L97.61 19.96L95.69 19.17L93.78 18.39L91.87 17.62L89.95 17.63L88.04 18.96L86.12 20.37L84.21 20.77L82.30 20.64L80.38 20.99L78.47 21.48L76.56 21.49L74.64 21.70L72.73 21.92L70.81 21.76L68.90 21.81L66.99 21.73L65.07 21.63L63.16 21.57L61.24 21.13L59.33 20.73L57.42 20.21L55.50 19.87L53.59 20.20L51.67 20.16L49.76 19.73L47.85 19.80L45.93 19.65L44.02 18.93L42.11 18.62L40.19 18.46L38.28 17.82L36.36 17.15L34.45 16.55L32.54 16.05L30.62 15.83L28.71 16.02L26.79 16.17L24.88 15.92L22.97 15.72L21.05 15.75L19.14 15.91L17.22 16.00L15.31 16.16L13.40 16.45L11.48 16.45L9.57 16.18L7.66 15.92L5.74 15.61L3.83 15.32L1.91 14.95L0.00 14.54Z" fill="currentColor"/></svg></span>
+            <p class="fline">The signal for who you are and what is yours to do.</p>
+            <p class="fband num">Root Band · 250–425 Hz</p>
+          </div>
+          <div class="frow" role="listitem" style="--tone:var(--f-love);--wave:var(--w-love)">
+            <span class="fname">Love</span>
+            <span class="fhz num">432 <small>Hz</small></span>
+            <span class="fwave"><svg class="wv" viewBox="0 0 400 28" preserveAspectRatio="none" width="400" height="28" aria-hidden="true" focusable="false"><path d="M0.00 13.46L1.91 13.08L3.83 12.61L5.74 12.24L7.66 11.92L9.57 11.67L11.48 11.41L13.40 11.29L15.31 11.43L17.22 11.55L19.14 11.36L21.05 10.93L22.97 10.52L24.88 10.08L26.79 9.75L28.71 9.48L30.62 9.00L32.54 8.58L34.45 8.46L36.36 8.16L38.28 7.66L40.19 7.34L42.11 7.30L44.02 7.30L45.93 7.13L47.85 7.29L49.76 7.86L51.67 8.43L53.59 9.01L55.50 9.43L57.42 9.43L59.33 9.27L61.24 9.43L63.16 9.83L65.07 9.92L66.99 9.82L68.90 9.68L70.81 9.61L72.73 9.89L74.64 10.04L76.56 9.73L78.47 9.39L80.38 9.35L82.30 9.47L84.21 9.28L86.12 8.96L88.04 8.74L89.95 8.28L91.87 7.99L93.78 7.88L95.69 7.30L97.61 6.71L99.52 6.47L101.44 6.31L103.35 6.19L105.26 6.14L107.18 6.37L109.09 7.01L111.00 7.66L112.92 7.66L114.83 7.27L116.75 6.87L118.66 6.23L120.57 5.32L122.49 4.24L124.40 3.48L126.32 3.22L128.23 3.21L130.14 3.21L132.06 3.10L133.97 3.05L135.89 3.19L137.80 3.22L139.71 3.44L141.63 4.10L143.54 4.65L145.45 5.32L147.37 6.37L149.28 7.07L151.20 7.08L153.11 7.24L155.02 7.87L156.94 8.30L158.85 8.48L160.77 8.60L162.68 8.64L164.59 8.84L166.51 9.14L168.42 9.33L170.33 9.18L172.25 8.69L174.16 8.34L176.08 7.92L177.99 7.37L179.90 6.78L181.82 6.17L183.73 5.62L185.65 5.18L187.56 4.93L189.47 4.66L191.39 4.32L193.30 4.14L195.22 4.16L197.13 4.49L199.04 4.90L200.96 5.32L202.87 6.00L204.78 6.92L206.70 7.43L208.61 6.61L210.53 5.27L212.44 4.36L214.35 3.49L216.27 2.90L218.18 2.56L220.10 2.40L222.01 2.84L223.92 3.38L225.84 3.40L227.75 3.24L229.67 3.28L231.58 3.49L233.49 3.92L235.41 4.36L237.32 5.18L239.23 6.17L241.15 6.58L243.06 6.83L244.98 7.02L246.89 7.08L248.80 7.46L250.72 8.19L252.63 8.96L254.55 9.33L256.46 9.50L258.37 9.66L260.29 9.67L262.20 9.78L264.11 9.76L266.03 9.34L267.94 8.54L269.86 7.48L271.77 6.53L273.68 5.69L275.60 5.44L277.51 5.87L279.43 5.79L281.34 5.21L283.25 5.07L285.17 5.21L287.08 5.40L289.00 5.61L290.91 5.81L292.82 6.33L294.74 7.22L296.65 8.23L298.56 8.55L300.48 7.81L302.39 6.87L304.31 6.17L306.22 5.56L308.13 5.18L310.05 5.22L311.96 5.31L313.88 5.43L315.79 5.76L317.70 5.93L319.62 6.05L321.53 6.21L323.44 6.26L325.36 6.47L327.27 6.95L329.19 7.41L331.10 7.62L333.01 7.85L334.93 8.42L336.84 9.14L338.76 9.54L340.67 9.76L342.58 10.10L344.50 10.61L346.41 11.07L348.33 11.43L350.24 11.89L352.15 12.14L354.07 12.05L355.98 11.75L357.89 11.22L359.81 10.72L361.72 10.32L363.64 9.83L365.55 9.50L367.46 9.50L369.38 9.50L371.29 9.50L373.21 9.65L375.12 9.74L377.03 9.81L378.95 10.09L380.86 10.36L382.78 10.61L384.69 11.01L386.60 11.33L388.52 11.61L390.43 11.97L392.34 12.24L394.26 12.45L396.17 12.63L398.09 12.89L400.00 13.46L400.00 14.54L398.09 15.11L396.17 15.37L394.26 15.55L392.34 15.76L390.43 16.03L388.52 16.39L386.60 16.67L384.69 16.99L382.78 17.39L380.86 17.64L378.95 17.91L377.03 18.19L375.12 18.26L373.21 18.35L371.29 18.50L369.38 18.50L367.46 18.50L365.55 18.50L363.64 18.17L361.72 17.68L359.81 17.28L357.89 16.78L355.98 16.25L354.07 15.95L352.15 15.86L350.24 16.11L348.33 16.57L346.41 16.93L344.50 17.39L342.58 17.90L340.67 18.24L338.76 18.46L336.84 18.86L334.93 19.58L333.01 20.15L331.10 20.38L329.19 20.59L327.27 21.05L325.36 21.53L323.44 21.74L321.53 21.79L319.62 21.95L317.70 22.07L315.79 22.24L313.88 22.57L311.96 22.69L310.05 22.78L308.13 22.82L306.22 22.44L304.31 21.83L302.39 21.13L300.48 20.19L298.56 19.45L296.65 19.77L294.74 20.78L292.82 21.67L290.91 22.19L289.00 22.39L287.08 22.60L285.17 22.79L283.25 22.93L281.34 22.79L279.43 22.21L277.51 22.13L275.60 22.56L273.68 22.31L271.77 21.47L269.86 20.52L267.94 19.46L266.03 18.66L264.11 18.24L262.20 18.22L260.29 18.33L258.37 18.34L256.46 18.50L254.55 18.67L252.63 19.04L250.72 19.81L248.80 20.54L246.89 20.92L244.98 20.98L243.06 21.17L241.15 21.42L239.23 21.83L237.32 22.82L235.41 23.64L233.49 24.08L231.58 24.51L229.67 24.72L227.75 24.76L225.84 24.60L223.92 24.62L222.01 25.16L220.10 25.60L218.18 25.44L216.27 25.10L214.35 24.51L212.44 23.64L210.53 22.73L208.61 21.39L206.70 20.57L204.78 21.08L202.87 22.00L200.96 22.68L199.04 23.10L197.13 23.51L195.22 23.84L193.30 23.86L191.39 23.68L189.47 23.34L187.56 23.07L185.65 22.82L183.73 22.38L181.82 21.83L179.90 21.22L177.99 20.63L176.08 20.08L174.16 19.66L172.25 19.31L170.33 18.82L168.42 18.67L166.51 18.86L164.59 19.16L162.68 19.36L160.77 19.40L158.85 19.52L156.94 19.70L155.02 20.13L153.11 20.76L151.20 20.92L149.28 20.93L147.37 21.63L145.45 22.68L143.54 23.35L141.63 23.90L139.71 24.56L137.80 24.78L135.89 24.81L133.97 24.95L132.06 24.90L130.14 24.79L128.23 24.79L126.32 24.78L124.40 24.52L122.49 23.76L120.57 22.68L118.66 21.77L116.75 21.13L114.83 20.73L112.92 20.34L111.00 20.34L109.09 20.99L107.18 21.63L105.26 21.86L103.35 21.81L101.44 21.69L99.52 21.53L97.61 21.29L95.69 20.70L93.78 20.12L91.87 20.01L89.95 19.72L88.04 19.26L86.12 19.04L84.21 18.72L82.30 18.53L80.38 18.65L78.47 18.61L76.56 18.27L74.64 17.96L72.73 18.11L70.81 18.39L68.90 18.32L66.99 18.18L65.07 18.08L63.16 18.17L61.24 18.57L59.33 18.73L57.42 18.57L55.50 18.57L53.59 18.99L51.67 19.57L49.76 20.14L47.85 20.71L45.93 20.87L44.02 20.70L42.11 20.70L40.19 20.66L38.28 20.34L36.36 19.84L34.45 19.54L32.54 19.42L30.62 19.00L28.71 18.52L26.79 18.25L24.88 17.92L22.97 17.48L21.05 17.07L19.14 16.64L17.22 16.45L15.31 16.57L13.40 16.71L11.48 16.59L9.57 16.33L7.66 16.08L5.74 15.76L3.83 15.39L1.91 14.92L0.00 14.54Z" fill="currentColor"/></svg></span>
+            <p class="fline">The signal for who to let close and how to connect.</p>
+            <p class="fband num">Solar Plexus Band · 425–600 Hz</p>
+          </div>
+          <div class="frow" role="listitem" style="--tone:var(--f-vitality);--wave:var(--w-vitality)">
+            <span class="fname">Vitality</span>
+            <span class="fhz num">579 <small>Hz</small></span>
+            <span class="fwave"><svg class="wv" viewBox="0 0 400 28" preserveAspectRatio="none" width="400" height="28" aria-hidden="true" focusable="false"><path d="M0.00 13.46L1.91 12.75L3.83 12.38L5.74 12.10L7.66 11.82L9.57 11.17L11.48 10.50L13.40 10.20L15.31 10.05L17.22 9.79L19.14 9.45L21.05 9.47L22.97 9.48L24.88 8.84L26.79 8.44L28.71 9.06L30.62 9.68L32.54 9.54L34.45 9.76L36.36 10.22L38.28 9.78L40.19 9.04L42.11 8.63L44.02 8.52L45.93 8.91L47.85 9.46L49.76 9.96L51.67 10.50L53.59 10.41L55.50 10.20L57.42 10.56L59.33 10.44L61.24 10.11L63.16 9.96L65.07 9.31L66.99 8.26L68.90 7.11L70.81 6.95L72.73 7.13L74.64 6.29L76.56 5.79L78.47 6.22L80.38 6.73L82.30 6.53L84.21 5.91L86.12 6.38L88.04 7.12L89.95 7.15L91.87 7.40L93.78 7.12L95.69 6.26L97.61 5.50L99.52 4.63L101.44 4.20L103.35 4.59L105.26 5.99L107.18 7.19L109.09 6.93L111.00 6.11L112.92 5.68L114.83 6.45L116.75 7.93L118.66 8.36L120.57 8.14L122.49 8.13L124.40 8.35L126.32 8.15L128.23 7.70L130.14 7.46L132.06 7.41L133.97 7.71L135.89 7.82L137.80 8.05L139.71 8.51L141.63 8.89L143.54 9.15L145.45 8.94L147.37 8.57L149.28 8.15L151.20 7.12L153.11 5.29L155.02 4.49L156.94 4.63L158.85 4.32L160.77 4.72L162.68 5.41L164.59 5.04L166.51 4.00L168.42 3.83L170.33 4.90L172.25 5.67L174.16 5.80L176.08 6.10L177.99 5.99L179.90 4.49L181.82 2.87L183.73 2.43L185.65 2.48L187.56 2.35L189.47 3.41L191.39 5.26L193.30 6.18L195.22 6.58L197.13 6.44L199.04 6.19L200.96 7.02L202.87 7.85L204.78 7.68L206.70 8.05L208.61 8.77L210.53 8.47L212.44 8.41L214.35 8.64L216.27 8.11L218.18 7.72L220.10 7.95L222.01 8.26L223.92 7.96L225.84 7.16L227.75 7.27L229.67 8.29L231.58 8.28L233.49 7.07L235.41 6.26L237.32 6.10L239.23 5.20L241.15 3.95L243.06 3.50L244.98 3.59L246.89 4.83L248.80 6.44L250.72 6.33L252.63 5.22L254.55 5.20L256.46 5.91L258.37 6.07L260.29 6.04L262.20 6.51L264.11 6.49L266.03 5.76L267.94 5.29L269.86 4.63L271.77 4.63L273.68 4.91L275.60 5.00L277.51 6.04L279.43 7.64L281.34 8.83L283.25 9.33L285.17 9.42L287.08 9.36L289.00 9.19L290.91 9.01L292.82 8.99L294.74 8.86L296.65 8.27L298.56 7.31L300.48 6.83L302.39 6.91L304.31 7.63L306.22 8.52L308.13 8.56L310.05 7.87L311.96 6.91L313.88 6.87L315.79 7.46L317.70 7.69L319.62 7.48L321.53 6.47L323.44 5.49L325.36 5.62L327.27 6.25L329.19 6.11L331.10 5.49L333.01 5.81L334.93 7.05L336.84 7.61L338.76 7.50L340.67 8.08L342.58 8.87L344.50 8.56L346.41 7.83L348.33 7.99L350.24 8.16L352.15 7.84L354.07 8.13L355.98 8.61L357.89 8.56L359.81 8.90L361.72 9.82L363.64 10.40L365.55 10.81L367.46 11.15L369.38 11.33L371.29 11.58L373.21 11.35L375.12 11.19L377.03 11.53L378.95 11.39L380.86 10.67L382.78 10.19L384.69 10.40L386.60 10.71L388.52 10.95L390.43 11.22L392.34 11.53L394.26 11.96L396.17 12.30L398.09 12.62L400.00 13.46L400.00 14.54L398.09 15.38L396.17 15.70L394.26 16.04L392.34 16.47L390.43 16.78L388.52 17.05L386.60 17.29L384.69 17.60L382.78 17.81L380.86 17.33L378.95 16.61L377.03 16.47L375.12 16.81L373.21 16.65L371.29 16.42L369.38 16.67L367.46 16.85L365.55 17.19L363.64 17.60L361.72 18.18L359.81 19.10L357.89 19.44L355.98 19.39L354.07 19.87L352.15 20.16L350.24 19.84L348.33 20.01L346.41 20.17L344.50 19.44L342.58 19.13L340.67 19.92L338.76 20.50L336.84 20.39L334.93 20.95L333.01 22.19L331.10 22.51L329.19 21.89L327.27 21.75L325.36 22.38L323.44 22.51L321.53 21.53L319.62 20.52L317.70 20.31L315.79 20.54L313.88 21.13L311.96 21.09L310.05 20.13L308.13 19.44L306.22 19.48L304.31 20.37L302.39 21.09L300.48 21.17L298.56 20.69L296.65 19.73L294.74 19.14L292.82 19.01L290.91 18.99L289.00 18.81L287.08 18.64L285.17 18.58L283.25 18.67L281.34 19.17L279.43 20.36L277.51 21.96L275.60 23.00L273.68 23.09L271.77 23.37L269.86 23.37L267.94 22.71L266.03 22.24L264.11 21.51L262.20 21.49L260.29 21.96L258.37 21.93L256.46 22.09L254.55 22.80L252.63 22.78L250.72 21.67L248.80 21.56L246.89 23.17L244.98 24.41L243.06 24.50L241.15 24.05L239.23 22.80L237.32 21.90L235.41 21.74L233.49 20.93L231.58 19.72L229.67 19.71L227.75 20.73L225.84 20.84L223.92 20.04L222.01 19.74L220.10 20.05L218.18 20.28L216.27 19.89L214.35 19.36L212.44 19.59L210.53 19.53L208.61 19.23L206.70 19.95L204.78 20.32L202.87 20.15L200.96 20.98L199.04 21.81L197.13 21.56L195.22 21.42L193.30 21.82L191.39 22.74L189.47 24.59L187.56 25.65L185.65 25.52L183.73 25.57L181.82 25.13L179.90 23.51L177.99 22.01L176.08 21.90L174.16 22.20L172.25 22.33L170.33 23.10L168.42 24.17L166.51 24.00L164.59 22.96L162.68 22.59L160.77 23.28L158.85 23.68L156.94 23.37L155.02 23.51L153.11 22.71L151.20 20.88L149.28 19.85L147.37 19.43L145.45 19.06L143.54 18.85L141.63 19.11L139.71 19.49L137.80 19.95L135.89 20.18L133.97 20.29L132.06 20.59L130.14 20.54L128.23 20.30L126.32 19.85L124.40 19.65L122.49 19.87L120.57 19.86L118.66 19.64L116.75 20.07L114.83 21.55L112.92 22.32L111.00 21.89L109.09 21.07L107.18 20.81L105.26 22.01L103.35 23.41L101.44 23.80L99.52 23.37L97.61 22.50L95.69 21.74L93.78 20.88L91.87 20.60L89.95 20.85L88.04 20.88L86.12 21.62L84.21 22.09L82.30 21.47L80.38 21.27L78.47 21.78L76.56 22.21L74.64 21.71L72.73 20.87L70.81 21.05L68.90 20.89L66.99 19.74L65.07 18.69L63.16 18.04L61.24 17.89L59.33 17.56L57.42 17.44L55.50 17.80L53.59 17.59L51.67 17.50L49.76 18.04L47.85 18.54L45.93 19.09L44.02 19.48L42.11 19.37L40.19 18.96L38.28 18.22L36.36 17.78L34.45 18.24L32.54 18.46L30.62 18.32L28.71 18.94L26.79 19.56L24.88 19.16L22.97 18.52L21.05 18.53L19.14 18.55L17.22 18.21L15.31 17.95L13.40 17.80L11.48 17.50L9.57 16.83L7.66 16.18L5.74 15.90L3.83 15.62L1.91 15.25L0.00 14.54Z" fill="currentColor"/></svg></span>
+            <p class="fline">The signal for what feeds you and what drains you.</p>
+            <p class="fband num">Solar Plexus Band · 425–600 Hz</p>
+          </div>
+          <div class="frow" role="listitem" style="--tone:var(--f-abundance);--wave:var(--w-abundance)">
+            <span class="fname">Abundance</span>
+            <span class="fhz num">611 <small>Hz</small></span>
+            <span class="fwave"><svg class="wv" viewBox="0 0 400 28" preserveAspectRatio="none" width="400" height="28" aria-hidden="true" focusable="false"><path d="M0.00 13.46L1.91 13.26L3.83 12.93L5.74 12.49L7.66 12.05L9.57 11.74L11.48 11.39L13.40 11.13L15.31 11.16L17.22 11.28L19.14 11.18L21.05 11.08L22.97 11.17L24.88 11.02L26.79 10.94L28.71 11.43L30.62 11.62L32.54 11.46L34.45 11.55L36.36 11.43L38.28 11.52L40.19 11.67L42.11 11.39L44.02 11.00L45.93 10.65L47.85 10.67L49.76 10.39L51.67 9.84L53.59 9.21L55.50 8.29L57.42 7.78L59.33 7.66L61.24 7.79L63.16 7.44L65.07 6.85L66.99 7.26L68.90 7.87L70.81 7.58L72.73 6.93L74.64 6.60L76.56 6.45L78.47 6.46L80.38 6.83L82.30 7.62L84.21 7.89L86.12 7.22L88.04 6.93L89.95 7.67L91.87 8.48L93.78 8.38L95.69 8.23L97.61 8.74L99.52 9.00L101.44 9.58L103.35 10.50L105.26 10.57L107.18 10.20L109.09 10.30L111.00 10.39L112.92 9.61L114.83 8.62L116.75 8.50L118.66 8.78L120.57 8.61L122.49 7.32L124.40 5.75L126.32 5.66L128.23 5.45L130.14 4.58L132.06 4.71L133.97 4.69L135.89 4.34L137.80 4.84L139.71 5.02L141.63 4.08L143.54 3.75L145.45 4.22L147.37 4.69L149.28 5.94L151.20 6.95L153.11 6.99L155.02 6.80L156.94 6.12L158.85 5.35L160.77 5.50L162.68 6.15L164.59 7.06L166.51 7.77L168.42 7.78L170.33 7.68L172.25 7.29L174.16 7.30L176.08 7.66L177.99 7.60L179.90 8.02L181.82 9.02L183.73 9.50L185.65 8.88L187.56 7.82L189.47 7.18L191.39 6.45L193.30 5.21L195.22 4.38L197.13 4.36L199.04 4.59L200.96 4.24L202.87 3.76L204.78 3.92L206.70 3.69L208.61 3.03L210.53 2.74L212.44 3.03L214.35 3.94L216.27 5.09L218.18 5.78L220.10 5.26L222.01 4.69L223.92 5.21L225.84 5.67L227.75 5.68L229.67 5.66L231.58 6.07L233.49 6.80L235.41 7.19L237.32 7.37L239.23 7.83L241.15 8.62L243.06 8.47L244.98 7.68L246.89 7.61L248.80 8.58L250.72 9.30L252.63 9.23L254.55 8.97L256.46 8.27L258.37 7.96L260.29 7.43L262.20 6.02L264.11 5.03L266.03 4.57L267.94 4.24L269.86 4.64L271.77 5.06L273.68 4.60L275.60 4.74L277.51 4.63L279.43 3.73L281.34 3.67L283.25 4.03L285.17 4.48L287.08 5.12L289.00 5.59L290.91 5.89L292.82 6.02L294.74 6.08L296.65 6.78L298.56 8.02L300.48 8.93L302.39 8.95L304.31 8.33L306.22 8.63L308.13 9.77L310.05 10.40L311.96 10.05L313.88 9.23L315.79 9.69L317.70 10.49L319.62 10.03L321.53 9.47L323.44 9.04L325.36 8.82L327.27 9.18L329.19 9.10L331.10 8.53L333.01 8.29L334.93 8.28L336.84 8.12L338.76 7.84L340.67 7.61L342.58 6.92L344.50 6.82L346.41 7.24L348.33 6.99L350.24 7.13L352.15 7.78L354.07 8.40L355.98 9.19L357.89 9.61L359.81 9.71L361.72 10.21L363.64 10.59L365.55 10.74L367.46 10.90L369.38 11.04L371.29 11.43L373.21 11.94L375.12 12.24L377.03 12.09L378.95 11.92L380.86 12.11L382.78 12.12L384.69 12.19L386.60 12.53L388.52 12.62L390.43 12.65L392.34 12.85L394.26 12.94L396.17 13.09L398.09 13.42L400.00 13.46L400.00 14.54L398.09 14.58L396.17 14.91L394.26 15.06L392.34 15.15L390.43 15.35L388.52 15.38L386.60 15.47L384.69 15.81L382.78 15.88L380.86 15.89L378.95 16.08L377.03 15.91L375.12 15.76L373.21 16.06L371.29 16.57L369.38 16.96L367.46 17.10L365.55 17.26L363.64 17.41L361.72 17.79L359.81 18.29L357.89 18.39L355.98 18.81L354.07 19.60L352.15 20.22L350.24 20.87L348.33 21.01L346.41 20.76L344.50 21.18L342.58 21.08L340.67 20.39L338.76 20.16L336.84 19.88L334.93 19.72L333.01 19.71L331.10 19.47L329.19 18.90L327.27 18.82L325.36 19.18L323.44 18.96L321.53 18.53L319.62 17.97L317.70 17.51L315.79 18.31L313.88 18.77L311.96 17.95L310.05 17.60L308.13 18.23L306.22 19.37L304.31 19.67L302.39 19.05L300.48 19.07L298.56 19.98L296.65 21.22L294.74 21.92L292.82 21.98L290.91 22.11L289.00 22.41L287.08 22.88L285.17 23.52L283.25 23.97L281.34 24.33L279.43 24.27L277.51 23.37L275.60 23.26L273.68 23.40L271.77 22.94L269.86 23.36L267.94 23.76L266.03 23.43L264.11 22.97L262.20 21.98L260.29 20.57L258.37 20.04L256.46 19.73L254.55 19.03L252.63 18.77L250.72 18.70L248.80 19.42L246.89 20.39L244.98 20.32L243.06 19.53L241.15 19.38L239.23 20.17L237.32 20.63L235.41 20.81L233.49 21.20L231.58 21.93L229.67 22.34L227.75 22.32L225.84 22.33L223.92 22.79L222.01 23.31L220.10 22.74L218.18 22.22L216.27 22.91L214.35 24.06L212.44 24.97L210.53 25.26L208.61 24.97L206.70 24.31L204.78 24.08L202.87 24.24L200.96 23.76L199.04 23.41L197.13 23.64L195.22 23.62L193.30 22.79L191.39 21.55L189.47 20.82L187.56 20.18L185.65 19.12L183.73 18.50L181.82 18.98L179.90 19.98L177.99 20.40L176.08 20.34L174.16 20.70L172.25 20.71L170.33 20.32L168.42 20.22L166.51 20.23L164.59 20.94L162.68 21.85L160.77 22.50L158.85 22.65L156.94 21.88L155.02 21.20L153.11 21.01L151.20 21.05L149.28 22.06L147.37 23.31L145.45 23.78L143.54 24.25L141.63 23.92L139.71 22.98L137.80 23.16L135.89 23.66L133.97 23.31L132.06 23.29L130.14 23.42L128.23 22.55L126.32 22.34L124.40 22.25L122.49 20.68L120.57 19.39L118.66 19.22L116.75 19.50L114.83 19.38L112.92 18.39L111.00 17.61L109.09 17.70L107.18 17.80L105.26 17.43L103.35 17.50L101.44 18.42L99.52 19.00L97.61 19.26L95.69 19.77L93.78 19.62L91.87 19.52L89.95 20.33L88.04 21.07L86.12 20.78L84.21 20.11L82.30 20.38L80.38 21.17L78.47 21.54L76.56 21.55L74.64 21.40L72.73 21.07L70.81 20.42L68.90 20.13L66.99 20.74L65.07 21.15L63.16 20.56L61.24 20.21L59.33 20.34L57.42 20.22L55.50 19.71L53.59 18.79L51.67 18.16L49.76 17.61L47.85 17.33L45.93 17.35L44.02 17.00L42.11 16.61L40.19 16.33L38.28 16.48L36.36 16.57L34.45 16.45L32.54 16.54L30.62 16.38L28.71 16.57L26.79 17.06L24.88 16.98L22.97 16.83L21.05 16.92L19.14 16.82L17.22 16.72L15.31 16.84L13.40 16.87L11.48 16.61L9.57 16.26L7.66 15.95L5.74 15.51L3.83 15.07L1.91 14.74L0.00 14.54Z" fill="currentColor"/></svg></span>
+            <p class="fline">The signal for when to move and which opportunities are yours.</p>
+            <p class="fband num">Throat Band · 600–775 Hz</p>
+          </div>
+        </div>
+        <p class="onward">This is not a description of you. It is your signal, the one you were born with. Every practice you have ever done was trying to reach it.</p>
+      </div>
+    </section>
+
+    <!-- 2 · WHO IS LISTENING -->
+    <section class="chapter g-white lit-top" id="proof-high">
+      <div class="shell">
+        <h2>The people who study this <span class="lit">are listening.</span></h2>
+        <figure class="testi expert">
+          <div class="who"><span class="face"><img src="/site/assets/d4k/d4k-face-srini.png" width="500" height="540" loading="eager" decoding="async" alt="Srini Pillay, M.D."></span><cite class="whoname">Srini Pillay, M.D.<small>Harvard Neuroscientist &amp; Author</small></cite></div>
+          <blockquote><p>“Zodiac.fm helps people access aspects of themselves that have always been there. Listening to your frequencies bypasses language and creates profound levels of self-awareness and coherence.</p><p>This leads to clearer decisions, more authentic relationships, and expanded possibilities.”</p></blockquote>
+        </figure>
+        <div class="tiles">
+          <div class="tile"><strong class="num">98.6%</strong><span>would recommend it to a friend</span></div>
+          <div class="tile"><strong class="num">84%</strong><span>called it life‑changing after a year</span></div>
+        </div>
+        <p class="tiles-caption">From our 52-week study of members who listened nine minutes a day across all four frequencies.</p>
+        <h3>In their words.</h3>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/img-images_testimonials_todd-shipman-d2c.png" width="500" height="500" loading="lazy" decoding="async" alt="Todd Shipman"></span><cite class="whoname">Todd Shipman<small>Founder &amp; CEO, Quantum Wellness Leader</small></cite></div>
+          <blockquote><p>“The static is gone. I finally feel like myself.”</p></blockquote>
+        </figure>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/img-images_testimonials_amy-wilcox-d2c.png" width="500" height="500" loading="lazy" decoding="async" alt="Amy Wilcox"></span><cite class="whoname">Amy Wilcox</cite></div>
+          <blockquote><p>“I am seeing a huge difference in how much more loving I am. I’m more affectionate, more grounded.”</p></blockquote>
+        </figure>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/img-images_testimonials_jennifer-k-hill-d2c.png" width="500" height="500" loading="lazy" decoding="async" alt="Jennifer K. Hill"></span><cite class="whoname">Jennifer K. Hill<small>Global Wellness Leader, Founder, OptiMatch</small></cite></div>
+          <blockquote><p>“It felt like the floodgates of abundance, prosperity, and purpose opened.”</p></blockquote>
+        </figure>
+        <p class="jump offer"><a class="button" href="#membership">Unlock&nbsp; →</a><span class="jump-note">Your first week is free.</span></p>
+        <p class="onward">Here is what your four numbers say. Knowing them is the first half.</p>
+      </div>
+    </section>
+
+    <!-- 3 · WHAT THE NUMBERS SAY -->
+    <section class="chapter g-grey lit-top" id="personal-readings">
+      <div class="shell">
+        <h2>What your numbers <span class="lit">say.</span></h2>
+        <p class="lede">Every frequency lands in one of four bands up the body. The band is how that part of you tends to work.</p>
+        <div class="readings">
+          <article class="reading" style="--tone:var(--f-core)">
+            <span class="rband num">Core · 422 Hz · Root Band</span>
+            <h4>Settle before you decide.</h4>
+            <p>Who you are and your life’s purpose are most naturally processed through groundedness.</p>
+            <details open>
+              <summary><span class="more">Read more</span><span class="less">Read less</span></summary>
+              <p>The four bands are Root, Solar Plexus, Throat and Crown: through steadiness, through motion, through expression, or through perspective. Everyone uses all four. Yours show where each part of you naturally starts.</p>
+              <p>Your read on issues related to your identity will be most accurate when you are still, steady and grounded.</p>
+              <p>Your most trusted route on your life’s purpose may be trusting your gut, literally.</p>
+              <p>At 422 Hz, Core is approaching the Solar Plexus Band, so drive and motion may also help clarify your identity signal.</p>
+            </details>
+          </article>
+          <article class="reading" style="--tone:var(--f-love)">
+            <span class="rband num">Love · 432 Hz · Solar Plexus Band</span>
+            <h4>Connection clarifies in motion.</h4>
+            <p>Who to let in, how close to become, and how you connect tend to clarify through drive and motion.</p>
+            <details>
+              <summary><span class="more">Read more</span><span class="less">Read less</span></summary>
+              <p>You can trust how to approach the connection most accurately through action and engagement, either with the person directly or by thinking about the relationship while moving.</p>
+            </details>
+          </article>
+          <article class="reading" style="--tone:var(--f-vitality)">
+            <span class="rband num">Vitality · 579 Hz · Solar Plexus Band</span>
+            <h4>Energy returns through momentum.</h4>
+            <p>The thoughts and actions that feed and drain your lifeforce are best identified and clarified when you are moving and taking action.</p>
+            <details>
+              <summary><span class="more">Read more</span><span class="less">Read less</span></summary>
+              <p>Your most trusted route towards choosing what truly lights you up is through drive and motion.</p>
+              <p>This is also how you may identify actions which are slowly draining your energy.</p>
+              <p>At 579 Hz, your Vitality is also close to the Throat Band, so you may also gain clarity on what feeds and drains you energetically by journaling or talking things out. Using words is important to your process.</p>
+            </details>
+          </article>
+          <article class="reading" style="--tone:var(--f-abundance)">
+            <span class="rband num">Abundance · 611 Hz · Throat Band</span>
+            <h4>Opportunity becomes clear when named.</h4>
+            <p>Recognizing opportunities and your timing are naturally identified and clarified when you can talk or write it out.</p>
+            <details>
+              <summary><span class="more">Read more</span><span class="less">Read less</span></summary>
+              <p>Articulating verbally or through a journal will lead to a more accurate read on what to do and when.</p>
+              <p>For manifesting, the natural way is to write it out or talk it through with trusted friends and advisors.</p>
+            </details>
+          </article>
+        </div>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/img-images_testimonials_amber-hedrick-d2c.png" width="500" height="500" loading="lazy" decoding="async" alt="Amber Hedrick"></span><cite class="whoname">Amber Hedrick</cite></div>
+          <blockquote><p>“I feel like ME. I feel like the person I’ve been trying to get back to for so long…”</p></blockquote>
+        </figure>
+        <p class="onward">You know your chart. You have just never heard it loud enough to live from it.</p>
+      </div>
+    </section>
+
+    <!-- 4 · IN RESONANCE, OUT OF RESONANCE -->
+    <section class="chapter g-grey" id="resonance">
+      <div class="shell">
+        <h2>In resonance, life answers. Out of resonance, <span class="lit">you feel the hum.</span></h2>
+        <div class="pairs">
+          <div class="pair" style="--tone:var(--f-core)"><b>Core</b><span class="out">“I know who I am until I’m around other people.”</span><span class="in">Identity stops shifting. You stop managing every room you walk into.</span></div>
+          <div class="pair" style="--tone:var(--f-love)"><b>Love</b><span class="out">“I’m not relaxed. I’m controlled.”</span><span class="in">The guard drops. The right people find you.</span></div>
+          <div class="pair" style="--tone:var(--f-vitality)"><b>Vitality</b><span class="out">“Tired in a way sleep doesn’t fix.”</span><span class="in">Rest lands. Energy holds.</span></div>
+          <div class="pair" style="--tone:var(--f-abundance)"><b>Abundance</b><span class="out">“I hesitate right when I should move.”</span><span class="in">You move from a clear signal. Things start arriving.</span></div>
+        </div>
+        <p class="onward">You are not broken. You are turned down.</p>
+      </div>
+    </section>
+
+    <!-- 5 · TWO SELVES -->
+    <section class="chapter g-white" id="two-selves">
+      <div class="shell">
+        <h2>You’ve been living from conditioning so long <span class="lit">you think it’s you.</span></h2>
+        <p>Nobody told you there were two. The one therapy works on. The one habits improve. The one meditation quiets.</p>
+        <p>And the one underneath all of that: unchanged, specific, encoded at the exact moment you were born. Your original signal is still there. You just lost access.</p>
+        <p class="onward">So you went looking. Charts, readings, Human Design, Gene Keys. Astrology can describe you almost perfectly. It just can’t make you live there.</p>
+      </div>
+    </section>
+
+    <!-- 6 · KNOWING IS NOT LIVING -->
+    <section class="chapter g-white" id="knowing">
+      <div class="shell">
+        <h2>Insight describes the self. <span class="lit">It does not tune it.</span></h2>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/testimonial-headshots-transparent-white/summer-phoenix.png" width="500" height="500" loading="lazy" decoding="async" alt="Summer Phoenix"></span><cite class="whoname">Summer Phoenix<small>Human Design and Gene Keys Practitioner</small></cite></div>
+          <blockquote><p>“Insight is powerful. But insight alone does not create integration.”</p></blockquote>
+        </figure>
+        <p class="pull">Every other practice asks you to turn the world down. Zodiac turns your signal up.</p>
+        <p class="onward">Not by teaching you anything. By playing you what you already are.</p>
+      </div>
+    </section>
+
+    <!-- 7 · YOUR CHART, PLAYED -->
+    <section class="chapter g-grey" id="how-it-works">
+      <div class="shell">
+        <h2>Your chart, played, <span class="lit">not read.</span></h2>
+        <p>Your four frequencies, converted to sound and carried inside real composed music from the first note to the last.</p>
+        <p>Like a tuning fork finding its note, your system recognizes its own signal underneath thought. It clears. It resonates. Over time, it holds.</p>
+        <p>Not healing. Not a belief. Just you, turned up.</p>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/testimonial-headshots-transparent-white/barbara-ditlow.png" width="500" height="500" loading="lazy" decoding="async" alt="Barbara Ditlow"></span><cite class="whoname">Barbara Ditlow<small>Human Design Master Practitioner, endorsed by Ra Uru Hu</small></cite></div>
+          <blockquote><p>“…bypassing the mind and speaking directly to the body.”</p></blockquote>
+        </figure>
+        <p class="onward">Because it works underneath the mind, you may not notice it at first. Noticing was never the test. Living is.</p>
+      </div>
+    </section>
+
+    <!-- 8 · IT COMPOUNDS -->
+    <section class="chapter g-white" id="compounds">
+      <div class="shell">
+        <h2>It compounds. <span class="lit">Give it the year.</span></h2>
+        <p>Three moves. Clarify: the static sweeps away. Amplify: your native signal gets louder than the noise. Hold: over time it stays on its own.</p>
+        <p>The people around you usually notice before you do. Then it shows up where it counts: the decision that comes easier, the room you stop managing, the yes you finally trust.</p>
+        <p>We ran the numbers for a year, and a year is where 84% comes from.</p>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/img-images_testimonials_todd-shipman-d2c.png" width="500" height="500" loading="lazy" decoding="async" alt="Todd Shipman"></span><cite class="whoname">Todd Shipman<small>Founder &amp; CEO, Quantum Wellness Leader</small></cite></div>
+          <blockquote><p>“My wife even says I’m softer.”</p></blockquote>
+        </figure>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/testimonial-headshots-transparent-white/hilary-dimassimo.png" width="500" height="700" loading="lazy" decoding="async" alt="Hilary DiMassimo"></span><cite class="whoname">Hilary DiMassimo</cite></div>
+          <blockquote><p>“Friends and family noticed the change in my presence.”</p></blockquote>
+        </figure>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/testimonial-headshots-transparent-white/katie-wells.png" width="500" height="500" loading="lazy" decoding="async" alt="Katie Wells"></span><cite class="whoname">Katie Wells<small>Founder, Wellness Mama, Best-Selling Author</small></cite></div>
+          <blockquote><p>“…it’s the reset that helps me become the version of me I want to bring to the world.”</p></blockquote>
+        </figure>
+        <p class="onward">One listener at a time, this is how it tends to arrive.</p>
+      </div>
+    </section>
+
+    <!-- 9 · HOW IT ARRIVES -->
+    <section class="chapter g-white lit-top" id="how-it-arrives">
+      <div class="shell">
+        <h2>How it <span class="lit">arrives.</span></h2>
+        <h3>The first listen: recognition.</h3>
+        <p>Confirmation that the person you always suspected was underneath everything actually exists.</p>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/testimonial-headshots-transparent-white/rhonda-britten.png" width="500" height="500" loading="lazy" decoding="async" alt="Rhonda Britten"></span><cite class="whoname">Rhonda Britten<small>Author of “Fearless Living,” Emmy Award-Winner</small></cite></div>
+          <blockquote><p>“If you’re tired of living out of tune with yourself, this is your invitation home.”</p></blockquote>
+        </figure>
+        <h3>The first weeks: the static drops.</h3>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/img-images_testimonials_tangie-nadimi-d2c.png" width="500" height="500" loading="lazy" decoding="async" alt="Tangie Nadimi"></span><cite class="whoname">Tangie Nadimi<small>Founder, Feel Good Human Design</small></cite></div>
+          <blockquote><p>“I went from ranting and complaining in my pages to writing in a way that felt hopeful… in only 9 minutes.”</p></blockquote>
+        </figure>
+        <h3>The first months: you stop managing the room.</h3>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/img-images_testimonials_alex-kikel-d2c.png" width="500" height="500" loading="lazy" decoding="async" alt="Alex Kikel"></span><cite class="whoname">Alex Kikel<small>Trainer to Olympians and Professional Athletes</small></cite></div>
+          <blockquote><p>“…I slip into my flow state MUCH easier, with a greater sense of calm and ease.”</p></blockquote>
+        </figure>
+        <h3>The year: the field responds.</h3>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/img-images_testimonials_jennifer-k-hill-d2c.png" width="500" height="500" loading="lazy" decoding="async" alt="Jennifer K. Hill"></span><cite class="whoname">Jennifer K. Hill<small>Global Wellness Leader, Founder, OptiMatch</small></cite></div>
+          <blockquote><p>“Instead of 10 paid members, I got 30 paid members in 30 days.”</p></blockquote>
+        </figure>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/img-images_testimonials_leanne-ely-d2c.png" width="500" height="500" loading="lazy" decoding="async" alt="Leanne Ely"></span><cite class="whoname">Leanne Ely<small>Best-Selling Author, Founder, Saving Dinner</small></cite></div>
+          <blockquote><p>“I have received multiple unexpected new very lucrative opportunities since I began tuning in.”</p></blockquote>
+        </figure>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/testimonial-headshots-transparent-white/hilary-porta.png" width="500" height="500" loading="lazy" decoding="async" alt="Hillary Porta"></span><cite class="whoname">Hillary Porta<small>Women’s Executive Coach</small></cite></div>
+          <blockquote><p>“I landed two new clients that came literally out of the blue.”</p></blockquote>
+        </figure>
+        <h3>What listeners report.</h3>
+        <ol class="benefits">
+          <li>Drop the exhausting social mask and reclaim your true, unshakeable center.</li>
+          <li>Turn off the constant internal conflicts so your physical body can finally rest.</li>
+          <li>Stop attracting the wrong people by breaking your repeating relationship loops.</li>
+          <li>End the frantic, forced effort and step into your natural timing.</li>
+          <li>Break out of automatic reactions by catching your patterns in real time.</li>
+          <li>The guard drops; the right people find you.</li>
+          <li>Rest goes deeper and energy holds through the day.</li>
+          <li>You move from a clear signal and things start arriving.</li>
+          <li>Sharper instincts you can trust.</li>
+          <li>A sense of connection to something bigger than yourself.</li>
+        </ol>
+        <p class="jump offer"><a class="button" href="#membership">Unlock&nbsp; →</a><span class="jump-note">Your first week is free.</span></p>
+        <p class="onward">That is the pattern one person at a time. We measured it across 278 people for a year.</p>
+      </div>
+    </section>
+
+    <!-- 10 · THE YEAR -->
+    <section class="chapter g-grey" id="beta-results">
+      <div class="shell">
+        <h2>278 people. One year. <span class="lit">84% called it life-changing.</span></h2>
+        <p class="lede">A 52-week study of our own members. 300 started, 278 finished.</p>
+        <div class="ochart">
+          <p class="otitle">What they reported after a year</p>
+          <div class="orow" style="--bar:var(--f-core)"><span class="olbl">Deeper access to themselves</span><span class="oval num">94%</span><span class="obar"><i style="--value:94%"></i></span></div>
+          <div class="orow" style="--bar:var(--f-love)"><span class="olbl">Internal regulation</span><span class="oval num">92%</span><span class="obar"><i style="--value:92%"></i></span></div>
+          <div class="orow" style="--bar:var(--f-vitality)"><span class="olbl">Sharper instincts</span><span class="oval num">91%</span><span class="obar"><i style="--value:91%"></i></span></div>
+          <div class="orow" style="--bar:var(--f-abundance)"><span class="olbl">The witness: watching life, not drowning in it</span><span class="oval num">91%</span><span class="obar"><i style="--value:91%"></i></span></div>
+          <div class="orow" style="--bar:var(--f-core)"><span class="olbl">Better relationships and love</span><span class="oval num">90%</span><span class="obar"><i style="--value:90%"></i></span></div>
+          <div class="orow" style="--bar:var(--f-love)"><span class="olbl">Connection to something bigger</span><span class="oval num">90%</span><span class="obar"><i style="--value:90%"></i></span></div>
+          <div class="orow" style="--bar:var(--f-vitality)"><span class="olbl">Life responds</span><span class="oval num">88%</span><span class="obar"><i style="--value:88%"></i></span></div>
+        </div>
+        <p class="tiny">Members who listened at least nine minutes a day, across all four frequencies.</p>
+        <p class="onward">The people who study this for a living are among them.</p>
+      </div>
+    </section>
+
+    <!-- 11 · THE EXPERTS -->
+    <section class="chapter g-grey" id="expert-authority">
+      <div class="shell">
+        <h2>Neuroscientists, doctors, and Human Design authorities <span class="lit">listen to their own.</span></h2>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/site/assets/d4k/d4k-face-maya.png" width="500" height="540" loading="lazy" decoding="async" alt="Maya Shetreat, MD"></span><cite class="whoname">Maya Shetreat, MD<small>Adult and Pediatric Neurologist, Best-Selling Author</small></cite></div>
+          <blockquote><p>“Employing vibration and frequency for our well-being is the future. And Zodiac.fm is way ahead of the curve.”</p></blockquote>
+        </figure>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/img-images_testimonials_debra-silverman-d2c.png" width="500" height="500" loading="lazy" decoding="async" alt="Debra Silverman"></span><cite class="whoname">Debra Silverman<small>Astrologer to Sting, Jennifer Aniston, and More</small></cite></div>
+          <blockquote><p>“This music tickled my soul… Give it a try. You’ll love it.”</p></blockquote>
+        </figure>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/testimonial-headshots-transparent-white/naomi-fox-reina.png" width="500" height="500" loading="lazy" decoding="async" alt="Naomi Fox Reina"></span><cite class="whoname">Naomi Fox Reina<small>Founder, Light-Filled Co · Top Human Design Certification Program</small></cite></div>
+          <blockquote><p>“I immediately noticed a difference down to the cellular level. I have never seen, or heard, anything like it.”</p></blockquote>
+        </figure>
+        <p class="onward">None of them added a practice to do it. Neither will you.</p>
+      </div>
+    </section>
+
+    <!-- 12 · NINE MINUTES -->
+    <section class="chapter g-white" id="practice">
+      <div class="shell">
+        <h2>Nine minutes a day, inside the life <span class="lit">you already have.</span></h2>
+        <p>You don’t rearrange your life. The music carries you. Walk, drive, cook, work, fall asleep to it. Most people listen for hours because the music is good.</p>
+        <p>Meditation, breathwork, Human Design, Gene Keys, prayer: each one quiets you down to reach the same self. Zodiac amplifies that self. Together, the effect compounds.</p>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/img-images_testimonials_zehra-ashary-d2c.png" width="500" height="500" loading="lazy" decoding="async" alt="Zehra Ashary"></span><cite class="whoname">Zehra Ashary<small>Kundalini Practitioner, London</small></cite></div>
+          <blockquote><p>“I started listening every day, sometimes for hours, because quietly everything in my life responded…”</p></blockquote>
+        </figure>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/testimonial-headshots-transparent-white/alex-nazarov.png" width="500" height="500" loading="lazy" decoding="async" alt="Alex Nazarov"></span><cite class="whoname">Alex Nazarov<small>Marketing Strategist &amp; Conscious Leadership Builder</small></cite></div>
+          <blockquote><p>“I’ve explored Kabbalah, Human Design, Gene Keys… the only practice that brings me into full embodiment.”</p></blockquote>
+        </figure>
+        <p class="onward">So the only questions left are what you get, and what it costs.</p>
+      </div>
+    </section>
+
+    <!-- 13 · WHAT YOU GET -->
+    <section class="chapter g-white" id="what-you-get">
+      <div class="shell">
+        <h2>Over nine hours of music, <span class="lit">tuned to you.</span></h2>
+        <p class="lede">Three short songs in each frequency, yours free, forever. Membership opens the long ones.</p>
+        <ul class="gets">
+          <li>Deep immersions for focus and flow</li>
+          <li>Meditations that carry your frequency for half an hour</li>
+          <li>A sleep track that runs the whole night</li>
+        </ul>
+        <p class="tiny">Every one in all four of your frequencies. Online or offline.</p>
+        <p class="onward">And it starts free.</p>
+      </div>
+    </section>
+
+    <!-- 14 · THE OFFER -->
+    <section class="chapter g-grey" id="membership">
+      <div class="shell">
+        <h2>Start free. Then <span class="lit">$9.08 a month, for the year.</span></h2>
+        <p class="lede">A year is how long the study ran, and a year is how it compounds. All four frequencies, every track, for as long as you stay.</p>
+        <div class="plan-card">
+          <span class="plan-name">Yearly</span>
+          <span class="plan-price num">$9.08 <small>/ month</small></span>
+          <span class="plan-line num">$109 billed yearly · first week free</span>
+          <a class="button" href="https://staging.zodiac.fm/begin">Unlock my music&nbsp; →</a>
+        </div>
+        <p class="cta-meta quiet">Your first week is free. Cancel anytime, and nothing is charged.</p>
+        <div class="plan-row">
+          <span class="plan-name">Monthly</span>
+          <span class="plan-row-price num">$17 <small>/ month</small></span>
+          <span class="plan-row-line">Billed monthly</span>
+        </div>
+        <p class="onward">Still guarded? So were they.</p>
+      </div>
+    </section>
+
+    <!-- 15 · THE ONES WHO ARRIVED GUARDED -->
+    <section class="chapter g-white" id="proof-two">
+      <div class="shell">
+        <h2>Six people who <span class="lit">arrived guarded.</span></h2>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/img-images_testimonials_david-mcewen-d2c.png" width="500" height="500" loading="lazy" decoding="async" alt="David McEwen"></span><cite class="whoname">David McEwen<small>Transformation Thought Leader · Over 12 Million YouTube Views</small></cite></div>
+          <blockquote><p>“It’s like a little cheat code for experiencing your authentic vibration… I use it every day.”</p></blockquote>
+        </figure>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/testimonial-headshots-transparent-white/paul-tribe.png" width="500" height="500" loading="lazy" decoding="async" alt="Paul Tribe"></span><cite class="whoname">Paul Tribe<small>Addictions Counselor</small></cite></div>
+          <blockquote><p>“I haven’t had anything quite so profoundly powerful and transformative as Zodiac.fm.”</p></blockquote>
+        </figure>
+        <figure class="testi">
+          <div class="who"><span class="face"><img src="/landers/reveal-assets/testimonial-headshots-transparent-white/joey-vaillancourt.png" width="500" height="500" loading="lazy" decoding="async" alt="Joey Vaillancourt"></span><cite class="whoname">Joey Vaillancourt<small>VP of Marketing, BiOptimizers</small></cite></div>
+          <blockquote><p>“Without doing anything but listening, I become a different person.”</p></blockquote>
+        </figure>
+        <figure class="testi noface">
+          <div class="who"><cite class="whoname">Ken Hoffman<small>Operations Manager, WNY Dyslexia Specialists</small></cite></div>
+          <blockquote><p>“My wife especially loves the man I am turning into since subscribing.”</p></blockquote>
+        </figure>
+        <figure class="testi noface">
+          <div class="who"><cite class="whoname">Ellen Grimaldi<small>Mission, Kansas</small></cite></div>
+          <blockquote><p>“The core immersions hit something within me that no other sound has been able to.”</p></blockquote>
+        </figure>
+        <figure class="testi noface">
+          <div class="who"><cite class="whoname">Hilary Wilson</cite></div>
+          <blockquote><p>“I looked in the mirror and said ‘oh there you are Hilary, I found you.’ I am blown away.”</p></blockquote>
+        </figure>
+        <p class="onward">And over time, the circle widens.</p>
+      </div>
+    </section>
+
+    <!-- 16 · MICHAEL'S CLOSE -->
+    <section class="chapter g-grey lit-top" id="law">
+      <div class="shell">
+        <h2>The real law of <span class="lit">attraction.</span></h2>
+        <p>As you begin to resonate as your deeper self, the field responds. The right people gravitate toward you. The wrong ones drop away. Opportunities arrive. Traps avoid you.</p>
+        <p>And what you decide to manifest comes from a place so deep in you that it almost becomes inevitable.</p>
+        <p class="jump offer"><a class="button" href="#membership">Unlock&nbsp; →</a><span class="jump-note">Your first week is free.</span></p>
+      </div>
+    </section>
+
+    <!-- 17 · QUESTIONS -->
+    <section class="chapter g-white faq" id="faq">
+      <div class="shell">
+        <h2>Questions people <span class="lit">ask.</span></h2>
+        <div class="faq-list">
+          <details>
+            <summary>I don’t know my exact birth time.</summary>
+            <p>Use your best estimate, and noon if you truly have no idea.</p>
+            <p>Listen for a week, then adjust if it does not land: you can change your birth details yourself twice a week in the app, and support can help sooner.</p>
+          </details>
+          <details>
+            <summary>How does it work?</summary>
+            <p>Zodiac turns your birth pattern into four personal frequencies and carries them through music. The four give you stable references for identity, connection, vitality, and timing.</p>
+            <p>Repeated listening is designed to make those references clearer and more available from underneath thought, so your pattern becomes something you increasingly recognize and live rather than only read about.</p>
+          </details>
+          <details>
+            <summary>How much time does it take?</summary>
+            <p>Nine minutes a day is the practice, spread across your four frequencies.</p>
+            <p>Missing a day is fine; there are no streaks. Most people listen far longer, because it is music they want on.</p>
+          </details>
+          <details>
+            <summary>What if I don’t notice anything?</summary>
+            <p>Most people don’t notice anything dramatic while they listen, because it works underneath the mind. It shows up in how you live: the decision that comes easier, the right people closer, your timing, and the people around you often see it first.</p>
+            <p>It compounds over months, which is why the study ran a year. Take the free week; if it isn’t for you, cancel and nothing is charged.</p>
+          </details>
+          <details>
+            <summary>Can I cancel?</summary>
+            <p>Yes. Cancel anytime in Settings › Subscriptions on your device.</p>
+            <p>Cancel during your first week and nothing is charged. After that, your membership runs to the end of the period you have already paid for.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 18 · THE CLOSE BAND -->
+    <section class="chapter g-night lit-top final" id="final">
+      <div class="shell">
+        <h2>Your four frequencies are calculated. Now <span class="lit">hear them.</span></h2>
+        <p class="lede">Born with it. Nine minutes a day to live from it.</p>
+        <a class="button" href="https://staging.zodiac.fm/begin">Unlock my music&nbsp; →</a>
+        <span class="cta-meta quiet">Your first week is free. Cancel anytime, and nothing is charged.</span>
+        <span class="cta-meta quiet">Not ready? Your three free songs are waiting.</span>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="g-white">
+    <div class="shell">
+      <img src="/site/assets/home-t7/logo-black.svg" width="781" height="136" loading="lazy" decoding="async" alt="Zodiac.fm">
+      <p>Tune in to your authentic design. &copy; 2026 Zodiac.fm</p>
+      <p>Testimonials describe individual experiences. Results are not guaranteed.</p>
+      <p class="footer-links"><a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a></p>
+    </div>
+  </footer>
+
+  <div id="stickyask" aria-hidden="true"></div>
+
+  <script>
+  (function(){
+    var q = location.search;
+    var els = document.querySelectorAll('h2,.testi,.freqs,.readings,.benefits,.tiles,.ochart,.gets,.plan-card,.offer,.pairs,.plainlist');
+    var i;
+    if (/[?&]static=1/.test(q)) {
+      for (i = 0; i < els.length; i++) { els[i].classList.add('fu','in'); }
+    } else {
+      document.documentElement.classList.add('fu-on');
+      for (i = 0; i < els.length; i++) { els[i].classList.add('fu'); }
+      if (!('IntersectionObserver' in window)) {
+        for (i = 0; i < els.length; i++) { els[i].classList.add('in'); }
+      } else {
+        var io = new IntersectionObserver(function(es){
+          es.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, {threshold:.15});
+        for (i = 0; i < els.length; i++) { io.observe(els[i]); }
+      }
+    }
+    var bar   = document.getElementById('stickyask');
+    var offer = document.querySelector('#proof-high .offer');
+    var src   = offer && offer.querySelector('a.button');
+    if (!bar || !src) { return; }
+    function sync(){
+      var on = window.innerWidth <= 799 && offer.getBoundingClientRect().bottom < 0;
+      if (on && !bar.firstChild) { bar.appendChild(src.cloneNode(true)); }
+      bar.classList.toggle('on', on);
+      bar.setAttribute('aria-hidden', on ? 'false' : 'true');
+    }
+    sync();
+    window.addEventListener('scroll', sync, {passive:true});
+    window.addEventListener('resize', sync);
+  })();
+  </script>
+</body>
+</html>
