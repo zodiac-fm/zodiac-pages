@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#fffffe">
+  <meta name="description" content="Hear your frequencies. Discover them as tones, then hear them carried through music. Start with your birth details. No account needed.">
+  <meta name="robots" content="noindex,nofollow">
+  <meta property="og:title" content="What do your frequencies sound like? · Zodiac.fm">
+  <meta property="og:description" content="Your birth details become sound. Hear your frequencies, then explore them in music.">
+  <title>Hear your frequencies · Zodiac.fm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tune-in-03.css">
+</head>
+<body data-phase="entry">
+  <svg class="icon-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m9 5 11 7-11 7Z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke-width="4"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3m-4 4 4-4 4 4M5 11v9h14v-9"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path d="m7 6 9 6-9 6Z" fill="currentColor" stroke="none"/><path d="M18 6v12" stroke-width="2"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></symbol>
+    <symbol id="i-tone" viewBox="0 0 24 24"><path d="M3 12h3l3-7 6 14 3-7h3"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+  </defs></svg>
+  <header class="site-header shell"><a class="wordmark" href="#main" aria-label="Zodiac.fm"><img src="../inapp/app-assets/logo-black.svg" width="139" height="32" alt="Zodiac.fm"></a><span class="edition">TUNE IN</span><button class="share-button" type="button" data-action="share" aria-label="Share this experience"><svg class="icon"><use href="#i-share"/></svg><span>Share this experience</span></button></header>
+  <main id="main">
+    <section id="entryView" class="shell entry-view" aria-labelledby="entryTitle">
+      <div class="entry-story">
+        <p class="eyebrow">YOUR BIRTH DETAILS BECOME SOUND</p>
+        <h1 id="entryTitle">Hear your <br>frequencies.</h1>
+        <p class="entry-intro">First as pure tones. <br>Then carried through music.</p>
+        <div class="entry-art" aria-hidden="true"><div><span>Core</span><i style="--strand:#d2c8ff"></i></div><div><span>Love</span><i style="--strand:#ffbdc3"></i></div><div><span>Vitality</span><i style="--strand:#ffc392"></i></div><div><span>Abundance</span><i style="--strand:#8fe1be"></i></div></div>
+        <p class="entry-note">Zodiac calculates four frequencies from when and where you were born. A pure tone lets you hear each one on its own.</p>
+      </div>
+      <div id="entryFormHost" class="entry-form-host">
+        <div class="form-heading"><span class="step-number">01</span><div><h2>Start with your birth details.</h2><p>No account needed to listen.</p></div></div>
+        <form id="birthForm">
+          <fieldset><legend>Date of birth</legend><div class="field-grid date-grid"><label for="birthMonth">Month<select id="birthMonth" autocomplete="bday-month" required><option value="">Month</option></select></label><label for="birthDay">Day<select id="birthDay" autocomplete="bday-day" required><option value="">Day</option></select></label><label for="birthYear">Year<select id="birthYear" autocomplete="bday-year" required><option value="">Year</option></select></label></div></fieldset>
+          <label class="place-label" for="birthPlace">Birthplace</label><div class="place-field"><input id="birthPlace" type="text" placeholder="Start typing your city or town" autocomplete="off" spellcheck="false" aria-autocomplete="list" aria-controls="placeResults" aria-describedby="placeStatus"><ul id="placeResults" class="place-results"></ul></div><p id="placeStatus" class="field-note" role="status"></p>
+          <fieldset class="birth-time-fields"><legend>Time of birth <small>An estimate is fine.</small></legend><div class="field-grid time-grid"><label for="birthHour">Hour<select id="birthHour" required><option value="">Hour</option></select></label><label for="birthMinute">Minute<select id="birthMinute" required><option value="">Minute</option></select></label><label for="birthPeriod">AM / PM<select id="birthPeriod" required><option value="">AM / PM</option><option value="AM">AM</option><option value="PM">PM</option></select></label></div></fieldset>
+          <label class="checkbox-label" for="unknownTime"><input id="unknownTime" type="checkbox"><span>I don’t know my birth time<small>Use 12 noon for now.</small></span></label>
+          <p id="birthError" class="form-error" role="alert"></p><button id="findFrequencies" class="primary" type="submit">Hear my frequencies<svg class="icon"><use href="#i-arrow"/></svg></button>
+          <p class="form-privacy">Next, you’ll hear your frequencies as tones.</p>
+        </form>
+      </div>
+    </section>
+
+    <div id="experienceView" class="shell listening-room" hidden>
+      <div class="listen-column">
+        <div id="stageAnchor"><section id="playerPanel" class="player-panel" aria-label="Your frequencies player">
+          <div class="player-head"><span id="profileBadge" class="eyebrow">01 · HEAR YOUR FREQUENCIES</span><button class="icon-button collapse-player" data-action="collapse" type="button" aria-label="Minimize player"><svg class="icon"><use href="#i-chevron"/></svg></button></div>
+          <h2 id="stageTitle">Your Core frequency</h2>
+          <p id="frequencyIntro" class="frequency-intro">A frequency is a rate of vibration. A tone is how you hear it. Press play to hear yours.</p>
+          <div class="stage-subline"><span id="stageMeta"></span><span id="domainDescription"></span></div>
+          <div class="frequency-stage"><div class="plot-labels"><span class="tone-plot-label">YOUR FREQUENCY</span><span class="music-plot-label">YOUR FREQUENCY IN THE MUSIC</span><span>Hz</span></div><canvas id="frequencyCanvas" width="1000" height="500" role="img" aria-label="Your selected frequency"></canvas><p id="visualCaption"></p></div>
+          <div class="tone-action"><button id="tonePlay" type="button" aria-pressed="false"><svg class="icon"><use href="#i-play"/></svg><span id="toneButtonText">Hear my Core frequency</span></button></div>
+          <div class="scrubber music-only"><label class="sr-only" for="seek">Seek through the song</label><input id="seek" type="range" min="0" max="1000" value="0" disabled><div class="time-labels"><span id="elapsed">0:00</span><span id="duration">0:00</span></div></div>
+          <div class="transport music-only"><button id="prevTrack" class="icon-button previous" type="button" aria-label="Previous song"><svg class="icon"><use href="#i-next"/></svg></button><button id="mainPlay" class="main-play" type="button" aria-label="Play music"><svg class="icon"><use href="#i-play"/></svg></button><button id="nextTrack" class="icon-button" type="button" aria-label="Next song"><svg class="icon"><use href="#i-next"/></svg></button></div>
+          <p id="audioError" class="audio-error" role="status"></p>
+          <p class="frequency-selector-label">Explore your four frequencies</p><div id="frequencyControls" class="frequency-controls" role="group" aria-label="Choose a frequency"></div>
+          <div class="music-bridge"><p id="toneGuideText">Hear a frequency on its own, then hear it within music.</p><button id="toMusic" class="primary" data-action="music" type="button" hidden>Hear it in music<svg class="icon"><use href="#i-arrow"/></svg></button></div>
+          <button id="backToFrequencies" class="band-link music-only" data-action="frequencies" type="button">Hear your frequencies on their own<span aria-hidden="true">↗</span></button>
+        </section></div>
+        <div class="personalize"><div><h2 id="personalizeTitle">Calculated for you.</h2><p id="personalizeText">From your birth details.</p><p id="birthSummary" hidden></p></div><button type="button" class="text-button" data-action="personalize">Edit birth details</button></div>
+      </div>
+      <aside id="frequencyGuide" class="frequency-guide"><p class="eyebrow">FOUR PARTS OF YOUR LIFE</p><h2>A way to listen <br>from the inside.</h2><p>Core, Love, Vitality and Abundance. Zodiac connects each frequency with a different part of your life.</p><dl><div><dt><i style="background:#6521c9"></i>Core</dt><dd>Identity, self-trust & direction</dd></div><div><dt><i style="background:#b90044"></i>Love</dt><dd>Connection, belonging & boundaries</dd></div><div><dt><i style="background:#ff9112"></i>Vitality</dt><dd>Energy, pace & rest</dd></div><div><dt><i style="background:#12a56e"></i>Abundance</dt><dd>Opportunity, timing & value</dd></div></dl><p class="guide-note">Start with Core, or tap another frequency. There’s nothing you need to feel or figure out. Just listen.</p><button class="text-button" data-action="bands" type="button">Explore your bands<svg class="icon"><use href="#i-arrow"/></svg></button></aside>
+      <section id="musicLibrary" class="library" aria-labelledby="libraryTitle" hidden>
+        <div class="library-head"><div><p class="eyebrow">THE SAME FREQUENCY. NOW IN MUSIC.</p><h2 id="libraryTitle">Find your sound.</h2></div></div><p id="musicContext" class="music-context"></p>
+        <div id="songList" class="song-list" aria-label="Choose your music"></div>
+        <div class="share-moment"><p class="eyebrow">SOMEONE ELSE HAS THEIR OWN.</p><h3>Let them hear theirs.</h3><p>Send this experience to someone you know. They’ll enter their birth details and hear their own frequencies.</p><button class="primary secondary" data-action="share" type="button">Share this experience<svg class="icon"><use href="#i-share"/></svg></button></div>
+        <div class="locked-heading"><svg class="icon"><use href="#i-lock"/></svg><div><h3>More to tune into.</h3><p>Longer listening, with a Zodiac membership.</p></div></div><div id="lockedSongs" class="song-list locked-list" aria-label="Songs included with membership"></div>
+        <div class="library-foot"><h3>Make listening part of your day.</h3><p>Create your account in the app to return to your frequencies, listen and make playlists.</p><a id="appContinue" class="primary" href="https://app.zodiac.fm/begin" target="_blank" rel="noopener">Keep listening in the app<svg class="icon"><use href="#i-arrow"/></svg></a><button class="text-button" data-action="bands" type="button">Explore your bands<svg class="icon"><use href="#i-arrow"/></svg></button></div>
+      </section>
+    </div>
+  </main>
+  <footer class="shell site-footer"><span>Zodiac.fm · Tune In</span><div><a href="https://zodiac.fm/privacy" target="_blank" rel="noopener">Privacy</a><a href="https://zodiac.fm/terms" target="_blank" rel="noopener">Terms</a></div></footer>
+  <div id="playerBackdrop" class="player-backdrop" hidden data-action="collapse"></div>
+  <aside id="miniPlayer" class="mini-player" aria-label="Now playing" hidden><div id="miniProgress" class="mini-progress"></div><button type="button" class="mini-open" data-action="expand" aria-label="Expand player"><span class="mini-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span><strong id="miniTitle"></strong><small id="miniMeta"></small></span><svg class="icon mini-chevron"><use href="#i-chevron"/></svg></button><button id="miniToggle" class="mini-toggle" type="button" aria-label="Pause music"><svg class="icon"><use href="#i-pause"/></svg></button></aside>
+  <dialog id="birthDialog" class="sheet" aria-labelledby="birthHeading"><div class="sheet-top"><span class="eyebrow">YOUR BIRTH DETAILS</span><button class="icon-button" type="button" data-close aria-label="Close birth details"><svg class="icon"><use href="#i-close"/></svg></button></div><h2 id="birthHeading">Fine-tune your details.</h2><div id="editFormHost"></div></dialog>
+  <dialog id="bandDialog" class="sheet band-sheet" aria-labelledby="bandsHeading"><div class="sheet-top"><span class="eyebrow">A LITTLE MORE ABOUT YOU</span><button class="icon-button" data-close aria-label="Close frequency meanings"><svg class="icon"><use href="#i-close"/></svg></button></div><h2 id="bandsHeading">Four parts of your life.</h2><p class="sheet-intro">Explore your frequencies and their bands while you listen.</p><div id="bandReadings"></div></dialog>
+  <dialog id="membershipDialog" class="sheet membership-sheet" aria-labelledby="lockedTitle"><div class="sheet-top"><span class="eyebrow">MORE TO TUNE INTO</span><button class="icon-button" data-close aria-label="Close membership information"><svg class="icon"><use href="#i-close"/></svg></button></div><div class="membership-lock"><svg class="icon"><use href="#i-lock"/></svg></div><h2 id="lockedTitle">More time to tune in.</h2><p class="sheet-intro">Longer listening. Music to drift off to. The full library opens with a Zodiac membership.</p><div class="app-note"><strong>Keep this part of your day.</strong><p>Create an account in the app to listen again and make playlists. Explore membership when you’re ready for more.</p></div><a id="appLink" class="primary" href="https://app.zodiac.fm/begin" target="_blank" rel="noopener">Explore Zodiac<svg class="icon"><use href="#i-arrow"/></svg></a><button class="text-button keep-listening" type="button" data-close>Keep listening here</button></dialog>
+  <div id="toast" class="toast" role="status" hidden></div><audio id="musicAudio" preload="none" playsinline></audio><noscript><p class="no-script">Turn on JavaScript to hear your frequencies and music.</p></noscript>
+  <script type="module" src="tune-in-03.js"></script>
+</body>
+</html>
