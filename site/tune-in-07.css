@@ -1,0 +1,75 @@
+/* Player 07: one selected frequency, complete music cards, clear next action. */
+.listen-screen{--active-color:#6521c9;--active-ink:#6521c9}
+.listening-grid{grid-template-columns:1fr 1fr;gap:32px}
+.listen-heading{margin-bottom:20px}
+.listen-heading h2{font-size:34px}
+.frequency-explanation{font-size:14px;line-height:1.5;padding:15px 16px 17px;color:#404040;min-height:74px}
+.music-heading{gap:12px;align-items:baseline}
+.music-heading h2{font-size:38px;line-height:1.05;letter-spacing:-.035em}
+.music-heading h2 em{font-weight:500;color:var(--active-ink)}
+.music-heading>span:last-child{font-size:25px;color:var(--active-ink)}
+.instruction{min-height:0;font-size:13px;line-height:1.4;margin:9px 0 16px;color:#646464}
+.song-list{gap:9px}
+.song-row{display:flex;align-items:center;gap:13px;min-height:81px;padding:12px 14px;border:1px solid #dedede;border-radius:8px;box-shadow:0 2px 5px #00000003;background:#fff;transition:border-color .18s,box-shadow .18s}
+.song-row:hover{border-color:#aaa;box-shadow:0 3px 10px #00000008}
+.song-row.is-current{border-color:#bcbcbc}
+.song-action{flex:0 0 30px;height:30px;display:grid;place-items:center;border:1px solid #e3e3e3;border-radius:50%;color:var(--active-ink);background:#fff}
+.song-action .icon{width:13px;height:13px}
+.song-body{flex:1;min-width:0}
+.song-wave{height:32px;width:100%;margin:0;overflow:visible}
+.song-copy{padding:6px 0 0;gap:10px}
+.song-name{font-size:16px;line-height:1.2}
+.song-time{font-size:11px;white-space:nowrap;color:#707070}
+.song-row.is-locked{opacity:1;background:#f6f6f6;box-shadow:none;border-color:#e4e4e4;color:#777}
+.song-row.is-locked .song-copy{padding-right:0}
+.song-row.is-locked .song-action{color:#777;background:transparent;border-color:#dedede}
+.song-row.is-locked .song-wave{opacity:.55}
+.song-row.is-locked:hover{border-color:#bbb}
+.locked-preview{margin-top:9px}
+.more-music{margin-top:3px;border:0}
+.more-music summary{font-size:12px;min-height:38px;padding:0 3px;color:#626262}
+.more-music summary .plus{font-size:20px}
+.more-music[open] #moreLocked{padding-bottom:6px}
+.stage-idle>button .icon{color:var(--active-ink)}
+.tone-orbit{border-color:color-mix(in srgb,var(--active-color) 17%,transparent);box-shadow:0 0 0 20px color-mix(in srgb,var(--active-color) 3%,transparent),0 0 0 40px color-mix(in srgb,var(--active-color) 2%,transparent)}
+dialog{width:min(440px,calc(100% - 28px));max-height:calc(100dvh - 28px);overflow:auto;padding:30px;border-radius:9px}
+dialog h2{margin:13px 0 15px;font-size:38px}
+.unlock-copy{font-size:14px;line-height:1.5;color:#555;margin-bottom:20px}
+#unlockForm label{display:block;font-size:12px;font-weight:600;margin:14px 0 6px}
+#unlockForm input{display:block;width:100%;height:46px;padding:10px 12px;font-size:16px;border:1px solid #ccc;border-radius:5px;background:#fff;color:var(--ink)}
+#unlockForm .primary{margin-top:20px}
+.demo-note{font-size:11px;line-height:1.45;color:#6c6c6c;margin-top:14px}
+#checkoutPreview h3{font-size:15px;font-weight:600;margin:0 0 10px}
+#checkoutDetails{font-size:13px;line-height:1.4;margin:0 0 14px}
+#checkoutDetails dt{font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#777;margin-top:12px}
+#checkoutDetails dd{margin:3px 0 0;overflow-wrap:anywhere}
+.text-button{padding:8px 0;margin-bottom:12px;font-size:12px;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:1050px) and (min-width:760px){.music-heading h2{font-size:32px}.listening-grid{gap:24px}.song-row{padding-inline:11px;gap:10px}.song-name{font-size:15px}}
+@media(max-width:759px){
+  .listen-screen{padding-top:14px}
+  .listen-heading{margin-bottom:12px}
+  .listen-heading h2{font-size:28px}
+  .listen-heading .eyebrow{font-size:8px}
+  .listening-grid{display:block}
+  .player-window{height:158px}
+  .frequency-explanation{font-size:12px;line-height:1.45;min-height:0;padding:10px 12px 12px}
+  .music-library{padding-top:16px}
+  .music-heading h2{font-size:31px;line-height:1.05}
+  .music-heading>span:last-child{font-size:23px}
+  .instruction{font-size:11px;margin:6px 0 10px;line-height:1.35}
+  .song-list{gap:7px}
+  .song-row{min-height:64px;padding:8px 11px;gap:11px;border-radius:7px}
+  .song-action{flex-basis:25px;height:25px}
+  .song-action .icon{width:11px;height:11px}
+  .song-wave{height:25px;margin:0}
+  .song-copy{padding-top:4px}
+  .song-name{font-size:14px}
+  .song-time{font-size:10px}
+  .locked-preview{margin-top:7px}
+  .more-music{margin-top:1px}
+  .more-music summary{min-height:34px;font-size:11px}
+  .after-listen{margin-top:5px;padding-top:7px}
+  .tone-orbit{box-shadow:0 0 0 15px color-mix(in srgb,var(--active-color) 3%,transparent),0 0 0 30px color-mix(in srgb,var(--active-color) 2%,transparent)}
+  dialog{padding:27px 24px}
+}
+@media(max-width:350px){.music-heading h2{font-size:28px}.song-row{padding-inline:9px;gap:8px}.song-action{flex-basis:23px;height:23px}.song-name{font-size:13px}.frequency-explanation{font-size:12px}.player-window{height:148px}}
