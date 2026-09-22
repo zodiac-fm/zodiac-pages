@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fffffe">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Hear your frequencies, then hear them carried through music.">
+  <title>Tune In · Zodiac.fm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tune-in-04.css">
+  <style>#birthPanel[hidden]~#stageToggle{top:auto;bottom:13px}#lockedPreview{margin-top:7px}body:has(#afterListen:not([hidden])) .utility{margin-bottom:110px}.player-window:has(#cancelEdit:not([hidden])) .birth-panel{padding-top:57px}.player-window:has(#cancelEdit:not([hidden])) .birth-panel h1,.player-window:has(#cancelEdit:not([hidden])) .birth-intro{display:none}.stage-message{color:var(--muted);right:64px}.stage-error:empty{display:none}</style>
+</head>
+<body>
+  <svg class="icon-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m9 5 11 7-11 7Z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke-width="4"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3m-4 4 4-4 4 4M5 11v9h14v-9"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  </defs></svg>
+
+  <header class="site-header">
+    <a class="wordmark" href="#main" aria-label="Zodiac.fm"><img src="../inapp/app-assets/logo-black.svg" width="112" height="26" alt="Zodiac.fm"></a>
+    <span class="edition">TUNE IN</span>
+    <button id="headerShare" class="header-share" type="button" data-action="share" aria-label="Share this experience" hidden><svg class="icon"><use href="#i-share"/></svg><span>Share</span></button>
+  </header>
+
+  <main id="main" class="utility" aria-label="Tune In">
+    <section id="playerWindow" class="player-window" aria-label="Your frequency player">
+      <div id="birthPanel" class="birth-panel">
+        <h1>Hear your frequencies</h1>
+        <p class="birth-intro">Your birth details become sound.</p>
+        <form id="birthForm">
+          <fieldset>
+            <legend>Date of birth</legend>
+            <div class="date-fields">
+              <label>Month<select id="birthMonth" autocomplete="bday-month" required><option value="">Month</option></select></label>
+              <label>Day<select id="birthDay" autocomplete="bday-day" required><option value="">Day</option></select></label>
+              <label>Year<select id="birthYear" autocomplete="bday-year" required><option value="">Year</option></select></label>
+            </div>
+          </fieldset>
+          <label class="place-label" for="birthPlace">Birthplace</label>
+          <div class="place-field"><input id="birthPlace" type="text" placeholder="City or town" autocomplete="off" spellcheck="false" aria-autocomplete="list" aria-controls="placeResults" aria-describedby="placeStatus"><ul id="placeResults" class="place-results"></ul></div>
+          <p id="placeStatus" class="field-note" role="status"></p>
+          <fieldset class="time-fields">
+            <legend>Time of birth <small>An estimate is fine.</small></legend>
+            <div class="time-selects">
+              <label>Hour<select id="birthHour" required><option value="">Hour</option></select></label>
+              <label>Minute<select id="birthMinute" required><option value="">Minute</option></select></label>
+              <label>AM / PM<select id="birthPeriod" required><option value="">AM / PM</option><option value="AM">AM</option><option value="PM">PM</option></select></label>
+            </div>
+          </fieldset>
+          <label class="unknown-time" for="unknownTime"><input id="unknownTime" type="checkbox"><span>I don’t know my birth time <small>Use 12 noon for now.</small></span></label>
+          <p id="birthError" class="form-error" role="alert"></p>
+          <button id="findFrequencies" class="primary" type="submit">Find my frequencies</button>
+        </form>
+      </div>
+      <div id="stageIdle" class="stage-idle" hidden><p>Choose a frequency below.</p><small>Hear it as a pure tone.</small></div>
+      <iframe id="stageFrame" title="Your frequency and music" src="tune-in-04-stage.html?center=1&amp;light=1&amp;minui=1" hidden></iframe>
+      <p id="stageLoading" class="stage-message" role="status" hidden></p>
+      <p id="stageError" class="stage-error" role="alert"></p>
+      <button id="stageToggle" class="stage-toggle" type="button" aria-label="Play" hidden><svg class="icon"><use href="#i-play"/></svg></button>
+      <button id="cancelEdit" class="cancel-edit" type="button" hidden>Back to listening</button>
+    </section>
+
+    <div id="frequencyControls" class="frequency-controls" role="group" aria-label="Choose a frequency"></div>
+    <p id="instruction" class="instruction">Enter your birth details to hear your frequencies.</p>
+
+    <section class="library" aria-label="Music">
+      <div id="songList" class="song-list" aria-label="Available music"></div>
+      <div id="lockedPreview" class="song-list" aria-label="Locked music preview"></div>
+      <details id="moreMusic" class="more-music">
+        <summary>More music</summary>
+        <div id="moreSongs" class="song-list" aria-label="More available music"></div>
+        <div id="moreLocked" class="song-list" aria-label="More locked music"></div>
+      </details>
+    </section>
+
+    <section id="afterListen" class="after-listen" hidden>
+      <button class="text-action" type="button" data-action="share"><svg class="icon"><use href="#i-share"/></svg>Share this experience</button>
+      <a id="appContinue" class="primary app-continue" href="https://app.zodiac.fm/begin" target="_blank" rel="noopener">Keep listening in the app</a>
+    </section>
+    <button id="editBirth" class="edit-birth" type="button" hidden>Edit birth details</button>
+  </main>
+
+  <dialog id="membershipDialog" class="sheet" aria-labelledby="membershipTitle"><button class="sheet-close" type="button" data-close aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button><svg class="lock-icon icon"><use href="#i-lock"/></svg><h2 id="membershipTitle">More time to tune in.</h2><p>Longer listening and the full library open with a Zodiac membership.</p><a id="appLink" class="primary" href="https://app.zodiac.fm/begin" target="_blank" rel="noopener">Explore Zodiac</a></dialog>
+  <dialog id="bandDialog" class="sheet" aria-labelledby="bandTitle"><button class="sheet-close" type="button" data-close aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button><h2 id="bandTitle">Your frequencies</h2><div id="bandReadings"></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <aside id="miniPlayer" class="mini-player" aria-label="Now playing" hidden><button id="miniOpen" class="mini-open" type="button" data-action="open-stage"><span><strong id="miniTitle"></strong><small id="miniMeta"></small></span></button><button id="miniToggle" type="button" aria-label="Pause"><svg class="icon"><use href="#i-pause"/></svg></button></aside>
+  <noscript><p class="no-script">Turn on JavaScript to hear your frequencies and music.</p></noscript>
+  <script type="module" src="tune-in-04.js"></script>
+</body>
+</html>
