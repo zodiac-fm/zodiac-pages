@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff"><meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Interactive Zodiac demo with four random frequencies, a local location finder and real development music. No birth-chart calculation.">
+  <title>Tune In demo · Zodiac.fm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tune-in-05.css">
+  <link rel="stylesheet" href="tune-in-07.css">
+  <link rel="stylesheet" href="tune-in-09.css">
+  <link rel="stylesheet" href="tune-in-10.css">
+</head>
+<body>
+  <svg class="defs" aria-hidden="true"><defs>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8Z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke-width="4"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3m-4 4 4-4 4 4M5 11v9h14v-9"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+  </defs></svg>
+  <div class="portal">
+    <header class="portal-header">
+      <a href="#" class="logo" aria-label="Zodiac.fm"><img src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm" width="133" height="30"></a>
+      <span class="header-note">INTERACTIVE DEMO</span>
+      <button id="headerShare" data-action="share" aria-label="Share this experience" hidden><svg class="icon"><use href="#i-share"/></svg></button>
+    </header>
+    <main>
+      <section id="welcomeScreen" class="welcome-screen" aria-label="Find your sound">
+        <div class="welcome-art">
+          <p class="eyebrow">WELCOME TO ZODIAC</p>
+          <h1>Hear the sound of <em>you.</em></h1>
+          <p class="welcome-line">Music tuned to you. So you can tune into yourself.</p>
+          <div class="welcome-domain-line" aria-hidden="true"><span data-preview-domain="core"><i></i>Core</span><span data-preview-domain="love"><i></i>Love</span><span data-preview-domain="vitality"><i></i>Vitality</span><span data-preview-domain="abundance"><i></i>Abundance</span></div>
+        </div>
+        <div class="birth-panel" id="birthPanel">
+          <div class="form-heading"><span class="step">01 / TRY THE EXPERIENCE</span><button id="cancelEdit" type="button" hidden>Back to listening ↗</button></div>
+          <h2>Start with your birth details.</h2>
+          <p class="form-intro">Four frequencies for who you are, how you connect, your energy, and opportunity. Hear the tones. Then hear them in music.</p>
+          <form id="birthForm">
+            <fieldset><legend>When were you born?</legend><div class="date-fields">
+              <label><span class="sr-only">Month</span><select id="birthMonth" autocomplete="bday-month" required><option value="">Month</option></select></label>
+              <label><span class="sr-only">Day</span><select id="birthDay" autocomplete="bday-day" required><option value="">Day</option></select></label>
+              <label><span class="sr-only">Year</span><select id="birthYear" autocomplete="bday-year" required><option value="">Year</option></select></label>
+            </div></fieldset>
+            <fieldset><legend>What time? <span>An estimate is fine.</span></legend><div class="time-fields">
+              <label><span class="sr-only">Hour</span><select id="birthHour" required><option value="">Hour</option></select></label>
+              <label><span class="sr-only">Minute</span><select id="birthMinute" required><option value="">Minute</option></select></label>
+              <label><span class="sr-only">AM or PM</span><select id="birthPeriod" required><option value="">AM / PM</option><option value="AM">AM</option><option value="PM">PM</option></select></label>
+            </div></fieldset>
+            <label class="unknown"><input id="unknownTime" type="checkbox"><span>I’m not sure. Use noon for now.</span></label>
+            <label class="place-label" for="birthPlace">Where were you born?</label>
+            <div class="place-wrap"><input id="birthPlace" type="text" placeholder="City or town" autocomplete="off" spellcheck="false" aria-autocomplete="list" aria-controls="placeResults" aria-describedby="placeStatus"><ul id="placeResults"></ul></div>
+            <p id="placeStatus" class="field-note" role="status"></p>
+            <p id="birthError" class="error" role="alert"></p>
+            <button id="findFrequencies" class="primary" type="submit">Hear the frequencies <span aria-hidden="true">→</span></button>
+            <p class="privacy">Demo: four random sample frequencies. Birth details stay in this browser.</p>
+          </form>
+        </div>
+      </section>
+
+      <section id="listenScreen" class="listen-screen" aria-label="Your demo music" hidden data-phase="tones">
+        <div class="listen-heading">
+          <div>
+            <p id="journeyEyebrow" class="eyebrow">YOUR FOUR FREQUENCIES</p>
+            <h2 id="journeyTitle">Four frequencies. One you.</h2>
+            <p id="journeyIntro">Start with Core. The frequency for who you are.</p>
+          </div>
+          <button id="editBirth" type="button" hidden>Edit birth details</button>
+        </div>
+        <div class="listening-grid">
+          <div class="instrument">
+            <p id="frequencyExplanation" class="frequency-explanation" aria-live="polite">Listening to this frequency tunes you in to who you are and what is yours to do.</p>
+            <div class="stage-heading"><p id="domainDescription">Core · The signal for who you are.</p><div class="mode-controls"><button id="toneOnly" type="button" aria-pressed="true">Tone only</button><button id="musicMode" type="button" aria-pressed="false">In music</button></div></div>
+            <div id="playerWindow" class="player-window">
+              <iframe id="stageFrame" title="Your frequency and music" src="tune-in-10-stage.html?center=1&amp;light=1&amp;minui=1" hidden></iframe>
+              <div id="stageIdle" class="stage-idle"><p>A frequency gives a tone its pitch.</p><button id="hearTone" type="button"><svg class="icon"><use href="#i-play"/></svg><span>Hear the Core tone</span></button></div>
+              <p id="stageLoading" class="stage-message" role="status" hidden></p><p id="stageError" class="stage-error" role="alert"></p>
+              <button id="stageToggle" type="button" aria-label="Play" hidden><svg class="icon"><use href="#i-play"/></svg></button>
+            </div>
+            <div id="frequencyControls" class="frequency-controls" role="group" aria-label="Hear it in a different frequency"></div>
+            <p id="guideText" class="guide-text" aria-live="polite">Start with your Core tone.</p>
+            <button id="enterMusic" type="button" class="enter-music">Now hear it in music <span aria-hidden="true">→</span></button>
+          </div>
+          <div id="musicLibrary" class="music-library">
+            <p class="music-kicker">CHOOSE YOUR MUSIC</p>
+            <p id="instruction" class="instruction">Hear your tone, then choose a song.</p>
+            <div id="songList" class="song-list" aria-label="Choose a song"></div>
+            <div id="lockedPreview" class="song-list locked-preview" aria-label="Unlock more music"></div>
+            <details id="moreMusic" class="more-music"><summary><span>View more</span><span class="plus" aria-hidden="true">+</span></summary><div id="moreLocked" class="song-list" aria-label="More membership music"></div></details>
+            <button id="backToTones" type="button">← Your frequencies</button>
+          </div>
+        </div>
+        <div id="afterListen" class="after-listen" hidden><button type="button" data-action="share"><svg class="icon"><use href="#i-share"/></svg>Share this demo</button><a id="appContinue" href="#membershipDialog">Explore more music ↗</a></div>
+      </section>
+    </main>
+    <footer class="portal-footer"><span>Prototype · random demo frequencies</span><span>zodiac.fm</span></footer>
+  </div>
+  <dialog id="membershipDialog" aria-labelledby="membershipTitle">
+    <button data-close class="close" aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button>
+    <p class="eyebrow">EXPLORE THE FULL LIBRARY</p><h2 id="membershipTitle">Keep tuning in.</h2>
+    <div id="unlockIntro">
+      <p class="unlock-copy">There’s more to hear, starting with <strong id="unlockTrack">Starseed</strong>. Your birth details are already here. Just add your email and phone to continue.</p>
+      <form id="unlockForm" novalidate>
+        <label for="unlockEmail">Email</label><input id="unlockEmail" type="email" autocomplete="email" placeholder="you@example.com" required>
+        <label for="unlockPhone">Phone number</label><input id="unlockPhone" type="tel" autocomplete="tel" placeholder="Include your country code" required>
+        <p id="unlockError" class="error" role="alert"></p><button type="submit" class="primary">Continue <span aria-hidden="true">→</span></button>
+      </form>
+      <p class="demo-note">Demo only. Use sample contact details. Nothing is sent and no account is created.</p>
+    </div>
+    <div id="checkoutPreview" hidden>
+      <h3>Trial checkout preview</h3><p class="unlock-copy">Your email, phone, and birth details would carry through here. A card is required only on a real checkout.</p>
+      <dl id="checkoutDetails"></dl><button id="backToContact" type="button" class="text-button">Edit contact details</button><button id="backToMusic" type="button" class="primary">Keep listening <span aria-hidden="true">→</span></button>
+    </div>
+  </dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <aside id="miniPlayer" class="mini-player" aria-label="Your music" hidden><button id="miniOpen" class="mini-open" data-action="open-stage"><strong id="miniTitle"></strong><small id="miniMeta"></small></button><button id="miniToggle" aria-label="Pause"><svg class="icon"><use href="#i-pause"/></svg></button></aside>
+  <script type="module" src="tune-in-10-core.js"></script>
+  <script type="module" src="tune-in-10.js"></script>
+</body>
+</html>

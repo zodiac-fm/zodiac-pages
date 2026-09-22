@@ -1,0 +1,89 @@
+/* The prepared soundstage is the first impression, not a blank waiting panel. */
+.portal{max-width:620px;width:min(620px,calc(100% - 40px))}
+.welcome-domain-line{max-width:430px}
+.listen-screen{--active-soft:#D2C8FF;--active-deep:#38007A;padding-top:26px}
+.listen-heading h2{font-size:42px;margin-bottom:8px}
+.listen-heading #journeyIntro{font-size:15px;color:#47414f}
+.instrument{background:transparent}
+.frequency-explanation,.listen-screen[data-phase="music"] .frequency-explanation{padding:0 0 15px;font-size:16px;line-height:1.45;color:#343038;max-width:540px}
+.stage-heading{padding:0 2px 7px;min-height:34px}
+.stage-heading>p{font-weight:600;color:var(--active-ink);font-size:13px}
+.mode-controls{gap:16px}
+.mode-controls button{font-size:12px;min-height:32px}
+.player-window{height:290px;border-radius:18px;background:var(--active-deep);box-shadow:0 10px 28px color-mix(in srgb,var(--active-color) 13%,transparent)}
+#stageFrame{background:var(--active-deep)}
+.stage-idle{position:absolute;inset:0;height:100%;background:transparent;z-index:3;justify-content:center;pointer-events:none}
+.stage-idle p{position:absolute;bottom:21px;left:15px;right:15px;margin:0;color:#fff9;font-size:12px}
+.stage-idle>button{position:relative;display:grid;place-items:center;width:76px;height:76px;min-height:76px;padding:0;border-radius:50%;background:#fff;color:var(--active-ink);box-shadow:0 5px 20px #18002033;pointer-events:auto;transition:transform .2s,box-shadow .2s}
+.stage-idle>button:hover{transform:scale(1.06);box-shadow:0 8px 28px #18002040}
+.stage-idle>button .icon{width:27px;height:27px;margin-left:4px;color:var(--active-ink)}
+.stage-idle>button span{position:absolute;top:88px;left:50%;transform:translateX(-50%);white-space:nowrap;color:white;font-size:15px;font-weight:600;line-height:1.3;background:color-mix(in srgb,var(--active-deep) 88%,transparent);padding:5px 11px;border-radius:20px}
+.listen-screen:not([data-has-played="true"]) #stageIdle{display:flex!important}
+.listen-screen:not([data-has-played="true"]) #stageToggle{display:none!important}
+#stageToggle{height:48px;width:48px;bottom:14px;right:14px;color:var(--active-ink);box-shadow:none}
+.stage-message,.stage-error{color:#fff;background:#1a1620a8;border-radius:5px;padding:5px 9px;bottom:8px;left:12px;right:auto;max-width:calc(100% - 78px);z-index:4}
+.stage-error:empty{display:none}
+.frequency-controls{margin:13px 0 0;gap:8px;border:0}
+.frequency-control{border:1px solid #e6e1e9;border-radius:10px;min-height:62px;padding:7px 3px;background:white;transition:background .2s,border-color .2s}
+.frequency-control:before{display:none}
+.frequency-control.selected{background:color-mix(in srgb,var(--active-color) 7%,white);border-color:var(--active-color);border-bottom:1px solid var(--active-color)}
+.frequency-control span{font-size:13px;font-weight:600}
+.frequency-control .frequency-hz{font-size:12px;margin-top:4px;font-weight:500}
+.guide-text{padding:14px 0 11px;color:#5a525f;font-size:13px;text-align:center}
+.enter-music{width:100%;margin:0;min-height:52px;border-radius:10px;background:var(--active-color);font-size:16px;padding:12px 18px}
+.enter-music:hover{background:var(--active-deep)}
+.listen-screen[data-phase="music"] .player-window{height:196px}
+.listen-screen[data-phase="music"] .guide-text{padding:10px 0 0}
+.listen-screen[data-phase="music"] .music-library{padding-top:18px}
+.music-kicker{font-size:11px;letter-spacing:.12em;margin-bottom:9px;color:#56505a}
+.song-list{gap:9px}
+.song-row,.listen-screen[data-phase="music"] .song-row{min-height:77px;padding:11px 13px;gap:13px;border-radius:14px;border-color:#e4dfe8;box-shadow:0 1px 3px #1a162005}
+.song-row:hover{background:color-mix(in srgb,var(--active-color) 3%,white);border-color:color-mix(in srgb,var(--active-color) 42%,white)}
+.song-row.is-current{border-color:color-mix(in srgb,var(--active-color) 45%,white);box-shadow:0 2px 8px color-mix(in srgb,var(--active-color) 7%,transparent)}
+.song-action{flex-basis:31px;height:31px;border:0;background:color-mix(in srgb,var(--active-color) 7%,white);color:var(--active-ink)}
+.song-action .icon{height:12px;width:12px}
+.song-copy{padding:0;align-items:center}
+.song-name{font-size:17px;line-height:22px;font-weight:600}
+.song-time{font-size:11px;line-height:1.2;color:#827b87}
+.song-wave,.listen-screen[data-phase="music"] .song-wave{height:24px;margin:7px 0 0;width:100%}
+.is-locked,.song-row.is-locked:hover{background:#f8f7f9;border-color:#e8e5eb;box-shadow:none}
+.is-locked .song-action{background:#eeebf0;color:#97919b}
+.locked-preview{margin-top:9px}
+.more-music summary{min-height:42px}
+.after-listen{padding-top:10px}
+@media(max-width:759px){
+ .portal{width:calc(100% - 32px)}
+ .listen-screen{padding-top:17px}
+ .listen-heading{margin-bottom:12px}
+ .listen-heading h2{font-size:34px;margin:6px 0}
+ .listen-heading #journeyIntro{font-size:13px}
+ .frequency-explanation,.listen-screen[data-phase="music"] .frequency-explanation{padding:0 0 11px;font-size:14px;line-height:1.4}
+ .stage-heading{padding-bottom:5px;min-height:31px}
+ .stage-heading>p{font-size:12px}
+ .mode-controls button{font-size:11px;min-height:30px}
+ .player-window{height:258px;border-radius:14px}
+ .stage-idle>button{width:66px;height:66px;min-height:66px}
+ .stage-idle>button span{top:77px;font-size:14px}
+ .stage-idle p{font-size:11px;bottom:17px}
+ #stageToggle{width:42px;height:42px;bottom:12px;right:12px}
+ .frequency-controls{margin-top:10px;gap:6px}
+ .frequency-control{min-height:54px;border-radius:9px}
+ .frequency-control span{font-size:12px}
+ .frequency-control .frequency-hz{font-size:11px}
+ .guide-text{font-size:12px;padding:11px 0 9px}
+ .enter-music{min-height:48px;font-size:14px;border-radius:9px}
+ .listen-screen[data-phase="music"] .player-window{height:150px}
+ .listen-screen[data-phase="music"] .guide-text{font-size:11px;padding:8px 0 0}
+ .listen-screen[data-phase="music"] .music-library{padding-top:12px}
+ .music-kicker{font-size:10px;margin-bottom:7px}
+ .song-list{gap:7px}
+ .song-row,.listen-screen[data-phase="music"] .song-row{min-height:65px;padding:9px 10px;gap:10px;border-radius:14px}
+ .song-action{flex-basis:28px;height:28px}
+ .song-name{font-size:15px;line-height:19px}
+ .song-time{font-size:10px}
+ .song-wave,.listen-screen[data-phase="music"] .song-wave{height:20px;margin-top:6px}
+ .locked-preview{margin-top:7px}
+ .more-music summary{min-height:36px}
+}
+@media(max-width:350px){.portal{width:calc(100% - 24px)}.listen-heading h2{font-size:30px}.frequency-control span{font-size:11px}.player-window{height:234px}.listen-screen[data-phase="music"] .player-window{height:140px}}
+@media(prefers-reduced-motion:reduce){.stage-idle>button,.frequency-control{transition:none}}
