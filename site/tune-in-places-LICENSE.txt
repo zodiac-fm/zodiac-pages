@@ -1,0 +1,12 @@
+Tune In 06 offline place suggestions
+
+Source: the IANA Time Zone Database tables zone.tab and iso3166.tab, as
+installed at /usr/share/zoneinfo on the build machine. Both source files
+state that they are in the public domain (Arthur David Olson, 2009-05-17).
+
+The JSON contains 418 representative place names derived from timezone
+identifiers, plus country names from iso3166.tab. Underscores were changed
+to spaces. It is a small suggestion list, not a comprehensive gazetteer.
+Users may enter any town or city without choosing a suggestion.
+
+IANA Time Zone Database: https://www.iana.org/time-zones
