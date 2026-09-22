@@ -1,10 +1,13 @@
 const { createHash } = require('node:crypto');
 
-const BIRTH_FREQUENCIES_URL = 'https://app.zodiac.fm/api/birth-frequencies';
-const GOOGLE_GEOCODING_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
-const GOOGLE_TIMEZONE_URL = 'https://maps.googleapis.com/maps/api/timezone/json';
+// Prototype calculation and place lookup remain closed until an isolated service is verified.
+// Audio signing is restricted to the independently verified development project.
+const BIRTH_FREQUENCIES_URL = null;
+const GOOGLE_GEOCODING_URL = null;
+const GOOGLE_TIMEZONE_URL = null;
 const IMMERSIONS_BUCKET = 'immersions';
 const SIGNED_AUDIO_TTL_SECONDS = 15 * 60;
+const DEVELOPMENT_AUDIO_ORIGIN = 'https://gnbfwqbgtehipjqqhjfn.supabase.co';
 
 const FREE_TRACK_FOLDERS = Object.freeze({
   'quiet-success': 'Quiet-Success',
@@ -295,20 +298,23 @@ function audioConfig() {
 
   try {
     const parsed = new URL(rawUrl);
-    if (parsed.protocol !== 'https:') return null;
+    if (rawUrl !== DEVELOPMENT_AUDIO_ORIGIN && rawUrl !== `${DEVELOPMENT_AUDIO_ORIGIN}/`) return null;
+    if (parsed.origin !== DEVELOPMENT_AUDIO_ORIGIN || parsed.username || parsed.password || parsed.search || parsed.hash) return null;
     return { baseUrl: parsed.origin, secretKey };
   } catch {
     return null;
   }
 }
 
-function signedUrlFromResponse(baseUrl, data) {
+function signedUrlFromResponse(baseUrl, expectedPath, data) {
   const value = data && (data.signedURL || data.signedUrl);
   if (typeof value !== 'string' || !value) return null;
-  if (value.startsWith('https://')) return value;
-  if (value.startsWith('/storage/v1/')) return `${baseUrl}${value}`;
-  if (value.startsWith('/object/')) return `${baseUrl}/storage/v1${value}`;
-  return null;
+  const candidate = value.startsWith('/object/') ? `${baseUrl}/storage/v1${value}` : value;
+  try {
+    const parsed = new URL(candidate, baseUrl);
+    if (parsed.origin !== baseUrl || parsed.pathname !== expectedPath || parsed.username || parsed.password || !parsed.searchParams.has('token')) return null;
+    return parsed.href;
+  } catch { return null; }
 }
 
 async function audio(req, res) {
@@ -324,7 +330,8 @@ async function audio(req, res) {
 
   const objectPath = `${folder}/${folder}--${hz}Hz.mp3`;
   const encodedPath = objectPath.split('/').map(encodeURIComponent).join('/');
-  const signingUrl = `${config.baseUrl}/storage/v1/object/sign/${IMMERSIONS_BUCKET}/${encodedPath}`;
+  const signingPath = `/storage/v1/object/sign/${IMMERSIONS_BUCKET}/${encodedPath}`;
+  const signingUrl = `${config.baseUrl}${signingPath}`;
 
   try {
     const upstream = await fetchWithTimeout(
@@ -342,7 +349,7 @@ async function audio(req, res) {
     );
 
     if (!upstream.ok) return fail(res, 502, 'audio_unavailable');
-    const url = signedUrlFromResponse(config.baseUrl, await upstream.json());
+    const url = signedUrlFromResponse(config.baseUrl, signingPath, await upstream.json());
     if (!url) return fail(res, 502, 'audio_unavailable');
     return sendJson(res, 200, { url, expiresIn: SIGNED_AUDIO_TTL_SECONDS });
   } catch {
@@ -362,6 +369,10 @@ module.exports = async function handler(req, res) {
 
   const action = req.method === 'GET' ? safeText((req.query || {}).action, 20) : 'calculate';
   if (!RATE_LIMITS[action]) return fail(res, 400, 'invalid_action');
+
+  if (action === 'calculate' || action === 'places') {
+    return fail(res, 503, action === 'calculate' ? 'calculation_unavailable' : 'places_unavailable');
+  }
 
   const retryAfter = rateLimit(req, action);
   if (retryAfter !== null) {
