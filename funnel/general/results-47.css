@@ -1,0 +1,790 @@
+/* ==========================================================================
+   mcewen-26.css — the McEwen influencer lander rebuilt on the T20 system.
+   Base: site/home-t20.css (tokens, grounds, type, testimonial print, marker,
+   button, steps, scenes, study grid, entry fade).
+   Added: the lander's own width rules (centred 760px editorial frame, section
+   heads 930, final headline 800, body paragraphs 620), the hero + David proof
+   unit that carries the first-viewport contract, the offer block, the bands,
+   the FAQ and the phone-only sticky ask.
+   CONTROL: landers/mcewen-25.html (never edited). Directive: working/mcewen-26/
+   directive-round1.md (Fable 5.1, 2026-09-14).
+   ========================================================================== */
+
+/* --- fonts: as T20 declares them ----------------------------------------- */
+@font-face{font-family:Switzer;src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype');font-weight:400;font-display:swap}
+@font-face{font-family:Switzer;src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype');font-weight:600;font-display:swap}
+
+/* --- 1. tokens (T20) ------------------------------------------------------ */
+:root{
+  --white:#FFFFFE;--grey:#CCCCCB;--ink:#20201e;--night:#40403F;
+  --muted:#53534f;--line:#cdcdca;--rose:#b42967;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:Switzer,Arial,sans-serif;
+  --space:clamp(72px,7.4vw,104px);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:24px;background:var(--white);color-scheme:light}
+body{margin:0;background:var(--white);color:var(--ink);font:19px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;width:100%;height:auto}
+figure,blockquote{margin:0}
+p{margin:0 0 1em}p:last-child{margin-bottom:0}
+h1,h2,h3{margin:0;font-family:var(--serif);font-weight:600;letter-spacing:-.024em;line-height:1.05;text-wrap:balance}
+h2{font-size:clamp(34px,4.4vw,46px)}
+h3{font-size:27px;line-height:1.12}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:5px}
+a:hover{color:var(--rose)}
+a:focus-visible{outline:3px solid currentColor;outline-offset:6px}
+small{font-size:inherit}
+cite{font-style:normal}
+strong{font-weight:600}
+
+/* --- 2. the lander's width rules ----------------------------------------- */
+/* Phone/tablet keep the control's gutters; from 1024 the reading frame is the
+   control's centred 760px editorial column. The three grounds stay full-bleed
+   behind it (directive 2). */
+.shell{width:calc(100% - 36px);margin-inline:auto}
+.narrow{width:calc(100% - 36px);max-width:790px;margin-inline:auto}
+@media(min-width:700px){
+  .shell{width:calc(100% - 64px);max-width:1180px}
+  .narrow{width:calc(100% - 64px);max-width:790px}
+}
+@media(min-width:1024px){
+  .shell,.narrow{width:calc(100% - 64px);max-width:760px}
+}
+.section-head{max-width:930px;margin-bottom:38px}
+.section-head p{max-width:620px;margin-top:16px;color:var(--muted);font-size:21px;line-height:1.5}
+.quiet{max-width:620px;color:var(--muted);font-size:21px;line-height:1.5}
+.tiny{max-width:760px;margin-top:26px;color:var(--muted);font-size:16px;line-height:1.55}
+
+/* --- 3. grounds (T20) ----------------------------------------------------- */
+.g-white{background:var(--white);color:var(--ink);--line:#D9D9D7;--muted:#53534f;
+  --mark:.32;--mark-f:.192;--washs:#FFFFFE;--wash0:rgba(255,255,254,0)}
+.g-grey{background:var(--grey);color:var(--ink);--line:#B0B0AE;--muted:#3a3a35;
+  --mark:.30;--mark-f:.18;--washs:#CCCCCB;--wash0:rgba(204,204,203,0)}
+.g-night{background:var(--night);color:#FFFFFE;--line:#747472;--muted:#ededeb;
+  --mark:.28;--mark-f:.168;--washs:#40403F;--wash0:rgba(64,64,63,0)}
+
+.chapter{padding-block:var(--space)}
+.chapter>.shell,.chapter>.narrow{position:relative}
+.chapter.g-night{padding-block:calc(var(--space) * 1.08)}
+/* same-ground neighbours keep the hairline join; different grounds meet as a
+   flat colour change (T20) */
+.chapter.g-white+.chapter.g-white,.chapter.g-grey+.chapter.g-grey{padding-top:0}
+.chapter.g-white+.chapter.g-white>.shell,.chapter.g-white+.chapter.g-white>.narrow,
+.chapter.g-grey+.chapter.g-grey>.shell,.chapter.g-grey+.chapter.g-grey>.narrow{
+  border-top:1px solid var(--line);padding-top:var(--space)}
+/* a chapter that opens with its own rose dawn needs no hairline above it */
+.chapter.g-white+.chapter.g-white.lit-top{padding-top:var(--space)}
+.chapter.g-white+.chapter.g-white.lit-top>.shell,
+.chapter.g-white+.chapter.g-white.lit-top>.narrow{border-top:0;padding-top:0}
+
+/* the rose light, as a modifier (T20) */
+.lit-top{background-image:radial-gradient(ellipse 90% var(--lit-h) at 50% 0%,
+                     rgba(193,65,119,var(--lit-a)),var(--wash0) 72%)}
+.g-white.lit-top{--lit-h:420px;--lit-a:.20;--muted:#454541}
+.g-grey.lit-top{--lit-h:400px;--lit-a:.26}
+.g-night.lit-top{--lit-h:400px;--lit-a:.40;--muted:#f5f5f3}
+
+/* --- 4. the marker (T20, never a flat box) -------------------------------- */
+.lit{background-color:transparent;
+  padding:.06em .32em;margin-inline:-.32em;border-radius:.3em;
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;
+  background-image:
+    linear-gradient(to bottom,var(--washs) 0,var(--washs) .434em,var(--wash0) .514em,var(--wash0) 1.04em,var(--washs) 1.12em,var(--washs) 100%),
+    linear-gradient(101deg,
+      rgba(193,65,119,calc(var(--mark)*.12)) 0%,
+      rgba(201,86,136,calc(var(--mark)*.70)) 9%,
+      rgba(193,65,119,calc(var(--mark)*1.00)) 30%,
+      rgba(186,58,112,calc(var(--mark)*1.14)) 47%,
+      rgba(193,65,119,calc(var(--mark)*.88)) 70%,
+      rgba(201,86,136,calc(var(--mark)*.54)) 90%,
+      rgba(193,65,119,calc(var(--mark)*.10)) 100%)}
+.g-night .lit{background-color:transparent;
+  background-image:
+    linear-gradient(to bottom,var(--washs) 0,var(--washs) .434em,var(--wash0) .514em,var(--wash0) 1.04em,var(--washs) 1.12em,var(--washs) 100%),
+    linear-gradient(101deg,
+      rgba(238,129,167,calc(var(--mark)*.12)) 0%,
+      rgba(243,152,184,calc(var(--mark)*.70)) 9%,
+      rgba(238,129,167,calc(var(--mark)*1.00)) 30%,
+      rgba(233,118,158,calc(var(--mark)*1.14)) 47%,
+      rgba(238,129,167,calc(var(--mark)*.88)) 70%,
+      rgba(243,152,184,calc(var(--mark)*.54)) 90%,
+      rgba(238,129,167,calc(var(--mark)*.10)) 100%)}
+.lit-faint{--mark:var(--mark-f)}
+/* on a lit ground the opaque wash layer is dropped and the band is cut out of
+   the stroke itself (T20's round-1 fix) */
+.lit-top .lit{background-repeat:no-repeat;background-size:100% .526em;background-position:0 .514em;
+  background-image:
+    linear-gradient(101deg,
+      rgba(193,65,119,calc(var(--mark)*.12)) 0%,
+      rgba(201,86,136,calc(var(--mark)*.70)) 9%,
+      rgba(193,65,119,calc(var(--mark)*1.00)) 30%,
+      rgba(186,58,112,calc(var(--mark)*1.14)) 47%,
+      rgba(193,65,119,calc(var(--mark)*.88)) 70%,
+      rgba(201,86,136,calc(var(--mark)*.54)) 90%,
+      rgba(193,65,119,calc(var(--mark)*.10)) 100%)}
+.g-night.lit-top .lit{background-image:
+    linear-gradient(101deg,
+      rgba(238,129,167,calc(var(--mark)*.12)) 0%,
+      rgba(243,152,184,calc(var(--mark)*.70)) 9%,
+      rgba(238,129,167,calc(var(--mark)*1.00)) 30%,
+      rgba(233,118,158,calc(var(--mark)*1.14)) 47%,
+      rgba(238,129,167,calc(var(--mark)*.88)) 70%,
+      rgba(243,152,184,calc(var(--mark)*.54)) 90%,
+      rgba(238,129,167,calc(var(--mark)*.10)) 100%)}
+
+/* --- 5. entry fade (one class, once) -------------------------------------- */
+.fu-on .fu{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.fu-on .fu.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.fu-on .fu{opacity:1;transform:none;transition:none}}
+
+/* --- 6. header ------------------------------------------------------------ */
+.site-head{border-bottom:1px solid var(--line)}
+.head-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:57px}
+@media(min-width:700px){.head-inner{min-height:65px}}
+.brand{width:120px;flex:0 0 auto}
+.offer-note{color:var(--muted);font-size:13px;line-height:1.3;text-align:right}
+.offer-note strong{display:block;color:var(--ink);font-size:14px}
+
+/* --- 7. small-caps cues (T20's discipline label) -------------------------- */
+.eyebrow,.topic-cue,.discipline,.result-label,.proof-kicker{
+  display:block;margin:0 0 16px;color:var(--muted);
+  font-family:var(--sans);font-size:13px;font-weight:600;line-height:1.35;
+  letter-spacing:.18em;text-transform:uppercase}
+.topic-cue{display:flex;align-items:center;gap:12px}
+.topic-cue::before{width:26px;height:1px;flex:0 0 auto;background:currentColor;opacity:.55;content:""}
+.g-night .discipline,.g-night .proof-kicker,.g-night .topic-cue{color:#f5c4d7}
+
+/* --- 8. hero (WHITE) ------------------------------------------------------ */
+.hero{padding:22px 0 22px}
+.hero h1{max-width:100%;font-size:clamp(41px,11.4vw,50px);line-height:.99;letter-spacing:-.028em}
+.hero-lede{max-width:620px;margin:15px 0 0;font-size:16px;line-height:1.48}
+@media(min-width:700px){
+  .hero{padding:38px 0 30px}
+  .hero h1{font-size:clamp(50px,6.6vw,64px)}
+  .hero-lede{margin-top:20px;font-size:19px}
+}
+@media(min-width:1024px){
+  .hero{padding:38px 0 30px}
+  .hero h1{max-width:660px;font-size:64px}
+  .hero-lede{margin-top:20px;font-size:18px}
+}
+
+/* --- 9. testimonial print (T20) ------------------------------------------ */
+.testimonial{display:grid;grid-template-columns:190px minmax(0,1fr);gap:40px;
+  align-items:start;padding-block:40px;border-bottom:1px solid var(--line)}
+.testimonial:first-child{padding-top:0}
+.testimonial:last-child{padding-bottom:0;border-bottom:0}
+.testimonial.lead{grid-template-columns:230px minmax(0,1fr)}
+.portrait img{box-shadow:0 14px 30px rgba(20,20,18,.12)}
+.testimonial.lead .portrait img{box-shadow:0 20px 44px rgba(20,20,18,.14)}
+.g-grey .portrait img{box-shadow:0 14px 30px rgba(20,20,18,.16)}
+.g-grey .testimonial.lead .portrait img{box-shadow:0 20px 44px rgba(20,20,18,.20)}
+.g-night .portrait img{box-shadow:0 14px 30px rgba(20,20,18,.35)}
+.testimony blockquote{padding-bottom:18px;border-bottom:1px solid var(--line)}
+.tlead{font:600 28px/1.16 var(--serif);letter-spacing:-.01em;text-wrap:pretty;margin:0}
+.lead .tlead{font-size:32px}
+.tdetail{font-size:19px;line-height:1.5;margin:18px 0 0}
+.testimony blockquote>p:first-child{margin-top:0}
+.testimonial.noportrait{grid-template-columns:minmax(0,1fr)}
+.testimonial.noportrait .testimony{padding-left:0}
+.byline{display:block;font-size:18px;line-height:1.4;font-weight:600;margin-top:20px}
+.byline small{display:block;font-size:16px;font-weight:400;color:var(--muted);margin-top:4px}
+.g-night .byline small{color:var(--muted)}
+/* the endorsement wall runs as vertical rows, never side-by-side columns */
+.vwrap{display:block}
+/* the wall on narrow surfaces: the print narrows, then the row stacks (T20) */
+@media(max-width:800px){
+  .testimonial,.testimonial.lead{grid-template-columns:165px minmax(0,1fr);gap:28px}
+  .tlead,.lead .tlead{font-size:25px}
+  .tdetail{font-size:18px}
+  .byline{font-size:17px}
+  .byline small{font-size:15px}
+}
+@media(max-width:540px){
+  .testimonial,.testimonial.lead{display:block;padding-block:34px}
+  .portrait{max-width:150px;margin-bottom:22px}
+  .testimonial.lead .portrait{max-width:180px}
+  .tlead,.lead .tlead{font-size:25px;line-height:1.16}
+  .tdetail{font-size:18px;margin-top:16px}
+  .byline{font-size:18px;margin-top:18px}
+  .byline small{font-size:16px}
+  .discipline{margin-bottom:14px}
+}
+
+/* --- 10. David's proof unit (the first-viewport contract) ----------------- */
+.david-band{padding-block:18px 26px}
+.david .tlead{font-size:23px;line-height:1.22}
+.david .byline{font-size:16px;margin-top:16px}
+.david .byline small{font-size:14px}
+.david-short{display:none}
+@media(max-width:699px){
+  /* stacked: the photograph and the identity, then the quote beneath them */
+  .testimonial.david{display:grid;grid-template-columns:130px minmax(0,1fr);
+    grid-template-areas:"photo identity" "quote quote";
+    gap:0 18px;align-items:center;padding:0;border-bottom:0}
+  .testimonial.david .portrait{grid-area:photo;max-width:none;margin-bottom:0}
+  .david .testimony{display:contents}
+  .david blockquote{grid-area:quote;margin-top:15px;padding:15px 0 0;
+    border-top:1px solid var(--line);border-bottom:0}
+  .david .byline{grid-area:identity;margin-top:0;font-size:15px}
+  .david .byline small{font-size:13px;line-height:1.35}
+  .david .tlead{font-size:21px;line-height:1.2}
+  .david-full{display:none}
+  .david-short{display:block}
+}
+@media(min-width:700px){
+  .david-band{padding-block:26px 34px}
+  .testimonial.david{grid-template-columns:200px minmax(0,1fr);gap:34px;align-items:center;
+    padding:0;border-bottom:0}
+  .david .tlead{font-size:25px}
+}
+@media(min-width:1024px){
+  .david-band{padding-block:22px 30px}
+  .testimonial.david{grid-template-columns:214px minmax(0,1fr);gap:32px}
+  .david .tlead{font-size:22px;line-height:1.24}
+  .david .byline{font-size:16px;margin-top:15px}
+  .david .byline small{font-size:14px}
+}
+@media(max-width:340px){
+  .testimonial.david{grid-template-columns:112px minmax(0,1fr);gap:0 14px}
+  .david .tlead{font-size:19px}
+  .david .byline{font-size:14px}
+  .david .byline small{font-size:12px}
+}
+
+/* --- 11. three steps (T20) ----------------------------------------------- */
+.steps3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px}
+.steps3 .step h3{margin-bottom:12px}
+.steps3 .step>p:last-child{font-size:18px;line-height:1.5;color:var(--muted)}
+.kick{display:block;font-size:16px;font-weight:600;margin:0 0 10px}
+.step:nth-child(1) .kick{color:#6532a0}
+.step:nth-child(2) .kick{color:#815400}
+.step:nth-child(3) .kick{color:#0a694d}
+.g-night .step:nth-child(1) .kick,.g-night .step:nth-child(2) .kick,.g-night .step:nth-child(3) .kick{color:#f5c4d7}
+.attribution{max-width:620px;margin-top:34px;color:var(--muted);font-size:16px;line-height:1.55}
+@media(max-width:799px){
+  .steps3{display:block}
+  .step{margin-bottom:34px}
+  .step:last-child{margin-bottom:0}
+}
+
+/* --- 12. offer block (plain block on the ground, one button) -------------- */
+.offer{max-width:620px}
+.offer .cta-title{margin:0 0 12px;font-family:var(--serif);font-weight:600;
+  font-size:clamp(30px,4.4vw,42px);line-height:1.06;letter-spacing:-.024em}
+.offer p{font-size:19px;line-height:1.5;color:var(--muted)}
+.offer .button{margin-top:22px}
+.cta-meta{display:block;margin-top:16px;color:var(--muted);font-size:17px;line-height:1.5}
+.cta-meta strong{font-weight:600}
+.button{display:inline-flex;min-height:56px;align-items:center;justify-content:center;
+  padding:16px 28px;color:#FFFFFE;background:var(--ink);font-size:19px;font-weight:600;
+  text-decoration:none;border:1px solid var(--ink);border-radius:4px}
+.button:hover{background:#65324c;color:#FFFFFE;border-color:#65324c}
+.g-night .button{background:#FFFFFE;color:var(--ink);border-color:#FFFFFE}
+.g-night .button:hover{background:#f3dbe5;color:var(--ink);border-color:#f3dbe5}
+.section-cta{margin-top:44px}
+
+/* --- 13. bands and values (hairline rows, numbers in Switzer) ------------- */
+.result-overview,.band-overview{max-width:700px}
+.band-overview{margin-top:var(--space)}
+.result-overview h3,.band-overview h3{margin-bottom:12px}
+.result-overview>p,.band-overview>p{max-width:620px;color:var(--muted);font-size:19px}
+.frequency-values{margin-top:26px;border-top:1px solid var(--line)}
+.frequency-value{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr);
+  gap:18px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line)}
+.frequency-value strong{font-size:22px;font-weight:600}
+.frequency-value small{font-size:17px;color:var(--muted)}
+.band-spectrum{margin-top:26px;border-top:1px solid var(--line)}
+.band-row{display:grid;grid-template-columns:minmax(0,170px) minmax(0,1fr);
+  gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+.band-row>div strong{display:block;font-size:20px;font-weight:600}
+.band-row>div small{display:block;margin-top:3px;color:var(--muted);font-size:16px;
+  font-variant-numeric:tabular-nums}
+.band-row p{margin:0;font-size:17px;line-height:1.5;color:var(--muted)}
+.profile-note{margin-top:30px;padding-top:22px;border-top:1px solid var(--line);max-width:620px}
+.profile-note strong{display:block;font-size:19px;font-weight:600}
+.profile-note span{display:block;margin-top:8px;color:var(--muted);font-size:17px;line-height:1.5}
+@media(max-width:540px){
+  .frequency-value{grid-template-columns:1fr;gap:4px}
+  .band-row{grid-template-columns:1fr;gap:8px}
+}
+
+/* --- 14. framed picture (the print treatment at figure scale) ------------- */
+.framed{margin:38px 0 0;padding:14px;background:var(--white);
+  border:1px solid rgba(20,20,18,.10);box-shadow:0 18px 40px rgba(20,20,18,.14)}
+.g-grey .framed{box-shadow:0 18px 40px rgba(20,20,18,.18)}
+.g-night .framed{background:#4b4b4a;border-color:rgba(255,255,254,.14);
+  box-shadow:0 18px 40px rgba(20,20,18,.35)}
+.framed img{width:100%;height:auto}
+.framed-mobile{display:none}
+@media(max-width:640px){
+  .framed{padding:10px}
+  .framed-desktop{display:none}
+  .framed-mobile{display:block}
+}
+
+/* --- 15. the four life areas: T20's scene strips -------------------------- */
+.scenes{display:grid;grid-template-columns:1fr 1fr;gap:46px 34px}
+.scene .wave{width:82px;height:44px;object-fit:contain;object-position:left center}
+.scene span{display:block;margin:14px 0 8px;font-size:14px;font-weight:600;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.scene h3{font-size:25px;margin-bottom:10px}
+.scene p{margin:0;font-size:17px;line-height:1.5;color:var(--muted)}
+.scene.core span{color:#6532a0}
+.scene.love span{color:#a3225c}
+.scene.vitality span{color:#815400}
+.scene.abundance span{color:#0a694d}
+@media(max-width:540px){.scenes{grid-template-columns:1fr;gap:34px}}
+
+/* --- 16. the study: T20's study grid ------------------------------------- */
+.study-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-block:0 var(--space)}
+.big-stat strong{display:block;font-family:var(--sans);font-size:clamp(62px,7.4vw,92px);
+  font-weight:600;line-height:1;letter-spacing:-.035em}
+.big-stat span{display:block;max-width:330px;margin-top:16px;font-size:19px;line-height:1.4}
+.outcomes{border-top:1px solid var(--line)}
+.outcome{display:grid;grid-template-columns:96px minmax(0,1fr);gap:22px;
+  align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line)}
+.outcome strong{font-family:var(--sans);font-size:30px;font-weight:600;letter-spacing:-.03em}
+.outcome span{font-size:18px;line-height:1.45}
+@media(max-width:540px){
+  .study-grid{grid-template-columns:1fr;gap:34px}
+  .outcome{grid-template-columns:78px minmax(0,1fr);gap:16px}
+  .outcome strong{font-size:26px}
+  .outcome span{font-size:17px}
+}
+
+/* --- 17. the daily feature ----------------------------------------------- */
+.daily-feature{margin-top:var(--space)}
+.daily-grid{display:block}
+
+/* --- 18. final ask -------------------------------------------------------- */
+.final{text-align:left}
+.final .cta-title{max-width:800px;font-family:var(--serif);font-weight:600;
+  font-size:clamp(38px,5.6vw,56px);line-height:1.04;letter-spacing:-.026em;margin:0 0 18px}
+.final p{max-width:620px;font-size:20px;line-height:1.5;color:var(--muted)}
+.final .button{margin-top:26px}
+
+/* --- 19. FAQ -------------------------------------------------------------- */
+.faq h2{margin-bottom:30px}
+.faq-list{border-top:1px solid var(--line)}
+.faq-list details{border-bottom:1px solid var(--line)}
+.faq-list summary{list-style:none;cursor:pointer;padding:20px 30px 20px 0;position:relative;
+  font-family:var(--sans);font-size:19px;font-weight:600;line-height:1.4}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{position:absolute;right:0;top:20px;color:var(--muted);content:"+"}
+.faq-list details[open] summary::after{content:"\2212"}
+.faq-list details p{max-width:620px;margin:0 0 18px;color:var(--muted);font-size:17px;line-height:1.55}
+.faq-list details p:last-child{padding-bottom:22px}
+
+/* --- 20. footer ----------------------------------------------------------- */
+footer{background:var(--white);border-top:1px solid var(--line);padding-block:34px 44px}
+footer img{width:112px;margin-bottom:18px}
+footer p{margin:0;color:var(--muted);font-size:15px;line-height:1.55}
+footer p+p{margin-top:6px}
+
+/* --- 21. the sticky ask: phones only, never on desktop -------------------- */
+/* The bar is a runtime CLONE of the offer block's own link (see the page
+   script): the document itself carries exactly six CTA anchors, so the
+   visible-text diff against mcewen-25 stays empty and the first viewport
+   stays CTA-free. */
+#stickyask{position:fixed;left:0;right:0;bottom:0;z-index:20;display:none;
+  padding:10px 18px calc(10px + env(safe-area-inset-bottom));
+  background:var(--white);border-top:1px solid #D9D9D7;
+  box-shadow:0 -10px 30px rgba(20,20,18,.12)}
+#stickyask .button{display:flex;width:100%;min-height:52px;font-size:18px}
+@media(max-width:799px){#stickyask.on{display:block}}
+@media(min-width:800px){#stickyask{display:none!important}}
+
+/* ==========================================================================
+   results-46.css — everything above is landers/mcewen-26.css verbatim (the
+   accepted template, on site/home-t20.css). Below is this page's own layer:
+   ONE type hierarchy, one portrait rule, one section rhythm. Mobile only.
+   The page is an argument, so the last line of a block is styled to lead into
+   the next headline rather than to close the block.
+   ========================================================================== */
+
+:root{
+  /* two sets, and they are not interchangeable. The --f- tokens are the text
+     cuts: dark enough for a band line or an eyebrow to pass contrast on white.
+     The --w- tokens are the home page's own wave colours, sampled from the
+     images site/assets/d4e/d4e-wave-*.png, and they are what a wave is
+     supposed to look like. Using the text cut for a fill is what turned
+     Vitality into olive. Fills take --w-, type takes --f-. */
+  --f-core:#6532a0;--f-love:#a3225c;--f-vitality:#815400;--f-abundance:#0a694d;
+  --w-core:#6722cd;--w-love:#bd0046;--w-vitality:#ff9412;--w-abundance:#12a66e;
+}
+
+/* --- the one hierarchy --------------------------------------------------- */
+body{font-size:15px;line-height:1.55}
+h1,h2,h3,h4{font-weight:400}
+h2{font-family:var(--serif);font-size:26px;line-height:1.14;letter-spacing:-.02em;
+  margin:0 0 14px;text-wrap:balance}
+h3{font-family:var(--sans);font-weight:600;font-size:15px;letter-spacing:.1em;
+  text-transform:uppercase;line-height:1.3;margin:0 0 10px}
+h4{font-family:var(--serif);font-weight:500;font-size:20px;letter-spacing:-.015em;line-height:1.15}
+.lede{margin:0 0 18px;font-size:16px;line-height:1.5}
+p{font-size:15px;line-height:1.55}
+.num{font-variant-numeric:tabular-nums}
+.tiny{margin:16px 0 0;font-size:13px;line-height:1.5;color:var(--muted)}
+.chapter{padding-block:48px}
+.chapter > .shell > * + *{margin-top:24px}
+.chapter > .shell > h2 + *{margin-top:0}
+.head-inner{justify-content:flex-start}
+.shell{width:calc(100% - 40px)}
+
+/* --- the transition: the last line of a block, leaning into the next ----- */
+/* the transition is the hinge of the argument, not another paragraph: it is
+   set apart in the serif, italic, and sits tight to the bottom of its section
+   so the eye reads the question and the answer across the ground change */
+.onward{margin:30px 0 0;font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:20px;line-height:1.3;letter-spacing:-.01em;color:var(--ink);max-width:28em}
+.chapter:has(.onward){padding-bottom:8px}
+.chapter:has(.onward) + section{padding-top:32px}
+.titleblock:has(.onward){padding-bottom:8px}
+
+/* --- 1. the title block and the four rows -------------------------------- */
+.titleblock{padding:24px 0 0}
+.titleblock h1{font-family:var(--serif);font-weight:400;font-size:clamp(26px,8vw,30px);
+  line-height:1.08;letter-spacing:-.022em;text-wrap:balance}
+.whose{margin:14px 0 0;font:600 16px/1.35 var(--sans);color:var(--ink)}
+.orient{margin:9px 0 0;font:400 15px/1.45 var(--sans);color:var(--muted)}
+.title-rule{margin-top:20px;border-bottom:1px solid var(--ink)}
+.frow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 14px;
+  padding:14px 0;border-bottom:1px solid var(--line)}
+.fname{font:500 22px/1 var(--serif);letter-spacing:-.02em}
+.fhz{font:600 22px/1 var(--sans);letter-spacing:-.02em;text-align:right;align-self:center}
+.fhz small{font-size:12px;font-weight:400;color:var(--muted);margin-left:3px}
+/* A. the wave rows are 33's treatment: the same image, contained at its
+   own aspect, anchored left. Cover cropped it and fill stretched it; both
+   are why the waves stopped reading as waves. */
+.fwave{grid-column:1/-1;margin-top:9px}
+.fwave img{display:block;width:100%;height:44px;object-fit:contain;object-position:left center}
+.fline{grid-column:1/-1;margin:9px 0 0;font-size:15px;line-height:1.4}
+.fband{grid-column:1/-1;margin:7px 0 0;font-size:12px;line-height:1.3;color:var(--tone)}
+
+/* --- the one portrait rule: the filed image, whole, in a square ---------- */
+.face{--fb:72px;display:block;flex:0 0 auto;width:var(--fb);height:var(--fb);overflow:hidden}
+.face img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 15%;
+  filter:grayscale(1)}
+.testi.expert .face{--fb:88px}
+
+/* --- the quote ----------------------------------------------------------- */
+.testi{margin-top:24px}
+.who{display:flex;align-items:center;gap:13px;margin-bottom:12px}
+.whoname{font:600 14px/1.25 var(--sans)}
+.whoname small{display:block;margin-top:3px;font-size:13px;font-weight:400;
+  line-height:1.35;color:var(--muted)}
+.testi blockquote p + p{margin-top:11px}
+.testi blockquote p{margin:0;font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:17px;line-height:1.45;color:var(--ink)}
+.g-night .testi blockquote p{color:#FFFFFE}
+.testi.noface .who{padding-left:85px}
+
+/* --- 2. the two numbers -------------------------------------------------- */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{padding:15px 14px 17px;background:var(--white);border:1px solid var(--line);
+  border-top:3px solid var(--rose)}
+.tile strong{display:block;font:600 40px/1 var(--sans);letter-spacing:-.035em}
+.tile span{display:block;margin-top:9px;font-size:13px;line-height:1.35}
+.tiles-caption{margin:12px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
+
+/* --- 3. the readings ----------------------------------------------------- */
+.readings{border-top:1px solid var(--line)}
+.reading{padding:22px 0;border-bottom:1px solid var(--line)}
+.rband{display:block;margin:0 0 9px;font-size:12px;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--tone)}
+.reading h4{margin-bottom:8px}
+.reading > p{margin:0;font-size:15px;line-height:1.5}
+.reading details{margin-top:12px;border-top:1px solid var(--line)}
+.reading summary{list-style:none;cursor:pointer;position:relative;padding:12px 26px 0 0;
+  font:600 14px/1.4 var(--sans)}
+.reading summary::-webkit-details-marker{display:none}
+.reading summary::after{position:absolute;right:0;top:12px;color:var(--muted);content:"+"}
+.reading details[open] summary::after{content:"\2212"}
+.reading summary .less{display:none}
+.reading details[open] summary .more{display:none}
+.reading details[open] summary .less{display:inline}
+.reading details p{margin:12px 0 0;color:var(--muted);font-size:14px;line-height:1.55}
+
+/* --- 4. in tune, out of tune --------------------------------------------- */
+.pairs{border-top:1px solid var(--line)}
+.pair{padding:15px 0;border-bottom:1px solid var(--line)}
+.pair b{display:block;margin-bottom:7px;font:600 12px/1 var(--sans);letter-spacing:.13em;
+  text-transform:uppercase;color:var(--tone)}
+.pair .out{display:block;font-size:15px;line-height:1.45;color:var(--muted)}
+.pair .in{display:block;margin-top:12px;padding-left:15px;font-size:15px;line-height:1.45;
+  color:var(--ink);border-left:2px solid var(--tone)}
+.plabel{display:block;margin-bottom:4px;font:600 11px/1 var(--sans);letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted)}
+.pair .in .plabel{color:var(--tone)}
+
+/* --- 5 + 6. the buried signal, and the pull ------------------------------ */
+.plainlist{margin:0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.plainlist li{padding:13px 0;border-bottom:1px solid var(--line);font-size:15px;line-height:1.45}
+.pull{margin:24px 0 0;font-family:var(--serif);font-size:21px;line-height:1.25;
+  letter-spacing:-.015em;color:var(--ink)}
+
+/* --- 8. the benefit list ------------------------------------------------- */
+.benefits{margin:0;padding:0;list-style:none;counter-reset:b;border-top:1px solid var(--line)}
+.benefits li{counter-increment:b;display:grid;grid-template-columns:34px minmax(0,1fr);
+  gap:12px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--line);
+  font-size:15px;line-height:1.45}
+.benefits li::before{content:counter(b,decimal-leading-zero);font:600 12px/1 var(--sans);
+  font-variant-numeric:tabular-nums;color:var(--muted)}
+
+/* --- 9. the study -------------------------------------------------------- */
+.ochart{border-top:1px solid var(--line)}
+.otitle{margin:0;padding:16px 0 2px;font:600 15px/1.35 var(--sans)}
+.orow{display:grid;grid-template-columns:minmax(0,1fr) 50px;gap:7px 12px;
+  padding:12px 0;border-top:1px solid var(--line)}
+.olbl{grid-column:1;font-size:14px;line-height:1.35}
+.oval{grid-column:2;text-align:right;font-weight:600;font-size:15px;letter-spacing:-.02em}
+.obar{grid-column:1/-1;height:7px;background:rgba(255,255,254,.16)}
+.g-white .obar,.g-grey .obar{background:rgba(32,32,30,.10)}
+.obar i{display:block;height:100%;width:var(--value);background:var(--bar)}
+
+/* --- 12. what you get ---------------------------------------------------- */
+.gets{margin:0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.gets li{padding:13px 0;border-bottom:1px solid var(--line);font-size:15px;line-height:1.45}
+
+/* --- 13. the offer ------------------------------------------------------- */
+.plan-card{padding:20px 18px 22px;background:var(--white);border:1px solid var(--line);
+  border-top:3px solid var(--rose)}
+.plan-card .plan-name{display:block;margin-bottom:10px;font-size:12px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.plan-card .plan-price{display:block;font:600 40px/1 var(--sans);letter-spacing:-.035em}
+.plan-card .plan-price small{font-size:16px;font-weight:400;color:var(--muted);
+  margin-left:6px;letter-spacing:0}
+.plan-card .plan-line{display:block;margin-top:10px;color:var(--muted);font-size:15px;line-height:1.45}
+.plan-card .button{display:flex;width:100%;margin-top:20px}
+#membership .cta-meta{display:block;margin-top:12px;font-size:14px;color:var(--muted)}
+.plan-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;
+  gap:5px 14px;padding-top:16px;border-top:1px solid var(--line)}
+.plan-row .plan-name{grid-column:1;font:600 12px/1 var(--sans);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted)}
+.plan-row-price{grid-column:2;grid-row:1/3;align-self:center;font:600 22px/1 var(--sans)}
+.plan-row-price small{font-size:14px;font-weight:400;color:var(--muted);margin-left:5px}
+.plan-row-line{grid-column:1;font-size:14px;color:var(--muted)}
+
+/* --- the buttons --------------------------------------------------------- */
+.button{font-size:17px;min-height:54px;width:100%;max-width:340px}
+.jump{margin-top:28px}
+.jump-note{display:block;margin-top:11px;font-size:13px;color:var(--muted)}
+.final .button{margin-top:22px}
+.final .cta-meta{display:block;margin-top:11px;font-size:13px}
+
+/* --- the FAQ ------------------------------------------------------------- */
+.faq-list{border-top:1px solid var(--line)}
+.faq-list details{border-bottom:1px solid var(--line)}
+.faq-list summary{list-style:none;cursor:pointer;padding:16px 28px 16px 0;position:relative;
+  font:600 16px/1.4 var(--sans)}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary::after{position:absolute;right:0;top:16px;color:var(--muted);content:"+"}
+.faq-list details[open] summary::after{content:"\2212"}
+.faq-list details p{margin:0 0 14px;color:var(--muted);font-size:14px;line-height:1.55}
+.faq-list details p:last-child{padding-bottom:18px}
+
+/* --- the footer ---------------------------------------------------------- */
+footer img{width:104px}
+footer p{font-size:13px}
+.footer-links{margin-top:10px}
+.footer-links a{color:var(--muted)}
+
+/* --- the rose light is allowed on grey too ------------------------------- */
+.g-grey.lit-top{--lit-h:360px;--lit-a:.24}
+
+/* this page is judged on a phone; the reading frame simply centres on wider
+   screens rather than taking a desktop layout of its own */
+@media(min-width:700px){
+  .shell{width:calc(100% - 64px);max-width:560px}
+  body{font-size:16px}
+}
+
+
+/* ==========================================================================
+   ROUND 16 — Michael's copy. What changed here is only what his notes call for.
+   ========================================================================== */
+
+/* 2. the sub-headline under The Zodiac Experience */
+.subhead{margin:-6px 0 22px;font-family:var(--serif);font-weight:400;font-size:19px;
+  line-height:1.25;color:var(--muted)}
+
+/* 2. the two numbers sit UNDER Srini, not over him: one row, hairline cells,
+      no rose rule, the figures at 28px so they stop shouting */
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:24px;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat-cell{padding:14px 14px 15px 0}
+.stat-cell + .stat-cell{padding-left:16px;border-left:1px solid var(--line)}
+.stat-cell strong{display:block;font:600 28px/1 var(--sans);letter-spacing:-.03em}
+.stat-cell span{display:block;margin-top:7px;font-size:13px;line-height:1.35;color:var(--muted)}
+.statnote{margin:11px 0 0;font-size:12px;line-height:1.45;color:var(--muted)}
+
+/* 3. the readings lost their plain headline, so the matrix line leads */
+.reading > p{margin-top:0}
+
+/* 4 + 5. the marker can sit inside a quote, and must stay legible in italic */
+.testi blockquote .lit{padding:.02em .2em;margin-inline:-.2em}
+
+/* 7 -> 8. the separation Michael asked for: the report list is its own band,
+      opened by a full rule and real air, so it stops blending into the beats */
+.reportband{border-top:1px solid var(--ink);padding-top:40px}
+
+/* 12. the mixed-frequency wash: the four colours as one soft diagonal, fading
+      out before the type, which stays in ink */
+.g-wash{position:relative;background:var(--white);color:var(--ink);
+  --line:#D9D9D7;--muted:#53534f;--mark:.32;--mark-f:.192;
+  --washs:#FFFFFE;--wash0:rgba(255,255,254,0)}
+.g-wash::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(152deg,
+    rgba(103,34,205,.16) 0%,
+    rgba(189,0,70,.14) 27%,
+    rgba(255,148,18,.15) 54%,
+    rgba(18,166,110,.13) 76%,
+    rgba(255,255,254,0) 100%)}
+.g-wash > .shell{position:relative;z-index:1}
+
+/* the offer block ends on the sub-line, then hands off */
+#membership .onward{margin-top:26px}
+
+/* --- round 16 amendment ---------------------------------------------------- */
+
+/* 2. sections need room to be separate things */
+.chapter{padding-block:64px}
+/* a full-width hairline at every ground change; the rule takes the colour of
+   the ground it opens, so it stays legible arriving on charcoal too */
+main > section + section{border-top:1px solid var(--line)}
+/* a transition is not the last testimonial's tail */
+.testi + .onward{margin-top:32px}
+/* the report list stands alone on white */
+.reportband{padding-top:48px}
+
+/* 1. the sticky ask: phones only, and only between the rows and the offer */
+#stickyask{position:fixed;left:0;right:0;bottom:0;z-index:20;display:none;
+  padding:10px 20px calc(10px + env(safe-area-inset-bottom));
+  background:var(--white);border-top:1px solid #D9D9D7;
+  box-shadow:0 -10px 30px rgba(20,20,18,.12)}
+#stickyask .button{display:flex;width:100%;max-width:none;min-height:52px;font-size:17px}
+@media(max-width:799px){#stickyask.on{display:block}}
+@media(min-width:800px){#stickyask{display:none!important}}
+
+/* The hinge rule from round 9 pulled a transition tight to the next headline
+   (8px bottom, 32px top). Michael's amendment asks for the opposite: 64px top
+   and bottom on every section, with a hairline carrying the change instead of
+   tightness. The later instruction wins, so the hinge spacing is released. */
+.chapter:has(.onward){padding-bottom:64px}
+.chapter:has(.onward) + section{padding-top:64px}
+.titleblock:has(.onward){padding-bottom:64px}
+
+/* ==========================================================================
+   ROUND 18 — brighten it. 46 was grey ground, charcoal and grayscale faces,
+   which read as morose. The greys are retired here, the page alternates white
+   with the soft frequency wash, and every portrait is a colour-ringed circle.
+   ========================================================================== */
+
+:root{
+  /* the ring and rule colours: the four frequency colours at full strength */
+  --r-violet:#6722cd;--r-rose:#bd0046;--r-orange:#ff9412;--r-emerald:#12a66e;
+  --warm-line:#d5cdbf;
+}
+
+/* --- warm hairlines everywhere the grey ones were ------------------------ */
+.g-white,.g-wash{--line:var(--warm-line)}
+main > section + section{border-top:1px solid var(--warm-line)}
+.g-night + section,.g-night{--line:#747472}
+
+/* --- the soft frequency wash is now a page ground, not one section's ----- */
+.g-wash{position:relative;background:var(--white);color:var(--ink);
+  --muted:#53534f;--mark:.32;--mark-f:.192;--washs:#FFFFFE;--wash0:rgba(255,255,254,0)}
+.g-wash::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(152deg,
+    rgba(103,34,205,.13) 0%,
+    rgba(189,0,70,.11) 27%,
+    rgba(255,148,18,.12) 54%,
+    rgba(18,166,110,.10) 76%,
+    rgba(255,255,254,0) 100%)}
+.g-wash > .shell{position:relative;z-index:1}
+
+/* --- one colour device on headlines: a 3px rule that rotates the four ---- */
+main > section h2::after{content:"";display:block;width:48px;height:3px;
+  margin-top:14px;background:var(--r-violet)}
+main > section:nth-of-type(4n+3) h2::after{background:var(--r-rose)}
+main > section:nth-of-type(4n) h2::after{background:var(--r-orange)}
+main > section:nth-of-type(4n+1) h2::after{background:var(--r-emerald)}
+.final h2::after,.g-night h2::after{opacity:.9}
+
+/* --- the portraits: 96px circles, ringed in the quote's own colour ------- */
+/* the ring colour is declared on each figure; .face must NOT redeclare it or
+   it shadows the one the card set, and every ring goes violet */
+.face{--fb:96px;
+  display:block;flex:0 0 auto;width:var(--fb);height:var(--fb);overflow:visible;
+  border-radius:50%;background:var(--white);
+  box-shadow:0 0 0 4px var(--white), 0 0 0 7px var(--ring, var(--r-violet))}
+.face img{display:block;width:100%;height:100%;border-radius:50%;
+  object-fit:cover;object-position:50% 20%;filter:none}
+.testi.expert .face{--fb:112px}
+/* a card with no photograph carries the person's initials in the same ring */
+.face.initials{display:flex;align-items:center;justify-content:center;
+  font:600 26px/1 var(--sans);letter-spacing:.04em;color:var(--ring, var(--r-violet))}
+.testi.noface .who{padding-left:0}
+.who{gap:20px;margin-bottom:16px}
+
+/* --- Different Experiences: white cards on the wash ---------------------- */
+.washpanel{position:relative;margin-top:30px;padding:26px 18px 28px;
+  border-radius:18px;overflow:hidden;background:var(--white)}
+.washpanel::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(152deg,
+    rgba(103,34,205,.13) 0%,
+    rgba(189,0,70,.11) 27%,
+    rgba(255,148,18,.12) 54%,
+    rgba(18,166,110,.10) 76%,
+    rgba(255,255,254,0) 100%)}
+.washpanel > *{position:relative;z-index:1}
+.washpanel .stats-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  margin-top:0;border:0}
+.washpanel .stat-cell{padding:15px 14px 17px;background:var(--white);
+  border:1px solid var(--warm-line);border-top:3px solid var(--r-violet);border-radius:12px}
+.washpanel .stat-cell + .stat-cell{padding-left:14px;border-left:1px solid var(--warm-line);
+  border-top:3px solid var(--r-emerald)}
+.washpanel .stat-cell strong{font-size:28px}
+.washpanel h3{margin:26px 0 14px}
+.washpanel .testi{margin-top:0;padding:18px 16px 20px;background:var(--white);
+  border:1px solid var(--warm-line);border-radius:16px}
+.washpanel .testi + .testi{margin-top:16px}
+
+/* --- the study and the close keep charcoal, and the rose light ----------- */
+.g-night .face{background:#4b4b4a;box-shadow:0 0 0 4px #4b4b4a, 0 0 0 7px var(--ring, var(--r-violet))}
+
+/* --- the four stages read as a journey, not a stack of identical cards --- */
+.timeline{position:relative;margin-top:30px;padding-left:34px}
+.timeline::before{content:"";position:absolute;left:10px;top:6px;bottom:6px;width:3px;
+  border-radius:2px;
+  background:linear-gradient(180deg,var(--r-violet) 0%,var(--r-rose) 34%,
+    var(--r-orange) 67%,var(--r-emerald) 100%)}
+.stage{position:relative;padding-bottom:34px}
+.stage:last-child{padding-bottom:0}
+.stage::before{content:"";position:absolute;left:-34px;top:2px;width:24px;height:24px;
+  border-radius:50%;background:var(--node);box-shadow:0 0 0 4px var(--white)}
+.stage h3{margin:0 0 8px;font-family:var(--serif);font-weight:500;font-size:20px;
+  letter-spacing:-.015em;text-transform:none;line-height:1.2}
+.stage > p{margin:0 0 16px;font-size:15px;line-height:1.5;color:var(--muted)}
+.pullq{display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px;align-items:start}
+.pullq .face{--fb:64px;grid-row:1/3}
+.pullq blockquote p{margin:0;font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:19px;line-height:1.4;color:var(--ink)}
+.pullq .whoname{grid-column:2;margin-top:10px;font:600 13px/1.3 var(--sans)}
+.pullq .whoname small{display:block;margin-top:2px;font-size:12px;font-weight:400;
+  line-height:1.35;color:var(--muted)}
+@media(max-width:360px){
+  .timeline{padding-left:30px}
+  .timeline::before{left:8px}
+  .stage::before{left:-30px;width:20px;height:20px}
+  .pullq{grid-template-columns:56px minmax(0,1fr);gap:13px}
+  .pullq .face{--fb:56px}
+  .pullq blockquote p{font-size:18px}
+}
+
+/* The transition is set in ink, which is right on every ground but charcoal,
+   where it was reading at 1.57:1. Found by measuring the rendered page. */
+.g-night .onward,.g-night .pull{color:#FFFFFE}
