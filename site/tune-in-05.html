@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff"><meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Hear the sound of you. Discover your four personal frequencies, then hear them inside real music. No account needed to listen.">
+  <title>Hear the sound of you · Zodiac.fm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tune-in-05.css">
+</head>
+<body>
+  <svg class="defs" aria-hidden="true"><defs>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8Z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" stroke-width="4"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="6" y="10" width="12" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3m-4 4 4-4 4 4M5 11v9h14v-9"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+  </defs></svg>
+  <div class="portal">
+    <header class="portal-header">
+      <a href="#" class="logo" aria-label="Zodiac.fm"><img src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm" width="133" height="30"></a>
+      <span class="header-note">THE SOUND OF YOU</span>
+      <button id="headerShare" data-action="share" aria-label="Share this experience" hidden><svg class="icon"><use href="#i-share"/></svg></button>
+    </header>
+
+    <main>
+      <section id="welcomeScreen" class="welcome-screen" aria-label="Find your sound">
+        <div class="welcome-art">
+          <p class="eyebrow">WELCOME TO ZODIAC</p>
+          <h1>Hear the sound<br>of <em>you.</em></h1>
+          <p class="welcome-line">Music tuned to you.<br>So you can tune into yourself.</p>
+          <img class="record-photo" src="assets/sg5lib/eval-r23-hero-record-emerald.jpg" data-asset-id="P-82" alt="An emerald record catching sunlight against a silver wall" width="1100" height="880">
+          <p class="art-caption">Your birth moment.<br>Your frequencies. Your music.</p>
+        </div>
+        <div class="birth-panel" id="birthPanel">
+          <div class="form-heading"><span class="step">01 / FIND YOUR SOUND</span><button id="cancelEdit" type="button" hidden>Back to listening ↗</button></div>
+          <h2>Let’s find yours.</h2>
+          <p class="form-intro">Your birth details become four personal frequencies. First hear them as tones, then inside music.</p>
+          <form id="birthForm">
+            <fieldset><legend>When were you born?</legend><div class="date-fields">
+              <label><span class="sr-only">Month</span><select id="birthMonth" autocomplete="bday-month" required><option value="">Month</option></select></label>
+              <label><span class="sr-only">Day</span><select id="birthDay" autocomplete="bday-day" required><option value="">Day</option></select></label>
+              <label><span class="sr-only">Year</span><select id="birthYear" autocomplete="bday-year" required><option value="">Year</option></select></label>
+            </div></fieldset>
+            <fieldset><legend>What time? <span>An estimate is fine.</span></legend><div class="time-fields">
+              <label><span class="sr-only">Hour</span><select id="birthHour" required><option value="">Hour</option></select></label>
+              <label><span class="sr-only">Minute</span><select id="birthMinute" required><option value="">Minute</option></select></label>
+              <label><span class="sr-only">AM or PM</span><select id="birthPeriod" required><option value="">AM / PM</option><option value="AM">AM</option><option value="PM">PM</option></select></label>
+            </div></fieldset>
+            <label class="unknown"><input id="unknownTime" type="checkbox"><span>I’m not sure. Use noon for now.</span></label>
+            <label class="place-label" for="birthPlace">Where were you born?</label>
+            <div class="place-wrap"><input id="birthPlace" type="text" placeholder="City or town" autocomplete="off" spellcheck="false" aria-autocomplete="list" aria-controls="placeResults" aria-describedby="placeStatus"><ul id="placeResults"></ul></div>
+            <p id="placeStatus" class="field-note" role="status"></p>
+            <p id="birthError" class="error" role="alert"></p>
+            <button id="findFrequencies" class="primary" type="submit">Find my sound <span aria-hidden="true">→</span></button>
+            <p class="privacy">No name. No email. Just listen.</p>
+          </form>
+        </div>
+      </section>
+
+      <section id="listenScreen" class="listen-screen" aria-label="Your personal music" hidden>
+        <div class="listen-heading"><div><p class="eyebrow">02 / TUNE IN</p><h2>Your sound. <em>Press play.</em></h2></div><button id="editBirth" type="button" hidden>Edit birth details</button></div>
+        <div class="listening-grid">
+          <div class="instrument">
+            <div class="stage-heading"><p id="domainDescription">Core · The signal for who you are.</p><div class="mode-controls"><button id="toneOnly" type="button" aria-pressed="true">Tone only</button><button id="musicMode" type="button" aria-pressed="false">In music</button></div></div>
+            <div id="playerWindow" class="player-window">
+              <div id="stageIdle" class="stage-idle"><span class="tone-orbit" aria-hidden="true"></span><p>A frequency gives a tone its pitch.<br>Let’s hear your Core.</p><button id="hearTone" type="button"><svg class="icon"><use href="#i-play"/></svg>Hear my Core tone</button></div>
+              <iframe id="stageFrame" title="Your frequency and music" src="tune-in-05-stage.html?center=1&amp;light=1&amp;minui=1" hidden></iframe>
+              <p id="stageLoading" class="stage-message" role="status" hidden></p><p id="stageError" class="stage-error" role="alert"></p>
+              <button id="stageToggle" type="button" aria-label="Play" hidden><svg class="icon"><use href="#i-play"/></svg></button>
+            </div>
+            <div id="frequencyControls" class="frequency-controls" role="group" aria-label="Hear it in a different frequency"></div>
+            <p class="frequency-hint">One of your four frequencies. Tap to explore.</p>
+          </div>
+          <div class="music-library">
+            <div class="music-heading"><span class="step">NOW, HEAR IT IN MUSIC</span><span aria-hidden="true">↓</span></div>
+            <p id="instruction" class="instruction">Hear your tone, then choose a song.</p>
+            <div id="songList" class="song-list" aria-label="Choose a song"></div>
+            <details id="moreMusic" class="more-music"><summary><span>Longer listening</span><svg class="icon"><use href="#i-lock"/></svg><span class="plus" aria-hidden="true">+</span></summary><div id="moreLocked" class="song-list" aria-label="Membership music"></div></details>
+          </div>
+        </div>
+        <div id="afterListen" class="after-listen" hidden><button type="button" data-action="share"><svg class="icon"><use href="#i-share"/></svg>Let someone hear their sound</button><a id="appContinue" href="https://app.zodiac.fm/begin" target="_blank" rel="noopener">Take your music with you ↗</a></div>
+      </section>
+    </main>
+    <footer class="portal-footer"><span>Made for you. Heard by you.</span><span>zodiac.fm</span></footer>
+  </div>
+  <dialog id="membershipDialog" aria-labelledby="membershipTitle"><button data-close class="close" aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button><p class="eyebrow">KEEP TUNING IN</p><h2 id="membershipTitle">More music. More you.</h2><p>Longer listening and the full library open with a Zodiac membership.</p><a id="appLink" class="primary" href="https://app.zodiac.fm/begin" target="_blank" rel="noopener">Explore Zodiac <span>↗</span></a></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <aside id="miniPlayer" class="mini-player" aria-label="Your music" hidden><button id="miniOpen" class="mini-open" data-action="open-stage"><strong id="miniTitle"></strong><small id="miniMeta"></small></button><button id="miniToggle" aria-label="Pause"><svg class="icon"><use href="#i-pause"/></svg></button></aside>
+  <script type="module" src="tune-in-05.js"></script>
+</body>
+</html>
