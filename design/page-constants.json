@@ -20,7 +20,16 @@
   "no_numbered_section_labels": {
    "ledger": "fd-028",
    "why": "The numbered eyebrow labels (01 Voices, 02 Your Unique Frequencies) are system furniture a visitor does not need.",
-   "forbidden_class": "cue"
+   "forbidden_class": "cue",
+   "superseded_by": "no_eyebrows (fd-085) - numbered labels are one kind of eyebrow; this class check stays as a floor"
+  },
+  "no_eyebrows": {
+   "ledger": "fd-085",
+   "why": "Michael 2026-09-22: \"no eyebrows.. they do not work and they are an ai tell\". An eyebrow is a short line set above a heading, a quote or a step to label it: section label, kicker, category tag, pre-title, numbered marker. Whatever job it did moves into the heading or the line under it, or it goes. fd-028 banned the class \"cue\" and the same device came back as stagecue, kicker and eyebrow, so this checks the shape, not a class name.",
+   "enforced_by": "python3 code/check_page.py preflight <page.html>; python3 code/check_design_qa.py eyebrows <page.html>; page-contract runs it too",
+   "detector": "code/_design_qa/eyebrows.py - one definition shared by every gate",
+   "shape": "a line of at most 60 characters and 8 words, directly before an h1-h4, a blockquote or a figure, that is named like one (eyebrow, kicker, overline, pretitle, cue), opens on an ordinal marker (01 ·, Step 3 -), is set in capitals, or is declared 14 px or smaller before a heading. A class named like an eyebrow fails anywhere.",
+   "scope": "every website page: site, landers, funnel, results, tune-in. App screens are outside it until Michael says otherwise. Binds new builds; shipped pages keep what they shipped."
   },
   "no_call_to_action": {
    "ledger": "fd-033",
