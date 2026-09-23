@@ -6,7 +6,7 @@
   "rewrites": [
     {
       "source": "/ios-results",
-      "destination": "/funnel/general/results-50.html"
+      "destination": "/funnel/general/results-50"
     }
   ],
   "redirects": [
