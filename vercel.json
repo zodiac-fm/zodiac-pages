@@ -3,6 +3,12 @@
   "trailingSlash": false,
   "buildCommand": "node gen-index.mjs",
   "outputDirectory": ".",
+  "rewrites": [
+    {
+      "source": "/ios-results",
+      "destination": "/funnel/general/results-50.html"
+    }
+  ],
   "redirects": [
     {
       "source": "/inapp/stats-v17b",
