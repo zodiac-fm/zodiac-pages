@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#ffffff"><meta name="robots" content="noindex,nofollow">
-  <meta name="description" content="Hear the sound of you. Discover your four personal frequencies, then hear them inside real music. No account needed to listen.">
-  <title>Hear the sound of you · Zodiac.fm</title>
+  <meta name="description" content="Interactive Zodiac demo with four random frequencies, a local location finder and real development music. No birth-chart calculation.">
+  <title>Tune In demo · Zodiac.fm</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="tune-in-05.css">
@@ -20,7 +20,7 @@
   <div class="portal">
     <header class="portal-header">
       <a href="#" class="logo" aria-label="Zodiac.fm"><img src="../inapp/app-assets/logo-black.svg" alt="Zodiac.fm" width="133" height="30"></a>
-      <span class="header-note">THE SOUND OF YOU</span>
+      <span class="header-note">INTERACTIVE DEMO</span>
       <button id="headerShare" data-action="share" aria-label="Share this experience" hidden><svg class="icon"><use href="#i-share"/></svg></button>
     </header>
 
@@ -34,9 +34,9 @@
           <p class="art-caption">Your birth moment.<br>Your frequencies. Your music.</p>
         </div>
         <div class="birth-panel" id="birthPanel">
-          <div class="form-heading"><span class="step">01 / FIND YOUR SOUND</span><button id="cancelEdit" type="button" hidden>Back to listening ↗</button></div>
-          <h2>Let’s find yours.</h2>
-          <p class="form-intro">Your birth details become four personal frequencies. First hear them as tones, then inside music.</p>
+          <div class="form-heading"><span class="step">01 / TRY THE EXPERIENCE</span><button id="cancelEdit" type="button" hidden>Back to listening ↗</button></div>
+          <h2>Let’s try it.</h2>
+          <p class="form-intro">Try the flow with four random frequencies. This demo does not calculate a birth chart.</p>
           <form id="birthForm">
             <fieldset><legend>When were you born?</legend><div class="date-fields">
               <label><span class="sr-only">Month</span><select id="birthMonth" autocomplete="bday-month" required><option value="">Month</option></select></label>
@@ -53,14 +53,14 @@
             <div class="place-wrap"><input id="birthPlace" type="text" placeholder="City or town" autocomplete="off" spellcheck="false" aria-autocomplete="list" aria-controls="placeResults" aria-describedby="placeStatus"><ul id="placeResults"></ul></div>
             <p id="placeStatus" class="field-note" role="status"></p>
             <p id="birthError" class="error" role="alert"></p>
-            <button id="findFrequencies" class="primary" type="submit">Find my sound <span aria-hidden="true">→</span></button>
-            <p class="privacy">No name. No email. Just listen.</p>
+            <button id="findFrequencies" class="primary" type="submit">Try the player <span aria-hidden="true">→</span></button>
+            <p class="privacy">Birth details stay in this browser.</p>
           </form>
         </div>
       </section>
 
-      <section id="listenScreen" class="listen-screen" aria-label="Your personal music" hidden>
-        <div class="listen-heading"><div><p class="eyebrow">02 / TUNE IN</p><h2>Your sound. <em>Press play.</em></h2></div><button id="editBirth" type="button" hidden>Edit birth details</button></div>
+      <section id="listenScreen" class="listen-screen" aria-label="Your demo music" hidden>
+        <div class="listen-heading"><div><p class="eyebrow">02 / RANDOM DEMO FREQUENCIES</p><h2>Four tones. <em>Press play.</em></h2></div><button id="editBirth" type="button" hidden>Edit birth details</button></div>
         <div class="listening-grid">
           <div class="instrument">
             <div class="stage-heading"><p id="domainDescription">Core · The signal for who you are.</p><div class="mode-controls"><button id="toneOnly" type="button" aria-pressed="true">Tone only</button><button id="musicMode" type="button" aria-pressed="false">In music</button></div></div>
@@ -71,7 +71,7 @@
               <button id="stageToggle" type="button" aria-label="Play" hidden><svg class="icon"><use href="#i-play"/></svg></button>
             </div>
             <div id="frequencyControls" class="frequency-controls" role="group" aria-label="Hear it in a different frequency"></div>
-            <p class="frequency-hint">One of your four frequencies. Tap to explore.</p>
+            <p class="frequency-hint">Four random demo frequencies. Tap to explore.</p>
           </div>
           <div class="music-library">
             <div class="music-heading"><span class="step">NOW, HEAR IT IN MUSIC</span><span aria-hidden="true">↓</span></div>
@@ -80,14 +80,14 @@
             <details id="moreMusic" class="more-music"><summary><span>Longer listening</span><svg class="icon"><use href="#i-lock"/></svg><span class="plus" aria-hidden="true">+</span></summary><div id="moreLocked" class="song-list" aria-label="Membership music"></div></details>
           </div>
         </div>
-        <div id="afterListen" class="after-listen" hidden><button type="button" data-action="share"><svg class="icon"><use href="#i-share"/></svg>Let someone hear their sound</button><a id="appContinue" href="https://app.zodiac.fm/begin" target="_blank" rel="noopener">Take your music with you ↗</a></div>
+        <div id="afterListen" class="after-listen" hidden><button type="button" data-action="share"><svg class="icon"><use href="#i-share"/></svg>Share this demo</button><a id="appContinue" href="#membershipDialog">Explore the Zodiac app ↗</a></div>
       </section>
     </main>
-    <footer class="portal-footer"><span>Made for you. Heard by you.</span><span>zodiac.fm</span></footer>
+    <footer class="portal-footer"><span>Interactive prototype</span><span>zodiac.fm</span></footer>
   </div>
-  <dialog id="membershipDialog" aria-labelledby="membershipTitle"><button data-close class="close" aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button><p class="eyebrow">KEEP TUNING IN</p><h2 id="membershipTitle">More music. More you.</h2><p>Longer listening and the full library open with a Zodiac membership.</p><a id="appLink" class="primary" href="https://app.zodiac.fm/begin" target="_blank" rel="noopener">Explore Zodiac <span>↗</span></a></dialog>
+  <dialog id="membershipDialog" aria-labelledby="membershipTitle"><button data-close class="close" aria-label="Close"><svg class="icon"><use href="#i-close"/></svg></button><p class="eyebrow">KEEP TUNING IN</p><h2 id="membershipTitle">More music. More you.</h2><p>Longer listening and the full library open with a Zodiac membership. App signup and purchases are not connected in this demo.</p><button id="appLink" class="primary" type="button" data-close>Back to music <span>↗</span></button></dialog>
   <div id="toast" class="toast" role="status" hidden></div>
   <aside id="miniPlayer" class="mini-player" aria-label="Your music" hidden><button id="miniOpen" class="mini-open" data-action="open-stage"><strong id="miniTitle"></strong><small id="miniMeta"></small></button><button id="miniToggle" aria-label="Pause"><svg class="icon"><use href="#i-pause"/></svg></button></aside>
-  <script type="module" src="tune-in-05.js"></script>
+  <script type="module" src="tune-in-06.js"></script>
 </body>
 </html>
