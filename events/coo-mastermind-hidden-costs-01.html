@@ -7,7 +7,6 @@
   <meta name="theme-color" content="#171714">
   <title>COO Mastermind | Hidden Cost Savings</title>
   <link rel="icon" href="data:,">
-  <script>document.documentElement.classList.add('js');</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
@@ -234,8 +233,6 @@
     .prototype-note { margin-top: 26px !important; padding: 12px; border: 1px solid var(--ink); font-family: var(--sans) !important; font-size: 12px !important; }
 
     .reveal { opacity: 1; transform: none; }
-    .js .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
-    .js .reveal.visible { opacity: 1; transform: none; }
 
     @media (max-width: 980px) {
       nav a:not(.nav-cta) { display: none; }
@@ -516,15 +513,6 @@
       if (event.target === modal) modal.close();
     });
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: .02, rootMargin: '0px 0px -4% 0px' });
-    document.querySelectorAll('.reveal').forEach(element => observer.observe(element));
   </script>
 </body>
 </html>
