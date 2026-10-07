@@ -4,19 +4,13 @@
   This file IS the current style guide library. Edit THIS file — never fork a numbered copy
   and never hand anyone a versioned URL for this surface.
   ZFM-CURRENT: /site/styleguide-library
-  ZFM-INTERNAL-VERSION: 9-14
+  ZFM-INTERNAL-VERSION: 9-13
   To bump the version: copy this file to site/styleguide-<n>-library.html
   as a frozen snapshot FIRST, then edit this file and raise ZFM-INTERNAL-VERSION.
   Rule: Michael, 2026-08-26 — "always just have the current one be the main url string".
   Applies to reference surfaces only (libraries, style guides, directories),
   never to landers, sites, or design rounds, which stay versioned.
 
-  9-14 (2026-10-07): the contents land exactly. Michael: the contents links did not take you where they
-  said. Three causes, all fixed: the smooth-scroll rule made Chrome abandon the #anchor jump while the page
-  loaded, so a shared link opened at the top; 130 lazy pictures reserved no space, so targets moved as
-  they loaded (every img now carries width and height); and the sticky Contents bar covered the landing
-  on phones (scroll margins on every anchored element). No picture or number changed; only the version strings
-  moved. Version 9-13 frozen.
   9-13 (2026-10-07): adds the Android App section to the product chapter, P-220 to P-236: seventeen real Android
   captures from the Google Play build (install, sign in, upgrade, purchase sheets, password reset) plus the
   three desktop captures that finish the reset trail. Password, card digits and reset token covered;
@@ -112,7 +106,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Zodiac Picture Library · 9-14</title>
+<title>The Zodiac Picture Library · 9-13</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
@@ -129,11 +123,9 @@
     --sans:'Switzer',-apple-system,Helvetica,Arial,sans-serif;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  /* 9-14: hash jumps are instant. With smooth scrolling Chrome abandoned the #anchor jump while this
-     long page was still loading, so a shared link such as #android-app opened at the top. */
-  html{scroll-behavior:auto}
+  html{scroll-behavior:smooth}
   body{background:var(--stage);color:var(--cream);font-family:var(--sans);font-size:19px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  img{max-width:100%;height:auto}
+  img{max-width:100%}
 
   .wrap{max-width:1140px;margin:0 auto;padding:0 32px}
   section{padding:104px 0;border-bottom:1px solid var(--hair)}
@@ -412,31 +404,16 @@
     .railbtn{display:none}
     .raillist{display:block;padding:0 22px}
   }
-  /* 9-14 landing. A contents link or a shared #anchor lands exactly on its target. Sections carry 104px
-     of top padding, so a negative margin puts the eyebrow 24px under the edge; figures, group heads and
-     testimonial entries land 24px clear. Under 1180px the sticky Contents bar is 49px tall, so both sit
-     below it. */
-  section[id]{scroll-margin-top:-32px}
-  [id]:not(section){scroll-margin-top:72px}
-  @media(max-width:760px){
-    /* phone: plain sections drop to 64px of top padding, chapter marks keep 104px */
-    section[id]{scroll-margin-top:8px}
-    section.chapmark[id]{scroll-margin-top:-32px}
-  }
-  @media(min-width:1180px){
-    section[id]{scroll-margin-top:-80px}
-    [id]:not(section){scroll-margin-top:24px}
-  }
 </style>
 </head>
 <body>
 
 <div class="bannerwrap" id="top">
   <div class="banner">
-    <div class="tag">Current &middot; one library &middot; version 9-14</div>
+    <div class="tag">Current &middot; one library &middot; version 9-13</div>
     <div class="line">THE ZODIAC PICTURE LIBRARY. Every picture we own, under one number: filed by the effect that put the colour in, then by subject, then the people, the product, how a picture is judged, and what may never be used.</div>
     <div class="sub">This is the one current library and it keeps one permanent address. Prior cuts are preserved as numbered snapshots and are never edited again. The rules that govern a page live on the style guide at <b>/site/styleguide</b>.</div>
-    <div class="date">Version 9-14 &middot; contents land exactly 2026-10-07 &middot; Android App P-220 to P-236 filed 2026-10-07 &middot; rose headphones dancer filed 2026-10-04 &middot; iphone-realistic-roselight-background filed 2026-09-24 &middot; iphone-playlist-realistic filed 2026-09-24 &middot; Mountain Field Band filed 2026-09-12 &middot; Hero Home phone companion filed 2026-09-12 &middot; Blue Sky Field Band filed 2026-09-11 &middot; reorganised 2026-09-08 &middot; testimonials synced from the master 2026-09-08</div>
+    <div class="date">Version 9-12 &middot; rose headphones dancer filed 2026-10-04 &middot; iphone-realistic-roselight-background filed 2026-09-24 &middot; iphone-playlist-realistic filed 2026-09-24 &middot; Mountain Field Band filed 2026-09-12 &middot; Hero Home phone companion filed 2026-09-12 &middot; Blue Sky Field Band filed 2026-09-11 &middot; reorganised 2026-09-08 &middot; testimonials synced from the master 2026-09-08</div>
   </div>
 </div>
 <nav id="rail" class="rail" aria-label="Contents">
@@ -534,106 +511,106 @@
     <div class="photogrid">
     <div class="colgroup">Violet <span class="cgn">6</span></div>
     <figure class="photo" id="p-2">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-core-violet-crosswalk.jpg" alt="Woman in a violet dress crossing a sunlit black and white street">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-core-violet-crosswalk.jpg" alt="Woman in a violet dress crossing a sunlit black and white street">
       <figcaption><b class="pid">P-2</b><span class="ttl">Crosswalk From Above</span><span class="recipe"><i>RECIPE</i> the violet dress is the only colored thing; sunlit street held black and white.</span></figcaption>
     </figure>
     <figure class="photo" id="p-4">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r18-day-core-jacaranda-walk-cc1.jpg" alt="Person walking a street under violet jacaranda trees, petals on the pavement">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r18-day-core-jacaranda-walk-cc1.jpg" alt="Person walking a street under violet jacaranda trees, petals on the pavement">
       <figcaption><b class="pid">P-4</b><span class="ttl">Jacaranda Walk</span><span class="recipe"><i>RECIPE</i> violet enters as jacaranda blossom overhead and fallen petals underfoot; walker and street silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-6">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r21-sun3-core-violet-doubledutch.jpg" alt="Girl jumping a violet skipping rope held by two boys, hard sun">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r21-sun3-core-violet-doubledutch.jpg" alt="Girl jumping a violet skipping rope held by two boys, hard sun">
       <figcaption><b class="pid">P-6</b><span class="ttl">Double Dutch in Violet</span><span class="recipe"><i>RECIPE</i> the skipping rope is the single violet object; hard sun, plaza monochrome.</span></figcaption>
     </figure>
     <figure class="photo" id="p-19">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r27-v-turntable-black.jpg" alt="Turntable with a violet lid on a stand, violet light on the wall">
+      <img loading="lazy" src="/site/assets/sg5lib/r27-v-turntable-black.jpg" alt="Turntable with a violet lid on a stand, violet light on the wall">
       <figcaption><b class="pid">P-19</b><span class="ttl">Violet-Lid Turntable</span><span class="recipe"><i>RECIPE</i> the turntable lid is the violet object; wall bounce is its own, room silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-105">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/d4h/d4h-morning.jpg" alt="Morning">
+      <img loading="lazy" src="/site/assets/d4h/d4h-morning.jpg" alt="Morning">
       <figcaption><b class="pid">P-105</b><span class="ttl">Jacaranda Morning</span><span class="recipe"><i>RECIPE</i> violet jacaranda overhead is the object; morning street silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-155">
-      <img width="1280" height="960" loading="lazy" src="/site/assets/d4j/d4j-step1.jpg" alt="Globe And Pocket Watch">
+      <img loading="lazy" src="/site/assets/d4j/d4j-step1.jpg" alt="Globe And Pocket Watch">
       <figcaption><b class="pid">P-155</b><span class="ttl">Globe And Pocket Watch</span><span class="recipe"><i>RECIPE</i> the violet globe is the object beside a silver pocket watch; curtain, sill and shadow fully black and white.</span></figcaption>
     </figure>
     <div class="colgroup">Rose <span class="cgn">7</span></div>
     <figure class="photo" id="p-22">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r21-sun3-love-rose-spin.jpg" alt="Couple dancing outdoors, her rose skirt flared into a full disc">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r21-sun3-love-rose-spin.jpg" alt="Couple dancing outdoors, her rose skirt flared into a full disc">
       <figcaption><b class="pid">P-22</b><span class="ttl">Rose Spin</span><span class="recipe"><i>RECIPE</i> the flared rose skirt is the one color, read as a full disc; ground and crowd grey.</span></figcaption>
     </figure>
     <figure class="photo" id="p-26">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-love-rose-awning.jpg" alt="Woman at a cafe table under a rose awning on a sunlit street">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-love-rose-awning.jpg" alt="Woman at a cafe table under a rose awning on a sunlit street">
       <figcaption><b class="pid">P-26</b><span class="ttl">Rose Awning</span><span class="recipe"><i>RECIPE</i> rose awning carries the pop; ground kept clean silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-36">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-doorway-crate-rose.jpg" alt="Man holding a crate of records in a doorway, one rose record showing">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-doorway-crate-rose.jpg" alt="Man holding a crate of records in a doorway, one rose record showing">
       <figcaption><b class="pid">P-36</b><span class="ttl">Doorway Crate, Rose</span><span class="recipe"><i>RECIPE</i> one rose sleeve inside a grey crate; man and doorway monochrome.</span></figcaption>
     </figure>
     <figure class="photo" id="p-37">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r23-hero-record-rose.jpg" alt="Rose vinyl record standing in sand, sun flaring behind its edge">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r23-hero-record-rose.jpg" alt="Rose vinyl record standing in sand, sun flaring behind its edge">
       <figcaption><b class="pid">P-37</b><span class="ttl">Rose Pressed in Vinyl</span><span class="recipe"><i>RECIPE</i> the rose disc is the object, sun flaring its edge; sand and sky silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-38">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r27-r-device-earbuds.jpg" alt="Open earbuds case on marble with a rose indicator light">
+      <img loading="lazy" src="/site/assets/sg5lib/r27-r-device-earbuds.jpg" alt="Open earbuds case on marble with a rose indicator light">
       <figcaption><b class="pid">P-38</b><span class="ttl">Earbuds on Marble</span><span class="recipe"><i>RECIPE</i> a single rose indicator dot; marble and case silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-39">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r27-r-record-label.jpg" alt="Turntable playing a black record with a rose center label">
+      <img loading="lazy" src="/site/assets/sg5lib/r27-r-record-label.jpg" alt="Turntable playing a black record with a rose center label">
       <figcaption><b class="pid">P-39</b><span class="ttl">Pink Label on Black Vinyl</span><span class="recipe"><i>RECIPE</i> the rose center label is the only color on a black record.</span></figcaption>
     </figure>
     <figure class="photo" id="p-110">
-      <img width="1600" height="1200" loading="lazy" src="/site/assets/d4h/d4h-record.jpg" alt="Record">
+      <img loading="lazy" src="/site/assets/d4h/d4h-record.jpg" alt="Record">
       <figcaption><b class="pid">P-110</b><span class="ttl">Rose Label Record</span><span class="recipe"><i>RECIPE</i> the rose center label turning is the only color; deck and room silver.</span></figcaption>
     </figure>
     <div class="colgroup">Amber <span class="cgn">2</span></div>
     <figure class="photo" id="p-57">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r23-hero-speaker-amber-cc1.jpg" alt="Wooden speaker on a stone ledge against clouds, amber light on the cone">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r23-hero-speaker-amber-cc1.jpg" alt="Wooden speaker on a stone ledge against clouds, amber light on the cone">
       <figcaption><b class="pid">P-57</b><span class="ttl">Amber Speaker</span><span class="recipe"><i>RECIPE</i> the amber cone is the object, not the light; ledge and cloud silver.</span><span class="flag"><b>FLAG: AMBER-OBJECT</b> weak under the amber ruling, needs a dark ground</span></figcaption>
     </figure>
     <figure class="photo" id="p-58">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r28-dev-radio-amber.jpg" alt="Vintage radio on a wooden table, amber dial glowing across the grain">
+      <img loading="lazy" src="/site/assets/sg5lib/r28-dev-radio-amber.jpg" alt="Vintage radio on a wooden table, amber dial glowing across the grain">
       <figcaption><b class="pid">P-58</b><span class="ttl">Amber Radio</span><span class="recipe"><i>RECIPE</i> the glowing dial is the object; grain and table silver.</span><span class="flag"><b>FLAG: AMBER-OBJECT</b> weak under the amber ruling, needs a dark ground or the amber dissolves into light</span></figcaption>
     </figure>
     <div class="colgroup">Emerald <span class="cgn">10</span></div>
     <figure class="photo" id="p-65">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r27-e-people-crossing.jpg" alt="People crossing at an emerald walk signal, black and white street in sun">
+      <img loading="lazy" src="/site/assets/sg5lib/r27-e-people-crossing.jpg" alt="People crossing at an emerald walk signal, black and white street in sun">
       <figcaption><b class="pid">P-65</b><span class="ttl">Green Light Crossing</span><span class="recipe"><i>RECIPE</i> the emerald walk signal is the one color; sunlit street black and white.</span></figcaption>
     </figure>
     <figure class="photo" id="p-66">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-abundance-emerald-bicycle.jpg" alt="Emerald bicycle against a white wall, person in headphones sitting beside it">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-abundance-emerald-bicycle.jpg" alt="Emerald bicycle against a white wall, person in headphones sitting beside it">
       <figcaption><b class="pid">P-66</b><span class="ttl">Emerald Bicycle</span><span class="recipe"><i>RECIPE</i> the bicycle is the emerald object; white wall and rider silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-67">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r21-sun3-abundance-emerald-ball-cc1.jpg" alt="Four kids jumping for an emerald football against a bright sky">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r21-sun3-abundance-emerald-ball-cc1.jpg" alt="Four kids jumping for an emerald football against a bright sky">
       <figcaption><b class="pid">P-67</b><span class="ttl">Emerald Ball</span><span class="recipe"><i>RECIPE</i> the football is the single color against a blown-out sky.</span></figcaption>
     </figure>
     <figure class="photo" id="p-73">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r34-abn-first-sale-parcel-a2.jpg" alt="Shop girl handing a wrapped parcel with an emerald bow to a customer on a grey street">
+      <img loading="lazy" src="/site/assets/sg5lib/r34-abn-first-sale-parcel-a2.jpg" alt="Shop girl handing a wrapped parcel with an emerald bow to a customer on a grey street">
       <figcaption><b class="pid">P-73</b><span class="ttl">First Sale, Bow</span><span class="recipe"><i>RECIPE</i> the emerald bow on the parcel is the only color; grey street.</span></figcaption>
     </figure>
     <figure class="photo" id="p-78">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r23-hero-speaker-emerald-cc1.jpg" alt="Emerald portable speaker on a diving board over lit water">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r23-hero-speaker-emerald-cc1.jpg" alt="Emerald portable speaker on a diving board over lit water">
       <figcaption><b class="pid">P-78</b><span class="ttl">Emerald Speaker</span><span class="recipe"><i>RECIPE</i> the emerald speaker is the object; diving board, water and sky silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-82">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r23-hero-record-emerald.jpg" alt="Emerald vinyl record leaning against a white wall in hard sun">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r23-hero-record-emerald.jpg" alt="Emerald vinyl record leaning against a white wall in hard sun">
       <figcaption><b class="pid">P-82</b><span class="ttl">Emerald Record</span><span class="dual">DUAL FILING · also filed under THROUGH</span><span class="recipe"><i>RECIPE</i> the emerald disc is the object against a silver wall, and the translucent vinyl passes hard sunlight through itself — our best THROUGH-outdoors exemplar.</span></figcaption>
     </figure>
     <figure class="photo" id="p-85">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r29-e-turntable-lid.jpg" alt="Turntable with an emerald lid open, shelved records behind it">
+      <img loading="lazy" src="/site/assets/sg5lib/r29-e-turntable-lid.jpg" alt="Turntable with an emerald lid open, shelved records behind it">
       <figcaption><b class="pid">P-85</b><span class="ttl">Emerald Lid Turntable</span><span class="dual">DUAL FILING · also filed under THROUGH</span><span class="recipe"><i>RECIPE</i> the emerald lid is the object, and daylight passes through it onto the deck below; shelved records and room silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-128">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/d4e/d4e-ball-h8.jpg" alt="Ball H8">
+      <img loading="lazy" src="/site/assets/d4e/d4e-ball-h8.jpg" alt="Ball H8">
       <figcaption><b class="pid">P-128</b><span class="ttl">Emerald Ball Sky</span><span class="recipe"><i>RECIPE</i> the emerald ball against sky; sun-lane ground, everything else silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-157">
-      <img width="1280" height="960" loading="lazy" src="/site/assets/d4j/d4j-step3.jpg" alt="Emerald Bag, Walking">
+      <img loading="lazy" src="/site/assets/d4j/d4j-step3.jpg" alt="Emerald Bag, Walking">
       <figcaption><b class="pid">P-157</b><span class="ttl">Emerald Bag, Walking</span><span class="recipe"><i>RECIPE</i> the emerald bag is the one carried object; the walking street silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-159">
-      <img width="1280" height="960" loading="lazy" src="/site/assets/d4k/d4k-step3.jpg" alt="The Spoon Singer">
+      <img loading="lazy" src="/site/assets/d4k/d4k-step3.jpg" alt="The Spoon Singer">
       <figcaption><b class="pid">P-159</b><span class="ttl">The Spoon Singer</span><span class="recipe"><i>RECIPE</i> the emerald mug on the counter is the only color; the singer, the kitchen and the dust-lit window all silver.</span></figcaption>
     </figure>
     </div>
@@ -648,87 +625,87 @@
     <div class="photogrid">
     <div class="colgroup">All four colours <span class="cgn">21</span></div>
     <figure class="photo" id="p-86">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r21-sun3-wild-four-caps-dive-cc1.jpg" alt="Four swimmers diving in one line, caps in violet, rose, amber and emerald">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r21-sun3-wild-four-caps-dive-cc1.jpg" alt="Four swimmers diving in one line, caps in violet, rose, amber and emerald">
       <figcaption><b class="pid">P-86</b><span class="ttl">Four Caps, One Dive</span><span class="recipe"><i>RECIPE</i> four caps carry the four colors as four real things in one dive line; water and sky grey.</span></figcaption>
     </figure>
     <figure class="photo" id="p-87">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-umbrellas-cc1.jpg" alt="Four beach umbrellas on white sand in violet, emerald, amber and rose">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-umbrellas-cc1.jpg" alt="Four beach umbrellas on white sand in violet, emerald, amber and rose">
       <figcaption><b class="pid">P-87</b><span class="ttl">Four Beach Umbrellas</span><span class="recipe"><i>RECIPE</i> four umbrellas on white sand; the sand does the silver work.</span></figcaption>
     </figure>
     <figure class="photo" id="p-88">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-laundry-cc1.jpg" alt="Alley laundry line with four garments in violet, emerald, amber and rose">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-laundry-cc1.jpg" alt="Alley laundry line with four garments in violet, emerald, amber and rose">
       <figcaption><b class="pid">P-88</b><span class="ttl">Four-Color Laundry Line</span><span class="dual">DUAL FILING · also filed under THROUGH</span><span class="recipe"><i>RECIPE</i> four garments on one alley line carry the chord, and sun through each one makes every garment its own lamp; brick and sky monochrome.</span></figcaption>
     </figure>
     <figure class="photo" id="p-89">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r27-m-crate.jpg" alt="Crate of records with four labels in violet, emerald, amber and rose">
+      <img loading="lazy" src="/site/assets/sg5lib/r27-m-crate.jpg" alt="Crate of records with four labels in violet, emerald, amber and rose">
       <figcaption><b class="pid">P-89</b><span class="ttl">Record Crate, Four Labels</span><span class="recipe"><i>RECIPE</i> four record labels in one grey crate.</span></figcaption>
     </figure>
     <figure class="photo" id="p-90">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-caps-echo-cc1.jpg" alt="Four swimmers launching from starting blocks, caps in the four colors">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-caps-echo-cc1.jpg" alt="Four swimmers launching from starting blocks, caps in the four colors">
       <figcaption><b class="pid">P-90</b><span class="ttl">Four Swim Caps at the Blocks</span><span class="recipe"><i>RECIPE</i> four caps at the blocks; pool deck and water silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-91">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r29-m-kites.jpg" alt="Four kites over black and white dunes in violet, emerald, amber and rose">
+      <img loading="lazy" src="/site/assets/sg5lib/r29-m-kites.jpg" alt="Four kites over black and white dunes in violet, emerald, amber and rose">
       <figcaption><b class="pid">P-91</b><span class="ttl">Four Kites</span><span class="recipe"><i>RECIPE</i> four kites over black and white dunes.</span></figcaption>
     </figure>
     <figure class="photo" id="p-92">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r29-m-kayaks.jpg" alt="Four kayaks seen from above in violet, emerald, amber and rose">
+      <img loading="lazy" src="/site/assets/sg5lib/r29-m-kayaks.jpg" alt="Four kayaks seen from above in violet, emerald, amber and rose">
       <figcaption><b class="pid">P-92</b><span class="ttl">Four Kayaks</span><span class="recipe"><i>RECIPE</i> four kayaks read from above on grey water.</span></figcaption>
     </figure>
     <figure class="photo" id="p-93">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r29-m-runners-bridge.jpg" alt="Four runners on a bridge in violet, emerald, amber and rose vests">
+      <img loading="lazy" src="/site/assets/sg5lib/r29-m-runners-bridge.jpg" alt="Four runners on a bridge in violet, emerald, amber and rose vests">
       <figcaption><b class="pid">P-93</b><span class="ttl">Runners on the Bridge</span><span class="dual">DUAL FILING · also filed under WORN</span><span class="recipe"><i>RECIPE</i> the chord carried entirely as worn garment: four vests on four bodies; bridge and river silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-94">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-boards-cc1.jpg" alt="Four surfboards upright in the sand in violet, emerald, amber and rose">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-boards-cc1.jpg" alt="Four surfboards upright in the sand in violet, emerald, amber and rose">
       <figcaption><b class="pid">P-94</b><span class="ttl">Four Surfboards</span><span class="recipe"><i>RECIPE</i> four boards upright in the sand; sand and sky grey.</span></figcaption>
     </figure>
     <figure class="photo" id="p-95">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-awnings-cc1.jpg" alt="Cobbled market street with awnings in violet, emerald, amber and rose">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-awnings-cc1.jpg" alt="Cobbled market street with awnings in violet, emerald, amber and rose">
       <figcaption><b class="pid">P-95</b><span class="ttl">Four Market Awnings</span><span class="recipe"><i>RECIPE</i> four market awnings down a cobbled street; stone silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-96">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-sails-cc1.jpg" alt="Four small sailboats with violet, emerald, amber and rose sails">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-sails-cc1.jpg" alt="Four small sailboats with violet, emerald, amber and rose sails">
       <figcaption><b class="pid">P-96</b><span class="ttl">Four Sails</span><span class="recipe"><i>RECIPE</i> four sails on grey water.</span></figcaption>
     </figure>
     <figure class="photo" id="p-98">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-spine-shelf-v3-take4-cc1.jpg" alt="Shelved records with four sleeves lit in violet, emerald, amber and rose">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r29-m-spine-shelf-v3-take4-cc1.jpg" alt="Shelved records with four sleeves lit in violet, emerald, amber and rose">
       <figcaption><b class="pid">P-98</b><span class="ttl">Record Shelf, Four Lit Records</span><span class="recipe"><i>RECIPE</i> four lit sleeves in a shelf of grey spines.</span></figcaption>
     </figure>
     <figure class="photo" id="p-112">
-      <img width="2200" height="1160" loading="lazy" src="/site/assets/d4i/d4i-umbrellas-2x.jpg" alt="Umbrellas 2X">
+      <img loading="lazy" src="/site/assets/d4i/d4i-umbrellas-2x.jpg" alt="Umbrellas 2X">
       <figcaption><b class="pid">P-112</b><span class="ttl">Four Umbrellas 2X</span><span class="recipe"><i>RECIPE</i> the finale chord at 2x for desktop; four umbrellas, four colors, silver ground.</span></figcaption>
     </figure>
     <figure class="photo" id="p-130">
-      <img width="1100" height="580" loading="lazy" src="/site/assets/d4e/d4e-umbrellas-h8.jpg" alt="Umbrellas H8">
+      <img loading="lazy" src="/site/assets/d4e/d4e-umbrellas-h8.jpg" alt="Umbrellas H8">
       <figcaption><b class="pid">P-130</b><span class="ttl">Four Umbrellas H8</span><span class="recipe"><i>RECIPE</i> the sun-lane finale chord; four umbrellas under standing sun, ground silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-209">
-      <img width="1448" height="1086" loading="lazy" src="/site/assets/library/p-209-vintage-jazz-jam.png" alt="Four musicians playing a vintage jazz jam, with violet saxophone, emerald trumpet, rose drums and amber trombone">
+      <img loading="lazy" src="/site/assets/library/p-209-vintage-jazz-jam.png" alt="Four musicians playing a vintage jazz jam, with violet saxophone, emerald trumpet, rose drums and amber trombone">
       <figcaption><b class="pid">P-209</b><span class="ttl">Vintage Jazz Jam in Selective Color</span><span class="recipe"><i>RECIPE</i> violet saxophone, emerald trumpet, rose drums and amber trombone carry the chord.</span><span class="recipe"><i>TAGS</i> Music · People together</span></figcaption>
     </figure>
     <figure class="photo" id="p-210">
-      <img width="1448" height="1086" loading="lazy" src="/site/assets/library/p-210-chromatic-noir-jazz-club.png" alt="Four musicians in a chromatic noir jazz club, with violet guitar, emerald bass, rose drums and amber microphone">
+      <img loading="lazy" src="/site/assets/library/p-210-chromatic-noir-jazz-club.png" alt="Four musicians in a chromatic noir jazz club, with violet guitar, emerald bass, rose drums and amber microphone">
       <figcaption><b class="pid">P-210</b><span class="ttl">Chromatic Noir Jazz Club Performance</span><span class="recipe"><i>RECIPE</i> violet guitar, emerald bass, rose drums and amber microphone carry the chord.</span><span class="recipe"><i>TAGS</i> Music · People together</span></figcaption>
     </figure>
     <figure class="photo" id="p-211">
-      <img width="1448" height="1086" loading="lazy" src="/site/assets/library/p-211-four-person-field-band.png" alt="Four musicians performing together in a grassy field, with violet guitar, emerald bass, rose drums and amber microphone">
+      <img loading="lazy" src="/site/assets/library/p-211-four-person-field-band.png" alt="Four musicians performing together in a grassy field, with violet guitar, emerald bass, rose drums and amber microphone">
       <figcaption><b class="pid">P-211</b><span class="ttl">Four-Person Field Band</span><span class="recipe"><i>RECIPE</i> violet guitar, emerald bass, rose drums and amber microphone carry the chord.</span><span class="recipe"><i>TAGS</i> Music · People together</span></figcaption>
     </figure>
     <figure class="photo" id="p-212">
-      <img width="1448" height="1086" loading="lazy" src="/site/assets/library/p-212-field-band-love-vitality.png" alt="Four musicians in a black-and-white field, with a rose-red microphone, amber drums, violet guitar and emerald bass">
+      <img loading="lazy" src="/site/assets/library/p-212-field-band-love-vitality.png" alt="Four musicians in a black-and-white field, with a rose-red microphone, amber drums, violet guitar and emerald bass">
       <figcaption><b class="pid">P-212</b><span class="ttl">Field Band · Love &amp; Vitality</span><span class="recipe"><i>RECIPE</i> Love rose microphone, Vitality amber drums, Core violet guitar and Abundance emerald bass carry the four colors; people, field and sky remain black and white.</span><span class="recipe"><i>TAGS</i> Music · People together</span></figcaption>
     </figure>
     <figure class="photo" id="p-214">
-      <img width="1536" height="1024" loading="lazy" src="/site/assets/library/p-214-hero-blue-sky.png" alt="Hero Blue Sky: smiling woman in headphones holding a phone beside four colored surfboards, with blue sky, silver ocean and sand, without headline or caption">
-      <figcaption><b class="pid">P-214</b><span class="ttl">Hero Blue Sky</span><span class="recipe"><i>RECIPE</i> Blue sky and silver ocean; violet, emerald, amber and rose surfboards carry the four colors. No headline or caption. The approved woman, phone, boards, ocean and sand are unchanged; lettering was removed only from the sky. Keep this source intact and place page text in separate layers.</span><span class="recipe"><i>TAGS</i> Hero · Blue sky · Sunlight</span><span class="recipe"><i>FORMATS</i> <a style="color:var(--cream)" href="/site/assets/library/p-214-hero-blue-sky.png">Desktop · 3:2</a> &nbsp; / &nbsp; <a style="color:var(--cream)" href="/site/assets/library/p-214-hero-blue-sky-mobile.png">Mobile · 4:5</a></span><details style="margin-top:12px"><summary style="cursor:pointer;font-weight:600;padding:8px 0">Show mobile image</summary><img width="1200" height="1500" loading="lazy" src="/site/assets/library/p-214-hero-blue-sky-mobile.png" alt="Hero Blue Sky mobile: the same woman, phone and four surfboards below an open blue sky, with silver ocean and sand; no headline or caption"></details></figcaption>
+      <img loading="lazy" src="/site/assets/library/p-214-hero-blue-sky.png" alt="Hero Blue Sky: smiling woman in headphones holding a phone beside four colored surfboards, with blue sky, silver ocean and sand, without headline or caption">
+      <figcaption><b class="pid">P-214</b><span class="ttl">Hero Blue Sky</span><span class="recipe"><i>RECIPE</i> Blue sky and silver ocean; violet, emerald, amber and rose surfboards carry the four colors. No headline or caption. The approved woman, phone, boards, ocean and sand are unchanged; lettering was removed only from the sky. Keep this source intact and place page text in separate layers.</span><span class="recipe"><i>TAGS</i> Hero · Blue sky · Sunlight</span><span class="recipe"><i>FORMATS</i> <a style="color:var(--cream)" href="/site/assets/library/p-214-hero-blue-sky.png">Desktop · 3:2</a> &nbsp; / &nbsp; <a style="color:var(--cream)" href="/site/assets/library/p-214-hero-blue-sky-mobile.png">Mobile · 4:5</a></span><details style="margin-top:12px"><summary style="cursor:pointer;font-weight:600;padding:8px 0">Show mobile image</summary><img loading="lazy" src="/site/assets/library/p-214-hero-blue-sky-mobile.png" alt="Hero Blue Sky mobile: the same woman, phone and four surfboards below an open blue sky, with silver ocean and sand; no headline or caption"></details></figcaption>
     </figure>
     <figure class="photo" id="p-215">
-      <img width="1448" height="1086" loading="lazy" src="/site/assets/library/p-215-blue-sky-field-band.png" alt="Four musicians performing in a field beneath a blue sky, with violet guitar, rose microphone, amber drums and emerald bass">
+      <img loading="lazy" src="/site/assets/library/p-215-blue-sky-field-band.png" alt="Four musicians performing in a field beneath a blue sky, with violet guitar, rose microphone, amber drums and emerald bass">
       <figcaption><b class="pid">P-215</b><span class="ttl">Blue Sky Field Band</span><span class="recipe"><i>RECIPE</i> The sky remains blue while the people and field stay silver. A violet guitar, rose microphone, amber drums and emerald bass carry the four colors.</span><span class="recipe"><i>TAGS</i> Music · People together · Blue sky</span></figcaption>
     </figure>
     <figure class="photo" id="p-216">
-      <img width="1448" height="1086" loading="lazy" src="/site/assets/library/p-216-mountain-field-band.png" alt="Four musicians playing in an alpine meadow beneath a blue sky and snow-capped peaks, with violet guitar, rose microphone, amber drums and emerald bass">
+      <img loading="lazy" src="/site/assets/library/p-216-mountain-field-band.png" alt="Four musicians playing in an alpine meadow beneath a blue sky and snow-capped peaks, with violet guitar, rose microphone, amber drums and emerald bass">
       <figcaption><b class="pid">P-216</b><span class="ttl">Mountain Field Band</span><span class="recipe"><i>RECIPE</i> The sky stays blue while the peaks, conifers, meadow and people stay silver. A violet guitar, rose microphone, amber drums and emerald bass carry the four colors. The P-215 band in casual mountain clothes, smiling at each other.</span><span class="recipe"><i>TAGS</i> Music · People together · Blue sky · Mountains</span></figcaption>
     </figure>
     </div>
@@ -743,38 +720,38 @@
     <div class="photogrid">
     <div class="colgroup">Violet <span class="cgn">3</span></div>
     <figure class="photo" id="p-5">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r18-day-core-stained-glass.jpg" alt="Person in headphones on a chair, violet stained-glass light across the floor">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r18-day-core-stained-glass.jpg" alt="Person in headphones on a chair, violet stained-glass light across the floor">
       <figcaption><b class="pid">P-5</b><span class="ttl">Stained Glass Light</span><span class="recipe"><i>RECIPE</i> sun passes through violet stained glass and the glass becomes the lamp; the floor takes the pattern, room silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-7">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r27-v-person-glass.jpg" alt="Woman by a bright window, violet stained-glass light falling on her face">
+      <img loading="lazy" src="/site/assets/sg5lib/r27-v-person-glass.jpg" alt="Woman by a bright window, violet stained-glass light falling on her face">
       <figcaption><b class="pid">P-7</b><span class="ttl">Stained-Glass Portrait</span><span class="recipe"><i>RECIPE</i> the window glass is the lamp; violet lands on her face as transmitted light, not a wash.</span></figcaption>
     </figure>
     <figure class="photo" id="p-21">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r28-dev-turntable-violet-cc1.jpg" alt="Close-up of a stylus in a record groove under violet light">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r28-dev-turntable-violet-cc1.jpg" alt="Close-up of a stylus in a record groove under violet light">
       <figcaption><b class="pid">P-21</b><span class="ttl">Turntable in Violet Light</span><span class="recipe"><i>RECIPE</i> light comes through the record&#x27;s own edge into the groove; deck silver.</span></figcaption>
     </figure>
     <div class="colgroup">Rose <span class="cgn">2</span></div>
     <figure class="photo" id="p-24">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r18-day-love-laundry-rose-cc1.jpg" alt="Rose dress on a laundry line between black and white fire escapes">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r18-day-love-laundry-rose-cc1.jpg" alt="Rose dress on a laundry line between black and white fire escapes">
       <figcaption><b class="pid">P-24</b><span class="ttl">Rose on the Line</span><span class="recipe"><i>RECIPE</i> sun through the rose dress on the line makes the dress the lamp; fire escapes black and white.</span></figcaption>
     </figure>
     <figure class="photo" id="p-25">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r19-sun-love-laundry-rose-cc1.jpg" alt="Rose dress on a washing line with white sheets, tenement wall behind">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r19-sun-love-laundry-rose-cc1.jpg" alt="Rose dress on a washing line with white sheets, tenement wall behind">
       <figcaption><b class="pid">P-25</b><span class="ttl">Laundry in the Sun</span><span class="recipe"><i>RECIPE</i> the dress backlit against white sheets; the cloth transmits, the wall stays grey.</span></figcaption>
     </figure>
     <div class="colgroup">Emerald <span class="cgn">2</span></div>
     <figure class="photo">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r23-hero-record-emerald.jpg" alt="Emerald vinyl record leaning against a white wall in hard sun">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r23-hero-record-emerald.jpg" alt="Emerald vinyl record leaning against a white wall in hard sun">
       <figcaption><b class="pid">P-82</b><span class="ttl">Emerald Record</span><span class="dual">DUAL FILING · also filed under SOLO</span><span class="recipe"><i>RECIPE</i> the emerald disc is the object against a silver wall, and the translucent vinyl passes hard sunlight through itself — our best THROUGH-outdoors exemplar.</span></figcaption>
     </figure>
     <figure class="photo">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r29-e-turntable-lid.jpg" alt="Turntable with an emerald lid open, shelved records behind it">
+      <img loading="lazy" src="/site/assets/sg5lib/r29-e-turntable-lid.jpg" alt="Turntable with an emerald lid open, shelved records behind it">
       <figcaption><b class="pid">P-85</b><span class="ttl">Emerald Lid Turntable</span><span class="dual">DUAL FILING · also filed under SOLO</span><span class="recipe"><i>RECIPE</i> the emerald lid is the object, and daylight passes through it onto the deck below; shelved records and room silver.</span></figcaption>
     </figure>
     <div class="colgroup">All four colours <span class="cgn">1</span></div>
     <figure class="photo">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-laundry-cc1.jpg" alt="Alley laundry line with four garments in violet, emerald, amber and rose">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r27-m-laundry-cc1.jpg" alt="Alley laundry line with four garments in violet, emerald, amber and rose">
       <figcaption><b class="pid">P-88</b><span class="ttl">Four-Color Laundry Line</span><span class="dual">DUAL FILING · also filed under CHORD</span><span class="recipe"><i>RECIPE</i> four garments on one alley line carry the chord, and sun through each one makes every garment its own lamp; brick and sky monochrome.</span></figcaption>
     </figure>
     </div>
@@ -789,21 +766,21 @@
     <div class="photogrid">
     <div class="colgroup">Violet <span class="cgn">1</span></div>
     <figure class="photo" id="p-1">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r19-sun-core-violet-parasol.jpg" alt="Woman on a bench under a violet parasol, black and white plaza, hard sun">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r19-sun-core-violet-parasol.jpg" alt="Woman on a bench under a violet parasol, black and white plaza, hard sun">
       <figcaption><b class="pid">P-1</b><span class="ttl">Violet Parasol</span><span class="recipe"><i>RECIPE</i> the violet parasol lands its color on the bench and the woman beneath it; plaza grey.</span></figcaption>
     </figure>
     <div class="colgroup">Amber <span class="cgn">2</span></div>
     <figure class="photo" id="p-55">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-boombox-puddle-amber.jpg" alt="Boombox on wet concrete steps, its amber tape window mirrored in the puddle">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-boombox-puddle-amber.jpg" alt="Boombox on wet concrete steps, its amber tape window mirrored in the puddle">
       <figcaption><b class="pid">P-55</b><span class="ttl">Boombox in the Puddle</span><span class="recipe"><i>RECIPE</i> the boombox&#x27;s amber tape window spills into the puddle beside it; concrete silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-59">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-groove-glint-amber.jpg" alt="Close-up of a stylus in a record groove, amber glint along the grooves">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-groove-glint-amber.jpg" alt="Close-up of a stylus in a record groove, amber glint along the grooves">
       <figcaption><b class="pid">P-59</b><span class="ttl">Groove Glint</span><span class="recipe"><i>RECIPE</i> amber glints off the groove and runs along the record beside the stylus; deck grey.</span></figcaption>
     </figure>
     <div class="colgroup">Emerald <span class="cgn">1</span></div>
     <figure class="photo" id="p-81">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-dashboard-earbuds-emerald.jpg" alt="Earbuds case on a car dashboard, emerald light reflected in the windscreen">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r22-refl-dashboard-earbuds-emerald.jpg" alt="Earbuds case on a car dashboard, emerald light reflected in the windscreen">
       <figcaption><b class="pid">P-81</b><span class="ttl">Dashboard Earbuds</span><span class="recipe"><i>RECIPE</i> the emerald case throws its color onto the windscreen; dashboard and street silver.</span></figcaption>
     </figure>
     </div>
@@ -820,7 +797,7 @@
   <p class="body" style="margin-top:10px"><b>RISING AIR</b> &mdash; the ground above a dark scene lightens with height. Collapse the scene&#x27;s topmost rows (the top strip only &mdash; a deep slice averages too light and cuts a line) to almost nothing, stretch upward, blur, then whiten with an eased ramp: zero white at the junction, full white by the first text block. Gate: a row-luminance scan across the junction must show no jump above 6 points.</p>
     <div class="photogrid">
     <figure class="photo" id="curtain-record">
-      <img width="1000" height="1167" loading="lazy" src="/site/Iris/assets/examples/curtain-record-inuse.jpg" alt="A dark turntable with a glowing rose center label, a soft vertical beam of rose light rising and dispersing into grey air that lightens to white">
+      <img loading="lazy" src="/site/Iris/assets/examples/curtain-record-inuse.jpg" alt="A dark turntable with a glowing rose center label, a soft vertical beam of rose light rising and dispersing into grey air that lightens to white">
       <figcaption><b class="pid">LAMP + BEAM + RISING AIR &middot; IN USE</b><span class="ttl">Light From The Record</span><span class="recipe"><i>RECIPE</i> the P-39 control keeps its blacks; the label is the lamp; the beam rises and disperses; the air whitens with height. Locked on the App Store credibility frame.</span><span class="flag"><b>NOT A BANK FRAME</b> a crop of the six-image App Store build, carried as the working reference. No P-number, counts in no bank total.</span></figcaption>
     </figure>
     </div>
@@ -834,18 +811,18 @@
   <p class="roomsline"><b>Rooms:</b> The daylight papers, sun, day and room, where a garment is the only sanctioned way colour touches a person. On the night and the dawn it holds when the garment is the section&#x27;s colour; the rim and the shadow go on the frame, never on the person. <a href="/site/styleguide#the-five-settings">The five settings</a>, on the style guide, shows a real frame standing in each room.</p>
     <div class="photogrid">
     <div class="colgroup">Rose <span class="cgn">2</span></div>
-    <figure class="photo" id="p-219"><img width="1121" height="1403" loading="lazy" src="/site/assets/library/p-219-rose-headphones-dancer.png" alt="Dancer wearing rose headphones and a rose dress beside a softly glowing turntable"><figcaption><b class="pid">P-219</b><span class="ttl">Rose headphones dancer</span><span class="recipe"><i>RECIPE</i> Approved generated variation of P-106. Rose dress and headphones, flat vinyl on the platter, rose light on the lid and wall, with a monochrome room.</span></figcaption></figure>
+    <figure class="photo" id="p-219"><img loading="lazy" src="/site/assets/library/p-219-rose-headphones-dancer.png" alt="Dancer wearing rose headphones and a rose dress beside a softly glowing turntable"><figcaption><b class="pid">P-219</b><span class="ttl">Rose headphones dancer</span><span class="recipe"><i>RECIPE</i> Approved generated variation of P-106. Rose dress and headphones, flat vinyl on the platter, rose light on the lid and wall, with a monochrome room.</span></figcaption></figure>
 <figure class="photo" id="p-106">
-      <img width="1600" height="2000" loading="lazy" src="/site/assets/d4i/d4i-dance.jpg" alt="Dance">
+      <img loading="lazy" src="/site/assets/d4i/d4i-dance.jpg" alt="Dance">
       <figcaption><b class="pid">P-106</b><span class="ttl">Red Dress Dance</span><span class="recipe"><i>RECIPE</i> the red dress is the garment carrying the color; room and record silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-127">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/d4e/d4e-laundry-h8.jpg" alt="Laundry H8">
+      <img loading="lazy" src="/site/assets/d4e/d4e-laundry-h8.jpg" alt="Laundry H8">
       <figcaption><b class="pid">P-127</b><span class="ttl">Rose Dress On The Line</span><span class="recipe"><i>RECIPE</i> the rose dress hung on the line, garment first, sun lane; wall and sheets silver.</span></figcaption>
     </figure>
     <div class="colgroup">All four colours <span class="cgn">1</span></div>
     <figure class="photo">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r29-m-runners-bridge.jpg" alt="Four runners on a bridge in violet, emerald, amber and rose vests">
+      <img loading="lazy" src="/site/assets/sg5lib/r29-m-runners-bridge.jpg" alt="Four runners on a bridge in violet, emerald, amber and rose vests">
       <figcaption><b class="pid">P-93</b><span class="ttl">Runners on the Bridge</span><span class="dual">DUAL FILING · also filed under CHORD</span><span class="recipe"><i>RECIPE</i> the chord carried entirely as worn garment: four vests on four bodies; bridge and river silver.</span></figcaption>
     </figure>
     </div>
@@ -860,83 +837,83 @@
     <div class="photogrid">
     <div class="colgroup">Violet <span class="cgn">1</span></div>
     <figure class="photo" id="p-125">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/d4e/d4e-tree-h8.jpg" alt="Tree H8">
+      <img loading="lazy" src="/site/assets/d4e/d4e-tree-h8.jpg" alt="Tree H8">
       <figcaption><b class="pid">P-125</b><span class="ttl">Jacaranda Morning H8</span><span class="recipe"><i>RECIPE</i> the sun lane&#x27;s morning walk; standing sun makes all the light, jacaranda in silver.</span></figcaption>
     </figure>
     <div class="colgroup">Amber <span class="cgn">15</span></div>
     <figure class="photo" id="p-46">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r18-day-vitality-dawn-gold-cc1.jpg" alt="Runner on a boardwalk bridge at sunrise, gold light down the planks">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r18-day-vitality-dawn-gold-cc1.jpg" alt="Runner on a boardwalk bridge at sunrise, gold light down the planks">
       <figcaption><b class="pid">P-46</b><span class="ttl">Dawn Gold</span><span class="recipe"><i>RECIPE</i> amber arrives as sunrise down the boardwalk planks, light not pop; runner silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-47">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-vitality-sunshine-shaft.jpg" alt="Person running through a shaft of gold sun in a dark alley">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r20-sun2-vitality-sunshine-shaft.jpg" alt="Person running through a shaft of gold sun in a dark alley">
       <figcaption><b class="pid">P-47</b><span class="ttl">Sunshine Shaft</span><span class="recipe"><i>RECIPE</i> a shaft of gold sun cuts the dark alley; the runner passes through it.</span></figcaption>
     </figure>
     <figure class="photo" id="p-48">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r27-a-person-shaft.jpg" alt="Breakdancer frozen on one hand in a gold alley shaft, friends watching">
+      <img loading="lazy" src="/site/assets/sg5lib/r27-a-person-shaft.jpg" alt="Breakdancer frozen on one hand in a gold alley shaft, friends watching">
       <figcaption><b class="pid">P-48</b><span class="ttl">B-Boy in the Amber Shaft</span><span class="recipe"><i>RECIPE</i> the alley shaft is the light source; the b-boy is lit by it, never painted.</span></figcaption>
     </figure>
     <figure class="photo" id="p-49">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r29-a-runner-dawn-loud.jpg" alt="Runner silhouetted on a pier against a gold sunrise, light on the water">
+      <img loading="lazy" src="/site/assets/sg5lib/r29-a-runner-dawn-loud.jpg" alt="Runner silhouetted on a pier against a gold sunrise, light on the water">
       <figcaption><b class="pid">P-49</b><span class="ttl">Dawn Runner</span><span class="recipe"><i>RECIPE</i> sunrise behind the pier does the work; runner and water read as silhouette and glare.</span></figcaption>
     </figure>
     <figure class="photo" id="p-50">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r27-a-landscape-dawn.jpg" alt="Empty boardwalk pier running out to a gold sunrise over water">
+      <img loading="lazy" src="/site/assets/sg5lib/r27-a-landscape-dawn.jpg" alt="Empty boardwalk pier running out to a gold sunrise over water">
       <figcaption><b class="pid">P-50</b><span class="ttl">Dawn Boardwalk</span><span class="recipe"><i>RECIPE</i> the empty pier runs out into sunrise; amber is the sky, not an object.</span></figcaption>
     </figure>
     <figure class="photo" id="p-51">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r19-sun-vitality-amber-brass-cc1.jpg" alt="Young man playing a brass trumpet on a sunlit sidewalk, two men listening">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r19-sun-vitality-amber-brass-cc1.jpg" alt="Young man playing a brass trumpet on a sunlit sidewalk, two men listening">
       <figcaption><b class="pid">P-51</b><span class="ttl">Brass in the Sun</span><span class="recipe"><i>RECIPE</i> afternoon sun on the sidewalk carries the warmth; the brass catches it.</span></figcaption>
     </figure>
     <figure class="photo" id="p-52">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r28-vit-studio-leap.jpg" alt="Dancer leaping in a studio, amber light thrown from a speaker below">
+      <img loading="lazy" src="/site/assets/sg5lib/r28-vit-studio-leap.jpg" alt="Dancer leaping in a studio, amber light thrown from a speaker below">
       <figcaption><b class="pid">P-52</b><span class="ttl">Studio Leap</span><span class="recipe"><i>RECIPE</i> amber thrown low across the studio floor as raking light; dancer silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-53">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r28-vit-stair-sprint.jpg" alt="Woman running down stadium steps, amber light from a boombox beside her">
+      <img loading="lazy" src="/site/assets/sg5lib/r28-vit-stair-sprint.jpg" alt="Woman running down stadium steps, amber light from a boombox beside her">
       <figcaption><b class="pid">P-53</b><span class="ttl">Stair Sprint</span><span class="recipe"><i>RECIPE</i> amber rakes the stadium steps as directional light; runner unpainted.</span></figcaption>
     </figure>
     <figure class="photo" id="p-60">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r28-attic-vinyl-amber.jpg" alt="Woman leaning close to a turntable in an attic, amber light on her face">
+      <img loading="lazy" src="/site/assets/sg5lib/r28-attic-vinyl-amber.jpg" alt="Woman leaning close to a turntable in an attic, amber light on her face">
       <figcaption><b class="pid">P-60</b><span class="ttl">Attic Vinyl, Amber</span><span class="recipe"><i>RECIPE</i> amber falls across the attic and her face as room light; the record stays grey.</span></figcaption>
     </figure>
     <figure class="photo" id="p-61">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r29-a-record-needledrop.jpg" alt="Hand lowering a tonearm onto a spinning record, amber light in the groove">
+      <img loading="lazy" src="/site/assets/sg5lib/r29-a-record-needledrop.jpg" alt="Hand lowering a tonearm onto a spinning record, amber light in the groove">
       <figcaption><b class="pid">P-61</b><span class="ttl">Needle Drop</span><span class="recipe"><i>RECIPE</i> amber sits in the groove as the light of the room; hand and deck silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-62">
-      <img width="1400" height="1120" loading="lazy" src="/site/assets/lc/fort-reveal-amber-t2.jpg" alt="A blanket-fort reveal, the child inside lit amber like a lantern, the room grey">
+      <img loading="lazy" src="/site/assets/lc/fort-reveal-amber-t2.jpg" alt="A blanket-fort reveal, the child inside lit amber like a lantern, the room grey">
       <figcaption><b class="pid">P-62</b><span class="ttl">Fort Reveal</span><span class="recipe"><i>RECIPE</i> the blanket fort is a lantern from inside; the room around it grey.</span></figcaption>
     </figure>
     <figure class="photo" id="p-63">
-      <img width="1400" height="1120" loading="lazy" src="/site/assets/lc/dawn-swimmer-amber-t3.jpg" alt="A swimmer at dawn in open water, a wide amber light across her and the water, the rest grey">
+      <img loading="lazy" src="/site/assets/lc/dawn-swimmer-amber-t3.jpg" alt="A swimmer at dawn in open water, a wide amber light across her and the water, the rest grey">
       <figcaption><b class="pid">P-63</b><span class="ttl">Dawn Swimmer</span><span class="recipe"><i>RECIPE</i> a wide amber light across swimmer and water at dawn; the rest grey.</span></figcaption>
     </figure>
     <figure class="photo" id="p-109">
-      <img width="1600" height="1253" loading="lazy" src="/site/assets/d4h/d4h-rain-sill.jpg" alt="Rain Sill">
+      <img loading="lazy" src="/site/assets/d4h/d4h-rain-sill.jpg" alt="Rain Sill">
       <figcaption><b class="pid">P-109</b><span class="ttl">Boombox Rain Sill</span><span class="recipe"><i>RECIPE</i> amber in the cassette window reads as lamp light on a rainy sill; street silver.</span></figcaption>
     </figure>
     <figure class="photo" id="p-118">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/d4c/d4c-attic.jpg" alt="Attic Record Glow">
+      <img loading="lazy" src="/site/assets/d4c/d4c-attic.jpg" alt="Attic Record Glow">
       <figcaption><b class="pid">P-118</b><span class="ttl">Attic Record Glow</span><span class="recipe"><i>RECIPE</i> the groove throws warm light up into her laugh; attic and shoulders silver.</span><span class="flag"><b>FLAG: SKIN-LAW EXCEPTION</b> kept on Michael&#x27;s word</span></figcaption>
     </figure>
     <figure class="photo" id="p-156">
-      <img width="1280" height="960" loading="lazy" src="/site/assets/d4j/d4j-step2.jpg" alt="Amber In The Earcup">
+      <img loading="lazy" src="/site/assets/d4j/d4j-step2.jpg" alt="Amber In The Earcup">
       <figcaption><b class="pid">P-156</b><span class="ttl">Amber In The Earcup</span><span class="recipe"><i>RECIPE</i> amber sits inside the earcup as light; the head and room silver.</span></figcaption>
     </figure>
     <div class="colgroup">Emerald <span class="cgn">1</span></div>
     <figure class="photo" id="p-206">
-      <img width="1280" height="960" loading="lazy" src="/site/assets/home-t11/step3-headphones-green.jpg" alt="A woman in headphones singing joyfully into a wooden spoon in a sun-flooded white kitchen, her earcup lit emerald from within">
+      <img loading="lazy" src="/site/assets/home-t11/step3-headphones-green.jpg" alt="A woman in headphones singing joyfully into a wooden spoon in a sun-flooded white kitchen, her earcup lit emerald from within">
       <figcaption><b class="pid">P-206</b><span class="ttl">Emerald In The Earcup</span><span class="recipe"><i>RECIPE</i> P-156&#x27;s grammar on the singer: the inner plate is the filament (L 90 to 80 centre to rim, chroma 28 to 56), the ring and pad are lit by it (own L &times;0.70, +25 L on the lit side), the halo reaches under one cup radius into dark hair only, the arm takes a thin rim within 30 px. Nothing on skin (20 px measured margin), the mug and its marble bounce silver, every other pixel the original photograph. Replaces P-182 (retired 2026-09-06, fd-071: the pop sat on a coffee cup). THE LAMP recipe, in code, no model.</span></figcaption>
     </figure>
     <div class="colgroup">All four colours <span class="cgn">1</span></div>
     <figure class="photo" id="p-177">
-      <img width="2200" height="1237" loading="lazy" src="/site/assets/hero-home/hero-home-real-screen-01.jpg" alt="A woman with large black headphones in a cream knitted sweater, smiling and holding up a real iPhone whose screen carries the live zodiac.fm Playlist, on a blown-out white beach with four surfboards in violet, emerald, amber and rose, the after-noon sun standing high in the middle of the sky and making all the light">
-      <figcaption><b class="pid">P-177</b><span class="ttl">Hero Home &middot; Real Screen 01</span><span class="recipe"><i>RECIPE</i> after-noon sun standing high makes all the light; four boards carry the chord beneath it. THE hero: the lady in the cream sweater, a real iPhone at true 19.5:9 proportion, carrying iPhone &middot; Real Screen 01 unmodified. Replaced P-163 one-for-one (retired 2026-09-04, Michael&#x27;s word: the P-163 phone was drawn, not photographed, with an old screen pasted over it); pages built on the old plate keep it. REBUILT 2026-09-06 (fd-073, fd-074): the phone in her hand is P-208 The Phone, Frame 04 Build, frontal with the hand&#x27;s 2.4&deg; tilt, scaled 1.033 about the old phone&#x27;s centre so the old device&#x27;s whole footprint is buried (0 old-phone pixels visible), her fingertips re-laid on the new rail from the master, bezel gain fitted to the beach light; outside the old footprint the photograph is byte-identical. PHONE COMPANION 2026-09-12: a 4:5 cut for phone widths, the same frame with its own sky continued upward so page text can sit in the picture; the original frame is pasted back over the bottom, so only the new sky band and the completed headphone crown are generated, and the top 18% dissolves to #FFFFFE. TIGHT PHONE CUT 2026-09-12: a 3:4 crop of that companion (x250-1650, y893-2750) for phone widths, where she and the phone need to be about 1.6x the size the 4:5 plate gives them; violet, emerald and a sliver of amber enter from the right, the rose board is out, and the top 20% is finished to #FFFFFE. Its headphone crown is repaired: the 4:5 file&#x27;s generated band flared 20-30px too wide on her right at the old frame line, so rows 1500-1512 were re-laid on the circle fitted to the ORIGINAL band (centre x804, r215, apex y1507). Everything from the old frame line down is the original photograph in all three formats. Keep every source intact and place page text in separate layers.</span><span class="recipe"><i>FORMATS</i> <a style="color:var(--cream)" href="/site/assets/hero-home/hero-home-real-screen-01.jpg">Desktop &middot; 2200&times;1237</a> &nbsp; / &nbsp; <a style="color:var(--cream)" href="/site/assets/hero-home/hero-home-real-screen-01-phone-sky.jpg">Phone &middot; 4:5</a> &nbsp; / &nbsp; <a style="color:var(--cream)" href="/site/assets/hero-home/hero-home-real-screen-01-phone-tight.jpg">Phone tight &middot; 3:4 &middot; 1400&times;1857</a></span><details style="margin-top:12px"><summary style="cursor:pointer;font-weight:600;padding:8px 0">Show phone image</summary><img width="2200" height="2750" loading="lazy" src="/site/assets/hero-home/hero-home-real-screen-01-phone-sky.jpg" alt="Hero Home phone companion: the same woman in headphones holding the real iPhone beside the four coloured surfboards, in a taller 4:5 frame whose pale beach sky is continued upward and dissolves to white at the top"></details><details style="margin-top:12px"><summary style="cursor:pointer;font-weight:600;padding:8px 0">Show tight phone image</summary><img width="1400" height="1857" loading="lazy" src="/site/assets/hero-home/hero-home-real-screen-01-phone-tight.jpg" alt="Hero Home tight phone cut: the same woman in headphones filling a 3:4 frame with the real iPhone held up beside her, the sun breaking at her shoulder, the violet and emerald surfboards and a sliver of the amber one standing in the sand at the right, and the sky dissolving to white across the top fifth"></details></figcaption>
+      <img loading="lazy" src="/site/assets/hero-home/hero-home-real-screen-01.jpg" alt="A woman with large black headphones in a cream knitted sweater, smiling and holding up a real iPhone whose screen carries the live zodiac.fm Playlist, on a blown-out white beach with four surfboards in violet, emerald, amber and rose, the after-noon sun standing high in the middle of the sky and making all the light">
+      <figcaption><b class="pid">P-177</b><span class="ttl">Hero Home &middot; Real Screen 01</span><span class="recipe"><i>RECIPE</i> after-noon sun standing high makes all the light; four boards carry the chord beneath it. THE hero: the lady in the cream sweater, a real iPhone at true 19.5:9 proportion, carrying iPhone &middot; Real Screen 01 unmodified. Replaced P-163 one-for-one (retired 2026-09-04, Michael&#x27;s word: the P-163 phone was drawn, not photographed, with an old screen pasted over it); pages built on the old plate keep it. REBUILT 2026-09-06 (fd-073, fd-074): the phone in her hand is P-208 The Phone, Frame 04 Build, frontal with the hand&#x27;s 2.4&deg; tilt, scaled 1.033 about the old phone&#x27;s centre so the old device&#x27;s whole footprint is buried (0 old-phone pixels visible), her fingertips re-laid on the new rail from the master, bezel gain fitted to the beach light; outside the old footprint the photograph is byte-identical. PHONE COMPANION 2026-09-12: a 4:5 cut for phone widths, the same frame with its own sky continued upward so page text can sit in the picture; the original frame is pasted back over the bottom, so only the new sky band and the completed headphone crown are generated, and the top 18% dissolves to #FFFFFE. TIGHT PHONE CUT 2026-09-12: a 3:4 crop of that companion (x250-1650, y893-2750) for phone widths, where she and the phone need to be about 1.6x the size the 4:5 plate gives them; violet, emerald and a sliver of amber enter from the right, the rose board is out, and the top 20% is finished to #FFFFFE. Its headphone crown is repaired: the 4:5 file&#x27;s generated band flared 20-30px too wide on her right at the old frame line, so rows 1500-1512 were re-laid on the circle fitted to the ORIGINAL band (centre x804, r215, apex y1507). Everything from the old frame line down is the original photograph in all three formats. Keep every source intact and place page text in separate layers.</span><span class="recipe"><i>FORMATS</i> <a style="color:var(--cream)" href="/site/assets/hero-home/hero-home-real-screen-01.jpg">Desktop &middot; 2200&times;1237</a> &nbsp; / &nbsp; <a style="color:var(--cream)" href="/site/assets/hero-home/hero-home-real-screen-01-phone-sky.jpg">Phone &middot; 4:5</a> &nbsp; / &nbsp; <a style="color:var(--cream)" href="/site/assets/hero-home/hero-home-real-screen-01-phone-tight.jpg">Phone tight &middot; 3:4 &middot; 1400&times;1857</a></span><details style="margin-top:12px"><summary style="cursor:pointer;font-weight:600;padding:8px 0">Show phone image</summary><img loading="lazy" src="/site/assets/hero-home/hero-home-real-screen-01-phone-sky.jpg" alt="Hero Home phone companion: the same woman in headphones holding the real iPhone beside the four coloured surfboards, in a taller 4:5 frame whose pale beach sky is continued upward and dissolves to white at the top"></details><details style="margin-top:12px"><summary style="cursor:pointer;font-weight:600;padding:8px 0">Show tight phone image</summary><img loading="lazy" src="/site/assets/hero-home/hero-home-real-screen-01-phone-tight.jpg" alt="Hero Home tight phone cut: the same woman in headphones filling a 3:4 frame with the real iPhone held up beside her, the sun breaking at her shoulder, the violet and emerald surfboards and a sliver of the amber one standing in the sand at the right, and the sky dissolving to white across the top fifth"></details></figcaption>
     </figure>
     <div class="colgroup">Unsorted <span class="cgn">1</span></div>
     <figure class="photo" id="p-126">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/d4e/d4e-trumpet-h8.jpg" alt="Trumpet H8">
+      <img loading="lazy" src="/site/assets/d4e/d4e-trumpet-h8.jpg" alt="Trumpet H8">
       <figcaption><b class="pid">P-126</b><span class="ttl">Trumpet In The Sun</span><span class="recipe"><i>RECIPE</i> brass into afternoon sun; the sun is the color, the horn only catches it.</span></figcaption>
     </figure>
     </div>
@@ -970,46 +947,46 @@
     <div class="photogrid">
     <div class="colgroup">Violet <span class="cgn">1</span></div>
     <figure class="photo" id="p-3">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r17-hour-core-violet-dusk.jpg" alt="Silhouetted person at a window filled with violet dusk light">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r17-hour-core-violet-dusk.jpg" alt="Silhouetted person at a window filled with violet dusk light">
       <figcaption><b class="pid">P-3</b><span class="ttl">Violet Hour</span><span class="recipe"><i>RECIPE</i> violet dusk fills the window and the room; kept and labeled, never a page ground.</span></figcaption>
     </figure>
     <div class="colgroup">Rose <span class="cgn">5</span></div>
     <figure class="photo" id="p-23">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/eval-r17-hour-love-rose-diner.jpg" alt="Two people at a diner table under a rose neon sign and lit jukebox">
+      <img loading="lazy" src="/site/assets/sg5lib/eval-r17-hour-love-rose-diner.jpg" alt="Two people at a diner table under a rose neon sign and lit jukebox">
       <figcaption><b class="pid">P-23</b><span class="ttl">Rose Diner</span><span class="recipe"><i>RECIPE</i> rose neon and a lit jukebox make the diner&#x27;s whole air; evening only.</span></figcaption>
     </figure>
     <figure class="photo" id="p-27">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r27-r-people-lanterns-cc1.jpg" alt="Couple dancing on a rooftop under a string of rose paper lanterns">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r27-r-people-lanterns-cc1.jpg" alt="Couple dancing on a rooftop under a string of rose paper lanterns">
       <figcaption><b class="pid">P-27</b><span class="ttl">Lantern Slow Dance</span><span class="recipe"><i>RECIPE</i> a string of rose paper lanterns lights the roof; evening only.</span></figcaption>
     </figure>
     <figure class="photo" id="p-42">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r29-r-turntable-signlight.jpg" alt="Turntable by a night window, rose sign light falling across it">
+      <img loading="lazy" src="/site/assets/sg5lib/r29-r-turntable-signlight.jpg" alt="Turntable by a night window, rose sign light falling across it">
       <figcaption><b class="pid">P-42</b><span class="ttl">Turntable in Sign Light</span><span class="recipe"><i>RECIPE</i> rose sign light falls through a night window onto the deck; evening only.</span></figcaption>
     </figure>
     <figure class="photo" id="p-44">
-      <img width="1400" height="1120" loading="lazy" src="/site/assets/lc/rooftop-toast-rose-t2.jpg" alt="Friends toasting on a rooftop at night, the toast moment lit in rose, the skyline grey">
+      <img loading="lazy" src="/site/assets/lc/rooftop-toast-rose-t2.jpg" alt="Friends toasting on a rooftop at night, the toast moment lit in rose, the skyline grey">
       <figcaption><b class="pid">P-44</b><span class="ttl">Rooftop Toast</span><span class="recipe"><i>RECIPE</i> the toast lit rose against a grey night skyline; evening only.</span></figcaption>
     </figure>
     <figure class="photo" id="p-99">
-      <img width="1400" height="1120" loading="lazy" src="/site/assets/lc/umbrella-run-cc1.jpg" alt="Three friends laughing under one black umbrella in night rain, one lit violet, one rose, one amber, the wet street reflecting all three">
+      <img loading="lazy" src="/site/assets/lc/umbrella-run-cc1.jpg" alt="Three friends laughing under one black umbrella in night rain, one lit violet, one rose, one amber, the wet street reflecting all three">
       <figcaption><b class="pid">P-99</b><span class="ttl">Umbrella Run</span><span class="recipe"><i>RECIPE</i> three friends under one black umbrella in night rain, three colors cast and mirrored in the wet street; the standard for cast light in group scenes, evening only.</span></figcaption>
     </figure>
     <div class="colgroup">Amber <span class="cgn">1</span></div>
     <figure class="photo" id="p-56">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r27-a-device-sill.jpg" alt="Boombox on a windowsill with rain on the glass, amber tape window lit">
+      <img loading="lazy" src="/site/assets/sg5lib/r27-a-device-sill.jpg" alt="Boombox on a windowsill with rain on the glass, amber tape window lit">
       <figcaption><b class="pid">P-56</b><span class="ttl">Boombox on the Rainy Sill</span><span class="recipe"><i>RECIPE</i> amber tape window against rain on night glass; evening only.</span></figcaption>
     </figure>
     <div class="colgroup">Emerald <span class="cgn">3</span></div>
     <figure class="photo" id="p-64">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/cc1-r17-hour-abundance-emerald-go-cc1.jpg" alt="Person in headphones on a wet night street, every traffic light emerald">
+      <img loading="lazy" src="/site/assets/sg5lib/cc1-r17-hour-abundance-emerald-go-cc1.jpg" alt="Person in headphones on a wet night street, every traffic light emerald">
       <figcaption><b class="pid">P-64</b><span class="ttl">Green Lights, Go</span><span class="recipe"><i>RECIPE</i> every traffic light emerald on a wet night street; evening only.</span></figcaption>
     </figure>
     <figure class="photo" id="p-79">
-      <img width="1100" height="880" loading="lazy" src="/site/assets/sg5lib/r27-e-device-stoop.jpg" alt="Speaker with an emerald ring light sitting on a stone stoop at night">
+      <img loading="lazy" src="/site/assets/sg5lib/r27-e-device-stoop.jpg" alt="Speaker with an emerald ring light sitting on a stone stoop at night">
       <figcaption><b class="pid">P-79</b><span class="ttl">Stoop Speaker</span><span class="recipe"><i>RECIPE</i> an emerald ring light on a stone stoop at night; evening only.</span></figcaption>
     </figure>
     <figure class="photo" id="p-108">
-      <img width="1600" height="1204" loading="lazy" src="/site/assets/d4h/d4h-crossing.jpg" alt="Crossing">
+      <img loading="lazy" src="/site/assets/d4h/d4h-crossing.jpg" alt="Crossing">
       <figcaption><b class="pid">P-108</b><span class="ttl">Emerald Crossing</span><span class="recipe"><i>RECIPE</i> emerald signal over an evening crossing; held for later work, Michael wants more green on her shirt when it returns.</span></figcaption>
     </figure>
     </div>
@@ -1089,19 +1066,19 @@
     <div class="gate"><b>Which one a page takes</b>Silver is the default, because a face on this site is always silver &mdash; colour sits beside a person, never on them. The colour master is the archival original and the source every other cut is made from; it runs on a page only where a page deliberately wants a photograph in its own colour. Both are library files under one number, so neither is a page-local <i class="em">P-213a</i>; that suffix stays reserved for a crop or edit made for a single page.</div>
     <div class="photogrid" style="margin-top:44px">
     <figure class="photo" id="p-213">
-      <img width="2730" height="1536" loading="lazy" src="/site/assets/library/p-213-michael-lovitch-founder-silver.jpg" alt="Michael Lovitch, founder of Zodiac.fm, in black and white, smiling to camera in a grey t-shirt against a plain pale wall">
+      <img loading="lazy" src="/site/assets/library/p-213-michael-lovitch-founder-silver.jpg" alt="Michael Lovitch, founder of Zodiac.fm, in black and white, smiling to camera in a grey t-shirt against a plain pale wall">
       <figcaption><b class="pid">P-213</b><span class="ttl">Michael Lovitch · Founder, Zodiac.fm</span><span class="recipe"><i>RECIPE</i> SILVER &mdash; the full frame through the site&#x27;s locked ink: deep-ink duotone from Stage #0B0712 to white with a warm midtone, s-curve 0.85, clarity, film grain. The same treatment every face on this site carries, taken from <b>code/standardize_headshot.py</b> unchanged; only the align, cutout and field steps are skipped, because this cut keeps the whole photograph. <b>THE DEFAULT CUT.</b> 2730&times;1536.</span><span class="recipe"><i>TAGS</i> People &middot; Founder</span></figcaption>
     </figure>
     <figure class="photo" id="p-213-master">
-      <img width="2730" height="1536" loading="lazy" src="/site/assets/library/p-213-michael-lovitch-founder.jpg" alt="Michael Lovitch, founder of Zodiac.fm, in colour, smiling to camera in a grey t-shirt against a plain pale grey wall">
+      <img loading="lazy" src="/site/assets/library/p-213-michael-lovitch-founder.jpg" alt="Michael Lovitch, founder of Zodiac.fm, in colour, smiling to camera in a grey t-shirt against a plain pale grey wall">
       <figcaption><b class="pid">P-213</b><span class="ttl">Michael Lovitch · The colour master</span><span class="recipe"><i>RECIPE</i> the unretouched original, no colour event: pale plain ground, grey shirt, natural skin and silver hair. Archival, and the source every other cut is made from &mdash; it never changes. 2730&times;1536.</span><span class="recipe"><i>TAGS</i> People &middot; Founder</span></figcaption>
     </figure>
     <figure class="photo" id="p-213-card-greige">
-      <img width="500" height="500" loading="lazy" src="/site/assets/library/p-213-michael-lovitch-founder-card-greige.png" alt="Michael Lovitch cut out in black and white on a flat greige field, the standard Zodiac headshot card">
+      <img loading="lazy" src="/site/assets/library/p-213-michael-lovitch-founder-card-greige.png" alt="Michael Lovitch cut out in black and white on a flat greige field, the standard Zodiac headshot card">
       <figcaption><b class="pid">P-213</b><span class="ttl">Michael Lovitch · Headshot card, greige</span><span class="recipe"><i>RECIPE</i> the locked <b>standardize_headshot.py</b> treatment run unmodified: eyes leveled, eye-line at 45.5% from the top, inter-eye span 20% of frame, person cutout with a 1.2px feather, composited on the live greige field <span class="num">#EAE4DA</span>. The card every testimonial face on this site wears, so the founder can stand in a proof row with no special case. 500&times;500.</span><span class="recipe"><i>TAGS</i> People &middot; Founder</span></figcaption>
     </figure>
     <figure class="photo" id="p-213-card-transparent">
-      <img width="500" height="500" loading="lazy" style="background:#FFFFFF" src="/site/assets/library/p-213-michael-lovitch-founder-card-transparent.png" alt="The same black and white headshot card cut to alpha, shown here on white">
+      <img loading="lazy" style="background:#FFFFFF" src="/site/assets/library/p-213-michael-lovitch-founder-card-transparent.png" alt="The same black and white headshot card cut to alpha, shown here on white">
       <figcaption><b class="pid">P-213</b><span class="ttl">Michael Lovitch · Headshot card, transparent</span><span class="recipe"><i>RECIPE</i> the same card with no field at all &mdash; the cutout on alpha, edge eroded ~1px so the source ground never haloes. For pages that already run on white <span class="num">#FFFFFF</span>, where the greige box would show as a box. Shown here on white, which is the only ground it is for. 500&times;500 RGBA.</span><span class="recipe"><i>TAGS</i> People &middot; Founder</span></figcaption>
     </figure>
     </div>
@@ -2210,23 +2187,23 @@
   <p class="statement" style="margin-top:22px">CHIP = the product&#x27;s own marks carry the color.</p>
     <div class="photogrid">
     <figure class="photo" id="p-218">
-      <img width="1536" height="1024" loading="lazy" src="/site/assets/library/p-218-iphone-realistic-roselight-background.png" alt="Centered titanium iPhone displaying the zodiac.fm playlist, with sunlight passing through rose glass onto pale stone">
+      <img loading="lazy" src="/site/assets/library/p-218-iphone-realistic-roselight-background.png" alt="Centered titanium iPhone displaying the zodiac.fm playlist, with sunlight passing through rose glass onto pale stone">
       <figcaption><b class="pid">P-218</b><span class="ttl">iphone-realistic-roselight-background</span><span class="recipe"><i>RECIPE</i> Approved AI-generated variation of P-217: the complete phone centered in a silver-white architectural setting, rose glass refracting daylight across pale stone, and a grounded directional shadow. No record player. Original 1536&times;1024 PNG preserved; the full phone also fits a centered 4:5 mobile crop.</span></figcaption>
     </figure>
     <figure class="photo" id="p-217">
-      <img width="1024" height="1536" loading="lazy" src="/site/assets/library/p-217-iphone-playlist-realistic.png" alt="Realistic titanium iPhone displaying the zodiac.fm playlist, softly lit on an ivory studio surface">
+      <img loading="lazy" src="/site/assets/library/p-217-iphone-playlist-realistic.png" alt="Realistic titanium iPhone displaying the zodiac.fm playlist, softly lit on an ivory studio surface">
       <figcaption><b class="pid">P-217</b><span class="ttl">iphone-playlist-realistic</span><span class="recipe"><i>RECIPE</i> Approved AI-generated iPhone mockup based on the supplied playlist screenshot. Warm studio lighting, titanium edges, ivory backdrop and a soft grounded shadow. Original PNG preserved.</span></figcaption>
     </figure>
     <figure class="photo" id="p-208">
-      <img width="1920" height="3248" loading="lazy" src="/site/assets/hero-recast/phone-frame04-build-full.png" alt="The whole iPhone, built the App Store Frame 04 way: the photographed body top to bottom on the white sweep, the live zodiac.fm Playlist of 2026-09-03 under the bezel frame with the true corner radius, the Dynamic Island as hardware">
+      <img loading="lazy" src="/site/assets/hero-recast/phone-frame04-build-full.png" alt="The whole iPhone, built the App Store Frame 04 way: the photographed body top to bottom on the white sweep, the live zodiac.fm Playlist of 2026-09-03 under the bezel frame with the true corner radius, the Dynamic Island as hardware">
       <figcaption><b class="pid">P-208</b><span class="ttl">The Phone &middot; Frame 04 Build</span><span class="recipe"><i>RECIPE</i> THE REGISTERED DEVICE for every page (fd-073, Michael: &ldquo;look at the quality of iphone 04 &hellip; that is how you do a fucking phone. Do a whole phone to that quality&rdquo;). The 1920&times;3248 photographed body P-162, whole, with iPhone &middot; Real Screen 01 resized under a frame layer whose screen opening is cut at rx 118 so the bezel&#x27;s own corners mask it, island redrawn as hardware: Frame 04&#x27;s construction and constants, verbatim, uncropped. Screen MAD against source 0; 0 screen pixels outside the opening; corner radius 191 px; real bottom corners. The RGBA cutout `phone-frame04-build-cutout.png` (same number) is what scenes composite; the body never goes below 1920 wide until the final scene resize. Replaces P-178 (retired 2026-09-06: the same body downscaled with the screenshot pasted on top with square corners).</span></figcaption>
     </figure>
     <figure class="photo" id="p-207">
-      <img width="3600" height="2700" loading="lazy" src="/site/assets/home-t11/phone-playlist-real-screen-01.jpg" alt="A real iPhone leaning against the slim plinth of a black turntable on white linen in high daylight, its screen the live zodiac.fm Playlist of 2026-09-03 with four waveforms in rose, violet, amber and green">
+      <img loading="lazy" src="/site/assets/home-t11/phone-playlist-real-screen-01.jpg" alt="A real iPhone leaning against the slim plinth of a black turntable on white linen in high daylight, its screen the live zodiac.fm Playlist of 2026-09-03 with four waveforms in rose, violet, amber and green">
       <figcaption><b class="pid">P-207</b><span class="ttl">Phone Playlist &middot; Real Screen 01</span><span class="recipe"><i>RECIPE</i> the photographed P-178 body carrying iPhone &middot; Real Screen 01 re-pasted byte-true (screen aspect 0.462, MAD 2.9/255 against the source), leaning 10&deg; on a slim plinth with two contacts and two shadows, on a nano-pro plate neutralised to CHIP law (chroma outside the screen 1.35); record diameter two phone heights; linen L 93. The mobile plate <span class="num">1500&times;1875</span> is the same frame cropped to the phone. Replaces P-184 (retired 2026-09-06, fd-070: P-160&#x27;s cut scene with a warped screenshot on a painted phone). Built by the P-177 method; no model drew the phone or the screen. REBUILT 2026-09-06 (fd-074, Michael: &ldquo;make 207 with the perfect 208 phone&rdquo;): the phone is the P-208 cutout FRONTAL, scaled once, pitch 6&deg; as a pure keystone, no gain, no colour change; device pixels bit-identical to P-208 through the one warp (MAD 0); bottom bezel 0.0389 of body width against P-208&#x27;s 0.0390. Two shadows only, built outside the device.</span></figcaption>
     </figure>
     <figure class="photo" id="chip-kickers">
-      <img width="744" height="520" loading="lazy" src="/site/Iris/assets/examples/chip-kickers.jpg" alt="Three testimonial kickers — Coming Home, Flow, Opportunity — each with a small band-coloured waveform chip beside it in rose, amber and emerald">
+      <img loading="lazy" src="/site/Iris/assets/examples/chip-kickers.jpg" alt="Three testimonial kickers — Coming Home, Flow, Opportunity — each with a small band-coloured waveform chip beside it in rose, amber and emerald">
       <figcaption><b class="pid">CHIPS &middot; IN USE</b><span class="ttl">Kickers On The Page</span><span class="recipe"><i>RECIPE</i> the real product mark at page scale: a small band-coloured waveform sitting beside the kicker, colour beside the person and never on them. Rose, amber, emerald, one per voice.</span><span class="flag"><b>NOT A BANK FRAME</b> a crop of the page&#x27;s own testimonial spec, carried here as the working CHIP reference. It carries no P-number and counts in no bank total.</span></figcaption>
     </figure>
     </div>
@@ -2238,42 +2215,42 @@
     <h2>iPhone App</h2>
     <p class="lede" style="margin-top:28px">Current, unmodified iOS screens are the product source of truth for website and App Store image construction.</p>
     <figure class="source-capture iphone" id="iphone-ios-real-playlist-2026-09-03">
-      <a class="capture-stage" href="/site/assets/iphone-app/real-screens/playlist-ios-app-iphone-2026-09-03.png" download><img width="1125" height="2436" loading="eager" src="/site/assets/iphone-app/real-screens/playlist-ios-app-iphone-2026-09-03.png" alt="Real current ZodiacFM iPhone iOS Playlist screen with four frequency-colored tracks"></a>
+      <a class="capture-stage" href="/site/assets/iphone-app/real-screens/playlist-ios-app-iphone-2026-09-03.png" download><img loading="eager" src="/site/assets/iphone-app/real-screens/playlist-ios-app-iphone-2026-09-03.png" alt="Real current ZodiacFM iPhone iOS Playlist screen with four frequency-colored tracks"></a>
       <figcaption><b class="pid">iPhone &middot; Real Screen 01</b><span class="ttl">Playlist &middot; Current iOS Source</span><span class="recipe"><i>SOURCE</i> Unmodified <span class="num">1125 × 2436</span> RGB PNG supplied from the live iOS app on <span class="num">2026-09-03</span>. Use this screen, not the older Playlist capture, when building websites or replacement App Store images. Preserve interface content and proportions exactly.</span><a class="download" href="/site/assets/iphone-app/real-screens/playlist-ios-app-iphone-2026-09-03.png" download>Download Original PNG</a></figcaption>
     </figure>
     <div class="subhead">Current iPhone App Store gallery &middot; Frame 04 replaced</div>
     <p class="note">The complete seven-frame campaign now uses the current real Playlist interface in Frame 04. Every frame below is the current accepted iPhone App Store master.</p>
     <figure class="exfig">
-      <img width="2632" height="930" loading="eager" src="/site/assets/iphone-app/ios-app-photos-board.png" alt="The complete accepted seven-frame iPhone App Store gallery in sequence">
+      <img loading="eager" src="/site/assets/iphone-app/ios-app-photos-board.png" alt="The complete accepted seven-frame iPhone App Store gallery in sequence">
       <figcaption><span class="ttl">Sequence authority</span><span class="cap">The labeled iOS App Photos board. Frames <b>1–7</b> run in this exact order.</span></figcaption>
     </figure>
     <div class="appgrid">
       <figure class="photo" id="iphone-app-01">
-        <img width="1290" height="2796" loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-01-promise.png" alt="Music Tuned to You iPhone App Store frame">
+        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-01-promise.png" alt="Music Tuned to You iPhone App Store frame">
         <figcaption><b class="pid">iPhone &middot; 01</b><span class="ttl">Music Tuned to You</span><span class="recipe"><i>ROLE</i> Promise.</span></figcaption>
       </figure>
       <figure class="photo" id="iphone-app-02">
-        <img width="1290" height="2796" loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-02-credibility.png" alt="Trusted by Thousands, Recommended by Experts iPhone App Store frame">
+        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-02-credibility.png" alt="Trusted by Thousands, Recommended by Experts iPhone App Store frame">
         <figcaption><b class="pid">iPhone &middot; 02</b><span class="ttl">Trusted by Thousands, Recommended by Experts</span><span class="recipe"><i>ROLE</i> Credibility.</span></figcaption>
       </figure>
       <figure class="photo" id="iphone-app-03">
-        <img width="1290" height="2796" loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-03-just-press-play.png" alt="Just Press Play iPhone App Store frame">
+        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-03-just-press-play.png" alt="Just Press Play iPhone App Store frame">
         <figcaption><b class="pid">iPhone &middot; 03</b><span class="ttl">Just Press Play</span><span class="recipe"><i>ROLE</i> Love Immersions.</span></figcaption>
       </figure>
       <figure class="photo" id="iphone-app-04">
-        <img width="1290" height="2796" loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-04-combine-frequencies.png" alt="Combine Frequencies iPhone App Store frame">
+        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-04-combine-frequencies.png" alt="Combine Frequencies iPhone App Store frame">
         <figcaption><b class="pid">iPhone &middot; 04 &middot; Current</b><span class="ttl">Combine Frequencies</span><span class="recipe"><i>ROLE</i> Current Playlist and multi-frequency selection.</span><a class="download" href="/site/assets/iphone-app/zodiac-appstore-04-combine-frequencies.png" download>Download Frame 04 PNG</a></figcaption>
       </figure>
       <figure class="photo" id="iphone-app-05">
-        <img width="1290" height="2796" loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-05-every-track-tuned.png" alt="Every Track, Tuned to You iPhone App Store frame">
+        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-05-every-track-tuned.png" alt="Every Track, Tuned to You iPhone App Store frame">
         <figcaption><b class="pid">iPhone &middot; 05</b><span class="ttl">Every Track, Tuned to You.</span><span class="recipe"><i>ROLE</i> Player.</span></figcaption>
       </figure>
       <figure class="photo" id="iphone-app-06">
-        <img width="1290" height="2796" loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-06-your-unique-frequencies.png" alt="Your Unique Frequencies iPhone App Store frame">
+        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-06-your-unique-frequencies.png" alt="Your Unique Frequencies iPhone App Store frame">
         <figcaption><b class="pid">iPhone &middot; 06</b><span class="ttl">Your Unique Frequencies</span><span class="recipe"><i>ROLE</i> Personalized frequency proof.</span></figcaption>
       </figure>
       <figure class="photo" id="iphone-app-07">
-        <img width="1290" height="2796" loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-07-track-time-balance.png" alt="Track Your Time and Balance iPhone App Store frame">
+        <img loading="lazy" src="/site/assets/iphone-app/zodiac-appstore-07-track-time-balance.png" alt="Track Your Time and Balance iPhone App Store frame">
         <figcaption><b class="pid">iPhone &middot; 07</b><span class="ttl">Track Your Time and Balance</span><span class="recipe"><i>ROLE</i> Weekly practice and balance.</span></figcaption>
       </figure>
     </div>
@@ -2285,11 +2262,11 @@
     <h2>iPad Reference</h2>
     <p class="lede" style="margin-top:28px">Current, unmodified captures of the iPhone-only app running on iPad. Use these as product and website references. They are not a native iPad App Store screenshot set while the release build remains configured with <span class="num">supportsTablet: false</span>.</p>
     <figure class="source-capture ipad" id="ipad-ios-real-playlist-2026-09-03">
-      <a class="capture-stage" href="/site/assets/ipad-app/real-screens/playlist-ios-app-ipad-2026-09-03.png" download><img width="2732" height="2048" loading="eager" src="/site/assets/ipad-app/real-screens/playlist-ios-app-ipad-2026-09-03.png" alt="Real current ZodiacFM iPad iOS Playlist screen centered in a landscape device capture"></a>
+      <a class="capture-stage" href="/site/assets/ipad-app/real-screens/playlist-ios-app-ipad-2026-09-03.png" download><img loading="eager" src="/site/assets/ipad-app/real-screens/playlist-ios-app-ipad-2026-09-03.png" alt="Real current ZodiacFM iPad iOS Playlist screen centered in a landscape device capture"></a>
       <figcaption><b class="pid">iPad Reference &middot; Real Screen 01</b><span class="ttl">Playlist &middot; Compatibility Capture</span><span class="recipe"><i>SOURCE</i> Unmodified <span class="num">2732 × 2048</span> RGB landscape PNG supplied from the live iOS app on <span class="num">2026-09-03</span>. The centered iPhone app viewport and surrounding black device area are part of the original capture. Use this screen for product truth and website construction, not as a native iPad App Store frame.</span><a class="download" href="/site/assets/ipad-app/real-screens/playlist-ios-app-ipad-2026-09-03.png" download>Download Original PNG</a></figcaption>
     </figure>
     <figure class="source-capture ipad" id="ipad-ios-real-player-love-quiet-success-2026-09-03">
-      <a class="capture-stage" href="/site/assets/ipad-app/real-screens/player-love-quiet-success-ipad-2026-09-03.png" download><img width="2732" height="2048" loading="eager" src="/site/assets/ipad-app/real-screens/player-love-quiet-success-ipad-2026-09-03.png" alt="Real current ZodiacFM iPad Love player screen for Quiet Success"></a>
+      <a class="capture-stage" href="/site/assets/ipad-app/real-screens/player-love-quiet-success-ipad-2026-09-03.png" download><img loading="eager" src="/site/assets/ipad-app/real-screens/player-love-quiet-success-ipad-2026-09-03.png" alt="Real current ZodiacFM iPad Love player screen for Quiet Success"></a>
       <figcaption><b class="pid">iPad Reference &middot; Real Screen 02</b><span class="ttl">Love Player &middot; Compatibility Capture</span><span class="recipe"><i>SOURCE</i> Unmodified <span class="num">2732 × 2048</span> RGB landscape PNG supplied from the live iOS app on <span class="num">2026-09-03</span>. Use this complete Quiet Success player capture as product truth for websites and other approved reference work, not as a native iPad App Store frame.</span><a class="download" href="/site/assets/ipad-app/real-screens/player-love-quiet-success-ipad-2026-09-03.png" download>Download Original PNG</a></figcaption>
     </figure>
     <div class="subhead">App Store status &middot; No native iPad gallery in the current configuration</div>
@@ -2305,74 +2282,74 @@
     <p class="note">Frames <b>01</b> to <b>11</b> and <b>15</b> to <b>17</b> are the phone. Frames <b>12</b> to <b>14</b> are the desktop captures that complete the reset trail: the email in Gmail, the new-password form, and the signed-in web app it lands on.</p>
     <div class="appgrid">
       <figure class="photo" id="android-app-01">
-        <img width="346" height="675" loading="lazy" src="/site/assets/android-app/real-screens/android-01-play-store-search-2026-10-07.png" alt="Real Android screen: Google Play · search result">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-01-play-store-search-2026-10-07.png" alt="Real Android screen: Google Play · search result">
         <figcaption><b class="pid">Android &middot; 01</b><span class="ttl">Google Play · search result</span><span class="recipe"><i>PLAY STORE</i> The listing as a search for "zodiac fm" finds it in Chrome on Android: feature graphic, moon icon, developer name ZodiacFM.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-02">
-        <img width="347" height="705" loading="lazy" src="/site/assets/android-app/real-screens/android-02-play-store-listing-2026-10-07.png" alt="Real Android screen: Google Play · store listing">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-02-play-store-listing-2026-10-07.png" alt="Real Android screen: Google Play · store listing">
         <figcaption><b class="pid">Android &middot; 02</b><span class="ttl">Google Play · store listing</span><span class="recipe"><i>PLAY STORE</i> The public listing page: Everyone rating, download count, Install button and the first three store frames.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-03">
-        <img width="434" height="897" loading="lazy" src="/site/assets/android-app/real-screens/android-03-sign-in-options-2026-10-07.png" alt="Real Android screen: Sign-in options">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-03-sign-in-options-2026-10-07.png" alt="Real Android screen: Sign-in options">
         <figcaption><b class="pid">Android &middot; 03</b><span class="ttl">Sign-in options</span><span class="recipe"><i>AUTH</i> First screen after install: the wordmark, Sign in with email, and Create an account for new members.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-04">
-        <img width="467" height="923" loading="lazy" src="/site/assets/android-app/real-screens/android-04-sign-in-email-password-2026-10-07.png" alt="Real Android screen: Sign in · email and password">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-04-sign-in-email-password-2026-10-07.png" alt="Real Android screen: Sign in · email and password">
         <figcaption><b class="pid">Android &middot; 04</b><span class="ttl">Sign in · email and password</span><span class="recipe"><i>AUTH</i> The password form with the Android keyboard up. The password field is covered on this capture; everything else is as served.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-05">
-        <img width="461" height="922" loading="lazy" src="/site/assets/android-app/real-screens/android-05-upgrade-over-10x-more-music-2026-10-07.png" alt="Real Android screen: Upgrade · Over 10× More Music">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-05-upgrade-over-10x-more-music-2026-10-07.png" alt="Real Android screen: Upgrade · Over 10× More Music">
         <figcaption><b class="pid">Android &middot; 05</b><span class="ttl">Upgrade · Over 10× More Music</span><span class="recipe"><i>PAYWALL</i> Screen one of the two-step upgrade: the four categories, the 52-minute versus 584-minute bar, See plans.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-06">
-        <img width="411" height="835" loading="lazy" src="/site/assets/android-app/real-screens/android-06-google-play-annual-trial-sheet-2026-10-07.png" alt="Real Android screen: Google Play · Annual purchase sheet">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-06-google-play-annual-trial-sheet-2026-10-07.png" alt="Real Android screen: Google Play · Annual purchase sheet">
         <figcaption><b class="pid">Android &middot; 06</b><span class="ttl">Google Play · Annual purchase sheet</span><span class="recipe"><i>BILLING</i> The Google Play sheet for the Annual plan: one-week free trial, then the yearly price plus tax. Card digits covered.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-07">
-        <img width="437" height="900" loading="lazy" src="/site/assets/android-app/real-screens/android-07-choose-your-plan-2026-10-07.png" alt="Real Android screen: Upgrade · Choose Your Plan">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-07-choose-your-plan-2026-10-07.png" alt="Real Android screen: Upgrade · Choose Your Plan">
         <figcaption><b class="pid">Android &middot; 07</b><span class="ttl">Upgrade · Choose Your Plan</span><span class="recipe"><i>PAYWALL</i> Screen two of the upgrade: Annual at Best Value with the trial, Monthly with no trial, the billing-date lines, the reminder toggle, Start 7 days free.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-08">
-        <img width="440" height="955" loading="lazy" src="/site/assets/android-app/real-screens/android-08-immersions-love-locked-tracks-2026-10-07.png" alt="Real Android screen: Immersions · Love, free member">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-08-immersions-love-locked-tracks-2026-10-07.png" alt="Real Android screen: Immersions · Love, free member">
         <figcaption><b class="pid">Android &middot; 08</b><span class="ttl">Immersions · Love, free member</span><span class="recipe"><i>HOME</i> The Love tab for a free member: two free tracks, the Unlock Over 9 Hours of Music band, then locked tracks greyed behind the padlock.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-09">
-        <img width="468" height="936" loading="lazy" src="/site/assets/android-app/real-screens/android-09-google-play-monthly-sheet-2026-10-07.png" alt="Real Android screen: Google Play · Monthly purchase sheet">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-09-google-play-monthly-sheet-2026-10-07.png" alt="Real Android screen: Google Play · Monthly purchase sheet">
         <figcaption><b class="pid">Android &middot; 09</b><span class="ttl">Google Play · Monthly purchase sheet</span><span class="recipe"><i>BILLING</i> The Google Play sheet for the Monthly plan: starts today, monthly price plus tax, authorization-hold note. Card digits covered.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-10">
-        <img width="501" height="919" loading="lazy" src="/site/assets/android-app/real-screens/android-10-reset-password-request-2026-10-07.png" alt="Real Android screen: Reset password · request">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-10-reset-password-request-2026-10-07.png" alt="Real Android screen: Reset password · request">
         <figcaption><b class="pid">Android &middot; 10</b><span class="ttl">Reset password · request</span><span class="recipe"><i>AUTH</i> Forgot? opens the web reset page inside a Chrome custom tab: email field and Send reset link.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-11">
-        <img width="487" height="902" loading="lazy" src="/site/assets/android-app/real-screens/android-11-reset-email-sent-2026-10-07.png" alt="Real Android screen: Reset password · email sent">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-11-reset-email-sent-2026-10-07.png" alt="Real Android screen: Reset password · email sent">
         <figcaption><b class="pid">Android &middot; 11</b><span class="ttl">Reset password · email sent</span><span class="recipe"><i>AUTH</i> The green confirmation after the request. On this run the email landed in spam.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-15">
-        <img width="441" height="898" loading="lazy" src="/site/assets/android-app/real-screens/android-15-sign-in-empty-form-2026-10-07.png" alt="Real Android screen: Sign in · empty form">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-15-sign-in-empty-form-2026-10-07.png" alt="Real Android screen: Sign in · empty form">
         <figcaption><b class="pid">Android &middot; 15</b><span class="ttl">Sign in · empty form</span><span class="recipe"><i>AUTH</i> The password form before entry, keyboard up: Enter your email, Enter your password, Forgot?, Sign in.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-16">
-        <img width="374" height="433" loading="lazy" src="/site/assets/android-app/real-screens/android-16-sign-in-code-option-2026-10-07.png" alt="Real Android screen: Sign in · code option">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-16-sign-in-code-option-2026-10-07.png" alt="Real Android screen: Sign in · code option">
         <figcaption><b class="pid">Android &middot; 16</b><span class="ttl">Sign in · code option</span><span class="recipe"><i>AUTH</i> Below the password form: Sign in with a code instead, and the Terms and Privacy line.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-17">
-        <img width="357" height="665" loading="lazy" src="/site/assets/android-app/real-screens/android-17-sign-in-send-code-2026-10-07.png" alt="Real Android screen: Sign in · send code">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-17-sign-in-send-code-2026-10-07.png" alt="Real Android screen: Sign in · send code">
         <figcaption><b class="pid">Android &middot; 17</b><span class="ttl">Sign in · send code</span><span class="recipe"><i>AUTH</i> The code route: Enter your email to receive a sign-in code, Send code, Use password instead.</span></figcaption>
       </figure>
     </div>
     <div class="subhead">The reset trail on the desktop</div>
     <div class="appgrid" style="grid-template-columns:1fr">
       <figure class="photo" id="android-app-12">
-        <img width="1071" height="834" loading="lazy" src="/site/assets/android-app/real-screens/android-12-reset-email-gmail-2026-10-07.png" alt="Real Android screen: Reset email · as received in Gmail">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-12-reset-email-gmail-2026-10-07.png" alt="Real Android screen: Reset email · as received in Gmail">
         <figcaption><b class="pid">Android &middot; 12</b><span class="ttl">Reset email · as received in Gmail</span><span class="recipe"><i>AUTH</i> The reset email as it arrived, from alerts at auth.zodiac.fm: a text link, a 60-minute single-use notice and a security note. Desktop Gmail capture.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-13">
-        <img width="1008" height="862" loading="lazy" src="/site/assets/android-app/real-screens/android-13-reset-password-web-form-2026-10-07.png" alt="Real Android screen: Reset password · new password form">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-13-reset-password-web-form-2026-10-07.png" alt="Real Android screen: Reset password · new password form">
         <figcaption><b class="pid">Android &middot; 13</b><span class="ttl">Reset password · new password form</span><span class="recipe"><i>AUTH</i> The reset link opens the web app's Create a new Password form. The token in the address bar is covered. Desktop capture.</span></figcaption>
       </figure>
       <figure class="photo" id="android-app-14">
-        <img width="1123" height="917" loading="lazy" src="/site/assets/android-app/real-screens/android-14-web-app-immersions-core-2026-10-07.png" alt="Real Android screen: Web app · Immersions, Core">
+        <img loading="lazy" src="/site/assets/android-app/real-screens/android-14-web-app-immersions-core-2026-10-07.png" alt="Real Android screen: Web app · Immersions, Core">
         <figcaption><b class="pid">Android &middot; 14</b><span class="ttl">Web app · Immersions, Core</span><span class="recipe"><i>HOME</i> Where the reset lands: the web app signed in, Core tab, 538 Hz Core Tone header and the first three tracks. Desktop capture.</span></figcaption>
       </figure>
     </div>
@@ -2385,11 +2362,11 @@
     <p class="statement" style="margin-top:22px">The product's own marks, photographed at the size a page uses them.</p>
     <p class="body" style="margin-top:30px">Two reference captures, kept here because they are the product speaking on a page: the small frequency mark that sits beside a person's name, and the chart block that carries the numbers. The rules for building charts, bullets, captions and proof blocks now live on the style guide; these pictures stay filed here, where every picture is filed.</p>
     <figure class="exfig">
-      <img width="1440" height="2476" loading="lazy" src="/site/Iris/assets/examples/testimonial-chips-spec.png" alt="Two stacked captures of the testimonial section: the control above with plain kickers, and below the same section with a small frequency chip beside each kicker">
+      <img loading="lazy" src="/site/Iris/assets/examples/testimonial-chips-spec.png" alt="Two stacked captures of the testimonial section: the control above with plain kickers, and below the same section with a small frequency chip beside each kicker">
       <figcaption><span class="ttl">Example</span><span class="cap">The banked baseline (Panel 10): the page's own frequency chips beside each kicker. Control above, treated below. The deeper treatment remains an open question on Michael's word.</span></figcaption>
     </figure>
     <figure class="exfig">
-      <img width="1540" height="1010" loading="lazy" src="/site/Iris/assets/examples/study-charts.jpg" alt="The study block from the d4-l page: the headline We ran the numbers for a year, two large figures 98.6% and 84%, and a card of seven horizontal bars on a pale paper ground">
+      <img loading="lazy" src="/site/Iris/assets/examples/study-charts.jpg" alt="The study block from the d4-l page: the headline We ran the numbers for a year, two large figures 98.6% and 84%, and a card of seven horizontal bars on a pale paper ground">
       <figcaption><span class="ttl">Example</span><span class="cap">The study block on d4-l — the current chart grammar. <b>Note: the big numbers must move to Switzer (numbers law); flagged drift.</b></span></figcaption>
     </figure>
   </div>
@@ -2631,7 +2608,7 @@
 {
  "surface": "The Zodiac Picture Library",
  "url": "https://zodiac-pages.vercel.app/site/styleguide-library",
- "version": "9-14",
+ "version": "9-13",
  "generated": "2026-10-07",
  "reads": "One number per picture. Ask for a picture by its number; never by its file path or by what a page happens to serve.",
  "laws": [
