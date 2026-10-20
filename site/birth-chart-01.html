@@ -64,7 +64,7 @@
     input::placeholder{color:#85857f}
     input:hover,select:hover{background:#fbfaf6}
     input:focus,select:focus{border-color:var(--rose);box-shadow:0 0 0 1px var(--rose);outline:0;background:var(--paper)}
-    .date-row{display:grid;grid-template-columns:1.3fr .85fr 1fr;gap:12px}
+    .date-row{display:grid;grid-template-columns:1fr;gap:12px}
     .time-label{display:flex;align-items:center;gap:9px}
     .help-link{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;background:var(--rose);color:white;text-decoration:none;font-size:12px;font-weight:600}
     .submit-row{grid-column:1/-1;margin-top:8px}
@@ -77,10 +77,8 @@
     .field-error{color:var(--danger);font-size:13px;margin:0;display:none}
     .field.invalid .field-error{display:block}
     .field.invalid input,.field.invalid select{border-color:var(--danger)}
-    .support{position:sticky;top:28px}
-    .support-image{background:var(--cream);overflow:hidden;aspect-ratio:4/4.45}
-    .support-image img{width:100%;height:100%;object-fit:cover;object-position:50% 31%}
-    .tip{border-top:1px solid var(--line);padding-top:30px;margin-top:34px}
+    .support{position:sticky;top:28px;border-top:1px solid var(--line);padding-top:30px}
+    .tip{margin:0}
     .tip h2{font:600 14px/1.25 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--rose);margin:0 0 24px}
     .tip p{font-size:18px;line-height:1.56;margin:0 0 18px}
     .tip strong{font-weight:600}
@@ -106,9 +104,7 @@
     @media(max-width:960px){
       .shell{width:calc(100% - 56px)}
       .entry-grid{grid-template-columns:1fr;gap:54px}
-      .support{position:static;display:grid;grid-template-columns:minmax(220px,.7fr) minmax(0,1.3fr);gap:34px;align-items:start}
-      .support-image{aspect-ratio:4/4.2}
-      .tip{margin:0;padding-top:0;border-top:0}
+      .support{position:static;display:block;max-width:760px}
       .proof-head{grid-template-columns:1fr;gap:20px;align-items:start}
       .testimonial{grid-template-columns:54px minmax(220px,.7fr) minmax(0,1.3fr);gap:25px}
     }
@@ -125,14 +121,12 @@
       .form-head h2{font-size:38px;line-height:1.03;margin-bottom:28px}
       .form-grid{grid-template-columns:1fr;gap:18px}
       .field.full,.submit-row{grid-column:auto}
-      .date-row{grid-template-columns:1.3fr .8fr 1fr;gap:8px}
+      .date-row{gap:10px}
       input,select{height:52px;padding-inline:12px;font-size:16px}
       .primary-action{min-height:56px;font-size:15px;box-shadow:3px 3px 0 var(--ink)}
       .consent{font-size:13px}
       .support{display:block}
-      .support-image{aspect-ratio:16/10}
-      .support-image img{object-position:50% 24%}
-      .tip{border-top:1px solid var(--line);padding-top:28px;margin-top:28px}
+      .tip{margin:0}
       .tip p{font-size:17px}
       .proof{padding:66px 0 78px}
       .proof-head{padding-bottom:32px}
@@ -152,8 +146,6 @@
       .shell{width:calc(100% - 30px)}
       .hero h1{font-size:45px}
       .proof-head h2{font-size:46px}
-      .date-row{grid-template-columns:1fr 1fr}
-      .date-row select:last-child{grid-column:1/-1}
       .testimonial{grid-template-columns:1fr}
       .testimonial::before,.testimonial h3,.quote{grid-column:1}
     }
@@ -244,9 +236,6 @@
         </div>
 
         <aside class="support" id="important-tip" aria-labelledby="tip-title">
-          <figure class="support-image">
-            <img src="/site/assets/library/p-219-rose-headphones-dancer.png" alt="A dancer wearing rose headphones and a rose dress beside a turntable casting soft rose light in a monochrome room" width="1600" height="2000">
-          </figure>
           <div class="tip">
             <h2 id="tip-title">UNKNOWN BIRTH TIME?</h2>
             <p><strong>4 out of 5 people</strong> who use <strong>12:00 Noon</strong> report getting amazing results.</p>
