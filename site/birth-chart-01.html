@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Hear Your Resonant Birth Frequencies · Zodiac.fm</title>
+  <meta name="description" content="Enter your birth information to hear your resonant birth frequencies.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    @font-face{font-family:Switzer;src:url('/landers/reveal-assets/Switzer-Regular.otf') format('opentype');font-weight:400;font-display:swap}
+    @font-face{font-family:Switzer;src:url('/landers/reveal-assets/Switzer-Semibold.otf') format('opentype');font-weight:600;font-display:swap}
+    :root{
+      --paper:#fffffe;
+      --cream:#f6f1e8;
+      --mist:#ece8e0;
+      --grey:#d4d4d1;
+      --ink:#20201e;
+      --muted:#5c5c57;
+      --line:#cacac6;
+      --rose:#b42967;
+      --rose-deep:#8e1c4e;
+      --rose-wash:#f7e6ed;
+      --danger:#aa2438;
+      --serif:'Cormorant Garamond',Georgia,serif;
+      --sans:Switzer,'Helvetica Neue',Arial,sans-serif;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--paper);color:var(--ink);font:18px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+    img{display:block;max-width:100%;height:auto}
+    button,input,select{font:inherit}
+    button{cursor:pointer}
+    a{color:inherit}
+    a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--rose);outline-offset:3px}
+    h1,h2,h3,p{margin-top:0}
+    h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.03em;line-height:1}
+    .shell{width:min(1320px,calc(100% - 96px));margin-inline:auto}
+    .site-header{height:88px;border-bottom:1px solid var(--line);display:flex;align-items:center;background:rgba(255,255,254,.94)}
+    .nav{display:flex;align-items:center;justify-content:space-between}
+    .logo{display:inline-flex;align-items:center;text-decoration:none}
+    .logo img{width:152px}
+    .hero{padding:68px 0 52px;background:
+      radial-gradient(ellipse 66% 300px at 83% 0%,rgba(180,41,103,.15),rgba(255,255,254,0) 72%),
+      var(--paper)}
+    .hero h1{font-size:clamp(62px,7vw,102px);max-width:1010px;margin:0}
+    .hero p{font:600 clamp(25px,2.4vw,34px)/1.2 var(--serif);margin:20px 0 0;color:var(--muted)}
+    .entry{padding:0 0 92px}
+    .entry-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(340px,.65fr);gap:72px;align-items:start;border-top:1px solid var(--line);padding-top:42px}
+    .eyebrow{font-size:13px;font-weight:600;letter-spacing:.17em;text-transform:uppercase;color:var(--rose);margin:0 0 14px}
+    .form-head h2{font-size:clamp(38px,3.6vw,52px);margin:0 0 34px}
+    form{margin:0}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px 20px}
+    .field{display:flex;flex-direction:column;gap:8px}
+    .field.full{grid-column:1/-1}
+    .field label{font-size:15px;font-weight:600}
+    .optional{font-weight:400;color:var(--muted)}
+    input,select{
+      width:100%;height:54px;border:1px solid var(--ink);border-radius:2px;background:var(--paper);color:var(--ink);
+      padding:0 15px;transition:border-color .18s ease,box-shadow .18s ease,background .18s ease
+    }
+    input::placeholder{color:#85857f}
+    input:hover,select:hover{background:#fbfaf6}
+    input:focus,select:focus{border-color:var(--rose);box-shadow:0 0 0 1px var(--rose);outline:0;background:var(--paper)}
+    .date-row{display:grid;grid-template-columns:1.3fr .85fr 1fr;gap:12px}
+    .time-label{display:flex;align-items:center;gap:9px}
+    .help-link{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;background:var(--rose);color:white;text-decoration:none;font-size:12px;font-weight:600}
+    .submit-row{grid-column:1/-1;margin-top:8px}
+    .primary-action{width:100%;min-height:58px;border:1px solid var(--ink);border-radius:2px;background:var(--rose);color:#fff;font-size:16px;font-weight:600;letter-spacing:.05em;padding:16px 24px;box-shadow:4px 4px 0 var(--ink);transition:transform .16s ease,box-shadow .16s ease,background .16s ease}
+    .primary-action:hover{background:var(--rose-deep);transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+    .privacy{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-size:13px;margin:18px 0 0;text-align:center}
+    .lock{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7}
+    .consent{display:flex;align-items:flex-start;gap:12px;border-top:1px solid var(--line);margin-top:28px;padding-top:22px;color:var(--muted);font-size:14px;line-height:1.55}
+    .consent input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--rose);flex:0 0 auto}
+    .field-error{color:var(--danger);font-size:13px;margin:0;display:none}
+    .field.invalid .field-error{display:block}
+    .field.invalid input,.field.invalid select{border-color:var(--danger)}
+    .support{position:sticky;top:28px}
+    .support-image{background:var(--cream);overflow:hidden;aspect-ratio:4/4.45}
+    .support-image img{width:100%;height:100%;object-fit:cover;object-position:50% 31%}
+    .tip{border-top:1px solid var(--line);padding-top:30px;margin-top:34px}
+    .tip h2{font:600 14px/1.25 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--rose);margin:0 0 24px}
+    .tip p{font-size:18px;line-height:1.56;margin:0 0 18px}
+    .tip strong{font-weight:600}
+    .tip-note{border:1px solid var(--line);background:var(--cream);padding:20px;margin-top:23px}
+    .proof{background:var(--grey);padding:96px 0 110px}
+    .proof-head{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;border-bottom:1px solid rgba(32,32,30,.33);padding-bottom:42px}
+    .proof-head h2{font-size:clamp(58px,6.4vw,92px);margin:0;max-width:8em}
+    .proof-head p{font:600 clamp(25px,2.5vw,36px)/1.2 var(--serif);margin:0 0 8px;max-width:19em}
+    .testimonials{counter-reset:proof}
+    .testimonial{counter-increment:proof;display:grid;grid-template-columns:70px minmax(260px,.62fr) minmax(0,1.38fr);gap:34px;border-bottom:1px solid rgba(32,32,30,.3);padding:50px 0}
+    .testimonial::before{content:counter(proof,decimal-leading-zero);font-size:13px;font-weight:600;letter-spacing:.12em;color:var(--rose);padding-top:9px}
+    .testimonial h3{font-size:clamp(31px,3vw,43px);line-height:1.08;margin:0}
+    .quote p{font-size:20px;line-height:1.58;margin:0}
+    .quote strong{font-weight:600}
+    .quote cite{display:block;font-style:normal;font-size:16px;font-weight:600;margin-top:22px}
+    .final-action{display:flex;justify-content:flex-end;margin-top:50px}
+    .final-action .primary-action{width:min(100%,440px)}
+    footer{background:var(--ink);color:#f9f6f0;padding:32px 0}
+    .footer-row{display:flex;align-items:center;justify-content:space-between;gap:24px}
+    footer .logo img{filter:invert(1);width:126px}
+    footer p{font-size:13px;color:#d8d4cc;margin:0}
+    .prototype-note{position:fixed;right:14px;bottom:14px;z-index:20;background:var(--ink);color:#fff;padding:8px 11px;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+    @media(max-width:960px){
+      .shell{width:calc(100% - 56px)}
+      .entry-grid{grid-template-columns:1fr;gap:54px}
+      .support{position:static;display:grid;grid-template-columns:minmax(220px,.7fr) minmax(0,1.3fr);gap:34px;align-items:start}
+      .support-image{aspect-ratio:4/4.2}
+      .tip{margin:0;padding-top:0;border-top:0}
+      .proof-head{grid-template-columns:1fr;gap:20px;align-items:start}
+      .testimonial{grid-template-columns:54px minmax(220px,.7fr) minmax(0,1.3fr);gap:25px}
+    }
+    @media(max-width:640px){
+      body{font-size:17px}
+      .shell{width:calc(100% - 40px)}
+      .site-header{height:72px}
+      .logo img{width:118px}
+      .hero{padding:46px 0 38px;background:radial-gradient(ellipse 100% 220px at 100% 0%,rgba(180,41,103,.14),rgba(255,255,254,0) 72%),var(--paper)}
+      .hero h1{font-size:clamp(47px,14.4vw,66px);line-height:.98}
+      .hero p{font-size:25px;margin-top:14px}
+      .entry{padding-bottom:68px}
+      .entry-grid{padding-top:30px;gap:48px}
+      .form-head h2{font-size:38px;line-height:1.03;margin-bottom:28px}
+      .form-grid{grid-template-columns:1fr;gap:18px}
+      .field.full,.submit-row{grid-column:auto}
+      .date-row{grid-template-columns:1.3fr .8fr 1fr;gap:8px}
+      input,select{height:52px;padding-inline:12px;font-size:16px}
+      .primary-action{min-height:56px;font-size:15px;box-shadow:3px 3px 0 var(--ink)}
+      .consent{font-size:13px}
+      .support{display:block}
+      .support-image{aspect-ratio:16/10}
+      .support-image img{object-position:50% 24%}
+      .tip{border-top:1px solid var(--line);padding-top:28px;margin-top:28px}
+      .tip p{font-size:17px}
+      .proof{padding:66px 0 78px}
+      .proof-head{padding-bottom:32px}
+      .proof-head h2{font-size:52px}
+      .proof-head p{font-size:25px}
+      .testimonial{display:grid;grid-template-columns:38px minmax(0,1fr);gap:15px 12px;padding:36px 0}
+      .testimonial::before{grid-column:1;padding-top:6px}
+      .testimonial h3{grid-column:2;font-size:32px}
+      .quote{grid-column:2}
+      .quote p{font-size:17px;line-height:1.56}
+      .final-action{margin-top:38px}
+      .final-action .primary-action{width:100%}
+      .footer-row{align-items:flex-start;flex-direction:column}
+      .prototype-note{display:none}
+    }
+    @media(max-width:360px){
+      .shell{width:calc(100% - 30px)}
+      .hero h1{font-size:45px}
+      .proof-head h2{font-size:46px}
+      .date-row{grid-template-columns:1fr 1fr}
+      .date-row select:last-child{grid-column:1/-1}
+      .testimonial{grid-template-columns:1fr}
+      .testimonial::before,.testimonial h3,.quote{grid-column:1}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.primary-action{transition:none}}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="shell nav">
+      <a class="logo" href="https://zodiac.fm/" aria-label="Zodiac.fm">
+        <img src="/site/assets/home-t7/logo-black.svg" alt="Zodiac.fm" width="781" height="136">
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell">
+        <h1>Hear Your Resonant Birth Frequencies</h1>
+        <p>It takes less than 15 seconds…</p>
+      </div>
+    </section>
+
+    <section class="entry" aria-labelledby="form-title">
+      <div class="shell entry-grid">
+        <div class="form-wrap">
+          <div class="form-head">
+            <h2 id="form-title">Enter Your Birth Information Below</h2>
+          </div>
+          <form id="birth-form" novalidate>
+            <div class="form-grid">
+              <div class="field" data-required>
+                <label for="first-name">First Name</label>
+                <input id="first-name" name="firstName" type="text" autocomplete="given-name" placeholder="Enter your first name" required>
+                <p class="field-error">First name is required.</p>
+              </div>
+              <div class="field" data-required>
+                <label for="last-name">Last Name</label>
+                <input id="last-name" name="lastName" type="text" autocomplete="family-name" placeholder="Enter your last name" required>
+                <p class="field-error">Last name is required.</p>
+              </div>
+              <div class="field full" data-required>
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="email" placeholder="your@email.com" required>
+                <p class="field-error">Please enter a valid email address.</p>
+              </div>
+              <div class="field full" data-required>
+                <label for="birth-month">Date of Birth</label>
+                <div class="date-row">
+                  <select id="birth-month" name="month" aria-label="Birth month" required>
+                    <option value="">Month</option><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option>
+                  </select>
+                  <select id="birth-day" name="day" aria-label="Birth day" required><option value="">Day</option></select>
+                  <select id="birth-year" name="year" aria-label="Birth year" required><option value="">Year</option></select>
+                </div>
+                <p class="field-error">Please select your complete date of birth.</p>
+              </div>
+              <div class="field full" data-required>
+                <label for="location">Birth Location</label>
+                <input id="location" name="location" type="text" autocomplete="off" placeholder="Type in Your Birth Location" required>
+                <p class="field-error">Birth location is required.</p>
+              </div>
+              <div class="field full" data-required>
+                <div class="time-label">
+                  <label for="birth-time">Time of Birth</label>
+                  <a class="help-link" href="#important-tip" aria-label="Read the unknown birth time tip">?</a>
+                </div>
+                <input id="birth-time" name="time" type="time" required>
+                <p class="field-error">Time of birth is required.</p>
+              </div>
+              <div class="field full">
+                <label for="phone">Phone Number <span class="optional">(optional)</span></label>
+                <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="Enter phone number">
+              </div>
+              <div class="submit-row">
+                <button class="primary-action" type="submit">CALCULATE MY FREQUENCY</button>
+                <p class="privacy">
+                  <svg class="lock" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1"></rect><path d="M5 7V5a3 3 0 0 1 6 0v2"></path></svg>
+                  Your birth data is encrypted and never sold or shared.
+                </p>
+              </div>
+            </div>
+            <label class="consent" for="sms-consent">
+              <input id="sms-consent" name="smsConsent" type="checkbox">
+              <span>Yes, I agree to receive personalized frequency updates, tips, and exclusive offers via SMS. Message and data rates may apply. Reply STOP to unsubscribe at any time.</span>
+            </label>
+          </form>
+        </div>
+
+        <aside class="support" id="important-tip" aria-labelledby="tip-title">
+          <figure class="support-image">
+            <img src="/site/assets/library/p-219-rose-headphones-dancer.png" alt="A dancer wearing rose headphones and a rose dress beside a turntable casting soft rose light in a monochrome room" width="1600" height="2000">
+          </figure>
+          <div class="tip">
+            <h2 id="tip-title">UNKNOWN BIRTH TIME?</h2>
+            <p><strong>4 out of 5 people</strong> who use <strong>12:00 Noon</strong> report getting amazing results.</p>
+            <p>Because we calculate your frequencies based on <strong>well over 248 data points</strong>, your frequencies will be close enough for you to experience resonance benefits you've never felt before.</p>
+            <div class="tip-note">
+              <p>Our support team will help you find your exact time later. When we update it, you'll have an even more powerful experience.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="proof" aria-labelledby="proof-title">
+      <div class="shell">
+        <div class="proof-head">
+          <h2 id="proof-title">Real Transformations</h2>
+          <p>Hear what happens when people discover their frequencies</p>
+        </div>
+        <div class="testimonials">
+          <article class="testimonial">
+            <h3>The shift hit in week one and people noticed</h3>
+            <div class="quote">
+              <p>“While listening, <strong>I had otherworldly visualizations</strong> and felt real shifts in the very first week. <strong>Friends and family noticed the change</strong> in my presence. In week one, I was offered a dream position. By week three, insights flowed daily. <strong>It feels like home.</strong>”</p>
+              <cite>&mdash; Hilary DiMassimo</cite>
+            </div>
+          </article>
+          <article class="testimonial">
+            <h3>I turn into the version of me I actually want to be</h3>
+            <div class="quote">
+              <p>“Without doing anything but listening, <strong>I become a different person</strong>. I shift into the version of me I want to be. I tap into different frequencies based on what I need.”</p>
+              <cite>&mdash; Joey Vaillancourt</cite>
+            </div>
+          </article>
+          <article class="testimonial">
+            <h3>Nothing has ever worked this fast for me</h3>
+            <div class="quote">
+              <p>“I have never had anything so powerful in such a short amount of practice. From my first experience <strong>I felt ecstatic then completely transformed.</strong> A friend said my frequency had changed and I know it is true.”</p>
+              <cite>&mdash; Paul Tribe</cite>
+            </div>
+          </article>
+          <article class="testimonial">
+            <h3>My nervous system relaxed the moment it heard my sound</h3>
+            <div class="quote">
+              <p>“When I listened to my core frequency, <strong>my whole nervous system softened in recognition</strong>. Like coming home to myself. Not fixing anything just remembering who I am.”</p>
+              <cite>&mdash; Rhonda Britten</cite>
+            </div>
+          </article>
+          <article class="testimonial">
+            <h3>I feel the shift in my cells every time I hit play</h3>
+            <div class="quote">
+              <p>“I feel the shift in my body and nervous system when I hit play. <strong>It enhances my workouts, deepens meditation, and helps me recover from stress</strong>. It feels like my sonic blueprint on repeat.”</p>
+              <cite>&mdash; Todd Shipman</cite>
+            </div>
+          </article>
+        </div>
+        <div class="final-action">
+          <button class="primary-action" type="button" data-return-to-form>CALCULATE MY FREQUENCY</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-row">
+      <a class="logo" href="https://zodiac.fm/" aria-label="Zodiac.fm"><img src="/site/assets/home-t7/logo-black.svg" alt="Zodiac.fm" width="781" height="136"></a>
+      <p>© Zodiac.fm</p>
+    </div>
+  </footer>
+  <span class="prototype-note">Design review · no data is sent</span>
+
+  <script>
+    const daySelect=document.getElementById('birth-day');
+    const yearSelect=document.getElementById('birth-year');
+    for(let day=1;day<=31;day++){daySelect.add(new Option(String(day),String(day)))}
+    for(let year=new Date().getFullYear();year>=1900;year--){yearSelect.add(new Option(String(year),String(year)))}
+
+    const form=document.getElementById('birth-form');
+    const fields=[...form.querySelectorAll('[data-required]')];
+    function fieldIsValid(field){return [...field.querySelectorAll('input,select')].every(control=>control.checkValidity())}
+    function refreshField(field){field.classList.toggle('invalid',!fieldIsValid(field))}
+    fields.forEach(field=>field.querySelectorAll('input,select').forEach(control=>{
+      control.addEventListener('input',()=>refreshField(field));
+      control.addEventListener('change',()=>refreshField(field));
+    }));
+    form.addEventListener('submit',event=>{
+      event.preventDefault();
+      fields.forEach(refreshField);
+      const firstInvalid=fields.find(field=>!fieldIsValid(field));
+      if(firstInvalid){firstInvalid.querySelector('input,select').focus();return}
+    });
+    document.querySelector('[data-return-to-form]').addEventListener('click',()=>{
+      document.getElementById('form-title').scrollIntoView({behavior:'smooth',block:'start'});
+      setTimeout(()=>document.getElementById('first-name').focus(),450);
+    });
+  </script>
+</body>
+</html>
