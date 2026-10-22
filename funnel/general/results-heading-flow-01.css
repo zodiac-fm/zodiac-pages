@@ -1,0 +1,12 @@
+/* Natural heading flow, following the accepted category landing pages. */
+main > section h2,
+main > section .timeline-step h3 {
+  text-wrap: pretty;
+}
+
+@media (min-width: 700px) {
+  main > section h2 {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
