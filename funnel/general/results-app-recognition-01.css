@@ -1,0 +1,47 @@
+/* Static platform identification, matching the shared-footer badge treatment. */
+.app-identification {
+  margin: -20px 0 28px;
+}
+
+.app-identification .app-identity {
+  margin: 0;
+}
+
+.platform-badges {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: nowrap;
+  cursor: default;
+}
+
+.platform-badges svg {
+  display: block;
+  width: auto;
+  height: 40px;
+  flex: 0 0 auto;
+}
+
+.platform-badges-mini {
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.platform-badges-mini svg {
+  height: 28px;
+}
+
+.footer-app .platform-badges {
+  justify-content: flex-end;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 700px) {
+  .app-identification {
+    margin: 0 0 22px;
+  }
+
+  .footer-app .platform-badges {
+    justify-content: center;
+  }
+}
