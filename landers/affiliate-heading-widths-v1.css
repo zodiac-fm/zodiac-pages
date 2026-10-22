@@ -1,0 +1,13 @@
+@media (min-width: 700px) {
+  .source-band h2,
+  .study-after-source h2,
+  .standardized-proof h2,
+  .benefits-section h2,
+  .standardized-bands h2,
+  .section-ten h2,
+  .shared-life h2,
+  .shared-faq h2 {
+    width: 100%;
+    max-width: none;
+  }
+}
