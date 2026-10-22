@@ -1,0 +1,6 @@
+@media (min-width: 700px) {
+  h2.astrology-heading-wide {
+    width: 100%;
+    max-width: none;
+  }
+}
