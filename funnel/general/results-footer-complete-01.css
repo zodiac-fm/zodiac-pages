@@ -1,0 +1,68 @@
+/* Complete results footer. Store badges identify the app and remain static. */
+.site-footer .shell {
+  gap: 34px 80px;
+}
+
+.footer-brand .platform-badges {
+  margin-top: 22px;
+}
+
+.footer-navigation {
+  justify-self: end;
+  text-align: right;
+}
+
+.footer-navigation nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0 26px;
+}
+
+.footer-navigation a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: #fff;
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+.footer-follow {
+  margin-top: 18px;
+}
+
+.footer-follow .follow-label {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.footer-social-links a {
+  font-size: 16px;
+}
+
+@media (max-width: 700px) {
+  .site-footer .shell {
+    gap: 26px;
+  }
+
+  .footer-brand .platform-badges,
+  .footer-navigation nav {
+    justify-content: center;
+  }
+
+  .footer-navigation {
+    justify-self: center;
+    text-align: center;
+  }
+
+  .footer-navigation nav {
+    gap: 0 22px;
+  }
+
+  .footer-follow {
+    margin-top: 14px;
+  }
+}
