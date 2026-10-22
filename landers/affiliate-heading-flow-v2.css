@@ -1,0 +1,7 @@
+@media (min-width: 700px) {
+  main > section h2 {
+    width: 100% !important;
+    max-width: none !important;
+    text-wrap: pretty !important;
+  }
+}
