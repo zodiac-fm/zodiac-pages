@@ -1,0 +1,12 @@
+/* General08 only: preserve the shared Astrology05 profile under its base stylesheet. */
+#profile .frequency .wave img{width:209px;max-width:100%;height:44px;object-fit:contain;object-position:left center}
+@media(min-width:701px){#profile .frequency{grid-template-columns:170px minmax(209px,1fr) 115px}#profile .frequency .wave{justify-self:start}}
+@media(max-width:700px){#profile .frequency .wave img{width:209px;height:44px;max-width:100%;object-position:left center}}
+
+/* General08 footer parity with the accepted Astrology05 source. */
+.site-footer{background:var(--night);color:#fff;border-top:0;padding:54px 0}
+.site-footer .shell{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px 80px;align-items:start}
+.site-footer img{width:200px;filter:invert(1);margin-bottom:18px}
+.site-footer p{margin-bottom:11px}.site-footer a{color:#fff;text-underline-offset:4px}
+.site-footer .footer-copyright{grid-column:1 / -1;border-top:1px solid #777;padding-top:22px;margin:0;font-size:15px;max-width:none;width:100%;color:#dedede}
+@media(max-width:700px){.site-footer{padding:44px 0}.site-footer .shell{grid-template-columns:1fr;gap:24px;text-align:center}.site-footer img{margin-inline:auto}.site-footer .footer-copyright{grid-column:1}}
