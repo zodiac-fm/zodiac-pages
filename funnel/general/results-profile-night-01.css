@@ -1,0 +1,20 @@
+/* Astrology review only: the existing compact waves carry the opening color. */
+.site-header,
+#profile {
+  background: var(--night);
+  color: #fff;
+}
+
+.site-header img {
+  filter: invert(1);
+}
+
+#profile {
+  --line: #626262;
+  --muted: #d0d0d0;
+  color-scheme: dark;
+}
+
+#profile .frequency .wave img {
+  filter: contrast(.6) brightness(1.8);
+}

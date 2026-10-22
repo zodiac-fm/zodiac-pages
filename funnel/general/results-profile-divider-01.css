@@ -1,0 +1,4 @@
+/* One boundary after the profile, shared by the three current results reviews. */
+#profile .frequency:last-child {
+  border-bottom: 0;
+}
