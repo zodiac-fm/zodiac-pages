@@ -1,0 +1,45 @@
+{
+  "categories": [
+    { "id": "m", "label": "Manifestation", "currentSource": "landers/manifestation-11.html", "controlPath": "landers/m/control.html" },
+    { "id": "a", "label": "Astrology & Human Design", "currentSource": "landers/astrology-human-design-04.html", "controlPath": "landers/a/control.html" },
+    { "id": "g", "label": "General Spiritual", "currentSource": "landers/general-spiritual-13.html", "controlPath": "landers/g/control.html" }
+  ],
+  "protected": [
+    { "path": "landers/general-spiritual-13.html", "sha256": "c0f17089dec918a8e79a0d36d0f0908f9d5bdff349c5c5c1c109b3408d361f8f" },
+    { "path": "landers/manifestation-11.html", "sha256": "0df8d6ee8890d4eee5a288e1b3df65a43671a645869baed15215a612790f3bc0" },
+    { "path": "landers/astrology-human-design-04.html", "sha256": "1af580144cf4fc68e024c7ac809241286ca91226edacb498b94df5687c6a3401" }
+  ],
+  "activeConcepts": [
+    { "category": "m", "path": "landers/m/sprout-1.html", "label": "Sprout 1" }
+  ],
+  "archived": [
+    { "path": "landers/general-spiritual-01.html", "sha256": "ae891eb72fb075cf1dcbdd8cd3776a2f14afd40d36477dd0c1b79357e1158c15" },
+    { "path": "landers/general-spiritual-02.html", "sha256": "41deaecf026b8289bc301e01ee3f043ebc9585160d8c921d123b48f0af5b02f9" },
+    { "path": "landers/general-spiritual-03.html", "sha256": "585119000cc5691e883fc9bab86b28896a6d930bb4119802138c0667d1dfc94b" },
+    { "path": "landers/general-spiritual-04.html", "sha256": "231dfb27b4dd22f49cf0096be3b465aa5c35c0f4b23fb45e4a7643365b44519d" },
+    { "path": "landers/general-spiritual-05.html", "sha256": "289738b47b1d3840f685a7c92af09b84106127a527ef54cc45b4f01be112e6d1" },
+    { "path": "landers/general-spiritual-06.html", "sha256": "24de89338a8f3338d65584715df62a2cc18208589f76a4b6306dfbdafc42beaa" },
+    { "path": "landers/general-spiritual-07.html", "sha256": "718c1b329de71b2e1b6cf17137088eb25bb67c0e0642d4e73f4be4ee97a9567e" },
+    { "path": "landers/general-spiritual-08.html", "sha256": "32b8940f5102e43ec256afca1df41d9f5bcbcb8a68b6e39289ce091900f9ff19" },
+    { "path": "landers/general-spiritual-09.html", "sha256": "1893b67dd9a4b8e1d1b1530cb68d06f708eb2b28025e1310a2feca47f428ccfd" },
+    { "path": "landers/general-spiritual-10.html", "sha256": "3a82fc9eb926aee897e1481bc6d55e562c5f8b6e4c304e863ea24d5f09977c78" },
+    { "path": "landers/general-spiritual-11.html", "sha256": "260232188fdcc7d6b67862ea019280ae321169d12209a09b10ad6d03e3547635" },
+    { "path": "landers/general-spiritual-12.html", "sha256": "be6690fd496dafa090b2b1b0002726a1167c03d31b368fbe6d8cd0c0c8aec93b" },
+    { "path": "landers/general-spiritual-14.html", "sha256": "f3b3c61e0ce7df66aae5f9d0e4ca130511ffab10cb23f1dce7b7f51266f1da98" },
+    { "path": "landers/manifestation-01.html", "sha256": "10e5dd787f4fdcfbd8c7dacb6d8e66c3978df047ba89745d828323303828c908" },
+    { "path": "landers/manifestation-02.html", "sha256": "8ebb7907734559ee5eb470a82499a12e0228aa74c30480b05ccc7d9d7686eeb0" },
+    { "path": "landers/manifestation-03.html", "sha256": "5fdd02e8ccaeb47360e6f6861fa54527d59358174c09089977e9764709ed0081" },
+    { "path": "landers/manifestation-04.html", "sha256": "5500a6ec4f10ef17850f9c47fe2697c1a8a93009dfc1acba81607fafe2a26eda" },
+    { "path": "landers/manifestation-05.html", "sha256": "fa796d6eee8644adc312f0dee638cdecdbe645059121ef6fef62ddf4013bfdc8" },
+    { "path": "landers/manifestation-06.html", "sha256": "85d76f01f789c90b15bb7367bbb2e900b5c2ae52e9b14f2f937b2e45cbe63ae2" },
+    { "path": "landers/manifestation-07.html", "sha256": "9c5a39c0450a823fb64330c0ceb3cb0d8a20474857a8f11b1eb85aad64d51ae4" },
+    { "path": "landers/manifestation-08.html", "sha256": "1c0be24bb6583c783bff24b795ab63086c974d9e7a56deed3130b762eab5b43c" },
+    { "path": "landers/manifestation-09.html", "sha256": "b9fbfd3270009ae492666658db4bc716d7a1491f379df6f354cdd263b8b7ca14" },
+    { "path": "landers/manifestation-10.html", "sha256": "c81f2d84cccaaac7246b1df56931e8fa61157cfa280a0673dc837212d88443ab" },
+    { "path": "landers/manifestation-12.html", "sha256": "97c6ed6856658e049b59d09cd122e9ffed9d0ad5167e3baec193a43813556848" },
+    { "path": "landers/manifestation-13.html", "sha256": "52b789de448458fac983ae7b90ae26479b11b4234e3007a035cd469d2170cbfd" },
+    { "path": "landers/astrology-human-design-01.html", "sha256": "75fd45f816593f298a2f82c54a80bc1ca11644a600c0b287d669e75644afd65f" },
+    { "path": "landers/astrology-human-design-02.html", "sha256": "cf77799c0243ed3b217ba591939256a2ca059058324dd0affc88030c36e163f5" },
+    { "path": "landers/astrology-human-design-03.html", "sha256": "fa2d23ca9f3e9c841346c9f06c07d590b95cb8b1abdf7a7b2daa1963d41e32dc" }
+  ]
+}

@@ -2,8 +2,9 @@
 // the category folders, so the directory groups pages by category. Drop a file in a
 // category folder + push -> it appears under that heading. Relative links (project
 // Pages serve under /<repo>/, so absolute /paths would break).
-import { readdir, writeFile } from 'fs/promises';
+import { readFile, readdir, unlink, writeFile } from 'fs/promises';
 import { basename } from 'path';
+import { createHash } from 'crypto';
 
 // Ordered categories. Add a new {dir,label} here to introduce a category.
 const CATS = [
@@ -13,22 +14,85 @@ const CATS = [
 ];
 
 const pretty = f => basename(f, '.html').replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+const catalog = JSON.parse(await readFile('landers/page-catalog.json', 'utf8'));
+const sha256 = source => createHash('sha256').update(source).digest('hex');
+const exactLanderPage = path => /^landers\/(?:general-spiritual|manifestation|astrology-human-design)-\d\d\.html$/.test(path);
+const expectedProtectedPaths = new Set([
+  'landers/general-spiritual-13.html',
+  'landers/manifestation-11.html',
+  'landers/astrology-human-design-04.html',
+]);
+const expectedNumberedPaths = new Set([
+  ...Array.from({ length: 14 }, (_, index) => `landers/general-spiritual-${String(index + 1).padStart(2, '0')}.html`),
+  ...Array.from({ length: 13 }, (_, index) => `landers/manifestation-${String(index + 1).padStart(2, '0')}.html`),
+  ...Array.from({ length: 4 }, (_, index) => `landers/astrology-human-design-${String(index + 1).padStart(2, '0')}.html`),
+]);
+
+function assertCatalog() {
+  const protectedPaths = new Set(catalog.protected.map(page => page.path));
+  const archivedPaths = new Set(catalog.archived.map(page => page.path));
+  if (catalog.protected.length !== 3 || catalog.archived.length !== 28 ||
+      protectedPaths.size !== 3 || archivedPaths.size !== 28 ||
+      ![...protectedPaths, ...archivedPaths].every(exactLanderPage) ||
+      [...protectedPaths].some(path => archivedPaths.has(path)) ||
+      [...expectedProtectedPaths].some(path => !protectedPaths.has(path)) ||
+      [...expectedNumberedPaths].some(path => !protectedPaths.has(path) && !archivedPaths.has(path))) {
+    throw new Error('Invalid lander archive catalog: expected 3 protected and 28 distinct archived numbered pages.');
+  }
+}
+
+async function assertHashes(pages, kind) {
+  await Promise.all(pages.map(async ({ path, sha256: expected }) => {
+    const actual = sha256(await readFile(path));
+    if (actual !== expected) throw new Error(`${kind} hash mismatch: ${path}`);
+  }));
+}
+
+assertCatalog();
+if (process.env.VERCEL === '1') {
+  // Validate every target before the first unlink so a failed deployment cannot partly archive this set.
+  await assertHashes(catalog.protected, 'Protected page');
+  await assertHashes(catalog.archived, 'Archived page');
+  await Promise.all(catalog.archived.map(({ path }) => unlink(path)));
+}
+
+const archivedPaths = new Set(catalog.archived.map(page => page.path));
+const protectedPaths = new Set(catalog.protected.map(page => page.path));
+const managedPaths = new Set([...archivedPaths, ...protectedPaths]);
+const pageLink = (href, label = pretty(href)) =>
+  `      <a class="page" href="${href}">${label} <span>/${href.replace(/\.html$/, '')}</span></a>`;
 
 let total = 0;
 const sections = [];
 for (const c of CATS) {
   let files = [];
-  try { files = (await readdir(c.dir)).filter(f => f.endsWith('.html')).sort(); } catch {}
+  try { files = (await readdir(c.dir)).filter(f => f.endsWith('.html') && !managedPaths.has(`${c.dir}/${f}`)).sort(); } catch {}
   total += files.length;
-  const items = files.map(f => {
-    const href = `${c.dir}/${f}`;          // relative -> works under the /zodiac-pages/ subpath
-    return `      <a class="page" href="${href}">${pretty(f)} <span>/${c.dir}/${basename(f, '.html')}</span></a>`;
-  }).join('\n');
+  const items = files.map(f => pageLink(`${c.dir}/${f}`)).join('\n');
   sections.push(`    <section class="cat">
       <div class="cathead">${c.label}<span class="count">${files.length || ''}</span></div>
       ${files.length ? `<div class="list">\n${items}\n      </div>` : '<div class="empty">Nothing here yet.</div>'}
     </section>`);
 }
+
+const landerSections = catalog.categories.map(category => {
+  const concepts = catalog.activeConcepts.filter(page => page.category === category.id);
+  const items = [
+    pageLink(category.controlPath, `${category.label} Control`),
+    ...concepts.map(page => pageLink(page.path, page.label)),
+  ].join('\n');
+  total += concepts.length + 1;
+  return `    <section class="cat">
+      <div class="cathead">${category.label}<span class="count">${concepts.length + 1}</span></div>
+      <div class="list">\n${items}\n      </div>
+    </section>`;
+});
+const walterItems = catalog.protected.map(page => pageLink(page.path)).join('\n');
+total += catalog.protected.length;
+landerSections.push(`    <section class="cat">
+      <div class="cathead">Walter Numbered Pages<span class="count">${catalog.protected.length}</span></div>
+      <div class="list">\n${walterItems}\n      </div>
+    </section>`);
 
 const html = `<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Zodiac — Pages</title>
@@ -54,6 +118,7 @@ const html = `<!doctype html><html lang="en"><head><meta charset="utf-8">
   <h1>Zodiac — Pages</h1>
   <p class="sub">Work-in-progress pages for feedback before they go live, grouped by category.</p>
 ${sections.join('\n')}
+${landerSections.join('\n')}
 </div></body></html>
 `;
 
