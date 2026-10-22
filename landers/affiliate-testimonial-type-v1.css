@@ -1,0 +1,27 @@
+/* Current category pages: every complete testimonial uses one large proof voice. */
+.section-seven .proof-item blockquote,
+.section-ten .proof-item blockquote,
+.shared-life .quote-card blockquote,
+.shared-life figure.quote-card:nth-child(n) blockquote,
+.shared-practice .quote-card blockquote {
+  font: 600 29px/1.2 var(--serif);
+  letter-spacing: -.015em;
+}
+
+.section-seven .proof-item blockquote p,
+.section-ten .proof-item blockquote p,
+.shared-life .quote-card blockquote p,
+.shared-practice .quote-card blockquote p {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+@media (min-width: 700px) {
+  .section-seven .proof-item blockquote,
+  .section-ten .proof-item blockquote,
+  .shared-life .quote-card blockquote,
+  .shared-life figure.quote-card:nth-child(n) blockquote,
+  .shared-practice .quote-card blockquote {
+    font-size: 34px;
+  }
+}
