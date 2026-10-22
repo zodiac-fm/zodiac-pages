@@ -1,0 +1,158 @@
+/* Shared footer for the fixed General, Manifestation, and Astrology controls. */
+.shared-footer{
+  padding:64px 0 28px;
+  border-top:1px solid rgba(255,255,255,.14);
+  background:#20201e;
+  color:#fffffe;
+}
+.shared-footer .footer-shell{
+  width:calc(100% - 40px);
+  max-width:1180px;
+  margin-inline:auto;
+}
+.shared-footer .footer-main{
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);
+  gap:72px;
+  align-items:start;
+}
+.shared-footer .footer-logo{
+  display:inline-block;
+  width:210px;
+}
+.shared-footer .footer-logo img{
+  display:block;
+  width:100%;
+  height:auto;
+  margin:0;
+}
+.shared-footer .footer-tagline{
+  margin:14px 0 0;
+  color:#fffffe;
+  font:600 20px/1.3 var(--serif);
+}
+.shared-footer .footer-store-badges{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-top:25px;
+}
+.shared-footer .footer-store-badge{
+  display:flex;
+  align-items:center;
+  height:40px;
+  cursor:default;
+  user-select:none;
+}
+.shared-footer .footer-store-badge svg{
+  display:block;
+  width:auto;
+  height:40px;
+}
+.shared-footer .footer-groups{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,.7fr);
+  gap:48px;
+  padding-top:4px;
+}
+.shared-footer .footer-heading{
+  margin:0 0 16px;
+  color:#ededeb;
+  font:600 13px/1.35 var(--sans);
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+.shared-footer .footer-links{
+  display:grid;
+  gap:10px;
+}
+.shared-footer .footer-links a{
+  width:max-content;
+  color:#fffffe;
+  font-size:17px;
+  line-height:1.4;
+  text-decoration:none;
+}
+.shared-footer .footer-links a:hover,
+.shared-footer .footer-links a:focus-visible{
+  text-decoration:underline;
+}
+.shared-footer .footer-social{
+  display:flex;
+  gap:4px;
+  margin:-11px 0 0 -11px;
+}
+.shared-footer .footer-social a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:44px;
+  color:#fffffe;
+}
+.shared-footer .footer-social a:hover,
+.shared-footer .footer-social a:focus-visible{
+  color:#f3c5d7;
+}
+.shared-footer .footer-social svg{
+  display:block;
+  width:auto;
+  height:22px;
+}
+.shared-footer .footer-copyright{
+  margin:54px 0 0;
+  padding-top:23px;
+  border-top:1px solid rgba(255,255,255,.14);
+  color:#ededeb;
+  font-size:14px;
+  line-height:1.5;
+  text-align:center;
+}
+@media(max-width:699px){
+  .shared-footer{
+    padding:52px 0 26px;
+  }
+  .shared-footer .footer-shell{
+    width:calc(100% - 34px);
+  }
+  .shared-footer .footer-main{
+    grid-template-columns:1fr;
+    gap:42px;
+    text-align:center;
+  }
+  .shared-footer .footer-logo{
+    width:180px;
+  }
+  .shared-footer .footer-tagline{
+    font-size:18px;
+  }
+  .shared-footer .footer-store-badges{
+    justify-content:center;
+  }
+  .shared-footer .footer-groups{
+    grid-template-columns:1fr;
+    gap:34px;
+  }
+  .shared-footer .footer-links{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px 22px;
+  }
+  .shared-footer .footer-social{
+    justify-content:center;
+    margin:-11px 0 0;
+  }
+  .shared-footer .footer-copyright{
+    margin-top:42px;
+  }
+}
+@media(max-width:319px){
+  .shared-footer .footer-store-badges{
+    gap:8px;
+  }
+  .shared-footer .footer-store-badge,
+  .shared-footer .footer-store-badge svg{
+    height:37px;
+  }
+}
