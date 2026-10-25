@@ -1,0 +1,35 @@
+/* Centered early offer jumps with stronger desktop emphasis. */
+.offer-jump {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  width: min(100%, 340px);
+  min-height: 64px;
+  padding: 13px 32px;
+  margin: -28px auto 48px;
+  border: 3px solid #e988b2;
+  border-radius: 4px;
+  background: transparent;
+  color: #fff;
+  font: 600 20px/1.4 var(--sans);
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+.offer-jump span { font-size: 24px; font-weight: 400; }
+.offer-jump:hover { background: #a71e5d; border-color: #a71e5d; }
+.offer-jump:focus-visible { outline: 2px solid #fff; outline-offset: 5px; }
+#offer-box { scroll-margin-top: 24px; }
+@media (max-width: 700px) {
+  .offer-jump {
+    width: min(100%, 320px);
+    min-height: 58px;
+    margin: -10px auto 36px;
+    padding: 12px 24px;
+    border-width: 2px;
+    font-size: 18px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .offer-jump { transition: none; }
+}
