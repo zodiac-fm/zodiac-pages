@@ -1,0 +1,299 @@
+.gh3-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 24px 0 0;
+  background: linear-gradient(180deg, #fff7fa 0%, #fff8fa 22%, #fdf2f6 58%, #f7e5ec 100%);
+}
+
+.gh3-hero-copy {
+  position: relative;
+  z-index: 3;
+  width: calc(100% - 36px);
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.gh3-hero h1 {
+  max-width: 680px;
+  margin: 0 auto;
+  font: 600 clamp(43px, 12.4vw, 48px)/.91 var(--serif);
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+
+.gh3-highlight {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  color: #b21758;
+}
+
+.gh3-highlight::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: 1px;
+  bottom: .025em;
+  left: 1px;
+  height: .11em;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(188, 31, 88, .18), rgba(188, 31, 88, .5) 50%, rgba(188, 31, 88, .18));
+}
+
+.gh3-product-line {
+  max-width: 310px;
+  margin: 13px auto 0;
+  color: #4b4248;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -.015em;
+}
+
+.gh3-music-stage {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  height: 500px;
+  margin-top: 11px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(250, 236, 242, .18) 52%, rgba(242, 216, 226, .54) 80%, rgba(118, 87, 101, .52) 100%);
+}
+
+.gh3-music-stage::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 50px;
+  left: 50%;
+  width: 350px;
+  height: 380px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(205, 28, 94, .13) 0%, rgba(210, 41, 104, .055) 48%, rgba(210, 41, 104, 0) 76%);
+  filter: blur(18px);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.gh3-phone-device {
+  position: absolute;
+  z-index: 2;
+  top: 34px;
+  left: 50%;
+  width: 228px;
+  height: 468px;
+  transform: translateX(-50%);
+}
+
+.gh3-phone-art {
+  position: absolute;
+  z-index: 1;
+  top: -66px;
+  left: -61px;
+  display: block;
+  width: 350px;
+  height: auto;
+  filter: drop-shadow(0 22px 22px rgba(35, 24, 31, .16));
+}
+
+.gh3-native-lower-screen {
+  position: absolute;
+  z-index: 3;
+  top: 346px;
+  right: 10px;
+  bottom: 12px;
+  left: 10px;
+  overflow: hidden;
+  border-radius: 0 0 29px 29px;
+  background: linear-gradient(180deg, #fbf5ed 0%, #fbf2ee 100%);
+}
+
+.gh3-native-card {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  left: 10px;
+  height: 69px;
+  overflow: hidden;
+  border: 1px solid rgba(93, 75, 86, .08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .97);
+  box-shadow: 0 4px 13px rgba(60, 45, 54, .07);
+}
+
+.gh3-ticker-window {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10px, #000 calc(100% - 10px), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10px, #000 calc(100% - 10px), transparent);
+}
+
+.gh3-ticker-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: gh3-ticker-shift 19s linear infinite;
+  will-change: transform;
+}
+
+.gh3-ticker-sequence {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 17px;
+  padding: 0 19px;
+}
+
+.gh3-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  color: #29232a;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+
+.gh3-platforms svg {
+  flex: none;
+  width: 55px;
+  height: auto;
+}
+
+.gh3-platforms svg.google-play-badge {
+  width: 61px;
+}
+
+.gh3-home-indicator {
+  position: absolute;
+  bottom: 7px;
+  left: 50%;
+  width: 53px;
+  height: 3px;
+  border-radius: 3px;
+  background: #161217;
+  transform: translateX(-50%);
+}
+
+@keyframes gh3-ticker-shift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.gh3-source {
+  position: relative;
+  z-index: 5;
+  margin-top: -1px;
+  background: var(--night);
+}
+
+.gh3-source::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -130px;
+  right: 0;
+  left: 0;
+  height: 130px;
+  background: linear-gradient(180deg, rgba(37, 33, 38, 0) 0%, rgba(37, 33, 38, .08) 23%, rgba(37, 33, 38, .34) 55%, rgba(37, 33, 38, .74) 82%, var(--night) 100%);
+  pointer-events: none;
+}
+
+@media (min-width: 700px) {
+  .gh3-hero {
+    padding-top: 36px;
+  }
+
+  .gh3-hero h1 {
+    max-width: 720px;
+    font-size: clamp(62px, 6.3vw, 82px);
+    line-height: .94;
+  }
+
+  .gh3-product-line {
+    max-width: 420px;
+    margin-top: 18px;
+    font-size: 19px;
+  }
+
+  .gh3-music-stage {
+    height: 550px;
+    margin-top: 15px;
+  }
+
+  .gh3-phone-device {
+    top: 36px;
+    transform: translateX(-50%) scale(1.1);
+    transform-origin: top center;
+  }
+}
+
+@media (min-width: 1100px) {
+  .gh3-music-stage {
+    height: 590px;
+  }
+
+  .gh3-phone-device {
+    top: 40px;
+    transform: translateX(-50%) scale(1.26);
+  }
+}
+
+@media (max-width: 355px) {
+  .gh3-hero-copy {
+    width: calc(100% - 28px);
+  }
+
+  .gh3-hero h1 {
+    font-size: 41px;
+  }
+
+  .gh3-product-line {
+    max-width: 275px;
+    font-size: 15px;
+  }
+
+  .gh3-music-stage {
+    height: 480px;
+  }
+
+  .gh3-phone-device {
+    top: 30px;
+    transform: translateX(-50%) scale(.955);
+    transform-origin: top center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gh3-ticker-track {
+    width: 100%;
+    animation: none;
+  }
+
+  .gh3-ticker-sequence {
+    width: 100%;
+    justify-content: center;
+    gap: 7px;
+    padding: 0 7px;
+  }
+
+  .gh3-ticker-sequence + .gh3-ticker-sequence {
+    display: none;
+  }
+
+  .gh3-ticker-item {
+    font-size: 8px;
+  }
+
+  .gh3-platforms svg {
+    width: 41px;
+  }
+
+  .gh3-platforms svg.google-play-badge {
+    width: 45px;
+  }
+}
