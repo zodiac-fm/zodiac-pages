@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="G-H-2 · General Hero 2 mobile opening review for Zodiac.fm.">
+  <meta name="robots" content="noindex,nofollow">
+  <title>G-H-2 · General Hero 2 · Zodiac.fm</title>
+  <style>
+    @font-face {
+      font-family: "Cormorant";
+      src: url("../general-spiritual-assets/cormorant-600.ttf") format("truetype");
+      font-weight: 600;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Switzer";
+      src: url("../reveal-assets/Switzer-Regular.otf") format("opentype");
+      font-weight: 400;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "Switzer";
+      src: url("../reveal-assets/Switzer-Semibold.otf") format("opentype");
+      font-weight: 600;
+      font-display: swap;
+    }
+
+    :root {
+      --ink: #17131a;
+      --charcoal: #252126;
+      --rose: #a3134e;
+      --rose-bright: #d91662;
+      --screen: #fbf5ed;
+      --white: #fff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #e7e3e5;
+      font-family: "Switzer", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .mobile-review {
+      width: min(100%, 430px);
+      min-height: 100svh;
+      margin: 0 auto;
+      overflow: hidden;
+      background: linear-gradient(180deg, #fff7fa 0%, #fff8fa 22%, #fdf2f6 58%, #f7e5ec 100%);
+      box-shadow: 0 0 44px rgba(25, 18, 24, .13);
+    }
+
+    .topbar {
+      min-height: 72px;
+      padding: 11px 17px 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 1px solid rgba(52, 33, 44, .13);
+      background: rgba(255, 255, 255, .97);
+    }
+
+    .brand {
+      font-family: "Cormorant", Georgia, serif;
+      font-size: 29px;
+      font-weight: 600;
+      line-height: .9;
+      letter-spacing: -.04em;
+      white-space: nowrap;
+    }
+
+    .offer-note {
+      margin: 0;
+      display: grid;
+      justify-items: end;
+      gap: 1px;
+      text-align: right;
+      line-height: 1.05;
+    }
+
+    .offer-note strong {
+      color: var(--rose);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .01em;
+    }
+
+    .offer-note span {
+      color: #665d63;
+      font-size: 10px;
+    }
+
+    .offer-note em {
+      margin-top: 2px;
+      color: var(--ink);
+      font-size: 11px;
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    .hero {
+      position: relative;
+      padding: 24px 18px 0;
+      background: var(--white);
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+    }
+
+    h1 {
+      max-width: 345px;
+      margin: 0 auto;
+      font-family: "Cormorant", Georgia, serif;
+      font-size: clamp(43px, 12.4vw, 48px);
+      font-weight: 600;
+      line-height: .91;
+      letter-spacing: -.045em;
+      text-wrap: balance;
+    }
+
+    .highlight {
+      position: relative;
+      display: inline-block;
+      z-index: 0;
+      color: var(--rose);
+    }
+
+    .highlight::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      left: 1px;
+      right: 1px;
+      bottom: .025em;
+      height: .11em;
+      border-radius: 2px;
+      background: linear-gradient(90deg, rgba(188, 31, 88, .18), rgba(188, 31, 88, .5) 50%, rgba(188, 31, 88, .18));
+    }
+
+    .product-line {
+      margin: 13px auto 0;
+      max-width: 290px;
+      color: #4b4248;
+      font-size: 16px;
+      line-height: 1.35;
+      letter-spacing: -.015em;
+    }
+
+    .music-stage {
+      position: relative;
+      width: calc(100% + 36px);
+      height: 466px;
+      margin: 11px -18px 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(250, 236, 242, .18) 52%, rgba(242, 216, 226, .54) 80%, rgba(118, 87, 101, .52) 100%);
+      isolation: isolate;
+    }
+
+    .music-stage::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      left: 50%;
+      top: 50px;
+      width: 350px;
+      height: 380px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(205, 28, 94, .13) 0%, rgba(210, 41, 104, .055) 48%, rgba(210, 41, 104, 0) 76%);
+      filter: blur(18px);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .phone-device {
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      left: 50%;
+      width: 228px;
+      height: 468px;
+      transform: translateX(-50%);
+    }
+
+    .phone-art {
+      position: absolute;
+      z-index: 1;
+      top: -66px;
+      left: -61px;
+      width: 350px;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 22px 22px rgba(35, 24, 31, .16));
+    }
+
+    .native-lower-screen {
+      position: absolute;
+      z-index: 3;
+      left: 10px;
+      right: 10px;
+      top: 346px;
+      bottom: 12px;
+      overflow: hidden;
+      border-radius: 0 0 29px 29px;
+      background: linear-gradient(180deg, #fbf5ed 0%, #fbf2ee 100%);
+    }
+
+    .native-card {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      top: 6px;
+      height: 69px;
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      align-items: stretch;
+      overflow: hidden;
+      border: 1px solid rgba(93, 75, 86, .08);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, .97);
+      box-shadow: 0 4px 13px rgba(60, 45, 54, .07);
+    }
+
+    .native-mark {
+      position: relative;
+      display: grid;
+      place-items: center;
+      color: var(--rose-bright);
+    }
+
+    .native-mark::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 13px;
+      bottom: 13px;
+      width: 1px;
+      background: #eee5e9;
+    }
+
+    .native-mark svg {
+      width: 14px;
+      height: 20px;
+      display: block;
+    }
+
+    .ticker-window {
+      min-width: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 10px, #000 calc(100% - 10px), transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 10px, #000 calc(100% - 10px), transparent);
+    }
+
+    .ticker-track {
+      width: max-content;
+      display: flex;
+      align-items: center;
+      animation: ticker-shift 32s linear infinite;
+      will-change: transform;
+    }
+
+    .ticker-sequence {
+      display: flex;
+      flex: none;
+      align-items: center;
+      gap: 20px;
+      padding: 0 20px 0 10px;
+    }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+      color: #29232a;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: -.01em;
+    }
+
+    .ticker-item::before {
+      content: "";
+      width: 4px;
+      height: 4px;
+      flex: none;
+      border-radius: 50%;
+      background: var(--rose-bright);
+    }
+
+    .ticker-item:first-child::before { display: none; }
+
+    .platforms {
+      gap: 5px;
+    }
+
+    .platforms::before { display: none; }
+
+    .platforms svg.store-badge {
+      width: 59px;
+      height: auto;
+      flex: none;
+    }
+
+    .platforms svg.google-play-badge { width: 65px; }
+
+    .home-indicator {
+      position: absolute;
+      left: 50%;
+      bottom: 7px;
+      width: 53px;
+      height: 3px;
+      border-radius: 3px;
+      background: #161217;
+      transform: translateX(-50%);
+    }
+
+    @keyframes ticker-shift {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation: none; }
+      .ticker-sequence + .ticker-sequence { display: none; }
+    }
+
+    .next-section {
+      position: relative;
+      z-index: 4;
+      min-height: 245px;
+      margin-top: -1px;
+      padding: 42px 25px 60px;
+      color: #fff;
+      background: var(--charcoal);
+    }
+
+    .next-section::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      left: 0;
+      right: 0;
+      top: -128px;
+      height: 130px;
+      background: linear-gradient(180deg, rgba(37, 33, 38, 0) 0%, rgba(37, 33, 38, .08) 24%, rgba(37, 33, 38, .34) 58%, rgba(37, 33, 38, .78) 84%, var(--charcoal) 100%);
+      pointer-events: none;
+    }
+
+    .next-section h2 {
+      max-width: 336px;
+      margin: 0;
+      font-family: "Cormorant", Georgia, serif;
+      font-size: 35px;
+      font-weight: 600;
+      line-height: .98;
+      letter-spacing: -.035em;
+      text-wrap: balance;
+    }
+
+    .next-section p {
+      max-width: 326px;
+      margin: 20px 0 0;
+      color: rgba(255, 255, 255, .75);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 355px) {
+      .topbar {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .brand { font-size: 27px; }
+
+      .hero {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .music-stage {
+        width: calc(100% + 28px);
+        height: 446px;
+        margin-left: -14px;
+        margin-right: -14px;
+      }
+
+      .phone-device {
+        transform: translateX(-50%) scale(.955);
+        transform-origin: top center;
+      }
+
+      .next-section { margin-top: -1px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="mobile-review" data-review-code="G-H-2" data-review-name="General Hero 2">
+    <header class="topbar">
+      <div class="brand" aria-label="Zodiac FM">zodiac.fm</div>
+      <p class="offer-note">
+        <strong>20% Off</strong>
+        <span>Courtesy of XXXXXX</span>
+        <em>Free 7-Day Trial</em>
+      </p>
+    </header>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <h1 id="hero-title">Tune Into Your Authentic <span class="highlight">Vibrations</span></h1>
+        <p class="product-line">Music made from your birth frequencies.</p>
+      </div>
+
+      <div class="music-stage" aria-label="The Zodiac app playing music made from personal birth frequencies">
+        <div class="phone-device">
+          <img class="phone-art" width="1920" height="3248" data-asset-id="P-208" src="../../site/assets/hero-recast/phone-frame04-build-cutout.png" alt="The Zodiac playlist on an iPhone">
+
+          <div class="native-lower-screen">
+            <div class="native-card" role="note" aria-label="Just 9 minutes a day. Listen with headphones or good speakers. Available on iOS and Android.">
+              <span class="native-mark" aria-hidden="true">
+                <svg viewBox="0 0 14 20" fill="none">
+                  <path d="M1 8.5v3M4 5v10M7 2v16M10 5v10M13 8.5v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <div class="ticker-window" aria-hidden="true">
+                <div class="ticker-track">
+                  <div class="ticker-sequence">
+                    <span class="ticker-item">Just 9 minutes a day</span>
+                    <span class="ticker-item">Listen with headphones or good speakers</span>
+                    <span class="ticker-item platforms">
+                      <svg class="store-badge" viewBox="0 0 120 40" role="img" aria-label="Download on the App Store"><rect x=".5" y=".5" width="119" height="39" rx="6" fill="#050505" stroke="#a6a6a6"></rect><path fill="#fff" d="M26.6 20.7c0-3.6 3-5.4 3.1-5.5a6.5 6.5 0 0 0-5.1-2.7c-2.2-.2-4.2 1.3-5.3 1.3-1.1 0-2.8-1.3-4.6-1.2a6.8 6.8 0 0 0-5.7 3.5c-2.5 4.2-.6 10.4 1.7 13.8 1.2 1.6 2.5 3.4 4.3 3.3 1.7-.1 2.4-1.1 4.5-1.1 2 0 2.7 1.1 4.5 1.1 1.9 0 3.1-1.7 4.2-3.3a15 15 0 0 0 1.9-3.9 5.9 5.9 0 0 1-3.5-5.3Zm-3.4-10.5a5.9 5.9 0 0 0 1.4-4.1 6.1 6.1 0 0 0-3.9 2 5.7 5.7 0 0 0-1.5 4c1.5.1 3-.7 4-1.9Z"></path><text x="39" y="14" fill="#fff" font-family="Arial,sans-serif" font-size="7.2">Download on the</text><text x="39" y="29" fill="#fff" font-family="Arial,sans-serif" font-size="16">App Store</text></svg>
+                      <svg class="store-badge google-play-badge" viewBox="0 0 135 40" role="img" aria-label="Get it on Google Play"><rect x=".5" y=".5" width="134" height="39" rx="6" fill="#050505" stroke="#a6a6a6"></rect><path fill="#32b5e6" d="M9 7.2 23.8 20 9 32.8Z"></path><path fill="#2fc063" d="M9 7.2 26.7 17.5 23.8 20Z"></path><path fill="#ffd34e" d="m23.8 20 2.9 2.5L9 32.8Z"></path><path fill="#f25f5c" d="m26.7 17.5 4.4 2.5-4.4 2.5-2.9-2.5Z"></path><text x="39" y="13" fill="#fff" font-family="Arial,sans-serif" font-size="7">GET IT ON</text><text x="39" y="29" fill="#fff" font-family="Arial,sans-serif" font-size="15.5">Google Play</text></svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <span class="home-indicator" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="next-section" id="offer" aria-label="Beginning of the next section">
+      <h2>Bypass Language and Reconnect to Source</h2>
+      <p>“Zodiac.fm helps people access aspects of themselves that have always been there.”</p>
+    </section>
+  </main>
+
+  <script>
+    const sequence = document.querySelector('.ticker-sequence');
+    sequence.parentElement.append(sequence.cloneNode(true));
+  </script>
+</body>
+</html>
