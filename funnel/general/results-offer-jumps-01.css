@@ -1,0 +1,27 @@
+/* Two early in-page offer links. Keep the primary membership action distinct. */
+.offer-jump {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  min-height: 50px;
+  padding: 10px 23px;
+  margin: 0 0 36px;
+  border: 1px solid #e988b2;
+  border-radius: 4px;
+  background: transparent;
+  color: #fff;
+  font: 600 17px/1.4 var(--sans);
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+.offer-jump span { font-size: 20px; font-weight: 400; }
+.offer-jump:hover { background: #a71e5d; border-color: #a71e5d; }
+.offer-jump:focus-visible { outline: 2px solid #fff; outline-offset: 5px; }
+#offer-box { scroll-margin-top: 24px; }
+@media (max-width: 700px) {
+  .offer-jump { min-height: 50px; margin-bottom: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .offer-jump { transition: none; }
+}
