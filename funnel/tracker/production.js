@@ -46,13 +46,14 @@
     document.querySelectorAll('[data-page-variant]').forEach(b=>b.onclick=()=>{variant=b.dataset.pageVariant;document.dispatchEvent(new CustomEvent('tracker:select-variant',{detail:{variant}}));render();});
     document.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>check(b.dataset.check));
     const rows=$('production-workspace').querySelectorAll('.production-row-main');
+    if(!live.length){const heading=$('production-workspace').querySelector('.production-group-title h3');if(heading)heading.textContent='Live page';}
     [...live,...draft].forEach((target,index)=>{if(target.editor&&rows[index])rows[index].insertAdjacentHTML('beforeend',`<p class="capture-meta">Added by ${esc(target.editor.name)} · ${esc(time(target.registeredAt))}</p>`);});
     document.querySelectorAll('[data-history]').forEach(b=>b.onclick=()=>historyFor(b.dataset.history));
     $('register-page').onclick=register;$('retry-production')?.addEventListener('click',load);
   }
   async function check(id){
     if(busy.has(id))return;busy.add(id);error='';render();
-    try{const result=await request({action:'check',targetId:id});if(!user)return;if(result.target)targets=targets.map(t=>t.id===id?result.target:t);else await load();}
+    try{const result=await request({action:'check',targetId:id});if(!user)return;if(result.target)targets=targets.map(t=>t.id===id?result.target:t);else await load();if(result.result?.error)error=result.result.error.message;}
     catch(e){error=e.message;}finally{busy.delete(id);render();}
   }
   function openDialog(content){dialog.innerHTML=`<div class="dialog-top"><p class="eyebrow">Page production</p><button id="close-production" class="icon-button" aria-label="Close page history">✕</button></div>${content}`;$('close-production').onclick=()=>dialog.close();if(!dialog.open)dialog.showModal();}

@@ -5,8 +5,10 @@ const {TARGETS} = require('../lib/funnel-tracker/production-catalog');
 const {
   InvalidProductionRequestError,
   checkTarget,
+  closeRendererWithin,
   customTargets,
   registerDraftTarget,
+  requestOidcTokenProvider,
 } = require('../lib/funnel-tracker/production-monitor');
 const {createProductionRenderer} = require('../lib/funnel-tracker/production-renderer');
 const {
@@ -240,7 +242,7 @@ function createHandler({
     }
   }
 
-  async function handleCheck(res, targetId) {
+  async function handleCheck(req, res, targetId) {
     let current;
     try {
       current = await store.read();
@@ -251,7 +253,11 @@ function createHandler({
     if (!target) return fail(res, 404, 'invalid_target');
     const renderer = rendererFactory();
     try {
-      const result = await checkTarget(target, {store, renderer});
+      const result = await checkTarget(target, {
+        store,
+        renderer,
+        tokenProvider: requestOidcTokenProvider(req),
+      });
       let latest;
       try {
         latest = await store.read();
@@ -269,7 +275,7 @@ function createHandler({
         target: publicTarget(target, latest.data.targets[target.id]),
       });
     } finally {
-      await renderer.close().catch(() => undefined);
+      await closeRendererWithin(renderer);
     }
   }
 
@@ -313,7 +319,7 @@ function createHandler({
     if (!body || typeof body.action !== 'string') return fail(res, 400, 'invalid_request');
     if (body.action === 'check') {
       if (typeof body.targetId !== 'string') return fail(res, 400, 'invalid_request');
-      return handleCheck(res, body.targetId);
+      return handleCheck(req, res, body.targetId);
     }
     if (body.action === 'register') return handleRegister(res, body, identity);
     return fail(res, 400, 'invalid_request');

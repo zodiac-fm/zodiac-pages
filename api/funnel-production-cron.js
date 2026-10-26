@@ -2,7 +2,7 @@
 
 const {timingSafeEqual} = require('node:crypto');
 const {TARGETS} = require('../lib/funnel-tracker/production-catalog');
-const {checkAllTargets} = require('../lib/funnel-tracker/production-monitor');
+const {checkAllTargets, requestOidcTokenProvider} = require('../lib/funnel-tracker/production-monitor');
 const {productionStorageConfigured, productionStore} = require('../lib/funnel-tracker/production-store');
 
 function sendJson(res, status, payload, headers = {}) {
@@ -34,6 +34,8 @@ function publicResult(result) {
     status: result.status,
     changed: result.changed,
     archiveId: result.archiveId,
+    skipped: result.skipped === true,
+    timedOut: result.timedOut === true,
     error: result.error || null,
   };
 }
@@ -56,8 +58,11 @@ function createHandler({
     }
     const checkedAt = now().toISOString();
     try {
-      const results = (await checkAll(targets, {store})).map(publicResult);
-      const failed = results.some(result => ['needs_connection', 'error'].includes(result.status));
+      const results = (await checkAll(targets, {
+        store,
+        tokenProvider: requestOidcTokenProvider(req),
+      })).map(publicResult);
+      const failed = results.some(result => ['needs_connection', 'error', 'skipped'].includes(result.status));
       return sendJson(res, failed ? 207 : 200, {ok: !failed, checkedAt, results});
     } catch {
       return sendJson(res, 503, {ok: false, checkedAt, error: 'monitor_unavailable', results: []});
