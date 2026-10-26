@@ -32,10 +32,11 @@
   }
   const statusLabel = target => {
     let label={never_checked:'Awaiting first screenshot',baseline:'First screenshot saved',current:'No change at last check',changed:'Change captured',needs_connection:'Connection needed',error:'Capture failed'}[target.status]||'Awaiting first screenshot';
-    if(target.status==='changed'&&target.comparisonVersion!=='semantic-v1')label='Screenshot difference';
-    if(target.status==='baseline'&&target.archiveCount>1&&target.comparisonVersion==='semantic-v1')label='Comparison ready';
     const latest=target.archives?.find(archive=>archive.id===target.currentArchiveId);
-    return latest?.kind==='changed'&&latest.comparisonVersion==='semantic-v1'&&previousPageVisit&&new Date(target.lastChangedAt)>new Date(previousPageVisit)?'New change since your last visit · '+label:label;
+    const compared=latest?.comparisonVersion==='semantic-v1'&&latest.changeSummary?.diagnosticBaseline===false;
+    if(target.status==='changed'&&!compared)label='Screenshot difference';
+    if(target.status==='baseline'&&target.archiveCount>1&&target.comparisonVersion==='semantic-v1')label='Comparison ready';
+    return latest?.kind==='changed'&&compared&&previousPageVisit&&new Date(target.lastChangedAt)>new Date(previousPageVisit)?'New change since your last visit · '+label:label;
   };
   function row(target){
     const address=url(target.productionUrl), draft=target.stage==='draft';
@@ -67,12 +68,19 @@
   function archiveTitle(archive){
     if(archive.comparisonBaseline)return 'Verified starting point';
     if(archive.kind==='baseline')return 'Starting record';
-    return archive.comparisonVersion==='semantic-v1'?'Page change captured':'Screenshot difference';
+    return archive.comparisonVersion==='semantic-v1'&&archive.changeSummary?.diagnosticBaseline===false?'Page change captured':'Screenshot difference';
   }
   function archiveSummary(archive){
     if(archive.comparisonBaseline)return 'Page comparison was updated at this check. Future changes use this starting point, with earlier screenshots preserved below.';
     if(archive.kind==='baseline')return 'First successful screenshot of this link.';
-    return archive.comparisonVersion==='semantic-v1'?'Page content, styles or assets differ from the previous successful comparison.':'The earlier comparison found a visual difference. That does not establish that the page was edited.';
+    if(archive.comparisonVersion==='semantic-v1'&&archive.changeSummary?.diagnosticBaseline===false){
+      const changes=archive.changeSummary,parts=[];
+      if(changes.mainHtmlChanged||changes.normalizedDomChanged)parts.push('page content');
+      if(changes.inlineCssChanged)parts.push('page styles');
+      if(changes.resourceSetChanged)parts.push('linked styles, images, fonts or scripts');
+      return parts.length?'The comparison found a change in '+parts.join(' and ')+'.':'A page difference was recorded.';
+    }
+    return 'The earlier comparison found a difference. That does not establish that the page was edited.';
   }
   function register(){
     openDialog(`<h2>Add a working page.</h2><p class="muted">Use its stable zodiac-pages.vercel.app link. Your company account will be recorded with the page.</p><form id="register-production"><label class="field">Page name<input name="name" required maxlength="160" placeholder="For example: General lander, new hero"></label><label class="field">Page family<select name="family">${Object.entries(families).map(([key,name])=>`<option value="${key}" ${key===family?'selected':''}>${name}</option>`).join('')}</select></label><label class="field">Category<select name="variant"></select></label><label class="field">Vercel URL<input name="url" required type="url" placeholder="https://zodiac-pages.vercel.app/…"></label><p id="register-error" class="form-error" role="alert"></p><div class="form-actions"><button type="button" id="cancel-production">Cancel</button><button class="primary" type="submit">Add page</button></div></form>`);
