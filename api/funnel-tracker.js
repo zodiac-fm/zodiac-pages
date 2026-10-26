@@ -10,10 +10,13 @@ const {
   clearNonceCookie,
   clearSessionCookie,
   configuredGoogleClientId,
+  createAgentToken,
   createSession,
+  hasAuthorizationHeader,
   issueLoginChallenge,
   nonceCookie,
   readLoginChallenge,
+  readAgentToken,
   readSession,
   sessionCookie,
   verifyGoogleCredential,
@@ -25,12 +28,15 @@ const ERROR_MESSAGES = Object.freeze({
   access_denied: 'Use a verified zodiac.fm Google account to continue.',
   auth_challenge_required: 'Refresh the tracker and try signing in again.',
   auth_not_configured: 'Company sign-in has not been configured yet.',
+  agent_access_denied: 'This agent token is missing, invalid or expired.',
+  agent_scope_denied: 'Agent access can read records and add drafts, but cannot perform this action.',
   company_access_required: 'Sign in with your zodiac.fm Google account to view the tracker.',
   expected_revision_required: 'Refresh the shared records before saving.',
   future_live_date: 'The go-live date cannot be in the future.',
   invalid_live_date: 'Enter the date this revision went live.',
   invalid_preview_url: 'Use a complete HTTPS preview URL.',
   invalid_production_url: 'Use the HTTPS customer production URL on zodiac.fm or one of its subdomains.',
+  invalid_repository_ref: 'Use a zodiac-fm repository, a full 40-character commit, and an optional repository-relative path.',
   live_confirmation_required: 'Confirm that you checked this exact revision in production.',
   live_note_required: 'Add the production confirmation note.',
   revision_conflict: 'Someone saved a change while you were editing. Refresh and compare before saving again.',
@@ -118,6 +124,15 @@ function parsedBody(req) {
   }
 }
 
+function requestIdentity(req) {
+  if (hasAuthorizationHeader(req)) {
+    const agent = readAgentToken(req);
+    return agent ? {kind: 'agent', user: agent.user, scope: agent.scope} : null;
+  }
+  const session = readSession(req);
+  return session ? {kind: 'browser', user: session.user} : null;
+}
+
 function createHandler({
   store = blobStore,
   verifyCredential = verifyGoogleCredential,
@@ -150,14 +165,16 @@ function createHandler({
   async function handleGet(req, res) {
     if (queryAction(req) === 'config') return handleConfig(res);
     if (!authConfigured()) return fail(res, 503, 'auth_not_configured', {setupPending: true});
-    const session = readSession(req);
-    if (!session) return fail(res, 401, 'company_access_required');
+    const identity = requestIdentity(req);
+    if (!identity) {
+      return fail(res, 401, hasAuthorizationHeader(req) ? 'agent_access_denied' : 'company_access_required');
+    }
     if (!storageConfigured()) {
       return fail(res, 503, 'storage_not_configured', {
         setupPending: true,
         authConfigured: true,
         storageConfigured: false,
-        user: session.user,
+        user: identity.user,
       });
     }
     try {
@@ -166,7 +183,7 @@ function createHandler({
         data: current.data,
         revision: current.revision,
         canEdit: true,
-        user: session.user,
+        user: identity.user,
         setupPending: false,
       });
     } catch (error) {
@@ -191,9 +208,22 @@ function createHandler({
     });
   }
 
-  async function handleMutation(req, res, body, session) {
-    if (!authConfigured()) return fail(res, 503, 'auth_not_configured', {setupPending: true});
+  function handleAgentToken(req, res) {
+    if (!authConfigured()) return fail(res, 503, 'auth_not_configured');
+    const session = readSession(req);
     if (!session) return fail(res, 401, 'company_access_required');
+    const issued = createAgentToken(session.user);
+    return sendJson(res, 200, issued);
+  }
+
+  async function handleMutation(req, res, body, identity) {
+    if (!authConfigured()) return fail(res, 503, 'auth_not_configured', {setupPending: true});
+    if (!identity) {
+      return fail(res, 401, hasAuthorizationHeader(req) ? 'agent_access_denied' : 'company_access_required');
+    }
+    if (identity.kind === 'agent' && body.action !== 'revision') {
+      return fail(res, 403, 'agent_scope_denied');
+    }
     if (!storageConfigured()) return fail(res, 503, 'storage_not_configured', {setupPending: true});
     if (typeof body.expectedRevision !== 'string' || !body.expectedRevision) {
       return fail(res, 400, 'expected_revision_required');
@@ -214,7 +244,7 @@ function createHandler({
         action: body.action,
         sectionId: body.sectionId,
         payload: body.payload,
-        editor: session.user,
+        editor: identity.user,
       });
     } catch (error) {
       if (error instanceof InvalidMutationError) return fail(res, 400, error.code);
@@ -227,7 +257,7 @@ function createHandler({
         data: stored.data,
         revision: stored.revision,
         canEdit: true,
-        user: session.user,
+        user: identity.user,
         event: changed.event,
       });
     } catch (error) {
@@ -240,18 +270,23 @@ function createHandler({
   return async function handler(req, res) {
     if (req.method === 'GET') return handleGet(req, res);
     if (req.method !== 'POST') return fail(res, 405, 'method_not_allowed', {}, {Allow: 'GET, POST'});
-    if (!isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
 
     const body = parsedBody(req);
     if (!body || typeof body.action !== 'string') return fail(res, 400, 'invalid_request');
+    const bearerRequest = hasAuthorizationHeader(req);
+    if (bearerRequest && ['session', 'logout', 'agent-token', 'live'].includes(body.action)) {
+      return fail(res, 403, 'agent_scope_denied');
+    }
+    if (!bearerRequest && !isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
     if (body.action === 'session') return handleSession(req, res, body);
     if (body.action === 'logout') {
       return sendJson(res, 200, {canEdit: false, user: null}, {
         'Set-Cookie': [clearSessionCookie(), clearNonceCookie()],
       });
     }
+    if (body.action === 'agent-token') return handleAgentToken(req, res);
     if (!['revision', 'live'].includes(body.action)) return fail(res, 400, 'invalid_action');
-    return handleMutation(req, res, body, readSession(req));
+    return handleMutation(req, res, body, requestIdentity(req));
   };
 }
 
@@ -264,4 +299,5 @@ module.exports._test = {
   isSameOrigin,
   parsedBody,
   queryAction,
+  requestIdentity,
 };
