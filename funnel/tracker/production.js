@@ -8,6 +8,8 @@
   const time = value => value ? new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Denver',timeZoneName:'short'}).format(new Date(value)) : 'Not checked yet';
   const url = value => {try{const parsed=new URL(value);return parsed.protocol==='https:'?parsed.href:'';}catch{return '';}};
   const api = '/api/funnel-production';
+  let previousPageVisit=null;
+  try{previousPageVisit=localStorage.getItem('funnel-tracker-page-visit');localStorage.setItem('funnel-tracker-page-visit',new Date().toISOString());}catch{/* Private shared history does not depend on this device marker. */}
   let mode = new URLSearchParams(location.search).get('mode') === 'sections' ? 'sections' : 'pages';
   let family='lander',variant='g',targets=[],loaded=false,loading=false,busy=new Set(),error='',user=null;
   const dialog=document.createElement('dialog');dialog.id='production-dialog';document.body.appendChild(dialog);
@@ -28,7 +30,10 @@
     try{const result=await request();if(!user)return;targets=result.targets||[];loaded=true;error='';}
     catch(e){error=e.message;}finally{loading=false;render();}
   }
-  const statusLabel = target => ({never_checked:'Awaiting first screenshot',baseline:'First screenshot saved',current:'No change at last check',changed:'Change captured',needs_connection:'Connection needed',error:'Capture failed'}[target.status]||'Awaiting first screenshot');
+  const statusLabel = target => {
+    const label={never_checked:'Awaiting first screenshot',baseline:'First screenshot saved',current:'No change at last check',changed:'Change captured',needs_connection:'Connection needed',error:'Capture failed'}[target.status]||'Awaiting first screenshot';
+    return target.archiveCount>1&&previousPageVisit&&new Date(target.lastChangedAt)>new Date(previousPageVisit)?'New change since your last visit · '+label:label;
+  };
   function row(target){
     const address=url(target.productionUrl), draft=target.stage==='draft';
     return `<article class="production-row"><div class="production-row-main"><div class="production-row-heading"><h4>${esc(draft?target.label:target.channel==='direct'?'Direct':target.channel==='paid'?'Paid · Facebook':target.channel==='affiliate'?'Affiliate · David McEwen':target.label)}</h4><span class="capture-status ${esc(target.status||'never_checked')}">${esc(statusLabel(target))}</span></div>${address?`<a class="production-url" href="${esc(address)}" target="_blank" rel="noopener">${esc(address.replace('https://',''))} ↗</a>`:''}${target.expectedOffer?`<p class="offer-note">${esc(target.expectedOffer)}</p>`:''}<p class="capture-meta">${esc(target.sourceRepo||'zodiac-fm/zodiac-pages')}${target.captureKind==='sample-profile'?' · Fixed sample profile':''}</p>${target.error?`<p class="capture-error">${esc(target.error.message||'The page could not be captured. Its previous screenshots are safe.')}</p>`:''}<p class="capture-meta">Last check: ${esc(time(target.lastCheckedAt))}${target.lastChangedAt?' · Last change captured: '+esc(time(target.lastChangedAt)):''}</p></div><div class="production-actions"><button data-history="${esc(target.id)}" ${!target.archiveCount?'disabled':''}>${Number(target.archiveCount)||0} screenshot${target.archiveCount===1?'':'s'}${target.archiveCount?' · History':''}</button><button data-check="${esc(target.id)}" ${busy.has(target.id)?'disabled':''}>${busy.has(target.id)?'Checking…':'Check now'}</button></div></article>`;
@@ -40,6 +45,8 @@
     $('production-workspace').innerHTML=`<div class="production-subhead"><nav class="production-variants" aria-label="Page category">${variants(family).map(v=>`<button data-page-variant="${v}" class="${variant===v?'selected':''}" aria-pressed="${variant===v}">${['g','a','m'].includes(v)?`<span>${v.toUpperCase()}</span>`:''}${names[v]}</button>`).join('')}</nav><button id="register-page">Add Vercel page</button></div><div class="production-title"><div><p class="eyebrow">${esc(families[family])} / ${esc(names[variant])}</p><h2>The page and its history.</h2></div><p>Checks run every 15 minutes.<br>Each detected change saves a screenshot and date.</p></div><div class="production-explainer"><p>Live links stay the same. Screenshots keep the previous versions available to both of you.</p><p>${family==='results'?'Results captures use a fixed sample profile, with separate paid and affiliate offers. Personal member details are excluded.':'A screenshot records what the monitor saw. Use Section versions to record who edited a section and which exact revision Walter took live.'}</p></div>${error?`<div class="capture-alert" role="alert">${esc(error)} <button id="retry-production">Try again</button></div>`:''}${!loaded?'<div class="loading">Loading private page records…</div>':`<section class="production-group"><div class="production-group-title"><h3>Live on ${family==='results'?'app.zodiac.fm':'zodiac.fm'}</h3><span>${live.length} tracked link${live.length===1?'':'s'}</span></div>${live.length?live.map(row).join(''):'<div class="production-empty">The live '+esc(families[family].toLowerCase())+' link has not been provided yet. Your Vercel pages are listed below.</div>'}</section><section class="production-group"><div class="production-group-title"><h3>Working pages on Vercel</h3><span>Drafts</span></div>${draft.length?draft.map(row).join(''):'<div class="production-empty">Add a Vercel page to start keeping its screenshot history.</div>'}</section><p class="production-footnote">The first successful check creates today’s starting record. Later checks save another screenshot when page content changes. A failed check keeps the last successful capture. Changes between checks may not be captured.</p>`}`;
     document.querySelectorAll('[data-page-variant]').forEach(b=>b.onclick=()=>{variant=b.dataset.pageVariant;document.dispatchEvent(new CustomEvent('tracker:select-variant',{detail:{variant}}));render();});
     document.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>check(b.dataset.check));
+    const rows=$('production-workspace').querySelectorAll('.production-row-main');
+    [...live,...draft].forEach((target,index)=>{if(target.editor&&rows[index])rows[index].insertAdjacentHTML('beforeend',`<p class="capture-meta">Added by ${esc(target.editor.name)} · ${esc(time(target.registeredAt))}</p>`);});
     document.querySelectorAll('[data-history]').forEach(b=>b.onclick=()=>historyFor(b.dataset.history));
     $('register-page').onclick=register;$('retry-production')?.addEventListener('click',load);
   }
@@ -59,6 +66,7 @@
     form.onsubmit=async e=>{e.preventDefault();const button=form.querySelector('[type=submit]');button.disabled=true;$('register-error').textContent='';try{const fields=new FormData(form);await request({action:'register',payload:Object.fromEntries(fields)});await load();dialog.close();}catch(e){$('register-error').textContent=e.message;}finally{button.disabled=false;}};
   }
   document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+  if($('all-changes').firstChild)$('all-changes').firstChild.textContent='Section changes ';
   document.addEventListener('tracker:show-sections',()=>setMode('sections'));
   document.addEventListener('tracker:selection',e=>{family=e.detail.family;variant=e.detail.variant;if(loaded)render();});
   document.addEventListener('tracker:ready',e=>{user=e.detail.user;family=e.detail.family;variant=e.detail.variant;setMode(mode);load();});
