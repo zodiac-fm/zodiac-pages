@@ -31,8 +31,11 @@
     catch(e){error=e.message;}finally{loading=false;render();}
   }
   const statusLabel = target => {
-    const label={never_checked:'Awaiting first screenshot',baseline:'First screenshot saved',current:'No change at last check',changed:'Change captured',needs_connection:'Connection needed',error:'Capture failed'}[target.status]||'Awaiting first screenshot';
-    return target.archiveCount>1&&previousPageVisit&&new Date(target.lastChangedAt)>new Date(previousPageVisit)?'New change since your last visit · '+label:label;
+    let label={never_checked:'Awaiting first screenshot',baseline:'First screenshot saved',current:'No change at last check',changed:'Change captured',needs_connection:'Connection needed',error:'Capture failed'}[target.status]||'Awaiting first screenshot';
+    if(target.status==='changed'&&target.comparisonVersion!=='semantic-v1')label='Screenshot difference';
+    if(target.status==='baseline'&&target.archiveCount>1&&target.comparisonVersion==='semantic-v1')label='Comparison ready';
+    const latest=target.archives?.find(archive=>archive.id===target.currentArchiveId);
+    return latest?.kind==='changed'&&latest.comparisonVersion==='semantic-v1'&&previousPageVisit&&new Date(target.lastChangedAt)>new Date(previousPageVisit)?'New change since your last visit · '+label:label;
   };
   function row(target){
     const address=url(target.productionUrl), draft=target.stage==='draft';
@@ -59,7 +62,17 @@
   function openDialog(content){dialog.innerHTML=`<div class="dialog-top"><p class="eyebrow">Page production</p><button id="close-production" class="icon-button" aria-label="Close page history">✕</button></div>${content}`;$('close-production').onclick=()=>dialog.close();if(!dialog.open)dialog.showModal();}
   function historyFor(id){
     const target=targets.find(t=>t.id===id);if(!target)return;
-    openDialog(`<h2>${esc(target.label)}${target.stage==='production'?' · '+esc(target.channel):''}</h2><p class="muted">${target.captureKind==='sample-profile'?'Fixed sample profile. ':''}Screenshot dates show when the monitor observed the page. They do not identify who changed it.</p><div class="archive-list">${[...(target.archives||[])].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map((a,i)=>{const source=new URL(api,location.origin);source.searchParams.set('targetId',target.id);source.searchParams.set('archiveId',a.id);return `<article class="archive-entry"><div class="archive-heading"><h3>${a.kind==='baseline'?'Starting record':'Page change captured'}${a.id===target.currentArchiveId?' · Latest':''}</h3><time>${esc(time(a.createdAt))}</time></div><p class="capture-meta">${a.kind==='baseline'?'First successful screenshot of this link.':'Page content differs from the previous successful capture.'}${a.sourceCommit?' Source commit: '+esc(a.sourceCommit.slice(0,10))+'.':''}</p><details ${i===0?'open':''}><summary>View screenshot</summary><a href="${esc(source.pathname+source.search)}" target="_blank" rel="noopener">Open full screenshot ↗</a><img loading="lazy" src="${esc(source.pathname+source.search)}" alt="${esc(target.label+' captured '+time(a.createdAt))}"></details></article>`;}).join('')}</div>`);
+    openDialog(`<h2>${esc(target.label)}${target.stage==='production'?' · '+esc(target.channel):''}</h2><p class="muted">${target.captureKind==='sample-profile'?'Fixed sample profile. ':''}Screenshot dates show when the monitor observed the page. They do not identify who changed it.</p><div class="archive-list">${[...(target.archives||[])].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map((a,i)=>{const source=new URL(api,location.origin);source.searchParams.set('targetId',target.id);source.searchParams.set('archiveId',a.id);return `<article class="archive-entry"><div class="archive-heading"><h3>${esc(archiveTitle(a))}${a.id===target.currentArchiveId?' · Latest':''}</h3><time>${esc(time(a.createdAt))}</time></div><p class="capture-meta">${esc(archiveSummary(a))}${a.sourceCommit?' Source commit: '+esc(a.sourceCommit.slice(0,10))+'.':''}</p><details ${i===0?'open':''}><summary>View screenshot</summary><a href="${esc(source.pathname+source.search)}" target="_blank" rel="noopener">Open full screenshot ↗</a><img loading="lazy" src="${esc(source.pathname+source.search)}" alt="${esc(target.label+' captured '+time(a.createdAt))}"></details></article>`;}).join('')}</div>`);
+  }
+  function archiveTitle(archive){
+    if(archive.comparisonBaseline)return 'Verified starting point';
+    if(archive.kind==='baseline')return 'Starting record';
+    return archive.comparisonVersion==='semantic-v1'?'Page change captured':'Screenshot difference';
+  }
+  function archiveSummary(archive){
+    if(archive.comparisonBaseline)return 'Page comparison was updated at this check. Future changes use this starting point, with earlier screenshots preserved below.';
+    if(archive.kind==='baseline')return 'First successful screenshot of this link.';
+    return archive.comparisonVersion==='semantic-v1'?'Page content, styles or assets differ from the previous successful comparison.':'The earlier comparison found a visual difference. That does not establish that the page was edited.';
   }
   function register(){
     openDialog(`<h2>Add a working page.</h2><p class="muted">Use its stable zodiac-pages.vercel.app link. Your company account will be recorded with the page.</p><form id="register-production"><label class="field">Page name<input name="name" required maxlength="160" placeholder="For example: General lander, new hero"></label><label class="field">Page family<select name="family">${Object.entries(families).map(([key,name])=>`<option value="${key}" ${key===family?'selected':''}>${name}</option>`).join('')}</select></label><label class="field">Category<select name="variant"></select></label><label class="field">Vercel URL<input name="url" required type="url" placeholder="https://zodiac-pages.vercel.app/…"></label><p id="register-error" class="form-error" role="alert"></p><div class="form-actions"><button type="button" id="cancel-production">Cancel</button><button class="primary" type="submit">Add page</button></div></form>`);
