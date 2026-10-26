@@ -37,8 +37,8 @@
       href.searchParams.set('mode','review');
       href.searchParams.set('page',item.family || 'lander');
       href.searchParams.set('variant',item.variant || 'g');
-      href.searchParams.set('section',item.sectionId);
-      return `<article class="review-version"><strong>${esc(item.sectionId)} · ${esc(item.pageLabel || 'Section change')}</strong><p>${item.type === 'published' || item.type === 'live' ? 'Publication confirmed' : item.type === 'image' ? 'Image changed' : 'Draft copy changed'}</p><blockquote>${esc(item.summary)}</blockquote><p>${esc(item.editor?.name || item.editor?.email || 'Verified contributor')} · ${esc(stamp(item.createdAt))}</p><a href="${esc(href.href)}" target="_blank" rel="noopener">Open labelled section ↗</a></article>`;
+      if(item.sectionId)href.searchParams.set('section',item.sectionId);
+      return `<article class="review-version"><strong>${item.sectionId ? esc(item.sectionId)+' · ' : ''}${esc(item.pageLabel || 'Section change')}</strong><p>${item.type === 'published' || item.type === 'live' ? 'Publication confirmed' : item.type === 'source' ? 'Vercel source updated' : item.type === 'image' ? 'Image changed' : 'Draft copy changed'}</p><blockquote>${esc(item.summary)}</blockquote><p>${esc(item.editor?.name || item.editor?.email || 'Verified contributor')} · ${esc(stamp(item.createdAt))}</p><a href="${esc(href.href)}" target="_blank" rel="noopener">${item.sectionId ? 'Open labelled section' : 'Open page'} ↗</a></article>`;
     }).join('') : '<p>No changes have been saved yet. Select text or an image on a working page to make the first change.</p>'}`;
     document.getElementById('close-working-activity').onclick = () => dialog.close();
     dialog.showModal();

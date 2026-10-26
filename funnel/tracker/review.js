@@ -319,7 +319,7 @@
       <div><p class="eyebrow">${esc(names[state.family])}</p>
         <strong>${esc(names[state.variant])}</strong></div>
       <nav class="review-variants" aria-label="Working page version">
-        ${variants(state.family).map(variant => `<button data-review-variant="${esc(variant)}" class="${variant === state.variant ? 'selected' : ''}" aria-pressed="${variant === state.variant}">${['g', 'a', 'm'].includes(variant) ? `<span>${variant.toUpperCase()}</span>` : ''}${esc(names[variant])}</button>`).join('')}
+        ${variants(state.family).map(variant => `<button data-review-variant="${esc(variant)}" class="${variant === state.variant ? 'selected' : ''}" aria-pressed="${variant === state.variant}" aria-label="${esc(names[variant])}">${['g', 'a', 'm'].includes(variant) ? `<span>${variant.toUpperCase()}</span>` : ''}<b>${esc(names[variant])}</b></button>`).join('')}
       </nav>
       `;
     container.querySelectorAll('[data-review-variant]').forEach(button => {

@@ -230,6 +230,12 @@ function createHandler({
       try {
         const current = await drafts.readManifest();
         const events = current.data.drafts.flatMap(draft => [
+          ...draft.revisions.filter((item, index) => item.kind === 'initialized' && index > 0).map(item => ({
+            id: item.id, type: 'source', sectionId: null,
+            pageKey: draft.pageKey, family: draft.family, variant: draft.variant,
+            pageLabel: draft.label, createdAt: item.createdAt, editor: item.editor,
+            summary: 'Working page updated from the selected Vercel source. Earlier versions remain in history.',
+          })),
           ...draft.revisions.filter(item => item.kind === 'edit').map(item => ({
             id: item.id, type: item.operationType, sectionId: item.sectionId,
             pageKey: draft.pageKey, family: draft.family, variant: draft.variant,
