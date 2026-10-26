@@ -494,7 +494,12 @@
     if (!state.frameReady || !state.pendingScroll || !frame?.contentDocument) return;
     const escaped = window.CSS?.escape ? CSS.escape(state.selected) : String(state.selected).replace(/[^A-Za-z0-9_-]/g, '\\$&');
     const target = frame.contentDocument.querySelector(`[data-funnel-section-id="${escaped}"]`);
-    target?.scrollIntoView({block: 'start', behavior: 'smooth'});
+    if (target && frame.contentWindow) {
+      const banner = frame.contentDocument.querySelector('[data-funnel-working-banner]');
+      const inset = (banner?.getBoundingClientRect().height || 0) + 12;
+      const top = target.getBoundingClientRect().top + frame.contentWindow.scrollY - inset;
+      frame.contentWindow.scrollTo({top: Math.max(0, top), behavior: 'smooth'});
+    }
     state.pendingScroll = false;
   }
 
