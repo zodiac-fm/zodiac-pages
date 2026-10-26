@@ -71,7 +71,7 @@
     return archive.comparisonVersion==='semantic-v1'&&archive.changeSummary?.diagnosticBaseline===false?'Page change captured':'Screenshot difference';
   }
   function archiveSummary(archive){
-    if(archive.comparisonBaseline)return 'Page comparison was updated at this check. Future changes use this starting point, with earlier screenshots preserved below.';
+    if(archive.comparisonBaseline)return 'This screenshot is the starting point for future page comparisons.';
     if(archive.kind==='baseline')return 'First successful screenshot of this link.';
     if(archive.comparisonVersion==='semantic-v1'&&archive.changeSummary?.diagnosticBaseline===false){
       const changes=archive.changeSummary,parts=[];
