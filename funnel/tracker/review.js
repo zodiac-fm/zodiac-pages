@@ -8,7 +8,7 @@
   const norm = value => String(value || '').replace(/\s+/g, ' ').trim();
   const names = {
     lander: 'Lander', results: 'Results', bc: 'Birth chart', join: 'Cart / Join', corporate: 'Corporate site',
-    g: 'General', a: 'Astrology', m: 'Manifesting', shared: 'Birth chart',
+    g: 'General', a: 'Astrology and Human Design', m: 'Manifestation', shared: 'Birth chart',
     paid: 'Paid trial', free: 'Free trial', home: 'Home',
   };
   const variants = family => family === 'corporate' ? ['home'] : family === 'bc' ? ['shared'] : family === 'join' ? ['paid', 'free'] : ['g', 'a', 'm'];
@@ -17,7 +17,7 @@
     family: 'lander', variant: 'g', selected: null,
     draft: null, pageKey: '', picked: null, frameReady: false, frameToken: 0, draftToken: 0,
     mode: null, notice: null, pendingScroll: false, conflict: null,
-    scratch: new Map(), layoutKey: '',
+    scratch: new Map(), layoutKey: '', work: [], workError: '',
   };
   let root;
   let resizeObserver;
@@ -121,6 +121,7 @@
     state.pageKey = '';
     state.layoutKey = '';
     state.frameReady = false;
+    state.work = [];
     state.draftToken += 1;
     resizeObserver?.disconnect();
     if (root) root.replaceChildren();
@@ -211,6 +212,21 @@
     if (!response.draft?.workingUrl || !Array.isArray(response.draft.editableNodes)) {
       throw Error('The working page cannot be prepared for editing.');
     }
+    if (response.draft.sourceOutdated) {
+      try {
+        response = await request('/api/funnel-review?action=initialize-draft', {
+          method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({pageKey}),
+        });
+      } catch (error) {
+        if (error.status !== 409 || !error.result?.draft) throw error;
+        response.draft = error.result.draft;
+        state.notice = {text: error.message, kind: 'error'};
+      }
+    }
+    try {
+      const linked = await request(`/api/funnel-review?action=linear-work&pageKey=${encodeURIComponent(pageKey)}`);
+      if (token === state.draftToken) { state.work = linked.entries || []; state.workError = ''; }
+    } catch { state.work = []; state.workError = 'Linked work could not be loaded. Refresh to retry.'; }
     if (token !== state.draftToken || state.pageKey !== pageKey) return state.draft;
     const latest = response.draft;
     if (previous && latest.revision !== previous.revision) {
@@ -279,6 +295,7 @@
     resizeObserver?.disconnect();
     root.innerHTML = `
       <div id="review-topline" class="review-topline"></div>
+      <div id="review-page-pair"></div>
       <div class="review-workgrid">
         <aside id="review-section-nav" class="review-section-nav"></aside>
         <section class="review-preview">
@@ -299,17 +316,80 @@
     const container = $('review-topline');
     if (!container) return;
     container.innerHTML = `
-      <div><p class="eyebrow">${esc(names[state.family])} / ${esc(names[state.variant])} · Working page</p>
-        <strong>${active ? `${esc(active.id)} · ${esc(active.name)}` : 'No mapped section'}</strong></div>
+      <div><p class="eyebrow">${esc(names[state.family])}</p>
+        <strong>${esc(names[state.variant])}</strong></div>
       <nav class="review-variants" aria-label="Working page version">
         ${variants(state.family).map(variant => `<button data-review-variant="${esc(variant)}" class="${variant === state.variant ? 'selected' : ''}" aria-pressed="${variant === state.variant}">${['g', 'a', 'm'].includes(variant) ? `<span>${variant.toUpperCase()}</span>` : ''}${esc(names[variant])}</button>`).join('')}
       </nav>
-      ${state.draft ? `<a class="review-open-page" target="_blank" rel="noopener" href="${esc(safe(state.draft.workingUrl))}">Open working page ↗</a>` : ''}`;
+      `;
     container.querySelectorAll('[data-review-variant]').forEach(button => {
       button.addEventListener('click', () => document.dispatchEvent(new CustomEvent('tracker:select-variant', {
         detail: {variant: button.dataset.reviewVariant},
       })));
     });
+    renderPagePair();
+  }
+
+  function renderPagePair() {
+    const container = $('review-page-pair'), draft = state.draft;
+    if (!container || !draft) return;
+    const livePages = draft.livePages || [];
+    const mainLive = livePages.find(item => item.channel === 'direct') || livePages.find(item => item.channel === 'affiliate') || livePages[0];
+    const publication = draft.latestPagePublication;
+    const status = draft.sourceOutdated ? 'Earlier source has saved edits' : draft.pageStatus === 'confirmed-live'
+      ? 'Confirmed matching live' : draft.pageStatus === 'changes-not-live' || draft.pendingEditCount
+        ? 'Draft changes awaiting publication' : 'Live match not confirmed';
+    container.innerHTML = `<div class="page-pair">
+      <section class="page-pair-live"><p class="eyebrow">Live page</p><h2>${esc(draft.selectedLabel || draft.label)}</h2>
+        ${mainLive ? `<a href="${esc(safe(mainLive.url))}" target="_blank" rel="noopener">Open live page ↗</a><p class="pair-address">${esc(mainLive.url.replace('https://',''))}</p>` : '<p class="review-muted">No live page has been selected for this draft.</p>'}
+        ${livePages.length > 1 ? `<details><summary>Live links by channel</summary><div class="pair-channels">${livePages.map(item => `<a href="${esc(safe(item.url))}" target="_blank" rel="noopener">${esc(item.channel === 'affiliate' ? 'Affiliate · David McEwen' : item.channel === 'paid' ? 'Paid · Facebook' : 'Direct')} ↗</a>`).join('')}</div></details>` : ''}
+      </section>
+      <section class="page-pair-draft"><p class="eyebrow">Vercel draft</p><h2>${esc(draft.selectedLabel || draft.label)} <span class="pair-draft-badge">DRAFT</span></h2>
+        <a href="${esc(safe(draft.workingUrl))}" target="_blank" rel="noopener">Open editable draft ↗</a><p class="pair-address">${esc(safe(draft.workingUrl).replace('https://',''))}</p>
+        <p class="pair-source">Based on <a href="${esc(safe(draft.referenceUrl || draft.sourceUrl))}" target="_blank" rel="noopener">${esc(draft.sourceVersion || 'selected source')} ↗</a>. Earlier versions stay in history.</p>
+      </section>
+      <div class="pair-publication"><strong>${esc(status)}</strong><p>${publication ? `Confirmed by ${esc(publication.editor.name)} on ${esc(dateTime(publication.confirmedAt))} for <a href="${esc(safe(publication.liveUrl))}" target="_blank" rel="noopener">this live link</a>.` : 'Compare the live page with this draft before confirming a match.'}${draft.pendingEditCount ? ` ${draft.pendingEditCount} saved ${draft.pendingEditCount === 1 ? 'edit' : 'edits'} since the last page confirmation.` : ''}</p>
+      ${livePages.length && !draft.sourceOutdated ? `<details id="pair-confirm"><summary>Confirm page matches live</summary><form id="pair-confirm-form"><label>Live channel<select id="pair-live-channel">${livePages.map(item => `<option value="${esc(item.url)}" ${item.id === mainLive.id ? 'selected' : ''}>${esc(item.channel)}</option>`).join('')}</select></label><label class="pair-checkbox"><input id="pair-confirm-check" type="checkbox" required>I checked this whole draft against that live page and they match.</label><button type="submit">Save live confirmation</button><p id="pair-confirm-error" role="alert"></p></form></details>` : ''}</div>
+    </div><details class="pair-work"><summary>Work in Linear · ${state.work.length} linked ${state.work.length === 1 ? 'issue' : 'issues'}</summary><div class="pair-work-heading"><h3>Linked work</h3><button type="button" id="pair-link-work">Link a Linear issue</button></div><p class="review-muted">Issue status is a dated record. Open Linear for its latest status. Confirm page publication separately.</p>
+      ${state.work.map(item => `<article><a href="${esc(safe(item.issueUrl))}" target="_blank" rel="noopener">${esc(item.issueId)} · ${esc(item.title)} ↗</a><p>${esc(item.status)}${item.assignee ? ` · ${esc(item.assignee)}` : ''}<small>Checked ${esc(dateTime(item.checkedAt))}</small></p>${item.note ? `<p class="review-muted">${esc(item.note)}</p>` : ''}</article>`).join('') || `<p>${esc(state.workError || 'No Linear issue linked to this page yet.')}</p>`}
+      <div id="pair-work-form"></div></details>`;
+    $('pair-confirm-form')?.addEventListener('submit', confirmPage);
+    $('pair-link-work').onclick = showWorkForm;
+  }
+
+  async function confirmPage(event) {
+    event.preventDefault();
+    const button = event.currentTarget.querySelector('button'); button.disabled = true;
+    try {
+      const result = await request('/api/funnel-review?action=confirm-page-published', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({
+          pageKey:state.pageKey, revisionId:state.draft.revision, liveUrl:$('pair-live-channel').value,
+          confirmed:$('pair-confirm-check').checked,
+        }),
+      });
+      state.draft = result.draft; renderPagePair();
+      document.dispatchEvent(new Event('tracker:working-saved'));
+      renderPagePair();
+    } catch (error) { $('pair-confirm-error').textContent = error.message; button.disabled = false; }
+  }
+
+  function showWorkForm() {
+    const area = $('pair-work-form');
+    area.innerHTML = `<form id="pair-linear-form"><label>Linear issue URL<input name="issueUrl" type="url" required placeholder="https://linear.app/zodiacfm/issue/…"></label><label>Issue title<input name="title" required maxlength="200"></label><label>Current status in Linear<input name="status" required maxlength="100"></label><label>Assigned to<input name="assignee" maxlength="120"></label><label>Note (optional)<input name="note" maxlength="2000"></label><label class="pair-checkbox"><input name="allLanders" type="checkbox">Link to all three landers</label><button type="submit">Save Linear link</button><button id="pair-work-cancel" type="button">Cancel</button><p id="pair-work-error" role="alert"></p></form>`;
+    $('pair-work-cancel').onclick = () => area.replaceChildren();
+    $('pair-linear-form').onsubmit = async event => {
+      event.preventDefault(); const form = event.currentTarget, button = form.querySelector('[type=submit]'); button.disabled = true;
+      try {
+        const values = Object.fromEntries(new FormData(form)), match = values.issueUrl.match(/\/issue\/((?:ZFM|ENG)-\d+)\//i);
+        if (!match) throw Error('Use a Zodiac Linear issue link.');
+        const payload = {issueId:match[1].toUpperCase(), issueUrl:values.issueUrl, title:values.title, status:values.status,
+          assignee:values.assignee || null, note:values.note || null, checkedAt:new Date().toISOString(),
+          pageKeys:values.allLanders ? ['draft-lander-g','draft-lander-a','draft-lander-m'] : [state.pageKey]};
+        await request('/api/funnel-review?action=link-linear-work', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({payload})});
+        state.work = (await request(`/api/funnel-review?action=linear-work&pageKey=${encodeURIComponent(state.pageKey)}`)).entries;
+        renderPagePair();
+      } catch (error) { $('pair-work-error').textContent = error.message; button.disabled = false; }
+    };
   }
 
   function renderNavigation(items) {
@@ -864,6 +944,7 @@
       state.draft = response.draft;
       document.dispatchEvent(new Event('tracker:working-saved'));
       state.notice = {text: 'Published confirmation recorded.', kind: 'success'};
+      renderPagePair();
       renderPanel(section(), workingBinding(state.selected), state.draft.editableNodes.filter(item => item.sectionId === state.selected));
     } catch (error) {
       if (errorArea) errorArea.textContent = error.message;

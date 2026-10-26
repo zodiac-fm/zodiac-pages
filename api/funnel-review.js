@@ -13,6 +13,7 @@ const {
 } = require('../lib/funnel-tracker/draft-store');
 const {captureDraftRevision} = require('../lib/funnel-tracker/draft-capture');
 const {getTarget} = require('../lib/funnel-tracker/production-catalog');
+const {workStore, InvalidWorkDataError, WorkStoreConflictError} = require('../lib/funnel-tracker/work-store');
 const {
   MAX_ATTACHMENT_BYTES,
   InvalidReviewDataError,
@@ -36,6 +37,7 @@ const MESSAGES = Object.freeze({
   review_unavailable: 'The private review material service is temporarily unavailable.',
   draft_not_found: 'That working page has not been initialized yet.',
   draft_conflict: 'Someone saved this working page while you were editing. Refresh and compare before saving again.',
+  draft_has_unmerged_edits: 'This working page has saved edits from its earlier source. Those edits are safe. Compare them before replacing the source.',
   same_origin_required: 'Open the tracker page directly before uploading a private image.',
   storage_not_configured: 'Shared tracker storage has not been configured yet.',
 });
@@ -187,6 +189,7 @@ function createHandler({
   tracker = blobStore,
   sourceFetcher = fetchCanonicalDraft,
   captureRevision = captureDraftRevision,
+  work = workStore,
 } = {}) {
   return async function handler(req, res) {
     if (!authConfigured()) return fail(res, 503, 'auth_not_configured', {setupPending: true});
@@ -200,6 +203,28 @@ function createHandler({
       return fail(res, 401, hasAuthorizationHeader(req) ? 'agent_access_denied' : 'company_access_required');
     }
     if (!storageConfigured()) return fail(res, 503, 'storage_not_configured', {setupPending: true, user: identity.user});
+
+    if (req.method === 'GET' && action === 'linear-work') {
+      try {
+        const result = await work.list({pageKey: params.get('pageKey') || null});
+        return sendJson(res, 200, {...result, user: identity.user});
+      } catch (error) {
+        return fail(res, error instanceof InvalidWorkDataError ? 400 : 503, 'review_unavailable');
+      }
+    }
+    if (req.method === 'POST' && action === 'link-linear-work') {
+      if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) return fail(res, 403, 'agent_scope_denied');
+      if (!isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
+      const body = parsedJsonBody(req);
+      if (!body) return fail(res, 400, 'invalid_request');
+      try {
+        const result = await work.upsert(body.payload, identity.user, body.expectedRevision);
+        return sendJson(res, 200, {...result, user: identity.user});
+      } catch (error) {
+        return fail(res, error instanceof WorkStoreConflictError ? 409 : error instanceof InvalidWorkDataError ? 400 : 503,
+          error instanceof WorkStoreConflictError ? 'draft_conflict' : 'invalid_request');
+      }
+    }
 
     if (req.method === 'GET' && action === 'activity') {
       try {
@@ -325,7 +350,7 @@ function createHandler({
       if (!body || !validPageKey(body.pageKey)) return fail(res, 400, 'invalid_draft');
       try {
         const existing = await drafts.getDraft(body.pageKey);
-        if (existing.draft) {
+        if (existing.draft && !publicDraft(existing.draft).sourceOutdated) {
           let latest = existing.draft;
           try {
             await captureRevision(body.pageKey, existing.draft.currentRevisionId, {drafts, review: store});
@@ -337,8 +362,10 @@ function createHandler({
           store.readMap(), tracker.read(), sourceFetcher(body.pageKey),
         ]);
         const sectionNames = Object.fromEntries(trackerResult.data.sections.map(section => [section.id, section.name]));
-        const initialized = await drafts.initialize({
+        const initialize = existing.draft ? drafts.rebase.bind(drafts) : drafts.initialize.bind(drafts);
+        const initialized = await initialize({
           pageKey: body.pageKey,
+          expectedRevision: existing.draft?.currentRevisionId,
           sourceHtml: source.html,
           sourceSha256: source.sha256,
           runtimeMap: mapResult.data,
@@ -354,6 +381,15 @@ function createHandler({
           draft: publicDraft(latest), user: identity.user,
         });
       } catch (error) {
+        if (error instanceof InvalidDraftDataError && error.message === 'draft_has_unmerged_edits') {
+          const latest = await drafts.getDraft(body.pageKey).catch(() => null);
+          return fail(res, 409, 'draft_has_unmerged_edits', {draft: latest?.draft ? publicDraft(latest.draft) : null});
+        }
+        if (error instanceof DraftStoreConflictError) {
+          const latest = await drafts.getDraft(body.pageKey).catch(() => null);
+          const code = error.message === 'draft_has_unmerged_edits' ? 'draft_has_unmerged_edits' : 'draft_conflict';
+          return fail(res, 409, code, {draft: latest?.draft ? publicDraft(latest.draft) : null});
+        }
         if (error instanceof InvalidDraftDataError) return fail(res, 400, 'invalid_draft');
         return fail(res, 503, 'review_unavailable');
       }
@@ -411,19 +447,20 @@ function createHandler({
       }
     }
 
-    if (req.method === 'POST' && action === 'confirm-published') {
+    if (req.method === 'POST' && ['confirm-published', 'confirm-page-published'].includes(action)) {
       if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) return fail(res, 403, 'agent_scope_denied');
       if (!isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
       const body = parsedJsonBody(req);
       if (!body) return fail(res, 400, 'invalid_publication');
       try {
-        const confirmed = await drafts.confirmPublished({...body, editor: identity.user});
+        const confirmed = await drafts.confirmPublished({...body, ...(action === 'confirm-page-published' ? {sectionId: null} : {}), editor: identity.user});
         return sendJson(res, 201, {
           draft: publicDraft(confirmed.draft),
           user: identity.user,
           publication: confirmed.publication,
         });
       } catch (error) {
+        if (error instanceof DraftStoreConflictError) return fail(res, 409, 'draft_conflict');
         if (error instanceof InvalidDraftDataError) return fail(res, 400, 'invalid_publication');
         return fail(res, 503, 'review_unavailable');
       }
