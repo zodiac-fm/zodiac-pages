@@ -33,9 +33,9 @@
   const statusLabel = target => {
     let label={never_checked:'Awaiting first screenshot',baseline:'First screenshot saved',current:'No change at last check',changed:'Change captured',needs_connection:'Connection needed',error:'Capture failed'}[target.status]||'Awaiting first screenshot';
     const latest=target.archives?.find(archive=>archive.id===target.currentArchiveId);
-    const compared=latest?.comparisonVersion==='semantic-v1'&&latest.changeSummary?.diagnosticBaseline===false;
+    const compared=latest?.comparisonVersion==='semantic-v2'&&latest.changeSummary?.diagnosticBaseline===false;
     if(target.status==='changed'&&!compared)label='Screenshot difference';
-    if(target.status==='baseline'&&target.archiveCount>1&&target.comparisonVersion==='semantic-v1')label='Comparison ready';
+    if(target.status==='baseline'&&target.archiveCount>1&&target.comparisonVersion==='semantic-v2')label='Comparison ready';
     return latest?.kind==='changed'&&compared&&previousPageVisit&&new Date(target.lastChangedAt)>new Date(previousPageVisit)?'New change since your last visit · '+label:label;
   };
   function row(target){
@@ -68,12 +68,12 @@
   function archiveTitle(archive){
     if(archive.comparisonBaseline)return 'Verified starting point';
     if(archive.kind==='baseline')return 'Starting record';
-    return archive.comparisonVersion==='semantic-v1'&&archive.changeSummary?.diagnosticBaseline===false?'Page change captured':'Screenshot difference';
+    return archive.comparisonVersion==='semantic-v2'&&archive.changeSummary?.diagnosticBaseline===false?'Page change captured':'Screenshot difference';
   }
   function archiveSummary(archive){
     if(archive.comparisonBaseline)return 'This screenshot is the starting point for future page comparisons.';
     if(archive.kind==='baseline')return 'First successful screenshot of this link.';
-    if(archive.comparisonVersion==='semantic-v1'&&archive.changeSummary?.diagnosticBaseline===false){
+    if(archive.comparisonVersion==='semantic-v2'&&archive.changeSummary?.diagnosticBaseline===false){
       const changes=archive.changeSummary,parts=[];
       if(changes.mainHtmlChanged||changes.normalizedDomChanged)parts.push('page content');
       if(changes.inlineCssChanged)parts.push('page styles');
