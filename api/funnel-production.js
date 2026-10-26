@@ -121,6 +121,30 @@ function requestIdentity(req) {
   return session ? {kind: 'browser', user: session.user} : null;
 }
 
+function publicComparisonDetails(details, includeResources = true) {
+  if (!details) return null;
+  return {
+    version: details.version,
+    mainHtmlSha256: details.mainHtmlSha256,
+    normalizedDomSha256: details.normalizedDomSha256,
+    inlineCssSha256: details.inlineCssSha256,
+    resourceSetSha256: details.resourceSetSha256,
+    resourceCount: details.resources.length,
+    ...(includeResources ? {resources: details.resources.map(resource => ({...resource}))} : {}),
+  };
+}
+
+function publicChangeSummary(summary) {
+  if (!summary) return null;
+  if (summary.diagnosticBaseline) return {diagnosticBaseline: true};
+  return {
+    ...summary,
+    resourcesAdded: summary.resourcesAdded.map(resource => ({...resource})),
+    resourcesRemoved: summary.resourcesRemoved.map(resource => ({...resource})),
+    resourcesChanged: summary.resourcesChanged.map(resource => ({...resource})),
+  };
+}
+
 function publicArchive(archive) {
   return {
     id: archive.id,
@@ -135,6 +159,8 @@ function publicArchive(archive) {
     renderFingerprint: archive.renderFingerprint,
     comparisonVersion: archive.comparisonVersion || null,
     comparisonBaseline: archive.comparisonBaseline === true,
+    comparisonDetails: publicComparisonDetails(archive.comparisonDetails, false),
+    changeSummary: publicChangeSummary(archive.changeSummary),
     imageSha256: archive.imageSha256,
     width: archive.width,
     height: archive.height,
@@ -154,6 +180,7 @@ function publicTarget(target, state) {
     sourceFingerprint: state?.sourceFingerprint || null,
     renderFingerprint: state?.renderFingerprint || null,
     comparisonVersion: state?.comparisonVersion || null,
+    comparisonDetails: publicComparisonDetails(state?.comparisonDetails),
     archiveCount: state?.archives?.length || 0,
     archives: (state?.archives || []).map(publicArchive).reverse(),
     error: state?.error || null,
@@ -338,6 +365,8 @@ module.exports._test = {
   isSameOrigin,
   manifestPayload,
   parsedBody,
+  publicChangeSummary,
+  publicComparisonDetails,
   publicArchive,
   publicTarget,
   query,
