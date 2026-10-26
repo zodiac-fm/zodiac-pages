@@ -2,7 +2,37 @@
 
 Open https://zodiac-pages.vercel.app/funnel/tracker and sign in with your own Zodiac.fm company account. Open your account button, choose **Create temporary connection**, and copy the token into your private Hermes environment as `FUNNEL_TRACKER_TOKEN`.
 
-The connection lasts one hour. It can read sections and save drafts under your verified company name. A company user confirms live versions in the tracker.
+The connection lasts one hour. It can read section records and working-page metadata, and edit text on existing private working pages under your verified company name. A company user uploads images, creates working copies and confirms customer publication in the tracker.
+
+## Edit a working page
+
+Open the page once in the tracker to create its shared working copy. The page is labelled DRAFT and has the same section codes as the tracker. Read its current editable text and history:
+
+```sh
+node /path/to/zodiac-pages/funnel/tracker/hermes.cjs working draft-lander-g
+```
+
+Use a returned text entry's sectionId and editId, together with the draft's current revision. Prepare a local edit file:
+
+```json
+{
+  "sectionId": "LG-01",
+  "editId": "copy an existing text editId from working",
+  "expectedRevision": "copy the exact current draft revision",
+  "value": "The replacement words",
+  "note": "Optional context for Walter"
+}
+```
+
+```sh
+node /path/to/zodiac-pages/funnel/tracker/hermes.cjs edit-text draft-lander-g /path/to/edit.json
+```
+
+This changes the actual shared working page and saves its previous HTML, editor and date. It preserves surrounding layout. A conflict requires reading the latest working draft and comparing the changes before retrying. Customer pages are published through the normal repository process, then confirmed in the tracker.
+
+Working page keys are draft-lander-g, draft-lander-a, draft-lander-m, draft-results-g, draft-results-a, draft-results-m, draft-bc, draft-join-paid and draft-join-free. Private HTML, images and publication confirmation require a company browser session.
+
+## Read source records and page monitoring
 
 The helper runs with Node.js 20 or newer from any repository. Use the helper in the company `zodiac-pages` checkout:
 

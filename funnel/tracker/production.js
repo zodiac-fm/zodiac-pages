@@ -10,7 +10,8 @@
   const api = '/api/funnel-production';
   let previousPageVisit=null;
   try{previousPageVisit=localStorage.getItem('funnel-tracker-page-visit');localStorage.setItem('funnel-tracker-page-visit',new Date().toISOString());}catch{/* Private shared history does not depend on this device marker. */}
-  let mode = new URLSearchParams(location.search).get('mode') === 'sections' ? 'sections' : 'pages';
+  const requestedMode = new URLSearchParams(location.search).get('mode');
+  let mode = requestedMode === 'history' ? 'pages' : requestedMode === 'records' ? 'sections' : 'review';
   let family='lander',variant='g',targets=[],loaded=false,loading=false,busy=new Set(),error='',user=null;
   const dialog=document.createElement('dialog');dialog.id='production-dialog';document.body.appendChild(dialog);
   async function request(body){
@@ -20,9 +21,10 @@
     return result;
   }
   function setMode(value){
-    mode=value;$('production-workspace').hidden=mode!=='pages';$('section-workspace').hidden=mode!=='sections';
+    mode=value;$('production-workspace').hidden=mode!=='pages';$('section-workspace').hidden=mode!=='sections';$('review-workspace').hidden=mode!=='review';
     document.querySelectorAll('[data-mode]').forEach(b=>{b.classList.toggle('selected',b.dataset.mode===mode);b.setAttribute('aria-pressed',String(b.dataset.mode===mode));});
-    const route=new URL(location.href);route.searchParams.set('mode',mode);history.replaceState(null,'',route);
+    const route=new URL(location.href);route.searchParams.set('mode',mode==='pages'?'history':mode==='sections'?'records':'review');history.replaceState(null,'',route);
+    document.dispatchEvent(new CustomEvent('tracker:mode',{detail:{mode}}));
     if(mode==='pages'&&user&&!loaded)load();
   }
   async function load(){
@@ -88,8 +90,8 @@
     form.onsubmit=async e=>{e.preventDefault();const button=form.querySelector('[type=submit]');button.disabled=true;$('register-error').textContent='';try{const fields=new FormData(form);await request({action:'register',payload:Object.fromEntries(fields)});await load();dialog.close();}catch(e){$('register-error').textContent=e.message;}finally{button.disabled=false;}};
   }
   document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
-  if($('all-changes').firstChild)$('all-changes').firstChild.textContent='Section changes ';
-  document.addEventListener('tracker:show-sections',()=>setMode('sections'));
+  if($('all-changes').firstChild)$('all-changes').firstChild.textContent='Changes ';
+  document.addEventListener('tracker:show-sections',()=>setMode('review'));
   document.addEventListener('tracker:selection',e=>{family=e.detail.family;variant=e.detail.variant;if(loaded)render();});
   document.addEventListener('tracker:ready',e=>{user=e.detail.user;family=e.detail.family;variant=e.detail.variant;setMode(mode);load();});
   new MutationObserver(()=>{if(document.querySelector('main').hidden){user=null;targets=[];loaded=false;dialog.close();dialog.innerHTML='';$('production-workspace').innerHTML='';}}).observe(document.querySelector('main'),{attributes:true,attributeFilter:['hidden']});

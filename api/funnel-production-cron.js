@@ -2,6 +2,7 @@
 
 const {timingSafeEqual} = require('node:crypto');
 const {TARGETS} = require('../lib/funnel-tracker/production-catalog');
+const {capturePendingDrafts} = require('../lib/funnel-tracker/draft-capture');
 const {checkAllTargets, requestOidcTokenProvider} = require('../lib/funnel-tracker/production-monitor');
 const {productionStorageConfigured, productionStore} = require('../lib/funnel-tracker/production-store');
 
@@ -45,6 +46,7 @@ function createHandler({
   store = productionStore,
   targets = TARGETS,
   checkAll = checkAllTargets,
+  captureDrafts = capturePendingDrafts,
   now = () => new Date(),
 } = {}) {
   return async function handler(req, res) {
@@ -62,8 +64,22 @@ function createHandler({
         store,
         tokenProvider: requestOidcTokenProvider(req),
       })).map(publicResult);
+      let draftCaptures;
+      try {
+        draftCaptures = await captureDrafts();
+      } catch {
+        draftCaptures = {
+          ok: false,
+          attempted: 0,
+          remaining: null,
+          ready: 0,
+          failed: 0,
+          results: [],
+          error: 'draft_capture_unavailable',
+        };
+      }
       const failed = results.some(result => ['needs_connection', 'error', 'skipped'].includes(result.status));
-      return sendJson(res, failed ? 207 : 200, {ok: !failed, checkedAt, results});
+      return sendJson(res, failed ? 207 : 200, {ok: !failed, checkedAt, results, draftCaptures});
     } catch {
       return sendJson(res, 503, {ok: false, checkedAt, error: 'monitor_unavailable', results: []});
     }

@@ -9,6 +9,7 @@
     "@vercel/blob": "2.6.1",
     "@vercel/oidc": "4.0.3",
     "google-auth-library": "11.3.1",
+    "parse5": "7.3.0",
     "playwright-core": "1.64.1"
   },
   "overrides": {

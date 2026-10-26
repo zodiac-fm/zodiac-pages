@@ -4,6 +4,7 @@
   "buildCommand": "node gen-index.mjs",
   "outputDirectory": ".",
   "functions": {
+    "api/funnel-review.js": {"includeFiles": "node_modules/@sparticuz/chromium/bin/**", "maxDuration": 60},
     "api/funnel-production.js": {"includeFiles": "node_modules/@sparticuz/chromium/bin/**", "maxDuration": 60},
     "api/funnel-production-cron.js": {"includeFiles": "node_modules/@sparticuz/chromium/bin/**", "maxDuration": 800}
   },
@@ -19,6 +20,10 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/funnel/working/:pageKey",
+      "destination": "/api/funnel-review?action=draft-html&pageKey=:pageKey"
+    },
     {
       "source": "/ios-results",
       "destination": "/funnel/general/results-50"

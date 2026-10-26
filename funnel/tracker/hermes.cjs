@@ -5,10 +5,11 @@
 const fs = require('node:fs/promises');
 const ENDPOINT = 'https://zodiac-pages.vercel.app/api/funnel-tracker';
 const PRODUCTION_ENDPOINT = 'https://zodiac-pages.vercel.app/api/funnel-production';
+const REVIEW_ENDPOINT = 'https://zodiac-pages.vercel.app/api/funnel-review';
 
 async function run(args, {token = process.env.FUNNEL_TRACKER_TOKEN, fetcher = fetch, output = console.log} = {}) {
   const [command, sectionId, file] = args;
-  if (!['list', 'show', 'draft', 'pages'].includes(command)) {
+  if (!['list', 'show', 'draft', 'pages', 'working', 'edit-text'].includes(command)) {
     throw new Error('Use list, show SECTION, draft SECTION /path/to/revision.json, or pages [FAMILY] [VARIANT]. Sign in to the tracker and create a temporary Hermes connection first.');
   }
   if (typeof token !== 'string' || !token || /\s/.test(token)) {
@@ -29,6 +30,32 @@ async function run(args, {token = process.env.FUNNEL_TRACKER_TOKEN, fetcher = fe
       throw new Error(result.error?.message || 'The tracker could not confirm this request.');
     }
     return result;
+  }
+  if (command === 'working' || command === 'edit-text') {
+    if (!/^draft-(?:lander-[gam]|results-[gam]|bc|join-(?:paid|free))$/.test(sectionId || '')) {
+      throw new Error('Choose a working page such as draft-lander-g, draft-results-a, draft-bc, or draft-join-paid.');
+    }
+    if (command === 'working') {
+      if (args.length !== 2) throw new Error('Use working PAGE.');
+      const result = await request(null, REVIEW_ENDPOINT+'?action=draft&pageKey='+encodeURIComponent(sectionId));
+      output(JSON.stringify({user:result.user,draft:result.draft}, null, 2));
+      return;
+    }
+    if (args.length !== 3 || !file) throw new Error('Use edit-text PAGE /path/to/edit.json.');
+    const stat = await fs.stat(file);
+    if (!stat.isFile() || stat.size > 48 * 1024) throw new Error('Use an edit JSON file smaller than 48 KB.');
+    let edit;
+    try { edit = JSON.parse(await fs.readFile(file, 'utf8')); } catch { throw new Error('The edit file must contain valid JSON.'); }
+    if (!edit || typeof edit.expectedRevision !== 'string' || !edit.expectedRevision
+        || typeof edit.sectionId !== 'string' || typeof edit.editId !== 'string'
+        || typeof edit.value !== 'string' || !edit.value.trim()) {
+      throw new Error('Include sectionId, editId, expectedRevision and replacement value from the working page metadata.');
+    }
+    const material = {...(edit.note ? {note:edit.note} : {}), ...(edit.exampleUrl ? {exampleUrl:edit.exampleUrl} : {})};
+    const result = await request({pageKey:sectionId,sectionId:edit.sectionId,editId:edit.editId,
+      expectedRevision:edit.expectedRevision,operation:{type:'text',value:edit.value},material}, REVIEW_ENDPOINT+'?action=draft-edit');
+    output(JSON.stringify({saved:true,user:result.user,draft:result.draft}, null, 2));
+    return;
   }
   if (command === 'pages') {
     if (args.length > 3) throw new Error('Use pages [FAMILY] [VARIANT].');

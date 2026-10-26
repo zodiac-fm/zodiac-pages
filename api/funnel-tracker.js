@@ -5,6 +5,7 @@ const {
   StoreUnavailableError,
 } = require('../lib/funnel-tracker/blob-store');
 const {InvalidMutationError, applyMutation} = require('../lib/funnel-tracker/state');
+const {ReviewStoreUnavailableError, reviewStore} = require('../lib/funnel-tracker/review-store');
 const {
   authConfigured,
   clearNonceCookie,
@@ -37,6 +38,8 @@ const ERROR_MESSAGES = Object.freeze({
   invalid_preview_url: 'Use a complete HTTPS preview URL.',
   invalid_production_url: 'Use the HTTPS customer production URL on zodiac.fm or one of its subdomains.',
   invalid_repository_ref: 'Use a zodiac-fm repository, a full 40-character commit, and an optional repository-relative path.',
+  invalid_attachment: 'That private image attachment is not available.',
+  invalid_change_material: 'Add replacement copy, a private image, a Vercel example, or a note using the supported fields.',
   live_confirmation_required: 'Confirm that you checked this exact revision in production.',
   live_note_required: 'Add the production confirmation note.',
   revision_conflict: 'Someone saved a change while you were editing. Refresh and compare before saving again.',
@@ -46,6 +49,7 @@ const ERROR_MESSAGES = Object.freeze({
   storage_not_configured: 'Shared tracker storage has not been configured yet.',
   tracker_state_invalid: 'The shared tracker data needs repair before another change can be saved.',
   tracker_unavailable: 'The shared service could not confirm the save. Refresh and check the section history before trying again.',
+  review_unavailable: 'The private review material service is temporarily unavailable.',
   unknown_section: 'That section is no longer in the shared tracker.',
   unknown_version: 'That revision is no longer available for production confirmation.',
 });
@@ -136,6 +140,7 @@ function requestIdentity(req) {
 function createHandler({
   store = blobStore,
   verifyCredential = verifyGoogleCredential,
+  review = reviewStore,
 } = {}) {
   async function latestConflict(res) {
     try {
@@ -237,6 +242,18 @@ function createHandler({
       return fail(res, 503, 'tracker_unavailable');
     }
     if (body.expectedRevision !== current.revision) return latestConflict(res);
+
+    const attachmentId = body.payload?.material?.attachmentId;
+    if (attachmentId !== undefined) {
+      if (identity.kind === 'agent') return fail(res, 403, 'agent_scope_denied');
+      if (typeof attachmentId !== 'string') return fail(res, 400, 'invalid_change_material');
+      try {
+        if (!await review.hasAttachment(attachmentId)) return fail(res, 400, 'invalid_attachment');
+      } catch (error) {
+        if (error instanceof ReviewStoreUnavailableError) return fail(res, 503, 'review_unavailable');
+        return fail(res, 503, 'review_unavailable');
+      }
+    }
 
     let changed;
     try {
