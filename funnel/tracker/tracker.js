@@ -13,9 +13,9 @@
   const previousVisit = getStored('funnel-tracker-visit');
   setStored('funnel-tracker-visit',new Date().toISOString());
   let data = null, revision = null, canEdit = false, actor = '', signedInUser = null, family = 'lander', variant = 'g', view = 'sections', activeSection = null, editMode = '', saving = false, allChanges = false;
-  const familyNames = {lander:'Lander',bc:'Birth chart',results:'Results',join:'Cart / Join'};
-  const variantNames = {g:'General',a:'Astrology',m:'Manifesting',shared:'Shared page',paid:'$3 trial',free:'Free trial'};
-  const variantsFor = f => f === 'bc' ? ['shared'] : f === 'join' ? ['paid','free'] : ['g','a','m'];
+  const familyNames = {lander:'Lander',bc:'Birth chart',results:'Results',join:'Cart / Join',corporate:'Corporate site'};
+  const variantNames = {g:'General',a:'Astrology',m:'Manifesting',shared:'Shared page',paid:'$3 trial',free:'Free trial',home:'Home'};
+  const variantsFor = f => f === 'corporate' ? ['home'] : f === 'bc' ? ['shared'] : f === 'join' ? ['paid','free'] : ['g','a','m'];
   const latest = s => s.versions[s.versions.length - 1];
   const isNew = s => previousVisit && new Date(latest(s).createdAt) > new Date(previousVisit);
   const hasPending = s => s.live && s.live.versionId !== latest(s).id;

@@ -7,11 +7,11 @@
   })[character]);
   const norm = value => String(value || '').replace(/\s+/g, ' ').trim();
   const names = {
-    lander: 'Lander', results: 'Results', bc: 'Birth chart', join: 'Cart / Join',
+    lander: 'Lander', results: 'Results', bc: 'Birth chart', join: 'Cart / Join', corporate: 'Corporate site',
     g: 'General', a: 'Astrology', m: 'Manifesting', shared: 'Birth chart',
-    paid: 'Paid trial', free: 'Free trial',
+    paid: 'Paid trial', free: 'Free trial', home: 'Home',
   };
-  const variants = family => family === 'bc' ? ['shared'] : family === 'join' ? ['paid', 'free'] : ['g', 'a', 'm'];
+  const variants = family => family === 'corporate' ? ['home'] : family === 'bc' ? ['shared'] : family === 'join' ? ['paid', 'free'] : ['g', 'a', 'm'];
   const state = {
     map: null, data: null, user: null, canEdit: false,
     family: 'lander', variant: 'g', selected: null,
@@ -871,6 +871,23 @@
     }
   }
 
+  function renderCorporate() {
+    if (!root) return;
+    state.draft = null;
+    state.pageKey = '';
+    state.layoutKey = '';
+    state.frameReady = false;
+    resizeObserver?.disconnect();
+    root.innerHTML = `<div class="review-topline"><div><p class="eyebrow">Corporate site</p><strong>Your website and its working pages.</strong></div></div>
+      <div class="corporate-workspace">
+        <section><p class="eyebrow">Live homepage</p><h2>zodiac.fm</h2><p>The live link stays the same. Dated screenshots keep earlier versions available.</p><a class="review-open-page" href="https://zodiac.fm/" target="_blank" rel="noopener">Open corporate site ↗</a><button type="button" id="corporate-history">View screenshots and history</button></section>
+        <section><p class="eyebrow">Working pages</p><h2>Add your corporate drafts.</h2><p>No editable corporate draft has been selected yet. Add Vercel pages here to track their screenshots, dates and contributor.</p><button type="button" id="corporate-add-page">Add Vercel page</button></section>
+      </div>`;
+    $('corporate-history').onclick = () => document.querySelector('[data-mode="pages"]').click();
+    $('corporate-add-page').onclick = () => document.dispatchEvent(new Event('tracker:add-page'));
+    root.hidden = state.mode !== 'review';
+  }
+
   async function ready(event) {
     stashInputs();
     const detail = event.detail || {};
@@ -880,6 +897,7 @@
     state.variant = detail.variant || state.variant;
     state.data = detail.data || state.data;
     state.canEdit = typeof detail.canEdit === 'boolean' ? detail.canEdit : state.canEdit;
+    if (state.family === 'corporate') return renderCorporate();
     try {
       await loadBase();
       await loadDraft({force: !changedPage && Boolean(state.draft)});
@@ -894,7 +912,7 @@
     if (!root) return;
     const initialRoute = new URLSearchParams(location.search);
     const initialFamily = initialRoute.get('page');
-    if (['lander', 'bc', 'results', 'join'].includes(initialFamily)) state.family = initialFamily;
+    if (['lander', 'bc', 'results', 'join', 'corporate'].includes(initialFamily)) state.family = initialFamily;
     const initialVariant = initialRoute.get('variant');
     state.variant = variants(state.family).includes(initialVariant) ? initialVariant : variants(state.family)[0];
     const requested = initialRoute.get('section');
@@ -909,6 +927,7 @@
       state.variant = event.detail.variant;
       state.selected = null;
       state.layoutKey = '';
+      if (state.family === 'corporate') return renderCorporate();
       try {
         await loadDraft();
         render();

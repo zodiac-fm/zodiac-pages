@@ -2,9 +2,9 @@
 (() => {
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const names = {g:'General',a:'Astrology',m:'Manifestation',shared:'Shared page',paid:'Paid trial',free:'Free trial'};
-  const families = {lander:'Lander',results:'Results',bc:'Birth chart',join:'Cart / Join'};
-  const variants = family => family === 'bc' ? ['shared'] : family === 'join' ? ['paid','free'] : ['g','a','m'];
+  const names = {g:'General',a:'Astrology',m:'Manifestation',shared:'Shared page',paid:'Paid trial',free:'Free trial',home:'Home'};
+  const families = {lander:'Lander',results:'Results',bc:'Birth chart',join:'Cart / Join',corporate:'Corporate site'};
+  const variants = family => family === 'corporate' ? ['home'] : family === 'bc' ? ['shared'] : family === 'join' ? ['paid','free'] : ['g','a','m'];
   const time = value => value ? new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Denver',timeZoneName:'short'}).format(new Date(value)) : 'Not checked yet';
   const url = value => {try{const parsed=new URL(value);return parsed.protocol==='https:'?parsed.href:'';}catch{return '';}};
   const api = '/api/funnel-production';
@@ -52,6 +52,10 @@
     document.querySelectorAll('[data-page-variant]').forEach(b=>b.onclick=()=>{variant=b.dataset.pageVariant;document.dispatchEvent(new CustomEvent('tracker:select-variant',{detail:{variant}}));render();});
     document.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>check(b.dataset.check));
     const rows=$('production-workspace').querySelectorAll('.production-row-main');
+    if(family==='corporate'){
+      $('production-workspace').querySelector('.production-explainer p:last-child').textContent='The live corporate homepage and your Vercel drafts keep their dated screenshot history here.';
+      [...live,...draft].forEach((target,index)=>{if(rows[index])rows[index].querySelector('h4').textContent=target.label;});
+    }
     if(!live.length){const heading=$('production-workspace').querySelector('.production-group-title h3');if(heading)heading.textContent='Live page';}
     [...live,...draft].forEach((target,index)=>{if(target.editor&&rows[index])rows[index].insertAdjacentHTML('beforeend',`<p class="capture-meta">Added by ${esc(target.editor.name)} · ${esc(time(target.registeredAt))}</p>`);});
     document.querySelectorAll('[data-history]').forEach(b=>b.onclick=()=>historyFor(b.dataset.history));
@@ -92,6 +96,7 @@
   document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
   if($('all-changes').firstChild)$('all-changes').firstChild.textContent='Changes ';
   document.addEventListener('tracker:show-sections',()=>setMode('review'));
+  document.addEventListener('tracker:add-page',()=>{setMode('pages');register();});
   document.addEventListener('tracker:selection',e=>{family=e.detail.family;variant=e.detail.variant;if(loaded)render();});
   document.addEventListener('tracker:ready',e=>{user=e.detail.user;family=e.detail.family;variant=e.detail.variant;setMode(mode);load();});
   new MutationObserver(()=>{if(document.querySelector('main').hidden){user=null;targets=[];loaded=false;dialog.close();dialog.innerHTML='';$('production-workspace').innerHTML='';}}).observe(document.querySelector('main'),{attributes:true,attributeFilter:['hidden']});
