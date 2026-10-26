@@ -929,6 +929,7 @@
       state.layoutKey = '';
       if (state.family === 'corporate') return renderCorporate();
       try {
+        await loadBase();
         await loadDraft();
         render();
       } catch (error) {
