@@ -390,9 +390,11 @@
   }
 
   function currentRevisionIsPublishable() {
-    return (state.draft?.history || []).some(item => (
-      item.id === state.draft.revision && item.kind === 'edit' && item.sectionId === state.selected
-    ));
+    return Boolean(sectionRevision());
+  }
+
+  function sectionRevision() {
+    return (state.draft?.history || []).filter(item => item.kind === 'edit' && item.sectionId === state.selected).at(-1);
   }
 
   function knownProductionUrls(active) {
@@ -426,7 +428,7 @@
         <div class="review-save-area"><p id="review-form-error" class="review-form-error" role="alert"></p><button id="review-save" class="review-save" type="submit">Save draft changes</button><p id="review-status" class="review-status ${esc(state.notice?.kind || '')}">${esc(state.notice?.text || '')}</p></div>
       </form>
       <section class="review-history"><h3>Draft history</h3>${history.length ? history.map(historyMarkup).join('') : '<p class="review-muted">No direct edits saved for this section.</p>'}<details class="review-source-notes"><summary>Source baseline and notes</summary><p>${esc(active?.scopeNote || '')}</p>${(active?.versions || []).slice().reverse().map(version => `<p><strong>Imported record ${esc(version.number)}</strong> · ${esc(version.summary || '')}</p>`).join('')}</details></section>
-      <section class="review-live"><h3>When this draft is published</h3><p>Confirm the current saved working page after Walter publishes it through the normal process.</p><button id="review-publish" type="button" ${state.canEdit && currentRevisionIsPublishable() ? '' : 'disabled'}>Confirm published</button>${!currentRevisionIsPublishable() ? '<p class="review-muted">Save a change in this section at the current working page before confirming it.</p>' : ''}<div id="review-published-form" hidden></div>${publications.map(publicationMarkup).join('')}</section>`;
+      <section class="review-live"><h3>When Walter publishes it</h3><p>Confirm this section’s latest saved change after it appears on the customer page.</p><button id="review-publish" type="button" ${state.canEdit && currentRevisionIsPublishable() ? '' : 'disabled'}>Confirm published</button>${!currentRevisionIsPublishable() ? '<p class="review-muted">Save a change in this section before confirming it.</p>' : ''}<div id="review-published-form" hidden></div>${publications.map(publicationMarkup).join('')}</section>`;
     panel.querySelectorAll('[data-review-pick]').forEach(button => {
       button.addEventListener('click', () => pickNode(button.dataset.reviewPick));
     });
@@ -819,7 +821,7 @@
       ${urls.length ? `<label>Customer production page<select id="review-live-choice">${urls.map(url => `<option value="${esc(url)}">${esc(url)}</option>`).join('')}<option value="custom">Another customer URL</option></select></label>` : ''}
       <label ${urls.length ? 'hidden' : ''} id="review-live-custom-label">Customer production URL<input id="review-live-url" type="url" required value="${esc(selectedUrl)}" placeholder="https://app.zodiac.fm/…"></label>
       <label>Optional note<textarea id="review-live-note" rows="2"></textarea></label>
-      <label class="review-check"><input id="review-live-confirm" type="checkbox" required> I checked this saved working page in customer production, or Walter confirmed it.</label>
+      <label class="review-check"><input id="review-live-confirm" type="checkbox" required> I checked this section’s saved change on the customer page, or Walter confirmed it.</label>
       <p id="review-live-error" class="review-form-error" role="alert"></p>
       <button id="review-confirm-live" type="submit">Record published confirmation</button>
     </form>`;
@@ -853,7 +855,7 @@
         body: JSON.stringify({
           pageKey: state.pageKey,
           sectionId: state.selected,
-          revisionId: state.draft.revision,
+          revisionId: sectionRevision()?.id,
           liveUrl,
           confirmed: true,
           note: $('review-live-note')?.value.trim() || undefined,
@@ -890,7 +892,12 @@
   function start() {
     root = $('review-workspace');
     if (!root) return;
-    const requested = new URLSearchParams(location.search).get('section');
+    const initialRoute = new URLSearchParams(location.search);
+    const initialFamily = initialRoute.get('page');
+    if (['lander', 'bc', 'results', 'join'].includes(initialFamily)) state.family = initialFamily;
+    const initialVariant = initialRoute.get('variant');
+    state.variant = variants(state.family).includes(initialVariant) ? initialVariant : variants(state.family)[0];
+    const requested = initialRoute.get('section');
     if (requested) state.selected = requested;
     root.hidden = true;
     document.addEventListener('tracker:ready', ready);
