@@ -4,17 +4,18 @@
 // Run from any repository. Credentials stay in the process environment.
 const fs = require('node:fs/promises');
 const ENDPOINT = 'https://zodiac-pages.vercel.app/api/funnel-tracker';
+const PRODUCTION_ENDPOINT = 'https://zodiac-pages.vercel.app/api/funnel-production';
 
 async function run(args, {token = process.env.FUNNEL_TRACKER_TOKEN, fetcher = fetch, output = console.log} = {}) {
   const [command, sectionId, file] = args;
-  if (!['list', 'show', 'draft'].includes(command)) {
-    throw new Error('Use list, show SECTION, or draft SECTION /path/to/revision.json. Sign in to the tracker and create a temporary Hermes connection first.');
+  if (!['list', 'show', 'draft', 'pages'].includes(command)) {
+    throw new Error('Use list, show SECTION, draft SECTION /path/to/revision.json, or pages [FAMILY] [VARIANT]. Sign in to the tracker and create a temporary Hermes connection first.');
   }
   if (typeof token !== 'string' || !token || /\s/.test(token)) {
     throw new Error('Set FUNNEL_TRACKER_TOKEN in your private Hermes environment. Create it from your signed-in company account in the tracker.');
   }
-  async function request(body) {
-    const response = await fetcher(ENDPOINT, {
+  async function request(body, endpoint = ENDPOINT) {
+    const response = await fetcher(endpoint, {
       method: body ? 'POST' : 'GET',
       redirect: 'error',
       headers: {Authorization: `Bearer ${token}`, ...(body ? {'Content-Type': 'application/json'} : {})},
@@ -28,6 +29,21 @@ async function run(args, {token = process.env.FUNNEL_TRACKER_TOKEN, fetcher = fe
       throw new Error(result.error?.message || 'The tracker could not confirm this request.');
     }
     return result;
+  }
+  if (command === 'pages') {
+    if (args.length > 3) throw new Error('Use pages [FAMILY] [VARIANT].');
+    const family = sectionId || null;
+    const variant = file || null;
+    if ((family && !/^[A-Za-z0-9][A-Za-z0-9._:-]{0,159}$/.test(family)) || (variant && !/^[A-Za-z0-9][A-Za-z0-9._:-]{0,159}$/.test(variant))) {
+      throw new Error('Use an identifier-style FAMILY or VARIANT filter.');
+    }
+    const result = await request(null, PRODUCTION_ENDPOINT);
+    if (!Array.isArray(result.targets)) throw new Error('The production tracker returned incomplete page records.');
+    const targets = result.targets.filter(target =>
+      (!family || target.family === family) && (!variant || target.variant === variant)
+    );
+    output(JSON.stringify({user:result.user, status:result.status, targets}, null, 2));
+    return;
   }
   if (command === 'list') {
     if (args.length !== 1) throw new Error('Use list without extra arguments.');

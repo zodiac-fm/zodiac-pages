@@ -39,7 +39,7 @@
       const source=data.sources?.find(s=>/google doc|document/i.test(s.label));if(source&&safeUrl(source.url)){$('source-link').href=safeUrl(source.url);$('source-link').hidden=false;}
       $('sync-status').textContent='Shared records · refreshed '+new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/Denver'}).format(new Date());
       $('access').disabled=false;$('access').textContent=signedInUser?.name?.split(' ')[0]||'Your account';$('access').title=actor;$('access-state').textContent=`Signed in as ${actor}. Your verified account is recorded with every change.`;
-      render();if(!silent && oldRevision && oldRevision!==revision)toast('The workspace has new changes.');return true;
+      render();document.dispatchEvent(new CustomEvent('tracker:ready',{detail:{user:signedInUser,family,variant}}));if(!silent && oldRevision && oldRevision!==revision)toast('The workspace has new changes.');return true;
     }catch(error){
       if(error.status===401){data=null;canEdit=false;signedInUser=null;actor='';document.querySelector('main').hidden=true;$('sign-in').hidden=false;$('all-changes').hidden=true;$('source-link').hidden=true;$('source-link').removeAttribute('href');$('access').textContent='Company sign-in';for(const id of ['sections','revisions','change-log','page-notes','detail-scope','live-summary','edit-fields'])$(id).textContent='';if($('section-dialog').open)$('section-dialog').close();if($('edit-dialog').open)$('edit-dialog').close();return false;}
       $('sync-status').textContent='Could not refresh shared records';
@@ -52,6 +52,7 @@
   function status(s){return hasPending(s)?'<span class="status">● Newer draft</span>':s.live?'<span class="status live">● Latest revision live</span>':'<span class="status unknown">Live unconfirmed</span>';}
   function render(){
     if(!data)return;
+    document.dispatchEvent(new CustomEvent('tracker:selection',{detail:{family,variant}}));
     document.querySelectorAll('[data-family]').forEach(b=>{const selected=b.dataset.family===family;b.classList.toggle('selected',selected);b.setAttribute('aria-current',selected?'page':'false');});
     $('variants').innerHTML=variantsFor(family).map(v=>`<button data-variant="${v}" class="${v===variant?'selected':''}" aria-pressed="${v===variant}">${['g','a','m'].includes(v)?`<span>${v.toUpperCase()}</span>`:''}${variantNames[v]}</button>`).join('');
     $('variants').querySelectorAll('button').forEach(b=>b.onclick=()=>{variant=b.dataset.variant;allChanges=false;view='sections';setRoute();render();});
@@ -133,10 +134,11 @@
     catch(error){$('form-error').textContent=error.message;if(error.status===409){await refresh(true);$('form-error').textContent=error.message+' Your text is still here.';}}
     finally{saving=false;$('save-edit').disabled=false;}
   };
-  function setRoute(){history.replaceState(null,'',`?page=${family}&variant=${variant}${view==='changes'?'&view=changes':''}${allChanges?'&all=1':''}`);}
+  function setRoute(){const mode=new URLSearchParams(location.search).get('mode')||'pages';history.replaceState(null,'',`?page=${family}&variant=${variant}&mode=${mode}${view==='changes'?'&view=changes':''}${allChanges?'&all=1':''}`);}
   const params=new URLSearchParams(location.search);if(Object.hasOwn(familyNames,params.get('page')))family=params.get('page');variant=variantsFor(family).includes(params.get('variant'))?params.get('variant'):variantsFor(family)[0];if(params.get('view')==='changes')view='changes';allChanges=params.get('all')==='1'&&view==='changes';
   document.querySelectorAll('[data-family]').forEach(b=>b.onclick=()=>{family=b.dataset.family;variant=variantsFor(family)[0];allChanges=false;view='sections';$('search').value='';setRoute();render();});
-  $('all-changes').onclick=()=>{allChanges=true;view='changes';$('search').value='';setRoute();render();};
+  document.addEventListener('tracker:select-variant',e=>{if(variantsFor(family).includes(e.detail.variant)){variant=e.detail.variant;setRoute();render();}});
+  $('all-changes').onclick=()=>{document.dispatchEvent(new Event('tracker:show-sections'));allChanges=true;view='changes';$('search').value='';setRoute();render();};
   $('edit-dialog').addEventListener('close',()=>{const input=$('hermes-token');if(input)input.value='';});
   $('section-view').onclick=()=>{view='sections';allChanges=false;setRoute();render();};$('change-view').onclick=()=>{view='changes';allChanges=false;setRoute();render();};$('search').oninput=render;$('filter').onchange=render;$('refresh').onclick=()=>refresh();$('access').onclick=openAccess;$('add-revision').onclick=()=>{openRevision();if(editMode==='revision')appendRepositoryFields();};$('confirm-live').onclick=openLive;$('close-detail').onclick=()=>$('section-dialog').close();$('close-edit').onclick=()=>$('edit-dialog').close();$('cancel-edit').onclick=()=>$('edit-dialog').close();
   for(const id of ['section-dialog','edit-dialog'])$(id).addEventListener('click',e=>{if(e.target===$(id)){const r=$(id).getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)$(id).close();}});

@@ -9,7 +9,11 @@ The helper runs with Node.js 20 or newer from any repository. Use the helper in 
 ```sh
 node /path/to/zodiac-pages/funnel/tracker/hermes.cjs list
 node /path/to/zodiac-pages/funnel/tracker/hermes.cjs show LG-01
+node /path/to/zodiac-pages/funnel/tracker/hermes.cjs pages
+node /path/to/zodiac-pages/funnel/tracker/hermes.cjs pages lander g
 ```
+
+`pages` reads the production-monitor records only. It returns the registered pages, their latest status, source commit and fingerprints, and archive metadata. You can optionally filter by `FAMILY` and then `VARIANT`. It cannot capture a screenshot, open an archived image, run a production check, register a page, or confirm production.
 
 `show` returns the section history and an `expectedRevision`. Keep that value with your proposed change. It prevents saving over someone else's newer work.
 

@@ -3,6 +3,11 @@
   "trailingSlash": false,
   "buildCommand": "node gen-index.mjs",
   "outputDirectory": ".",
+  "functions": {
+    "api/funnel-production.js": {"includeFiles": "node_modules/@sparticuz/chromium/bin/**", "maxDuration": 60},
+    "api/funnel-production-cron.js": {"includeFiles": "node_modules/@sparticuz/chromium/bin/**", "maxDuration": 800}
+  },
+  "crons": [{"path": "/api/funnel-production-cron", "schedule": "*/15 * * * *"}],
   "headers": [
     {
       "source": "/funnel/tracker/:path*",
