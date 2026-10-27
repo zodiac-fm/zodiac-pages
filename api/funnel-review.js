@@ -20,6 +20,8 @@ const {
 const {captureDraftRevision} = require('../lib/funnel-tracker/draft-capture');
 const {getTarget, pairedLiveTargets} = require('../lib/funnel-tracker/production-catalog');
 const {
+  BC_COMPARISON_VERSION,
+  comparisonStructuralDigests,
   fetchVerifiedLiveSource,
   fetchVerifiedLiveViews,
   buildVerifiedLiveRuntimeMap,
@@ -252,6 +254,8 @@ function createHandler({
   async function withLiveCheck(req, value, view = 'desktop') {
     let draft = publicDraft(value, {view});
     const tokenProvider = requestOidcTokenProvider(req);
+    const includeComparisonDiagnostics = value.family === 'bc'
+      && requestIdentity(req)?.kind === 'browser';
     if (value.views) {
       const contexts = Object.fromEntries(['desktop','mobile'].map(checkView => {
         const viewDraft = publicDraft(value, {view:checkView});
@@ -277,6 +281,22 @@ function createHandler({
           try {
             const matchStatus = compareLiveSourceEvidence(value, observed.evidence, checkView);
             checks[checkView] = {status:statusFor(matchStatus),matchStatus,checkedAt};
+            const context = contexts[checkView];
+            const storedSha256 = context.publication?.liveComparisonSha256
+              || context.evidence?.comparisonSha256 || null;
+            if (includeComparisonDiagnostics && matchStatus === 'check-needed'
+                && context.evidence?.comparisonVersion === BC_COMPARISON_VERSION
+                && observed.evidence?.comparisonVersion === BC_COMPARISON_VERSION
+                && typeof storedSha256 === 'string'
+                && typeof observed.evidence.comparisonSha256 === 'string'
+                && typeof observed.html === 'string') {
+              checks[checkView].comparison = {
+                version:BC_COMPARISON_VERSION,
+                storedSha256,
+                observedSha256:observed.evidence.comparisonSha256,
+                observed:comparisonStructuralDigests(observed.html),
+              };
+            }
           } catch {
             checks[checkView] = {status:'unavailable',checkedAt};
           }
