@@ -19,7 +19,7 @@
     mode: null, notice: null, pendingScroll: false, conflict: null,
     scratch: new Map(), layoutKey: '', work: [], workError: '', syncing: false,
     pageChoice: '', pages: [], pagesError: '',
-    view: 'desktop', viewScope: 'both',
+    view: 'desktop', viewScope: 'shared',
   };
   let root;
   let resizeObserver;
@@ -224,6 +224,7 @@
       state.draft = null;
       state.picked = null;
       state.conflict = null;
+      state.viewScope = 'shared';
       state.frameReady = false;
     }
     const token = ++state.draftToken;
@@ -336,7 +337,7 @@
     if (!['desktop', 'mobile'].includes(view) || view === selectedView()) return;
     stashInputs();
     state.view = view;
-    if (state.viewScope !== 'shared') state.viewScope = view;
+    state.viewScope = 'shared';
     state.picked = null;
     state.conflict = null;
     state.frameReady = false;
@@ -365,7 +366,7 @@
         <aside id="review-section-nav" class="review-section-nav"></aside>
         <section class="review-preview">
           <div id="review-preview-bar" class="review-preview-bar"></div>
-          <div class="review-frame-shell">
+          <div id="review-frame-shell" class="review-frame-shell">
             <iframe id="review-frame" sandbox="allow-same-origin" title="Private working page"></iframe>
             <div id="review-overlay" class="review-overlay" aria-hidden="true"></div>
             <div id="review-frame-message" class="review-frame-message">Loading private working page…</div>
@@ -831,6 +832,7 @@
     $('review-shared-edit')?.replaceChildren();
     state.selected = sectionId;
     state.picked = null;
+    state.viewScope = 'shared';
     state.conflict = null;
     state.pendingScroll = true;
     const url = new URL(location.href);
@@ -848,6 +850,7 @@
     stashInputs();
     const node = state.draft?.editableNodes?.find(item => item.editId === editId);
     if (!node) return;
+    if (state.picked?.editId !== node.editId) state.viewScope = 'shared';
     state.selected = node.sectionId;
     state.picked = node;
     state.conflict = null;
@@ -1018,7 +1021,8 @@
         resizeObserver?.disconnect();
         resizeObserver = new ResizeObserver(() => { fitPreview(); markLabels(); });
         resizeObserver.observe(frame);
-        resizeObserver.observe($('review-frame-shell'));
+        const shell = $('review-frame-shell');
+        if (shell instanceof Element) resizeObserver.observe(shell);
         state.pendingScroll = true;
         scrollSelected();
       } catch (error) {
@@ -1363,7 +1367,7 @@
       state.family = event.detail.family;
       state.variant = event.detail.variant;
       state.pageChoice = '';
-      const route = new URL(location.href); route.searchParams.delete('pageKey'); history.replaceState(null,'',route);
+      const route = new URL(location.href); route.searchParams.delete('pageKey'); route.searchParams.set('view', selectedView()); history.replaceState(null,'',route);
       state.selected = null;
       state.layoutKey = '';
       if (state.family === 'corporate') return renderCorporate();

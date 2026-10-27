@@ -197,6 +197,7 @@
   }
 
   function showDrawer(node, trigger, restore = null, forceClose = false) {
+    if (!restore && picked?.editId !== node.editId) viewScope = 'shared';
     if (drawer && !closeDrawer(forceClose)) return;
     if (!draft) return;
     picked = node;

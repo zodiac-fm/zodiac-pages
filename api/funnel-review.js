@@ -26,6 +26,7 @@ const {
   LiveSourceError,
 } = require('../lib/funnel-tracker/live-source');
 const {requestOidcTokenProvider} = require('../lib/funnel-tracker/production-monitor');
+const {initializeWorkingViews} = require('../lib/funnel-tracker/view-initialization');
 const {workStore, InvalidWorkDataError, WorkStoreConflictError} = require('../lib/funnel-tracker/work-store');
 const {
   MAX_ATTACHMENT_BYTES,
@@ -637,34 +638,13 @@ function createHandler({
         return fail(res, 400, 'invalid_draft');
       }
       try {
-        const existing = await drafts.getDraft(body.pageKey);
-        if ((existing.draft && existing.draft.currentRevisionId !== body.expectedRevision)
-            || (!existing.draft && body.expectedRevision !== null)) {
-          throw new DraftStoreConflictError('draft revision conflict');
-        }
-        if (existing.draft?.views) {
-          return sendJson(res, 200, {
-            draft:publicDraft(existing.draft, {view}),user:identity.user,initialized:false,
-          });
-        }
-        const [mapResult, trackerResult] = await Promise.all([store.readMap(), tracker.read()]);
-        const sectionNames = Object.fromEntries(
-          trackerResult.data.sections.map(section => [section.id, section.name]),
-        );
-        const source = await liveViewsFetcher(body.pageKey, {
-          referenceMap:mapResult.data,
-          sectionNames,
-          tokenProvider:requestOidcTokenProvider(req),
+        const initialized = await initializeWorkingViews({
+          pageKey:body.pageKey,expectedRevision:body.expectedRevision,view,
+          tokenProvider:requestOidcTokenProvider(req),drafts,review:store,tracker,
+          fetchViews:liveViewsFetcher,editor:identity.user,
         });
-        const initialized = await drafts.initializeViews({
-          pageKey:body.pageKey,
-          expectedRevision:body.expectedRevision,
-          sources:source.sources,
-          sectionNames:{...sectionNames,...(source.sectionNames || {})},
-          editor:identity.user,
-        });
-        return sendJson(res, 201, {
-          draft:publicDraft(initialized.draft, {view}),user:identity.user,initialized:true,
+        return sendJson(res, initialized.initialized ? 201 : 200, {
+          draft:initialized.draft,user:identity.user,initialized:initialized.initialized,
         });
       } catch (error) {
         if (error instanceof DraftStoreConflictError) {
@@ -818,9 +798,16 @@ function createHandler({
             const channel = paired.find(item => item.productionUrl === body.liveUrl);
             if (!channel || body.confirmed !== true) return fail(res, 400, 'invalid_publication');
             const observed = await liveSourceFetcher(target.variationOf || body.pageKey, {
-              channel:channel.channel, tokenProvider:requestOidcTokenProvider(req),
+              channel:channel.channel, view, tokenProvider:requestOidcTokenProvider(req),
             });
-            liveEvidence = {liveContentSha256:observed.evidence.contentSha256,liveSourceCommit:observed.evidence.sourceCommit};
+            liveEvidence = {
+              liveContentSha256:observed.evidence.contentSha256,
+              liveSourceCommit:observed.evidence.sourceCommit,
+              ...(observed.evidence.comparisonVersion === undefined ? {} : {
+                liveComparisonVersion:observed.evidence.comparisonVersion,
+                liveComparisonSha256:observed.evidence.comparisonSha256,
+              }),
+            };
           }
         }
         const confirmed = await drafts.confirmPublished({
