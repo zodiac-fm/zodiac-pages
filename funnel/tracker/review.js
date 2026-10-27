@@ -1,6 +1,21 @@
 'use strict';
 
-(() => {
+(async () => {
+  const loadedCacheLibrary = !window.FunnelSessionCache;
+  if(loadedCacheLibrary){
+    try{
+      await new Promise((resolve,reject)=>{
+        const script=document.createElement('script');
+        script.src='/funnel/tracker/session-cache.js';
+        script.onload=resolve;script.onerror=reject;
+        document.head.appendChild(script);
+      });
+    }catch{
+      const workspace=document.getElementById('review-workspace');
+      if(workspace){workspace.hidden=false;workspace.textContent='The working pages could not finish loading. Refresh this page to retry.';}
+      return;
+    }
+  }
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -1550,5 +1565,9 @@
     }, 1500);
   }
 
-  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', start) : start();
+  function initialize() {
+    start();
+    if(loadedCacheLibrary)document.dispatchEvent(new CustomEvent('tracker:refresh-request',{detail:{fresh:false,reason:'cache-library'}}));
+  }
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', initialize) : initialize();
 })();
