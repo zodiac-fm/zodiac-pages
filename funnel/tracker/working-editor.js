@@ -1,7 +1,14 @@
 'use strict';
 
 (() => {
-  if (window.self !== window.top) return;
+  const embedded = new URL(location.href).searchParams.get('embedded') === '1';
+  let shellParent = false;
+  let trackerPreview = false;
+  try {
+    shellParent = window.parent !== window && Boolean(window.parent.document.querySelector('[data-funnel-working-shell]'));
+    trackerPreview = window.parent !== window && Boolean(window.parent.document.getElementById('review-frame'));
+  } catch {}
+  if (window.self !== window.top && (!embedded || !shellParent || trackerPreview)) return;
 
   const banner = document.querySelector('[data-funnel-working-banner]');
   if (!banner || banner.dataset.workingEditorReady === 'true') return;
@@ -9,6 +16,8 @@
   const pageKey = banner.dataset.funnelWorkingPage;
   const renderedRevision = banner.dataset.funnelWorkingRevision;
   let editingRevision = renderedRevision;
+  let view = banner.dataset.funnelWorkingView === 'mobile' ? 'mobile' : 'desktop';
+  let viewScope = 'shared';
   if (!pageKey || !renderedRevision) return;
 
   const apiOrigin = location.origin;
@@ -22,6 +31,37 @@
   let picked = null;
   let lastFocus = null;
   let drawer = null;
+
+  function activeDraft(value) {
+    if (!value) return value;
+    const selected = value.views?.[view];
+    return selected ? {...value, ...selected, views: value.views, activeView: view} : value;
+  }
+
+  function withView(value) {
+    const href = sameOriginUrl(value);
+    if (!href) return '';
+    const url = new URL(href, apiOrigin);
+    url.searchParams.set('view', view);
+    return url.href;
+  }
+
+  function hostWindow() { return shellParent ? window.top : window; }
+
+  function replaceWorkingHash(hash) {
+    const host = hostWindow();
+    const page = new URL(host.location.href);
+    page.hash = hash;
+    host.history.replaceState(null, '', page.href);
+  }
+
+  function navigateWorkingPage(value, sectionId) {
+    const href = withView(value);
+    if (!href) return;
+    const next = new URL(href, apiOrigin);
+    next.hash = currentHash(sectionId);
+    hostWindow().location.assign(next.href);
+  }
 
   function imageSource(value) {
     try {
@@ -58,12 +98,40 @@
     return document.querySelector(`[data-funnel-section-id="${escaped}"]`);
   }
 
+  function wireSafeWorkingRuntime(documentRoot = document) {
+    if (documentRoot.documentElement.dataset.funnelSafeRuntime === 'true') return;
+    documentRoot.documentElement.dataset.funnelSafeRuntime = 'true';
+    const pageWindow = documentRoot.defaultView || window;
+    const visible = element => {
+      const box = element.getBoundingClientRect();
+      return box.top < pageWindow.innerHeight && box.bottom > 0;
+    };
+    const update = () => {
+      const atOffer = [...documentRoot.querySelectorAll('.offer-callout,.offer-inline')].some(visible)
+        || [...documentRoot.querySelectorAll('footer,.site-footer')].some(visible);
+      const showSticky = pageWindow.scrollY > 120 && !atOffer;
+      documentRoot.querySelectorAll('.sticky-cta').forEach(item => item.classList.toggle('is-shown', showSticky));
+      documentRoot.querySelectorAll('.header-cta,.site-header').forEach(item => item.classList.toggle('is-condensed', pageWindow.scrollY > 8));
+    };
+    pageWindow.addEventListener('scroll', update, {passive: true});
+    pageWindow.addEventListener('resize', update, {passive: true});
+    documentRoot.addEventListener('click', event => {
+      const jump = event.target.closest?.('a[data-offer-jump]');
+      if (!jump) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const offers = [...documentRoot.querySelectorAll('.offer-callout,.offer-inline')];
+      const next = offers.find(item => item.getBoundingClientRect().top > 80) || offers.at(-1);
+      next?.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }, true);
+    documentRoot.addEventListener('submit', event => event.preventDefault(), true);
+    update();
+  }
+
   function visitSection(sectionId, behavior = 'smooth') {
     const target = sectionTarget(sectionId);
     if (!target) return;
-    const page = new URL(location.href);
-    page.hash = currentHash(sectionId);
-    history.replaceState(null, '', page.href);
+    replaceWorkingHash(currentHash(sectionId));
     target.scrollIntoView({behavior, block: 'start'});
   }
 
@@ -101,8 +169,8 @@
   }
 
   function historicalMarkup() {
-    const current = sameOriginUrl(draft?.workingUrl);
-    return `<p class="working-editor-error">This is an earlier saved version and is read-only.</p>${current ? `<a class="working-editor-current" href="${escapeHtml(current + currentHash(picked?.sectionId))}">Open the current working page</a>` : ''}`;
+    const current = withView(draft?.workingUrl);
+    return `<p class="working-editor-error">This is an earlier saved version and is read-only.</p>${current ? `<a class="working-editor-current" target="_top" href="${escapeHtml(current + currentHash(picked?.sectionId))}">Open the current working page</a>` : ''}`;
   }
 
   function escapeHtml(value) {
@@ -120,6 +188,7 @@
         ${editingRevision !== renderedRevision && !isImage ? `<p class="working-editor-help">Latest saved copy: ${escapeHtml(node.value)}</p>` : ''}
         ${isImage ? `<div class="working-editor-image"><img src="${escapeHtml(imageSource(node.value))}" alt="${escapeHtml(node.alt || 'Current image')}"></div><label>Replacement image<input id="working-editor-file" type="file" accept="image/png,image/jpeg,image/webp" required></label><p class="working-editor-help">PNG, JPEG, or WebP up to 4 MiB.</p>` : `<label>Copy<textarea id="working-editor-copy" rows="10" required>${escapeHtml(node.value)}</textarea></label>`}
         <label>What changed?<textarea id="working-editor-summary" rows="3" required placeholder="Describe this change for Walter and the version history."></textarea></label>
+        <label>Apply this change to<select id="working-editor-scope"><option value="shared" ${viewScope === 'shared' ? 'selected' : ''}>Both web views</option><option value="${view}" ${viewScope === view ? 'selected' : ''}>This view only (${view === 'mobile' ? 'Mobile web' : 'Desktop web'})</option></select></label><p class="working-editor-help">Editing ${view === 'mobile' ? 'Mobile web' : 'Desktop web'}. Both views is the default.</p>
         <label>Release type<select id="working-editor-release"><option value="minor">Minor: copy or image change</option><option value="major">Major: page structure changed</option></select></label>
         <p class="working-editor-error" id="working-editor-error" role="alert"></p>
         <button class="working-editor-save" type="submit">Save draft change</button>
@@ -159,6 +228,7 @@
     });
     const form = drawer.querySelector('#working-editor-form');
     if (form) form.addEventListener('submit', save);
+    drawer.querySelector('#working-editor-scope')?.addEventListener('change', event => { viewScope = event.target.value; });
     drawer.querySelector('#working-editor-file')?.addEventListener('change', event => {
       drawer._workingEditorFile = event.target.files?.[0] || null;
       const help = drawer.querySelector('.working-editor-help');
@@ -203,12 +273,13 @@
         method: 'POST', headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           pageKey, sectionId: picked.sectionId, editId: picked.editId, expectedRevision: draft.revision,
-          operation, material: {note: summary}, changeSummary: summary, releaseType,
+          operation, view, scope: viewScope === 'shared' ? 'shared' : view,
+          material: {note: summary}, changeSummary: summary, releaseType,
         }),
       });
-      const next = sameOriginUrl(result?.draft?.workingUrl);
+      const next = withView(activeDraft(result?.draft)?.workingUrl);
       if (!next) throw Error('The saved draft did not return a working-page link.');
-      location.assign(next + currentHash(picked.sectionId));
+      navigateWorkingPage(next, picked.sectionId);
     } catch (saveError) {
       button.disabled = false;
       if (saveError.status === 409) {
@@ -221,8 +292,8 @@
           const editId = picked?.editId;
           const trigger = lastFocus;
           try {
-            const latest = await request('draft', {}, {pageKey});
-            draft = latest.draft;
+            const latest = await request('draft', {}, {pageKey, view});
+            draft = activeDraft(latest.draft);
             const node = draft.editableNodes?.find(item => item.editId === editId);
             if (!node) throw Error('That editable item changed in the newer version. Copy your change before continuing.');
             editingRevision = draft.revision;
@@ -236,8 +307,8 @@
 
   async function loadDraft() {
     try {
-      const result = await request('draft', {}, {pageKey});
-      draft = result.draft;
+      const result = await request('draft', {}, {pageKey, view});
+      draft = activeDraft(result.draft);
       if (!draft?.revision) throw Error('This working page is unavailable.');
     } catch (error) {
       banner.insertAdjacentHTML('beforeend', `<span class="working-editor-notice">${escapeHtml(errorText(error))}</span>`);
@@ -257,6 +328,20 @@
   }
 
   banner.insertAdjacentHTML('beforeend', '<button class="working-editor-open" type="button">Edit sections</button><span class="working-editor-instruction">Choose a labeled section or highlighted copy/image to edit this draft.</span>');
+  wireSafeWorkingRuntime();
+  banner.querySelectorAll('[data-funnel-working-view-toggle]').forEach(button => {
+    const nextView = button.dataset.funnelWorkingViewToggle;
+    const selected = nextView === view;
+    button.classList.toggle('selected', selected);
+    button.setAttribute('aria-pressed', String(selected));
+    button.addEventListener('click', () => {
+      if (!['desktop', 'mobile'].includes(nextView) || nextView === view) return;
+      if (!closeDrawer()) return;
+      const route = new URL(hostWindow().location.href);
+      route.searchParams.set('view', nextView);
+      hostWindow().location.assign(route.href);
+    });
+  });
   const open = banner.querySelector('.working-editor-open');
   open.addEventListener('click', () => {
     const first = draft?.editableNodes?.[0];

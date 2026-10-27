@@ -19,6 +19,7 @@
     mode: null, notice: null, pendingScroll: false, conflict: null,
     scratch: new Map(), layoutKey: '', work: [], workError: '', syncing: false,
     pageChoice: '', pages: [], pagesError: '',
+    view: 'desktop', viewScope: 'both',
   };
   let root;
   let resizeObserver;
@@ -33,6 +34,28 @@
     } catch {
       return '';
     }
+  }
+
+  function selectedView() { return state.view === 'mobile' ? 'mobile' : 'desktop'; }
+
+  function withView(value) {
+    const href = safe(value);
+    if (!href) return '';
+    try {
+      const url = new URL(href, location.origin);
+      url.searchParams.set('view', selectedView());
+      return safe(url.href);
+    } catch { return href; }
+  }
+
+  function syncStatus(value) {
+    return value?.sync?.status || value?.status || 'unavailable';
+  }
+
+  function activeDraft(value = state.draft) {
+    if (!value) return value;
+    const view = value.views?.[selectedView()];
+    return view ? {...value, ...view, views: value.views, activeView: selectedView()} : value;
   }
 
   function imageUrl(value) {
@@ -206,29 +229,31 @@
     const token = ++state.draftToken;
     let response;
     try {
-      response = await request(`/api/funnel-review?action=draft&pageKey=${encodeURIComponent(pageKey)}`);
+      response = await request(`/api/funnel-review?action=draft&pageKey=${encodeURIComponent(pageKey)}&view=${selectedView()}`);
     } catch (error) {
       if (error.status !== 404) throw error;
-      response = await request('/api/funnel-review?action=initialize-draft', {
+      response = await request(`/api/funnel-review?action=initialize-draft&view=${selectedView()}`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({pageKey}),
       });
     }
+    response.draft = activeDraft(response.draft);
     if (!response.draft?.workingUrl || !Array.isArray(response.draft.editableNodes)) {
       throw Error('The working page cannot be prepared for editing.');
     }
     if (response.draft.sourceOutdated) {
       try {
-        response = await request('/api/funnel-review?action=initialize-draft', {
+        response = await request(`/api/funnel-review?action=initialize-draft&view=${selectedView()}`, {
           method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({pageKey}),
         });
       } catch (error) {
         if (error.status !== 409 || !error.result?.draft) throw error;
-        response.draft = error.result.draft;
+        response.draft = activeDraft(error.result.draft);
         state.notice = {text: error.message, kind: 'error'};
       }
     }
+    response.draft = activeDraft(response.draft);
     try {
       const linked = await request(`/api/funnel-review?action=linear-work&pageKey=${encodeURIComponent(pageKey)}`);
       if (token === state.draftToken) { state.work = linked.entries || []; state.workError = ''; }
@@ -238,7 +263,7 @@
       if (token === state.draftToken) { state.pages = pages.drafts || []; state.pagesError = ''; }
     } catch { state.pagesError = 'Other working pages could not be loaded. Refresh to retry.'; }
     if (token !== state.draftToken || state.pageKey !== pageKey) return state.draft;
-    const latest = response.draft;
+    const latest = activeDraft(response.draft);
     if (previous && latest.revision !== previous.revision) {
       const pending = pendingScratch(previous);
       if (pending) {
@@ -296,7 +321,34 @@
 
   function currentRevisionUrl() {
     const current = (state.draft?.history || []).find(item => item.id === state.draft?.revision);
-    return safe(current?.workingUrl || state.draft?.workingUrl);
+    return withView(current?.workingUrl || state.draft?.workingUrl);
+  }
+
+  function previewEmbedUrl(value) {
+    const href = withView(value);
+    if (!href) return '';
+    const url = new URL(href, location.origin);
+    url.searchParams.set('embedded', '1');
+    return safe(url.href);
+  }
+
+  async function chooseView(view) {
+    if (!['desktop', 'mobile'].includes(view) || view === selectedView()) return;
+    stashInputs();
+    state.view = view;
+    if (state.viewScope !== 'shared') state.viewScope = view;
+    state.picked = null;
+    state.conflict = null;
+    state.frameReady = false;
+    const route = new URL(location.href);
+    route.searchParams.set('view', view);
+    history.replaceState(null, '', route);
+    try {
+      await loadDraft({force: true});
+      render();
+    } catch (error) {
+      setNotice(error.message, 'error');
+    }
   }
 
   function layout() {
@@ -306,6 +358,7 @@
     root.innerHTML = `
       <div id="review-topline" class="review-topline"></div>
       <div id="review-branchbar"></div>
+      <div id="review-viewbar"></div>
       <div id="review-page-pair"></div>
       <div id="review-shared-edit"></div>
       <div class="review-workgrid">
@@ -339,8 +392,9 @@
         detail: {variant: button.dataset.reviewVariant},
       })));
     });
-    renderPagePair();
     renderBranchBar();
+    renderViewBar();
+    renderPagePair();
   }
 
   function renderBranchBar() {
@@ -391,6 +445,19 @@
     };
   }
 
+  function renderViewBar() {
+    const container = $('review-viewbar');
+    if (!container || !state.draft) return;
+    const view = selectedView();
+    const title = `${names[state.family]} · ${names[state.variant]}`;
+    const status = value => value === 'synced' ? 'Synced' : value === 'unsynced' ? 'Unsynced' : 'Check unavailable';
+    const desktop = syncStatus(state.draft.views?.desktop);
+    const mobile = syncStatus(state.draft.views?.mobile);
+    const overall = syncStatus(state.draft);
+    container.innerHTML = `<section class="review-viewbar"><div class="review-view-summary"><span>Working page</span><strong>${esc(title)} · Version ${esc(state.draft.version)}</strong><small>Viewing ${view === 'desktop' ? 'Desktop web · 1280px fit' : 'Mobile web · 390px viewport'}</small></div><nav class="review-view-toggle" aria-label="Working page view"><button type="button" data-review-view="desktop" class="${view === 'desktop' ? 'selected' : ''}" aria-pressed="${view === 'desktop'}">Desktop web</button><button type="button" data-review-view="mobile" class="${view === 'mobile' ? 'selected' : ''}" aria-pressed="${view === 'mobile'}">Mobile web</button></nav><div class="review-sync-states" aria-label="View synchronization"><b>Desktop ${esc(status(desktop))}</b><b>Mobile ${esc(status(mobile))}</b><b>Overall ${esc(status(overall))}</b></div></section>`;
+    container.querySelectorAll('[data-review-view]').forEach(button => button.addEventListener('click', () => chooseView(button.dataset.reviewView)));
+  }
+
   function renderPagePair() {
     const container = $('review-page-pair'), draft = state.draft;
     if (!container || !draft) return;
@@ -414,7 +481,7 @@
         ${sourceVersion ? `<p class="pair-source">${synced ? 'Synced working version' : 'Last working baseline'}: Version ${synced ? draft.version : sourceVersion}</p>` : ''}
       </section>
       <section class="page-pair-draft"><p class="eyebrow">Working page <span class="pair-draft-badge">DRAFT</span></p><h2>${esc(draft.label)}</h2>
-        <a href="${esc(safe(draft.workingUrl))}" target="_blank" rel="noopener">Working page ↗</a><p class="pair-address">${esc(safe(draft.stableWorkingUrl || draft.workingUrl).replace('https://',''))}</p>
+        <a href="${esc(withView(draft.workingUrl))}" target="_blank" rel="noopener">Working page ↗</a><p class="pair-address">${esc(withView(draft.stableWorkingUrl || draft.workingUrl).replace('https://',''))}</p>
         <p class="pair-source">Saved ${esc(dateTime(draft.updatedAt))} · ${esc(draft.editor.name)}</p>
       </section>
       <div class="pair-publication" aria-live="polite"><strong class="sync-badge ${synced ? 'synced' : 'unsynced'}">${esc(status)}</strong><p>${explanation}</p>${draft.liveCheck ? `<p class="review-muted">${draft.liveCheck.status === 'unavailable' ? 'Live check unavailable. The last recorded state is shown.' : `Live checked ${esc(dateTime(draft.liveCheck.checkedAt))}.`}${live?.synthetic ? ' Results uses a fixed sample profile.' : ''}</p>` : ''}${publication ? `<p>Version ${draft.history.find(item=>item.id===publication.revisionId)?.version} confirmed live by ${esc(publication.editor.name)} · ${esc(dateTime(publication.confirmedAt))}.</p>` : ''}
@@ -433,7 +500,7 @@
   function releaseHistoryMarkup(item) {
     const label = item.setup ? `Setup record ${item.archiveNumber}` : `Version ${item.version}`;
     const description = item.changeSummary || (item.sourceEvidence ? 'Copied from verified live content.' : item.kind === 'initialized' ? 'Starting page.' : item.kind === 'section-copy' ? 'Shared section updated.' : 'Saved page change.');
-    return `<article class="review-release"><strong>${esc(label)}</strong><p>${esc(description)}</p>${item.sectionId ? `<p>${esc(item.sectionId)}</p>` : ''}<small>${esc(dateTime(item.createdAt))} · ${esc(item.editor.name)}</small><p><a href="${esc(safe(item.workingUrl))}" target="_blank" rel="noopener">Working page ↗</a>${item.screenshot?.status === 'ready' ? ` · <a href="${esc(safe(item.screenshot.imageUrl))}" target="_blank" rel="noopener">Screenshot ↗</a>` : ''}</p></article>`;
+    return `<article class="review-release"><strong>${esc(label)}</strong><p>${esc(description)}</p>${item.sectionId ? `<p>${esc(item.sectionId)}</p>` : ''}<small>${esc(dateTime(item.createdAt))} · ${esc(item.editor.name)}</small><p><a href="${esc(withView(item.workingUrl))}" target="_blank" rel="noopener">Working page ↗</a>${item.screenshot?.status === 'ready' ? ` · <a href="${esc(safe(item.screenshot.imageUrl))}" target="_blank" rel="noopener">Screenshot ↗</a>` : ''}</p></article>`;
   }
 
   async function syncLive() {
@@ -455,11 +522,11 @@
       });
       if (state.pageKey !== pageKey) return;
       if (pendingScratch(previous)) {
-        state.conflict = conflictFor(response.draft, pendingScratch(previous));
+        state.conflict = conflictFor(activeDraft(response.draft), pendingScratch(previous));
         state.notice = {text:'The live baseline was saved. Your unsaved change is still here. Compare before retrying.', kind:'error'};
       } else {
-        rebaseCleanScratch(previous, response.draft);
-        state.draft = response.draft;
+        rebaseCleanScratch(previous, activeDraft(response.draft));
+        state.draft = activeDraft(response.draft);
         state.picked = null;
         state.notice = {text:response.synced ? 'Working draft updated from live. Earlier versions are saved.' : 'Working draft already matches the live template.', kind:'success'};
       }
@@ -578,7 +645,7 @@
         try {
           const result = await request('/api/funnel-review?action=copy-section', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sourcePageKey:source.pageKey,sourceSectionId,sourceRevision:source.revision,targets:chosen,releaseType:$('review-copy-release').value,changeSummary:$('review-copy-summary').value.trim()})});
           area.innerHTML = `<section class="review-shared-panel"><h2>Section copied to ${result.drafts.length} ${result.drafts.length === 1 ? 'page' : 'pages'}.</h2><p>These new versions are Unsynced and ready for Walter. Screenshots are queued automatically.</p>${result.drafts.map(draft => {
-            const route = new URL(draft.workingUrl,location.origin);route.hash=`funnel-section-${chosen.find(item=>item.pageKey===draft.pageKey).sectionId}`;
+            const route = new URL(withView(draft.workingUrl),location.origin);route.hash=`funnel-section-${chosen.find(item=>item.pageKey===draft.pageKey).sectionId}`;
             return `<p><a href="${esc(route.href)}" target="_blank" rel="noopener">${esc(draft.label)} · Unsynced ↗</a></p>`;
           }).join('')}<button id="review-shared-done" type="button">Done</button></section>`;
           $('review-shared-done').onclick = () => area.replaceChildren();
@@ -593,7 +660,34 @@
   function renderPreview(active) {
     const bar = $('review-preview-bar');
     if (!bar) return;
-    bar.innerHTML = `<span>${esc(active?.id || '')}</span><span>${esc(active?.name || '')}</span><span class="review-preview-heading">Version ${state.draft.version} · ${state.draft.sync?.status === 'synced' ? 'Synced' : 'Unsynced'}</span>`;
+    const view = selectedView();
+    bar.innerHTML = `<span>${esc(active?.id || '')}</span><span>${esc(active?.name || '')}</span><span class="review-preview-heading">${view === 'desktop' ? 'Desktop web' : 'Mobile web'} · Version ${esc(state.draft.version)}</span>`;
+    const shell = document.querySelector('.review-frame-shell');
+    if (shell) shell.dataset.view = view;
+    fitPreview();
+  }
+
+  function fitPreview() {
+    const shell = $('review-frame-shell');
+    const frame = $('review-frame');
+    if (!shell || !frame) return;
+    if (selectedView() !== 'desktop') {
+      frame.style.removeProperty('width');
+      frame.style.removeProperty('height');
+      frame.style.removeProperty('transform');
+      shell.style.removeProperty('height');
+      shell.style.removeProperty('min-height');
+      return;
+    }
+    const sourceWidth = 1280;
+    const sourceHeight = 795;
+    const available = Math.max(1, shell.clientWidth);
+    const scale = Math.min(1, available / sourceWidth);
+    frame.style.width = `${sourceWidth}px`;
+    frame.style.height = `${sourceHeight}px`;
+    frame.style.transform = `scale(${scale})`;
+    shell.style.height = `${Math.round(sourceHeight * scale)}px`;
+    shell.style.minHeight = '0';
   }
 
   function editorMarkup(node) {
@@ -617,14 +711,14 @@
 
   function historyMarkup(event) {
     if (event.kind === 'section-copy') {
-      return `<article class="review-version"><strong>Version ${event.version} · Section copied</strong><p>Copied from ${esc(event.after.sourceSectionId)}. Earlier content remains in the previous version.</p><p><a href="${esc(safe(event.workingUrl))}" target="_blank" rel="noopener">Open this working version ↗</a></p><small>${esc(event.editor.name)} · ${esc(dateTime(event.createdAt))}</small></article>`;
+      return `<article class="review-version"><strong>Version ${event.version} · Section copied</strong><p>Copied from ${esc(event.after.sourceSectionId)}. Earlier content remains in the previous version.</p><p><a href="${esc(withView(event.workingUrl))}" target="_blank" rel="noopener">Open this working version ↗</a></p><small>${esc(event.editor.name)} · ${esc(dateTime(event.createdAt))}</small></article>`;
     }
     const isImage = event.operationType === 'image';
     const afterImage = isImage ? imageUrl(event.after) : '';
     const actorName = event.editor?.name || 'Verified contributor';
     const actorEmail = event.editor?.email || '';
     const title = isImage ? 'Saved image change' : 'Saved copy change';
-    const revisionLink = safe(event.workingUrl);
+    const revisionLink = withView(event.workingUrl);
     const screenshotLink = event.screenshot?.status === 'ready' ? safe(event.screenshot.imageUrl) : '';
     const screenshotStatus = event.screenshot?.status === 'pending'
       ? '<small>Screenshot pending</small>'
@@ -691,7 +785,7 @@
       ${binding?.gaps?.length ? `<details class="review-source-notes review-gap"><summary>Source notes</summary>${binding.gaps.map(item => `<p>${esc(item)}</p>`).join('')}</details>` : ''}
       <form id="review-change-form">
         <div class="review-picker"><strong>${node ? (node.type === 'image' ? 'Selected image' : 'Selected text') : 'Choose text or an image'}</strong><p>${node ? esc(nodeDescription(node)) : (nodes.length ? 'Click a copy line or image in the working page.' : 'Nothing in this section is ready to edit yet.')}</p>${node ? editorMarkup(node) : `<div class="review-node-list">${nodes.map(item => `<button type="button" data-review-pick="${esc(item.editId)}">${esc(nodeDescription(item))}</button>`).join('')}</div>`}</div>
-        <div class="review-reference"><label>What changed?<textarea id="review-summary" rows="2" required placeholder="Describe the change for Walter.">${esc(entry?.changeSummary || '')}</textarea></label><label class="review-note">Release type<select id="review-release-type"><option value="minor" ${entry?.releaseType !== 'major' ? 'selected' : ''}>Minor: keep the page structure</option><option value="major" ${entry?.releaseType === 'major' ? 'selected' : ''}>Major: page structure changed</option></select></label><label class="review-note">Design example for Walter (optional)<input id="review-example" type="url" placeholder="https://zodiac-pages.vercel.app/…" value="${esc(entry?.exampleUrl || '')}"></label><label class="review-note">Optional note<textarea id="review-note" rows="2">${esc(entry?.note || '')}</textarea></label></div>
+        <div class="review-reference"><label>Apply this change to<select id="review-view-scope"><option value="shared" ${state.viewScope === 'shared' ? 'selected' : ''}>Both web views</option><option value="${esc(selectedView())}" ${state.viewScope === selectedView() ? 'selected' : ''}>This view only (${selectedView() === 'desktop' ? 'Desktop web' : 'Mobile web'})</option></select></label><p class="review-view-scope-help">Previewing ${selectedView() === 'desktop' ? 'Desktop web' : 'Mobile web'}. Both views is the default.</p><label>What changed?<textarea id="review-summary" rows="2" required placeholder="Describe the change for Walter.">${esc(entry?.changeSummary || '')}</textarea></label><label class="review-note">Release type<select id="review-release-type"><option value="minor" ${entry?.releaseType !== 'major' ? 'selected' : ''}>Minor: keep the page structure</option><option value="major" ${entry?.releaseType === 'major' ? 'selected' : ''}>Major: page structure changed</option></select></label><label class="review-note">Design example for Walter (optional)<input id="review-example" type="url" placeholder="https://zodiac-pages.vercel.app/…" value="${esc(entry?.exampleUrl || '')}"></label><label class="review-note">Optional note<textarea id="review-note" rows="2">${esc(entry?.note || '')}</textarea></label></div>
         ${renderConflict()}
         <div class="review-save-area"><p id="review-form-error" class="review-form-error" role="alert"></p><button id="review-save" class="review-save" type="submit">Save draft changes</button><p id="review-status" class="review-status ${esc(state.notice?.kind || '')}">${esc(state.notice?.text || '')}</p></div>
       </form>
@@ -790,6 +884,36 @@
     });
   }
 
+  function wireSafeWorkingRuntime(documentRoot) {
+    if (!documentRoot || documentRoot.documentElement.dataset.funnelSafeRuntime === 'true') return;
+    documentRoot.documentElement.dataset.funnelSafeRuntime = 'true';
+    const frameWindow = documentRoot.defaultView;
+    const visible = element => {
+      const box = element.getBoundingClientRect();
+      return box.top < frameWindow.innerHeight && box.bottom > 0;
+    };
+    const update = () => {
+      const atOffer = [...documentRoot.querySelectorAll('.offer-callout,.offer-inline')].some(visible)
+        || [...documentRoot.querySelectorAll('footer,.site-footer')].some(visible);
+      const showSticky = frameWindow.scrollY > 120 && !atOffer;
+      documentRoot.querySelectorAll('.sticky-cta').forEach(item => item.classList.toggle('is-shown', showSticky));
+      documentRoot.querySelectorAll('.header-cta,.site-header').forEach(item => item.classList.toggle('is-condensed', frameWindow.scrollY > 8));
+    };
+    frameWindow.addEventListener('scroll', update, {passive: true});
+    frameWindow.addEventListener('resize', update, {passive: true});
+    documentRoot.addEventListener('click', event => {
+      const jump = event.target.closest?.('a[data-offer-jump]');
+      if (!jump) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const offers = [...documentRoot.querySelectorAll('.offer-callout,.offer-inline')];
+      const next = offers.find(item => item.getBoundingClientRect().top > 80) || offers.at(-1);
+      next?.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }, true);
+    documentRoot.addEventListener('submit', event => event.preventDefault(), true);
+    update();
+  }
+
   function wireFrame(documentRoot) {
     if (documentRoot.documentElement.dataset.funnelReviewWired === 'true') return;
     documentRoot.documentElement.dataset.funnelReviewWired = 'true';
@@ -797,7 +921,7 @@
       const sectionLink = event.target.closest?.('[data-funnel-working-label]');
       if (sectionLink) {
         event.preventDefault(); event.stopPropagation();
-        const href = safe(sectionLink.href);
+        const href = withView(sectionLink.href);
         if (href) window.open(href, '_blank', 'noopener');
         return;
       }
@@ -823,7 +947,7 @@
     state.frameReady = false;
     const area = $('review-frame-message');
     if (!area) return;
-    const href = safe(url);
+    const href = withView(url);
     area.hidden = false;
     area.innerHTML = `<strong>The working preview could not open.</strong><p>${esc(message)}</p><button type="button" id="review-frame-retry">Retry preview</button>${href ? `<a href="${esc(href)}" target="_blank" rel="noopener">Open this working version ↗</a>` : ''}`;
     $('review-frame-retry').onclick = () => { const frame = $('review-frame'); delete frame.dataset.reviewUrl; loadFrame(currentRevisionUrl()); };
@@ -831,7 +955,7 @@
 
   function loadFrame(url) {
     const frame = $('review-frame');
-    const href = safe(url);
+    const href = previewEmbedUrl(url);
     if (!frame || !href) return frameError('The private working page link is unavailable.', url);
     if (frame.dataset.loadedUrl === href && state.frameReady) {
       markLabels();
@@ -882,6 +1006,9 @@
               || (actual?.text || null) !== (expected?.text || null)) failures.push(binding.sectionId);
         }
         if (failures.length) throw Error(`The section labels could not be verified for Version ${expectedDraft.version}. Retry the preview. Your saved page is intact.`);
+        banner.style.setProperty('display', 'none', 'important');
+        banner.setAttribute('aria-hidden', 'true');
+        wireSafeWorkingRuntime(documentRoot);
         wireFrame(documentRoot);
         frame.dataset.loadedUrl = href;
         frame.dataset.loading = 'false';
@@ -889,8 +1016,9 @@
         if (message) message.hidden = true;
         markLabels();
         resizeObserver?.disconnect();
-        resizeObserver = new ResizeObserver(markLabels);
+        resizeObserver = new ResizeObserver(() => { fitPreview(); markLabels(); });
         resizeObserver.observe(frame);
+        resizeObserver.observe($('review-frame-shell'));
         state.pendingScroll = true;
         scrollSelected();
       } catch (error) {
@@ -934,6 +1062,7 @@
       });
     });
     $('review-image')?.addEventListener('change', event => acceptFile(event.target.files?.[0]));
+    $('review-view-scope')?.addEventListener('change', event => { state.viewScope = event.target.value; });
     const dropzone = $('review-dropzone');
     if (dropzone) {
       for (const type of ['dragenter', 'dragover']) dropzone.addEventListener(type, event => {
@@ -1044,13 +1173,15 @@
           editId: node.editId,
           expectedRevision: state.draft.revision,
           operation,
+          view: selectedView(),
+          scope: state.viewScope === 'shared' ? 'shared' : selectedView(),
           material: changeMaterial(node, entry, attachmentId),
           changeSummary: entry.changeSummary.trim(),
           releaseType: entry.releaseType,
         }),
       });
       clearScratch(node);
-      state.draft = response.draft;
+      state.draft = activeDraft(response.draft);
       state.user = response.user || state.user;
       document.dispatchEvent(new Event('tracker:working-saved'));
       state.picked = state.draft.editableNodes.find(item => item.editId === node.editId) || null;
@@ -1070,7 +1201,7 @@
     } catch (error) {
       if (error.status === 409 && error.result?.draft) {
         state.conflict = {
-          latest: error.result.draft,
+          latest: activeDraft(error.result.draft),
           editId: node.editId,
           desired: node.type === 'text'
             ? {type: 'text', text: entry.text}
@@ -1090,7 +1221,7 @@
     if (!state.conflict?.latest) return;
     const editId = state.conflict.editId;
     const previous = state.draft;
-    const latest = state.conflict.latest;
+    const latest = activeDraft(state.conflict.latest);
     rebaseCleanScratch(previous, latest);
     state.draft = latest;
     state.picked = state.draft.editableNodes.find(item => item.editId === editId) || null;
@@ -1161,7 +1292,7 @@
           note: $('review-live-note')?.value.trim() || undefined,
         }),
       });
-      state.draft = response.draft;
+      state.draft = activeDraft(response.draft);
       document.dispatchEvent(new Event('tracker:working-saved'));
       state.notice = {text: 'Published confirmation recorded.', kind: 'success'};
       renderPagePair();
@@ -1213,6 +1344,8 @@
     root = $('review-workspace');
     if (!root) return;
     const initialRoute = new URLSearchParams(location.search);
+    const requestedView = initialRoute.get('view');
+    state.view = requestedView === 'mobile' ? 'mobile' : 'desktop';
     const initialFamily = initialRoute.get('page');
     if (['lander', 'bc', 'results', 'join', 'corporate'].includes(initialFamily)) state.family = initialFamily;
     const initialVariant = initialRoute.get('variant');

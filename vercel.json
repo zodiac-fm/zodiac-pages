@@ -22,7 +22,7 @@
   "rewrites": [
     {
       "source": "/funnel/working/:pageKey",
-      "destination": "/api/funnel-review?action=draft-html&pageKey=:pageKey"
+      "destination": "/api/funnel-review?action=draft-html&pageKey=:pageKey&standalone=1"
     },
     {
       "source": "/ios-results",

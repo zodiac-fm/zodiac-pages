@@ -14,11 +14,17 @@ const {
   compareLiveSourceEvidence,
   renderWorkingPage,
   revisionSyncState,
+  normalizedView,
   validPageKey,
 } = require('../lib/funnel-tracker/draft-store');
 const {captureDraftRevision} = require('../lib/funnel-tracker/draft-capture');
 const {getTarget, pairedLiveTargets} = require('../lib/funnel-tracker/production-catalog');
-const {fetchVerifiedLiveSource, buildVerifiedLiveRuntimeMap, LiveSourceError} = require('../lib/funnel-tracker/live-source');
+const {
+  fetchVerifiedLiveSource,
+  fetchVerifiedLiveViews,
+  buildVerifiedLiveRuntimeMap,
+  LiveSourceError,
+} = require('../lib/funnel-tracker/live-source');
 const {requestOidcTokenProvider} = require('../lib/funnel-tracker/production-monitor');
 const {workStore, InvalidWorkDataError, WorkStoreConflictError} = require('../lib/funnel-tracker/work-store');
 const {
@@ -132,9 +138,10 @@ function parsedJsonBody(req, maxBytes = 64 * 1024) {
   }
 }
 
-function redirectToTracker(res, pageKey) {
+function redirectToTracker(res, pageKey, view = null) {
   const target = getTarget(pageKey);
-  const params = new URLSearchParams({mode: 'review', page: target.family, variant: target.variant, pageKey});
+  const params = new URLSearchParams({mode:'review',page:target.family,variant:target.variant,pageKey});
+  if (view !== null && view !== '') params.set('view', normalizedView(view) || 'desktop');
   res.statusCode = 302;
   res.setHeader('Cache-Control', 'private, no-store');
   res.setHeader('Location', `/funnel/tracker?${params}`);
@@ -154,6 +161,35 @@ function sendWorkingHtml(res, html, req) {
   res.setHeader('Referrer-Policy', 'same-origin');
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
   res.setHeader('Content-Security-Policy', `default-src 'self' https: data: blob:; script-src 'nonce-${nonce}'; style-src 'self' 'unsafe-inline' https:; object-src 'none'; base-uri 'self' https://zodiac-pages.vercel.app https://zodiac.fm https://app.zodiac.fm; frame-ancestors 'self'; form-action 'self' https://zodiac-pages.vercel.app`);
+  return res.end(html);
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function sendWorkingShell(res, req, {pageKey, revisionId, view, draft}) {
+  const origin = expectedOrigin(req);
+  const width = view === 'mobile' ? 390 : 1280;
+  const label = view === 'mobile' ? 'Mobile web' : 'Desktop web';
+  const revision = draft.history.find(item => item.id === revisionId);
+  const version = revision?.version ? `Version ${revision.version}`
+    : `Setup archive ${revision?.archiveNumber || 1}`;
+  const status = revision?.sync?.status === 'synced' ? 'Synced' : 'Unsynced';
+  const identity = `${draft.baseLabel} · ${label} · ${version} · ${status}`;
+  const params = new URLSearchParams({
+    action:'draft-html',pageKey,revision:revisionId,view,embedded:'1',
+  });
+  const source = `${origin}/api/funnel-review?${params}`;
+  const html = `<!doctype html><html lang="en" data-funnel-working-shell><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(identity)}</title><style>html,body{margin:0;min-height:100%;background:#eeeaf1;color:#211b2a;font:14px/1.4 system-ui,sans-serif}.working-shell{padding:12px}.working-shell__title{margin:0 0 10px;font-weight:750}.working-shell__viewport{overflow:auto;width:${width}px;max-width:100%;margin-inline:auto;border:1px solid #cfc7d4;border-radius:8px;background:#fff;box-shadow:0 8px 30px #211b2a1c}.working-shell iframe{display:block;width:${width}px;height:900px;border:0;background:#fff}</style></head><body data-funnel-working-shell><main class="working-shell"><p class="working-shell__title">${escapeHtml(identity)} · ${width}px viewport</p><div class="working-shell__viewport"><iframe id="funnel-working-view-frame" title="${escapeHtml(`${label} working page`)}" src="${escapeHtml(source)}"></iframe></div></main></body></html>`;
+  res.statusCode = 200;
+  res.setHeader('Cache-Control', 'private, no-store');
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'same-origin');
+  res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  res.setHeader('Content-Security-Policy', "default-src 'none'; frame-src 'self'; style-src 'unsafe-inline'; frame-ancestors 'self'; base-uri 'none'");
   return res.end(html);
 }
 
@@ -206,25 +242,95 @@ function createHandler({
   tracker = blobStore,
   sourceFetcher = fetchCanonicalDraft,
   liveSourceFetcher = fetchVerifiedLiveSource,
+  liveViewsFetcher = fetchVerifiedLiveViews,
   captureRevision = captureDraftRevision,
   work = workStore,
 } = {}) {
-  async function withLiveCheck(req, value) {
-    let draft = publicDraft(value);
+  async function withLiveCheck(req, value, view = 'desktop') {
+    let draft = publicDraft(value, {view});
+    const tokenProvider = requestOidcTokenProvider(req);
+    if (value.views) {
+      const contexts = Object.fromEntries(['desktop','mobile'].map(checkView => {
+        const viewDraft = publicDraft(value, {view:checkView});
+        const publication = viewDraft.latestPagePublication || null;
+        const initialized = [...value.revisions].reverse().find(item => item.kind === 'initialized'
+          && (item.views?.[checkView]?.sourceEvidence || item.sourceEvidence));
+        const evidence = initialized
+          ? initialized.views?.[checkView]?.sourceEvidence || initialized.sourceEvidence : null;
+        const liveUrl = publication?.liveUrl || evidence?.liveUrl || null;
+        const channel = liveUrl
+          ? pairedLiveTargets(viewDraft.pageKey).find(item => item.productionUrl === liveUrl)?.channel
+          : null;
+        return [checkView, {viewDraft,publication,evidence,channel,
+          shouldCheck:Boolean(publication || evidence)}];
+      }));
+      if (contexts.desktop.shouldCheck || contexts.mobile.shouldCheck) {
+        const checkedAt = new Date().toISOString();
+        const checks = {desktop:null,mobile:null};
+        const statusFor = (matchStatus) => matchStatus === 'check-needed' ? 'changed'
+          : matchStatus === 'unavailable' ? 'unavailable' : 'current';
+        const checkObserved = async (checkView, observed) => {
+          if (!contexts[checkView].shouldCheck) return;
+          try {
+            const matchStatus = compareLiveSourceEvidence(value, observed.evidence, checkView);
+            checks[checkView] = {status:statusFor(matchStatus),matchStatus,checkedAt};
+          } catch {
+            checks[checkView] = {status:'unavailable',checkedAt};
+          }
+        };
+        const distinctChannels = new Set(['desktop','mobile']
+          .filter(checkView => contexts[checkView].shouldCheck)
+          .map(checkView => contexts[checkView].channel));
+        if (value.family === 'bc' || distinctChannels.size > 1) {
+          await Promise.all(['desktop','mobile'].map(async checkView => {
+            if (!contexts[checkView].shouldCheck) return;
+            try {
+              const observed = await liveSourceFetcher(draft.mainPageKey, {
+                channel:contexts[checkView].channel,view:checkView,
+                tokenProvider,
+              });
+              await checkObserved(checkView, observed);
+            } catch { checks[checkView] = {status:'unavailable',checkedAt}; }
+          }));
+        } else {
+          const representative = contexts[view].shouldCheck ? view
+            : contexts.desktop.shouldCheck ? 'desktop' : 'mobile';
+          try {
+            const observed = await liveSourceFetcher(draft.mainPageKey, {
+              channel:contexts[representative].channel,view:representative,
+              tokenProvider,
+            });
+            await Promise.all(['desktop','mobile'].map(checkView => checkObserved(checkView, observed)));
+          } catch {
+            for (const checkView of ['desktop','mobile']) {
+              if (contexts[checkView].shouldCheck) checks[checkView] = {status:'unavailable',checkedAt};
+            }
+          }
+        }
+        const syncStatusByView = Object.fromEntries(['desktop','mobile'].map(checkView => [
+          checkView,checks[checkView]?.status || null,
+        ]));
+        draft = publicDraft(value, {syncStatusByView,view});
+        draft.liveChecks = checks;
+        draft.liveCheck = checks[view];
+        return draft;
+      }
+      return draft;
+    }
     const publication = draft.latestPagePublication?.revisionId === draft.revision ? draft.latestPagePublication : null;
     if (draft.liveSource || publication) {
       const checkedAt = new Date().toISOString();
       try {
         const channel = publication ? pairedLiveTargets(draft.pageKey).find(item => item.productionUrl === publication.liveUrl)?.channel : draft.liveSource.channel;
         const observed = await liveSourceFetcher(draft.mainPageKey, {
-          channel, tokenProvider: requestOidcTokenProvider(req),
+          channel, view, tokenProvider,
         });
-        const matchStatus = compareLiveSourceEvidence(value, observed.evidence);
+        const matchStatus = compareLiveSourceEvidence(value, observed.evidence, view);
         draft.liveCheck = {status: matchStatus === 'check-needed' ? 'changed' : matchStatus === 'unavailable' ? 'unavailable' : 'current', matchStatus, checkedAt};
       } catch { draft.liveCheck = {status: 'unavailable', checkedAt}; }
     }
     const liveCheck = draft.liveCheck;
-    draft = publicDraft(value, {syncStatus: liveCheck?.status || null});
+    draft = publicDraft(value, {syncStatus: liveCheck?.status || null,view});
     if (liveCheck) draft.liveCheck = liveCheck;
     return draft;
   }
@@ -236,7 +342,7 @@ function createHandler({
     if (!identity) {
       const pageKey = params.get('pageKey');
       if (req.method === 'GET' && action === 'draft-html' && validPageKey(pageKey)
-          && !hasAuthorizationHeader(req)) return redirectToTracker(res, pageKey);
+          && !hasAuthorizationHeader(req)) return redirectToTracker(res, pageKey, params.get('view'));
       return fail(res, 401, hasAuthorizationHeader(req) ? 'agent_access_denied' : 'company_access_required');
     }
     if (!storageConfigured()) return fail(res, 503, 'storage_not_configured', {setupPending: true, user: identity.user});
@@ -377,11 +483,12 @@ function createHandler({
 
     if (req.method === 'GET' && action === 'draft') {
       const pageKey = params.get('pageKey');
-      if (!validPageKey(pageKey)) return fail(res, 400, 'invalid_draft');
+      const view = normalizedView(params.get('view'));
+      if (!validPageKey(pageKey) || !view) return fail(res, 400, 'invalid_draft');
       try {
         const current = await drafts.getDraft(pageKey);
         if (!current.draft) return fail(res, 404, 'draft_not_found');
-        const draft = await withLiveCheck(req, current.draft);
+        const draft = await withLiveCheck(req, current.draft, view);
         return sendJson(res, 200, {draft, user: identity.user});
       } catch (error) {
         if (error instanceof InvalidDraftDataError) return fail(res, 400, 'invalid_draft');
@@ -392,15 +499,29 @@ function createHandler({
     if (req.method === 'GET' && action === 'draft-html') {
       if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) return fail(res, 403, 'agent_scope_denied');
       const pageKey = params.get('pageKey');
-      if (!validPageKey(pageKey)) return fail(res, 404, 'draft_not_found');
+      const view = normalizedView(params.get('view'));
+      if (!validPageKey(pageKey) || !view) return fail(res, 404, 'draft_not_found');
       try {
         const current = await drafts.getDraft(pageKey);
         if (!current.draft) return fail(res, 404, 'draft_not_found');
         const revisionId = params.get('revision') || current.draft.currentRevisionId;
-        const result = await drafts.getHtmlByRevision(current.draft, revisionId);
+        const result = await drafts.getHtmlByRevision(current.draft, revisionId, view);
         if (!result) return fail(res, 404, 'draft_not_found');
-        const checked = revisionId === current.draft.currentRevisionId ? await withLiveCheck(req, current.draft) : null;
-        return sendWorkingHtml(res, renderWorkingPage(current.draft, result.html, revisionId, {syncStatus:checked?.liveCheck?.status || null}), req);
+        const checked = revisionId === current.draft.currentRevisionId
+          ? await withLiveCheck(req, current.draft, view) : null;
+        const publicValue = checked || publicDraft(current.draft, {view});
+        if (params.get('standalone') === '1' && params.get('embedded') !== '1') {
+          return sendWorkingShell(res, req, {pageKey,revisionId,view,draft:publicValue});
+        }
+        return sendWorkingHtml(res, renderWorkingPage(current.draft, result.html, revisionId, {
+          syncStatus:checked?.liveCheck?.status || null,
+          syncStatusByView:checked?.liveChecks ? Object.fromEntries(
+            ['desktop','mobile'].map(checkView => [
+              checkView,checked.liveChecks[checkView]?.status || null,
+            ]),
+          ) : null,
+          view,
+        }), req);
       } catch {
         return fail(res, 503, 'review_unavailable');
       }
@@ -410,9 +531,10 @@ function createHandler({
       if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) return fail(res, 403, 'agent_scope_denied');
       const pageKey = params.get('pageKey');
       const revisionId = params.get('revision');
-      if (!validPageKey(pageKey) || typeof revisionId !== 'string') return fail(res, 404, 'draft_not_found');
+      const view = normalizedView(params.get('view'));
+      if (!validPageKey(pageKey) || typeof revisionId !== 'string' || !view) return fail(res, 404, 'draft_not_found');
       try {
-        const result = await drafts.getScreenshot(pageKey, revisionId);
+        const result = await drafts.getScreenshot(pageKey, revisionId, view);
         if (!result) return fail(res, 404, 'draft_not_found');
         return sendPng(res, result.image);
       } catch {
@@ -504,11 +626,68 @@ function createHandler({
       }
     }
 
+    if (req.method === 'POST' && action === 'initialize-views') {
+      if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) return fail(res, 403, 'agent_scope_denied');
+      if (!isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
+      const body = parsedJsonBody(req);
+      const view = normalizedView(body?.view);
+      if (!body || !validPageKey(body.pageKey)
+          || !(body.expectedRevision === null || typeof body.expectedRevision === 'string')
+          || !view || typeof liveViewsFetcher !== 'function') {
+        return fail(res, 400, 'invalid_draft');
+      }
+      try {
+        const existing = await drafts.getDraft(body.pageKey);
+        if ((existing.draft && existing.draft.currentRevisionId !== body.expectedRevision)
+            || (!existing.draft && body.expectedRevision !== null)) {
+          throw new DraftStoreConflictError('draft revision conflict');
+        }
+        if (existing.draft?.views) {
+          return sendJson(res, 200, {
+            draft:publicDraft(existing.draft, {view}),user:identity.user,initialized:false,
+          });
+        }
+        const [mapResult, trackerResult] = await Promise.all([store.readMap(), tracker.read()]);
+        const sectionNames = Object.fromEntries(
+          trackerResult.data.sections.map(section => [section.id, section.name]),
+        );
+        const source = await liveViewsFetcher(body.pageKey, {
+          referenceMap:mapResult.data,
+          sectionNames,
+          tokenProvider:requestOidcTokenProvider(req),
+        });
+        const initialized = await drafts.initializeViews({
+          pageKey:body.pageKey,
+          expectedRevision:body.expectedRevision,
+          sources:source.sources,
+          sectionNames:{...sectionNames,...(source.sectionNames || {})},
+          editor:identity.user,
+        });
+        return sendJson(res, 201, {
+          draft:publicDraft(initialized.draft, {view}),user:identity.user,initialized:true,
+        });
+      } catch (error) {
+        if (error instanceof DraftStoreConflictError) {
+          const latest = await drafts.getDraft(body.pageKey).catch(() => null);
+          return fail(res, 409, error.message === 'draft_has_unmerged_edits'
+            ? 'draft_has_unmerged_edits' : 'draft_conflict', {
+            draft:latest?.draft ? publicDraft(latest.draft, {view}) : null,
+          });
+        }
+        if (error instanceof InvalidDraftDataError) return fail(res, 400, 'invalid_draft');
+        if (error instanceof LiveSourceError) return fail(res, 503, 'live_source_unavailable');
+        return fail(res, 503, 'review_unavailable');
+      }
+    }
+
     if (req.method === 'POST' && action === 'initialize-draft') {
       if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) return fail(res, 403, 'agent_scope_denied');
       if (!isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
       const body = parsedJsonBody(req);
       if (!body || !validPageKey(body.pageKey)) return fail(res, 400, 'invalid_draft');
+      if (['bc','join'].includes(getTarget(body.pageKey)?.family)) {
+        return fail(res, 400, 'invalid_draft');
+      }
       try {
         const existing = await drafts.getDraft(body.pageKey);
         if (existing.draft && !publicDraft(existing.draft).sourceOutdated) {
@@ -560,6 +739,8 @@ function createHandler({
       if (identity.kind === 'browser' && !isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
       const body = parsedJsonBody(req);
       if (!body) return fail(res, 400, 'invalid_draft');
+      const view = normalizedView(body.view);
+      if (!view) return fail(res, 400, 'invalid_draft');
       if (identity.kind === 'agent' && (body.operation?.type !== 'text' || body.material?.attachmentId !== undefined)) {
         return fail(res, 403, 'agent_scope_denied');
       }
@@ -581,16 +762,25 @@ function createHandler({
           expectedRevision: body.expectedRevision,
           operation: body.operation,
           material: body.material,
+          view,
+          scope:body.scope,
           releaseType: body.releaseType,
           changeSummary: body.changeSummary,
           editor: identity.user,
         });
         let latest = changed.draft;
-        try {
-          await captureRevision(body.pageKey, changed.revision.id, {drafts, review: store});
-          latest = (await drafts.getDraft(body.pageKey)).draft || latest;
-        } catch {}
-        const publicLatest = publicDraft(latest);
+        const captureViews = !changed.draft.views ? ['desktop']
+          : (body.scope === undefined || body.scope === null || body.scope === ''
+            || body.scope === 'shared') ? ['desktop','mobile'] : [view];
+        for (const captureView of captureViews) {
+          try {
+            await captureRevision(body.pageKey, changed.revision.id, {
+              drafts,review:store,view:captureView,
+            });
+            latest = (await drafts.getDraft(body.pageKey)).draft || latest;
+          } catch {}
+        }
+        const publicLatest = publicDraft(latest, {view});
         return sendJson(res, 201, {
           draft: publicLatest,
           user: identity.user,
@@ -600,7 +790,9 @@ function createHandler({
         if (error instanceof DraftStoreConflictError) {
           try {
             const latest = await drafts.getDraft(body.pageKey);
-            return fail(res, 409, 'draft_conflict', {draft: latest.draft ? publicDraft(latest.draft) : null});
+            return fail(res, 409, 'draft_conflict', {
+              draft:latest.draft ? publicDraft(latest.draft, {view}) : null,
+            });
           } catch {
             return fail(res, 409, 'draft_conflict');
           }
@@ -615,6 +807,8 @@ function createHandler({
       if (!isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
       const body = parsedJsonBody(req);
       if (!body) return fail(res, 400, 'invalid_publication');
+      const view = normalizedView(body.view);
+      if (!view) return fail(res, 400, 'invalid_publication');
       try {
         let liveEvidence = {};
         if (action === 'confirm-page-published') {
@@ -630,11 +824,13 @@ function createHandler({
           }
         }
         const confirmed = await drafts.confirmPublished({
-          pageKey:body.pageKey,revisionId:body.revisionId,sectionId:action === 'confirm-page-published' ? null : body.sectionId,
+          pageKey:body.pageKey,revisionId:body.revisionId,
+          sectionId:action === 'confirm-page-published' ? null : body.sectionId,
+          view,
           confirmed:body.confirmed,liveUrl:body.liveUrl,note:body.note,...liveEvidence,editor:identity.user,
         });
         return sendJson(res, 201, {
-          draft: publicDraft(confirmed.draft),
+          draft: publicDraft(confirmed.draft, {view}),
           user: identity.user,
           publication: confirmed.publication,
         });

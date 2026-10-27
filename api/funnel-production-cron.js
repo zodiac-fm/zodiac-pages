@@ -5,6 +5,7 @@ const {TARGETS} = require('../lib/funnel-tracker/production-catalog');
 const {capturePendingDrafts} = require('../lib/funnel-tracker/draft-capture');
 const {checkAllTargets, requestOidcTokenProvider} = require('../lib/funnel-tracker/production-monitor');
 const {productionStorageConfigured, productionStore} = require('../lib/funnel-tracker/production-store');
+const {initializeWorkingViews} = require('../lib/funnel-tracker/view-initialization');
 
 function sendJson(res, status, payload, headers = {}) {
   res.statusCode = status;
@@ -47,6 +48,7 @@ function createHandler({
   targets = TARGETS,
   checkAll = checkAllTargets,
   captureDrafts = capturePendingDrafts,
+  initializeViews = initializeWorkingViews,
   now = () => new Date(),
 } = {}) {
   return async function handler(req, res) {
@@ -59,6 +61,18 @@ function createHandler({
       return sendJson(res, 503, {ok: false, error: 'storage_not_configured'});
     }
     const checkedAt = now().toISOString();
+    const params = new URL(req.url || '/', 'https://zodiac-pages.vercel.app').searchParams;
+    if (params.get('operation') === 'initialize-views') {
+      try {
+        const result = await initializeViews({pageKey:params.get('pageKey'),
+          expectedRevision:params.get('expectedRevision'),tokenProvider:requestOidcTokenProvider(req)});
+        return sendJson(res, 200, {ok:true,pageKey:result.pageKey,initialized:result.initialized,
+          revision:result.draft.revision,version:result.draft.version,sync:result.draft.sync,
+          views:Object.fromEntries(Object.entries(result.draft.views).map(([view,value])=>[view,{sync:value.sync,workingUrl:value.workingUrl}]))});
+      } catch (error) {
+        return sendJson(res, 409, {ok:false,error:error?.code || error?.message || 'view_initialization_failed'});
+      }
+    }
     try {
       const results = (await checkAll(targets, {
         store,
