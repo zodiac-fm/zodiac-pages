@@ -1,8 +1,14 @@
 'use strict';
 
-const {randomBytes} = require('node:crypto');
+const {createHmac, randomBytes, timingSafeEqual} = require('node:crypto');
 
-const {authConfigured, hasAuthorizationHeader, readAgentToken, readSession} = require('../lib/funnel-tracker/session');
+const {
+  authConfigured,
+  configuredSessionSecret,
+  hasAuthorizationHeader,
+  readAgentToken,
+  readSession,
+} = require('../lib/funnel-tracker/session');
 const {blobStore, storageConfigured} = require('../lib/funnel-tracker/blob-store');
 const {
   DraftStoreConflictError,
@@ -65,6 +71,89 @@ const MESSAGES = Object.freeze({
   same_origin_required: 'Open the tracker page directly before uploading a private image.',
   storage_not_configured: 'Shared tracker storage has not been configured yet.',
 });
+const WORKING_CHECK_SECONDS = 2 * 60;
+const LIVE_CHECK_STATUSES = new Set(['current', 'changed', 'unavailable']);
+
+function workingCheckSignature(encoded, environment = process.env) {
+  const secret = configuredSessionSecret(environment);
+  if (!secret) return null;
+  return createHmac('sha256', secret)
+    .update('funnel-working-check-v1\n', 'ascii')
+    .update(encoded, 'ascii')
+    .digest('base64url');
+}
+
+function workingCheckSubjectDigest(subject, environment = process.env) {
+  const secret = configuredSessionSecret(environment);
+  if (!secret || typeof subject !== 'string' || !/^[A-Za-z0-9_-]{6,255}$/.test(subject)) {
+    return null;
+  }
+  return createHmac('sha256', secret)
+    .update('funnel-working-check-subject-v1\n', 'ascii')
+    .update(subject, 'utf8')
+    .digest('base64url');
+}
+
+function createWorkingCheckReceipt(draft, pageKey, revisionId, subject, {
+  environment = process.env,
+  now = new Date(),
+} = {}) {
+  const subjectDigest = workingCheckSubjectDigest(subject, environment);
+  if (!draft || draft.revision !== revisionId || !validPageKey(pageKey) || !subjectDigest
+      || !draft.liveChecks || !['desktop', 'mobile'].every(view => (
+        LIVE_CHECK_STATUSES.has(draft.liveChecks[view]?.status)
+      ))) return null;
+  const issuedAt = Math.floor(now.getTime() / 1000);
+  const payload = {
+    v:1,
+    kind:'working-check',
+    pageKey,
+    revisionId,
+    subjectDigest,
+    statuses:{
+      desktop:draft.liveChecks.desktop.status,
+      mobile:draft.liveChecks.mobile.status,
+    },
+    iat:issuedAt,
+    exp:issuedAt + WORKING_CHECK_SECONDS,
+  };
+  const encoded = Buffer.from(JSON.stringify(payload), 'utf8').toString('base64url');
+  const signature = workingCheckSignature(encoded, environment);
+  return signature ? `${encoded}.${signature}` : null;
+}
+
+function readWorkingCheckReceipt(value, pageKey, revisionId, subject, {
+  environment = process.env,
+  now = () => new Date(),
+} = {}) {
+  if (typeof value !== 'string' || value.length > 2048) return null;
+  const parts = value.split('.');
+  if (parts.length !== 2 || !parts[0] || !parts[1]) return null;
+  const signature = workingCheckSignature(parts[0], environment);
+  if (!signature) return null;
+  const actual = Buffer.from(parts[1], 'base64url');
+  const expected = Buffer.from(signature, 'base64url');
+  if (actual.length !== expected.length || !timingSafeEqual(actual, expected)) return null;
+  let payload;
+  try { payload = JSON.parse(Buffer.from(parts[0], 'base64url').toString('utf8')); }
+  catch { return null; }
+  if (!payload || Object.keys(payload).sort().join(',')
+      !== 'exp,iat,kind,pageKey,revisionId,statuses,subjectDigest,v'
+      || payload.v !== 1 || payload.kind !== 'working-check'
+      || payload.pageKey !== pageKey || payload.revisionId !== revisionId
+      || !payload.statuses || Object.keys(payload.statuses).sort().join(',') !== 'desktop,mobile'
+      || !['desktop', 'mobile'].every(view => LIVE_CHECK_STATUSES.has(payload.statuses[view]))
+      || !Number.isSafeInteger(payload.iat) || !Number.isSafeInteger(payload.exp)
+      || payload.exp !== payload.iat + WORKING_CHECK_SECONDS) return null;
+  const subjectDigest = workingCheckSubjectDigest(subject, environment);
+  if (!subjectDigest || typeof payload.subjectDigest !== 'string') return null;
+  const actualSubject = Buffer.from(payload.subjectDigest, 'base64url');
+  const expectedSubject = Buffer.from(subjectDigest, 'base64url');
+  if (actualSubject.length !== expectedSubject.length
+      || !timingSafeEqual(actualSubject, expectedSubject)) return null;
+  const current = Math.floor(now().getTime() / 1000);
+  return payload.iat <= current + 60 && payload.exp > current ? payload : null;
+}
 
 function setSecurityHeaders(res) {
   res.setHeader('Cache-Control', 'private, no-store');
@@ -193,6 +282,10 @@ function sendWorkingShell(res, req, {pageKey, revisionId, view, draft}) {
   const params = new URLSearchParams({
     action:'draft-html',pageKey,revision:revisionId,view,embedded:'1',
   });
+  const checkReceipt = createWorkingCheckReceipt(
+    draft, pageKey, revisionId, requestIdentity(req)?.user?.sub,
+  );
+  if (checkReceipt) params.set('check', checkReceipt);
   const source = `${origin}/api/funnel-review?${params}`;
   const html = `<!doctype html><html lang="en" data-funnel-working-shell><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(identity)}</title><style>html,body{margin:0;min-height:100%;background:#eeeaf1;color:#211b2a;font:14px/1.4 system-ui,sans-serif}.working-shell{padding:12px}.working-shell__title{margin:0 0 10px;font-weight:750}.working-shell__viewport{overflow:auto;width:${width}px;max-width:100%;margin-inline:auto;border:1px solid #cfc7d4;border-radius:8px;background:#fff;box-shadow:0 8px 30px #211b2a1c}.working-shell iframe{display:block;width:${width}px;height:900px;border:0;background:#fff}</style></head><body data-funnel-working-shell><main class="working-shell"><p class="working-shell__title">${escapeHtml(identity)} · ${width}px viewport</p><div class="working-shell__viewport"><iframe id="funnel-working-view-frame" title="${escapeHtml(`${label} working page`)}" src="${escapeHtml(source)}"></iframe></div></main></body></html>`;
   res.statusCode = 200;
@@ -560,8 +653,26 @@ function createHandler({
         const revisionId = params.get('revision') || current.draft.currentRevisionId;
         const result = await drafts.getHtmlByRevision(current.draft, revisionId, view);
         if (!result) return fail(res, 404, 'draft_not_found');
-        const checked = revisionId === current.draft.currentRevisionId
-          ? await withLiveCheck(req, current.draft, view) : null;
+        const inheritedCheck = params.get('embedded') === '1'
+          ? readWorkingCheckReceipt(
+            params.get('check'), pageKey, revisionId, identity.user.sub,
+          ) : null;
+        let checked = null;
+        if (revisionId === current.draft.currentRevisionId) {
+          if (inheritedCheck) {
+            checked = publicDraft(current.draft, {
+              view,
+              syncStatusByView:inheritedCheck.statuses,
+            });
+            checked.liveChecks = Object.fromEntries(['desktop', 'mobile'].map(checkView => [
+              checkView,
+              {status:inheritedCheck.statuses[checkView],checkedAt:new Date(inheritedCheck.iat * 1000).toISOString()},
+            ]));
+            checked.liveCheck = checked.liveChecks[view];
+          } else {
+            checked = await withLiveCheck(req, current.draft, view);
+          }
+        }
         const publicValue = checked || publicDraft(current.draft, {view});
         if (params.get('standalone') === '1' && params.get('embedded') !== '1') {
           return sendWorkingShell(res, req, {pageKey,revisionId,view,draft:publicValue});
@@ -890,11 +1001,13 @@ function createHandler({
 const handler = createHandler();
 module.exports = handler;
 module.exports._test = {
+  createWorkingCheckReceipt,
   createHandler,
   expectedOrigin,
   isSameOrigin,
   query,
   rawBody,
+  readWorkingCheckReceipt,
   parsedJsonBody,
   requestIdentity,
 };

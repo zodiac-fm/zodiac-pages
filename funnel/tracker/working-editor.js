@@ -361,14 +361,15 @@
   document.addEventListener('mouseout', event => event.target.closest?.('[data-funnel-edit-id]')?.classList.remove('working-editor-hover'));
   document.addEventListener('focusin', event => event.target.closest?.('[data-funnel-edit-id]')?.classList.add('working-editor-hover'));
   document.addEventListener('focusout', event => event.target.closest?.('[data-funnel-edit-id]')?.classList.remove('working-editor-hover'));
-  window.addEventListener('hashchange', () => {
-    const match = /^#funnel-section-(.+)$/.exec(location.hash);
+  hostWindow().addEventListener('hashchange', () => {
+    const match = /^#funnel-section-(.+)$/.exec(hostWindow().location.hash);
     if (match) { try { visitSection(decodeURIComponent(match[1])); } catch {} }
   });
 
+  const initialSection = /^#funnel-section-(.+)$/.exec(hostWindow().location.hash);
+  if (initialSection) { try { visitSection(decodeURIComponent(initialSection[1]), 'auto'); } catch {} }
+
   loadDraft().then(() => {
     if (!isCurrent()) open.disabled = true;
-    const match = /^#funnel-section-(.+)$/.exec(location.hash);
-    if (match) { try { visitSection(decodeURIComponent(match[1]), 'auto'); } catch {} }
   }).catch(() => { open.disabled = true; });
 })();
