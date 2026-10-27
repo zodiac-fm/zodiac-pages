@@ -2,7 +2,7 @@
 
 const {timingSafeEqual} = require('node:crypto');
 const {TARGETS} = require('../lib/funnel-tracker/production-catalog');
-const {capturePendingDrafts} = require('../lib/funnel-tracker/draft-capture');
+const {captureDraftRevision, capturePendingDrafts} = require('../lib/funnel-tracker/draft-capture');
 const {checkAllTargets, requestOidcTokenProvider} = require('../lib/funnel-tracker/production-monitor');
 const {productionStorageConfigured, productionStore} = require('../lib/funnel-tracker/production-store');
 const {initializeWorkingViews} = require('../lib/funnel-tracker/view-initialization');
@@ -49,6 +49,7 @@ function createHandler({
   checkAll = checkAllTargets,
   captureDrafts = capturePendingDrafts,
   initializeViews = initializeWorkingViews,
+  captureRevision = captureDraftRevision,
   now = () => new Date(),
 } = {}) {
   return async function handler(req, res) {
@@ -66,8 +67,19 @@ function createHandler({
       try {
         const result = await initializeViews({pageKey:params.get('pageKey'),
           expectedRevision:params.get('expectedRevision'),tokenProvider:requestOidcTokenProvider(req)});
+        const captures = [];
+        if (result.initialized) {
+          for (const view of ['desktop', 'mobile']) {
+            try {
+              captures.push(await captureRevision(result.pageKey, result.draft.revision, {view}));
+            } catch {
+              captures.push({view, status:'error', error:{code:'draft_capture_unavailable'}});
+            }
+          }
+        }
         return sendJson(res, 200, {ok:true,pageKey:result.pageKey,initialized:result.initialized,
           revision:result.draft.revision,version:result.draft.version,sync:result.draft.sync,
+          captures,
           views:Object.fromEntries(Object.entries(result.draft.views).map(([view,value])=>[view,{sync:value.sync,workingUrl:value.workingUrl}]))});
       } catch (error) {
         return sendJson(res, 409, {ok:false,error:error?.code || error?.message || 'view_initialization_failed'});

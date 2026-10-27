@@ -49,7 +49,13 @@
   }
 
   function syncStatus(value) {
-    return value?.sync?.status || value?.status || 'unavailable';
+    const sync = value?.sync || value;
+    const status = sync?.status || value?.status;
+    if (status === 'unsynced') return 'unsynced';
+    const views = sync?.views || value?.views || {};
+    const unavailable = sync?.checkStatus === 'unavailable' || value?.checkStatus === 'unavailable'
+      || Object.values(views).some(view => (view?.sync || view)?.checkStatus === 'unavailable');
+    return unavailable ? 'unavailable' : status || 'unavailable';
   }
 
   function activeDraft(value = state.draft) {
@@ -468,11 +474,14 @@
     const live = draft.liveSource;
     const canSync = ['lander', 'results'].includes(draft.family) && !draft.variation;
     const overallSync = draft.viewSync || draft.overallSync || draft.sync;
-    const synced = overallSync?.status === 'synced';
-    const selectedSynced = draft.sync?.status === 'synced';
+    const overallStatus = syncStatus(overallSync);
+    const selectedStatus = syncStatus(draft.sync);
+    const synced = overallStatus === 'synced';
+    const selectedSynced = selectedStatus === 'synced';
     const selectedName = selectedView() === 'mobile' ? 'Mobile web' : 'Desktop web';
-    const status = state.syncing ? 'Copying live into the working page…' : synced ? 'Synced' : 'Unsynced';
-    const explanation = synced ? `All tracked views in Version ${draft.version} match the recorded live version.`
+    const status = state.syncing ? 'Copying live into the working page…' : overallStatus === 'unavailable' ? 'Check unavailable' : synced ? 'Synced' : 'Unsynced';
+    const explanation = overallStatus === 'unavailable' ? 'The latest live check could not finish. The saved baseline is preserved; no edit has been recorded.'
+      : synced ? `All tracked views in Version ${draft.version} match the recorded live version.`
       : selectedSynced ? `${selectedName} matches live, but Version ${draft.version} remains unsynced until both web views match.`
       : overallSync?.reason === 'live-changed' ? 'The live page changed. Review it before updating this working copy.'
         : draft.variation ? 'This variation has its own versions. Walter can publish it when it is ready.'

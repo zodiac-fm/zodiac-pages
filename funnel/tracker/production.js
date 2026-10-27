@@ -33,11 +33,13 @@
     catch(e){error=e.message;}finally{loading=false;render();}
   }
   const bcMonitorTarget = id => id==='bc-shared-direct'||id==='bc-shared-direct-mobile';
-  const comparisonVersion = targetId => targetId==='corporate-home'?'corporate-source-v1':bcMonitorTarget(targetId)?'bc-public-v1':'semantic-v2';
+  const joinMonitorTarget = id => ['join-paid-paid','join-free-affiliate','join-paid-paid-mobile','join-free-affiliate-mobile'].includes(id);
+  const comparisonVersion = targetId => targetId==='corporate-home'?'corporate-source-v1':bcMonitorTarget(targetId)?'bc-public-v1':joinMonitorTarget(targetId)?'join-snapshot-v1':'semantic-v2';
   const verifiedComparison = archive => archive?.changeSummary?.diagnosticBaseline===false
     && archive.comparisonVersion===comparisonVersion(archive.targetId);
   const earlierCorporateComparison = archive => archive.targetId==='corporate-home'&&archive.comparisonVersion!=='corporate-source-v1';
   const earlierBirthChartComparison = archive => bcMonitorTarget(archive.targetId)&&archive.comparisonVersion==='semantic-v2';
+  const earlierJoinComparison = archive => joinMonitorTarget(archive.targetId)&&archive.comparisonVersion==='semantic-v2';
   const frozenCatalogDraft = target => /^(draft-(?:lander-[gma]|results-[gma]|bc|join-(?:paid|free)))$/.test(target.id||'');
   const statusLabel = target => {
     let label={never_checked:'Awaiting first screenshot',baseline:'First screenshot saved',current:'No change at last check',changed:'Change captured',needs_connection:'Connection needed',error:'Capture failed'}[target.status]||'Awaiting first screenshot';
@@ -96,6 +98,7 @@
   function archiveTitle(archive){
     if(earlierCorporateComparison(archive))return 'Earlier screenshot';
     if(earlierBirthChartComparison(archive))return 'Earlier comparison';
+    if(earlierJoinComparison(archive))return 'Earlier comparison';
     if(archive.comparisonBaseline)return 'Verified starting point';
     if(archive.kind==='baseline')return 'Starting record';
     return verifiedComparison(archive)?'Page change captured':'Screenshot difference';
@@ -103,6 +106,7 @@
   function archiveSummary(archive){
     if(earlierCorporateComparison(archive))return 'Saved before the homepage comparison was adjusted for automatic page behavior. This is not a confirmed edit.';
     if(earlierBirthChartComparison(archive))return 'Saved before the Birth chart public-page comparison was adjusted. This is comparison history, not a confirmed edit.';
+    if(earlierJoinComparison(archive))return 'Saved before the Join page public snapshot comparison was adjusted. This is comparison history, not a confirmed edit.';
     if(archive.comparisonBaseline)return 'This screenshot is the starting point for future page comparisons.';
     if(archive.kind==='baseline')return 'First successful screenshot of this link.';
     if(verifiedComparison(archive)){

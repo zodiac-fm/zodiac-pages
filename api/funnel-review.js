@@ -181,9 +181,14 @@ function sendWorkingShell(res, req, {pageKey, revisionId, view, draft}) {
   const revision = draft.history.find(item => item.id === revisionId);
   const version = revision?.version ? `Version ${revision.version}`
     : `Setup archive ${revision?.archiveNumber || 1}`;
-  const status = revision?.sync?.status === 'synced' ? 'Synced' : 'Unsynced';
-  const overallStatus = (revision?.overallSync || revision?.sync)?.status === 'synced'
-    ? 'Synced' : 'Unsynced';
+  const activeSync = revision?.sync || null;
+  const overallSync = revision?.overallSync || activeSync;
+  const hasUnavailable = activeSync?.checkStatus === 'unavailable'
+    || Object.values(overallSync?.views || {}).some(item => item.checkStatus === 'unavailable');
+  const hasUnsynced = activeSync?.status === 'unsynced' || overallSync?.status === 'unsynced';
+  const status = hasUnsynced ? 'Unsynced' : hasUnavailable ? 'Check unavailable' : 'Synced';
+  const overallStatus = overallSync?.status === 'unsynced'
+    ? 'Unsynced' : hasUnavailable ? 'Check unavailable' : 'Synced';
   const identity = `${revision?.identity || `${draft.baseLabel} · ${version}`} · ${label} · ${status} · Overall ${overallStatus}`;
   const params = new URLSearchParams({
     action:'draft-html',pageKey,revision:revisionId,view,embedded:'1',
