@@ -1,5 +1,7 @@
 'use strict';
 
+const {randomBytes} = require('node:crypto');
+
 const {authConfigured, hasAuthorizationHeader, readAgentToken, readSession} = require('../lib/funnel-tracker/session');
 const {blobStore, storageConfigured} = require('../lib/funnel-tracker/blob-store');
 const {
@@ -140,14 +142,18 @@ function redirectToTracker(res, pageKey) {
   return res.end();
 }
 
-function sendWorkingHtml(res, html) {
+function sendWorkingHtml(res, html, req) {
+  const nonce = randomBytes(18).toString('base64');
+  const origin = expectedOrigin(req);
+  const editor = `<link rel="stylesheet" href="${origin}/funnel/tracker/working-editor.css"><script nonce="${nonce}" defer src="${origin}/funnel/tracker/working-editor.js"></script>`;
+  html = html.replace('</head>', `${editor}</head>`);
   res.statusCode = 200;
   res.setHeader('Cache-Control', 'private, no-store');
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'same-origin');
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
-  res.setHeader('Content-Security-Policy', "default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; object-src 'none'; base-uri 'self' https://zodiac-pages.vercel.app https://zodiac.fm https://app.zodiac.fm; frame-ancestors 'self'; form-action 'self' https://zodiac-pages.vercel.app");
+  res.setHeader('Content-Security-Policy', `default-src 'self' https: data: blob:; script-src 'nonce-${nonce}'; style-src 'self' 'unsafe-inline' https:; object-src 'none'; base-uri 'self' https://zodiac-pages.vercel.app https://zodiac.fm https://app.zodiac.fm; frame-ancestors 'self'; form-action 'self' https://zodiac-pages.vercel.app`);
   return res.end(html);
 }
 
@@ -204,7 +210,7 @@ function createHandler({
   work = workStore,
 } = {}) {
   async function withLiveCheck(req, value) {
-    const draft = publicDraft(value);
+    let draft = publicDraft(value);
     const publication = draft.latestPagePublication?.revisionId === draft.revision ? draft.latestPagePublication : null;
     if (draft.liveSource || publication) {
       const checkedAt = new Date().toISOString();
@@ -217,7 +223,9 @@ function createHandler({
         draft.liveCheck = {status: matchStatus === 'check-needed' ? 'changed' : matchStatus === 'unavailable' ? 'unavailable' : 'current', matchStatus, checkedAt};
       } catch { draft.liveCheck = {status: 'unavailable', checkedAt}; }
     }
-    draft.sync = revisionSyncState(value, value.currentRevisionId, {syncStatus: draft.liveCheck?.status || null});
+    const liveCheck = draft.liveCheck;
+    draft = publicDraft(value, {syncStatus: liveCheck?.status || null});
+    if (liveCheck) draft.liveCheck = liveCheck;
     return draft;
   }
   return async function handler(req, res) {
@@ -240,12 +248,16 @@ function createHandler({
       } catch { return fail(res, 503, 'review_unavailable'); }
     }
 
-    if (req.method === 'POST' && ['copy-section', 'create-variation'].includes(action)) {
+    if (req.method === 'POST' && ['copy-section', 'create-variation', 'start-versioning'].includes(action)) {
       if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) return fail(res, 403, 'agent_scope_denied');
       if (!isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
       const body = parsedJsonBody(req);
       if (!body) return fail(res, 400, 'invalid_request');
       try {
+        if (action === 'start-versioning') {
+          const result = await drafts.startVersioning({expectedPages:body.expectedPages, editor:identity.user});
+          return sendJson(res, 200, {drafts:result.drafts.map(item=>publicDraft(item)), anchoredPageKeys:result.anchoredPageKeys, user:identity.user});
+        }
         if (action === 'create-variation') {
           const result = await drafts.createVariation({pageKey:body.pageKey, expectedRevision:body.expectedRevision, name:body.name, editor:identity.user});
           try { await captureRevision(result.draft.pageKey, result.draft.currentRevisionId, {drafts, review:store}); } catch {}
@@ -255,6 +267,7 @@ function createHandler({
         const result = await drafts.copySection({
           sourcePageKey:body.sourcePageKey, sourceSectionId:body.sourceSectionId,
           sourceRevision:body.sourceRevision, targets:body.targets, editor:identity.user,
+          releaseType:body.releaseType, changeSummary:body.changeSummary,
         });
         // Each immutable page is saved atomically above. The existing cron captures
         // pending screenshots without stretching a multi-page edit past its request budget.
@@ -319,7 +332,13 @@ function createHandler({
             pageLabel: draft.label, createdAt: item.confirmedAt, editor: item.editor,
             summary: 'Customer publication confirmed',
           })),
-        ]).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+        ]).sort((a, b) => b.createdAt.localeCompare(a.createdAt)).map(event => {
+          const draft = publicDraft(current.data.drafts.find(item=>item.pageKey === event.pageKey));
+          const publication = draft.publications.find(item=>item.id === event.id);
+          const revision = draft.history.find(item=>item.id === (publication?.revisionId || event.id));
+          return {...event, version:revision?.version, setup:revision?.setup, archiveNumber:revision?.archiveNumber,
+            workingUrl:revision?.workingUrl, summary:revision?.changeSummary || event.summary};
+        });
         return sendJson(res, 200, {events, user: identity.user});
       } catch { return fail(res, 503, 'review_unavailable'); }
     }
@@ -381,7 +400,7 @@ function createHandler({
         const result = await drafts.getHtmlByRevision(current.draft, revisionId);
         if (!result) return fail(res, 404, 'draft_not_found');
         const checked = revisionId === current.draft.currentRevisionId ? await withLiveCheck(req, current.draft) : null;
-        return sendWorkingHtml(res, renderWorkingPage(current.draft, result.html, revisionId, {syncStatus:checked?.liveCheck?.status || null}));
+        return sendWorkingHtml(res, renderWorkingPage(current.draft, result.html, revisionId, {syncStatus:checked?.liveCheck?.status || null}), req);
       } catch {
         return fail(res, 503, 'review_unavailable');
       }
@@ -446,6 +465,7 @@ function createHandler({
         const mapped = buildVerifiedLiveRuntimeMap(body.pageKey, source, mapResult.data, sectionNames);
         const expectedSections = Object.keys(mapped.runtimeMap.sections);
         const alreadyMatches = publicDraft(existing.draft).liveSource
+          && body.releaseType !== 'major'
           && ['synced-from-live','confirmed-live'].includes(compareLiveSourceEvidence(existing.draft, source.evidence))
           && expectedSections.length === existing.draft.workingBindings.length
           && expectedSections.every(id => existing.draft.workingBindings.some(item => item.sectionId === id))
@@ -456,6 +476,7 @@ function createHandler({
             pageKey: body.pageKey, expectedRevision: body.expectedRevision,
             sourceHtml: source.html, sourceSha256: source.sha256, sourceEvidence: source.evidence,
             runtimeMap: mapped.runtimeMap, sectionNames, editor: identity.user,
+            releaseType:body.releaseType, changeSummary:body.changeSummary,
           });
           latest = result.draft;
         }
@@ -560,6 +581,8 @@ function createHandler({
           expectedRevision: body.expectedRevision,
           operation: body.operation,
           material: body.material,
+          releaseType: body.releaseType,
+          changeSummary: body.changeSummary,
           editor: identity.user,
         });
         let latest = changed.draft;

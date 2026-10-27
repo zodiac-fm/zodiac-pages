@@ -33,13 +33,13 @@
       document.body.append(dialog);
     }
     dialog.innerHTML = `<div class="dialog-top"><h2>Changes across the funnel</h2><button type="button" id="close-working-activity" aria-label="Close changes">✕</button></div><p>Saved drafts and confirmed publications, newest first.</p>${rows().length ? rows().map(item => {
-      const href = new URL('/funnel/tracker',location.origin);
-      href.searchParams.set('mode','review');
-      href.searchParams.set('page',item.family || 'lander');
-      href.searchParams.set('variant',item.variant || 'g');
-      if(item.pageKey)href.searchParams.set('pageKey',item.pageKey);
-      if(item.sectionId)href.searchParams.set('section',item.sectionId);
-      return `<article class="review-version"><strong>${item.sectionId ? esc(item.sectionId)+' · ' : ''}${esc(item.pageLabel || 'Section change')}</strong><p>${item.type === 'published' || item.type === 'live' ? 'Version confirmed live' : item.type === 'source' ? 'Working copy updated from live' : item.type === 'section-copy' ? 'Section copied across pages' : item.type === 'variation' ? 'Variation created' : item.type === 'image' ? 'Image changed' : 'Draft copy changed'}</p><blockquote>${esc(item.summary)}</blockquote><p>${esc(item.editor?.name || item.editor?.email || 'Verified contributor')} · ${esc(stamp(item.createdAt))}</p><a href="${esc(href.href)}" target="_blank" rel="noopener">${item.sectionId ? 'Open labelled section' : 'Open page'} ↗</a></article>`;
+      const href = new URL(item.workingUrl || '/funnel/tracker',location.origin);
+      if(item.workingUrl) { if(item.sectionId)href.hash=`funnel-section-${item.sectionId}`; }
+      else {
+        href.searchParams.set('mode','review'); href.searchParams.set('page',item.family || 'lander'); href.searchParams.set('variant',item.variant || 'g');
+        if(item.pageKey)href.searchParams.set('pageKey',item.pageKey); if(item.sectionId)href.searchParams.set('section',item.sectionId);
+      }
+      return `<article class="review-version"><strong>${item.sectionId ? esc(item.sectionId)+' · ' : ''}${esc(item.pageLabel || 'Section change')}</strong><p>${item.setup ? `Setup record ${esc(item.archiveNumber)}` : item.version ? `Version ${esc(item.version)}` : ''} · ${item.type === 'published' || item.type === 'live' ? 'Version confirmed live' : item.type === 'source' ? 'Working copy updated from live' : item.type === 'section-copy' ? 'Section copied across pages' : item.type === 'variation' ? 'Variation created' : item.type === 'image' ? 'Image changed' : 'Draft copy changed'}</p><blockquote>${esc(item.summary)}</blockquote><p>${esc(item.editor?.name || item.editor?.email || 'Verified contributor')} · ${esc(stamp(item.createdAt))}</p><a href="${esc(href.href)}" target="_blank" rel="noopener">Working page ↗</a></article>`;
     }).join('') : '<p>No changes have been saved yet. Select text or an image on a working page to make the first change.</p>'}`;
     document.getElementById('close-working-activity').onclick = () => dialog.close();
     dialog.showModal();

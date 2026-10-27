@@ -86,7 +86,7 @@
       state.scratch.set(key, {
         editId: node.editId, sectionId: node.sectionId, type: node.type,
         text: node.type === 'text' ? String(node.value || '') : '',
-        note: '', exampleUrl: '', file: null, objectUrl: '', attachmentId: '',
+        note: '', changeSummary: '', releaseType: 'minor', exampleUrl: '', file: null, objectUrl: '', attachmentId: '',
       });
     }
     return state.scratch.get(key);
@@ -108,6 +108,8 @@
     if (!entry) return;
     if ($('review-text')) entry.text = $('review-text').value;
     if ($('review-note')) entry.note = $('review-note').value;
+    if ($('review-summary')) entry.changeSummary = $('review-summary').value;
+    if ($('review-release-type')) entry.releaseType = $('review-release-type').value;
     if ($('review-example')) entry.exampleUrl = $('review-example').value;
   }
 
@@ -345,7 +347,17 @@
     const container = $('review-branchbar'), draft = state.draft;
     if (!container || !draft) return;
     const pages = [draft, ...state.pages.filter(item => item.pageKey !== draft.pageKey)].filter(item => item.mainPageKey === draft.mainPageKey).sort((a,b)=>Number(Boolean(a.variation))-Number(Boolean(b.variation)));
-    container.innerHTML = `<div class="review-branchbar"><label>Variation<select id="review-variation">${pages.map(item => `<option value="${esc(item.pageKey)}" ${item.pageKey === draft.pageKey ? 'selected' : ''}>${esc(item.variation?.name || 'Main')} · Version ${item.version}</option>`).join('') || `<option>${esc(draft.variation?.name || 'Main')} · Version ${draft.version}</option>`}</select></label><button id="review-new-variation" type="button" ${draft.variation || !state.canEdit ? 'disabled' : ''}>New variation</button><span>Variations keep their own versions. Creating one does not launch a split test.</span></div><div id="review-variation-form"></div>`;
+    container.innerHTML = `<div class="review-branchbar"><label>Variation<select id="review-variation">${pages.map(item => `<option value="${esc(item.pageKey)}" ${item.pageKey === draft.pageKey ? 'selected' : ''}>${esc(item.variation?.name || 'Main')} · Version ${esc(item.version)}</option>`).join('') || `<option>${esc(draft.variation?.name || 'Main')} · Version ${esc(draft.version)}</option>`}</select></label><button id="review-new-variation" type="button" ${draft.variation || !state.canEdit ? 'disabled' : ''}>New variation</button>${!draft.releaseStarted ? '<button id="review-start-versions" type="button">Start current pages at Version 1</button>' : ''}<span>Minor changes use 1.1D, 1.2D. A structural change starts 2D. Confirmation removes D.</span></div><div id="review-variation-form"></div>`;
+    $('review-start-versions')?.addEventListener('click', async event => {
+      stashInputs();
+      if (pendingScratch()) return setNotice('Save or undo your unsaved change first.', 'error');
+      const button = event.currentTarget; button.disabled = true;
+      try {
+        const response = await request('/api/funnel-review?action=working-pages');
+        await request('/api/funnel-review?action=start-versioning', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({expectedPages:response.drafts.map(item=>({pageKey:item.pageKey,expectedRevision:item.revision}))})});
+        await loadDraft({force:true}); render();
+      } catch(error) { setNotice(error.message, 'error'); button.disabled = false; }
+    });
     $('review-variation').onchange = async event => {
       stashInputs();
       state.pageChoice = event.target.value;
@@ -402,19 +414,26 @@
         ${sourceVersion ? `<p class="pair-source">${synced ? 'Synced working version' : 'Last working baseline'}: Version ${synced ? draft.version : sourceVersion}</p>` : ''}
       </section>
       <section class="page-pair-draft"><p class="eyebrow">Working page <span class="pair-draft-badge">DRAFT</span></p><h2>${esc(draft.label)}</h2>
-        <a href="${esc(safe(draft.workingUrl))}" target="_blank" rel="noopener">Open working Version ${draft.version} ↗</a><p class="pair-address">${esc(safe(draft.stableWorkingUrl || draft.workingUrl).replace('https://',''))}</p>
+        <a href="${esc(safe(draft.workingUrl))}" target="_blank" rel="noopener">Working page ↗</a><p class="pair-address">${esc(safe(draft.stableWorkingUrl || draft.workingUrl).replace('https://',''))}</p>
         <p class="pair-source">Saved ${esc(dateTime(draft.updatedAt))} · ${esc(draft.editor.name)}</p>
       </section>
       <div class="pair-publication" aria-live="polite"><strong class="sync-badge ${synced ? 'synced' : 'unsynced'}">${esc(status)}</strong><p>${explanation}</p>${draft.liveCheck ? `<p class="review-muted">${draft.liveCheck.status === 'unavailable' ? 'Live check unavailable. The last recorded state is shown.' : `Live checked ${esc(dateTime(draft.liveCheck.checkedAt))}.`}${live?.synthetic ? ' Results uses a fixed sample profile.' : ''}</p>` : ''}${publication ? `<p>Version ${draft.history.find(item=>item.id===publication.revisionId)?.version} confirmed live by ${esc(publication.editor.name)} · ${esc(dateTime(publication.confirmedAt))}.</p>` : ''}
       ${livePages.length && !synced && !draft.sourceOutdated ? `<details id="pair-confirm"><summary>Confirm this version is live</summary><form id="pair-confirm-form"><p>Use this after Walter publishes Version ${draft.version}. This records the match and does not deploy the page.</p><label>Live channel<select id="pair-live-channel">${livePages.map(item => `<option value="${esc(item.url)}" ${item.id === mainLive.id ? 'selected' : ''}>${esc(item.channel)}</option>`).join('')}</select></label><label class="pair-checkbox"><input id="pair-confirm-check" type="checkbox" required>I checked Version ${draft.version} on that live page and they match.</label><button type="submit">Mark Version ${draft.version} synced</button><p id="pair-confirm-error" role="alert"></p></form></details>` : ''}
-      <details><summary>Version history · ${draft.history.length}</summary>${draft.history.slice().reverse().map(item => `<p><a href="${esc(safe(item.workingUrl))}" target="_blank" rel="noopener">Version ${item.version} · ${esc(item.sourceEvidence ? 'Copied from live' : item.kind === 'initialized' ? 'Starting version' : item.kind === 'section-copy' ? 'Shared section change' : 'Saved edit')} · ${esc(dateTime(item.createdAt))} ↗</a>${item.screenshot?.status === 'ready' ? ` · <a href="${esc(safe(item.screenshot.imageUrl))}" target="_blank" rel="noopener">Screenshot ↗</a>` : ''}</p>`).join('')}<p class="review-muted">Earlier design: <a href="${esc(safe(draft.referenceUrl || draft.sourceUrl))}" target="_blank" rel="noopener">${esc(draft.sourceVersion || 'Original design')} ↗</a>. This is kept as history.</p></details>
+      <details id="pair-change-log"><summary>Change log · ${draft.history.filter(item=>!item.setup).length} ${draft.history.filter(item=>!item.setup).length === 1 ? 'version' : 'versions'}</summary>${draft.history.filter(item=>!item.setup).slice().reverse().map(item => releaseHistoryMarkup(item)).join('')}<details><summary>Earlier setup history · ${draft.history.filter(item=>item.setup).length}</summary>${draft.history.filter(item=>item.setup).slice().reverse().map(item => releaseHistoryMarkup(item)).join('')}<p class="review-muted">Earlier design: <a href="${esc(safe(draft.referenceUrl || draft.sourceUrl))}" target="_blank" rel="noopener">${esc(draft.sourceVersion || 'Original design')} ↗</a></p></details></details>
       ${canSync ? `<details><summary>Copy live into the working page</summary><p>This replaces an unchanged working baseline with the current live template. It does not publish your changes.</p><button id="pair-sync-live" type="button" ${!state.canEdit || state.syncing ? 'disabled' : ''}>${state.syncing ? 'Copying live…' : 'Copy current live version'}</button><p id="pair-sync-message" role="status"></p></details>` : ''}</div>
     </div><details class="pair-work"><summary>Work in Linear · ${state.work.length} linked ${state.work.length === 1 ? 'issue' : 'issues'}</summary><div class="pair-work-heading"><h3>Linked work</h3><button type="button" id="pair-link-work">Link a Linear issue</button></div><p class="review-muted">Issue status is a dated record. Open Linear for its latest status. Confirm page publication separately.</p>
       ${state.work.map(item => `<article><a href="${esc(safe(item.issueUrl))}" target="_blank" rel="noopener">${esc(item.issueId)} · ${esc(item.title)} ↗</a><p>${esc(item.status)}${item.assignee ? ` · ${esc(item.assignee)}` : ''}<small>Checked ${esc(dateTime(item.checkedAt))}</small></p>${item.note ? `<p class="review-muted">${esc(item.note)}</p>` : ''}</article>`).join('') || `<p>${esc(state.workError || 'No Linear issue linked to this page yet.')}</p>`}
       <div id="pair-work-form"></div></details>`;
     $('pair-confirm-form')?.addEventListener('submit', confirmPage);
+    $('pair-sync-live')?.insertAdjacentHTML('beforebegin', '<label>Release type<select id="pair-sync-release"><option value="minor">Minor: keep the page structure</option><option value="major">Major: page structure changed</option></select></label><label>Change description<input id="pair-sync-description" maxlength="1000" placeholder="Describe changes made on the live page."></label>');
     $('pair-sync-live')?.addEventListener('click', syncLive);
     $('pair-link-work').onclick = showWorkForm;
+  }
+
+  function releaseHistoryMarkup(item) {
+    const label = item.setup ? `Setup record ${item.archiveNumber}` : `Version ${item.version}`;
+    const description = item.changeSummary || (item.sourceEvidence ? 'Copied from verified live content.' : item.kind === 'initialized' ? 'Starting page.' : item.kind === 'section-copy' ? 'Shared section updated.' : 'Saved page change.');
+    return `<article class="review-release"><strong>${esc(label)}</strong><p>${esc(description)}</p>${item.sectionId ? `<p>${esc(item.sectionId)}</p>` : ''}<small>${esc(dateTime(item.createdAt))} · ${esc(item.editor.name)}</small><p><a href="${esc(safe(item.workingUrl))}" target="_blank" rel="noopener">Working page ↗</a>${item.screenshot?.status === 'ready' ? ` · <a href="${esc(safe(item.screenshot.imageUrl))}" target="_blank" rel="noopener">Screenshot ↗</a>` : ''}</p></article>`;
   }
 
   async function syncLive() {
@@ -425,12 +444,14 @@
       return;
     }
     const pageKey = state.pageKey, previous = state.draft;
+    const releaseType = $('pair-sync-release')?.value || 'minor';
+    const changeSummary = $('pair-sync-description')?.value.trim() || undefined;
     state.syncing = true;
     renderPagePair();
     try {
       const response = await request('/api/funnel-review?action=sync-live', {
         method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({pageKey, expectedRevision: previous.revision}),
+        body: JSON.stringify({pageKey, expectedRevision: previous.revision, releaseType, changeSummary}),
       });
       if (state.pageKey !== pageKey) return;
       if (pendingScratch(previous)) {
@@ -533,6 +554,7 @@
       }).join('') : '<p>No other working pages in this family yet. Open another category or create a variation first.</p>'}<label class="pair-checkbox"><input id="review-copy-accept" type="checkbox" required>I reviewed the selected sections. Replace them with this saved section.</label><button id="review-copy-submit" type="submit" disabled>Choose pages to update</button><p id="review-copy-error" role="alert"></p></form></section>`;
       $('review-shared-close').onclick = () => area.replaceChildren();
       const form = $('review-copy-form');
+      form.insertAdjacentHTML('afterbegin', `<label>What changed?<textarea id="review-copy-summary" rows="2" required maxlength="1000">Use ${esc(sourceSectionId)} from ${esc(source.label)}.</textarea></label><label>Release type<select id="review-copy-release"><option value="minor">Minor: keep the page structure</option><option value="major">Major: page structure changed</option></select></label>`);
       const update = () => {
         const count = form.querySelectorAll('input[name=target]:checked').length;
         $('review-copy-submit').textContent = count ? `Copy section to ${count} ${count === 1 ? 'page' : 'pages'}` : 'Choose pages to update';
@@ -554,9 +576,9 @@
           return {pageKey:target.pageKey,sectionId:form.querySelector(`[data-copy-target="${index}"]`).value,expectedRevision:target.revision};
         });
         try {
-          const result = await request('/api/funnel-review?action=copy-section', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sourcePageKey:source.pageKey,sourceSectionId,sourceRevision:source.revision,targets:chosen})});
+          const result = await request('/api/funnel-review?action=copy-section', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sourcePageKey:source.pageKey,sourceSectionId,sourceRevision:source.revision,targets:chosen,releaseType:$('review-copy-release').value,changeSummary:$('review-copy-summary').value.trim()})});
           area.innerHTML = `<section class="review-shared-panel"><h2>Section copied to ${result.drafts.length} ${result.drafts.length === 1 ? 'page' : 'pages'}.</h2><p>These new versions are Unsynced and ready for Walter. Screenshots are queued automatically.</p>${result.drafts.map(draft => {
-            const route = new URL('/funnel/tracker',location.origin);route.search = new URLSearchParams({mode:'review',page:draft.family,variant:draft.variant,pageKey:draft.pageKey,section:chosen.find(item=>item.pageKey===draft.pageKey).sectionId});
+            const route = new URL(draft.workingUrl,location.origin);route.hash=`funnel-section-${chosen.find(item=>item.pageKey===draft.pageKey).sectionId}`;
             return `<p><a href="${esc(route.href)}" target="_blank" rel="noopener">${esc(draft.label)} · Unsynced ↗</a></p>`;
           }).join('')}<button id="review-shared-done" type="button">Done</button></section>`;
           $('review-shared-done').onclick = () => area.replaceChildren();
@@ -669,7 +691,7 @@
       ${binding?.gaps?.length ? `<details class="review-source-notes review-gap"><summary>Source notes</summary>${binding.gaps.map(item => `<p>${esc(item)}</p>`).join('')}</details>` : ''}
       <form id="review-change-form">
         <div class="review-picker"><strong>${node ? (node.type === 'image' ? 'Selected image' : 'Selected text') : 'Choose text or an image'}</strong><p>${node ? esc(nodeDescription(node)) : (nodes.length ? 'Click a copy line or image in the working page.' : 'Nothing in this section is ready to edit yet.')}</p>${node ? editorMarkup(node) : `<div class="review-node-list">${nodes.map(item => `<button type="button" data-review-pick="${esc(item.editId)}">${esc(nodeDescription(item))}</button>`).join('')}</div>`}</div>
-        <div class="review-reference"><label>Design example for Walter (optional)<input id="review-example" type="url" placeholder="https://zodiac-pages.vercel.app/…" value="${esc(entry?.exampleUrl || '')}"></label><label class="review-note">Optional note<textarea id="review-note" rows="2">${esc(entry?.note || '')}</textarea></label></div>
+        <div class="review-reference"><label>What changed?<textarea id="review-summary" rows="2" required placeholder="Describe the change for Walter.">${esc(entry?.changeSummary || '')}</textarea></label><label class="review-note">Release type<select id="review-release-type"><option value="minor" ${entry?.releaseType !== 'major' ? 'selected' : ''}>Minor: keep the page structure</option><option value="major" ${entry?.releaseType === 'major' ? 'selected' : ''}>Major: page structure changed</option></select></label><label class="review-note">Design example for Walter (optional)<input id="review-example" type="url" placeholder="https://zodiac-pages.vercel.app/…" value="${esc(entry?.exampleUrl || '')}"></label><label class="review-note">Optional note<textarea id="review-note" rows="2">${esc(entry?.note || '')}</textarea></label></div>
         ${renderConflict()}
         <div class="review-save-area"><p id="review-form-error" class="review-form-error" role="alert"></p><button id="review-save" class="review-save" type="submit">Save draft changes</button><p id="review-status" class="review-status ${esc(state.notice?.kind || '')}">${esc(state.notice?.text || '')}</p></div>
       </form>
@@ -772,6 +794,13 @@
     if (documentRoot.documentElement.dataset.funnelReviewWired === 'true') return;
     documentRoot.documentElement.dataset.funnelReviewWired = 'true';
     documentRoot.addEventListener('click', event => {
+      const sectionLink = event.target.closest?.('[data-funnel-working-label]');
+      if (sectionLink) {
+        event.preventDefault(); event.stopPropagation();
+        const href = safe(sectionLink.href);
+        if (href) window.open(href, '_blank', 'noopener');
+        return;
+      }
       const bannerLink = event.target.closest?.('[data-funnel-working-banner] a');
       if (bannerLink) {
         event.preventDefault(); event.stopPropagation();
@@ -986,6 +1015,10 @@
     if (!node || !entry || !hasChange() || state.conflict) return updateSaveButton();
     const button = $('review-save');
     const errorArea = $('review-form-error');
+    if (!entry.changeSummary.trim()) {
+      if (errorArea) errorArea.textContent = 'Describe the change for the page header and change log.';
+      return;
+    }
     if (!validExampleUrl(entry.exampleUrl.trim())) {
       if (errorArea) errorArea.textContent = 'Use a zodiac-pages.vercel.app lander, funnel, or site link as the example.';
       return;
@@ -1012,6 +1045,8 @@
           expectedRevision: state.draft.revision,
           operation,
           material: changeMaterial(node, entry, attachmentId),
+          changeSummary: entry.changeSummary.trim(),
+          releaseType: entry.releaseType,
         }),
       });
       clearScratch(node);
