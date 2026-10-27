@@ -21,7 +21,9 @@ const {captureDraftRevision} = require('../lib/funnel-tracker/draft-capture');
 const {getTarget, pairedLiveTargets} = require('../lib/funnel-tracker/production-catalog');
 const {
   BC_COMPARISON_VERSION,
+  SNAPSHOT_TRACE_DIAGNOSTIC_VERSION,
   comparisonStructuralDigests,
+  snapshotTraceStructuralDigests,
   fetchVerifiedLiveSource,
   fetchVerifiedLiveViews,
   buildVerifiedLiveRuntimeMap,
@@ -256,6 +258,12 @@ function createHandler({
     const tokenProvider = requestOidcTokenProvider(req);
     const includeComparisonDiagnostics = value.family === 'bc'
       && requestIdentity(req)?.kind === 'browser';
+    const includeSnapshotTraceDiagnostics = value.family === 'join'
+      && requestIdentity(req)?.kind === 'browser';
+    const safeErrorCode = error => {
+      const code=typeof error?.code==='string' ? error.code.toLowerCase() : '';
+      return /^[a-z][a-z0-9_]{0,63}$/.test(code) ? code : 'live_source_unavailable';
+    };
     if (value.views) {
       const contexts = Object.fromEntries(['desktop','mobile'].map(checkView => {
         const viewDraft = publicDraft(value, {view:checkView});
@@ -296,9 +304,22 @@ function createHandler({
                 observedSha256:observed.evidence.comparisonSha256,
                 observed:comparisonStructuralDigests(observed.html),
               };
+            } else if (includeSnapshotTraceDiagnostics && matchStatus === 'check-needed'
+                && context.evidence?.comparisonVersion === undefined
+                && observed.evidence?.comparisonVersion === undefined
+                && /^[a-f0-9]{64}$/.test(context.evidence?.contentSha256 || '')
+                && /^[a-f0-9]{64}$/.test(observed.evidence?.contentSha256 || '')
+                && typeof observed.html === 'string') {
+              checks[checkView].comparison = {
+                version:SNAPSHOT_TRACE_DIAGNOSTIC_VERSION,
+                storedRawSha256:context.evidence.contentSha256,
+                observedRawSha256:observed.evidence.contentSha256,
+                observed:snapshotTraceStructuralDigests(observed.html,value.pageKey),
+              };
             }
-          } catch {
-            checks[checkView] = {status:'unavailable',checkedAt};
+          } catch (error) {
+            checks[checkView] = {status:'unavailable',checkedAt,
+              ...(includeComparisonDiagnostics ? {errorCode:safeErrorCode(error)} : {})};
           }
         };
         const distinctChannels = new Set(['desktop','mobile']
@@ -313,7 +334,8 @@ function createHandler({
                 tokenProvider,
               });
               await checkObserved(checkView, observed);
-            } catch { checks[checkView] = {status:'unavailable',checkedAt}; }
+            } catch (error) { checks[checkView] = {status:'unavailable',checkedAt,
+              ...(includeComparisonDiagnostics ? {errorCode:safeErrorCode(error)} : {})}; }
           }));
         } else {
           const representative = contexts[view].shouldCheck ? view
@@ -324,9 +346,12 @@ function createHandler({
               tokenProvider,
             });
             await Promise.all(['desktop','mobile'].map(checkView => checkObserved(checkView, observed)));
-          } catch {
+          } catch (error) {
             for (const checkView of ['desktop','mobile']) {
-              if (contexts[checkView].shouldCheck) checks[checkView] = {status:'unavailable',checkedAt};
+              if (contexts[checkView].shouldCheck) checks[checkView] = {
+                status:'unavailable',checkedAt,
+                ...(includeComparisonDiagnostics ? {errorCode:safeErrorCode(error)} : {}),
+              };
             }
           }
         }
