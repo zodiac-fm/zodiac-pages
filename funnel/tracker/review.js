@@ -18,6 +18,7 @@
     draft: null, pageKey: '', picked: null, frameReady: false, frameToken: 0, draftToken: 0,
     mode: null, notice: null, pendingScroll: false, conflict: null,
     scratch: new Map(), layoutKey: '', work: [], workError: '', syncing: false,
+    pageChoice: '', pages: [], pagesError: '',
   };
   let root;
   let resizeObserver;
@@ -74,7 +75,8 @@
       && (item.variant === state.variant || item.variant === 'shared')
       && mapped(item.id)
   ));
-  const draftKey = () => state.family === 'bc' ? 'draft-bc' : `draft-${state.family}-${state.variant}`;
+  const mainDraftKey = () => state.family === 'bc' ? 'draft-bc' : `draft-${state.family}-${state.variant}`;
+  const draftKey = () => state.pageChoice || mainDraftKey();
   const scratchKey = (node = state.picked) => node ? `${state.pageKey}:${node.sectionId}:${node.editId}` : '';
 
   function scratchFor(node = state.picked) {
@@ -122,6 +124,8 @@
     state.layoutKey = '';
     state.frameReady = false;
     state.work = [];
+    state.pages = [];
+    state.pageChoice = '';
     state.draftToken += 1;
     resizeObserver?.disconnect();
     if (root) root.replaceChildren();
@@ -227,6 +231,10 @@
       const linked = await request(`/api/funnel-review?action=linear-work&pageKey=${encodeURIComponent(pageKey)}`);
       if (token === state.draftToken) { state.work = linked.entries || []; state.workError = ''; }
     } catch { state.work = []; state.workError = 'Linked work could not be loaded. Refresh to retry.'; }
+    try {
+      const pages = await request('/api/funnel-review?action=working-pages');
+      if (token === state.draftToken) { state.pages = pages.drafts || []; state.pagesError = ''; }
+    } catch { state.pagesError = 'Other working pages could not be loaded. Refresh to retry.'; }
     if (token !== state.draftToken || state.pageKey !== pageKey) return state.draft;
     const latest = response.draft;
     if (previous && latest.revision !== previous.revision) {
@@ -295,7 +303,9 @@
     resizeObserver?.disconnect();
     root.innerHTML = `
       <div id="review-topline" class="review-topline"></div>
+      <div id="review-branchbar"></div>
       <div id="review-page-pair"></div>
+      <div id="review-shared-edit"></div>
       <div class="review-workgrid">
         <aside id="review-section-nav" class="review-section-nav"></aside>
         <section class="review-preview">
@@ -328,39 +338,77 @@
       })));
     });
     renderPagePair();
+    renderBranchBar();
+  }
+
+  function renderBranchBar() {
+    const container = $('review-branchbar'), draft = state.draft;
+    if (!container || !draft) return;
+    const pages = [draft, ...state.pages.filter(item => item.pageKey !== draft.pageKey)].filter(item => item.mainPageKey === draft.mainPageKey).sort((a,b)=>Number(Boolean(a.variation))-Number(Boolean(b.variation)));
+    container.innerHTML = `<div class="review-branchbar"><label>Variation<select id="review-variation">${pages.map(item => `<option value="${esc(item.pageKey)}" ${item.pageKey === draft.pageKey ? 'selected' : ''}>${esc(item.variation?.name || 'Main')} · Version ${item.version}</option>`).join('') || `<option>${esc(draft.variation?.name || 'Main')} · Version ${draft.version}</option>`}</select></label><button id="review-new-variation" type="button" ${draft.variation || !state.canEdit ? 'disabled' : ''}>New variation</button><span>Variations keep their own versions. Creating one does not launch a split test.</span></div><div id="review-variation-form"></div>`;
+    $('review-variation').onchange = async event => {
+      stashInputs();
+      state.pageChoice = event.target.value;
+      state.selected = null;
+      const route = new URL(location.href);
+      route.searchParams.set('pageKey', state.pageChoice);
+      route.searchParams.delete('section');
+      history.replaceState(null, '', route);
+      await loadDraft();
+      render();
+    };
+    $('review-new-variation').onclick = () => {
+      stashInputs();
+      const area = $('review-variation-form');
+      if (pendingScratch()) { area.textContent = 'Save or undo your unsaved changes before creating a variation.'; return; }
+      area.innerHTML = `<form class="review-inline-form" id="review-create-variation"><label>Variation name<input name="name" required maxlength="100" placeholder="For example: Different opening"></label><p>Starts from ${esc(draft.label)}. Main stays unchanged.</p><button type="submit">Create variation</button><button id="review-variation-cancel" type="button">Cancel</button><p role="alert" id="review-variation-error"></p></form>`;
+      $('review-variation-cancel').onclick = () => area.replaceChildren();
+      $('review-create-variation').onsubmit = async event => {
+        event.preventDefault();
+        const button = event.currentTarget.querySelector('[type=submit]');
+        button.disabled = true; button.textContent = 'Creating variation…';
+        try {
+          const response = await request('/api/funnel-review?action=create-variation', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pageKey:draft.pageKey,expectedRevision:draft.revision,name:new FormData(event.currentTarget).get('name')})});
+          state.pageChoice = response.draft.pageKey;
+          const route = new URL(location.href); route.searchParams.set('pageKey',state.pageChoice); route.searchParams.delete('section'); history.replaceState(null,'',route);
+          state.notice = {text:'Variation created. It has its own version history and is not live.',kind:'success'};
+          await loadDraft(); render();
+          document.dispatchEvent(new Event('tracker:working-saved'));
+        } catch(error) { $('review-variation-error').textContent = error.message; button.disabled = false; button.textContent = 'Create variation'; }
+      };
+    };
   }
 
   function renderPagePair() {
     const container = $('review-page-pair'), draft = state.draft;
     if (!container || !draft) return;
     const livePages = draft.livePages || [];
-    const mainLive = livePages.find(item => item.url === draft.liveSource?.liveUrl) || livePages.find(item => item.channel === 'direct') || livePages.find(item => item.channel === 'affiliate') || livePages[0];
     const publication = draft.latestPagePublication;
+    const mainLive = livePages.find(item => item.url === (publication?.revisionId === draft.revision ? publication.liveUrl : draft.liveSource?.liveUrl)) || livePages.find(item => item.channel === 'direct') || livePages.find(item => item.channel === 'affiliate') || livePages[0];
     const live = draft.liveSource;
-    const canSync = ['lander', 'results'].includes(draft.family);
-    const status = state.syncing ? 'Syncing draft from live…' : draft.sourceOutdated ? 'Earlier source has saved edits' : draft.pageStatus === 'confirmed-live' ? 'Confirmed matching live' : live
-      ? draft.sourceMatchStatus === 'changes-not-live' ? 'Draft changes awaiting publication'
-        : draft.liveCheck?.status === 'changed' ? 'Live page changed since this draft was synced'
-          : draft.liveCheck?.status === 'current' ? 'Matches live' : 'Live match could not be checked'
-      : draft.pageStatus === 'confirmed-live'
-      ? 'Confirmed matching live' : draft.pageStatus === 'changes-not-live' || draft.pendingEditCount
-        ? 'Draft changes awaiting publication' : 'Live match not confirmed';
-    const explanation = live
-      ? `Synced from ${esc(live.channel)} live on ${esc(dateTime(live.createdAt))} by ${esc(live.editor.name)}.${live.synthetic ? ' Results uses a fixed sample profile.' : ''} ${draft.liveCheck?.status === 'current' ? `Live template checked ${esc(dateTime(draft.liveCheck.checkedAt))}.` : draft.liveCheck?.status === 'changed' ? 'Update the draft from live to start with the latest version.' : 'Your saved baseline is available. Refresh to retry the live check.'}`
-      : 'Compare the live page with this draft before confirming a match.';
+    const canSync = ['lander', 'results'].includes(draft.family) && !draft.variation;
+    const synced = draft.sync?.status === 'synced';
+    const status = state.syncing ? 'Copying live into the working page…' : synced ? 'Synced' : 'Unsynced';
+    const explanation = synced ? `Version ${draft.version} matches the recorded live version.`
+      : draft.sync?.reason === 'live-changed' ? 'The live page changed. Review it before updating this working copy.'
+        : draft.variation ? 'This variation has its own versions. Walter can publish it when it is ready.'
+          : mainLive ? `Version ${draft.version} has changes ready for Walter to make live.` : 'A live page has not been connected yet.';
+    const sourceVersion = draft.history.find(item => item.id === live?.revisionId)?.version;
+    const pageLabel = draft.family === 'bc' ? 'Birth chart' : `${names[draft.variant]} · ${names[draft.family]}`;
     container.innerHTML = `<div class="page-pair">
-      <section class="page-pair-live"><p class="eyebrow">Live page</p><h2>${esc(draft.selectedLabel || draft.label)}</h2>
+      <section class="page-pair-live"><p class="eyebrow">Live page</p><h2>${esc(pageLabel)}</h2>
         ${mainLive ? `<a href="${esc(safe(mainLive.url))}" target="_blank" rel="noopener">Open live page ↗</a><p class="pair-address">${esc(mainLive.url.replace('https://',''))}</p>` : '<p class="review-muted">No live page has been selected for this draft.</p>'}
         ${livePages.length > 1 ? `<details><summary>Live links by channel</summary><div class="pair-channels">${livePages.map(item => `<a href="${esc(safe(item.url))}" target="_blank" rel="noopener">${esc(item.channel === 'affiliate' ? 'Affiliate · David McEwen' : item.channel === 'paid' ? 'Paid · Facebook' : 'Direct')} ↗</a>`).join('')}</div></details>` : ''}
+        ${sourceVersion ? `<p class="pair-source">${synced ? 'Synced working version' : 'Last working baseline'}: Version ${synced ? draft.version : sourceVersion}</p>` : ''}
       </section>
-      <section class="page-pair-draft"><p class="eyebrow">Vercel draft</p><h2>${esc(draft.selectedLabel || draft.label)} <span class="pair-draft-badge">DRAFT</span></h2>
-        <a href="${esc(safe(draft.workingUrl))}" target="_blank" rel="noopener">Open editable draft ↗</a><p class="pair-address">${esc(safe(draft.workingUrl).replace('https://',''))}</p>
-        <p class="pair-source">${live ? `Synced from live · ${esc(dateTime(live.createdAt))}. Original design: ` : 'Based on '}<a href="${esc(safe(draft.referenceUrl || draft.sourceUrl))}" target="_blank" rel="noopener">${esc(draft.sourceVersion || 'selected source')} ↗</a>. Earlier versions stay in history.</p>
+      <section class="page-pair-draft"><p class="eyebrow">Working page <span class="pair-draft-badge">DRAFT</span></p><h2>${esc(draft.label)}</h2>
+        <a href="${esc(safe(draft.workingUrl))}" target="_blank" rel="noopener">Open working Version ${draft.version} ↗</a><p class="pair-address">${esc(safe(draft.stableWorkingUrl || draft.workingUrl).replace('https://',''))}</p>
+        <p class="pair-source">Saved ${esc(dateTime(draft.updatedAt))} · ${esc(draft.editor.name)}</p>
       </section>
-      <div class="pair-publication" aria-live="polite"><strong>${esc(status)}</strong><p>${explanation}</p>${publication ? `<p>Last human confirmation: ${esc(publication.editor.name)}, ${esc(dateTime(publication.confirmedAt))} for <a href="${esc(safe(publication.liveUrl))}" target="_blank" rel="noopener">this live link</a>.${publication.revisionId !== draft.revision ? ' That confirmation is for an earlier draft.' : ''}</p>` : ''}
-      ${canSync ? `<button id="pair-sync-live" type="button" ${!state.canEdit || state.syncing ? 'disabled' : ''}>${state.syncing ? 'Syncing from live…' : 'Update draft from live'}</button><p class="review-muted">Copies the current live template into this working draft. Earlier versions stay saved. Saved draft edits must be reconciled first.</p><p id="pair-sync-message" role="status"></p>` : ''}
-      <details><summary>Earlier working versions · ${draft.history.length}</summary>${draft.history.slice().reverse().map(item => `<p><a href="${esc(safe(item.workingUrl))}" target="_blank" rel="noopener">${esc(item.sourceEvidence ? 'Synced from live' : item.kind === 'initialized' ? 'Original Vercel source' : 'Saved draft edit')} · ${esc(dateTime(item.createdAt))} ↗</a>${item.screenshot?.status === 'ready' ? ` · <a href="${esc(safe(item.screenshot.imageUrl))}" target="_blank" rel="noopener">Screenshot ↗</a>` : ''}</p>`).join('')}</details>
-      ${livePages.length && !draft.sourceOutdated ? `<details id="pair-confirm"><summary>Confirm page matches live</summary><form id="pair-confirm-form"><label>Live channel<select id="pair-live-channel">${livePages.map(item => `<option value="${esc(item.url)}" ${item.id === mainLive.id ? 'selected' : ''}>${esc(item.channel)}</option>`).join('')}</select></label><label class="pair-checkbox"><input id="pair-confirm-check" type="checkbox" required>I checked this whole draft against that live page and they match.</label><button type="submit">Save live confirmation</button><p id="pair-confirm-error" role="alert"></p></form></details>` : ''}</div>
+      <div class="pair-publication" aria-live="polite"><strong class="sync-badge ${synced ? 'synced' : 'unsynced'}">${esc(status)}</strong><p>${explanation}</p>${draft.liveCheck ? `<p class="review-muted">${draft.liveCheck.status === 'unavailable' ? 'Live check unavailable. The last recorded state is shown.' : `Live checked ${esc(dateTime(draft.liveCheck.checkedAt))}.`}${live?.synthetic ? ' Results uses a fixed sample profile.' : ''}</p>` : ''}${publication ? `<p>Version ${draft.history.find(item=>item.id===publication.revisionId)?.version} confirmed live by ${esc(publication.editor.name)} · ${esc(dateTime(publication.confirmedAt))}.</p>` : ''}
+      ${livePages.length && !synced && !draft.sourceOutdated ? `<details id="pair-confirm"><summary>Confirm this version is live</summary><form id="pair-confirm-form"><p>Use this after Walter publishes Version ${draft.version}. This records the match and does not deploy the page.</p><label>Live channel<select id="pair-live-channel">${livePages.map(item => `<option value="${esc(item.url)}" ${item.id === mainLive.id ? 'selected' : ''}>${esc(item.channel)}</option>`).join('')}</select></label><label class="pair-checkbox"><input id="pair-confirm-check" type="checkbox" required>I checked Version ${draft.version} on that live page and they match.</label><button type="submit">Mark Version ${draft.version} synced</button><p id="pair-confirm-error" role="alert"></p></form></details>` : ''}
+      <details><summary>Version history · ${draft.history.length}</summary>${draft.history.slice().reverse().map(item => `<p><a href="${esc(safe(item.workingUrl))}" target="_blank" rel="noopener">Version ${item.version} · ${esc(item.sourceEvidence ? 'Copied from live' : item.kind === 'initialized' ? 'Starting version' : item.kind === 'section-copy' ? 'Shared section change' : 'Saved edit')} · ${esc(dateTime(item.createdAt))} ↗</a>${item.screenshot?.status === 'ready' ? ` · <a href="${esc(safe(item.screenshot.imageUrl))}" target="_blank" rel="noopener">Screenshot ↗</a>` : ''}</p>`).join('')}<p class="review-muted">Earlier design: <a href="${esc(safe(draft.referenceUrl || draft.sourceUrl))}" target="_blank" rel="noopener">${esc(draft.sourceVersion || 'Original design')} ↗</a>. This is kept as history.</p></details>
+      ${canSync ? `<details><summary>Copy live into the working page</summary><p>This replaces an unchanged working baseline with the current live template. It does not publish your changes.</p><button id="pair-sync-live" type="button" ${!state.canEdit || state.syncing ? 'disabled' : ''}>${state.syncing ? 'Copying live…' : 'Copy current live version'}</button><p id="pair-sync-message" role="status"></p></details>` : ''}</div>
     </div><details class="pair-work"><summary>Work in Linear · ${state.work.length} linked ${state.work.length === 1 ? 'issue' : 'issues'}</summary><div class="pair-work-heading"><h3>Linked work</h3><button type="button" id="pair-link-work">Link a Linear issue</button></div><p class="review-muted">Issue status is a dated record. Open Linear for its latest status. Confirm page publication separately.</p>
       ${state.work.map(item => `<article><a href="${esc(safe(item.issueUrl))}" target="_blank" rel="noopener">${esc(item.issueId)} · ${esc(item.title)} ↗</a><p>${esc(item.status)}${item.assignee ? ` · ${esc(item.assignee)}` : ''}<small>Checked ${esc(dateTime(item.checkedAt))}</small></p>${item.note ? `<p class="review-muted">${esc(item.note)}</p>` : ''}</article>`).join('') || `<p>${esc(state.workError || 'No Linear issue linked to this page yet.')}</p>`}
       <div id="pair-work-form"></div></details>`;
@@ -452,10 +500,78 @@
     });
   }
 
+  function sectionPreview(draft, sectionId) {
+    const nodes = draft.editableNodes.filter(item => item.sectionId === sectionId);
+    const text = nodes.filter(item => item.type === 'text').map(item => item.value).join('\n');
+    const images = nodes.filter(item => item.type === 'image');
+    return `<details class="shared-section-preview"><summary>Copy and images · ${images.length} ${images.length === 1 ? 'image' : 'images'}</summary><pre>${esc(text || 'This section has no editable text.')}</pre><div>${images.map(item => {
+      let href = ''; try { href = safe(new URL(item.value,draft.contentBaseUrl || draft.sourceUrl).href); } catch {}
+      return href ? `<a href="${esc(href)}" target="_blank" rel="noopener"><img loading="lazy" src="${esc(href)}" alt="${esc(item.alt || 'Section image')}"></a>` : '';
+    }).join('')}</div></details>`;
+  }
+
+  async function showSharedEdit() {
+    stashInputs();
+    const area = $('review-shared-edit');
+    if (pendingScratch()) {
+      setNotice('Save or undo your unsaved changes before copying a section.', 'error');
+      return;
+    }
+    const source = state.draft, sourceSectionId = state.selected;
+    area.innerHTML = '<p role="status">Loading other working pages…</p>';
+    try {
+      const response = await request('/api/funnel-review?action=working-pages');
+      if (state.pageKey !== source.pageKey || state.selected !== sourceSectionId) return;
+      state.pages = response.drafts || [];
+      const targets = state.pages.filter(item => item.family === source.family && item.pageKey !== source.pageKey);
+      const preferredSection = target => target.workingBindings.find(item => item.sectionId === sourceSectionId)
+        || target.workingBindings.find(item => item.sectionId.split('-').slice(1).join('-') === sourceSectionId.split('-').slice(1).join('-'))
+        || target.workingBindings[0];
+      area.innerHTML = `<section class="review-shared-panel"><div class="review-shared-heading"><h2>Use this section on other ${esc(names[source.family].toLowerCase())} pages</h2><button id="review-shared-close" type="button">Close</button></div><p>From ${esc(source.label)} · ${esc(sourceSectionId)} · ${esc(section(sourceSectionId)?.name || '')}</p><p>This copies the whole saved section, including its copy and images. It replaces category-specific content only on the pages you select. Earlier versions stay in history.</p>${sectionPreview(source,sourceSectionId)}<form id="review-copy-form">${targets.length ? targets.map((target,index) => {
+        const selected = preferredSection(target);
+        return `<div class="review-copy-target"><label class="pair-checkbox"><input type="checkbox" name="target" value="${index}"><strong>${esc(target.label)}</strong></label><label>Section to replace<select data-copy-target="${index}">${target.workingBindings.map(binding => `<option value="${esc(binding.sectionId)}" ${binding.sectionId === selected.sectionId ? 'selected' : ''}>${esc(binding.sectionId)} · ${esc(section(binding.sectionId)?.name || binding.firstHeading?.text || 'Section')}</option>`).join('')}</select></label><div id="copy-target-preview-${index}">${sectionPreview(target,selected.sectionId)}</div></div>`;
+      }).join('') : '<p>No other working pages in this family yet. Open another category or create a variation first.</p>'}<label class="pair-checkbox"><input id="review-copy-accept" type="checkbox" required>I reviewed the selected sections. Replace them with this saved section.</label><button id="review-copy-submit" type="submit" disabled>Choose pages to update</button><p id="review-copy-error" role="alert"></p></form></section>`;
+      $('review-shared-close').onclick = () => area.replaceChildren();
+      const form = $('review-copy-form');
+      const update = () => {
+        const count = form.querySelectorAll('input[name=target]:checked').length;
+        $('review-copy-submit').textContent = count ? `Copy section to ${count} ${count === 1 ? 'page' : 'pages'}` : 'Choose pages to update';
+        $('review-copy-submit').disabled = !count || !$('review-copy-accept').checked;
+      };
+      form.querySelectorAll('[data-copy-target]').forEach(select => select.onchange = () => {
+        const index = Number(select.dataset.copyTarget);
+        $(`copy-target-preview-${index}`).innerHTML = sectionPreview(targets[index],select.value);
+        $('review-copy-accept').checked = false; update();
+      });
+      form.querySelectorAll('input[name=target]').forEach(input => input.onchange = () => { $('review-copy-accept').checked = false; update(); });
+      $('review-copy-accept').onchange = update;
+      form.onsubmit = async event => {
+        event.preventDefault();
+        const button = $('review-copy-submit');
+        button.disabled = true; button.textContent = 'Saving selected pages…';
+        const chosen = [...form.querySelectorAll('input[name=target]:checked')].map(input => {
+          const index = Number(input.value), target = targets[index];
+          return {pageKey:target.pageKey,sectionId:form.querySelector(`[data-copy-target="${index}"]`).value,expectedRevision:target.revision};
+        });
+        try {
+          const result = await request('/api/funnel-review?action=copy-section', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sourcePageKey:source.pageKey,sourceSectionId,sourceRevision:source.revision,targets:chosen})});
+          area.innerHTML = `<section class="review-shared-panel"><h2>Section copied to ${result.drafts.length} ${result.drafts.length === 1 ? 'page' : 'pages'}.</h2><p>These new versions are Unsynced and ready for Walter. Screenshots are queued automatically.</p>${result.drafts.map(draft => {
+            const route = new URL('/funnel/tracker',location.origin);route.search = new URLSearchParams({mode:'review',page:draft.family,variant:draft.variant,pageKey:draft.pageKey,section:chosen.find(item=>item.pageKey===draft.pageKey).sectionId});
+            return `<p><a href="${esc(route.href)}" target="_blank" rel="noopener">${esc(draft.label)} · Unsynced ↗</a></p>`;
+          }).join('')}<button id="review-shared-done" type="button">Done</button></section>`;
+          $('review-shared-done').onclick = () => area.replaceChildren();
+          state.pages = (await request('/api/funnel-review?action=working-pages')).drafts;
+          renderBranchBar(); document.dispatchEvent(new Event('tracker:working-saved'));
+        } catch(error) { $('review-copy-error').textContent = error.message; button.textContent = 'Copy selected sections'; update(); }
+      };
+      area.scrollIntoView({behavior:'smooth',block:'start'});
+    } catch(error) { area.innerHTML = `<p role="alert">${esc(error.message)}</p>`; }
+  }
+
   function renderPreview(active) {
     const bar = $('review-preview-bar');
     if (!bar) return;
-    bar.innerHTML = `<span>${esc(active?.id || '')}</span><span>${esc(active?.name || '')}</span><span class="review-preview-heading">DRAFT</span>`;
+    bar.innerHTML = `<span>${esc(active?.id || '')}</span><span>${esc(active?.name || '')}</span><span class="review-preview-heading">Version ${state.draft.version} · ${state.draft.sync?.status === 'synced' ? 'Synced' : 'Unsynced'}</span>`;
   }
 
   function editorMarkup(node) {
@@ -478,6 +594,9 @@
   }
 
   function historyMarkup(event) {
+    if (event.kind === 'section-copy') {
+      return `<article class="review-version"><strong>Version ${event.version} · Section copied</strong><p>Copied from ${esc(event.after.sourceSectionId)}. Earlier content remains in the previous version.</p><p><a href="${esc(safe(event.workingUrl))}" target="_blank" rel="noopener">Open this working version ↗</a></p><small>${esc(event.editor.name)} · ${esc(dateTime(event.createdAt))}</small></article>`;
+    }
     const isImage = event.operationType === 'image';
     const afterImage = isImage ? imageUrl(event.after) : '';
     const actorName = event.editor?.name || 'Verified contributor';
@@ -546,15 +665,15 @@
     const history = (state.draft?.history || []).filter(item => item.sectionId === state.selected).slice().reverse();
     const publications = (state.draft?.publications || []).filter(item => item.sectionId === state.selected).slice().reverse();
     panel.innerHTML = `
-      <div class="review-panel-head"><p class="eyebrow">Edit the working page</p><h2>${esc(active?.id || '')} · ${esc(active?.name || '')}</h2><p>${esc(binding?.firstHeading?.text || '')}</p></div>
+      <div class="review-panel-head"><p class="eyebrow">Edit the working page</p><h2>${esc(active?.id || '')} · ${esc(active?.name || '')}</h2><p>${esc(binding?.firstHeading?.text || '')}</p><button id="review-copy-section" class="review-copy-section" type="button">Copy section to other pages</button></div>
       ${binding?.gaps?.length ? `<details class="review-source-notes review-gap"><summary>Source notes</summary>${binding.gaps.map(item => `<p>${esc(item)}</p>`).join('')}</details>` : ''}
       <form id="review-change-form">
         <div class="review-picker"><strong>${node ? (node.type === 'image' ? 'Selected image' : 'Selected text') : 'Choose text or an image'}</strong><p>${node ? esc(nodeDescription(node)) : (nodes.length ? 'Click a copy line or image in the working page.' : 'Nothing in this section is ready to edit yet.')}</p>${node ? editorMarkup(node) : `<div class="review-node-list">${nodes.map(item => `<button type="button" data-review-pick="${esc(item.editId)}">${esc(nodeDescription(item))}</button>`).join('')}</div>`}</div>
-        <div class="review-reference"><label>Vercel example (reference only)<input id="review-example" type="url" placeholder="https://zodiac-pages.vercel.app/…" value="${esc(entry?.exampleUrl || '')}"></label><label class="review-note">Optional note<textarea id="review-note" rows="2">${esc(entry?.note || '')}</textarea></label></div>
+        <div class="review-reference"><label>Design example for Walter (optional)<input id="review-example" type="url" placeholder="https://zodiac-pages.vercel.app/…" value="${esc(entry?.exampleUrl || '')}"></label><label class="review-note">Optional note<textarea id="review-note" rows="2">${esc(entry?.note || '')}</textarea></label></div>
         ${renderConflict()}
         <div class="review-save-area"><p id="review-form-error" class="review-form-error" role="alert"></p><button id="review-save" class="review-save" type="submit">Save draft changes</button><p id="review-status" class="review-status ${esc(state.notice?.kind || '')}">${esc(state.notice?.text || '')}</p></div>
       </form>
-      <section class="review-history"><h3>Draft history</h3>${history.length ? history.map(historyMarkup).join('') : '<p class="review-muted">No direct edits saved for this section.</p>'}<details class="review-source-notes"><summary>Source baseline and notes</summary><p>${esc(active?.scopeNote || '')}</p>${(active?.versions || []).slice().reverse().map(version => `<p><strong>Imported record ${esc(version.number)}</strong> · ${esc(version.summary || '')}</p>`).join('')}</details></section>
+      <section class="review-history"><h3>Section changes</h3>${history.length ? history.map(historyMarkup).join('') : '<p class="review-muted">No edits saved for this section yet.</p>'}<details class="review-source-notes"><summary>Original section requirements</summary><p>${esc(active?.scopeNote || '')}</p>${(active?.versions || []).slice().reverse().map(version => `<p><strong>Imported record ${esc(version.number)}</strong> · ${esc(version.summary || '')}</p>`).join('')}</details></section>
       <section class="review-live"><h3>When Walter publishes it</h3><p>Confirm this section’s latest saved change after it appears on the customer page.</p><button id="review-publish" type="button" ${state.canEdit && currentRevisionIsPublishable() ? '' : 'disabled'}>Confirm published</button>${!currentRevisionIsPublishable() ? '<p class="review-muted">Save a change in this section before confirming it.</p>' : ''}<div id="review-published-form" hidden></div>${publications.map(publicationMarkup).join('')}</section>`;
     panel.querySelectorAll('[data-review-pick]').forEach(button => {
       button.addEventListener('click', () => pickNode(button.dataset.reviewPick));
@@ -564,6 +683,7 @@
       save();
     });
     $('review-publish')?.addEventListener('click', () => publish(active));
+    $('review-copy-section')?.addEventListener('click', showSharedEdit);
     $('review-load-latest')?.addEventListener('click', loadLatestAfterConflict);
     wireEditor();
     updateSaveButton();
@@ -592,6 +712,7 @@
       return;
     }
     stashInputs();
+    $('review-shared-edit')?.replaceChildren();
     state.selected = sectionId;
     state.picked = null;
     state.conflict = null;
@@ -651,6 +772,13 @@
     if (documentRoot.documentElement.dataset.funnelReviewWired === 'true') return;
     documentRoot.documentElement.dataset.funnelReviewWired = 'true';
     documentRoot.addEventListener('click', event => {
+      const bannerLink = event.target.closest?.('[data-funnel-working-banner] a');
+      if (bannerLink) {
+        event.preventDefault(); event.stopPropagation();
+        const href = safe(bannerLink.href);
+        if (href) window.open(href, '_blank', 'noopener');
+        return;
+      }
       const editable = event.target.closest?.('[data-funnel-edit-id]');
       const region = event.target.closest?.('[data-funnel-section-id]');
       if (!editable && !region) return;
@@ -668,22 +796,25 @@
     if (!area) return;
     const href = safe(url);
     area.hidden = false;
-    area.innerHTML = `<strong>Working page unavailable</strong><p>${esc(message)}</p>${href ? `<a href="${esc(href)}" target="_blank" rel="noopener">Open working page ↗</a>` : ''}`;
+    area.innerHTML = `<strong>The working preview could not open.</strong><p>${esc(message)}</p><button type="button" id="review-frame-retry">Retry preview</button>${href ? `<a href="${esc(href)}" target="_blank" rel="noopener">Open this working version ↗</a>` : ''}`;
+    $('review-frame-retry').onclick = () => { const frame = $('review-frame'); delete frame.dataset.reviewUrl; loadFrame(currentRevisionUrl()); };
   }
 
   function loadFrame(url) {
     const frame = $('review-frame');
     const href = safe(url);
     if (!frame || !href) return frameError('The private working page link is unavailable.', url);
-    if (frame.dataset.reviewUrl === href && frame.contentDocument?.body) {
-      state.frameReady = true;
+    if (frame.dataset.loadedUrl === href && state.frameReady) {
       markLabels();
       scrollSelected();
       return;
     }
+    if (frame.dataset.reviewUrl === href && frame.dataset.loading === 'true') return;
     const token = ++state.frameToken;
+    const expectedDraft = state.draft;
     state.frameReady = false;
     frame.dataset.reviewUrl = href;
+    frame.dataset.loading = 'true';
     const message = $('review-frame-message');
     if (message) {
       message.hidden = false;
@@ -693,12 +824,17 @@
       if (token !== state.frameToken) return;
       try {
         const documentRoot = frame.contentDocument;
+        if (!documentRoot || documentRoot.URL === 'about:blank') return;
+        const banner = documentRoot.querySelector('[data-funnel-working-banner]');
+        if (!banner) throw Error('Company sign-in may have expired. Open this working version to sign in, then retry the preview.');
+        if (banner.dataset.funnelWorkingPage !== expectedDraft.pageKey
+            || banner.dataset.funnelWorkingRevision !== expectedDraft.revision) {
+          throw Error('The preview loaded a different version. Refresh shared records, then retry.');
+        }
         const failures = [];
-        for (const binding of state.draft?.workingBindings || []) {
-          let matches;
+        for (const binding of expectedDraft.workingBindings || []) {
           let owned;
           try {
-            matches = documentRoot.querySelectorAll(binding.selector);
             const sectionId = window.CSS?.escape
               ? CSS.escape(binding.sectionId)
               : String(binding.sectionId).replace(/[^A-Za-z0-9_-]/g, '\\$&');
@@ -707,18 +843,19 @@
             failures.push(binding.sectionId);
             continue;
           }
-          if (matches.length !== 1 || owned.length !== 1 || matches[0] !== owned[0]
-              || !elementMatches(matches[0], binding)) {
+          if (owned.length !== 1 || !elementMatches(owned[0], binding)) {
             failures.push(binding.sectionId);
             continue;
           }
-          const actual = firstHeading(matches[0]);
+          const actual = firstHeading(owned[0]);
           const expected = binding.firstHeading;
           if ((actual?.tag || null) !== (expected?.tag || null)
               || (actual?.text || null) !== (expected?.text || null)) failures.push(binding.sectionId);
         }
-        if (failures.length) throw Error(`The saved working page no longer matches ${failures.slice(0, 2).join(', ')}.`);
+        if (failures.length) throw Error(`The section labels could not be verified for Version ${expectedDraft.version}. Retry the preview. Your saved page is intact.`);
         wireFrame(documentRoot);
+        frame.dataset.loadedUrl = href;
+        frame.dataset.loading = 'false';
         state.frameReady = true;
         if (message) message.hidden = true;
         markLabels();
@@ -728,10 +865,11 @@
         state.pendingScroll = true;
         scrollSelected();
       } catch (error) {
+        frame.dataset.loading = 'false';
         frameError(error.message, href);
       }
     };
-    frame.onerror = () => frameError('The private working page could not be embedded.', href);
+    frame.onerror = () => { frame.dataset.loading = 'false'; frameError('The private working page could not be embedded. Retry or open this version in its own tab.', href); };
     frame.src = href;
   }
 
@@ -1020,6 +1158,7 @@
     stashInputs();
     const detail = event.detail || {};
     const changedPage = detail.family && (detail.family !== state.family || detail.variant !== state.variant);
+    if (changedPage) state.pageChoice = '';
     state.user = detail.user || state.user;
     state.family = detail.family || state.family;
     state.variant = detail.variant || state.variant;
@@ -1043,6 +1182,8 @@
     if (['lander', 'bc', 'results', 'join', 'corporate'].includes(initialFamily)) state.family = initialFamily;
     const initialVariant = initialRoute.get('variant');
     state.variant = variants(state.family).includes(initialVariant) ? initialVariant : variants(state.family)[0];
+    const requestedPageKey = initialRoute.get('pageKey');
+    if (requestedPageKey === mainDraftKey() || requestedPageKey?.startsWith(`${mainDraftKey()}--variation-`)) state.pageChoice = requestedPageKey;
     const requested = initialRoute.get('section');
     if (requested) state.selected = requested;
     root.hidden = true;
@@ -1053,6 +1194,8 @@
       if (!changedPage) return;
       state.family = event.detail.family;
       state.variant = event.detail.variant;
+      state.pageChoice = '';
+      const route = new URL(location.href); route.searchParams.delete('pageKey'); history.replaceState(null,'',route);
       state.selected = null;
       state.layoutKey = '';
       if (state.family === 'corporate') return renderCorporate();

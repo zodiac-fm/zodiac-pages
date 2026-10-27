@@ -10,10 +10,12 @@ const {
   fetchCanonicalDraft,
   publicDraft,
   compareLiveSourceEvidence,
+  renderWorkingPage,
+  revisionSyncState,
   validPageKey,
 } = require('../lib/funnel-tracker/draft-store');
 const {captureDraftRevision} = require('../lib/funnel-tracker/draft-capture');
-const {getTarget} = require('../lib/funnel-tracker/production-catalog');
+const {getTarget, pairedLiveTargets} = require('../lib/funnel-tracker/production-catalog');
 const {fetchVerifiedLiveSource, buildVerifiedLiveRuntimeMap, LiveSourceError} = require('../lib/funnel-tracker/live-source');
 const {requestOidcTokenProvider} = require('../lib/funnel-tracker/production-monitor');
 const {workStore, InvalidWorkDataError, WorkStoreConflictError} = require('../lib/funnel-tracker/work-store');
@@ -43,6 +45,10 @@ const MESSAGES = Object.freeze({
   draft_has_unmerged_edits: 'This working page has saved edits from its earlier source. Those edits are safe. Compare them before replacing the source.',
   live_source_unavailable: 'The live template could not be verified. Your working page is unchanged. Try again shortly.',
   live_sections_unmatched: 'Some sections could not be matched to the live template. Your working page is unchanged.',
+  section_copy_conflict: 'One of the selected pages changed. Nothing was copied. Refresh the page list and review the selected versions again.',
+  invalid_section_copy: 'Choose a saved section and matching sections within the same page family. Nothing was copied.',
+  variation_name_conflict: 'That variation name is already in use for this category. Choose another name.',
+  invalid_variation: 'Give this variation a name and start from the current main working version.',
   same_origin_required: 'Open the tracker page directly before uploading a private image.',
   storage_not_configured: 'Shared tracker storage has not been configured yet.',
 });
@@ -126,7 +132,7 @@ function parsedJsonBody(req, maxBytes = 64 * 1024) {
 
 function redirectToTracker(res, pageKey) {
   const target = getTarget(pageKey);
-  const params = new URLSearchParams({mode: 'review', page: target.family, variant: target.variant});
+  const params = new URLSearchParams({mode: 'review', page: target.family, variant: target.variant, pageKey});
   res.statusCode = 302;
   res.setHeader('Cache-Control', 'private, no-store');
   res.setHeader('Location', `/funnel/tracker?${params}`);
@@ -197,6 +203,23 @@ function createHandler({
   captureRevision = captureDraftRevision,
   work = workStore,
 } = {}) {
+  async function withLiveCheck(req, value) {
+    const draft = publicDraft(value);
+    const publication = draft.latestPagePublication?.revisionId === draft.revision ? draft.latestPagePublication : null;
+    if (draft.liveSource || publication) {
+      const checkedAt = new Date().toISOString();
+      try {
+        const channel = publication ? pairedLiveTargets(draft.pageKey).find(item => item.productionUrl === publication.liveUrl)?.channel : draft.liveSource.channel;
+        const observed = await liveSourceFetcher(draft.mainPageKey, {
+          channel, tokenProvider: requestOidcTokenProvider(req),
+        });
+        const matchStatus = compareLiveSourceEvidence(value, observed.evidence);
+        draft.liveCheck = {status: matchStatus === 'check-needed' ? 'changed' : matchStatus === 'unavailable' ? 'unavailable' : 'current', matchStatus, checkedAt};
+      } catch { draft.liveCheck = {status: 'unavailable', checkedAt}; }
+    }
+    draft.sync = revisionSyncState(value, value.currentRevisionId, {syncStatus: draft.liveCheck?.status || null});
+    return draft;
+  }
   return async function handler(req, res) {
     if (!authConfigured()) return fail(res, 503, 'auth_not_configured', {setupPending: true});
     const params = query(req);
@@ -209,6 +232,45 @@ function createHandler({
       return fail(res, 401, hasAuthorizationHeader(req) ? 'agent_access_denied' : 'company_access_required');
     }
     if (!storageConfigured()) return fail(res, 503, 'storage_not_configured', {setupPending: true, user: identity.user});
+
+    if (req.method === 'GET' && action === 'working-pages') {
+      try {
+        const current = await drafts.readManifest();
+        return sendJson(res, 200, {drafts: current.data.drafts.map(publicDraft), user: identity.user});
+      } catch { return fail(res, 503, 'review_unavailable'); }
+    }
+
+    if (req.method === 'POST' && ['copy-section', 'create-variation'].includes(action)) {
+      if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) return fail(res, 403, 'agent_scope_denied');
+      if (!isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
+      const body = parsedJsonBody(req);
+      if (!body) return fail(res, 400, 'invalid_request');
+      try {
+        if (action === 'create-variation') {
+          const result = await drafts.createVariation({pageKey:body.pageKey, expectedRevision:body.expectedRevision, name:body.name, editor:identity.user});
+          try { await captureRevision(result.draft.pageKey, result.draft.currentRevisionId, {drafts, review:store}); } catch {}
+          const latest = (await drafts.getDraft(result.draft.pageKey)).draft || result.draft;
+          return sendJson(res, 201, {draft:publicDraft(latest), user:identity.user});
+        }
+        const result = await drafts.copySection({
+          sourcePageKey:body.sourcePageKey, sourceSectionId:body.sourceSectionId,
+          sourceRevision:body.sourceRevision, targets:body.targets, editor:identity.user,
+        });
+        // Each immutable page is saved atomically above. The existing cron captures
+        // pending screenshots without stretching a multi-page edit past its request budget.
+        return sendJson(res, 201, {drafts:result.drafts.map(publicDraft), user:identity.user});
+      } catch (error) {
+        if (error instanceof DraftStoreConflictError) {
+          return fail(res, 409, action === 'copy-section' ? 'section_copy_conflict' : 'draft_conflict');
+        }
+        if (error instanceof InvalidDraftDataError) {
+          const code = error.code === 'variation_name_conflict' ? 'variation_name_conflict'
+            : action === 'copy-section' ? 'invalid_section_copy' : 'invalid_variation';
+          return fail(res, 400, code);
+        }
+        return fail(res, 503, 'review_unavailable');
+      }
+    }
 
     if (req.method === 'GET' && action === 'linear-work') {
       try {
@@ -242,12 +304,15 @@ function createHandler({
             pageLabel: draft.label, createdAt: item.createdAt, editor: item.editor,
             summary: item.sourceEvidence ? 'Working draft synced from live. Earlier versions remain in history.' : 'Working page updated from the selected Vercel source. Earlier versions remain in history.',
           })),
-          ...draft.revisions.filter(item => item.kind === 'edit').map(item => ({
+          ...draft.revisions.filter(item => ['edit','section-copy'].includes(item.kind)).map(item => ({
             id: item.id, type: item.operationType, sectionId: item.sectionId,
             pageKey: draft.pageKey, family: draft.family, variant: draft.variant,
             pageLabel: draft.label, createdAt: item.createdAt, editor: item.editor,
-            summary: item.operationType === 'text' ? String(item.after).slice(0, 240) : 'Replacement image saved',
+            summary: item.kind === 'section-copy' ? `Section copied from ${item.after.sourceSectionId}. This version is unsynced.` : item.operationType === 'text' ? String(item.after).slice(0, 240) : 'Replacement image saved',
           })),
+          ...(draft.branch ? [{id:draft.revisions[0].id,type:'variation',sectionId:null,
+            pageKey:draft.pageKey,family:draft.family,variant:draft.variant,pageLabel:draft.label,
+            createdAt:draft.createdAt,editor:draft.revisions[0].editor,summary:`Variation created: ${draft.branch.name}`}]:[]),
           ...draft.publications.map(item => ({
             id: item.id, type: 'published', sectionId: item.sectionId,
             pageKey: draft.pageKey, family: draft.family, variant: draft.variant,
@@ -297,17 +362,7 @@ function createHandler({
       try {
         const current = await drafts.getDraft(pageKey);
         if (!current.draft) return fail(res, 404, 'draft_not_found');
-        const draft = publicDraft(current.draft);
-        if (draft.liveSource) {
-          const checkedAt = new Date().toISOString();
-          try {
-            const observed = await liveSourceFetcher(pageKey, {
-              channel: draft.liveSource.channel, tokenProvider: requestOidcTokenProvider(req),
-            });
-            const matchStatus = compareLiveSourceEvidence(current.draft, observed.evidence);
-            draft.liveCheck = {status: matchStatus === 'check-needed' ? 'changed' : 'current', matchStatus, checkedAt};
-          } catch { draft.liveCheck = {status: 'unavailable', checkedAt}; }
-        }
+        const draft = await withLiveCheck(req, current.draft);
         return sendJson(res, 200, {draft, user: identity.user});
       } catch (error) {
         if (error instanceof InvalidDraftDataError) return fail(res, 400, 'invalid_draft');
@@ -325,7 +380,8 @@ function createHandler({
         const revisionId = params.get('revision') || current.draft.currentRevisionId;
         const result = await drafts.getHtmlByRevision(current.draft, revisionId);
         if (!result) return fail(res, 404, 'draft_not_found');
-        return sendWorkingHtml(res, result.html);
+        const checked = revisionId === current.draft.currentRevisionId ? await withLiveCheck(req, current.draft) : null;
+        return sendWorkingHtml(res, renderWorkingPage(current.draft, result.html, revisionId, {syncStatus:checked?.liveCheck?.status || null}));
       } catch {
         return fail(res, 503, 'review_unavailable');
       }
@@ -371,7 +427,7 @@ function createHandler({
       if (!isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
       const body = parsedJsonBody(req);
       const target = body && validPageKey(body.pageKey) ? getTarget(body.pageKey) : null;
-      if (!target || !['lander', 'results'].includes(target.family) || typeof body.expectedRevision !== 'string') {
+      if (!target || target.variationOf || !['lander', 'results'].includes(target.family) || typeof body.expectedRevision !== 'string') {
         return fail(res, 400, 'invalid_draft');
       }
       try {
@@ -379,20 +435,23 @@ function createHandler({
         if (!existing.draft) return fail(res, 404, 'draft_not_found');
         if (existing.draft.currentRevisionId !== body.expectedRevision) throw new DraftStoreConflictError('draft revision conflict');
         const latestInitialization = existing.draft.revisions.findLastIndex(item => item.kind === 'initialized');
-        if (existing.draft.revisions.slice(latestInitialization + 1).some(item => item.kind === 'edit')) {
+        if (existing.draft.revisions.slice(latestInitialization + 1).some(item => item.kind !== 'initialized')) {
           throw new DraftStoreConflictError('draft_has_unmerged_edits');
         }
         const [mapResult, trackerResult, source] = await Promise.all([
           store.readMap(), tracker.read(), liveSourceFetcher(body.pageKey, {tokenProvider: requestOidcTokenProvider(req)}),
         ]);
         const existingHtml = await drafts.getHtmlByRevision(existing.draft, existing.draft.currentRevisionId);
+        const sectionNames = Object.fromEntries(trackerResult.data.sections.map(item => [item.id, item.name]));
+        const mapped = buildVerifiedLiveRuntimeMap(body.pageKey, source, mapResult.data, sectionNames);
+        const expectedSections = Object.keys(mapped.runtimeMap.sections);
         const alreadyMatches = publicDraft(existing.draft).liveSource
-          && compareLiveSourceEvidence(existing.draft, source.evidence) === 'synced-from-live'
+          && ['synced-from-live','confirmed-live'].includes(compareLiveSourceEvidence(existing.draft, source.evidence))
+          && expectedSections.length === existing.draft.workingBindings.length
+          && expectedSections.every(id => existing.draft.workingBindings.some(item => item.sectionId === id))
           && existingHtml?.html.includes('data-funnel-working-style="2"');
         let latest = existing.draft;
         if (!alreadyMatches) {
-          const sectionNames = Object.fromEntries(trackerResult.data.sections.map(item => [item.id, item.name]));
-          const mapped = buildVerifiedLiveRuntimeMap(body.pageKey, source, mapResult.data, sectionNames);
           const result = await drafts.rebase({
             pageKey: body.pageKey, expectedRevision: body.expectedRevision,
             sourceHtml: source.html, sourceSha256: source.sha256, sourceEvidence: source.evidence,
@@ -407,6 +466,7 @@ function createHandler({
         const draft = publicDraft(latest);
         const matchStatus = compareLiveSourceEvidence(latest, source.evidence);
         draft.liveCheck = {status: matchStatus === 'check-needed' ? 'changed' : 'current', matchStatus, checkedAt: new Date().toISOString()};
+        draft.sync = revisionSyncState(latest, latest.currentRevisionId, {syncStatus:draft.liveCheck.status});
         return sendJson(res, 200, {draft, synced: !alreadyMatches, user: identity.user});
       } catch (error) {
         if (error instanceof DraftStoreConflictError) {
@@ -533,7 +593,23 @@ function createHandler({
       const body = parsedJsonBody(req);
       if (!body) return fail(res, 400, 'invalid_publication');
       try {
-        const confirmed = await drafts.confirmPublished({...body, ...(action === 'confirm-page-published' ? {sectionId: null} : {}), editor: identity.user});
+        let liveEvidence = {};
+        if (action === 'confirm-page-published') {
+          const target = getTarget(body.pageKey);
+          const paired = pairedLiveTargets(body.pageKey);
+          if (paired.length) {
+            const channel = paired.find(item => item.productionUrl === body.liveUrl);
+            if (!channel || body.confirmed !== true) return fail(res, 400, 'invalid_publication');
+            const observed = await liveSourceFetcher(target.variationOf || body.pageKey, {
+              channel:channel.channel, tokenProvider:requestOidcTokenProvider(req),
+            });
+            liveEvidence = {liveContentSha256:observed.evidence.contentSha256,liveSourceCommit:observed.evidence.sourceCommit};
+          }
+        }
+        const confirmed = await drafts.confirmPublished({
+          pageKey:body.pageKey,revisionId:body.revisionId,sectionId:action === 'confirm-page-published' ? null : body.sectionId,
+          confirmed:body.confirmed,liveUrl:body.liveUrl,note:body.note,...liveEvidence,editor:identity.user,
+        });
         return sendJson(res, 201, {
           draft: publicDraft(confirmed.draft),
           user: identity.user,
