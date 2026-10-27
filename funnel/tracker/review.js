@@ -17,7 +17,7 @@
     family: 'lander', variant: 'g', selected: null,
     draft: null, pageKey: '', picked: null, frameReady: false, frameToken: 0, draftToken: 0,
     mode: null, notice: null, pendingScroll: false, conflict: null,
-    scratch: new Map(), layoutKey: '', work: [], workError: '',
+    scratch: new Map(), layoutKey: '', work: [], workError: '', syncing: false,
   };
   let root;
   let resizeObserver;
@@ -38,7 +38,7 @@
     const raw = typeof value === 'string' ? value : value?.url;
     if (!String(raw || '').trim()) return '';
     try {
-      const base = String(raw).startsWith('/api/funnel-review') ? location.origin : state.draft?.sourceUrl;
+      const base = String(raw).startsWith('/api/funnel-review') ? location.origin : state.draft?.contentBaseUrl || state.draft?.sourceUrl;
       return safe(new URL(raw, base || location.href).href);
     } catch {
       return '';
@@ -334,11 +334,20 @@
     const container = $('review-page-pair'), draft = state.draft;
     if (!container || !draft) return;
     const livePages = draft.livePages || [];
-    const mainLive = livePages.find(item => item.channel === 'direct') || livePages.find(item => item.channel === 'affiliate') || livePages[0];
+    const mainLive = livePages.find(item => item.url === draft.liveSource?.liveUrl) || livePages.find(item => item.channel === 'direct') || livePages.find(item => item.channel === 'affiliate') || livePages[0];
     const publication = draft.latestPagePublication;
-    const status = draft.sourceOutdated ? 'Earlier source has saved edits' : draft.pageStatus === 'confirmed-live'
+    const live = draft.liveSource;
+    const canSync = ['lander', 'results'].includes(draft.family);
+    const status = state.syncing ? 'Syncing draft from live…' : draft.sourceOutdated ? 'Earlier source has saved edits' : draft.pageStatus === 'confirmed-live' ? 'Confirmed matching live' : live
+      ? draft.sourceMatchStatus === 'changes-not-live' ? 'Draft changes awaiting publication'
+        : draft.liveCheck?.status === 'changed' ? 'Live page changed since this draft was synced'
+          : draft.liveCheck?.status === 'current' ? 'Matches live' : 'Live match could not be checked'
+      : draft.pageStatus === 'confirmed-live'
       ? 'Confirmed matching live' : draft.pageStatus === 'changes-not-live' || draft.pendingEditCount
         ? 'Draft changes awaiting publication' : 'Live match not confirmed';
+    const explanation = live
+      ? `Synced from ${esc(live.channel)} live on ${esc(dateTime(live.createdAt))} by ${esc(live.editor.name)}.${live.synthetic ? ' Results uses a fixed sample profile.' : ''} ${draft.liveCheck?.status === 'current' ? `Live template checked ${esc(dateTime(draft.liveCheck.checkedAt))}.` : draft.liveCheck?.status === 'changed' ? 'Update the draft from live to start with the latest version.' : 'Your saved baseline is available. Refresh to retry the live check.'}`
+      : 'Compare the live page with this draft before confirming a match.';
     container.innerHTML = `<div class="page-pair">
       <section class="page-pair-live"><p class="eyebrow">Live page</p><h2>${esc(draft.selectedLabel || draft.label)}</h2>
         ${mainLive ? `<a href="${esc(safe(mainLive.url))}" target="_blank" rel="noopener">Open live page ↗</a><p class="pair-address">${esc(mainLive.url.replace('https://',''))}</p>` : '<p class="review-muted">No live page has been selected for this draft.</p>'}
@@ -346,15 +355,53 @@
       </section>
       <section class="page-pair-draft"><p class="eyebrow">Vercel draft</p><h2>${esc(draft.selectedLabel || draft.label)} <span class="pair-draft-badge">DRAFT</span></h2>
         <a href="${esc(safe(draft.workingUrl))}" target="_blank" rel="noopener">Open editable draft ↗</a><p class="pair-address">${esc(safe(draft.workingUrl).replace('https://',''))}</p>
-        <p class="pair-source">Based on <a href="${esc(safe(draft.referenceUrl || draft.sourceUrl))}" target="_blank" rel="noopener">${esc(draft.sourceVersion || 'selected source')} ↗</a>. Earlier versions stay in history.</p>
+        <p class="pair-source">${live ? `Synced from live · ${esc(dateTime(live.createdAt))}. Original design: ` : 'Based on '}<a href="${esc(safe(draft.referenceUrl || draft.sourceUrl))}" target="_blank" rel="noopener">${esc(draft.sourceVersion || 'selected source')} ↗</a>. Earlier versions stay in history.</p>
       </section>
-      <div class="pair-publication"><strong>${esc(status)}</strong><p>${publication ? `Confirmed by ${esc(publication.editor.name)} on ${esc(dateTime(publication.confirmedAt))} for <a href="${esc(safe(publication.liveUrl))}" target="_blank" rel="noopener">this live link</a>.` : 'Compare the live page with this draft before confirming a match.'}${draft.pendingEditCount ? ` ${draft.pendingEditCount} saved ${draft.pendingEditCount === 1 ? 'edit' : 'edits'} since the last page confirmation.` : ''}</p>
+      <div class="pair-publication" aria-live="polite"><strong>${esc(status)}</strong><p>${explanation}</p>${publication ? `<p>Last human confirmation: ${esc(publication.editor.name)}, ${esc(dateTime(publication.confirmedAt))} for <a href="${esc(safe(publication.liveUrl))}" target="_blank" rel="noopener">this live link</a>.${publication.revisionId !== draft.revision ? ' That confirmation is for an earlier draft.' : ''}</p>` : ''}
+      ${canSync ? `<button id="pair-sync-live" type="button" ${!state.canEdit || state.syncing ? 'disabled' : ''}>${state.syncing ? 'Syncing from live…' : 'Update draft from live'}</button><p class="review-muted">Copies the current live template into this working draft. Earlier versions stay saved. Saved draft edits must be reconciled first.</p><p id="pair-sync-message" role="status"></p>` : ''}
+      <details><summary>Earlier working versions · ${draft.history.length}</summary>${draft.history.slice().reverse().map(item => `<p><a href="${esc(safe(item.workingUrl))}" target="_blank" rel="noopener">${esc(item.sourceEvidence ? 'Synced from live' : item.kind === 'initialized' ? 'Original Vercel source' : 'Saved draft edit')} · ${esc(dateTime(item.createdAt))} ↗</a>${item.screenshot?.status === 'ready' ? ` · <a href="${esc(safe(item.screenshot.imageUrl))}" target="_blank" rel="noopener">Screenshot ↗</a>` : ''}</p>`).join('')}</details>
       ${livePages.length && !draft.sourceOutdated ? `<details id="pair-confirm"><summary>Confirm page matches live</summary><form id="pair-confirm-form"><label>Live channel<select id="pair-live-channel">${livePages.map(item => `<option value="${esc(item.url)}" ${item.id === mainLive.id ? 'selected' : ''}>${esc(item.channel)}</option>`).join('')}</select></label><label class="pair-checkbox"><input id="pair-confirm-check" type="checkbox" required>I checked this whole draft against that live page and they match.</label><button type="submit">Save live confirmation</button><p id="pair-confirm-error" role="alert"></p></form></details>` : ''}</div>
     </div><details class="pair-work"><summary>Work in Linear · ${state.work.length} linked ${state.work.length === 1 ? 'issue' : 'issues'}</summary><div class="pair-work-heading"><h3>Linked work</h3><button type="button" id="pair-link-work">Link a Linear issue</button></div><p class="review-muted">Issue status is a dated record. Open Linear for its latest status. Confirm page publication separately.</p>
       ${state.work.map(item => `<article><a href="${esc(safe(item.issueUrl))}" target="_blank" rel="noopener">${esc(item.issueId)} · ${esc(item.title)} ↗</a><p>${esc(item.status)}${item.assignee ? ` · ${esc(item.assignee)}` : ''}<small>Checked ${esc(dateTime(item.checkedAt))}</small></p>${item.note ? `<p class="review-muted">${esc(item.note)}</p>` : ''}</article>`).join('') || `<p>${esc(state.workError || 'No Linear issue linked to this page yet.')}</p>`}
       <div id="pair-work-form"></div></details>`;
     $('pair-confirm-form')?.addEventListener('submit', confirmPage);
+    $('pair-sync-live')?.addEventListener('click', syncLive);
     $('pair-link-work').onclick = showWorkForm;
+  }
+
+  async function syncLive() {
+    if (state.syncing) return;
+    stashInputs();
+    if (pendingScratch()) {
+      $('pair-sync-message').textContent = 'Your unsaved change is still here. Save or undo it before updating from live.';
+      return;
+    }
+    const pageKey = state.pageKey, previous = state.draft;
+    state.syncing = true;
+    renderPagePair();
+    try {
+      const response = await request('/api/funnel-review?action=sync-live', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({pageKey, expectedRevision: previous.revision}),
+      });
+      if (state.pageKey !== pageKey) return;
+      if (pendingScratch(previous)) {
+        state.conflict = conflictFor(response.draft, pendingScratch(previous));
+        state.notice = {text:'The live baseline was saved. Your unsaved change is still here. Compare before retrying.', kind:'error'};
+      } else {
+        rebaseCleanScratch(previous, response.draft);
+        state.draft = response.draft;
+        state.picked = null;
+        state.notice = {text:response.synced ? 'Working draft updated from live. Earlier versions are saved.' : 'Working draft already matches the live template.', kind:'success'};
+      }
+      document.dispatchEvent(new Event('tracker:working-saved'));
+    } catch (error) {
+      if (state.pageKey === pageKey) state.notice = {text: `${error.message}${error.result?.unmatched?.length ? ` Sections: ${error.result.unmatched.join(', ')}.` : ''}`, kind:'error'};
+    } finally {
+      state.syncing = false;
+      render();
+      if (state.pageKey === pageKey && $('pair-sync-message')) $('pair-sync-message').textContent = state.notice?.text || '';
+    }
   }
 
   async function confirmPage(event) {

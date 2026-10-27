@@ -55,6 +55,16 @@
     document.querySelectorAll('[data-page-variant]').forEach(b=>b.onclick=()=>{variant=b.dataset.pageVariant;document.dispatchEvent(new CustomEvent('tracker:select-variant',{detail:{variant}}));render();});
     document.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>check(b.dataset.check));
     const rows=$('production-workspace').querySelectorAll('.production-row-main');
+    if(['lander','results'].includes(family)){
+      const groups=$('production-workspace').querySelectorAll('.production-group-title h3');
+      if(groups[1])groups[1].textContent='Vercel pages and original sources';
+      [...live,...draft].forEach((target,index)=>{
+        if(!/^draft-(lander|results)-[gam]$/.test(target.id)||!rows[index])return;
+        rows[index].querySelector('h4').textContent=`Original design source · ${target.sourceVersion||target.label}`;
+        const route=new URLSearchParams({mode:'review',page:target.family,variant:target.variant});
+        rows[index].insertAdjacentHTML('beforeend',`<p><a href="/funnel/tracker?${esc(route.toString())}">Open current working draft and saved versions ↗</a></p><p class="capture-meta">These screenshots preserve the original design source. The editable draft has its own version history.</p>`);
+      });
+    }
     if(family==='corporate'){
       $('production-workspace').querySelector('.production-explainer p:last-child').textContent='The live corporate homepage and your Vercel drafts keep their dated screenshot history here.';
       [...live,...draft].forEach((target,index)=>{if(rows[index])rows[index].querySelector('h4').textContent=target.label;});

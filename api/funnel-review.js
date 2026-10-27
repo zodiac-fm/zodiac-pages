@@ -9,10 +9,13 @@ const {
   draftStore,
   fetchCanonicalDraft,
   publicDraft,
+  compareLiveSourceEvidence,
   validPageKey,
 } = require('../lib/funnel-tracker/draft-store');
 const {captureDraftRevision} = require('../lib/funnel-tracker/draft-capture');
 const {getTarget} = require('../lib/funnel-tracker/production-catalog');
+const {fetchVerifiedLiveSource, buildVerifiedLiveRuntimeMap, LiveSourceError} = require('../lib/funnel-tracker/live-source');
+const {requestOidcTokenProvider} = require('../lib/funnel-tracker/production-monitor');
 const {workStore, InvalidWorkDataError, WorkStoreConflictError} = require('../lib/funnel-tracker/work-store');
 const {
   MAX_ATTACHMENT_BYTES,
@@ -38,6 +41,8 @@ const MESSAGES = Object.freeze({
   draft_not_found: 'That working page has not been initialized yet.',
   draft_conflict: 'Someone saved this working page while you were editing. Refresh and compare before saving again.',
   draft_has_unmerged_edits: 'This working page has saved edits from its earlier source. Those edits are safe. Compare them before replacing the source.',
+  live_source_unavailable: 'The live template could not be verified. Your working page is unchanged. Try again shortly.',
+  live_sections_unmatched: 'Some sections could not be matched to the live template. Your working page is unchanged.',
   same_origin_required: 'Open the tracker page directly before uploading a private image.',
   storage_not_configured: 'Shared tracker storage has not been configured yet.',
 });
@@ -136,7 +141,7 @@ function sendWorkingHtml(res, html) {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'same-origin');
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
-  res.setHeader('Content-Security-Policy', "default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; object-src 'none'; base-uri 'self' https://zodiac-pages.vercel.app; frame-ancestors 'self'; form-action 'self' https://zodiac-pages.vercel.app");
+  res.setHeader('Content-Security-Policy', "default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; object-src 'none'; base-uri 'self' https://zodiac-pages.vercel.app https://zodiac.fm https://app.zodiac.fm; frame-ancestors 'self'; form-action 'self' https://zodiac-pages.vercel.app");
   return res.end(html);
 }
 
@@ -188,6 +193,7 @@ function createHandler({
   drafts = draftStore,
   tracker = blobStore,
   sourceFetcher = fetchCanonicalDraft,
+  liveSourceFetcher = fetchVerifiedLiveSource,
   captureRevision = captureDraftRevision,
   work = workStore,
 } = {}) {
@@ -234,7 +240,7 @@ function createHandler({
             id: item.id, type: 'source', sectionId: null,
             pageKey: draft.pageKey, family: draft.family, variant: draft.variant,
             pageLabel: draft.label, createdAt: item.createdAt, editor: item.editor,
-            summary: 'Working page updated from the selected Vercel source. Earlier versions remain in history.',
+            summary: item.sourceEvidence ? 'Working draft synced from live. Earlier versions remain in history.' : 'Working page updated from the selected Vercel source. Earlier versions remain in history.',
           })),
           ...draft.revisions.filter(item => item.kind === 'edit').map(item => ({
             id: item.id, type: item.operationType, sectionId: item.sectionId,
@@ -291,7 +297,18 @@ function createHandler({
       try {
         const current = await drafts.getDraft(pageKey);
         if (!current.draft) return fail(res, 404, 'draft_not_found');
-        return sendJson(res, 200, {draft: publicDraft(current.draft), user: identity.user});
+        const draft = publicDraft(current.draft);
+        if (draft.liveSource) {
+          const checkedAt = new Date().toISOString();
+          try {
+            const observed = await liveSourceFetcher(pageKey, {
+              channel: draft.liveSource.channel, tokenProvider: requestOidcTokenProvider(req),
+            });
+            const matchStatus = compareLiveSourceEvidence(current.draft, observed.evidence);
+            draft.liveCheck = {status: matchStatus === 'check-needed' ? 'changed' : 'current', matchStatus, checkedAt};
+          } catch { draft.liveCheck = {status: 'unavailable', checkedAt}; }
+        }
+        return sendJson(res, 200, {draft, user: identity.user});
       } catch (error) {
         if (error instanceof InvalidDraftDataError) return fail(res, 400, 'invalid_draft');
         return fail(res, 503, 'review_unavailable');
@@ -346,6 +363,61 @@ function createHandler({
       } catch (error) {
         if (error instanceof InvalidReviewDataError) return fail(res, 400, 'invalid_attachment');
         return fail(res, 503, 'review_unavailable');
+      }
+    }
+
+    if (req.method === 'POST' && action === 'sync-live') {
+      if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) return fail(res, 403, 'agent_scope_denied');
+      if (!isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
+      const body = parsedJsonBody(req);
+      const target = body && validPageKey(body.pageKey) ? getTarget(body.pageKey) : null;
+      if (!target || !['lander', 'results'].includes(target.family) || typeof body.expectedRevision !== 'string') {
+        return fail(res, 400, 'invalid_draft');
+      }
+      try {
+        const existing = await drafts.getDraft(body.pageKey);
+        if (!existing.draft) return fail(res, 404, 'draft_not_found');
+        if (existing.draft.currentRevisionId !== body.expectedRevision) throw new DraftStoreConflictError('draft revision conflict');
+        const latestInitialization = existing.draft.revisions.findLastIndex(item => item.kind === 'initialized');
+        if (existing.draft.revisions.slice(latestInitialization + 1).some(item => item.kind === 'edit')) {
+          throw new DraftStoreConflictError('draft_has_unmerged_edits');
+        }
+        const [mapResult, trackerResult, source] = await Promise.all([
+          store.readMap(), tracker.read(), liveSourceFetcher(body.pageKey, {tokenProvider: requestOidcTokenProvider(req)}),
+        ]);
+        const alreadyMatches = publicDraft(existing.draft).liveSource
+          && compareLiveSourceEvidence(existing.draft, source.evidence) === 'synced-from-live';
+        let latest = existing.draft;
+        if (!alreadyMatches) {
+          const sectionNames = Object.fromEntries(trackerResult.data.sections.map(item => [item.id, item.name]));
+          const mapped = buildVerifiedLiveRuntimeMap(body.pageKey, source, mapResult.data, sectionNames);
+          const result = await drafts.rebase({
+            pageKey: body.pageKey, expectedRevision: body.expectedRevision,
+            sourceHtml: source.html, sourceSha256: source.sha256, sourceEvidence: source.evidence,
+            runtimeMap: mapped.runtimeMap, sectionNames, editor: identity.user,
+          });
+          latest = result.draft;
+        }
+        try {
+          await captureRevision(body.pageKey, latest.currentRevisionId, {drafts, review: store});
+          latest = (await drafts.getDraft(body.pageKey)).draft || latest;
+        } catch {}
+        const draft = publicDraft(latest);
+        const matchStatus = compareLiveSourceEvidence(latest, source.evidence);
+        draft.liveCheck = {status: matchStatus === 'check-needed' ? 'changed' : 'current', matchStatus, checkedAt: new Date().toISOString()};
+        return sendJson(res, 200, {draft, synced: !alreadyMatches, user: identity.user});
+      } catch (error) {
+        if (error instanceof DraftStoreConflictError) {
+          const latest = await drafts.getDraft(body.pageKey).catch(() => null);
+          return fail(res, 409, error.message === 'draft_has_unmerged_edits' ? 'draft_has_unmerged_edits' : 'draft_conflict', {
+            draft: latest?.draft ? publicDraft(latest.draft) : null,
+          });
+        }
+        if (error instanceof LiveSourceError && error.code === 'live_sections_unmatched') {
+          return fail(res, 422, 'live_sections_unmatched', {unmatched: error.details.unmatched.map(item => item.sectionId)});
+        }
+        if (error instanceof InvalidDraftDataError) return fail(res, 400, 'invalid_draft');
+        return fail(res, 503, 'live_source_unavailable');
       }
     }
 
