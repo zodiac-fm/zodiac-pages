@@ -23,6 +23,21 @@
   };
   let root;
   let resizeObserver;
+  const createSessionCache = window.FunnelSessionCache.createSessionCache;
+  const draftCache = createSessionCache({maxEntries:32,maxBytes:8*1024*1024,ttlMs:30000});
+  const htmlCache = createSessionCache({maxEntries:24,maxBytes:16*1024*1024,ttlMs:300000});
+  const auxiliaryCache = createSessionCache({maxEntries:4,maxBytes:8*1024*1024,ttlMs:30000});
+  const liveRequests = new Map();
+  const warmQueue = [];
+  const warmKeys = new Set();
+  let warming = 0;
+  let cacheGeneration = 0;
+
+  function clearCaches() {
+    cacheGeneration += 1;
+    draftCache.clear(); htmlCache.clear(); auxiliaryCache.clear();
+    liveRequests.clear(); warmQueue.length = 0; warmKeys.clear();
+  }
 
   function safe(value) {
     if (!String(value || '').trim()) return '';
@@ -61,7 +76,8 @@
   function activeDraft(value = state.draft) {
     if (!value) return value;
     const view = value.views?.[selectedView()];
-    return view ? {...value, ...view, views: value.views, overallSync: value.viewSync || value.overallSync || value.sync, activeView: selectedView()} : value;
+    return view ? {...value, ...view, views: value.views, overallSync: value.viewSync || value.overallSync || value.sync, activeView: selectedView(),
+      history:value.history.map(item=>({...item,...item.views?.[selectedView()]}))} : value;
   }
 
   function imageUrl(value) {
@@ -84,6 +100,7 @@
       throw Error('The workspace service returned an unreadable response.');
     }
     if (!response.ok) {
+      if(response.status===401){clearCaches();document.dispatchEvent(new Event('tracker:refresh-request'));}
       const error = Error(result.message || result.error?.message || (
         response.status === 409
           ? 'A newer draft was saved. Your unsaved edit is still here.'
@@ -93,6 +110,7 @@
       error.result = result;
       throw error;
     }
+    if (options.method && options.method !== 'GET') clearCaches();
     return result;
   }
 
@@ -143,6 +161,7 @@
   }
 
   function clear() {
+    clearCaches();
     for (const entry of state.scratch.values()) releaseScratch(entry);
     state.scratch.clear();
     state.map = null;
@@ -185,6 +204,112 @@
     }
   }
 
+  function deferredResponse(draft) {
+    return {draft:{...draft,liveCheckPending:true,liveCheck:{status:'pending',checkedAt:null}}};
+  }
+
+  function refreshLive(draft, {fresh = false} = {}) {
+    const pageKey = draft.pageKey;
+    const view = selectedView();
+    const key = `${pageKey}:${draft.revision}`;
+    const checkedAt = Date.parse(draft.liveCheck?.checkedAt || '');
+    if (!fresh && !draft.liveCheckPending && Date.now()-checkedAt < 60000) return;
+    if (liveRequests.has(key) && !fresh) return;
+    const generation = cacheGeneration;
+    const task = request(`/api/funnel-review?action=draft&pageKey=${encodeURIComponent(pageKey)}&view=${view}${fresh?'&check=fresh':''}`)
+      .then(response => {
+        if (generation !== cacheGeneration) return;
+        draftCache.set(pageKey,response);
+        if (state.pageKey !== pageKey || state.draft?.revision !== draft.revision) return;
+        stashInputs();
+        const latest = activeDraft(response.draft);
+        if (latest.revision !== draft.revision) {
+          const pending = pendingScratch(state.draft);
+          if (pending) {
+            state.conflict = conflictFor(latest,pending);
+            state.notice = {text:'A newer working page exists. Your unsaved change is still here.',kind:'error'};
+            renderPanel(section(),workingBinding(state.selected),(state.draft.editableNodes||[]).filter(item=>item.sectionId===state.selected));
+            return;
+          }
+          rebaseCleanScratch(state.draft,latest);
+          state.draft = latest;
+          state.picked = null;
+          render();
+          return;
+        }
+        state.draft = latest;
+        renderViewBar(); renderPagePair(); renderBranchBar();
+      }).catch(error => {
+        if (generation !== cacheGeneration || state.pageKey !== pageKey || state.draft?.revision !== draft.revision) return;
+        state.draft = {...state.draft,liveCheckPending:false,liveCheck:{status:'unavailable',checkedAt:new Date().toISOString()}};
+        state.draft.views = Object.fromEntries(Object.entries(state.draft.views||{}).map(([name,value])=>[name,{...value,sync:{...value.sync,checkStatus:'unavailable'}}]));
+        state.draft.viewSync = {...state.draft.viewSync,checkStatus:'unavailable'};
+        renderViewBar(); renderPagePair();
+      }).finally(()=>{if(liveRequests.get(key)===task)liveRequests.delete(key);});
+    liveRequests.set(key,task);
+  }
+
+  async function previewDocument(href) {
+    return htmlCache.load(href,async()=>{
+      const response = await fetch(href,{credentials:'same-origin',cache:'no-store'});
+      if (!response.ok) {
+        if(response.status===401){clearCaches();document.dispatchEvent(new Event('tracker:refresh-request'));}
+        throw Error(response.status===401?'Company sign-in has expired. Sign in again to open the working page.':'The saved working preview could not load.');
+      }
+      const html = await response.text();
+      const parsed = new DOMParser().parseFromString(html,'text/html');
+      if (!parsed.querySelector('[data-funnel-working-banner]')) throw Error('The saved working page could not be verified.');
+      parsed.querySelectorAll('script,noscript,iframe,object,embed').forEach(node=>node.remove());
+      parsed.querySelectorAll('*').forEach(node=>{
+        for(const attribute of [...node.attributes])if(attribute.name.startsWith('on'))node.removeAttribute(attribute.name);
+      });
+      const policy = parsed.createElement('meta');
+      policy.httpEquiv = 'Content-Security-Policy';
+      policy.content = "default-src 'none'; style-src 'self' 'unsafe-inline' https:; img-src 'self' https: data: blob:; font-src 'self' https: data:; media-src 'self' https: blob:; script-src 'none'; connect-src 'none'; object-src 'none'; form-action 'none'; base-uri 'self' https://zodiac-pages.vercel.app https://zodiac.fm https://app.zodiac.fm";
+      parsed.head.prepend(policy);
+      return '<!doctype html>'+parsed.documentElement.outerHTML;
+    });
+  }
+
+  function warmPreviews(drafts) {
+    for(const draft of drafts.filter(item=>!item.variation).slice(0,12))for(const view of ['desktop','mobile']){
+      const url = new URL('/api/funnel-review',location.origin);
+      url.search = new URLSearchParams({action:'draft-html',pageKey:draft.pageKey,revision:draft.revision,view,embedded:'1',check:'defer'});
+      const href = url.href;
+      if(warmKeys.has(href)||htmlCache.get(href))continue;
+      warmKeys.add(href); warmQueue.push({href,generation:cacheGeneration});
+    }
+    const pump=()=>{
+      while(warming<2&&warmQueue.length){
+        const entry=warmQueue.shift();
+        if(entry.generation!==cacheGeneration)continue;
+        warming+=1;
+        previewDocument(entry.href).catch(()=>{}).finally(()=>{warming-=1;warmKeys.delete(entry.href);pump();});
+      }
+    };
+    pump();
+  }
+
+  function loadAuxiliary({force = false} = {}) {
+    const generation=cacheGeneration;
+    const pageKey=state.pageKey;
+    auxiliaryCache.load('pages',()=>request('/api/funnel-review?action=working-pages'),{force}).then(result=>{
+      if(generation!==cacheGeneration)return;
+      state.pages=result.drafts||[];state.pagesError='';
+      for(const draft of state.pages){
+        const cached=draftCache.get(draft.pageKey);
+        if(!cached||cached.draft.revision!==draft.revision)draftCache.set(draft.pageKey,deferredResponse(draft));
+      }
+      warmPreviews(state.pages);
+      if(state.draft)renderBranchBar();
+    }).catch(error=>{if(error.code!=='cache_cleared')state.pagesError='Other working pages could not be loaded.';});
+    auxiliaryCache.load('linear',()=>request('/api/funnel-review?action=linear-work'),{force}).then(result=>{
+      if(generation!==cacheGeneration||state.pageKey!==pageKey)return;
+      state.work=(result.entries||[]).filter(item=>item.pageKey===pageKey);state.workError='';
+      renderPagePair();
+    }).catch(error=>{if(error.code!=='cache_cleared')state.workError='Linked work could not be loaded.';});
+  }
+
   function pendingScratch(draft = state.draft) {
     for (const [key, entry] of state.scratch) {
       if (!key.startsWith(`${state.pageKey}:`)) continue;
@@ -220,9 +345,9 @@
     };
   }
 
-  async function loadDraft({force = false} = {}) {
+  async function loadDraft({force = false, fresh = false} = {}) {
     const pageKey = draftKey();
-    if (!force && state.pageKey === pageKey && state.draft) return state.draft;
+    if (!force && state.pageKey === pageKey && state.draft?.activeView === selectedView()) return state.draft;
     stashInputs();
     const previous = state.pageKey === pageKey ? state.draft : null;
     if (state.pageKey !== pageKey) {
@@ -236,7 +361,7 @@
     const token = ++state.draftToken;
     let response;
     try {
-      response = await request(`/api/funnel-review?action=draft&pageKey=${encodeURIComponent(pageKey)}&view=${selectedView()}`);
+      response = await draftCache.load(pageKey,()=>request(`/api/funnel-review?action=draft&pageKey=${encodeURIComponent(pageKey)}&view=${selectedView()}&check=defer`),{force});
     } catch (error) {
       if (error.status !== 404) throw error;
       response = await request(`/api/funnel-review?action=initialize-draft&view=${selectedView()}`, {
@@ -261,14 +386,6 @@
       }
     }
     response.draft = activeDraft(response.draft);
-    try {
-      const linked = await request(`/api/funnel-review?action=linear-work&pageKey=${encodeURIComponent(pageKey)}`);
-      if (token === state.draftToken) { state.work = linked.entries || []; state.workError = ''; }
-    } catch { state.work = []; state.workError = 'Linked work could not be loaded. Refresh to retry.'; }
-    try {
-      const pages = await request('/api/funnel-review?action=working-pages');
-      if (token === state.draftToken) { state.pages = pages.drafts || []; state.pagesError = ''; }
-    } catch { state.pagesError = 'Other working pages could not be loaded. Refresh to retry.'; }
     if (token !== state.draftToken || state.pageKey !== pageKey) return state.draft;
     const latest = activeDraft(response.draft);
     if (previous && latest.revision !== previous.revision) {
@@ -285,6 +402,10 @@
     if (state.picked) state.picked = latest.editableNodes.find(item => item.editId === state.picked.editId) || null;
     state.conflict = null;
     state.user = response.user || state.user;
+    const linked = auxiliaryCache.get('linear');
+    state.work = (linked?.entries||[]).filter(item=>item.pageKey===pageKey);
+    loadAuxiliary({force:fresh});
+    refreshLive(latest,{fresh});
     return latest;
   }
 
@@ -334,8 +455,9 @@
   function previewEmbedUrl(value) {
     const href = withView(value);
     if (!href) return '';
-    const url = new URL(href, location.origin);
-    url.searchParams.set('embedded', '1');
+    const url = new URL('/api/funnel-review', location.origin);
+    url.search = new URLSearchParams({action:'draft-html',pageKey:state.draft.pageKey,
+      revision:state.draft.revision,view:selectedView(),embedded:'1',check:'defer'});
     return safe(url.href);
   }
 
@@ -351,7 +473,7 @@
     route.searchParams.set('view', view);
     history.replaceState(null, '', route);
     try {
-      await loadDraft({force: true});
+      await loadDraft();
       render();
     } catch (error) {
       setNotice(error.message, 'error');
@@ -407,6 +529,7 @@
   function renderBranchBar() {
     const container = $('review-branchbar'), draft = state.draft;
     if (!container || !draft) return;
+    if(container.querySelector('#review-create-variation'))return;
     const pages = [draft, ...state.pages.filter(item => item.pageKey !== draft.pageKey)].filter(item => item.mainPageKey === draft.mainPageKey).sort((a,b)=>Number(Boolean(a.variation))-Number(Boolean(b.variation)));
     container.innerHTML = `<div class="review-branchbar"><label>Variation<select id="review-variation">${pages.map(item => `<option value="${esc(item.pageKey)}" ${item.pageKey === draft.pageKey ? 'selected' : ''}>${esc(item.variation?.name || 'Main')} · Version ${esc(item.version)}</option>`).join('') || `<option>${esc(draft.variation?.name || 'Main')} · Version ${esc(draft.version)}</option>`}</select></label><button id="review-new-variation" type="button" ${draft.variation || !state.canEdit ? 'disabled' : ''}>New variation</button>${!draft.releaseStarted ? '<button id="review-start-versions" type="button">Start current pages at Version 1</button>' : ''}<span>Minor changes use 1.1D, 1.2D. A structural change starts 2D. Confirmation removes D.</span></div><div id="review-variation-form"></div>`;
     $('review-start-versions')?.addEventListener('click', async event => {
@@ -457,7 +580,7 @@
     if (!container || !state.draft) return;
     const view = selectedView();
     const title = `${names[state.family]} · ${names[state.variant]}`;
-    const status = value => value === 'synced' ? 'Synced' : value === 'unsynced' ? 'Unsynced' : 'Check unavailable';
+    const status = value => state.draft.liveCheckPending ? 'Checking live…' : value === 'synced' ? 'Synced' : value === 'unsynced' ? 'Unsynced' : 'Check unavailable';
     const desktop = syncStatus(state.draft.views?.desktop);
     const mobile = syncStatus(state.draft.views?.mobile);
     const overall = syncStatus(state.draft.viewSync || state.draft.overallSync || state.draft);
@@ -468,6 +591,8 @@
   function renderPagePair() {
     const container = $('review-page-pair'), draft = state.draft;
     if (!container || !draft) return;
+    if(container.querySelector('#pair-linear-form')||container.querySelector('details[open] form'))return;
+    const openDetails=[...container.querySelectorAll('details[id][open]')].map(item=>item.id);
     const livePages = draft.livePages || [];
     const publication = draft.latestPagePublication;
     const mainLive = livePages.find(item => item.url === (publication?.revisionId === draft.revision ? publication.liveUrl : draft.liveSource?.liveUrl)) || livePages.find(item => item.channel === 'direct') || livePages.find(item => item.channel === 'affiliate') || livePages[0];
@@ -479,8 +604,10 @@
     const synced = overallStatus === 'synced';
     const selectedSynced = selectedStatus === 'synced';
     const selectedName = selectedView() === 'mobile' ? 'Mobile web' : 'Desktop web';
-    const status = state.syncing ? 'Copying live into the working page…' : overallStatus === 'unavailable' ? 'Check unavailable' : synced ? 'Synced' : 'Unsynced';
-    const explanation = overallStatus === 'unavailable' ? 'The latest live check could not finish. The saved baseline is preserved; no edit has been recorded.'
+    const checking = Boolean(draft.liveCheckPending);
+    const status = state.syncing ? 'Copying live into the working page…' : checking ? 'Checking live…' : overallStatus === 'unavailable' ? 'Check unavailable' : synced ? 'Synced' : 'Unsynced';
+    const explanation = checking ? 'Your saved working page is ready. Live status is being checked in the background.'
+      : overallStatus === 'unavailable' ? 'The latest live check could not finish. The saved baseline is preserved; no edit has been recorded.'
       : synced ? `All tracked views in Version ${draft.version} match the recorded live version.`
       : selectedSynced ? `${selectedName} matches live, but Version ${draft.version} remains unsynced until both web views match.`
       : overallSync?.reason === 'live-changed' ? 'The live page changed. Review it before updating this working copy.'
@@ -498,8 +625,8 @@
         <a href="${esc(withView(draft.workingUrl))}" target="_blank" rel="noopener">Working page ↗</a><p class="pair-address">${esc(withView(draft.stableWorkingUrl || draft.workingUrl).replace('https://',''))}</p>
         <p class="pair-source">Saved ${esc(dateTime(draft.updatedAt))} · ${esc(draft.editor.name)}</p>
       </section>
-      <div class="pair-publication" aria-live="polite"><strong class="sync-badge ${synced ? 'synced' : 'unsynced'}">${esc(status)}</strong><p>${explanation}</p>${draft.liveCheck ? `<p class="review-muted">${draft.liveCheck.status === 'unavailable' ? 'Live check unavailable. The last recorded state is shown.' : `Live checked ${esc(dateTime(draft.liveCheck.checkedAt))}.`}${live?.synthetic ? ' Results uses a fixed sample profile.' : ''}</p>` : ''}${publication ? `<p>Version ${draft.history.find(item=>item.id===publication.revisionId)?.version} confirmed live by ${esc(publication.editor.name)} · ${esc(dateTime(publication.confirmedAt))}.</p>` : ''}
-      ${livePages.length && !synced && !draft.sourceOutdated ? `<details id="pair-confirm"><summary>Confirm this version is live</summary><form id="pair-confirm-form"><p>Use this after Walter publishes Version ${draft.version}. This records the match and does not deploy the page.</p><label>Live channel<select id="pair-live-channel">${livePages.map(item => `<option value="${esc(item.url)}" ${item.id === mainLive.id ? 'selected' : ''}>${esc(item.channel)}</option>`).join('')}</select></label><label class="pair-checkbox"><input id="pair-confirm-check" type="checkbox" required>I checked Version ${draft.version} on that live page and they match.</label><button type="submit">Mark Version ${draft.version} synced</button><p id="pair-confirm-error" role="alert"></p></form></details>` : ''}
+      <div class="pair-publication" aria-live="polite"><strong class="sync-badge ${synced && !checking ? 'synced' : 'unsynced'}">${esc(status)}</strong><p>${explanation}</p>${draft.liveCheck && !checking ? `<p class="review-muted">${draft.liveCheck.status === 'unavailable' ? 'Live check unavailable. The last recorded state is shown.' : `Live checked ${esc(dateTime(draft.liveCheck.checkedAt))}.`}${live?.synthetic ? ' A fixed sample profile is used.' : ''}</p>` : ''}${publication ? `<p>Version ${draft.history.find(item=>item.id===publication.revisionId)?.version} confirmed live by ${esc(publication.editor.name)} · ${esc(dateTime(publication.confirmedAt))}.</p>` : ''}
+      ${livePages.length && !synced && !checking && !draft.sourceOutdated ? `<details id="pair-confirm"><summary>Confirm this version is live</summary><form id="pair-confirm-form" data-page-key="${esc(draft.pageKey)}" data-revision="${esc(draft.revision)}"><p>Use this after Walter publishes Version ${draft.version}. This records the match and does not deploy the page.</p><label>Live channel<select id="pair-live-channel">${livePages.map(item => `<option value="${esc(item.url)}" ${item.id === mainLive.id ? 'selected' : ''}>${esc(item.channel)}</option>`).join('')}</select></label><label class="pair-checkbox"><input id="pair-confirm-check" type="checkbox" required>I checked Version ${draft.version} on that live page and they match.</label><button type="submit">Mark Version ${draft.version} synced</button><p id="pair-confirm-error" role="alert"></p></form></details>` : ''}
       <details id="pair-change-log"><summary>Change log · ${draft.history.filter(item=>!item.setup).length} ${draft.history.filter(item=>!item.setup).length === 1 ? 'version' : 'versions'}</summary>${draft.history.filter(item=>!item.setup).slice().reverse().map(item => releaseHistoryMarkup(item)).join('')}<details><summary>Earlier setup history · ${draft.history.filter(item=>item.setup).length}</summary>${draft.history.filter(item=>item.setup).slice().reverse().map(item => releaseHistoryMarkup(item)).join('')}<p class="review-muted">Earlier design: <a href="${esc(safe(draft.referenceUrl || draft.sourceUrl))}" target="_blank" rel="noopener">${esc(draft.sourceVersion || 'Original design')} ↗</a></p></details></details>
       ${canSync ? `<details><summary>Copy live into the working page</summary><p>This replaces an unchanged working baseline with the current live template. It does not publish your changes.</p><button id="pair-sync-live" type="button" ${!state.canEdit || state.syncing ? 'disabled' : ''}>${state.syncing ? 'Copying live…' : 'Copy current live version'}</button><p id="pair-sync-message" role="status"></p></details>` : ''}</div>
     </div><details class="pair-work"><summary>Work in Linear · ${state.work.length} linked ${state.work.length === 1 ? 'issue' : 'issues'}</summary><div class="pair-work-heading"><h3>Linked work</h3><button type="button" id="pair-link-work">Link a Linear issue</button></div><p class="review-muted">Issue status is a dated record. Open Linear for its latest status. Confirm page publication separately.</p>
@@ -509,6 +636,7 @@
     $('pair-sync-live')?.insertAdjacentHTML('beforebegin', '<label>Release type<select id="pair-sync-release"><option value="minor">Minor: keep the page structure</option><option value="major">Major: page structure changed</option></select></label><label>Change description<input id="pair-sync-description" maxlength="1000" placeholder="Describe changes made on the live page."></label>');
     $('pair-sync-live')?.addEventListener('click', syncLive);
     $('pair-link-work').onclick = showWorkForm;
+    for(const id of openDetails){const details=$(id);if(details)details.open=true;}
   }
 
   function releaseHistoryMarkup(item) {
@@ -556,15 +684,18 @@
 
   async function confirmPage(event) {
     event.preventDefault();
-    const button = event.currentTarget.querySelector('button'); button.disabled = true;
+    const form=event.currentTarget;
+    const button = form.querySelector('button'); button.disabled = true;
     try {
       const result = await request('/api/funnel-review?action=confirm-page-published', {
         method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({
-          pageKey:state.pageKey, revisionId:state.draft.revision, liveUrl:$('pair-live-channel').value,
+          pageKey:form.dataset.pageKey, revisionId:form.dataset.revision, liveUrl:$('pair-live-channel').value,
           confirmed:$('pair-confirm-check').checked,
         }),
       });
-      state.draft = result.draft; renderPagePair();
+      state.draft = activeDraft(result.draft);
+      if($('pair-confirm'))$('pair-confirm').open=false;
+      renderPagePair();
       document.dispatchEvent(new Event('tracker:working-saved'));
       renderPagePair();
     } catch (error) { $('pair-confirm-error').textContent = error.message; button.disabled = false; }
@@ -584,6 +715,7 @@
           pageKeys:values.allLanders ? ['draft-lander-g','draft-lander-a','draft-lander-m'] : [state.pageKey]};
         await request('/api/funnel-review?action=link-linear-work', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({payload})});
         state.work = (await request(`/api/funnel-review?action=linear-work&pageKey=${encodeURIComponent(state.pageKey)}`)).entries;
+        area.replaceChildren();
         renderPagePair();
       } catch (error) { $('pair-work-error').textContent = error.message; button.disabled = false; }
     };
@@ -966,7 +1098,7 @@
     const href = withView(url);
     area.hidden = false;
     area.innerHTML = `<strong>The working preview could not open.</strong><p>${esc(message)}</p><button type="button" id="review-frame-retry">Retry preview</button>${href ? `<a href="${esc(href)}" target="_blank" rel="noopener">Open this working version ↗</a>` : ''}`;
-    $('review-frame-retry').onclick = () => { const frame = $('review-frame'); delete frame.dataset.reviewUrl; loadFrame(currentRevisionUrl()); };
+    $('review-frame-retry').onclick = () => { const frame = $('review-frame'); htmlCache.delete(previewEmbedUrl(currentRevisionUrl())); delete frame.dataset.reviewUrl; loadFrame(currentRevisionUrl()); };
   }
 
   function loadFrame(url) {
@@ -1044,7 +1176,15 @@
       }
     };
     frame.onerror = () => { frame.dataset.loading = 'false'; frameError('The private working page could not be embedded. Retry or open this version in its own tab.', href); };
-    frame.src = href;
+    frame.setAttribute('sandbox','allow-same-origin');
+    previewDocument(href).then(html=>{
+      if(token!==state.frameToken)return;
+      frame.srcdoc=html;
+    }).catch(error=>{
+      if(token!==state.frameToken||error.code==='cache_cleared')return;
+      frame.dataset.loading='false';
+      frameError(error.message,href);
+    });
   }
 
   function fileError(message) {
@@ -1349,8 +1489,9 @@
     state.canEdit = typeof detail.canEdit === 'boolean' ? detail.canEdit : state.canEdit;
     if (state.family === 'corporate') return renderCorporate();
     try {
+      if (detail.fresh) clearCaches();
       await loadBase();
-      await loadDraft({force: !changedPage && Boolean(state.draft)});
+      await loadDraft({force: !changedPage && Boolean(state.draft),fresh:Boolean(detail.fresh)});
       render();
     } catch (error) {
       if (root) root.innerHTML = `<div class="review-unavailable"><strong>Working page unavailable</strong><p>${esc(error.message)}</p></div>`;
@@ -1398,6 +1539,7 @@
       root.hidden = state.mode !== 'review';
     });
     document.addEventListener('tracker:signed-out', clear);
+    document.addEventListener('tracker:cache-clear', clear);
     document.addEventListener('tracker:show-changes', () => root.querySelector('.review-history')?.scrollIntoView({behavior: 'smooth'}));
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') stashInputs();

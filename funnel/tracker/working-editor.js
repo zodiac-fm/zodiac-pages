@@ -308,13 +308,58 @@
 
   async function loadDraft() {
     try {
-      const result = await request('draft', {}, {pageKey, view});
+      const result = await request('draft', {}, {pageKey, view,check:'defer'});
       draft = activeDraft(result.draft);
       if (!draft?.revision) throw Error('This working page is unavailable.');
     } catch (error) {
       banner.insertAdjacentHTML('beforeend', `<span class="working-editor-notice">${escapeHtml(errorText(error))}</span>`);
       throw error;
     }
+  }
+
+  let liveCheckRequest = null;
+  function updateShellStatus(status,overallStatus=status) {
+    if(!shellParent)return;
+    const viewLabel=view==='mobile'?'Mobile web':'Desktop web';
+    const fullIdentity=banner.querySelector('.funnel-working-identity').textContent;
+    const prefix=`${viewLabel} · `;
+    const identity=fullIdentity.startsWith(prefix)?fullIdentity.slice(prefix.length):fullIdentity;
+    const title=`${identity} · ${viewLabel} · ${status} · Overall ${overallStatus}`;
+    hostWindow().document.title=title;
+    hostWindow().document.querySelector('.working-shell__title').textContent=`${title} · ${view==='mobile'?390:1280}px viewport`;
+  }
+  function updateLiveStatus(value) {
+    if(value.revision!==renderedRevision)return;
+    const selected=value.views?.[view]||value;
+    const overall=value.viewSync||value.sync;
+    const label=sync=>sync?.status==='unsynced'?'Unsynced':sync?.checkStatus==='unavailable'?'Check unavailable':'Synced';
+    const status=label(selected.sync);
+    const overallStatus=overall?.status==='unsynced'?'Unsynced':overall?.checkStatus==='unavailable'||Object.values(overall?.views||{}).some(item=>item.checkStatus==='unavailable')?'Check unavailable':label(overall);
+    const revision=value.history.find(item=>item.id===renderedRevision);
+    const identity=revision?.identity||`${value.baseLabel} · Version ${value.version}`;
+    const viewLabel=view==='mobile'?'Mobile web':'Desktop web';
+    banner.querySelector('.funnel-working-identity').textContent=`${viewLabel} · ${identity}`;
+    banner.querySelector('.funnel-working-status').textContent=status;
+    banner.querySelector('.funnel-working-status').dataset.status=status==='Synced'?'synced':status==='Unsynced'?'unsynced':'unavailable';
+    banner.dataset.funnelWorkingVersion=value.version;
+    banner.dataset.funnelSyncStatus=selected.sync?.status||'unsynced';
+    document.title=`${identity} · ${status}`;
+    updateShellStatus(status,overallStatus);
+  }
+
+  function checkLive(fresh=false) {
+    if(liveCheckRequest)return liveCheckRequest;
+    const button=banner.querySelector('.working-editor-check-live');
+    if(button)button.disabled=true;
+    banner.querySelector('.funnel-working-status').textContent='Checking live…';
+    updateShellStatus('Checking live…');
+    liveCheckRequest=request('draft',{}, {pageKey,view,...(fresh?{check:'fresh'}:{})}).then(result=>{
+      updateLiveStatus(result.draft);
+    }).catch(()=>{
+      banner.querySelector('.funnel-working-status').textContent='Check unavailable';
+      updateShellStatus('Check unavailable');
+    }).finally(()=>{liveCheckRequest=null;if(button)button.disabled=false;});
+    return liveCheckRequest;
   }
 
   function selectEditable(event) {
@@ -328,7 +373,8 @@
     showDrawer(node, element);
   }
 
-  banner.insertAdjacentHTML('beforeend', '<button class="working-editor-open" type="button">Edit sections</button><span class="working-editor-instruction">Choose a labeled section or highlighted copy/image to edit this draft.</span>');
+  banner.insertAdjacentHTML('beforeend', '<button class="working-editor-open" type="button">Edit sections</button><button class="working-editor-check-live" type="button">Check live</button><span class="working-editor-instruction">Choose a labeled section or highlighted copy/image to edit this draft.</span>');
+  banner.querySelector('.working-editor-check-live').addEventListener('click',()=>checkLive(true));
   wireSafeWorkingRuntime();
   banner.querySelectorAll('[data-funnel-working-view-toggle]').forEach(button => {
     const nextView = button.dataset.funnelWorkingViewToggle;
@@ -370,6 +416,7 @@
   if (initialSection) { try { visitSection(decodeURIComponent(initialSection[1]), 'auto'); } catch {} }
 
   loadDraft().then(() => {
-    if (!isCurrent()) open.disabled = true;
+    if (!isCurrent()) {open.disabled = true;banner.querySelector('.working-editor-check-live').disabled=true;}
+    if(isCurrent())checkLive();
   }).catch(() => { open.disabled = true; });
 })();

@@ -37,6 +37,10 @@ const {
 } = require('../lib/funnel-tracker/live-source');
 const {requestOidcTokenProvider} = require('../lib/funnel-tracker/production-monitor');
 const {initializeWorkingViews} = require('../lib/funnel-tracker/view-initialization');
+const {
+  createLiveCheckCache,
+  liveCheckCacheKey,
+} = require('../lib/funnel-tracker/live-check-cache');
 const {workStore, InvalidWorkDataError, WorkStoreConflictError} = require('../lib/funnel-tracker/work-store');
 const {
   MAX_ATTACHMENT_BYTES,
@@ -275,17 +279,24 @@ function sendWorkingShell(res, req, {pageKey, revisionId, view, draft}) {
   const hasUnavailable = activeSync?.checkStatus === 'unavailable'
     || Object.values(overallSync?.views || {}).some(item => item.checkStatus === 'unavailable');
   const hasUnsynced = activeSync?.status === 'unsynced' || overallSync?.status === 'unsynced';
-  const status = hasUnsynced ? 'Unsynced' : hasUnavailable ? 'Check unavailable' : 'Synced';
+  const pendingCheck = draft.liveCheckPending === true;
+  const pending = pendingCheck && !hasUnsynced;
+  const status = hasUnsynced ? 'Unsynced'
+    : pending ? 'Checking live…' : hasUnavailable ? 'Check unavailable' : 'Synced';
   const overallStatus = overallSync?.status === 'unsynced'
-    ? 'Unsynced' : hasUnavailable ? 'Check unavailable' : 'Synced';
+    ? 'Unsynced' : pending ? 'Checking live…' : hasUnavailable ? 'Check unavailable' : 'Synced';
   const identity = `${revision?.identity || `${draft.baseLabel} · ${version}`} · ${label} · ${status} · Overall ${overallStatus}`;
   const params = new URLSearchParams({
     action:'draft-html',pageKey,revision:revisionId,view,embedded:'1',
   });
-  const checkReceipt = createWorkingCheckReceipt(
-    draft, pageKey, revisionId, requestIdentity(req)?.user?.sub,
-  );
-  if (checkReceipt) params.set('check', checkReceipt);
+  if (pendingCheck) {
+    params.set('check', 'defer');
+  } else {
+    const checkReceipt = createWorkingCheckReceipt(
+      draft, pageKey, revisionId, requestIdentity(req)?.user?.sub,
+    );
+    if (checkReceipt) params.set('check', checkReceipt);
+  }
   const source = `${origin}/api/funnel-review?${params}`;
   const html = `<!doctype html><html lang="en" data-funnel-working-shell><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(identity)}</title><style>html,body{margin:0;min-height:100%;background:#eeeaf1;color:#211b2a;font:14px/1.4 system-ui,sans-serif}.working-shell{padding:12px}.working-shell__title{margin:0 0 10px;font-weight:750}.working-shell__viewport{overflow:auto;width:${width}px;max-width:100%;margin-inline:auto;border:1px solid #cfc7d4;border-radius:8px;background:#fff;box-shadow:0 8px 30px #211b2a1c}.working-shell iframe{display:block;width:${width}px;height:900px;border:0;background:#fff}</style></head><body data-funnel-working-shell><main class="working-shell"><p class="working-shell__title">${escapeHtml(identity)} · ${width}px viewport</p><div class="working-shell__viewport"><iframe id="funnel-working-view-frame" title="${escapeHtml(`${label} working page`)}" src="${escapeHtml(source)}"></iframe></div></main></body></html>`;
   res.statusCode = 200;
@@ -350,8 +361,9 @@ function createHandler({
   liveViewsFetcher = fetchVerifiedLiveViews,
   captureRevision = captureDraftRevision,
   work = workStore,
+  checkCache = createLiveCheckCache(),
 } = {}) {
-  async function withLiveCheck(req, value, view = 'desktop') {
+  async function withLiveCheckUncached(req, value, view = 'desktop') {
     let draft = publicDraft(value, {view});
     const tokenProvider = requestOidcTokenProvider(req);
     const includeComparisonDiagnostics = value.family === 'bc'
@@ -480,6 +492,41 @@ function createHandler({
     if (liveCheck) draft.liveCheck = liveCheck;
     return draft;
   }
+  async function withLiveCheck(req, value, view = 'desktop', {force = false} = {}) {
+    const identity = requestIdentity(req);
+    if (!identity) throw new InvalidDraftDataError('company_access_required');
+    const key = liveCheckCacheKey(value, view, identity.kind);
+    const result = await checkCache.getOrLoad(
+      key,
+      () => withLiveCheckUncached(req, value, view),
+      {force},
+    );
+    const draft = result.value;
+    draft.liveCheckMode = result.mode;
+    draft.liveCheckCached = ['cached', 'shared'].includes(result.mode);
+    draft.liveCheckPending = false;
+    return draft;
+  }
+
+  function deferredLiveCheck(value, view = 'desktop') {
+    const draft = publicDraft(value, {view});
+    if (value.views) {
+      draft.liveChecks = Object.fromEntries(['desktop', 'mobile'].map(checkView => {
+        const candidate = publicDraft(value, {view:checkView});
+        const shouldCheck = Boolean(candidate.liveSource || candidate.latestPagePublication);
+        return [checkView, shouldCheck ? {status:'pending',checkedAt:null} : null];
+      }));
+      draft.liveCheck = draft.liveChecks[view];
+    } else if (draft.liveSource || draft.latestPagePublication) {
+      draft.liveCheck = {status:'pending',checkedAt:null};
+    }
+    draft.liveCheckMode = 'deferred';
+    draft.liveCheckCached = false;
+    draft.liveCheckPending = Boolean(draft.liveCheck
+      || Object.values(draft.liveChecks || {}).some(Boolean));
+    return draft;
+  }
+
   return async function handler(req, res) {
     if (!authConfigured()) return fail(res, 503, 'auth_not_configured', {setupPending: true});
     const params = query(req);
@@ -630,11 +677,15 @@ function createHandler({
     if (req.method === 'GET' && action === 'draft') {
       const pageKey = params.get('pageKey');
       const view = normalizedView(params.get('view'));
-      if (!validPageKey(pageKey) || !view) return fail(res, 400, 'invalid_draft');
+      const checkMode = params.get('check');
+      if (!validPageKey(pageKey) || !view
+          || ![null, 'defer', 'fresh'].includes(checkMode)) return fail(res, 400, 'invalid_draft');
       try {
         const current = await drafts.getDraft(pageKey);
         if (!current.draft) return fail(res, 404, 'draft_not_found');
-        const draft = await withLiveCheck(req, current.draft, view);
+        const draft = checkMode === 'defer'
+          ? deferredLiveCheck(current.draft, view)
+          : await withLiveCheck(req, current.draft, view, {force:checkMode === 'fresh'});
         return sendJson(res, 200, {draft, user: identity.user});
       } catch (error) {
         if (error instanceof InvalidDraftDataError) return fail(res, 400, 'invalid_draft');
@@ -653,13 +704,23 @@ function createHandler({
         const revisionId = params.get('revision') || current.draft.currentRevisionId;
         const result = await drafts.getHtmlByRevision(current.draft, revisionId, view);
         if (!result) return fail(res, 404, 'draft_not_found');
-        const inheritedCheck = params.get('embedded') === '1'
+        const embedded = params.get('embedded') === '1';
+        const standalone = params.get('standalone') === '1' && !embedded;
+        const requestedCheck = params.get('check');
+        if (!embedded && ![null, 'defer', 'fresh'].includes(requestedCheck)) {
+          return fail(res, 400, 'invalid_draft');
+        }
+        const deferred = requestedCheck === 'defer'
+          || (standalone && requestedCheck === null);
+        const inheritedCheck = embedded && !deferred
           ? readWorkingCheckReceipt(
-            params.get('check'), pageKey, revisionId, identity.user.sub,
+            requestedCheck, pageKey, revisionId, identity.user.sub,
           ) : null;
         let checked = null;
         if (revisionId === current.draft.currentRevisionId) {
-          if (inheritedCheck) {
+          if (deferred) {
+            checked = deferredLiveCheck(current.draft, view);
+          } else if (inheritedCheck) {
             checked = publicDraft(current.draft, {
               view,
               syncStatusByView:inheritedCheck.statuses,
@@ -669,22 +730,35 @@ function createHandler({
               {status:inheritedCheck.statuses[checkView],checkedAt:new Date(inheritedCheck.iat * 1000).toISOString()},
             ]));
             checked.liveCheck = checked.liveChecks[view];
+            checked.liveCheckMode = 'receipt';
+            checked.liveCheckCached = true;
+            checked.liveCheckPending = false;
           } else {
-            checked = await withLiveCheck(req, current.draft, view);
+            checked = await withLiveCheck(req, current.draft, view, {
+              force:requestedCheck === 'fresh'
+                || (embedded && requestedCheck !== null && !inheritedCheck),
+            });
           }
         }
         const publicValue = checked || publicDraft(current.draft, {view});
-        if (params.get('standalone') === '1' && params.get('embedded') !== '1') {
+        res.setHeader('X-Funnel-Live-Check', checked?.liveCheckMode || 'historical');
+        const checkedAt = checked?.liveCheck?.checkedAt;
+        if (typeof checkedAt === 'string') res.setHeader('X-Funnel-Live-Checked-At', checkedAt);
+        if (standalone) {
           return sendWorkingShell(res, req, {pageKey,revisionId,view,draft:publicValue});
         }
         return sendWorkingHtml(res, renderWorkingPage(current.draft, result.html, revisionId, {
-          syncStatus:checked?.liveCheck?.status || null,
+          syncStatus:['current','changed','unavailable'].includes(checked?.liveCheck?.status)
+            ? checked.liveCheck.status : null,
           syncStatusByView:checked?.liveChecks ? Object.fromEntries(
             ['desktop','mobile'].map(checkView => [
-              checkView,checked.liveChecks[checkView]?.status || null,
+              checkView,['current','changed','unavailable']
+                .includes(checked.liveChecks[checkView]?.status)
+                ? checked.liveChecks[checkView].status : null,
             ]),
           ) : null,
           view,
+          liveCheckPending:checked?.liveCheckPending === true,
         }), req);
       } catch {
         return fail(res, 503, 'review_unavailable');
