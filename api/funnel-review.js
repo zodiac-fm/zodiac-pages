@@ -178,7 +178,9 @@ function sendWorkingShell(res, req, {pageKey, revisionId, view, draft}) {
   const version = revision?.version ? `Version ${revision.version}`
     : `Setup archive ${revision?.archiveNumber || 1}`;
   const status = revision?.sync?.status === 'synced' ? 'Synced' : 'Unsynced';
-  const identity = `${draft.baseLabel} · ${label} · ${version} · ${status}`;
+  const overallStatus = (revision?.overallSync || revision?.sync)?.status === 'synced'
+    ? 'Synced' : 'Unsynced';
+  const identity = `${revision?.identity || `${draft.baseLabel} · ${version}`} · ${label} · ${status} · Overall ${overallStatus}`;
   const params = new URLSearchParams({
     action:'draft-html',pageKey,revision:revisionId,view,embedded:'1',
   });

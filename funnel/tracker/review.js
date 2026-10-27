@@ -55,7 +55,7 @@
   function activeDraft(value = state.draft) {
     if (!value) return value;
     const view = value.views?.[selectedView()];
-    return view ? {...value, ...view, views: value.views, activeView: selectedView()} : value;
+    return view ? {...value, ...view, views: value.views, overallSync: value.viewSync || value.overallSync || value.sync, activeView: selectedView()} : value;
   }
 
   function imageUrl(value) {
@@ -454,7 +454,7 @@
     const status = value => value === 'synced' ? 'Synced' : value === 'unsynced' ? 'Unsynced' : 'Check unavailable';
     const desktop = syncStatus(state.draft.views?.desktop);
     const mobile = syncStatus(state.draft.views?.mobile);
-    const overall = syncStatus(state.draft);
+    const overall = syncStatus(state.draft.viewSync || state.draft.overallSync || state.draft);
     container.innerHTML = `<section class="review-viewbar"><div class="review-view-summary"><span>Working page</span><strong>${esc(title)} · Version ${esc(state.draft.version)}</strong><small>Viewing ${view === 'desktop' ? 'Desktop web · 1280px fit' : 'Mobile web · 390px viewport'}</small></div><nav class="review-view-toggle" aria-label="Working page view"><button type="button" data-review-view="desktop" class="${view === 'desktop' ? 'selected' : ''}" aria-pressed="${view === 'desktop'}">Desktop web</button><button type="button" data-review-view="mobile" class="${view === 'mobile' ? 'selected' : ''}" aria-pressed="${view === 'mobile'}">Mobile web</button></nav><div class="review-sync-states" aria-label="View synchronization"><b>Desktop ${esc(status(desktop))}</b><b>Mobile ${esc(status(mobile))}</b><b>Overall ${esc(status(overall))}</b></div></section>`;
     container.querySelectorAll('[data-review-view]').forEach(button => button.addEventListener('click', () => chooseView(button.dataset.reviewView)));
   }
@@ -467,10 +467,14 @@
     const mainLive = livePages.find(item => item.url === (publication?.revisionId === draft.revision ? publication.liveUrl : draft.liveSource?.liveUrl)) || livePages.find(item => item.channel === 'direct') || livePages.find(item => item.channel === 'affiliate') || livePages[0];
     const live = draft.liveSource;
     const canSync = ['lander', 'results'].includes(draft.family) && !draft.variation;
-    const synced = draft.sync?.status === 'synced';
+    const overallSync = draft.viewSync || draft.overallSync || draft.sync;
+    const synced = overallSync?.status === 'synced';
+    const selectedSynced = draft.sync?.status === 'synced';
+    const selectedName = selectedView() === 'mobile' ? 'Mobile web' : 'Desktop web';
     const status = state.syncing ? 'Copying live into the working page…' : synced ? 'Synced' : 'Unsynced';
-    const explanation = synced ? `Version ${draft.version} matches the recorded live version.`
-      : draft.sync?.reason === 'live-changed' ? 'The live page changed. Review it before updating this working copy.'
+    const explanation = synced ? `All tracked views in Version ${draft.version} match the recorded live version.`
+      : selectedSynced ? `${selectedName} matches live, but Version ${draft.version} remains unsynced until both web views match.`
+      : overallSync?.reason === 'live-changed' ? 'The live page changed. Review it before updating this working copy.'
         : draft.variation ? 'This variation has its own versions. Walter can publish it when it is ready.'
           : mainLive ? `Version ${draft.version} has changes ready for Walter to make live.` : 'A live page has not been connected yet.';
     const sourceVersion = draft.history.find(item => item.id === live?.revisionId)?.version;
