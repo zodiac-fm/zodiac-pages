@@ -8,6 +8,7 @@
   banner.dataset.workingEditorReady = 'true';
   const pageKey = banner.dataset.funnelWorkingPage;
   const renderedRevision = banner.dataset.funnelWorkingRevision;
+  let editingRevision = renderedRevision;
   if (!pageKey || !renderedRevision) return;
 
   const apiOrigin = location.origin;
@@ -66,7 +67,7 @@
     target.scrollIntoView({behavior, block: 'start'});
   }
 
-  function isCurrent() { return Boolean(draft && draft.revision === renderedRevision); }
+  function isCurrent() { return Boolean(draft && draft.revision === editingRevision); }
 
   function scratch() {
     if (!drawer || !picked) return null;
@@ -116,6 +117,7 @@
       <div class="working-editor-head"><div><p>Working draft</p><h2 id="working-editor-title">${escapeHtml(sectionTitle)}</h2></div><button type="button" class="working-editor-close" aria-label="Close editor" data-working-editor-close>×</button></div>
       <p class="working-editor-version">${escapeHtml(draft?.label || '')}</p>
       ${readOnly ? historicalMarkup() : `<form id="working-editor-form" novalidate>
+        ${editingRevision !== renderedRevision && !isImage ? `<p class="working-editor-help">Latest saved copy: ${escapeHtml(node.value)}</p>` : ''}
         ${isImage ? `<div class="working-editor-image"><img src="${escapeHtml(imageSource(node.value))}" alt="${escapeHtml(node.alt || 'Current image')}"></div><label>Replacement image<input id="working-editor-file" type="file" accept="image/png,image/jpeg,image/webp" required></label><p class="working-editor-help">PNG, JPEG, or WebP up to 4 MiB.</p>` : `<label>Copy<textarea id="working-editor-copy" rows="10" required>${escapeHtml(node.value)}</textarea></label>`}
         <label>What changed?<textarea id="working-editor-summary" rows="3" required placeholder="Describe this change for Walter and the version history."></textarea></label>
         <label>Release type<select id="working-editor-release"><option value="minor">Minor: copy or image change</option><option value="major">Major: page structure changed</option></select></label>
@@ -223,6 +225,7 @@
             draft = latest.draft;
             const node = draft.editableNodes?.find(item => item.editId === editId);
             if (!node) throw Error('That editable item changed in the newer version. Copy your change before continuing.');
+            editingRevision = draft.revision;
             showDrawer(node, trigger, saved, true);
           } catch (reloadError) { error.textContent = errorText(reloadError); }
         });
