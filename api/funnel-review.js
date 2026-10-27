@@ -385,8 +385,10 @@ function createHandler({
         const [mapResult, trackerResult, source] = await Promise.all([
           store.readMap(), tracker.read(), liveSourceFetcher(body.pageKey, {tokenProvider: requestOidcTokenProvider(req)}),
         ]);
+        const existingHtml = await drafts.getHtmlByRevision(existing.draft, existing.draft.currentRevisionId);
         const alreadyMatches = publicDraft(existing.draft).liveSource
-          && compareLiveSourceEvidence(existing.draft, source.evidence) === 'synced-from-live';
+          && compareLiveSourceEvidence(existing.draft, source.evidence) === 'synced-from-live'
+          && existingHtml?.html.includes('data-funnel-working-style="2"');
         let latest = existing.draft;
         if (!alreadyMatches) {
           const sectionNames = Object.fromEntries(trackerResult.data.sections.map(item => [item.id, item.name]));
