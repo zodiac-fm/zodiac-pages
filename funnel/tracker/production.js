@@ -11,7 +11,7 @@
   let previousPageVisit=null;
   try{previousPageVisit=localStorage.getItem('funnel-tracker-page-visit');localStorage.setItem('funnel-tracker-page-visit',new Date().toISOString());}catch{/* Private shared history does not depend on this device marker. */}
   const requestedMode = new URLSearchParams(location.search).get('mode');
-  let mode = requestedMode === 'history' ? 'pages' : requestedMode === 'records' ? 'sections' : 'review';
+  let mode = requestedMode === 'linear' ? 'linear' : requestedMode === 'history' ? 'pages' : requestedMode === 'records' ? 'sections' : 'review';
   let family='lander',variant='g',targets=[],loaded=false,loading=false,busy=new Set(),error='',user=null;
   const dialog=document.createElement('dialog');dialog.id='production-dialog';document.body.appendChild(dialog);
   async function request(body){
@@ -21,9 +21,10 @@
     return result;
   }
   function setMode(value){
-    mode=value;$('production-workspace').hidden=mode!=='pages';$('section-workspace').hidden=mode!=='sections';$('review-workspace').hidden=mode!=='review';
+    mode=value;$('production-workspace').hidden=mode!=='pages';$('section-workspace').hidden=mode!=='sections';$('review-workspace').hidden=mode!=='review';$('linear-workspace').hidden=mode!=='linear';
+    document.querySelector('.family-tabs').hidden=mode==='linear';
     document.querySelectorAll('[data-mode]').forEach(b=>{b.classList.toggle('selected',b.dataset.mode===mode);b.setAttribute('aria-pressed',String(b.dataset.mode===mode));});
-    const route=new URL(location.href);route.searchParams.set('mode',mode==='pages'?'history':mode==='sections'?'records':'review');history.replaceState(null,'',route);
+    const route=new URL(location.href);route.searchParams.set('mode',mode==='linear'?'linear':mode==='pages'?'history':mode==='sections'?'records':'review');history.replaceState(null,'',route);
     document.dispatchEvent(new CustomEvent('tracker:mode',{detail:{mode}}));
     if(mode==='pages'&&user&&!loaded)load();
   }

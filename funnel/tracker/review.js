@@ -196,6 +196,8 @@
     state.work = [];
     state.workError = '';
     state.workConnection = 'loading';
+    $('linear-workspace')?.replaceChildren();
+    if ($('linear-issue-count')) $('linear-issue-count').textContent = '…';
     state.pages = [];
     state.pageChoice = '';
     state.draftToken += 1;
@@ -333,16 +335,15 @@
 
   function loadLinearWork({force = false} = {}) {
     const generation=cacheGeneration;
-    const pageKey=state.pageKey;
     auxiliaryCache.load('linear',()=>request('/api/funnel-review?action=linear-work'),{force}).then(result=>{
-      if(generation!==cacheGeneration||state.pageKey!==pageKey)return;
-      state.work=(result.entries||[]).filter(item=>item.pageKeys?.includes(pageKey));
+      if(generation!==cacheGeneration||!state.user)return;
+      state.work=result.entries||[];
       state.workConnection=result.connection||'unavailable';state.workError='';
-      renderPagePair();
+      renderLinearWork();
     }).catch(error=>{
       if(error.code==='cache_cleared')return;
-      if(generation!==cacheGeneration||state.pageKey!==pageKey)return;
-      state.work=[];state.workConnection='unavailable';state.workError='Linear could not be reached.';renderPagePair();
+      if(generation!==cacheGeneration||!state.user)return;
+      state.work=[];state.workConnection='unavailable';state.workError='Linear could not be reached.';renderLinearWork();
     });
   }
 
@@ -439,7 +440,7 @@
     state.conflict = null;
     state.user = response.user || state.user;
     const linked = auxiliaryCache.get('linear');
-    state.work = (linked?.entries||[]).filter(item=>item.pageKeys?.includes(pageKey));
+    state.work = linked?.entries||[];
     state.workConnection=linked?.connection||'loading';
     loadAuxiliary({force:fresh});
     refreshLive(latest,{fresh});
@@ -739,6 +740,7 @@
   }
 
   function renderPagePair() {
+    renderLinearWork();
     const container = $('review-page-pair'), draft = state.draft;
     if (!container || !draft) return;
     if(container.querySelector('#pair-linear-form')||container.querySelector('details[open] form'))return;
@@ -781,17 +783,24 @@
       ${editableDraft() && !draft.variation && livePages.length && !synced && !checking && !draft.sourceOutdated ? `<details id="pair-confirm"><summary>Confirm this version is live</summary><form id="pair-confirm-form" data-page-key="${esc(draft.pageKey)}" data-revision="${esc(draft.revision)}"><p>Use this after Walter publishes Version ${draft.version}. This records the match and does not deploy the page.</p><label>Live channel<select id="pair-live-channel">${livePages.map(item => `<option value="${esc(item.url)}" ${item.id === mainLive.id ? 'selected' : ''}>${esc(item.channel)}</option>`).join('')}</select></label><label class="pair-checkbox"><input id="pair-confirm-check" type="checkbox" required>I checked Version ${draft.version} on that live page and they match.</label><button type="submit">Mark Version ${draft.version} synced</button><p id="pair-confirm-error" role="alert"></p></form></details>` : ''}
       <details id="pair-change-log"><summary>Change log · ${releaseVersionCount} ${releaseVersionCount === 1 ? 'version' : 'versions'}</summary>${releaseHistory.slice().reverse().map(item => releaseHistoryMarkup(item)).join('')}<details><summary>Earlier setup history · ${draft.history.filter(item=>item.setup).length}</summary>${draft.history.filter(item=>item.setup).slice().reverse().map(item => releaseHistoryMarkup(item)).join('')}<p class="review-muted">Earlier design: <a href="${esc(safe(draft.referenceUrl || draft.sourceUrl))}" target="_blank" rel="noopener">${esc(draft.sourceVersion || 'Original design')} ↗</a></p></details></details>
       ${canSync ? `<details><summary>Copy live into the working page</summary><p>This replaces an unchanged working baseline with the current live template. It does not publish your changes.</p><button id="pair-sync-live" type="button" ${!state.canEdit || state.syncing ? 'disabled' : ''}>${state.syncing ? 'Copying live…' : 'Copy current live version'}</button><p id="pair-sync-message" role="status"></p></details>` : ''}</div>
-    </div><details class="pair-work" id="pair-work"><summary>Active work in Linear · ${state.work.length} ${state.work.length === 1 ? 'issue' : 'issues'}</summary><div class="pair-work-heading"><h3>Active work in Linear</h3><button type="button" id="pair-link-work" ${!editableDraft() ? 'disabled' : ''}>Link a Linear issue</button></div>
-      ${state.work.map(item => `<article><a href="${esc(safe(item.issueUrl))}" target="_blank" rel="noopener">${esc(item.issueId)} · ${esc(item.title)} ↗</a><p>${esc(item.status)}${item.assignee ? ` · ${esc(item.assignee)}` : ''}<small>Updated from Linear ${esc(dateTime(item.checkedAt))}</small></p></article>`).join('') || `<p>${esc(state.workError || (state.workConnection === 'not_configured' ? 'Linear is not connected yet. Active issues cannot be shown.' : state.workConnection === 'unavailable' ? 'Linear could not be reached. No saved issue details are being shown.' : state.workConnection === 'loading' ? 'Loading active Linear work…' : 'No active Linear work is linked to this page.'))}</p>`}
-      <button type="button" id="pair-refresh-work">Refresh Linear</button>
-      <div id="pair-work-form"></div></details>`;
+    </div>`;
     $('pair-confirm-form')?.addEventListener('submit', confirmPage);
     $('pair-sync-live')?.insertAdjacentHTML('beforebegin', '<label>Release type<select id="pair-sync-release"><option value="minor">Minor: keep the page structure</option><option value="major">Major: page structure changed</option></select></label><label>Change description<input id="pair-sync-description" maxlength="300" placeholder="Describe changes made on the live page."></label>');
     $('pair-sync-live')?.addEventListener('click', syncLive);
-    $('pair-link-work').onclick = showWorkForm;
-    $('pair-refresh-work').onclick = () => loadLinearWork({force:true});
     for(const id of openDetails){const details=$(id);if(details)details.open=true;}
     if(window.scrollX!==scrollPosition.x||window.scrollY!==scrollPosition.y)window.scrollTo({left:scrollPosition.x,top:scrollPosition.y});
+  }
+
+  function renderLinearWork() {
+    const container = $('linear-workspace');
+    if (!container) return;
+    $('linear-issue-count').textContent = state.workConnection === 'current' ? String(state.work.length) : state.workConnection === 'loading' ? '…' : 'Unavailable';
+    if (container.querySelector('#pair-linear-form')) return;
+    container.innerHTML = `<div class="pair-work-heading"><h2>Linear Active Issues</h2><button type="button" id="pair-link-work" ${!editableDraft() ? 'disabled' : ''}>Link a Linear issue</button></div>
+      ${state.work.map(item => `<article><a href="${esc(safe(item.issueUrl))}" target="_blank" rel="noopener">${esc(item.issueId)} · ${esc(item.title)} ↗</a><p>${esc(item.status)}${item.assignee ? ` · ${esc(item.assignee)}` : ''}<small>Updated from Linear ${esc(dateTime(item.checkedAt))}</small></p></article>`).join('') || `<p>${esc(state.workError || (state.workConnection === 'not_configured' ? 'Linear is not connected yet. Active issues cannot be shown.' : state.workConnection === 'unavailable' ? 'Linear could not be reached. No saved issue details are being shown.' : state.workConnection === 'loading' ? 'Loading active Linear work…' : 'No active Linear issues are linked to this workspace.'))}</p>`}
+      <button type="button" id="pair-refresh-work">Refresh Linear</button><div id="pair-work-form"></div>`;
+    $('pair-link-work').onclick = showWorkForm;
+    $('pair-refresh-work').onclick = () => loadLinearWork({force:true});
   }
 
   function releaseHistoryMarkup(item) {
@@ -860,8 +869,10 @@
 
   function showWorkForm() {
     const area = $('pair-work-form');
+    const scope = state.draft?.label || `${names[state.variant]} · ${names[state.family]}`;
     area.innerHTML = `<form id="pair-linear-form"><label>Linear issue URL<input name="issueUrl" type="url" required placeholder="https://linear.app/zodiacfm/issue/…"></label><label class="pair-checkbox"><input name="allLanders" type="checkbox">Link to all three landers</label><button type="submit">Save Linear link</button><button id="pair-work-cancel" type="button">Cancel</button><p id="pair-work-error" role="alert"></p></form>`;
-    $('pair-work-cancel').onclick = () => {area.replaceChildren();renderPagePair();};
+    $('pair-linear-form').insertAdjacentHTML('afterbegin', `<p>Link to ${esc(scope)}.</p>`);
+    $('pair-work-cancel').onclick = () => {area.replaceChildren();renderLinearWork();};
     $('pair-linear-form').onsubmit = async event => {
       event.preventDefault(); const form = event.currentTarget, button = form.querySelector('[type=submit]'); button.disabled = true;
       try {
@@ -1658,7 +1669,7 @@
     state.variant = detail.variant || state.variant;
     state.data = detail.data || state.data;
     state.canEdit = typeof detail.canEdit === 'boolean' ? detail.canEdit : state.canEdit;
-    if (state.family === 'corporate') return renderCorporate();
+    if (state.family === 'corporate') { loadLinearWork({force:Boolean(detail.fresh)}); return renderCorporate(); }
     try {
       if (detail.fresh) clearCaches();
       await loadBase();
@@ -1708,21 +1719,22 @@
       stashInputs();
       state.mode = event.detail?.mode;
       root.hidden = state.mode !== 'review';
+      if (state.user) {renderLinearWork();loadLinearWork();}
     });
     document.addEventListener('tracker:signed-out', clear);
     document.addEventListener('tracker:cache-clear', clear);
     document.addEventListener('tracker:show-changes', () => root.querySelector('.review-history')?.scrollIntoView({behavior: 'smooth'}));
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') stashInputs();
-      else if(state.mode==='review'&&state.user)loadLinearWork({force:true});
+      else if(state.user)loadLinearWork({force:true});
     });
-    window.addEventListener('focus',()=>{if(state.mode==='review'&&state.user)loadLinearWork({force:true});});
+    window.addEventListener('focus',()=>{if(state.user)loadLinearWork({force:true});});
     window.addEventListener('pagehide', stashInputs);
     window.setInterval(() => {
       if (state.mode === 'review') stashInputs();
     }, 1500);
     window.setInterval(()=>{
-      if(state.mode==='review'&&state.user&&document.visibilityState==='visible')loadLinearWork({force:true});
+      if(state.user&&document.visibilityState==='visible')loadLinearWork({force:true});
     },60000);
   }
 
