@@ -132,6 +132,8 @@
     const target = sectionTarget(sectionId);
     if (!target) return;
     replaceWorkingHash(currentHash(sectionId));
+    const bannerHeight = Math.max(0, banner.getBoundingClientRect().height);
+    target.style.scrollMarginTop = `${Math.ceil(bannerHeight) + 8}px`;
     target.scrollIntoView({behavior, block: 'start'});
   }
 
