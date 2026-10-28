@@ -297,16 +297,15 @@ function sendWorkingShell(res, req, {pageKey, revisionId, view, draft}) {
     : `Setup archive ${revision?.archiveNumber || 1}`;
   const activeSync = revision?.sync || null;
   const overallSync = revision?.overallSync || activeSync;
-  const hasUnavailable = activeSync?.checkStatus === 'unavailable'
-    || Object.values(overallSync?.views || {}).some(item => item.checkStatus === 'unavailable');
-  const hasUnsynced = activeSync?.status === 'unsynced' || overallSync?.status === 'unsynced';
+  const hasUnavailable = activeSync?.checkStatus === 'unavailable';
+  const hasUnsynced = activeSync?.status === 'unsynced';
   const pendingCheck = draft.liveCheckPending === true;
   const pending = pendingCheck && !hasUnsynced;
   const status = hasUnsynced ? 'Unsynced'
     : pending ? 'Checking live…' : hasUnavailable ? 'Check unavailable' : 'Synced';
   const overallStatus = overallSync?.status === 'unsynced'
     ? 'Unsynced' : pending ? 'Checking live…' : hasUnavailable ? 'Check unavailable' : 'Synced';
-  const identity = `${revision?.identity || `${draft.baseLabel} · ${version}`} · ${label} · ${status} · Overall ${overallStatus}`;
+  const identity = `${revision?.identity || `${draft.baseLabel} · ${version}`} · ${label} · ${status}`;
   const params = new URLSearchParams({
     action:'draft-html',pageKey,revision:revisionId,view,embedded:'1',
   });
@@ -610,7 +609,7 @@ function createHandler({
             expectedUpdatedAt:body.expectedUpdatedAt,
             expectedMainRevision:body.expectedMainRevision,
             releaseType:body.releaseType,changeSummary:body.changeSummary,
-            editor:identity.user,
+            view:body.view,scope:body.scope,editor:identity.user,
           });
           // Promotion already saves both immutable working views atomically. The existing
           // capture monitor records their pending screenshots without holding this request
@@ -661,6 +660,7 @@ function createHandler({
           sourcePageKey:body.sourcePageKey, sourceSectionId:body.sourceSectionId,
           sourceRevision:body.sourceRevision, targets:body.targets, editor:identity.user,
           releaseType:body.releaseType, changeSummary:body.changeSummary,
+          view:body.view,scope:body.scope,
         });
         // Each immutable page is saved atomically above. The existing cron captures
         // pending screenshots without stretching a multi-page edit past its request budget.
@@ -763,8 +763,15 @@ function createHandler({
           const draft = publicDraft(current.data.drafts.find(item=>item.pageKey === event.pageKey));
           const publication = draft.publications.find(item=>item.id === event.id);
           const revision = draft.history.find(item=>item.id === (publication?.revisionId || event.id));
-          return {...event, version:revision?.version, setup:revision?.setup, archiveNumber:revision?.archiveNumber,
-            workingUrl:revision?.workingUrl, summary:revision?.changeSummary || event.summary};
+          const affectedViews = ['desktop','mobile'].filter(view => publication
+            ? (publication.view || 'desktop') === view
+            : revision?.views?.[view]?.affectsView !== false && Boolean(revision?.views?.[view]));
+          const versions = affectedViews.map(view => ({view,version:revision.views[view].version,
+            workingUrl:revision.views[view].workingUrl}));
+          return {...event, version:versions[0]?.version || revision?.version, versions,
+            setup:revision?.setup, archiveNumber:revision?.archiveNumber,
+            workingUrl:versions[0]?.workingUrl || revision?.workingUrl,
+            summary:revision?.changeSummary || event.summary};
         });
         return sendJson(res, 200, {events, user: identity.user});
       } catch { return fail(res, 503, 'review_unavailable'); }

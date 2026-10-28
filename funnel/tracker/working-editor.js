@@ -17,7 +17,7 @@
   const renderedRevision = banner.dataset.funnelWorkingRevision;
   let editingRevision = renderedRevision;
   let view = banner.dataset.funnelWorkingView === 'mobile' ? 'mobile' : 'desktop';
-  let viewScope = 'shared';
+  let viewScope = view;
   if (!pageKey || !renderedRevision) return;
 
   const apiOrigin = location.origin;
@@ -35,7 +35,7 @@
   function activeDraft(value) {
     if (!value) return value;
     const selected = value.views?.[view];
-    return selected ? {...value, ...selected, views: value.views, activeView: view} : value;
+    return selected ? {...value, ...selected, label:selected.identity || value.label, views: value.views, activeView: view} : value;
   }
 
   function withView(value) {
@@ -191,7 +191,7 @@
         ${editingRevision !== renderedRevision && !isImage ? `<p class="working-editor-help">Latest saved copy: ${escapeHtml(node.value)}</p>` : ''}
         ${isImage ? `<div class="working-editor-image"><img src="${escapeHtml(imageSource(node.value))}" alt="${escapeHtml(node.alt || 'Current image')}"></div><label>Replacement image<input id="working-editor-file" type="file" accept="image/png,image/jpeg,image/webp" required></label><p class="working-editor-help">PNG, JPEG, or WebP up to 4 MiB.</p>` : `<label>Copy<textarea id="working-editor-copy" rows="10" required>${escapeHtml(node.value)}</textarea></label>`}
         <label>What changed?<textarea id="working-editor-summary" rows="3" required placeholder="Describe this change for Walter and the version history."></textarea></label>
-        <label>Apply this change to<select id="working-editor-scope"><option value="shared" ${viewScope === 'shared' ? 'selected' : ''}>Both web views</option><option value="${view}" ${viewScope === view ? 'selected' : ''}>This view only (${view === 'mobile' ? 'Mobile web' : 'Desktop web'})</option></select></label><p class="working-editor-help">Editing ${view === 'mobile' ? 'Mobile web' : 'Desktop web'}. Both views is the default.</p>
+        <label>Apply this change to<select id="working-editor-scope"><option value="shared" ${viewScope === 'shared' ? 'selected' : ''}>Both web views</option><option value="${view}" ${viewScope === view ? 'selected' : ''}>This view only (${view === 'mobile' ? 'Mobile web' : 'Desktop web'})</option></select></label><p class="working-editor-help">Editing ${view === 'mobile' ? 'Mobile web' : 'Desktop web'}. This view only is the default. Choose Both web views deliberately to change both.</p>
         <label>Release type<select id="working-editor-release"><option value="minor">Minor: copy or image change</option><option value="major">Major: page structure changed</option></select></label>
         <p class="working-editor-error" id="working-editor-error" role="alert"></p>
         <button class="working-editor-save" type="submit">Save draft change</button>
@@ -201,7 +201,7 @@
 
   function showDrawer(node, trigger, restore = null, forceClose = false) {
     const bothViews = !draft?.views || ['desktop','mobile'].every(name=>draft.views[name]?.editableNodes.some(item=>item.editId === node.editId && item.sectionId === node.sectionId && item.type === node.type));
-    if (!restore && picked?.editId !== node.editId) viewScope = bothViews ? 'shared' : view;
+    if (!restore && picked?.editId !== node.editId) viewScope = view;
     if (drawer && !closeDrawer(forceClose)) return;
     if (!draft) return;
     picked = node;
@@ -333,7 +333,7 @@
     const fullIdentity=banner.querySelector('.funnel-working-identity').textContent;
     const prefix=`${viewLabel} · `;
     const identity=fullIdentity.startsWith(prefix)?fullIdentity.slice(prefix.length):fullIdentity;
-    const title=`${identity} · ${viewLabel} · ${status} · Overall ${overallStatus}`;
+    const title=`${identity} · ${viewLabel} · ${status}`;
     hostWindow().document.title=title;
     hostWindow().document.querySelector('.working-shell__title').textContent=`${title} · ${view==='mobile'?390:1280}px viewport`;
   }
@@ -345,12 +345,12 @@
     const status=label(selected.sync);
     const overallStatus=overall?.status==='unsynced'?'Unsynced':overall?.checkStatus==='unavailable'||Object.values(overall?.views||{}).some(item=>item.checkStatus==='unavailable')?'Check unavailable':label(overall);
     const revision=value.history.find(item=>item.id===renderedRevision);
-    const identity=revision?.identity||`${value.baseLabel} · Version ${value.version}`;
+    const identity=revision?.views?.[view]?.identity||revision?.identity||`${value.baseLabel} · Version ${selected.version}`;
     const viewLabel=view==='mobile'?'Mobile web':'Desktop web';
     banner.querySelector('.funnel-working-identity').textContent=`${viewLabel} · ${identity}`;
     banner.querySelector('.funnel-working-status').textContent=status;
     banner.querySelector('.funnel-working-status').dataset.status=status==='Synced'?'synced':status==='Unsynced'?'unsynced':'unavailable';
-    banner.dataset.funnelWorkingVersion=value.version;
+    banner.dataset.funnelWorkingVersion=selected.version;
     banner.dataset.funnelSyncStatus=selected.sync?.status||'unsynced';
     document.title=`${identity} · ${status}`;
     updateShellStatus(status,overallStatus);

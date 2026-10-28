@@ -34,7 +34,7 @@
     mode: null, notice: null, pendingScroll: false, conflict: null,
     scratch: new Map(), layoutKey: '', work: [], workError: '', syncing: false,
     pageChoice: '', pages: [], pagesError: '',
-    view: 'desktop', viewScope: 'shared',
+    view: 'desktop', viewScope: 'desktop',
   };
   let root;
   let resizeObserver;
@@ -68,6 +68,8 @@
 
   function selectedView() { return state.view === 'mobile' ? 'mobile' : 'desktop'; }
 
+  const viewVersion = (value, view = selectedView()) => value?.views?.[view]?.version || value?.versions?.[view] || value?.version;
+
   function withView(value) {
     const href = safe(value);
     if (!href) return '';
@@ -91,7 +93,7 @@
   function activeDraft(value = state.draft) {
     if (!value) return value;
     const view = value.views?.[selectedView()];
-    return view ? {...value, ...view, views: value.views, overallSync: value.viewSync || value.overallSync || value.sync, activeView: selectedView(),
+    return view ? {...value, ...view, label:view.identity || value.label, views: value.views, overallSync: value.viewSync || value.overallSync || value.sync, activeView: selectedView(),
       history:value.history.map(item=>({...item,...item.views?.[selectedView()]}))} : value;
   }
 
@@ -326,7 +328,7 @@
     }).catch(error=>{if(error.code!=='cache_cleared')state.pagesError='Other working pages could not be loaded.';});
     auxiliaryCache.load('linear',()=>request('/api/funnel-review?action=linear-work'),{force}).then(result=>{
       if(generation!==cacheGeneration||state.pageKey!==pageKey)return;
-      state.work=(result.entries||[]).filter(item=>item.pageKey===pageKey);state.workError='';
+      state.work=(result.entries||[]).filter(item=>item.pageKeys?.includes(pageKey));state.workError='';
       renderPagePair();
     }).catch(error=>{if(error.code!=='cache_cleared')state.workError='Linked work could not be loaded.';});
   }
@@ -376,7 +378,7 @@
       state.draft = null;
       state.picked = null;
       state.conflict = null;
-      state.viewScope = 'shared';
+      state.viewScope = selectedView();
       state.frameReady = false;
     }
     const token = ++state.draftToken;
@@ -424,7 +426,7 @@
     state.conflict = null;
     state.user = response.user || state.user;
     const linked = auxiliaryCache.get('linear');
-    state.work = (linked?.entries||[]).filter(item=>item.pageKey===pageKey);
+    state.work = (linked?.entries||[]).filter(item=>item.pageKeys?.includes(pageKey));
     loadAuxiliary({force:fresh});
     refreshLive(latest,{fresh});
     return latest;
@@ -486,7 +488,7 @@
     if (!['desktop', 'mobile'].includes(view) || view === selectedView()) return;
     stashInputs();
     state.view = view;
-    state.viewScope = 'shared';
+    state.viewScope = selectedView();
     state.picked = null;
     state.conflict = null;
     state.frameReady = false;
@@ -555,10 +557,10 @@
     const pages = related.filter(item => lifecycleStatus(item) === 'active' || item.pageKey === draft.pageKey).sort((a,b)=>Number(Boolean(a.variation))-Number(Boolean(b.variation)));
     const archived = related.filter(item => lifecycleStatus(item) === 'archived');
     const inactive = lifecycleStatus(draft) !== 'active';
-    container.innerHTML = `<div class="review-branchbar"><label>Working page<select id="review-variation">${pages.map(item => `<option value="${esc(item.pageKey)}" ${item.pageKey === draft.pageKey ? 'selected' : ''}>${esc(item.variation?.name || 'Main')} · Version ${esc(item.version)}${lifecycleStatus(item) === 'archived' ? ' · Archived' : ''}</option>`).join('')}</select></label><div class="review-variation-actions"><button id="review-new-variation" type="button" ${draft.variation || !editableDraft() ? 'disabled' : ''}>New variation</button>${draft.variation ? `<button id="review-make-main" class="review-primary-action" type="button" ${!editableDraft() ? 'disabled' : ''}>Make Main</button>${inactive ? `<button id="review-restore-variation" type="button" ${!state.canEdit ? 'disabled' : ''}>Restore variation</button>` : `<button id="review-archive-variation" type="button" ${!state.canEdit ? 'disabled' : ''}>Archive variation</button>`}<button id="review-delete-variation" class="review-danger-action" type="button" ${!state.canEdit ? 'disabled' : ''}>Delete variation</button>` : ''}${!draft.releaseStarted ? '<button id="review-start-versions" type="button">Start current pages at Version 1</button>' : ''}</div></div>
-      <div class="review-workflow"><p>${inactive ? 'Archived variation. Its saved pages and history are read-only. Restore it to work on it again.' : draft.variation ? 'Experiment here. Main stays unchanged until you choose Make Main.' : 'Main is the approved working page. Create a variation to try an idea without changing Main.'}</p><details><summary>How variations become live</summary><p>Create variation → Review both web views → Make Main → Walter publishes.</p><p>Make Main saves the approved variation as the next Main draft, for example 1.1D. After Walter publishes it and both views are confirmed, it becomes 1.1 and Synced. A structural release starts 2D. Creating a variation does not start a split test.</p><p>You can edit Main directly for a change you have already decided on. Every saved change still gets its own version and history.</p></details>${archived.length ? `<details class="review-archived"><summary>Archived variations · ${archived.length}</summary>${archived.map(item=>`<p><button type="button" data-review-archived="${esc(item.pageKey)}">Review ${esc(item.variation.name)} · Version ${esc(item.version)}</button></p>`).join('')}</details>` : ''}</div><div id="review-variation-form"></div>`;
+    container.innerHTML = `<div class="review-branchbar"><label>Working page<select id="review-variation">${pages.map(item => `<option value="${esc(item.pageKey)}" ${item.pageKey === draft.pageKey ? 'selected' : ''}>${esc(item.variation?.name || 'Main')} · Version ${esc(viewVersion(item))}${lifecycleStatus(item) === 'archived' ? ' · Archived' : ''}</option>`).join('')}</select></label><div class="review-variation-actions"><button id="review-new-variation" type="button" ${draft.variation || !editableDraft() ? 'disabled' : ''}>New variation</button>${draft.variation ? `<button id="review-make-main" class="review-primary-action" type="button" ${!editableDraft() ? 'disabled' : ''}>Make Main</button>${inactive ? `<button id="review-restore-variation" type="button" ${!state.canEdit ? 'disabled' : ''}>Restore variation</button>` : `<button id="review-archive-variation" type="button" ${!state.canEdit ? 'disabled' : ''}>Archive variation</button>`}<button id="review-delete-variation" class="review-danger-action" type="button" ${!state.canEdit ? 'disabled' : ''}>Delete variation</button>` : ''}${!draft.releaseStarted ? '<button id="review-start-versions" type="button">Start current pages at Version 1.0</button>' : ''}</div></div>
+      <div class="review-workflow"><p>${inactive ? 'Archived variation. Its saved pages and history are read-only. Restore it to work on it again.' : draft.variation ? 'Experiment here. Main stays unchanged until you choose Make Main.' : 'Main is the approved working page. Create a variation to try an idea without changing Main.'}</p><details><summary>How variations become live</summary><p>Create a variation → Review the selected view → Make Main → Approve Walter’s assignment → Publish.</p><p>Desktop and Mobile have separate versions and histories. D means Desktop and M means Mobile. Publishing changes sync status and keeps the version number. A variation does not start a split test.</p><p>You can edit Main directly for a change you have already decided on. Every saved change still gets its own version and history.</p></details>${archived.length ? `<details class="review-archived"><summary>Archived variations · ${archived.length}</summary>${archived.map(item=>`<p><button type="button" data-review-archived="${esc(item.pageKey)}">Review ${esc(item.variation.name)} · Version ${esc(viewVersion(item))}</button></p>`).join('')}</details>` : ''}</div><div id="review-variation-form"></div>`;
     $('review-make-main')?.addEventListener('click', () => showVariationAction('promote'));
-    if ((draft.variation || draft.mainLayoutAmendment) && draft.family === 'lander'
+    if (selectedView() === 'desktop' && (draft.variation || draft.mainLayoutAmendment) && draft.family === 'lander'
         && ['g','m','a'].includes(draft.variant) && editableDraft()) {
       const label=draft.variation?'Prepared designs':'Update current draft';
       container.querySelector('.review-variation-actions').insertAdjacentHTML('beforeend',`<button id="review-prepared-design" type="button">${label}</button>`);
@@ -632,7 +634,7 @@
         && !source.history.some(revision=>revision.layoutId === item.id));
       if (!layouts.length) { area.innerHTML = `<p>No new prepared design is available for this ${amendment?'Main draft':'variation'}. Saved copy and images remain editable.</p>`; return; }
       const category=names[source.variant] || source.category;
-      area.innerHTML = `<form class="review-inline-form review-lifecycle-form" id="review-apply-design"><h3>${amendment?'Update current draft':'Apply a prepared design'}</h3><p>${amendment?`Update ${esc(category)} Main Desktop only. It stays Version ${esc(source.version)}; Mobile and the customer page stay unchanged.`:`Only this ${esc(category)} variation changes. Main stays as it is.`}</p><label>Design<select id="review-prepared-id">${layouts.map(item=>`<option value="${esc(item.id)}">${esc(category)} · ${esc(item.sectionId)} · ${esc(item.title)} · Desktop only</option>`).join('')}</select></label><p>Updates the selected Desktop section with the selected design. The dated change remains in history.</p><label>What changed?<textarea id="review-prepared-summary" required maxlength="300" rows="4">${esc(category)} Desktop ${esc(layouts[0].sectionId)}: apply the selected prepared design. ${amendment?'Keep the current Main version number and Mobile unchanged.':'Main and Mobile stay unchanged.'}</textarea></label><label class="review-action-accept"><input type="checkbox" required>${amendment?`I understand this updates Main Desktop only and keeps Version ${esc(source.version)}.`:'I understand this updates only the saved Desktop view of this variation.'}</label><div class="review-action-buttons"><button id="review-prepared-submit" type="submit" class="review-primary-action">${amendment?'Update Main Desktop':'Apply design to Desktop'}</button><button id="review-prepared-cancel" type="button">Cancel</button></div><p id="review-prepared-error" role="alert"></p></form>`;
+      area.innerHTML = `<form class="review-inline-form review-lifecycle-form" id="review-apply-design"><h3>${amendment?'Update current draft':'Apply a prepared design'}</h3><p>${amendment?`Update ${esc(category)} Main Desktop only. It stays Version ${esc(viewVersion(source))}; Mobile and the customer page stay unchanged.`:`Only this ${esc(category)} variation changes. Main stays as it is.`}</p><label>Design<select id="review-prepared-id">${layouts.map(item=>`<option value="${esc(item.id)}">${esc(category)} · ${esc(item.sectionId)} · ${esc(item.title)} · Desktop only</option>`).join('')}</select></label><p>Updates the selected Desktop section with the selected design. The dated change remains in history.</p><label>What changed?<textarea id="review-prepared-summary" required maxlength="300" rows="4">${esc(category)} Desktop ${esc(layouts[0].sectionId)}: apply the selected prepared design. ${amendment?'Keep the current Main version number and Mobile unchanged.':'Main and Mobile stay unchanged.'}</textarea></label><label class="review-action-accept"><input type="checkbox" required>${amendment?`I understand this updates Main Desktop only and keeps Version ${esc(viewVersion(source))}.`:'I understand this updates only the saved Desktop view of this variation.'}</label><div class="review-action-buttons"><button id="review-prepared-submit" type="submit" class="review-primary-action">${amendment?'Update Main Desktop':'Apply design to Desktop'}</button><button id="review-prepared-cancel" type="button">Cancel</button></div><p id="review-prepared-error" role="alert"></p></form>`;
       $('review-prepared-id').addEventListener('change',event=>{
         const selected=layouts.find(item=>item.id===event.target.value);
         if(selected)$('review-prepared-summary').value=`${category} Desktop ${selected.sectionId}: apply the selected prepared design. ${amendment?'Keep the current Main version number and Mobile unchanged.':'Main and Mobile stay unchanged.'}`;
@@ -645,7 +647,7 @@
           const action=amendment?'amend-main-layout':'apply-layout';
           const saved = await request(`/api/funnel-review?action=${action}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pageKey:source.pageKey,expectedRevision:source.revision,expectedUpdatedAt:source.updatedAt,layoutId:$('review-prepared-id').value,changeSummary:$('review-prepared-summary').value.trim()})});
           area.replaceChildren();state.view='desktop';
-          state.notice={text:amendment?`Main Desktop updated. It remains Version ${saved.draft.version}; Mobile is unchanged.`:`Desktop design saved as Version ${saved.draft.version}. Main and Mobile are unchanged.`,kind:'success'};
+          state.notice={text:amendment?`Main Desktop updated. It remains Version ${viewVersion(saved.draft,'desktop')}; Mobile is unchanged.`:`Desktop design saved as Version ${viewVersion(saved.draft,'desktop')}. Main and Mobile are unchanged.`,kind:'success'};
           await selectWorkingPage(source.pageKey,{force:true});
           const route=new URL(location.href);route.searchParams.set('view','desktop');history.replaceState(null,'',route);
           document.dispatchEvent(new Event('tracker:working-saved'));
@@ -656,8 +658,9 @@
   }
 
   function nextMainVersion(version, releaseType) {
-    const [major, minor = 0] = String(version).replace(/D$/, '').split('.').map(Number);
-    return releaseType === 'major' ? `${major + 1}D` : `${major}.${minor + 1}D`;
+    const suffix = selectedView() === 'mobile' ? 'M' : 'D';
+    const [major, minor = 0] = String(version).replace(/[DM]$/, '').split('.').map(Number);
+    return releaseType === 'major' ? `${major + 1}.0${suffix}` : `${major}.${minor + 1}${suffix}`;
   }
 
   async function showVariationAction(action) {
@@ -672,10 +675,10 @@
     try {
       if (action === 'promote') main = (await request(`/api/funnel-review?action=draft&pageKey=${encodeURIComponent(source.mainPageKey)}&check=defer`)).draft;
       if (state.draft?.pageKey !== source.pageKey) return;
-      area.innerHTML = `<form class="review-inline-form review-lifecycle-form" id="review-variation-action"><h3>${titles[action]}</h3><p>${esc(name)} · Version ${esc(source.version)}</p>${action === 'promote' ? `<p>Replace Main Version ${esc(main.version)} with both saved web views from this variation. Earlier Main versions stay in the change log. The customer page stays as it is until Walter publishes.</p>${source.branch?.parentRevisionId !== main.revision ? '<p class="review-action-warning">Main has changed since this variation started. Review both pages before replacing Main with this variation.</p>' : ''}<label>Release type<select id="review-promote-release"><option value="minor">Minor: keep the page structure</option><option value="major">Major: page structure changed</option></select></label><p id="review-promote-version">Next working version: ${esc(nextMainVersion(main.version,'minor'))} · Unsynced</p><label>What changed?<textarea id="review-promote-summary" required maxlength="300" rows="3" placeholder="Describe the changes Walter should publish."></textarea></label><label class="review-action-accept"><input id="review-promote-accept" type="checkbox" required>I reviewed Desktop web and Mobile web. Use this variation as the next Main working page.</label>` : action === 'archive' ? '<p>Remove this variation from the active choices. You can review and restore it under Archived variations. Its saved history stays intact.</p>' : action === 'restore' ? '<p>Return this variation to the active choices so you can edit it again. Main stays unchanged.</p>' : `<p>Remove this variation from the workspace. It will no longer be editable or available in the variation list. Protected saved history is retained. Main stays unchanged.</p><label>Type the variation name to confirm<input id="review-delete-name" required autocomplete="off" spellcheck="false"></label>`}<div class="review-action-buttons"><button id="review-variation-submit" type="submit" class="${action === 'delete' ? 'review-danger-action' : 'review-primary-action'}">${titles[action]}</button><button id="review-variation-dismiss" type="button">Cancel</button></div><p id="review-variation-action-error" role="alert"></p></form>`;
+      area.innerHTML = `<form class="review-inline-form review-lifecycle-form" id="review-variation-action"><h3>${titles[action]}</h3><p>${esc(name)} · Version ${esc(viewVersion(source))}</p>${action === 'promote' ? `<p>Use this ${selectedView() === 'mobile' ? 'Mobile' : 'Desktop'} variation as Main Version ${esc(nextMainVersion(viewVersion(main),'minor'))}. The other view stays unchanged. Earlier Main versions stay in the change log. The customer page stays as it is until Walter publishes.</p>${source.branch?.parentRevisionId !== main.revision ? '<p class="review-action-warning">Main has changed since this variation started. Review both pages before replacing Main with this variation.</p>' : ''}<label>Release type<select id="review-promote-release"><option value="minor">Minor: keep the page structure</option><option value="major">Major: page structure changed</option></select></label><p id="review-promote-version">Next working version: ${esc(nextMainVersion(viewVersion(main),'minor'))} · Unsynced</p><label>What changed?<textarea id="review-promote-summary" required maxlength="300" rows="3" placeholder="Describe the changes Walter should publish."></textarea></label><label class="review-action-accept"><input id="review-promote-accept" type="checkbox" required>I reviewed this ${selectedView() === 'mobile' ? 'Mobile' : 'Desktop'} variation. Make it Main for this view only.</label>` : action === 'archive' ? '<p>Remove this variation from the active choices. You can review and restore it under Archived variations. Its saved history stays intact.</p>' : action === 'restore' ? '<p>Return this variation to the active choices so you can edit it again. Main stays unchanged.</p>' : `<p>Remove this variation from the workspace. It will no longer be editable or available in the variation list. Protected saved history is retained. Main stays unchanged.</p><label>Type the variation name to confirm<input id="review-delete-name" required autocomplete="off" spellcheck="false"></label>`}<div class="review-action-buttons"><button id="review-variation-submit" type="submit" class="${action === 'delete' ? 'review-danger-action' : 'review-primary-action'}">${titles[action]}</button><button id="review-variation-dismiss" type="button">Cancel</button></div><p id="review-variation-action-error" role="alert"></p></form>`;
       $('review-variation-dismiss').onclick = () => area.replaceChildren();
       $('review-promote-release')?.addEventListener('change',event=>{
-        $('review-promote-version').textContent = `Next working version: ${nextMainVersion(main.version,event.target.value)} · Unsynced`;
+        $('review-promote-version').textContent = `Next working version: ${nextMainVersion(viewVersion(main),event.target.value)} · Unsynced`;
       });
       const deletionName = $('review-delete-name');
       if (deletionName) {
@@ -691,12 +694,12 @@
         if (action === 'delete' && deletionName.value !== name) return;
         button.disabled = true; button.textContent = 'Saving…';
         const payload = {pageKey:source.pageKey,expectedRevision:source.revision,expectedUpdatedAt:source.updatedAt};
-        if (action === 'promote') Object.assign(payload,{expectedMainRevision:main.revision,releaseType:$('review-promote-release').value,changeSummary:$('review-promote-summary').value.trim()});
+        if (action === 'promote') Object.assign(payload,{view:selectedView(),scope:selectedView(),expectedMainRevision:main.revision,releaseType:$('review-promote-release').value,changeSummary:$('review-promote-summary').value.trim()});
         if (action === 'delete') payload.confirmationName = deletionName.value;
         try {
           const result = await request(`/api/funnel-review?action=${action === 'promote' ? 'promote' : action}-variation`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
           area.replaceChildren();
-          state.notice = {text:action === 'promote' ? `Main is now Version ${result.draft.version}. Review the working page, then Walter can publish it.` : action === 'archive' ? 'Variation archived. Find it under Archived variations.' : action === 'restore' ? 'Variation restored. Main is unchanged.' : 'Variation removed from the workspace. Protected saved history is retained.',kind:'success'};
+          state.notice = {text:action === 'promote' ? `${selectedView() === 'mobile' ? 'Mobile' : 'Desktop'} Main is now Version ${viewVersion(result.draft)}. The other view is unchanged.` : action === 'archive' ? 'Variation archived. Find it under Archived variations.' : action === 'restore' ? 'Variation restored. Main is unchanged.' : 'Variation removed from the workspace. Protected saved history is retained.',kind:'success'};
           await selectWorkingPage(action === 'promote' ? result.draft.pageKey : action === 'restore' ? source.pageKey : source.mainPageKey,{force:true});
           document.dispatchEvent(new Event('tracker:working-saved'));
         } catch (error) {
@@ -717,8 +720,7 @@
     const status = value => state.draft.liveCheckPending ? 'Checking live…' : value === 'synced' ? 'Synced' : value === 'unsynced' ? 'Unsynced' : 'Check unavailable';
     const desktop = syncStatus(state.draft.views?.desktop);
     const mobile = syncStatus(state.draft.views?.mobile);
-    const overall = syncStatus(state.draft.viewSync || state.draft.overallSync || state.draft);
-    container.innerHTML = `<section class="review-viewbar"><div class="review-view-summary"><span>Working page</span><strong>${esc(title)} · Version ${esc(state.draft.version)}</strong><small>Viewing ${view === 'desktop' ? 'Desktop web · 1280px fit' : 'Mobile web · 390px viewport'}</small></div><nav class="review-view-toggle" aria-label="Working page view"><button type="button" data-review-view="desktop" class="${view === 'desktop' ? 'selected' : ''}" aria-pressed="${view === 'desktop'}">Desktop web</button><button type="button" data-review-view="mobile" class="${view === 'mobile' ? 'selected' : ''}" aria-pressed="${view === 'mobile'}">Mobile web</button></nav><div class="review-sync-states" aria-label="View synchronization"><b>Desktop ${esc(status(desktop))}</b><b>Mobile ${esc(status(mobile))}</b><b>Overall ${esc(status(overall))}</b></div></section>`;
+    container.innerHTML = `<section class="review-viewbar"><div class="review-view-summary"><span>Working page</span><strong>${esc(title)} · Version ${esc(state.draft.version)}</strong><small>Viewing ${view === 'desktop' ? 'Desktop web · 1280px fit' : 'Mobile web · 390px viewport'}</small></div><nav class="review-view-toggle" aria-label="Working page view"><button type="button" data-review-view="desktop" class="${view === 'desktop' ? 'selected' : ''}" aria-pressed="${view === 'desktop'}">Desktop web</button><button type="button" data-review-view="mobile" class="${view === 'mobile' ? 'selected' : ''}" aria-pressed="${view === 'mobile'}">Mobile web</button></nav><div class="review-sync-states" aria-label="View synchronization"><b>Desktop ${esc(viewVersion(state.draft,'desktop'))} · ${esc(status(desktop))}</b><b>Mobile ${esc(viewVersion(state.draft,'mobile'))} · ${esc(status(mobile))}</b></div><small class="review-version-key">D = Desktop · M = Mobile. Sync status is separate.</small></section>`;
     container.querySelectorAll('[data-review-view]').forEach(button => button.addEventListener('click', () => chooseView(button.dataset.reviewView)));
   }
 
@@ -728,29 +730,28 @@
     if(container.querySelector('#pair-linear-form')||container.querySelector('details[open] form'))return;
     const openDetails=[...container.querySelectorAll('details[id][open]')].map(item=>item.id);
     const livePages = draft.livePages || [];
-    const publication = draft.latestPagePublication;
+    const publication = draft.publications?.filter(item => item.sectionId === null && (!item.view || item.view === selectedView())).at(-1);
     const mainLive = livePages.find(item => item.url === (publication?.revisionId === draft.revision ? publication.liveUrl : draft.liveSource?.liveUrl)) || livePages.find(item => item.channel === 'direct') || livePages.find(item => item.channel === 'affiliate') || livePages[0];
     const live = draft.liveSource;
     const canSync = ['lander', 'results'].includes(draft.family) && !draft.variation && editableDraft();
     const overallSync = draft.viewSync || draft.overallSync || draft.sync;
-    const overallStatus = syncStatus(overallSync);
     const selectedStatus = syncStatus(draft.sync);
-    const synced = overallStatus === 'synced';
-    const selectedSynced = selectedStatus === 'synced';
+    const synced = selectedStatus === 'synced';
     const selectedName = selectedView() === 'mobile' ? 'Mobile web' : 'Desktop web';
     const checking = Boolean(draft.liveCheckPending);
-    const status = state.syncing ? 'Copying live into the working page…' : checking ? 'Checking live…' : overallStatus === 'unavailable' ? 'Check unavailable' : synced ? 'Synced' : 'Unsynced';
+    const status = state.syncing ? 'Copying live into the working page…' : checking ? 'Checking live…' : selectedStatus === 'unavailable' ? 'Check unavailable' : synced ? 'Synced' : 'Unsynced';
     const explanation = checking ? 'Your saved working page is ready. Live status is being checked in the background.'
-      : overallStatus === 'unavailable' ? 'The latest live check could not finish. The saved baseline is preserved; no edit has been recorded.'
-      : synced ? `All tracked views in Version ${draft.version} match the recorded live version.`
-      : selectedSynced ? `${selectedName} matches live, but Version ${draft.version} remains unsynced until both web views match.`
-      : overallSync?.reason === 'live-changed' ? 'The live page changed. Review it before updating this working copy.'
+      : selectedStatus === 'unavailable' ? 'The latest live check could not finish. The saved baseline is preserved; no edit has been recorded.'
+      : synced ? `${selectedName} ${draft.version} matches live.`
+      : draft.sync?.reason === 'live-changed' ? 'The live page changed. Review it before updating this working copy.'
         : draft.variation ? 'This is an experiment. Choose Make Main when approved, then Walter can publish the new Main version.'
           : mainLive ? `Version ${draft.version} has changes ready for Walter to make live.` : 'A live page has not been connected yet.';
-    const sourceVersion = draft.history.find(item => item.id === live?.revisionId)?.version;
+    const sourceVersion = draft.history.find(item => item.id === live?.revisionId)?.version
+      || draft.history.find(item => !item.setup && item.affectsView !== false)?.version;
+    const savedViewRevision = draft.history.filter(item => item.affectsView !== false).at(-1);
     const pageLabel = draft.family === 'bc' ? 'Birth chart' : `${names[draft.variant]} · ${names[draft.family]}`;
-    const releaseHistory = draft.history.filter(item => !item.setup);
-    const releaseVersionCount = new Set(releaseHistory.map(item => String(item.version).replace(/D$/, ''))).size;
+    const releaseHistory = draft.history.filter(item => !item.setup && item.affectsView !== false);
+    const releaseVersionCount = new Set(releaseHistory.map(item => String(item.version))).size;
     container.innerHTML = `<div class="page-pair">
       <section class="page-pair-live"><p class="eyebrow">Live page</p><h2>${esc(pageLabel)}</h2>
         ${mainLive ? `<a href="${esc(safe(mainLive.url))}" target="_blank" rel="noopener">Open live page ↗</a><p class="pair-address">${esc(mainLive.url.replace('https://',''))}</p>` : '<p class="review-muted">No live page has been selected for this draft.</p>'}
@@ -759,7 +760,7 @@
       </section>
       <section class="page-pair-draft"><p class="eyebrow">Working page <span class="pair-draft-badge">DRAFT</span></p><h2>${esc(draft.label)}</h2>
         <a href="${esc(withView(draft.workingUrl))}" target="_blank" rel="noopener">Working page ↗</a><p class="pair-address">${esc(withView(draft.stableWorkingUrl || draft.workingUrl).replace('https://',''))}</p>
-        <p class="pair-source">Saved ${esc(dateTime(draft.updatedAt))} · ${esc(draft.editor.name)}</p>
+        <p class="pair-source">Saved ${esc(dateTime(savedViewRevision?.createdAt || draft.updatedAt))} · ${esc(savedViewRevision?.editor.name || draft.editor.name)}</p>
       </section>
       <div class="pair-publication" aria-live="polite"><strong class="sync-badge ${synced && !checking ? 'synced' : 'unsynced'}">${esc(status)}</strong><p>${explanation}</p>${draft.liveCheck && !checking ? `<p class="review-muted">${draft.liveCheck.status === 'unavailable' ? 'Live check unavailable. The last recorded state is shown.' : `Live checked ${esc(dateTime(draft.liveCheck.checkedAt))}.`}${live?.synthetic ? ' A fixed sample profile is used.' : ''}</p>` : ''}${publication ? `<p>Version ${draft.history.find(item=>item.id===publication.revisionId)?.version} confirmed live by ${esc(publication.editor.name)} · ${esc(dateTime(publication.confirmedAt))}.</p>` : ''}
       ${editableDraft() && !draft.variation && livePages.length && !synced && !checking && !draft.sourceOutdated ? `<details id="pair-confirm"><summary>Confirm this version is live</summary><form id="pair-confirm-form" data-page-key="${esc(draft.pageKey)}" data-revision="${esc(draft.revision)}"><p>Use this after Walter publishes Version ${draft.version}. This records the match and does not deploy the page.</p><label>Live channel<select id="pair-live-channel">${livePages.map(item => `<option value="${esc(item.url)}" ${item.id === mainLive.id ? 'selected' : ''}>${esc(item.channel)}</option>`).join('')}</select></label><label class="pair-checkbox"><input id="pair-confirm-check" type="checkbox" required>I checked Version ${draft.version} on that live page and they match.</label><button type="submit">Mark Version ${draft.version} synced</button><p id="pair-confirm-error" role="alert"></p></form></details>` : ''}
@@ -827,7 +828,7 @@
     try {
       const result = await request('/api/funnel-review?action=confirm-page-published', {
         method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({
-          pageKey:form.dataset.pageKey, revisionId:form.dataset.revision, liveUrl:$('pair-live-channel').value,
+          pageKey:form.dataset.pageKey, revisionId:form.dataset.revision, view:selectedView(), liveUrl:$('pair-live-channel').value,
           confirmed:$('pair-confirm-check').checked,
         }),
       });
@@ -895,11 +896,11 @@
       const response = await request('/api/funnel-review?action=working-pages');
       if (state.pageKey !== source.pageKey || state.selected !== sourceSectionId) return;
       state.pages = response.drafts || [];
-      const targets = state.pages.filter(item => item.family === source.family && item.pageKey !== source.pageKey);
+      const targets = state.pages.filter(item => item.family === source.family && item.pageKey !== source.pageKey).map(item => activeDraft(item));
       const preferredSection = target => target.workingBindings.find(item => item.sectionId === sourceSectionId)
         || target.workingBindings.find(item => item.sectionId.split('-').slice(1).join('-') === sourceSectionId.split('-').slice(1).join('-'))
         || target.workingBindings[0];
-      area.innerHTML = `<section class="review-shared-panel"><div class="review-shared-heading"><h2>Use this section on other ${esc(names[source.family].toLowerCase())} pages</h2><button id="review-shared-close" type="button">Close</button></div><p>From ${esc(source.label)} · ${esc(sourceSectionId)} · ${esc(section(sourceSectionId)?.name || '')}</p><p>This copies the whole saved section, including its copy and images. It replaces category-specific content only on the pages you select. Earlier versions stay in history.</p>${sectionPreview(source,sourceSectionId)}<form id="review-copy-form">${targets.length ? targets.map((target,index) => {
+      area.innerHTML = `<section class="review-shared-panel"><div class="review-shared-heading"><h2>Use this section on other ${esc(names[source.family].toLowerCase())} pages</h2><button id="review-shared-close" type="button">Close</button></div><p>From ${esc(source.label)} · ${esc(sourceSectionId)} · ${esc(section(sourceSectionId)?.name || '')}</p><p>This copies the whole saved ${selectedView() === 'mobile' ? 'Mobile' : 'Desktop'} section, including its copy and images. The other view stays unchanged. It replaces category-specific content only on the pages you select. Earlier versions stay in history.</p>${sectionPreview(source,sourceSectionId)}<form id="review-copy-form">${targets.length ? targets.map((target,index) => {
         const selected = preferredSection(target);
         return `<div class="review-copy-target"><label class="pair-checkbox"><input type="checkbox" name="target" value="${index}"><strong>${esc(target.label)}</strong></label><label>Section to replace<select data-copy-target="${index}">${target.workingBindings.map(binding => `<option value="${esc(binding.sectionId)}" ${binding.sectionId === selected.sectionId ? 'selected' : ''}>${esc(binding.sectionId)} · ${esc(section(binding.sectionId)?.name || binding.firstHeading?.text || 'Section')}</option>`).join('')}</select></label><div id="copy-target-preview-${index}">${sectionPreview(target,selected.sectionId)}</div></div>`;
       }).join('') : '<p>No other working pages in this family yet. Open another category or create a variation first.</p>'}<label class="pair-checkbox"><input id="review-copy-accept" type="checkbox" required>I reviewed the selected sections. Replace them with this saved section.</label><button id="review-copy-submit" type="submit" disabled>Choose pages to update</button><p id="review-copy-error" role="alert"></p></form></section>`;
@@ -927,8 +928,9 @@
           return {pageKey:target.pageKey,sectionId:form.querySelector(`[data-copy-target="${index}"]`).value,expectedRevision:target.revision};
         });
         try {
-          const result = await request('/api/funnel-review?action=copy-section', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sourcePageKey:source.pageKey,sourceSectionId,sourceRevision:source.revision,targets:chosen,releaseType:$('review-copy-release').value,changeSummary:$('review-copy-summary').value.trim()})});
-          area.innerHTML = `<section class="review-shared-panel"><h2>Section copied to ${result.drafts.length} ${result.drafts.length === 1 ? 'page' : 'pages'}.</h2><p>These new versions are Unsynced and ready for Walter. Screenshots are queued automatically.</p>${result.drafts.map(draft => {
+          const result = await request('/api/funnel-review?action=copy-section', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sourcePageKey:source.pageKey,sourceSectionId,sourceRevision:source.revision,view:selectedView(),scope:selectedView(),targets:chosen,releaseType:$('review-copy-release').value,changeSummary:$('review-copy-summary').value.trim()})});
+          area.innerHTML = `<section class="review-shared-panel"><h2>Section copied to ${result.drafts.length} ${result.drafts.length === 1 ? 'page' : 'pages'}.</h2><p>The selected view has new Unsynced versions. The other view is unchanged.</p>${result.drafts.map(value => {
+            const draft = activeDraft(value);
             const route = new URL(withView(draft.workingUrl),location.origin);route.hash=`funnel-section-${chosen.find(item=>item.pageKey===draft.pageKey).sectionId}`;
             return `<p><a href="${esc(route.href)}" target="_blank" rel="noopener">${esc(draft.label)} · Unsynced ↗</a></p>`;
           }).join('')}<button id="review-shared-done" type="button">Done</button></section>`;
@@ -1044,7 +1046,7 @@
   }
 
   function sectionRevision() {
-    return (state.draft?.history || []).filter(item => item.kind === 'edit' && item.sectionId === state.selected).at(-1);
+    return (state.draft?.history || []).filter(item => item.affectsView !== false && item.kind === 'edit' && item.sectionId === state.selected).at(-1);
   }
 
   function knownProductionUrls(active) {
@@ -1066,8 +1068,8 @@
     if (!panel) return;
     const node = state.picked;
     const entry = scratchFor(node);
-    const history = (state.draft?.history || []).filter(item => item.sectionId === state.selected || item.sectionChanges?.some(change=>change.sectionId === state.selected)).slice().reverse();
-    const publications = (state.draft?.publications || []).filter(item => item.sectionId === state.selected).slice().reverse();
+    const history = (state.draft?.history || []).filter(item => item.affectsView !== false && (item.sectionId === state.selected || item.sectionChanges?.some(change=>change.sectionId === state.selected && change.views.includes(selectedView())))).slice().reverse();
+    const publications = (state.draft?.publications || []).filter(item => item.sectionId === state.selected && (!item.view || item.view === selectedView())).slice().reverse();
     if (lifecycleStatus(state.draft) !== 'active') {
       panel.innerHTML = `<div class="review-panel-head"><p class="eyebrow">Archived variation</p><h2>${esc(active?.id || '')} · ${esc(active?.name || '')}</h2><p>Read-only. Restore this variation above to edit it again.</p></div><section class="review-history"><h3>Section changes</h3>${history.length ? history.map(historyMarkup).join('') : '<p>No edits saved for this section.</p>'}</section>`;
       return;
@@ -1077,7 +1079,7 @@
       ${binding?.gaps?.length ? `<details class="review-source-notes review-gap"><summary>Source notes</summary>${binding.gaps.map(item => `<p>${esc(item)}</p>`).join('')}</details>` : ''}
       <form id="review-change-form">
         <div class="review-picker"><strong>${node ? (node.type === 'image' ? 'Selected image' : 'Selected text') : 'Choose text or an image'}</strong><p>${node ? esc(nodeDescription(node)) : (nodes.length ? 'Click a copy line or image in the working page.' : 'Nothing in this section is ready to edit yet.')}</p>${node ? editorMarkup(node) : `<div class="review-node-list">${nodes.map(item => `<button type="button" data-review-pick="${esc(item.editId)}">${esc(nodeDescription(item))}</button>`).join('')}</div>`}</div>
-        <div class="review-reference"><label>Apply this change to<select id="review-view-scope"><option value="shared" ${state.viewScope === 'shared' ? 'selected' : ''}>Both web views</option><option value="${esc(selectedView())}" ${state.viewScope === selectedView() ? 'selected' : ''}>This view only (${selectedView() === 'desktop' ? 'Desktop web' : 'Mobile web'})</option></select></label><p class="review-view-scope-help">Previewing ${selectedView() === 'desktop' ? 'Desktop web' : 'Mobile web'}. Both views is the default.</p><label>What changed?<textarea id="review-summary" rows="2" required maxlength="300" placeholder="Describe the change for Walter.">${esc(entry?.changeSummary || '')}</textarea></label><label class="review-note">Release type<select id="review-release-type"><option value="minor" ${entry?.releaseType !== 'major' ? 'selected' : ''}>Minor: keep the page structure</option><option value="major" ${entry?.releaseType === 'major' ? 'selected' : ''}>Major: page structure changed</option></select></label><label class="review-note">Design example for Walter (optional)<input id="review-example" type="url" placeholder="https://zodiac-pages.vercel.app/…" value="${esc(entry?.exampleUrl || '')}"></label><label class="review-note">Optional note<textarea id="review-note" rows="2">${esc(entry?.note || '')}</textarea></label></div>
+        <div class="review-reference"><label>Apply this change to<select id="review-view-scope"><option value="shared" ${state.viewScope === 'shared' ? 'selected' : ''}>Both web views</option><option value="${esc(selectedView())}" ${state.viewScope === selectedView() ? 'selected' : ''}>This view only (${selectedView() === 'desktop' ? 'Desktop web' : 'Mobile web'})</option></select></label><p class="review-view-scope-help">Previewing ${selectedView() === 'desktop' ? 'Desktop web' : 'Mobile web'}. This view only is the default. Choose Both web views deliberately to change both.</p><label>What changed?<textarea id="review-summary" rows="2" required maxlength="300" placeholder="Describe the change for Walter.">${esc(entry?.changeSummary || '')}</textarea></label><label class="review-note">Release type<select id="review-release-type"><option value="minor" ${entry?.releaseType !== 'major' ? 'selected' : ''}>Minor: keep the page structure</option><option value="major" ${entry?.releaseType === 'major' ? 'selected' : ''}>Major: page structure changed</option></select></label><label class="review-note">Design example for Walter (optional)<input id="review-example" type="url" placeholder="https://zodiac-pages.vercel.app/…" value="${esc(entry?.exampleUrl || '')}"></label><label class="review-note">Optional note<textarea id="review-note" rows="2">${esc(entry?.note || '')}</textarea></label></div>
         ${renderConflict()}
         <div class="review-save-area"><p id="review-form-error" class="review-form-error" role="alert"></p><button id="review-save" class="review-save" type="submit">Save draft changes</button><p id="review-status" class="review-status ${esc(state.notice?.kind || '')}">${esc(state.notice?.text || '')}</p></div>
       </form>
@@ -1129,7 +1131,7 @@
     $('review-shared-edit')?.replaceChildren();
     state.selected = sectionId;
     state.picked = null;
-    state.viewScope = 'shared';
+    state.viewScope = selectedView();
     state.conflict = null;
     state.pendingScroll = true;
     const url = new URL(location.href);
@@ -1147,7 +1149,7 @@
     stashInputs();
     const node = state.draft?.editableNodes?.find(item => item.editId === editId);
     if (!node) return;
-    if (state.picked?.editId !== node.editId) state.viewScope = nodeInBothViews(node) ? 'shared' : selectedView();
+    if (state.picked?.editId !== node.editId) state.viewScope = selectedView();
     state.selected = node.sectionId;
     state.picked = node;
     state.conflict = null;
@@ -1596,6 +1598,7 @@
           pageKey: state.pageKey,
           sectionId: state.selected,
           revisionId: sectionRevision()?.id,
+          view: selectedView(),
           liveUrl,
           confirmed: true,
           note: $('review-live-note')?.value.trim() || undefined,
