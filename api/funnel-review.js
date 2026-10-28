@@ -37,6 +37,7 @@ const {
 } = require('../lib/funnel-tracker/live-source');
 const {requestOidcTokenProvider} = require('../lib/funnel-tracker/production-monitor');
 const {initializeWorkingViews} = require('../lib/funnel-tracker/view-initialization');
+const {listPreparedLayouts} = require('../lib/funnel-tracker/prepared-layouts');
 const {
   createLiveCheckCache,
   liveCheckCacheKey,
@@ -82,7 +83,12 @@ const MESSAGES = Object.freeze({
   variation_promotion_missing: 'The variation or its Main working page is no longer available.',
   variation_promotion_views_required: 'Both the variation and Main need Desktop and Mobile working pages before promotion.',
   invalid_variation: 'Give this variation a name and start from the current main working version.',
-  same_origin_required: 'Open the tracker page directly before uploading a private image.',
+  invalid_prepared_layout: 'Choose the current General variation and an available prepared design.',
+  prepared_layout_requires_variation: 'Create or choose a variation before applying a prepared design.',
+  prepared_layout_target_mismatch: 'That prepared design does not belong to this working page.',
+  prepared_layout_views_required: 'This variation needs both Desktop and Mobile working pages before applying a prepared design.',
+  prepared_layout_conflict: 'This variation changed while you were working. Refresh before applying the design.',
+  same_origin_required: 'Open the tracker page directly before making this change.',
   storage_not_configured: 'Shared tracker storage has not been configured yet.',
 });
 const WORKING_CHECK_SECONDS = 2 * 60;
@@ -372,6 +378,7 @@ function createHandler({
   captureRevision = captureDraftRevision,
   work = workStore,
   checkCache = createLiveCheckCache(),
+  preparedLayouts = listPreparedLayouts,
 } = {}) {
   async function withLiveCheckUncached(req, value, view = 'desktop') {
     let draft = publicDraft(value, {view});
@@ -563,9 +570,19 @@ function createHandler({
       } catch { return fail(res, 503, 'review_unavailable'); }
     }
 
+    if (req.method === 'GET' && action === 'prepared-layouts') {
+      if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) {
+        return fail(res, 403, 'agent_scope_denied');
+      }
+      try {
+        return sendJson(res, 200, {layouts:preparedLayouts(),user:identity.user});
+      } catch { return fail(res, 503, 'review_unavailable'); }
+    }
+
     if (req.method === 'POST' && [
       'copy-section', 'create-variation', 'start-versioning', 'promote-variation',
       'archive-variation', 'restore-variation', 'delete-variation',
+      'apply-layout',
     ].includes(action)) {
       if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) return fail(res, 403, 'agent_scope_denied');
       if (!isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
@@ -601,6 +618,19 @@ function createHandler({
             user:identity.user,
           });
         }
+        if (action === 'apply-layout') {
+          if (Object.keys(body).sort().join(',') !== [
+            'changeSummary','expectedRevision','expectedUpdatedAt','layoutId','pageKey',
+          ].join(',')) return fail(res, 400, 'invalid_prepared_layout');
+          const result = await drafts.applyPreparedLayout({
+            pageKey:body.pageKey,expectedRevision:body.expectedRevision,
+            expectedUpdatedAt:body.expectedUpdatedAt,layoutId:body.layoutId,
+            changeSummary:body.changeSummary,editor:identity.user,
+          });
+          // Both immutable view records are already saved. The capture monitor can
+          // produce their pending screenshots without holding this request open.
+          return sendJson(res, 201, {draft:publicDraft(result.draft),user:identity.user});
+        }
         if (['archive-variation', 'restore-variation', 'delete-variation'].includes(action)) {
           const lifecycleAction = action.slice(0, action.indexOf('-'));
           const result = await drafts.changeVariationLifecycle({
@@ -623,6 +653,7 @@ function createHandler({
         if (error instanceof DraftStoreConflictError) {
           const code = action === 'copy-section' ? 'section_copy_conflict'
             : action === 'promote-variation' ? 'variation_promotion_conflict'
+              : action === 'apply-layout' ? 'prepared_layout_conflict'
               : ['archive-variation','restore-variation','delete-variation'].includes(action)
                 ? 'variation_lifecycle_conflict'
                 : 'draft_conflict';
@@ -636,9 +667,12 @@ function createHandler({
             'invalid_variation_lifecycle', 'invalid_variation_promotion',
             'variation_delete_confirmation_mismatch', 'variation_not_found',
             'variation_promotion_missing', 'variation_promotion_views_required',
+            'prepared_layout_requires_variation', 'prepared_layout_target_mismatch',
+            'prepared_layout_views_required',
           ].includes(error.code)) return fail(res, 400, error.code);
           const code = error.code === 'variation_name_conflict' ? 'variation_name_conflict'
-            : action === 'copy-section' ? 'invalid_section_copy' : 'invalid_variation';
+            : action === 'copy-section' ? 'invalid_section_copy'
+              : action === 'apply-layout' ? 'invalid_prepared_layout' : 'invalid_variation';
           return fail(res, 400, code);
         }
         return fail(res, 503, 'review_unavailable');
@@ -679,11 +713,14 @@ function createHandler({
             pageLabel: draft.label, createdAt: item.createdAt, editor: item.editor,
             summary: item.sourceEvidence ? 'Working draft synced from live. Earlier versions remain in history.' : 'Working page updated from the selected Vercel source. Earlier versions remain in history.',
           })),
-          ...draft.revisions.filter(item => ['edit','section-copy'].includes(item.kind)).map(item => ({
+          ...draft.revisions.filter(item => ['edit','section-copy','section-layout'].includes(item.kind)).map(item => ({
             id: item.id, type: item.operationType, sectionId: item.sectionId,
             pageKey: draft.pageKey, family: draft.family, variant: draft.variant,
             pageLabel: draft.label, createdAt: item.createdAt, editor: item.editor,
-            summary: item.kind === 'section-copy' ? `Section copied from ${item.after.sourceSectionId}. This version is unsynced.` : item.operationType === 'text' ? String(item.after).slice(0, 240) : 'Replacement image saved',
+            summary:item.kind === 'section-copy'
+              ? `Section copied from ${item.after.sourceSectionId}. This version is unsynced.`
+              : item.kind === 'section-layout' ? item.changeSummary
+                : item.operationType === 'text' ? String(item.after).slice(0, 240) : 'Replacement image saved',
           })),
           ...draft.revisions.filter(item => item.kind === 'variation-promotion').map(item => ({
             id:item.id,type:'variation-promotion',sectionId:null,

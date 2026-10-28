@@ -141,6 +141,7 @@
   const draftKey = () => state.pageChoice || mainDraftKey();
   const lifecycleStatus = draft => draft?.lifecycle?.status || 'active';
   const editableDraft = () => state.canEdit && lifecycleStatus(state.draft) === 'active';
+  const nodeInBothViews = node => !state.draft?.views || ['desktop','mobile'].every(view=>state.draft.views[view]?.editableNodes.some(item=>item.editId === node?.editId && item.sectionId === node.sectionId && item.type === node.type));
   const scratchKey = (node = state.picked) => node ? `${state.pageKey}:${node.sectionId}:${node.editId}` : '';
 
   function scratchFor(node = state.picked) {
@@ -557,6 +558,10 @@
     container.innerHTML = `<div class="review-branchbar"><label>Working page<select id="review-variation">${pages.map(item => `<option value="${esc(item.pageKey)}" ${item.pageKey === draft.pageKey ? 'selected' : ''}>${esc(item.variation?.name || 'Main')} · Version ${esc(item.version)}${lifecycleStatus(item) === 'archived' ? ' · Archived' : ''}</option>`).join('')}</select></label><div class="review-variation-actions"><button id="review-new-variation" type="button" ${draft.variation || !editableDraft() ? 'disabled' : ''}>New variation</button>${draft.variation ? `<button id="review-make-main" class="review-primary-action" type="button" ${!editableDraft() ? 'disabled' : ''}>Make Main</button>${inactive ? `<button id="review-restore-variation" type="button" ${!state.canEdit ? 'disabled' : ''}>Restore variation</button>` : `<button id="review-archive-variation" type="button" ${!state.canEdit ? 'disabled' : ''}>Archive variation</button>`}<button id="review-delete-variation" class="review-danger-action" type="button" ${!state.canEdit ? 'disabled' : ''}>Delete variation</button>` : ''}${!draft.releaseStarted ? '<button id="review-start-versions" type="button">Start current pages at Version 1</button>' : ''}</div></div>
       <div class="review-workflow"><p>${inactive ? 'Archived variation. Its saved pages and history are read-only. Restore it to work on it again.' : draft.variation ? 'Experiment here. Main stays unchanged until you choose Make Main.' : 'Main is the approved working page. Create a variation to try an idea without changing Main.'}</p><details><summary>How variations become live</summary><p>Create variation → Review both web views → Make Main → Walter publishes.</p><p>Make Main saves the approved variation as the next Main draft, for example 1.1D. After Walter publishes it and both views are confirmed, it becomes 1.1 and Synced. A structural release starts 2D. Creating a variation does not start a split test.</p><p>You can edit Main directly for a change you have already decided on. Every saved change still gets its own version and history.</p></details>${archived.length ? `<details class="review-archived"><summary>Archived variations · ${archived.length}</summary>${archived.map(item=>`<p><button type="button" data-review-archived="${esc(item.pageKey)}">Review ${esc(item.variation.name)} · Version ${esc(item.version)}</button></p>`).join('')}</details>` : ''}</div><div id="review-variation-form"></div>`;
     $('review-make-main')?.addEventListener('click', () => showVariationAction('promote'));
+    if (draft.variation && draft.family === 'lander' && draft.variant === 'g' && editableDraft()) {
+      container.querySelector('.review-variation-actions').insertAdjacentHTML('beforeend','<button id="review-prepared-design" type="button">Prepared designs</button>');
+      $('review-prepared-design').addEventListener('click', showPreparedDesign);
+    }
     $('review-archive-variation')?.addEventListener('click', () => showVariationAction('archive'));
     $('review-delete-variation')?.addEventListener('click', () => showVariationAction('delete'));
     $('review-restore-variation')?.addEventListener('click', () => showVariationAction('restore'));
@@ -607,6 +612,35 @@
     $('review-variation-form')?.replaceChildren();
     try { await loadDraft({force}); render(); }
     catch (error) { setNotice(error.message, 'error'); }
+  }
+
+  async function showPreparedDesign() {
+    stashInputs();
+    const source = state.draft, area = $('review-variation-form');
+    if (!source?.variation || !editableDraft() || !area) return;
+    if (pendingScratch()) { area.textContent = 'Save or undo your unsaved change before applying a prepared design.'; return; }
+    area.innerHTML = '<p role="status">Loading prepared designs…</p>';
+    try {
+      const result = await request('/api/funnel-review?action=prepared-layouts');
+      if (state.draft?.pageKey !== source.pageKey) return;
+      const layouts = result.layouts.filter(item=>item.family === source.family && item.variant === source.variant && !source.history.some(revision=>revision.layoutId === item.id));
+      if (!layouts.length) { area.innerHTML = '<p>No new prepared design is available for this variation. Saved copy and images remain editable.</p>'; return; }
+      area.innerHTML = `<form class="review-inline-form review-lifecycle-form" id="review-apply-design"><h3>Apply a prepared design</h3><p>Only this variation changes. Main stays as it is.</p><label>Design<select id="review-prepared-id">${layouts.map(item=>`<option value="${esc(item.id)}">${esc(item.title)} · Desktop only</option>`).join('')}</select></label><p>The proof design shows 15,000+ users including the earlier platform, 3.4M+ estimated minutes listened, and a 5.0 rating from 3 US App Store ratings. The estimate multiplies recorded plays by full-track lengths and assumes full-track plays.</p><label>What changed?<textarea id="review-prepared-summary" required maxlength="1000" rows="4">General desktop hero: add 15,000+ users, 3.4M+ estimated minutes listened, and 5.0 from 3 US App Store ratings beside the phone. Listening estimate uses recorded plays multiplied by full-track length. Main and Mobile stay unchanged.</textarea></label><label class="review-action-accept"><input type="checkbox" required>I understand this updates only the saved Desktop view of this variation.</label><div class="review-action-buttons"><button id="review-prepared-submit" type="submit" class="review-primary-action">Apply design to Desktop</button><button id="review-prepared-cancel" type="button">Cancel</button></div><p id="review-prepared-error" role="alert"></p></form>`;
+      $('review-prepared-cancel').onclick = () => area.replaceChildren();
+      $('review-apply-design').onsubmit = async event => {
+        event.preventDefault();
+        const button = $('review-prepared-submit');button.disabled=true;button.textContent='Saving Desktop design…';
+        try {
+          const saved = await request('/api/funnel-review?action=apply-layout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pageKey:source.pageKey,expectedRevision:source.revision,expectedUpdatedAt:source.updatedAt,layoutId:$('review-prepared-id').value,changeSummary:$('review-prepared-summary').value.trim()})});
+          area.replaceChildren();state.view='desktop';
+          state.notice={text:`Desktop design saved as Version ${saved.draft.version}. Main and Mobile are unchanged.`,kind:'success'};
+          await selectWorkingPage(source.pageKey,{force:true});
+          const route=new URL(location.href);route.searchParams.set('view','desktop');history.replaceState(null,'',route);
+          document.dispatchEvent(new Event('tracker:working-saved'));
+        } catch (error) { $('review-prepared-error').textContent=error.message;button.disabled=false;button.textContent='Apply design to Desktop'; }
+      };
+      area.scrollIntoView({behavior:'smooth',block:'nearest'});
+    } catch(error) {area.innerHTML=`<p role="alert">${esc(error.message)}</p>`;}
   }
 
   function nextMainVersion(version, releaseType) {
@@ -944,6 +978,7 @@
   }
 
   function historyMarkup(event) {
+    if (event.kind === 'section-layout') return `<article class="review-version"><strong>Version ${esc(event.version)} · Desktop design</strong><p>${esc(event.changeSummary)}</p><p><a href="${esc(withView(event.workingUrl))}" target="_blank" rel="noopener">Open this working version ↗</a></p><small>${esc(event.editor.name)} · ${esc(dateTime(event.createdAt))}</small></article>`;
     if (event.kind === 'variation-promotion') {
       return `<article class="review-version"><strong>Version ${esc(event.version)} · Made Main</strong><p>${esc(event.changeSummary)}</p><p>From ${esc(event.promotion.sourceVariationName)}. Earlier Main versions remain in the change log.</p><p><a href="${esc(withView(event.workingUrl))}" target="_blank" rel="noopener">Open this working version ↗</a></p><small>${esc(event.editor.name)} · ${esc(dateTime(event.createdAt))}</small></article>`;
     }
@@ -1043,6 +1078,12 @@
     $('review-copy-section')?.addEventListener('click', showSharedEdit);
     $('review-load-latest')?.addEventListener('click', loadLatestAfterConflict);
     wireEditor();
+    if (node && !nodeInBothViews(node)) {
+      state.viewScope = selectedView();
+      $('review-view-scope').value = selectedView();
+      $('review-view-scope').querySelector('[value=shared]').disabled = true;
+      panel.querySelector('.review-view-scope-help').textContent = 'This content exists only on this web view. Its other view stays unchanged.';
+    }
     updateSaveButton();
   }
 
@@ -1090,7 +1131,7 @@
     stashInputs();
     const node = state.draft?.editableNodes?.find(item => item.editId === editId);
     if (!node) return;
-    if (state.picked?.editId !== node.editId) state.viewScope = 'shared';
+    if (state.picked?.editId !== node.editId) state.viewScope = nodeInBothViews(node) ? 'shared' : selectedView();
     state.selected = node.sectionId;
     state.picked = node;
     state.conflict = null;

@@ -198,7 +198,8 @@
   }
 
   function showDrawer(node, trigger, restore = null, forceClose = false) {
-    if (!restore && picked?.editId !== node.editId) viewScope = 'shared';
+    const bothViews = !draft?.views || ['desktop','mobile'].every(name=>draft.views[name]?.editableNodes.some(item=>item.editId === node.editId && item.sectionId === node.sectionId && item.type === node.type));
+    if (!restore && picked?.editId !== node.editId) viewScope = bothViews ? 'shared' : view;
     if (drawer && !closeDrawer(forceClose)) return;
     if (!draft) return;
     picked = node;
@@ -208,6 +209,11 @@
     drawer.className = 'working-editor';
     drawer.innerHTML = drawerMarkup(node);
     document.body.append(drawer);
+    if (!bothViews && drawer.querySelector('#working-editor-scope')) {
+      viewScope = view;
+      drawer.querySelector('#working-editor-scope').value = view;
+      drawer.querySelector('#working-editor-scope [value=shared]').disabled = true;
+    }
     if (restore) {
       const copy = drawer.querySelector('#working-editor-copy');
       const summary = drawer.querySelector('#working-editor-summary');
