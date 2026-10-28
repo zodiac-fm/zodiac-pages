@@ -1,5 +1,6 @@
 'use strict';
 
+const {createHash} = require('node:crypto');
 const {authConfigured, hasAuthorizationHeader, readAgentToken, readSession} = require('../lib/funnel-tracker/session');
 const {TARGETS} = require('../lib/funnel-tracker/production-catalog');
 const {
@@ -13,9 +14,11 @@ const {
 const {createProductionRenderer} = require('../lib/funnel-tracker/production-renderer');
 const {
   ProductionStoreConflictError,
+  MAX_IMAGE_BYTES,
   productionStorageConfigured,
   productionStore,
 } = require('../lib/funnel-tracker/production-store');
+const {immutableScreenshotCache} = require('../lib/funnel-tracker/screenshot-cache');
 
 const MAX_BODY_BYTES = 16 * 1024;
 
@@ -221,28 +224,48 @@ function findTarget(manifest, targetId) {
   return [...TARGETS, ...customTargets(manifest)].find(target => target.id === targetId) || null;
 }
 
-async function streamArchive(res, result) {
+function sendArchive(res, image) {
   res.statusCode = 200;
   setSecurityHeaders(res);
   res.setHeader('Content-Type', 'image/png');
   res.setHeader('Content-Disposition', 'inline');
-  if (Number.isSafeInteger(result.blob?.size)) res.setHeader('Content-Length', String(result.blob.size));
+  res.setHeader('Content-Length', String(image.length));
+  return res.end(image);
+}
+
+async function readArchiveImage(result, expectedSha256) {
+  if (!result?.stream || (Number.isSafeInteger(result.blob?.size)
+      && (result.blob.size < 8 || result.blob.size > MAX_IMAGE_BYTES))) {
+    throw new Error('invalid production archive image');
+  }
   const reader = result.stream.getReader();
+  const chunks = [];
+  let length = 0;
   try {
     while (true) {
       const {done, value} = await reader.read();
       if (done) break;
-      if (!res.write(Buffer.from(value))) await new Promise(resolve => res.once('drain', resolve));
+      const chunk = Buffer.from(value);
+      length += chunk.length;
+      if (length > MAX_IMAGE_BYTES) throw new Error('production archive image is too large');
+      chunks.push(chunk);
     }
-    res.end();
   } finally {
     reader.releaseLock();
   }
+  const image = Buffer.concat(chunks, length);
+  if (image.length < 8
+      || !image.subarray(0, 8).equals(Buffer.from([137,80,78,71,13,10,26,10]))
+      || createHash('sha256').update(image).digest('hex') !== expectedSha256) {
+    throw new Error('production archive image integrity check failed');
+  }
+  return image;
 }
 
 function createHandler({
   store = productionStore,
   rendererFactory = createProductionRenderer,
+  screenshotCache = immutableScreenshotCache,
 } = {}) {
   async function handleManifest(req, res, identity) {
     try {
@@ -262,14 +285,25 @@ function createHandler({
       return fail(res, 404, 'archive_not_found');
     }
     try {
-      const current = await store.read();
-      const state = current.data.targets[targetId];
-      const archive = state?.archives.find(item => item.id === archiveId);
-      if (!archive) return fail(res, 404, 'archive_not_found');
-      const result = await store.readImage(archive.blobPath);
-      if (!result) return fail(res, 404, 'archive_not_found');
-      return await streamArchive(res, result);
-    } catch {
+      const image = await screenshotCache.getOrLoad(
+        `production:${targetId}:${archiveId}`,
+        async () => {
+          const current = await store.read();
+          const state = current.data.targets[targetId];
+          const archive = state?.archives.find(item => item.id === archiveId);
+          if (!archive) throw Object.assign(new Error('archive not found'), {
+            code:'archive_not_found',
+          });
+          const result = await store.readImage(archive.blobPath);
+          if (!result) throw Object.assign(new Error('archive not found'), {
+            code:'archive_not_found',
+          });
+          return readArchiveImage(result, archive.imageSha256);
+        },
+      );
+      return sendArchive(res, image);
+    } catch (error) {
+      if (error?.code === 'archive_not_found') return fail(res, 404, 'archive_not_found');
       return fail(res, 503, 'production_unavailable');
     }
   }

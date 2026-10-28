@@ -42,6 +42,7 @@ const {
   createLiveCheckCache,
   liveCheckCacheKey,
 } = require('../lib/funnel-tracker/live-check-cache');
+const {immutableScreenshotCache} = require('../lib/funnel-tracker/screenshot-cache');
 const {workStore, InvalidWorkDataError, WorkStoreConflictError} = require('../lib/funnel-tracker/work-store');
 const {linearStatusResolver} = require('../lib/funnel-tracker/linear-status');
 const {
@@ -384,6 +385,7 @@ function createHandler({
   work = workStore,
   linear = linearStatusResolver,
   checkCache = createLiveCheckCache(),
+  screenshotCache = immutableScreenshotCache,
   preparedLayouts = listPreparedLayouts,
 } = {}) {
   async function withLiveCheckUncached(req, value, view = 'desktop') {
@@ -859,10 +861,11 @@ function createHandler({
           return fail(res, 410, 'deleted_variation');
         }
         const revisionId = params.get('revision') || current.draft.currentRevisionId;
-        const result = await drafts.getHtmlByRevision(current.draft, revisionId, view);
-        if (!result) return fail(res, 404, 'draft_not_found');
         const embedded = params.get('embedded') === '1';
         const standalone = params.get('standalone') === '1' && !embedded;
+        if (!current.draft.revisions.some(item => item.id === revisionId)) {
+          return fail(res, 404, 'draft_not_found');
+        }
         const requestedCheck = params.get('check');
         if (!embedded && ![null, 'defer', 'fresh'].includes(requestedCheck)) {
           return fail(res, 400, 'invalid_draft');
@@ -904,6 +907,8 @@ function createHandler({
         if (standalone) {
           return sendWorkingShell(res, req, {pageKey,revisionId,view,draft:publicValue});
         }
+        const result = await drafts.getHtmlByRevision(current.draft, revisionId, view);
+        if (!result) return fail(res, 404, 'draft_not_found');
         return sendWorkingHtml(res, renderWorkingPage(current.draft, result.html, revisionId, {
           syncStatus:['current','changed','unavailable'].includes(checked?.liveCheck?.status)
             ? checked.liveCheck.status : null,
@@ -933,10 +938,27 @@ function createHandler({
         if (current.draft?.lifecycle?.status === 'deleted') {
           return fail(res, 410, 'deleted_variation');
         }
-        const result = await drafts.getScreenshot(pageKey, revisionId, view);
-        if (!result) return fail(res, 404, 'draft_not_found');
-        return sendPng(res, result.image);
-      } catch {
+        if (!current.draft) return fail(res, 404, 'draft_not_found');
+        if (!current.draft.revisions.some(item => item.id === revisionId)) {
+          return fail(res, 404, 'draft_not_found');
+        }
+        const image = await screenshotCache.getOrLoad(
+          `draft:${pageKey}:${revisionId}:${view}`,
+          async () => {
+            const loaded = typeof drafts.getScreenshotForDraft === 'function'
+              ? await drafts.getScreenshotForDraft(current.draft, revisionId, view)
+              : await drafts.getScreenshot(pageKey, revisionId, view);
+            if (!loaded) throw Object.assign(new Error('draft screenshot not found'), {
+              code:'draft_screenshot_not_found',
+            });
+            return loaded.image;
+          },
+        );
+        return sendPng(res, image);
+      } catch (error) {
+        if (error?.code === 'draft_screenshot_not_found') {
+          return fail(res, 404, 'draft_not_found');
+        }
         return fail(res, 503, 'review_unavailable');
       }
     }

@@ -8,6 +8,7 @@
   const time = value => value ? new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Denver',timeZoneName:'short'}).format(new Date(value)) : 'Not checked yet';
   const url = value => {try{const parsed=new URL(value);return parsed.protocol==='https:'?parsed.href:'';}catch{return '';}};
   const api = '/api/funnel-production';
+  const archiveImages = window.FunnelArchiveImages;
   let previousPageVisit=null;
   try{previousPageVisit=localStorage.getItem('funnel-tracker-page-visit');localStorage.setItem('funnel-tracker-page-visit',new Date().toISOString());}catch{/* Private shared history does not depend on this device marker. */}
   const requestedMode = new URLSearchParams(location.search).get('mode');
@@ -27,6 +28,7 @@
     const route=new URL(location.href);route.searchParams.set('mode',mode==='linear'?'linear':mode==='pages'?'history':mode==='sections'?'records':'review');history.replaceState(null,'',route);
     document.dispatchEvent(new CustomEvent('tracker:mode',{detail:{mode}}));
     if(mode==='pages'&&user&&!loaded)load();
+    else if(mode==='pages'&&user)warmSelectedArchive();
   }
   async function load(){
     if(loading||!user)return;loading=true;
@@ -85,6 +87,7 @@
     });
     document.querySelectorAll('[data-history]').forEach(b=>b.onclick=()=>historyFor(b.dataset.history));
     $('register-page').onclick=register;$('retry-production')?.addEventListener('click',load);
+    if(mode==='pages')warmSelectedArchive();
   }
   async function check(id){
     if(busy.has(id))return;busy.add(id);error='';render();
@@ -92,9 +95,28 @@
     catch(e){error=e.message;}finally{busy.delete(id);render();}
   }
   function openDialog(content){dialog.innerHTML=`<div class="dialog-top"><p class="eyebrow">Page production</p><button id="close-production" class="icon-button" aria-label="Close page history">✕</button></div>${content}`;$('close-production').onclick=()=>dialog.close();if(!dialog.open)dialog.showModal();}
+  function archiveUrl(targetId,archiveId){return `${api}?${new URLSearchParams({targetId,archiveId})}`;}
+  function warmSelectedArchive(){
+    const view=new URLSearchParams(location.search).get('view')==='mobile'?'mobile':'desktop';
+    const target=targets.find(item=>item.family===family&&(item.variant===variant||item.variant==='shared')&&item.stage==='production'&&(item.view||'desktop')===view&&item.currentArchiveId);
+    if(user&&target)archiveImages?.warm(archiveUrl(target.id,target.currentArchiveId));
+  }
   function historyFor(id){
     const target=targets.find(t=>t.id===id);if(!target)return;
-    openDialog(`<h2>${esc(target.label)}${target.stage==='production'?' · '+esc(target.channel):''}</h2><p class="muted">${target.captureKind==='sample-profile'?'Fixed sample profile. ':''}Screenshot dates show when the monitor observed the page. They do not identify who changed it.</p><div class="archive-list">${[...(target.archives||[])].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map((a,i)=>{const source=new URL(api,location.origin);source.searchParams.set('targetId',target.id);source.searchParams.set('archiveId',a.id);return `<article class="archive-entry"><div class="archive-heading"><h3>${esc(archiveTitle(a))}${a.id===target.currentArchiveId?' · Latest':''}</h3><time>${esc(time(a.createdAt))}</time></div><p class="capture-meta">${esc(archiveSummary(a))}${a.sourceCommit?' Source commit: '+esc(a.sourceCommit.slice(0,10))+'.':''}</p><details ${i===0?'open':''}><summary>View screenshot</summary><a href="${esc(source.pathname+source.search)}" target="_blank" rel="noopener">Open full screenshot ↗</a><img loading="lazy" src="${esc(source.pathname+source.search)}" alt="${esc(target.label+' captured '+time(a.createdAt))}"></details></article>`;}).join('')}</div>`);
+    openDialog(`<h2>${esc(target.label)}${target.stage==='production'?' · '+esc(target.channel):''}</h2><p class="muted">${target.captureKind==='sample-profile'?'Fixed sample profile. ':''}Screenshot dates show when the monitor observed the page. They do not identify who changed it.</p><div class="archive-list">${[...(target.archives||[])].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map((a,i)=>{const source=archiveUrl(target.id,a.id);return `<article class="archive-entry"><div class="archive-heading"><h3>${esc(archiveTitle(a))}${a.id===target.currentArchiveId?' · Latest':''}</h3><time>${esc(time(a.createdAt))}</time></div><p class="capture-meta">${esc(archiveSummary(a))}${a.sourceCommit?' Source commit: '+esc(a.sourceCommit.slice(0,10))+'.':''}</p><details ${i===0?'open':''}><summary>View screenshot</summary><a href="${esc(source)}" target="_blank" rel="noopener">Open full screenshot ↗</a><p class="capture-meta" role="status" data-archive-loading>Loading saved screenshot…</p><img data-archive-src="${esc(source)}" alt="${esc(target.label+' captured '+time(a.createdAt))}"></details></article>`;}).join('')}</div>`);
+    dialog.querySelectorAll('details').forEach(details=>{
+      const show=()=>{
+        const image=details.querySelector('[data-archive-src]');
+        if(!details.open||!image||image.dataset.archiveStarted)return;
+        image.dataset.archiveStarted='1';
+        const status=details.querySelector('[data-archive-loading]');
+        image.onload=()=>{if(status)status.hidden=true;};
+        image.onerror=()=>{if(status)status.textContent='Open the full screenshot to retry.';};
+        if(archiveImages)archiveImages.attach(image,image.dataset.archiveSrc);
+        else image.src=image.dataset.archiveSrc;
+      };
+      details.addEventListener('toggle',show);show();
+    });
   }
   function archiveTitle(archive){
     if(earlierCorporateComparison(archive))return 'Earlier screenshot';
