@@ -129,6 +129,12 @@
     }
     if (options.method && options.method !== 'GET') {
       clearCaches();
+      await withHeaderMetadata(result);
+    }
+    return result;
+  }
+
+  async function withHeaderMetadata(result) {
       if (result.draft?.family === 'lander' && result.draft.lifecycle?.status !== 'deleted'
           && !result.draft.workingBindings?.some(item=>item.sectionId === 'XX-HD')) {
         try {
@@ -144,7 +150,6 @@
           }
         } catch { /* The saved result stays usable if optional editor metadata cannot refresh. */ }
       }
-    }
     return result;
   }
 
@@ -436,6 +441,8 @@
         body: JSON.stringify({pageKey}),
       });
     }
+    response = await withHeaderMetadata(response);
+    draftCache.set(pageKey,response);
     response.draft = activeDraft(response.draft);
     if (!response.draft?.workingUrl || !Array.isArray(response.draft.editableNodes)) {
       throw Error('The working page cannot be prepared for editing.');
@@ -952,7 +959,12 @@
       const response = await request('/api/funnel-review?action=working-pages');
       if (state.pageKey !== source.pageKey || state.selected !== sourceSectionId) return;
       state.pages = response.drafts || [];
-      const targets = state.pages.filter(item => item.family === source.family && item.pageKey !== source.pageKey).map(item => activeDraft(item));
+      const candidates = state.pages.filter(item => item.family === source.family && item.pageKey !== source.pageKey);
+      const targets = await Promise.all(candidates.map(async item => activeDraft((await withHeaderMetadata({draft:item})).draft)));
+      if (state.pageKey !== source.pageKey || state.selected !== sourceSectionId) return;
+      if (sourceSectionId === 'XX-HD' && targets.some(target => !target.workingBindings.some(binding => binding.sectionId === 'XX-HD'))) {
+        throw Error('The target headers could not be loaded. Close this panel and try again.');
+      }
       const preferredSection = target => target.workingBindings.find(item => item.sectionId === sourceSectionId)
         || target.workingBindings.find(item => item.sectionId.split('-').slice(1).join('-') === sourceSectionId.split('-').slice(1).join('-'))
         || target.workingBindings[0];
