@@ -75,6 +75,7 @@ const MESSAGES = Object.freeze({
   deleted_variation: 'This variation was deleted. Its protected history is retained, but it cannot be changed or restored.',
   invalid_variation_lifecycle: 'Choose a current variation and try that variation action again.',
   invalid_variation_promotion: 'Choose a current variation, release type, and change summary before making it Main.',
+  invalid_change_summary: 'Keep the change description to 300 characters.',
   variation_delete_confirmation_mismatch: 'Type the exact variation name to delete it.',
   variation_lifecycle_conflict: 'This variation changed while you were working. Refresh before archiving, restoring, or deleting it.',
   variation_name_conflict: 'That variation name is already in use for this category. Choose another name.',
@@ -665,6 +666,7 @@ function createHandler({
           }
           if ([
             'invalid_variation_lifecycle', 'invalid_variation_promotion',
+            'invalid_change_summary',
             'variation_delete_confirmation_mismatch', 'variation_not_found',
             'variation_promotion_missing', 'variation_promotion_views_required',
             'prepared_layout_requires_variation', 'prepared_layout_target_mismatch',
