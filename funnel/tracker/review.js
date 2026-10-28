@@ -1669,9 +1669,11 @@
     state.variant = detail.variant || state.variant;
     state.data = detail.data || state.data;
     state.canEdit = typeof detail.canEdit === 'boolean' ? detail.canEdit : state.canEdit;
-    if (state.family === 'corporate') { loadLinearWork({force:Boolean(detail.fresh)}); return renderCorporate(); }
+    if (detail.fresh) clearCaches();
+    renderLinearWork();
+    if (state.user) loadLinearWork({force:Boolean(detail.fresh)});
+    if (state.family === 'corporate') return renderCorporate();
     try {
-      if (detail.fresh) clearCaches();
       await loadBase();
       await loadDraft({force: !changedPage && Boolean(state.draft),fresh:Boolean(detail.fresh)});
       render();
