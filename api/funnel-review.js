@@ -89,6 +89,10 @@ const MESSAGES = Object.freeze({
   prepared_layout_target_mismatch: 'That prepared design does not belong to this working page.',
   prepared_layout_views_required: 'This variation needs both Desktop and Mobile working pages before applying a prepared design.',
   prepared_layout_conflict: 'This variation changed while you were working. Refresh before applying the design.',
+  invalid_main_layout_amendment: 'Choose the current Main draft and its available Desktop design.',
+  main_layout_amendment_not_allowed: 'This Main draft cannot be updated in place. Refresh and review its current version and live status.',
+  main_layout_amendment_target_mismatch: 'That Desktop design does not belong to this Main working page.',
+  main_layout_amendment_conflict: 'This Main working page changed while you were reviewing it. Refresh before updating the draft.',
   same_origin_required: 'Open the tracker page directly before making this change.',
   storage_not_configured: 'Shared tracker storage has not been configured yet.',
 });
@@ -583,7 +587,7 @@ function createHandler({
     if (req.method === 'POST' && [
       'copy-section', 'create-variation', 'start-versioning', 'promote-variation',
       'archive-variation', 'restore-variation', 'delete-variation',
-      'apply-layout',
+      'apply-layout', 'amend-main-layout',
     ].includes(action)) {
       if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) return fail(res, 403, 'agent_scope_denied');
       if (!isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
@@ -632,6 +636,17 @@ function createHandler({
           // produce their pending screenshots without holding this request open.
           return sendJson(res, 201, {draft:publicDraft(result.draft),user:identity.user});
         }
+        if (action === 'amend-main-layout') {
+          if (Object.keys(body).sort().join(',') !== [
+            'changeSummary','expectedRevision','expectedUpdatedAt','layoutId','pageKey',
+          ].join(',')) return fail(res, 400, 'invalid_main_layout_amendment');
+          const result = await drafts.amendMainPreparedLayout({
+            pageKey:body.pageKey,expectedRevision:body.expectedRevision,
+            expectedUpdatedAt:body.expectedUpdatedAt,layoutId:body.layoutId,
+            changeSummary:body.changeSummary,editor:identity.user,
+          });
+          return sendJson(res, 201, {draft:publicDraft(result.draft),user:identity.user});
+        }
         if (['archive-variation', 'restore-variation', 'delete-variation'].includes(action)) {
           const lifecycleAction = action.slice(0, action.indexOf('-'));
           const result = await drafts.changeVariationLifecycle({
@@ -655,6 +670,7 @@ function createHandler({
           const code = action === 'copy-section' ? 'section_copy_conflict'
             : action === 'promote-variation' ? 'variation_promotion_conflict'
               : action === 'apply-layout' ? 'prepared_layout_conflict'
+              : action === 'amend-main-layout' ? 'main_layout_amendment_conflict'
               : ['archive-variation','restore-variation','delete-variation'].includes(action)
                 ? 'variation_lifecycle_conflict'
                 : 'draft_conflict';
@@ -671,10 +687,14 @@ function createHandler({
             'variation_promotion_missing', 'variation_promotion_views_required',
             'prepared_layout_requires_variation', 'prepared_layout_target_mismatch',
             'prepared_layout_views_required',
+            'invalid_main_layout_amendment', 'main_layout_amendment_not_allowed',
+            'main_layout_amendment_target_mismatch',
           ].includes(error.code)) return fail(res, 400, error.code);
           const code = error.code === 'variation_name_conflict' ? 'variation_name_conflict'
             : action === 'copy-section' ? 'invalid_section_copy'
-              : action === 'apply-layout' ? 'invalid_prepared_layout' : 'invalid_variation';
+              : action === 'apply-layout' ? 'invalid_prepared_layout'
+                : action === 'amend-main-layout' ? 'invalid_main_layout_amendment'
+                  : 'invalid_variation';
           return fail(res, 400, code);
         }
         return fail(res, 503, 'review_unavailable');
