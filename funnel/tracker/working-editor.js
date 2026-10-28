@@ -135,7 +135,7 @@
     target.scrollIntoView({behavior, block: 'start'});
   }
 
-  function isCurrent() { return Boolean(draft && draft.revision === editingRevision); }
+  function isCurrent() { return Boolean(draft && draft.revision === editingRevision && (!draft.lifecycle || draft.lifecycle.status === 'active')); }
 
   function scratch() {
     if (!drawer || !picked) return null;
@@ -169,6 +169,7 @@
   }
 
   function historicalMarkup() {
+    if (draft?.lifecycle?.status === 'archived') return '<p class="working-editor-error">This variation is archived and read-only. Open the tracker and restore it to edit it again.</p>';
     const current = withView(draft?.workingUrl);
     return `<p class="working-editor-error">This is an earlier saved version and is read-only.</p>${current ? `<a class="working-editor-current" target="_top" href="${escapeHtml(current + currentHash(picked?.sectionId))}">Open the current working page</a>` : ''}`;
   }

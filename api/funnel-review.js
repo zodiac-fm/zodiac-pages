@@ -70,7 +70,17 @@ const MESSAGES = Object.freeze({
   live_sections_unmatched: 'Some sections could not be matched to the live template. Your working page is unchanged.',
   section_copy_conflict: 'One of the selected pages changed. Nothing was copied. Refresh the page list and review the selected versions again.',
   invalid_section_copy: 'Choose a saved section and matching sections within the same page family. Nothing was copied.',
+  archived_variation: 'This variation is archived and read-only. Restore it before making changes.',
+  deleted_variation: 'This variation was deleted. Its protected history is retained, but it cannot be changed or restored.',
+  invalid_variation_lifecycle: 'Choose a current variation and try that variation action again.',
+  invalid_variation_promotion: 'Choose a current variation, release type, and change summary before making it Main.',
+  variation_delete_confirmation_mismatch: 'Type the exact variation name to delete it.',
+  variation_lifecycle_conflict: 'This variation changed while you were working. Refresh before archiving, restoring, or deleting it.',
   variation_name_conflict: 'That variation name is already in use for this category. Choose another name.',
+  variation_not_found: 'That variation is no longer available.',
+  variation_promotion_conflict: 'The variation or Main changed while you were working. Refresh both before making it Main.',
+  variation_promotion_missing: 'The variation or its Main working page is no longer available.',
+  variation_promotion_views_required: 'Both the variation and Main need Desktop and Mobile working pages before promotion.',
   invalid_variation: 'Give this variation a name and start from the current main working version.',
   same_origin_required: 'Open the tracker page directly before uploading a private image.',
   storage_not_configured: 'Shared tracker storage has not been configured yet.',
@@ -542,12 +552,21 @@ function createHandler({
 
     if (req.method === 'GET' && action === 'working-pages') {
       try {
+        const includeArchived = params.get('includeArchived');
+        if (![null, '1'].includes(includeArchived)) return fail(res, 400, 'invalid_request');
         const current = await drafts.readManifest();
-        return sendJson(res, 200, {drafts: current.data.drafts.map(publicDraft), user: identity.user});
+        const visible = current.data.drafts.filter(draft => {
+          const status = draft.lifecycle?.status || 'active';
+          return status === 'active' || (includeArchived === '1' && status === 'archived');
+        });
+        return sendJson(res, 200, {drafts: visible.map(publicDraft), user: identity.user});
       } catch { return fail(res, 503, 'review_unavailable'); }
     }
 
-    if (req.method === 'POST' && ['copy-section', 'create-variation', 'start-versioning'].includes(action)) {
+    if (req.method === 'POST' && [
+      'copy-section', 'create-variation', 'start-versioning', 'promote-variation',
+      'archive-variation', 'restore-variation', 'delete-variation',
+    ].includes(action)) {
       if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) return fail(res, 403, 'agent_scope_denied');
       if (!isSameOrigin(req)) return fail(res, 403, 'same_origin_required');
       const body = parsedJsonBody(req);
@@ -563,6 +582,35 @@ function createHandler({
           const latest = (await drafts.getDraft(result.draft.pageKey)).draft || result.draft;
           return sendJson(res, 201, {draft:publicDraft(latest), user:identity.user});
         }
+        if (action === 'promote-variation') {
+          const result = await drafts.promoteVariation({
+            pageKey:body.pageKey,expectedRevision:body.expectedRevision,
+            expectedUpdatedAt:body.expectedUpdatedAt,
+            expectedMainRevision:body.expectedMainRevision,
+            releaseType:body.releaseType,changeSummary:body.changeSummary,
+            editor:identity.user,
+          });
+          // Promotion already saves both immutable working views atomically. The existing
+          // capture monitor records their pending screenshots without holding this request
+          // open for two browser captures.
+          const latestMain = result.draft;
+          const latestVariation = result.variation;
+          return sendJson(res, 201, {
+            draft:publicDraft(latestMain),draftMain:publicDraft(latestMain),
+            variation:publicDraft(latestVariation),
+            user:identity.user,
+          });
+        }
+        if (['archive-variation', 'restore-variation', 'delete-variation'].includes(action)) {
+          const lifecycleAction = action.slice(0, action.indexOf('-'));
+          const result = await drafts.changeVariationLifecycle({
+            action:lifecycleAction,pageKey:body.pageKey,
+            expectedRevision:body.expectedRevision,
+            expectedUpdatedAt:body.expectedUpdatedAt,
+            confirmationName:body.confirmationName,editor:identity.user,
+          });
+          return sendJson(res, 200, {draft:publicDraft(result.draft),user:identity.user});
+        }
         const result = await drafts.copySection({
           sourcePageKey:body.sourcePageKey, sourceSectionId:body.sourceSectionId,
           sourceRevision:body.sourceRevision, targets:body.targets, editor:identity.user,
@@ -573,9 +621,22 @@ function createHandler({
         return sendJson(res, 201, {drafts:result.drafts.map(publicDraft), user:identity.user});
       } catch (error) {
         if (error instanceof DraftStoreConflictError) {
-          return fail(res, 409, action === 'copy-section' ? 'section_copy_conflict' : 'draft_conflict');
+          const code = action === 'copy-section' ? 'section_copy_conflict'
+            : action === 'promote-variation' ? 'variation_promotion_conflict'
+              : ['archive-variation','restore-variation','delete-variation'].includes(action)
+                ? 'variation_lifecycle_conflict'
+                : 'draft_conflict';
+          return fail(res, 409, code);
         }
         if (error instanceof InvalidDraftDataError) {
+          if (['archived_variation', 'deleted_variation'].includes(error.code)) {
+            return fail(res, error.code === 'deleted_variation' ? 410 : 409, error.code);
+          }
+          if ([
+            'invalid_variation_lifecycle', 'invalid_variation_promotion',
+            'variation_delete_confirmation_mismatch', 'variation_not_found',
+            'variation_promotion_missing', 'variation_promotion_views_required',
+          ].includes(error.code)) return fail(res, 400, error.code);
           const code = error.code === 'variation_name_conflict' ? 'variation_name_conflict'
             : action === 'copy-section' ? 'invalid_section_copy' : 'invalid_variation';
           return fail(res, 400, code);
@@ -609,7 +670,9 @@ function createHandler({
     if (req.method === 'GET' && action === 'activity') {
       try {
         const current = await drafts.readManifest();
-        const events = current.data.drafts.flatMap(draft => [
+        const events = current.data.drafts
+          .filter(draft => draft.lifecycle?.status !== 'deleted')
+          .flatMap(draft => [
           ...draft.revisions.filter((item, index) => item.kind === 'initialized' && index > 0).map(item => ({
             id: item.id, type: 'source', sectionId: null,
             pageKey: draft.pageKey, family: draft.family, variant: draft.variant,
@@ -621,6 +684,12 @@ function createHandler({
             pageKey: draft.pageKey, family: draft.family, variant: draft.variant,
             pageLabel: draft.label, createdAt: item.createdAt, editor: item.editor,
             summary: item.kind === 'section-copy' ? `Section copied from ${item.after.sourceSectionId}. This version is unsynced.` : item.operationType === 'text' ? String(item.after).slice(0, 240) : 'Replacement image saved',
+          })),
+          ...draft.revisions.filter(item => item.kind === 'variation-promotion').map(item => ({
+            id:item.id,type:'variation-promotion',sectionId:null,
+            pageKey:draft.pageKey,family:draft.family,variant:draft.variant,
+            pageLabel:draft.label,createdAt:item.createdAt,editor:item.editor,
+            summary:item.changeSummary,
           })),
           ...(draft.branch ? [{id:draft.revisions[0].id,type:'variation',sectionId:null,
             pageKey:draft.pageKey,family:draft.family,variant:draft.variant,pageLabel:draft.label,
@@ -683,12 +752,20 @@ function createHandler({
       try {
         const current = await drafts.getDraft(pageKey);
         if (!current.draft) return fail(res, 404, 'draft_not_found');
+        if (current.draft.lifecycle?.status === 'deleted') {
+          return fail(res, 410, 'deleted_variation');
+        }
         const draft = checkMode === 'defer'
           ? deferredLiveCheck(current.draft, view)
           : await withLiveCheck(req, current.draft, view, {force:checkMode === 'fresh'});
         return sendJson(res, 200, {draft, user: identity.user});
       } catch (error) {
-        if (error instanceof InvalidDraftDataError) return fail(res, 400, 'invalid_draft');
+        if (error instanceof InvalidDraftDataError) {
+          if (['archived_variation', 'deleted_variation'].includes(error.code)) {
+            return fail(res, error.code === 'deleted_variation' ? 410 : 409, error.code);
+          }
+          return fail(res, 400, 'invalid_draft');
+        }
         return fail(res, 503, 'review_unavailable');
       }
     }
@@ -701,6 +778,9 @@ function createHandler({
       try {
         const current = await drafts.getDraft(pageKey);
         if (!current.draft) return fail(res, 404, 'draft_not_found');
+        if (current.draft.lifecycle?.status === 'deleted') {
+          return fail(res, 410, 'deleted_variation');
+        }
         const revisionId = params.get('revision') || current.draft.currentRevisionId;
         const result = await drafts.getHtmlByRevision(current.draft, revisionId, view);
         if (!result) return fail(res, 404, 'draft_not_found');
@@ -772,6 +852,10 @@ function createHandler({
       const view = normalizedView(params.get('view'));
       if (!validPageKey(pageKey) || typeof revisionId !== 'string' || !view) return fail(res, 404, 'draft_not_found');
       try {
+        const current = await drafts.getDraft(pageKey);
+        if (current.draft?.lifecycle?.status === 'deleted') {
+          return fail(res, 410, 'deleted_variation');
+        }
         const result = await drafts.getScreenshot(pageKey, revisionId, view);
         if (!result) return fail(res, 404, 'draft_not_found');
         return sendPng(res, result.image);
@@ -859,7 +943,12 @@ function createHandler({
         if (error instanceof LiveSourceError && error.code === 'live_sections_unmatched') {
           return fail(res, 422, 'live_sections_unmatched', {unmatched: error.details.unmatched.map(item => item.sectionId)});
         }
-        if (error instanceof InvalidDraftDataError) return fail(res, 400, 'invalid_draft');
+        if (error instanceof InvalidDraftDataError) {
+          if (['archived_variation', 'deleted_variation'].includes(error.code)) {
+            return fail(res, error.code === 'deleted_variation' ? 410 : 409, error.code);
+          }
+          return fail(res, 400, 'invalid_draft');
+        }
         return fail(res, 503, 'live_source_unavailable');
       }
     }
@@ -1014,7 +1103,12 @@ function createHandler({
             return fail(res, 409, 'draft_conflict');
           }
         }
-        if (error instanceof InvalidDraftDataError) return fail(res, 400, 'invalid_draft');
+        if (error instanceof InvalidDraftDataError) {
+          if (['archived_variation', 'deleted_variation'].includes(error.code)) {
+            return fail(res, error.code === 'deleted_variation' ? 410 : 409, error.code);
+          }
+          return fail(res, 400, 'invalid_draft');
+        }
         return fail(res, 503, 'review_unavailable');
       }
     }
@@ -1060,7 +1154,12 @@ function createHandler({
         });
       } catch (error) {
         if (error instanceof DraftStoreConflictError) return fail(res, 409, 'draft_conflict');
-        if (error instanceof InvalidDraftDataError) return fail(res, 400, 'invalid_publication');
+        if (error instanceof InvalidDraftDataError) {
+          if (['archived_variation', 'deleted_variation'].includes(error.code)) {
+            return fail(res, error.code === 'deleted_variation' ? 410 : 409, error.code);
+          }
+          return fail(res, 400, 'invalid_publication');
+        }
         return fail(res, 503, 'review_unavailable');
       }
     }

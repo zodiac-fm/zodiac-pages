@@ -139,6 +139,8 @@
   ));
   const mainDraftKey = () => state.family === 'bc' ? 'draft-bc' : `draft-${state.family}-${state.variant}`;
   const draftKey = () => state.pageChoice || mainDraftKey();
+  const lifecycleStatus = draft => draft?.lifecycle?.status || 'active';
+  const editableDraft = () => state.canEdit && lifecycleStatus(state.draft) === 'active';
   const scratchKey = (node = state.picked) => node ? `${state.pageKey}:${node.sectionId}:${node.editId}` : '';
 
   function scratchFor(node = state.picked) {
@@ -238,6 +240,8 @@
         if (state.pageKey !== pageKey || state.draft?.revision !== draft.revision) return;
         stashInputs();
         const latest = activeDraft(response.draft);
+        if (Date.parse(latest.updatedAt) < Date.parse(state.draft.updatedAt)) return;
+        const lifecycleChanged = lifecycleStatus(latest) !== lifecycleStatus(state.draft);
         if (latest.revision !== draft.revision) {
           const pending = pendingScratch(state.draft);
           if (pending) {
@@ -254,6 +258,7 @@
         }
         state.draft = latest;
         renderViewBar(); renderPagePair(); renderBranchBar();
+        if (lifecycleChanged) renderPanel(section(),workingBinding(state.selected),(state.draft.editableNodes||[]).filter(item=>item.sectionId===state.selected));
       }).catch(error => {
         if (generation !== cacheGeneration || state.pageKey !== pageKey || state.draft?.revision !== draft.revision) return;
         state.draft = {...state.draft,liveCheckPending:false,liveCheck:{status:'unavailable',checkedAt:new Date().toISOString()}};
@@ -287,7 +292,7 @@
   }
 
   function warmPreviews(drafts) {
-    for(const draft of drafts.filter(item=>!item.variation).slice(0,12))for(const view of ['desktop','mobile']){
+    for(const draft of drafts.filter(item=>!item.variation && lifecycleStatus(item) === 'active').slice(0,12))for(const view of ['desktop','mobile']){
       const url = new URL('/api/funnel-review',location.origin);
       url.search = new URLSearchParams({action:'draft-html',pageKey:draft.pageKey,revision:draft.revision,view,embedded:'1',check:'defer'});
       const href = url.href;
@@ -308,12 +313,12 @@
   function loadAuxiliary({force = false} = {}) {
     const generation=cacheGeneration;
     const pageKey=state.pageKey;
-    auxiliaryCache.load('pages',()=>request('/api/funnel-review?action=working-pages'),{force}).then(result=>{
+    auxiliaryCache.load('pages',()=>request('/api/funnel-review?action=working-pages&includeArchived=1'),{force}).then(result=>{
       if(generation!==cacheGeneration)return;
       state.pages=result.drafts||[];state.pagesError='';
       for(const draft of state.pages){
         const cached=draftCache.get(draft.pageKey);
-        if(!cached||cached.draft.revision!==draft.revision)draftCache.set(draft.pageKey,deferredResponse(draft));
+        if(!cached||cached.draft.revision!==draft.revision||cached.draft.updatedAt!==draft.updatedAt||lifecycleStatus(cached.draft)!==lifecycleStatus(draft))draftCache.set(draft.pageKey,deferredResponse(draft));
       }
       warmPreviews(state.pages);
       if(state.draft)renderBranchBar();
@@ -544,9 +549,18 @@
   function renderBranchBar() {
     const container = $('review-branchbar'), draft = state.draft;
     if (!container || !draft) return;
-    if(container.querySelector('#review-create-variation'))return;
-    const pages = [draft, ...state.pages.filter(item => item.pageKey !== draft.pageKey)].filter(item => item.mainPageKey === draft.mainPageKey).sort((a,b)=>Number(Boolean(a.variation))-Number(Boolean(b.variation)));
-    container.innerHTML = `<div class="review-branchbar"><label>Variation<select id="review-variation">${pages.map(item => `<option value="${esc(item.pageKey)}" ${item.pageKey === draft.pageKey ? 'selected' : ''}>${esc(item.variation?.name || 'Main')} · Version ${esc(item.version)}</option>`).join('') || `<option>${esc(draft.variation?.name || 'Main')} · Version ${esc(draft.version)}</option>`}</select></label><button id="review-new-variation" type="button" ${draft.variation || !state.canEdit ? 'disabled' : ''}>New variation</button>${!draft.releaseStarted ? '<button id="review-start-versions" type="button">Start current pages at Version 1</button>' : ''}<span>Minor changes use 1.1D, 1.2D. A structural change starts 2D. Confirmation removes D.</span></div><div id="review-variation-form"></div>`;
+    if(container.querySelector('#review-variation-form form'))return;
+    const related = [draft, ...state.pages.filter(item => item.pageKey !== draft.pageKey)].filter(item => item.mainPageKey === draft.mainPageKey);
+    const pages = related.filter(item => lifecycleStatus(item) === 'active' || item.pageKey === draft.pageKey).sort((a,b)=>Number(Boolean(a.variation))-Number(Boolean(b.variation)));
+    const archived = related.filter(item => lifecycleStatus(item) === 'archived');
+    const inactive = lifecycleStatus(draft) !== 'active';
+    container.innerHTML = `<div class="review-branchbar"><label>Working page<select id="review-variation">${pages.map(item => `<option value="${esc(item.pageKey)}" ${item.pageKey === draft.pageKey ? 'selected' : ''}>${esc(item.variation?.name || 'Main')} · Version ${esc(item.version)}${lifecycleStatus(item) === 'archived' ? ' · Archived' : ''}</option>`).join('')}</select></label><div class="review-variation-actions"><button id="review-new-variation" type="button" ${draft.variation || !editableDraft() ? 'disabled' : ''}>New variation</button>${draft.variation ? `<button id="review-make-main" class="review-primary-action" type="button" ${!editableDraft() ? 'disabled' : ''}>Make Main</button>${inactive ? `<button id="review-restore-variation" type="button" ${!state.canEdit ? 'disabled' : ''}>Restore variation</button>` : `<button id="review-archive-variation" type="button" ${!state.canEdit ? 'disabled' : ''}>Archive variation</button>`}<button id="review-delete-variation" class="review-danger-action" type="button" ${!state.canEdit ? 'disabled' : ''}>Delete variation</button>` : ''}${!draft.releaseStarted ? '<button id="review-start-versions" type="button">Start current pages at Version 1</button>' : ''}</div></div>
+      <div class="review-workflow"><p>${inactive ? 'Archived variation. Its saved pages and history are read-only. Restore it to work on it again.' : draft.variation ? 'Experiment here. Main stays unchanged until you choose Make Main.' : 'Main is the approved working page. Create a variation to try an idea without changing Main.'}</p><details><summary>How variations become live</summary><p>Create variation → Review both web views → Make Main → Walter publishes.</p><p>Make Main saves the approved variation as the next Main draft, for example 1.1D. After Walter publishes it and both views are confirmed, it becomes 1.1 and Synced. A structural release starts 2D. Creating a variation does not start a split test.</p><p>You can edit Main directly for a change you have already decided on. Every saved change still gets its own version and history.</p></details>${archived.length ? `<details class="review-archived"><summary>Archived variations · ${archived.length}</summary>${archived.map(item=>`<p><button type="button" data-review-archived="${esc(item.pageKey)}">Review ${esc(item.variation.name)} · Version ${esc(item.version)}</button></p>`).join('')}</details>` : ''}</div><div id="review-variation-form"></div>`;
+    $('review-make-main')?.addEventListener('click', () => showVariationAction('promote'));
+    $('review-archive-variation')?.addEventListener('click', () => showVariationAction('archive'));
+    $('review-delete-variation')?.addEventListener('click', () => showVariationAction('delete'));
+    $('review-restore-variation')?.addEventListener('click', () => showVariationAction('restore'));
+    container.querySelectorAll('[data-review-archived]').forEach(button=>button.addEventListener('click',()=>selectWorkingPage(button.dataset.reviewArchived)));
     $('review-start-versions')?.addEventListener('click', async event => {
       stashInputs();
       if (pendingScratch()) return setNotice('Save or undo your unsaved change first.', 'error');
@@ -558,21 +572,13 @@
       } catch(error) { setNotice(error.message, 'error'); button.disabled = false; }
     });
     $('review-variation').onchange = async event => {
-      stashInputs();
-      state.pageChoice = event.target.value;
-      state.selected = null;
-      const route = new URL(location.href);
-      route.searchParams.set('pageKey', state.pageChoice);
-      route.searchParams.delete('section');
-      history.replaceState(null, '', route);
-      await loadDraft();
-      render();
+      await selectWorkingPage(event.target.value);
     };
     $('review-new-variation').onclick = () => {
       stashInputs();
       const area = $('review-variation-form');
       if (pendingScratch()) { area.textContent = 'Save or undo your unsaved changes before creating a variation.'; return; }
-      area.innerHTML = `<form class="review-inline-form" id="review-create-variation"><label>Variation name<input name="name" required maxlength="100" placeholder="For example: Different opening"></label><p>Starts from ${esc(draft.label)}. Main stays unchanged.</p><button type="submit">Create variation</button><button id="review-variation-cancel" type="button">Cancel</button><p role="alert" id="review-variation-error"></p></form>`;
+      area.innerHTML = `<form class="review-inline-form" id="review-create-variation"><label>Variation name<input name="name" required maxlength="80" placeholder="For example: Different opening"></label><p>Starts from ${esc(draft.label)} · Version ${esc(draft.version)}. Main stays unchanged while you experiment.</p><button type="submit">Create variation</button><button id="review-variation-cancel" type="button">Cancel</button><p role="alert" id="review-variation-error"></p></form>`;
       $('review-variation-cancel').onclick = () => area.replaceChildren();
       $('review-create-variation').onsubmit = async event => {
         event.preventDefault();
@@ -588,6 +594,73 @@
         } catch(error) { $('review-variation-error').textContent = error.message; button.disabled = false; button.textContent = 'Create variation'; }
       };
     };
+  }
+
+  async function selectWorkingPage(pageKey, {force = false} = {}) {
+    stashInputs();
+    state.pageChoice = pageKey;
+    state.selected = null;
+    const route = new URL(location.href);
+    route.searchParams.set('pageKey', pageKey);
+    route.searchParams.delete('section');
+    history.replaceState(null, '', route);
+    $('review-variation-form')?.replaceChildren();
+    try { await loadDraft({force}); render(); }
+    catch (error) { setNotice(error.message, 'error'); }
+  }
+
+  function nextMainVersion(version, releaseType) {
+    const [major, minor = 0] = String(version).replace(/D$/, '').split('.').map(Number);
+    return releaseType === 'major' ? `${major + 1}D` : `${major}.${minor + 1}D`;
+  }
+
+  async function showVariationAction(action) {
+    stashInputs();
+    const area = $('review-variation-form'), source = state.draft;
+    if (!area || !source?.variation || !state.canEdit) return;
+    if (pendingScratch()) { area.textContent = 'Save or undo your unsaved changes before continuing.'; return; }
+    const name = source.variation.name;
+    const titles = {promote:'Make Main', archive:'Archive variation', restore:'Restore variation', delete:'Delete variation'};
+    let main = null;
+    area.innerHTML = '<p role="status">Loading the saved version…</p>';
+    try {
+      if (action === 'promote') main = (await request(`/api/funnel-review?action=draft&pageKey=${encodeURIComponent(source.mainPageKey)}&check=defer`)).draft;
+      if (state.draft?.pageKey !== source.pageKey) return;
+      area.innerHTML = `<form class="review-inline-form review-lifecycle-form" id="review-variation-action"><h3>${titles[action]}</h3><p>${esc(name)} · Version ${esc(source.version)}</p>${action === 'promote' ? `<p>Replace Main Version ${esc(main.version)} with both saved web views from this variation. Earlier Main versions stay in the change log. The customer page stays as it is until Walter publishes.</p>${source.branch?.parentRevisionId !== main.revision ? '<p class="review-action-warning">Main has changed since this variation started. Review both pages before replacing Main with this variation.</p>' : ''}<label>Release type<select id="review-promote-release"><option value="minor">Minor: keep the page structure</option><option value="major">Major: page structure changed</option></select></label><p id="review-promote-version">Next working version: ${esc(nextMainVersion(main.version,'minor'))} · Unsynced</p><label>What changed?<textarea id="review-promote-summary" required maxlength="1000" rows="3" placeholder="Describe the changes Walter should publish."></textarea></label><label class="review-action-accept"><input id="review-promote-accept" type="checkbox" required>I reviewed Desktop web and Mobile web. Use this variation as the next Main working page.</label>` : action === 'archive' ? '<p>Remove this variation from the active choices. You can review and restore it under Archived variations. Its saved history stays intact.</p>' : action === 'restore' ? '<p>Return this variation to the active choices so you can edit it again. Main stays unchanged.</p>' : `<p>Remove this variation from the workspace. It will no longer be editable or available in the variation list. Protected saved history is retained. Main stays unchanged.</p><label>Type the variation name to confirm<input id="review-delete-name" required autocomplete="off" spellcheck="false"></label>`}<div class="review-action-buttons"><button id="review-variation-submit" type="submit" class="${action === 'delete' ? 'review-danger-action' : 'review-primary-action'}">${titles[action]}</button><button id="review-variation-dismiss" type="button">Cancel</button></div><p id="review-variation-action-error" role="alert"></p></form>`;
+      $('review-variation-dismiss').onclick = () => area.replaceChildren();
+      $('review-promote-release')?.addEventListener('change',event=>{
+        $('review-promote-version').textContent = `Next working version: ${nextMainVersion(main.version,event.target.value)} · Unsynced`;
+      });
+      const deletionName = $('review-delete-name');
+      if (deletionName) {
+        $('review-variation-submit').disabled = true;
+        deletionName.addEventListener('input',()=>{
+          deletionName.setCustomValidity(deletionName.value === name ? '' : 'Type the exact variation name.');
+          $('review-variation-submit').disabled = deletionName.value !== name;
+        });
+      }
+      $('review-variation-action').onsubmit = async event => {
+        event.preventDefault();
+        const button = $('review-variation-submit');
+        if (action === 'delete' && deletionName.value !== name) return;
+        button.disabled = true; button.textContent = 'Saving…';
+        const payload = {pageKey:source.pageKey,expectedRevision:source.revision,expectedUpdatedAt:source.updatedAt};
+        if (action === 'promote') Object.assign(payload,{expectedMainRevision:main.revision,releaseType:$('review-promote-release').value,changeSummary:$('review-promote-summary').value.trim()});
+        if (action === 'delete') payload.confirmationName = deletionName.value;
+        try {
+          const result = await request(`/api/funnel-review?action=${action === 'promote' ? 'promote' : action}-variation`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+          area.replaceChildren();
+          state.notice = {text:action === 'promote' ? `Main is now Version ${result.draft.version}. Review the working page, then Walter can publish it.` : action === 'archive' ? 'Variation archived. Find it under Archived variations.' : action === 'restore' ? 'Variation restored. Main is unchanged.' : 'Variation removed from the workspace. Protected saved history is retained.',kind:'success'};
+          await selectWorkingPage(action === 'promote' ? result.draft.pageKey : action === 'restore' ? source.pageKey : source.mainPageKey,{force:true});
+          document.dispatchEvent(new Event('tracker:working-saved'));
+        } catch (error) {
+          $('review-variation-action-error').textContent = error.status === 409 ? 'This variation or Main changed while the form was open. Cancel and refresh shared records, then review both before trying again.' : error.message;
+          button.disabled = false; button.textContent = titles[action];
+        }
+      };
+      area.scrollIntoView({behavior:'smooth',block:'nearest'});
+      area.querySelector('textarea,input,button')?.focus();
+    } catch (error) { area.innerHTML = `<p role="alert">${esc(error.message)}</p>`; }
   }
 
   function renderViewBar() {
@@ -612,7 +685,7 @@
     const publication = draft.latestPagePublication;
     const mainLive = livePages.find(item => item.url === (publication?.revisionId === draft.revision ? publication.liveUrl : draft.liveSource?.liveUrl)) || livePages.find(item => item.channel === 'direct') || livePages.find(item => item.channel === 'affiliate') || livePages[0];
     const live = draft.liveSource;
-    const canSync = ['lander', 'results'].includes(draft.family) && !draft.variation;
+    const canSync = ['lander', 'results'].includes(draft.family) && !draft.variation && editableDraft();
     const overallSync = draft.viewSync || draft.overallSync || draft.sync;
     const overallStatus = syncStatus(overallSync);
     const selectedStatus = syncStatus(draft.sync);
@@ -626,7 +699,7 @@
       : synced ? `All tracked views in Version ${draft.version} match the recorded live version.`
       : selectedSynced ? `${selectedName} matches live, but Version ${draft.version} remains unsynced until both web views match.`
       : overallSync?.reason === 'live-changed' ? 'The live page changed. Review it before updating this working copy.'
-        : draft.variation ? 'This variation has its own versions. Walter can publish it when it is ready.'
+        : draft.variation ? 'This is an experiment. Choose Make Main when approved, then Walter can publish the new Main version.'
           : mainLive ? `Version ${draft.version} has changes ready for Walter to make live.` : 'A live page has not been connected yet.';
     const sourceVersion = draft.history.find(item => item.id === live?.revisionId)?.version;
     const pageLabel = draft.family === 'bc' ? 'Birth chart' : `${names[draft.variant]} · ${names[draft.family]}`;
@@ -641,10 +714,10 @@
         <p class="pair-source">Saved ${esc(dateTime(draft.updatedAt))} · ${esc(draft.editor.name)}</p>
       </section>
       <div class="pair-publication" aria-live="polite"><strong class="sync-badge ${synced && !checking ? 'synced' : 'unsynced'}">${esc(status)}</strong><p>${explanation}</p>${draft.liveCheck && !checking ? `<p class="review-muted">${draft.liveCheck.status === 'unavailable' ? 'Live check unavailable. The last recorded state is shown.' : `Live checked ${esc(dateTime(draft.liveCheck.checkedAt))}.`}${live?.synthetic ? ' A fixed sample profile is used.' : ''}</p>` : ''}${publication ? `<p>Version ${draft.history.find(item=>item.id===publication.revisionId)?.version} confirmed live by ${esc(publication.editor.name)} · ${esc(dateTime(publication.confirmedAt))}.</p>` : ''}
-      ${livePages.length && !synced && !checking && !draft.sourceOutdated ? `<details id="pair-confirm"><summary>Confirm this version is live</summary><form id="pair-confirm-form" data-page-key="${esc(draft.pageKey)}" data-revision="${esc(draft.revision)}"><p>Use this after Walter publishes Version ${draft.version}. This records the match and does not deploy the page.</p><label>Live channel<select id="pair-live-channel">${livePages.map(item => `<option value="${esc(item.url)}" ${item.id === mainLive.id ? 'selected' : ''}>${esc(item.channel)}</option>`).join('')}</select></label><label class="pair-checkbox"><input id="pair-confirm-check" type="checkbox" required>I checked Version ${draft.version} on that live page and they match.</label><button type="submit">Mark Version ${draft.version} synced</button><p id="pair-confirm-error" role="alert"></p></form></details>` : ''}
+      ${editableDraft() && !draft.variation && livePages.length && !synced && !checking && !draft.sourceOutdated ? `<details id="pair-confirm"><summary>Confirm this version is live</summary><form id="pair-confirm-form" data-page-key="${esc(draft.pageKey)}" data-revision="${esc(draft.revision)}"><p>Use this after Walter publishes Version ${draft.version}. This records the match and does not deploy the page.</p><label>Live channel<select id="pair-live-channel">${livePages.map(item => `<option value="${esc(item.url)}" ${item.id === mainLive.id ? 'selected' : ''}>${esc(item.channel)}</option>`).join('')}</select></label><label class="pair-checkbox"><input id="pair-confirm-check" type="checkbox" required>I checked Version ${draft.version} on that live page and they match.</label><button type="submit">Mark Version ${draft.version} synced</button><p id="pair-confirm-error" role="alert"></p></form></details>` : ''}
       <details id="pair-change-log"><summary>Change log · ${draft.history.filter(item=>!item.setup).length} ${draft.history.filter(item=>!item.setup).length === 1 ? 'version' : 'versions'}</summary>${draft.history.filter(item=>!item.setup).slice().reverse().map(item => releaseHistoryMarkup(item)).join('')}<details><summary>Earlier setup history · ${draft.history.filter(item=>item.setup).length}</summary>${draft.history.filter(item=>item.setup).slice().reverse().map(item => releaseHistoryMarkup(item)).join('')}<p class="review-muted">Earlier design: <a href="${esc(safe(draft.referenceUrl || draft.sourceUrl))}" target="_blank" rel="noopener">${esc(draft.sourceVersion || 'Original design')} ↗</a></p></details></details>
       ${canSync ? `<details><summary>Copy live into the working page</summary><p>This replaces an unchanged working baseline with the current live template. It does not publish your changes.</p><button id="pair-sync-live" type="button" ${!state.canEdit || state.syncing ? 'disabled' : ''}>${state.syncing ? 'Copying live…' : 'Copy current live version'}</button><p id="pair-sync-message" role="status"></p></details>` : ''}</div>
-    </div><details class="pair-work"><summary>Work in Linear · ${state.work.length} linked ${state.work.length === 1 ? 'issue' : 'issues'}</summary><div class="pair-work-heading"><h3>Linked work</h3><button type="button" id="pair-link-work">Link a Linear issue</button></div><p class="review-muted">Issue status is a dated record. Open Linear for its latest status. Confirm page publication separately.</p>
+    </div><details class="pair-work"><summary>Work in Linear · ${state.work.length} linked ${state.work.length === 1 ? 'issue' : 'issues'}</summary><div class="pair-work-heading"><h3>Linked work</h3><button type="button" id="pair-link-work" ${!editableDraft() ? 'disabled' : ''}>Link a Linear issue</button></div><p class="review-muted">Issue status is a dated record. Open Linear for its latest status. Confirm page publication separately.</p>
       ${state.work.map(item => `<article><a href="${esc(safe(item.issueUrl))}" target="_blank" rel="noopener">${esc(item.issueId)} · ${esc(item.title)} ↗</a><p>${esc(item.status)}${item.assignee ? ` · ${esc(item.assignee)}` : ''}<small>Checked ${esc(dateTime(item.checkedAt))}</small></p>${item.note ? `<p class="review-muted">${esc(item.note)}</p>` : ''}</article>`).join('') || `<p>${esc(state.workError || 'No Linear issue linked to this page yet.')}</p>`}
       <div id="pair-work-form"></div></details>`;
     $('pair-confirm-form')?.addEventListener('submit', confirmPage);
@@ -657,7 +730,7 @@
   function releaseHistoryMarkup(item) {
     const label = item.setup ? `Setup record ${item.archiveNumber}` : `Version ${item.version}`;
     const description = item.changeSummary || (item.sourceEvidence ? 'Copied from verified live content.' : item.kind === 'initialized' ? 'Starting page.' : item.kind === 'section-copy' ? 'Shared section updated.' : 'Saved page change.');
-    return `<article class="review-release"><strong>${esc(label)}</strong><p>${esc(description)}</p>${item.sectionId ? `<p>${esc(item.sectionId)}</p>` : ''}<small>${esc(dateTime(item.createdAt))} · ${esc(item.editor.name)}</small><p><a href="${esc(withView(item.workingUrl))}" target="_blank" rel="noopener">Working page ↗</a>${item.screenshot?.status === 'ready' ? ` · <a href="${esc(safe(item.screenshot.imageUrl))}" target="_blank" rel="noopener">Screenshot ↗</a>` : ''}</p></article>`;
+    return `<article class="review-release"><strong>${esc(label)}</strong><p>${esc(description)}</p>${item.promotion ? `<p>Made Main from ${esc(item.promotion.sourceVariationName)}.</p>${item.sectionChanges?.length ? `<p>Changed sections: ${item.sectionChanges.map(change=>`${esc(change.sectionId)} (${change.views.map(view=>view === 'mobile' ? 'Mobile' : 'Desktop').join(', ')})`).join(' · ')}</p>` : ''}` : ''}${item.sectionId ? `<p>${esc(item.sectionId)}</p>` : ''}<small>${esc(dateTime(item.createdAt))} · ${esc(item.editor.name)}</small><p><a href="${esc(withView(item.workingUrl))}" target="_blank" rel="noopener">Working page ↗</a>${item.screenshot?.status === 'ready' ? ` · <a href="${esc(safe(item.screenshot.imageUrl))}" target="_blank" rel="noopener">Screenshot ↗</a>` : ''}</p></article>`;
   }
 
   async function syncLive() {
@@ -871,6 +944,9 @@
   }
 
   function historyMarkup(event) {
+    if (event.kind === 'variation-promotion') {
+      return `<article class="review-version"><strong>Version ${esc(event.version)} · Made Main</strong><p>${esc(event.changeSummary)}</p><p>From ${esc(event.promotion.sourceVariationName)}. Earlier Main versions remain in the change log.</p><p><a href="${esc(withView(event.workingUrl))}" target="_blank" rel="noopener">Open this working version ↗</a></p><small>${esc(event.editor.name)} · ${esc(dateTime(event.createdAt))}</small></article>`;
+    }
     if (event.kind === 'section-copy') {
       return `<article class="review-version"><strong>Version ${event.version} · Section copied</strong><p>Copied from ${esc(event.after.sourceSectionId)}. Earlier content remains in the previous version.</p><p><a href="${esc(withView(event.workingUrl))}" target="_blank" rel="noopener">Open this working version ↗</a></p><small>${esc(event.editor.name)} · ${esc(dateTime(event.createdAt))}</small></article>`;
     }
@@ -939,8 +1015,12 @@
     if (!panel) return;
     const node = state.picked;
     const entry = scratchFor(node);
-    const history = (state.draft?.history || []).filter(item => item.sectionId === state.selected).slice().reverse();
+    const history = (state.draft?.history || []).filter(item => item.sectionId === state.selected || item.sectionChanges?.some(change=>change.sectionId === state.selected)).slice().reverse();
     const publications = (state.draft?.publications || []).filter(item => item.sectionId === state.selected).slice().reverse();
+    if (lifecycleStatus(state.draft) !== 'active') {
+      panel.innerHTML = `<div class="review-panel-head"><p class="eyebrow">Archived variation</p><h2>${esc(active?.id || '')} · ${esc(active?.name || '')}</h2><p>Read-only. Restore this variation above to edit it again.</p></div><section class="review-history"><h3>Section changes</h3>${history.length ? history.map(historyMarkup).join('') : '<p>No edits saved for this section.</p>'}</section>`;
+      return;
+    }
     panel.innerHTML = `
       <div class="review-panel-head"><p class="eyebrow">Edit the working page</p><h2>${esc(active?.id || '')} · ${esc(active?.name || '')}</h2><p>${esc(binding?.firstHeading?.text || '')}</p><button id="review-copy-section" class="review-copy-section" type="button">Copy section to other pages</button></div>
       ${binding?.gaps?.length ? `<details class="review-source-notes review-gap"><summary>Source notes</summary>${binding.gaps.map(item => `<p>${esc(item)}</p>`).join('')}</details>` : ''}
@@ -951,7 +1031,7 @@
         <div class="review-save-area"><p id="review-form-error" class="review-form-error" role="alert"></p><button id="review-save" class="review-save" type="submit">Save draft changes</button><p id="review-status" class="review-status ${esc(state.notice?.kind || '')}">${esc(state.notice?.text || '')}</p></div>
       </form>
       <section class="review-history"><h3>Section changes</h3>${history.length ? history.map(historyMarkup).join('') : '<p class="review-muted">No edits saved for this section yet.</p>'}<details class="review-source-notes"><summary>Original section requirements</summary><p>${esc(active?.scopeNote || '')}</p>${(active?.versions || []).slice().reverse().map(version => `<p><strong>Imported record ${esc(version.number)}</strong> · ${esc(version.summary || '')}</p>`).join('')}</details></section>
-      <section class="review-live"><h3>When Walter publishes it</h3><p>Confirm this section’s latest saved change after it appears on the customer page.</p><button id="review-publish" type="button" ${state.canEdit && currentRevisionIsPublishable() ? '' : 'disabled'}>Confirm published</button>${!currentRevisionIsPublishable() ? '<p class="review-muted">Save a change in this section before confirming it.</p>' : ''}<div id="review-published-form" hidden></div>${publications.map(publicationMarkup).join('')}</section>`;
+      <section class="review-live">${state.draft.variation ? '<h3>When this variation is approved</h3><p>Choose Make Main above to create the next Main draft. Walter can then publish that version, and you can confirm it on Main.</p>' : `<h3>When Walter publishes it</h3><p>Confirm this section’s latest saved change after it appears on the customer page.</p><button id="review-publish" type="button" ${editableDraft() && currentRevisionIsPublishable() ? '' : 'disabled'}>Confirm published</button>${!currentRevisionIsPublishable() ? '<p class="review-muted">Save a change in this section before confirming it.</p>' : ''}<div id="review-published-form" hidden></div>`}${publications.map(publicationMarkup).join('')}</section>`;
     panel.querySelectorAll('[data-review-pick]').forEach(button => {
       button.addEventListener('click', () => pickNode(button.dataset.reviewPick));
     });
@@ -1263,7 +1343,7 @@
   function updateSaveButton() {
     const button = $('review-save');
     if (!button) return;
-    button.disabled = !state.canEdit || !state.picked || !hasChange() || Boolean(state.conflict);
+    button.disabled = !editableDraft() || !state.picked || !hasChange() || Boolean(state.conflict);
   }
 
   async function uploadAttachment(file) {
@@ -1313,7 +1393,7 @@
     stashInputs();
     const node = state.picked;
     const entry = scratchFor(node);
-    if (!node || !entry || !hasChange() || state.conflict) return updateSaveButton();
+    if (!editableDraft() || !node || !entry || !hasChange() || state.conflict) return updateSaveButton();
     const button = $('review-save');
     const errorArea = $('review-form-error');
     if (!entry.changeSummary.trim()) {
