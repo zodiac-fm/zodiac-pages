@@ -43,6 +43,7 @@ const {
   liveCheckCacheKey,
 } = require('../lib/funnel-tracker/live-check-cache');
 const {workStore, InvalidWorkDataError, WorkStoreConflictError} = require('../lib/funnel-tracker/work-store');
+const {linearStatusResolver} = require('../lib/funnel-tracker/linear-status');
 const {
   MAX_ATTACHMENT_BYTES,
   InvalidReviewDataError,
@@ -381,6 +382,7 @@ function createHandler({
   liveViewsFetcher = fetchVerifiedLiveViews,
   captureRevision = captureDraftRevision,
   work = workStore,
+  linear = linearStatusResolver,
   checkCache = createLiveCheckCache(),
   preparedLayouts = listPreparedLayouts,
 } = {}) {
@@ -703,8 +705,9 @@ function createHandler({
 
     if (req.method === 'GET' && action === 'linear-work') {
       try {
-        const result = await work.list({pageKey: params.get('pageKey') || null});
-        return sendJson(res, 200, {...result, user: identity.user});
+        const stored = await work.list({pageKey: params.get('pageKey') || null});
+        const current = await linear.resolve(stored.entries);
+        return sendJson(res, 200, {...current, revision: stored.revision, user: identity.user});
       } catch (error) {
         return fail(res, error instanceof InvalidWorkDataError ? 400 : 503, 'review_unavailable');
       }
@@ -715,7 +718,15 @@ function createHandler({
       const body = parsedJsonBody(req);
       if (!body) return fail(res, 400, 'invalid_request');
       try {
-        const result = await work.upsert(body.payload, identity.user, body.expectedRevision);
+        const payload = body.payload;
+        if (!payload || Object.keys(payload).sort().join(',') !== 'issueId,issueUrl,pageKeys') {
+          return fail(res, 400, 'invalid_request');
+        }
+        const current = await linear.resolve([payload]);
+        if (current.connection !== 'current') return fail(res, 503, 'review_unavailable');
+        if (current.entries.length !== 1) return fail(res, 400, 'invalid_request');
+        const resolved = current.entries[0];
+        const result = await work.upsert({...resolved, note: null}, identity.user, body.expectedRevision);
         return sendJson(res, 200, {...result, user: identity.user});
       } catch (error) {
         return fail(res, error instanceof WorkStoreConflictError ? 409 : error instanceof InvalidWorkDataError ? 400 : 503,

@@ -32,7 +32,7 @@
     family: 'lander', variant: 'g', selected: null,
     draft: null, pageKey: '', picked: null, frameReady: false, frameToken: 0, draftToken: 0,
     mode: null, notice: null, pendingScroll: false, conflict: null,
-    scratch: new Map(), layoutKey: '', work: [], workError: '', syncing: false,
+    scratch: new Map(), layoutKey: '', work: [], workError: '', workConnection: 'loading', syncing: false,
     pageChoice: '', pages: [], pagesError: '',
     view: 'desktop', viewScope: 'desktop',
   };
@@ -194,6 +194,8 @@
     state.layoutKey = '';
     state.frameReady = false;
     state.work = [];
+    state.workError = '';
+    state.workConnection = 'loading';
     state.pages = [];
     state.pageChoice = '';
     state.draftToken += 1;
@@ -326,11 +328,22 @@
       warmPreviews(state.pages);
       if(state.draft)renderBranchBar();
     }).catch(error=>{if(error.code!=='cache_cleared')state.pagesError='Other working pages could not be loaded.';});
+    loadLinearWork({force});
+  }
+
+  function loadLinearWork({force = false} = {}) {
+    const generation=cacheGeneration;
+    const pageKey=state.pageKey;
     auxiliaryCache.load('linear',()=>request('/api/funnel-review?action=linear-work'),{force}).then(result=>{
       if(generation!==cacheGeneration||state.pageKey!==pageKey)return;
-      state.work=(result.entries||[]).filter(item=>item.pageKeys?.includes(pageKey));state.workError='';
+      state.work=(result.entries||[]).filter(item=>item.pageKeys?.includes(pageKey));
+      state.workConnection=result.connection||'unavailable';state.workError='';
       renderPagePair();
-    }).catch(error=>{if(error.code!=='cache_cleared')state.workError='Linked work could not be loaded.';});
+    }).catch(error=>{
+      if(error.code==='cache_cleared')return;
+      if(generation!==cacheGeneration||state.pageKey!==pageKey)return;
+      state.work=[];state.workConnection='unavailable';state.workError='Linear could not be reached.';renderPagePair();
+    });
   }
 
   function pendingScratch(draft = state.draft) {
@@ -427,6 +440,7 @@
     state.user = response.user || state.user;
     const linked = auxiliaryCache.get('linear');
     state.work = (linked?.entries||[]).filter(item=>item.pageKeys?.includes(pageKey));
+    state.workConnection=linked?.connection||'loading';
     loadAuxiliary({force:fresh});
     refreshLive(latest,{fresh});
     return latest;
@@ -728,6 +742,7 @@
     const container = $('review-page-pair'), draft = state.draft;
     if (!container || !draft) return;
     if(container.querySelector('#pair-linear-form')||container.querySelector('details[open] form'))return;
+    const scrollPosition={x:window.scrollX,y:window.scrollY};
     const openDetails=[...container.querySelectorAll('details[id][open]')].map(item=>item.id);
     const livePages = draft.livePages || [];
     const publication = draft.publications?.filter(item => item.sectionId === null && (!item.view || item.view === selectedView())).at(-1);
@@ -766,14 +781,17 @@
       ${editableDraft() && !draft.variation && livePages.length && !synced && !checking && !draft.sourceOutdated ? `<details id="pair-confirm"><summary>Confirm this version is live</summary><form id="pair-confirm-form" data-page-key="${esc(draft.pageKey)}" data-revision="${esc(draft.revision)}"><p>Use this after Walter publishes Version ${draft.version}. This records the match and does not deploy the page.</p><label>Live channel<select id="pair-live-channel">${livePages.map(item => `<option value="${esc(item.url)}" ${item.id === mainLive.id ? 'selected' : ''}>${esc(item.channel)}</option>`).join('')}</select></label><label class="pair-checkbox"><input id="pair-confirm-check" type="checkbox" required>I checked Version ${draft.version} on that live page and they match.</label><button type="submit">Mark Version ${draft.version} synced</button><p id="pair-confirm-error" role="alert"></p></form></details>` : ''}
       <details id="pair-change-log"><summary>Change log · ${releaseVersionCount} ${releaseVersionCount === 1 ? 'version' : 'versions'}</summary>${releaseHistory.slice().reverse().map(item => releaseHistoryMarkup(item)).join('')}<details><summary>Earlier setup history · ${draft.history.filter(item=>item.setup).length}</summary>${draft.history.filter(item=>item.setup).slice().reverse().map(item => releaseHistoryMarkup(item)).join('')}<p class="review-muted">Earlier design: <a href="${esc(safe(draft.referenceUrl || draft.sourceUrl))}" target="_blank" rel="noopener">${esc(draft.sourceVersion || 'Original design')} ↗</a></p></details></details>
       ${canSync ? `<details><summary>Copy live into the working page</summary><p>This replaces an unchanged working baseline with the current live template. It does not publish your changes.</p><button id="pair-sync-live" type="button" ${!state.canEdit || state.syncing ? 'disabled' : ''}>${state.syncing ? 'Copying live…' : 'Copy current live version'}</button><p id="pair-sync-message" role="status"></p></details>` : ''}</div>
-    </div><details class="pair-work"><summary>Work in Linear · ${state.work.length} linked ${state.work.length === 1 ? 'issue' : 'issues'}</summary><div class="pair-work-heading"><h3>Linked work</h3><button type="button" id="pair-link-work" ${!editableDraft() ? 'disabled' : ''}>Link a Linear issue</button></div><p class="review-muted">Issue status is a dated record. Open Linear for its latest status. Confirm page publication separately.</p>
-      ${state.work.map(item => `<article><a href="${esc(safe(item.issueUrl))}" target="_blank" rel="noopener">${esc(item.issueId)} · ${esc(item.title)} ↗</a><p>${esc(item.status)}${item.assignee ? ` · ${esc(item.assignee)}` : ''}<small>Checked ${esc(dateTime(item.checkedAt))}</small></p>${item.note ? `<p class="review-muted">${esc(item.note)}</p>` : ''}</article>`).join('') || `<p>${esc(state.workError || 'No Linear issue linked to this page yet.')}</p>`}
+    </div><details class="pair-work" id="pair-work"><summary>Active work in Linear · ${state.work.length} ${state.work.length === 1 ? 'issue' : 'issues'}</summary><div class="pair-work-heading"><h3>Active work in Linear</h3><button type="button" id="pair-link-work" ${!editableDraft() ? 'disabled' : ''}>Link a Linear issue</button></div>
+      ${state.work.map(item => `<article><a href="${esc(safe(item.issueUrl))}" target="_blank" rel="noopener">${esc(item.issueId)} · ${esc(item.title)} ↗</a><p>${esc(item.status)}${item.assignee ? ` · ${esc(item.assignee)}` : ''}<small>Updated from Linear ${esc(dateTime(item.checkedAt))}</small></p></article>`).join('') || `<p>${esc(state.workError || (state.workConnection === 'not_configured' ? 'Linear is not connected yet. Active issues cannot be shown.' : state.workConnection === 'unavailable' ? 'Linear could not be reached. No saved issue details are being shown.' : state.workConnection === 'loading' ? 'Loading active Linear work…' : 'No active Linear work is linked to this page.'))}</p>`}
+      <button type="button" id="pair-refresh-work">Refresh Linear</button>
       <div id="pair-work-form"></div></details>`;
     $('pair-confirm-form')?.addEventListener('submit', confirmPage);
     $('pair-sync-live')?.insertAdjacentHTML('beforebegin', '<label>Release type<select id="pair-sync-release"><option value="minor">Minor: keep the page structure</option><option value="major">Major: page structure changed</option></select></label><label>Change description<input id="pair-sync-description" maxlength="300" placeholder="Describe changes made on the live page."></label>');
     $('pair-sync-live')?.addEventListener('click', syncLive);
     $('pair-link-work').onclick = showWorkForm;
+    $('pair-refresh-work').onclick = () => loadLinearWork({force:true});
     for(const id of openDetails){const details=$(id);if(details)details.open=true;}
+    if(window.scrollX!==scrollPosition.x||window.scrollY!==scrollPosition.y)window.scrollTo({left:scrollPosition.x,top:scrollPosition.y});
   }
 
   function releaseHistoryMarkup(item) {
@@ -842,20 +860,18 @@
 
   function showWorkForm() {
     const area = $('pair-work-form');
-    area.innerHTML = `<form id="pair-linear-form"><label>Linear issue URL<input name="issueUrl" type="url" required placeholder="https://linear.app/zodiacfm/issue/…"></label><label>Issue title<input name="title" required maxlength="200"></label><label>Current status in Linear<input name="status" required maxlength="100"></label><label>Assigned to<input name="assignee" maxlength="120"></label><label>Note (optional)<input name="note" maxlength="2000"></label><label class="pair-checkbox"><input name="allLanders" type="checkbox">Link to all three landers</label><button type="submit">Save Linear link</button><button id="pair-work-cancel" type="button">Cancel</button><p id="pair-work-error" role="alert"></p></form>`;
-    $('pair-work-cancel').onclick = () => area.replaceChildren();
+    area.innerHTML = `<form id="pair-linear-form"><label>Linear issue URL<input name="issueUrl" type="url" required placeholder="https://linear.app/zodiacfm/issue/…"></label><label class="pair-checkbox"><input name="allLanders" type="checkbox">Link to all three landers</label><button type="submit">Save Linear link</button><button id="pair-work-cancel" type="button">Cancel</button><p id="pair-work-error" role="alert"></p></form>`;
+    $('pair-work-cancel').onclick = () => {area.replaceChildren();renderPagePair();};
     $('pair-linear-form').onsubmit = async event => {
       event.preventDefault(); const form = event.currentTarget, button = form.querySelector('[type=submit]'); button.disabled = true;
       try {
         const values = Object.fromEntries(new FormData(form)), match = values.issueUrl.match(/\/issue\/((?:ZFM|ENG)-\d+)\//i);
         if (!match) throw Error('Use a Zodiac Linear issue link.');
-        const payload = {issueId:match[1].toUpperCase(), issueUrl:values.issueUrl, title:values.title, status:values.status,
-          assignee:values.assignee || null, note:values.note || null, checkedAt:new Date().toISOString(),
+        const payload = {issueId:match[1].toUpperCase(), issueUrl:values.issueUrl,
           pageKeys:values.allLanders ? ['draft-lander-g','draft-lander-a','draft-lander-m'] : [state.pageKey]};
         await request('/api/funnel-review?action=link-linear-work', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({payload})});
-        state.work = (await request(`/api/funnel-review?action=linear-work&pageKey=${encodeURIComponent(state.pageKey)}`)).entries;
         area.replaceChildren();
-        renderPagePair();
+        loadLinearWork({force:true});
       } catch (error) { $('pair-work-error').textContent = error.message; button.disabled = false; }
     };
   }
@@ -1698,11 +1714,16 @@
     document.addEventListener('tracker:show-changes', () => root.querySelector('.review-history')?.scrollIntoView({behavior: 'smooth'}));
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') stashInputs();
+      else if(state.mode==='review'&&state.user)loadLinearWork({force:true});
     });
+    window.addEventListener('focus',()=>{if(state.mode==='review'&&state.user)loadLinearWork({force:true});});
     window.addEventListener('pagehide', stashInputs);
     window.setInterval(() => {
       if (state.mode === 'review') stashInputs();
     }, 1500);
+    window.setInterval(()=>{
+      if(state.mode==='review'&&state.user&&document.visibilityState==='visible')loadLinearWork({force:true});
+    },60000);
   }
 
   function initialize() {
