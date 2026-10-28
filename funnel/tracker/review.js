@@ -127,18 +127,47 @@
       error.result = result;
       throw error;
     }
-    if (options.method && options.method !== 'GET') clearCaches();
+    if (options.method && options.method !== 'GET') {
+      clearCaches();
+      if (result.draft?.family === 'lander' && result.draft.lifecycle?.status !== 'deleted'
+          && !result.draft.workingBindings?.some(item=>item.sectionId === 'XX-HD')) {
+        try {
+          const projected = await request(`/api/funnel-review?action=draft&pageKey=${encodeURIComponent(result.draft.pageKey)}&view=${selectedView()}&check=defer`);
+          if (projected.draft?.revision === result.draft.revision) {
+            result.draft.editableNodes = projected.draft.editableNodes;
+            result.draft.workingBindings = projected.draft.workingBindings;
+            for (const view of ['desktop','mobile']) {
+              if (!result.draft.views?.[view] || !projected.draft.views?.[view]) continue;
+              result.draft.views[view].editableNodes = projected.draft.views[view].editableNodes;
+              result.draft.views[view].workingBindings = projected.draft.views[view].workingBindings;
+            }
+          }
+        } catch { /* The saved result stays usable if optional editor metadata cannot refresh. */ }
+      }
+    }
     return result;
   }
 
-  const mapped = id => state.map?.sections?.[id];
+  const mapped = id => state.map?.sections?.[id]
+    || (id === 'XX-HD' ? state.draft?.workingBindings?.find(item => item.sectionId === id) : null);
   const workingBinding = id => state.draft?.workingBindings?.find(item => item.sectionId === id) || mapped(id);
-  const section = (id = state.selected) => (state.data?.sections || []).find(item => item.id === id);
-  const pageSections = () => (state.data?.sections || []).filter(item => (
-    item.family === state.family
-      && (item.variant === state.variant || item.variant === 'shared')
-      && mapped(item.id)
-  ));
+  function headerSection() {
+    if (state.family !== 'lander' || !state.draft?.workingBindings?.some(item => item.sectionId === 'XX-HD')) return null;
+    return {id:'XX-HD',name:'Header',family:'lander',variant:state.variant,versions:[],
+      scopeNote:'The logo, offer and header button above section 01.',
+      live:{productionUrl:state.draft.livePages?.find(item=>item.channel==='direct')?.url || ''}};
+  }
+  const section = (id = state.selected) => (state.data?.sections || []).find(item => item.id === id)
+    || (id === 'XX-HD' ? headerSection() : null);
+  const pageSections = () => {
+    const items = (state.data?.sections || []).filter(item => (
+      item.family === state.family
+        && (item.variant === state.variant || item.variant === 'shared')
+        && mapped(item.id)
+    ));
+    const header = headerSection();
+    return header ? [header,...items.filter(item => item.id !== header.id)] : items;
+  };
   const mainDraftKey = () => state.family === 'bc' ? 'draft-bc' : `draft-${state.family}-${state.variant}`;
   const draftKey = () => state.pageChoice || mainDraftKey();
   const lifecycleStatus = draft => draft?.lifecycle?.status || 'active';
@@ -893,7 +922,7 @@
     container.innerHTML = `
       <label class="review-select-label" for="review-select">Section</label>
       <select id="review-select">${items.map(item => `<option value="${esc(item.id)}" ${item.id === state.selected ? 'selected' : ''}>${esc(item.id)} · ${esc(item.name)}</option>`).join('')}</select>
-      <div class="review-section-list">${items.map(item => `<button data-review-section="${esc(item.id)}" class="${item.id === state.selected ? 'selected' : ''}"><span>${esc(item.id)}</span><b>${esc(item.name)}</b><small>${esc(workingBinding(item.id)?.firstHeading?.text || 'No current heading')}</small></button>`).join('')}</div>`;
+      <div class="review-section-list">${items.map(item => `<button data-review-section="${esc(item.id)}" class="${item.id === state.selected ? 'selected' : ''}"><span>${esc(item.id)}</span><b>${esc(item.name)}</b><small>${esc(workingBinding(item.id)?.firstHeading?.text || (item.id === 'XX-HD' ? 'Logo, offer and button' : 'No current heading'))}</small></button>`).join('')}</div>`;
     $('review-select')?.addEventListener('change', event => chooseSection(event.target.value));
     container.querySelectorAll('[data-review-section]').forEach(button => {
       button.addEventListener('click', () => chooseSection(button.dataset.reviewSection));
@@ -1191,8 +1220,12 @@
     const target = frame.contentDocument.querySelector(`[data-funnel-section-id="${escaped}"]`);
     if (target && frame.contentWindow) {
       const banner = frame.contentDocument.querySelector('[data-funnel-working-banner]');
-      const inset = (banner?.getBoundingClientRect().height || 0) + 12;
-      const top = target.getBoundingClientRect().top + frame.contentWindow.scrollY - inset;
+      const header = frame.contentDocument.querySelector('header[data-funnel-section-id="XX-HD"]');
+      const headerHeight = header && ['sticky','fixed'].includes(frame.contentWindow.getComputedStyle(header).position)
+        ? header.getBoundingClientRect().height : 0;
+      const inset = (banner?.getBoundingClientRect().height || 0) + headerHeight + 12;
+      const top = state.selected === 'XX-HD' ? 0
+        : target.getBoundingClientRect().top + frame.contentWindow.scrollY - inset;
       frame.contentWindow.scrollTo({top: Math.max(0, top), behavior: 'smooth'});
     }
     state.pendingScroll = false;

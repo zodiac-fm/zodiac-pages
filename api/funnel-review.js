@@ -834,9 +834,11 @@ function createHandler({
         if (current.draft.lifecycle?.status === 'deleted') {
           return fail(res, 410, 'deleted_variation');
         }
+        const selected = typeof drafts.organizeDraft === 'function'
+          ? await drafts.organizeDraft(current.draft) : current.draft;
         const draft = checkMode === 'defer'
-          ? deferredLiveCheck(current.draft, view)
-          : await withLiveCheck(req, current.draft, view, {force:checkMode === 'fresh'});
+          ? deferredLiveCheck(selected, view)
+          : await withLiveCheck(req, selected, view, {force:checkMode === 'fresh'});
         return sendJson(res, 200, {draft, user: identity.user});
       } catch (error) {
         if (error instanceof InvalidDraftDataError) {

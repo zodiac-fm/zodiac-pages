@@ -133,7 +133,14 @@
     if (!target) return;
     replaceWorkingHash(currentHash(sectionId));
     const bannerHeight = Math.max(0, banner.getBoundingClientRect().height);
-    target.style.scrollMarginTop = `${Math.ceil(bannerHeight) + 8}px`;
+    if (sectionId === 'XX-HD') {
+      window.scrollTo({top:0,behavior});
+      return;
+    }
+    const header = document.querySelector('header[data-funnel-section-id="XX-HD"]');
+    const headerHeight = header && ['sticky','fixed'].includes(getComputedStyle(header).position)
+      ? header.getBoundingClientRect().height : 0;
+    target.style.scrollMarginTop = `${Math.ceil(bannerHeight + headerHeight) + 8}px`;
     target.scrollIntoView({behavior, block: 'start'});
   }
 
