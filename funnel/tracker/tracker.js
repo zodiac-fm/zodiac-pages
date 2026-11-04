@@ -13,9 +13,9 @@
   const previousVisit = getStored('funnel-tracker-visit');
   setStored('funnel-tracker-visit',new Date().toISOString());
   let data = null, revision = null, canEdit = false, actor = '', signedInUser = null, family = 'lander', variant = 'g', view = 'sections', activeSection = null, editMode = '', saving = false, allChanges = false, refreshPromise = null;
-  const familyNames = {lander:'Lander',bc:'Birth chart',results:'Results',join:'Cart / Join',corporate:'Corporate site'};
-  const variantNames = {g:'General',a:'Astrology',m:'Manifesting',shared:'Shared page',paid:'$3 trial',free:'Free trial',home:'Home'};
-  const variantsFor = f => f === 'corporate' ? ['home'] : f === 'bc' ? ['shared'] : f === 'join' ? ['paid','free'] : ['g','a','m'];
+  const familyNames = {lander:'Lander',bc:'Birth chart',results:'Results',join:'Cart / Join',welcome:'Stripe trial welcome',corporate:'Corporate site'};
+  const variantNames = {g:'General',a:'Astrology',m:'Manifesting',shared:'Shared page',paid:'$3 trial',free:'Free trial',stripe:'Stripe web',home:'Home'};
+  const variantsFor = f => f === 'corporate' ? ['home'] : f === 'bc' ? ['shared'] : f === 'join' ? ['paid','free'] : f === 'welcome' ? ['stripe'] : ['g','a','m'];
   const latest = s => s.versions[s.versions.length - 1];
   const isNew = s => previousVisit && new Date(latest(s).createdAt) > new Date(previousVisit);
   const hasPending = s => s.live && s.live.versionId !== latest(s).id;
@@ -63,6 +63,7 @@
   }
   function status(s){return hasPending(s)?'<span class="status">● Newer draft</span>':s.live?'<span class="status live">● Latest revision live</span>':'<span class="status unknown">Live unconfirmed</span>';}
   function render(){
+    document.querySelector('.intro .lede').textContent=family==='welcome'?'Review pages and their saved history.':'Live pages, Vercel drafts and the work between them.';
     if(!data)return;
     document.dispatchEvent(new CustomEvent('tracker:selection',{detail:{family,variant}}));
     document.querySelectorAll('[data-family]').forEach(b=>{const selected=b.dataset.family===family;b.classList.toggle('selected',selected);b.setAttribute('aria-current',selected?'page':'false');});
@@ -70,8 +71,8 @@
     $('variants').querySelectorAll('button').forEach(b=>b.onclick=()=>{variant=b.dataset.variant;allChanges=false;view='sections';setRoute();render();});
     const list=allChanges?data.sections:familySections(),title=family==='bc'?'Birth chart':variantNames[variant];
     $('family-label').textContent=familyNames[family]+' / '+(family==='bc'?'One shared page':variantNames[variant]);
-    $('page-title').textContent=title;$('overview-title').textContent=family==='bc'?'Birth chart':title+' '+(family==='join'?'join':family==='lander'?'lander':'results');
-    $('page-description').textContent=family==='lander'?'Matching numbers share one format. Sections 11–16 and the footer share the same requirements.':family==='results'?'Only sections 02, 03 and 09 vary by category. Personal results and offer values are runtime variables.':family==='bc'?'The accepted birth chart design, organized into sections for implementation.': 'Accepted Join 04 design. Paid and free offers keep separate revision histories.';
+    $('page-title').textContent=title;$('overview-title').textContent=family==='bc'?'Birth chart':family==='welcome'?'Stripe trial welcome':title+' '+(family==='join'?'join':family==='lander'?'lander':'results');
+    $('page-description').textContent=family==='lander'?'Matching numbers share one format. Sections 11–16 and the footer share the same requirements.':family==='results'?'Only sections 02, 03 and 09 vary by category. Personal results and offer values are runtime variables.':family==='bc'?'The accepted birth chart design, organized into sections for implementation.':family==='welcome'?'This post-checkout review has its own page history and dated screenshots.':'Accepted Join 04 design. Paid and free offers keep separate revision histories.';
     if(allChanges){$('family-label').textContent='Across the whole funnel';$('page-title').textContent='All funnel changes';$('overview-title').textContent='The whole funnel';$('page-description').textContent='Dated drafts and production confirmations from every page and variation, newest first.';}
     const pageUrl=allChanges?null:list.find(s=>s.variant===variant)?.sourceUrl;
     $('page-preview').hidden=!safeUrl(pageUrl);if(safeUrl(pageUrl))$('page-preview').href=safeUrl(pageUrl);
@@ -83,7 +84,7 @@
       const v=latest(s);if(query&&!`${s.id} ${s.name} ${v.content} ${v.summary}`.toLowerCase().includes(query))return false;
       return filter==='all'||filter==='pending'&&(!s.live||hasPending(s))||filter==='live'&&s.live||filter==='unknown'&&!s.live||filter==='unseen'&&isNew(s);
     });
-    $('sections').innerHTML=filtered.length?filtered.map(s=>{const v=latest(s);return `<div class="section-row" role="button" tabindex="0" data-section="${escape(s.id)}" aria-label="${escape(s.id+' '+s.name+'. Open revision history')}"><span class="section-code">${escape(s.id)}</span><div><div class="section-name">${escape(s.name)}${isNew(s)?'<span class="new-label">New</span>':''}${s.shared?'<span class="shared-label">Shared format</span>':''}</div><p class="section-note"><strong>Revision ${v.number}</strong> · ${escape(v.summary)}</p></div><div class="section-meta">${status(s)}<time datetime="${escape(v.createdAt)}">${date(v.createdAt)}</time></div><span class="chevron" aria-hidden="true">›</span></div>`;}).join(''):'<div class="empty">No sections match this view.</div>';
+    $('sections').innerHTML=filtered.length?filtered.map(s=>{const v=latest(s);return `<div class="section-row" role="button" tabindex="0" data-section="${escape(s.id)}" aria-label="${escape(s.id+' '+s.name+'. Open revision history')}"><span class="section-code">${escape(s.id)}</span><div><div class="section-name">${escape(s.name)}${isNew(s)?'<span class="new-label">New</span>':''}${s.shared?'<span class="shared-label">Shared format</span>':''}</div><p class="section-note"><strong>Revision ${v.number}</strong> · ${escape(v.summary)}</p></div><div class="section-meta">${status(s)}<time datetime="${escape(v.createdAt)}">${date(v.createdAt)}</time></div><span class="chevron" aria-hidden="true">›</span></div>`;}).join(''):family==='welcome'?'<div class="empty">The Stripe welcome review and its dated screenshots are in Page history.</div>':'<div class="empty">No sections match this view.</div>';
     $('sections').querySelectorAll('[data-section]').forEach(row=>{row.onclick=()=>openSection(row.dataset.section);row.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openSection(row.dataset.section);}};});
     $('sections').querySelectorAll('[data-section]').forEach(row=>{if(hasPreviewGap(findSection(row.dataset.section)))row.querySelector('.section-name').insertAdjacentHTML('beforeend','<span class="new-label">Preview gap</span>');});
     const ids=new Set(list.map(s=>s.id));

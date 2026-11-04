@@ -22,11 +22,11 @@
   })[character]);
   const norm = value => String(value || '').replace(/\s+/g, ' ').trim();
   const names = {
-    lander: 'Lander', results: 'Results', bc: 'Birth chart', join: 'Cart / Join', corporate: 'Corporate site',
+    lander: 'Lander', results: 'Results', bc: 'Birth chart', join: 'Cart / Join', welcome: 'Stripe trial welcome', corporate: 'Corporate site',
     g: 'General', a: 'Astrology and Human Design', m: 'Manifestation', shared: 'Birth chart',
-    paid: 'Paid trial', free: 'Free trial', home: 'Home',
+    paid: 'Paid trial', free: 'Free trial', stripe: 'Stripe web', home: 'Home',
   };
-  const variants = family => family === 'corporate' ? ['home'] : family === 'bc' ? ['shared'] : family === 'join' ? ['paid', 'free'] : ['g', 'a', 'm'];
+  const variants = family => family === 'corporate' ? ['home'] : family === 'bc' ? ['shared'] : family === 'join' ? ['paid', 'free'] : family === 'welcome' ? ['stripe'] : ['g', 'a', 'm'];
   const state = {
     map: null, data: null, user: null, canEdit: false,
     family: 'lander', variant: 'g', selected: null,
@@ -1704,6 +1704,22 @@
     root.hidden = state.mode !== 'review';
   }
 
+  function renderWelcome() {
+    if (!root) return;
+    state.draft = null;
+    state.pageKey = '';
+    state.layoutKey = '';
+    state.frameReady = false;
+    resizeObserver?.disconnect();
+    root.innerHTML = `<div class="review-topline"><div><p class="eyebrow">After Cart / Join</p><strong>Stripe trial welcome.</strong></div></div>
+      <div class="corporate-workspace">
+        <section><p class="eyebrow">Review page</p><h2>You're in. Your music is ready.</h2><p>See the web trial welcome on a phone or computer. The review controls show annual, monthly and discounted offers with sample details.</p><a class="review-open-page" href="https://zodiac-pages.vercel.app/funnel/stripe-welcome/stripe-welcome-01" target="_blank" rel="noopener">Open Stripe welcome ↗</a></section>
+        <section><p class="eyebrow">Page history</p><h2>Saved screenshots.</h2><p>Open the dated captures for this review page. A new screenshot is saved when a check finds a page change.</p><button type="button" id="welcome-history">View screenshots and history</button></section>
+      </div>`;
+    $('welcome-history').onclick = () => document.querySelector('[data-mode="pages"]').click();
+    root.hidden = state.mode !== 'review';
+  }
+
   async function ready(event) {
     stashInputs();
     const detail = event.detail || {};
@@ -1718,6 +1734,7 @@
     renderLinearWork();
     if (state.user) loadLinearWork({force:Boolean(detail.fresh)});
     if (state.family === 'corporate') return renderCorporate();
+    if (state.family === 'welcome') return renderWelcome();
     try {
       await loadBase();
       await loadDraft({force: !changedPage && Boolean(state.draft),fresh:Boolean(detail.fresh)});
@@ -1734,7 +1751,7 @@
     const requestedView = initialRoute.get('view');
     state.view = requestedView === 'mobile' ? 'mobile' : 'desktop';
     const initialFamily = initialRoute.get('page');
-    if (['lander', 'bc', 'results', 'join', 'corporate'].includes(initialFamily)) state.family = initialFamily;
+    if (['lander', 'bc', 'results', 'join', 'welcome', 'corporate'].includes(initialFamily)) state.family = initialFamily;
     const initialVariant = initialRoute.get('variant');
     state.variant = variants(state.family).includes(initialVariant) ? initialVariant : variants(state.family)[0];
     const requestedPageKey = initialRoute.get('pageKey');
@@ -1754,6 +1771,7 @@
       state.selected = null;
       state.layoutKey = '';
       if (state.family === 'corporate') return renderCorporate();
+      if (state.family === 'welcome') return renderWelcome();
       try {
         await loadBase();
         await loadDraft();

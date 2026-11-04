@@ -2,9 +2,9 @@
 (() => {
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const names = {g:'General',a:'Astrology',m:'Manifestation',shared:'Shared page',paid:'Paid trial',free:'Free trial',home:'Home'};
-  const families = {lander:'Lander',results:'Results',bc:'Birth chart',join:'Cart / Join',corporate:'Corporate site'};
-  const variants = family => family === 'corporate' ? ['home'] : family === 'bc' ? ['shared'] : family === 'join' ? ['paid','free'] : ['g','a','m'];
+  const names = {g:'General',a:'Astrology',m:'Manifestation',shared:'Shared page',paid:'Paid trial',free:'Free trial',stripe:'Stripe web',home:'Home'};
+  const families = {lander:'Lander',bc:'Birth chart',results:'Results',join:'Cart / Join',welcome:'Stripe trial welcome',corporate:'Corporate site'};
+  const variants = family => family === 'corporate' ? ['home'] : family === 'bc' ? ['shared'] : family === 'join' ? ['paid','free'] : family === 'welcome' ? ['stripe'] : ['g','a','m'];
   const time = value => value ? new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Denver',timeZoneName:'short'}).format(new Date(value)) : 'Not checked yet';
   const url = value => {try{const parsed=new URL(value);return parsed.protocol==='https:'?parsed.href:'';}catch{return '';}};
   const api = '/api/funnel-production';
@@ -63,6 +63,10 @@
     const live=selected.filter(t=>t.stage==='production'),draft=selected.filter(t=>t.stage==='draft'),frozenDraft=draft.filter(frozenCatalogDraft),customDraft=draft.filter(target=>!frozenCatalogDraft(target));
     const reviewRoute=new URLSearchParams({mode:'review',page:family,variant});
     $('production-workspace').innerHTML=`<div class="production-subhead"><nav class="production-variants" aria-label="Page category">${variants(family).map(v=>`<button data-page-variant="${v}" class="${variant===v?'selected':''}" aria-pressed="${variant===v}">${['g','a','m'].includes(v)?`<span>${v.toUpperCase()}</span>`:''}${names[v]}</button>`).join('')}</nav><button id="register-page">Add Vercel page</button></div><div class="production-title"><div><p class="eyebrow">${esc(families[family])} / ${esc(names[variant])}</p><h2>The page and its history.</h2></div><p>Checks run every 15 minutes.<br>Each detected change saves a screenshot and date.</p></div><div class="production-explainer"><p>Live links stay the same. Screenshots keep the previous versions available to both of you.</p><p>${family==='results'?'Results captures use a fixed sample profile, with separate paid and affiliate offers. Personal member details are excluded.':'A screenshot records what the monitor saw. Use Section versions to record who edited a section and which exact revision Walter took live.'}</p></div>${error?`<div class="capture-alert" role="alert">${esc(error)} <button id="retry-production">Try again</button></div>`:''}${!loaded?'<div class="loading">Loading private page records…</div>':`<section class="production-group"><div class="production-group-title"><h3>Live on ${['results','bc','join'].includes(family)?'app.zodiac.fm':'zodiac.fm'}</h3><span>${live.length} tracked link${live.length===1?'':'s'}</span></div>${live.length?live.map(row).join(''):'<div class="production-empty">The live '+esc(families[family].toLowerCase())+' link has not been provided yet. Your Vercel pages are listed below.</div>'}</section>${frozenDraft.length?`<section class="production-group"><div class="production-group-title"><h3>Earlier Vercel design pages</h3><span>Frozen references</span></div><p class="production-empty">These pages preserve earlier designs. Open <a href="/funnel/tracker?${esc(reviewRoute.toString())}">Review sections</a> for the current editable versions and their saved captures.</p>${frozenDraft.map(row).join('')}</section>`:''}${customDraft.length?`<section class="production-group"><div class="production-group-title"><h3>Current Vercel pages</h3><span>Added pages</span></div>${customDraft.map(row).join('')}</section>`:''}<p class="production-footnote">The first successful check creates today’s starting record. Later checks save another screenshot when page content changes. A failed check keeps the last successful capture. Changes between checks may not be captured.</p>`}`;
+    if(family==='welcome'){
+      $('production-workspace').querySelector('.production-explainer').innerHTML='<p>This review page follows Cart / Join. Its dated screenshots stay together here.</p><p>The first successful check saves a starting screenshot. Later checks add a new one when the page changes.</p>';
+      if(loaded)$('production-workspace').querySelector('.production-group')?.remove();
+    }
     document.querySelectorAll('[data-page-variant]').forEach(b=>b.onclick=()=>{variant=b.dataset.pageVariant;document.dispatchEvent(new CustomEvent('tracker:select-variant',{detail:{variant}}));render();});
     document.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>check(b.dataset.check));
     const rows=$('production-workspace').querySelectorAll('.production-row-main');
@@ -80,7 +84,7 @@
       $('production-workspace').querySelector('.production-explainer p:last-child').textContent='The live corporate homepage and your Vercel drafts keep their dated screenshot history here.';
       [...live,...draft].forEach((target,index)=>{if(rows[index])rows[index].querySelector('h4').textContent=target.label;});
     }
-    if(!live.length){const heading=$('production-workspace').querySelector('.production-group-title h3');if(heading)heading.textContent='Live page';}
+    if(!live.length&&family!=='welcome'){const heading=$('production-workspace').querySelector('.production-group-title h3');if(heading)heading.textContent='Live page';}
     [...live,...draft].forEach((target,index)=>{if(target.editor&&rows[index])rows[index].insertAdjacentHTML('beforeend',`<p class="capture-meta">Added by ${esc(target.editor.name)} · ${esc(time(target.registeredAt))}</p>`);});
     [...live,...draft].forEach((target,index)=>{
       if(target.stage==='production'&&rows[index])rows[index].querySelector('h4').append(` · ${target.view==='mobile'?'Mobile web':'Desktop web'}`);
