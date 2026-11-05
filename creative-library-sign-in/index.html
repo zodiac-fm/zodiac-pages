@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>Sign in · Zodiac Creative Library</title>
+  <style>
+    @font-face{font-family:Switzer;src:url('/landers/reveal-assets/Switzer-Regular.otf');font-display:swap}
+    @font-face{font-family:Cormorant;src:url('/landers/general-spiritual-assets/cormorant-600.ttf');font-weight:600;font-display:swap}
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100svh;background:#f5f1e7;color:#211d26;font:16px/1.5 Switzer,Arial,sans-serif}
+    header{padding:24px clamp(22px,4vw,64px);border-bottom:1px solid #dcd6cc}
+    header img{display:block;width:132px;height:auto}
+    main{max-width:620px;margin:0 auto;padding:clamp(80px,13vh,160px) 26px 80px}
+    .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#6a5d75}
+    h1{font:600 clamp(45px,8vw,76px)/.98 Cormorant,Georgia,serif;letter-spacing:-.045em;margin:18px 0 22px}
+    p{max-width:430px;margin:0 0 26px;color:#5f5863}
+    #google-sign-in{min-height:44px}
+    #status{font-size:13px;margin-top:20px}
+    a{color:#31243d;text-underline-offset:3px}
+  </style>
+</head>
+<body>
+  <header><img src="/inapp/app-assets/logo-black.svg" alt="Zodiac.fm"></header>
+  <main>
+    <div class="eyebrow">Zodiac Creative Library</div>
+    <h1>Sign in to review</h1>
+    <p>Choose your Google account. Your review controls will open in the Creative Library.</p>
+    <div id="google-sign-in"></div>
+    <p id="status" role="status">Loading Google sign-in…</p>
+    <a href="https://creative-library-zodiac-fms-projects.vercel.app/#review">Back to the Creative Library</a>
+  </main>
+  <script>
+    (()=>{
+      const CLIENT_ID='640599482145-s0le86e9ellvtogfrshmef7osc7ee2a0.apps.googleusercontent.com';
+      const CREATIVE_ORIGIN='https://creative-library-zodiac-fms-projects.vercel.app';
+      const parameters=new URLSearchParams(location.search);
+      const nonce=parameters.get('nonce');
+      const status=document.querySelector('#status');
+      if(!nonce||!/^[A-Za-z0-9_-]{32,128}$/.test(nonce)){
+        status.textContent='This sign-in link has expired. Return to the Creative Library and choose Google sign-in again.';
+        return;
+      }
+      let returnPath='/';
+      try{
+        const candidate=new URL(parameters.get('return')||'/',CREATIVE_ORIGIN);
+        if(candidate.origin===CREATIVE_ORIGIN)returnPath=candidate.pathname+candidate.search+candidate.hash;
+      }catch{}
+      const script=document.createElement('script');
+      script.src='https://accounts.google.com/gsi/client';
+      script.async=true;
+      script.onload=()=>{
+        google.accounts.id.initialize({
+          client_id:CLIENT_ID,
+          nonce,
+          auto_select:false,
+          callback:({credential})=>{
+            if(typeof credential!=='string'||!credential){status.textContent='Google sign-in did not finish. Try again.';return;}
+            status.textContent='Opening your review controls…';
+            const destination=new URL('/sign-in.html',CREATIVE_ORIGIN);
+            destination.searchParams.set('return',returnPath);
+            destination.hash='credential='+encodeURIComponent(credential);
+            location.replace(destination.href);
+          }
+        });
+        google.accounts.id.renderButton(document.querySelector('#google-sign-in'),{theme:'outline',size:'large',text:'signin_with',shape:'rectangular',width:280});
+        status.textContent='Choose the Google account you use for Zodiac.';
+      };
+      script.onerror=()=>{status.textContent='Google sign-in could not load. Refresh to try again.'};
+      document.head.append(script);
+    })();
+  </script>
+</body>
+</html>
