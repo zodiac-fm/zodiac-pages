@@ -5,7 +5,7 @@
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const txt=s=>esc(s).replace(/\[\[(.+?)\]\]/g,'<span class="slot">$1</span>');
   const root=$('visualizer-workspace'),toggle=document.querySelector('.main-toggle');
-  let signedIn=false,funnels=null,loading=false,F=null,byId={},selected=null;
+  let signedIn=false,funnels=null,loading=false,F=null,byId={},selected=null,pages=null,pagesLoading=null,shotView='mobile';
 
   const params=()=>new URL(location.href).searchParams;
   const isVisualizer=()=>params().get('tab')==='visualizer';
@@ -62,9 +62,15 @@
   function draw(){
     const marker=(id,color)=>'<marker id="'+id+'" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 L7 4 L1 7" fill="none" stroke="'+color+'" stroke-width="1.4"/></marker>';
     const edges=F.edges.map((e,i)=>'<path class="vz-edge" data-i="'+i+'" marker-end="url(#vz-arr)" d="'+edgePath(byId[e[0]],byId[e[1]],e[2])+'"/>').join('');
+    // Funnels sharing a channel get one tab in the top row, and a second row to choose between them.
+    const group=f=>f.channel||f.id;
+    const tops=funnels.filter((f,i)=>funnels.findIndex(x=>group(x)===group(f))===i);
+    const peers=funnels.filter(f=>group(f)===group(F));
+    const tab=(f,label,on)=>'<button type="button" data-funnel="'+esc(f.id)+'"'+(on?' class="selected" aria-current="page"':'')+'>'+esc(label)+'</button>';
     root.innerHTML=
-      '<nav class="family-tabs vz-funnels" aria-label="Funnels">'+funnels.map(f=>'<button type="button" data-funnel="'+esc(f.id)+'"'+(f===F?' class="selected" aria-current="page"':'')+'>'+esc(f.name)+'</button>').join('')+'</nav>'+
-      '<div class="vz-intro"><h2>'+esc(F.name)+'</h2><p>'+esc(F.sub||'')+'</p></div>'+
+      '<nav class="family-tabs vz-funnels" aria-label="Funnels">'+tops.map(f=>tab(f,f.channelName||f.name,group(f)===group(F))).join('')+'</nav>'+
+      (peers.length>1?'<nav class="production-variants vz-variants" aria-label="'+esc(F.channelName||F.name)+' funnels">'+peers.map(f=>tab(f,f.name,f===F)).join('')+'</nav>':'')+
+      '<div class="vz-intro"><h2>'+esc(F.channelName?F.channelName+' · '+F.name:F.name)+'</h2><p>'+esc(F.sub||'')+'</p></div>'+
       '<div class="vz-layout"><div class="vz-mapwrap" id="vz-mapwrap">'+
         '<div class="vz-fit" id="vz-fit"><div class="vz-canvas" id="vz-canvas" style="width:'+F.width+'px;height:'+F.height+'px">'+
           '<svg width="'+F.width+'" height="'+F.height+'" aria-hidden="true"><defs>'+marker('vz-arr','#a9a9a2')+marker('vz-arron','#222220')+'</defs>'+edges+'</svg>'+
@@ -124,7 +130,54 @@
     if(s.choices)h+='<h3>Where each choice goes</h3><ul>'+s.choices.map(c=>'<li><button type="button" class="vz-jump" data-go="'+esc(c.to)+'">'+txt(c.text)+'</button></li>').join('')+'</ul>';
     if(s.variants)h+='<h3>How the wording changes by plan</h3><ul class="vz-plain">'+s.variants.map(v=>'<li>'+txt(v)+'</li>').join('')+'</ul>';
     if(s.notes)h+='<h3>What happens</h3><ul class="vz-plain">'+s.notes.map(v=>'<li>'+txt(v)+'</li>').join('')+'</ul>';
+    if(s.page){
+      const links=(s.page.links||[]).filter(l=>safeUrl(l.url));
+      if(links.length)h+='<div class="vz-links">'+links.map(l=>'<a href="'+esc(safeUrl(l.url))+'" target="_blank" rel="noopener">'+esc(l.label)+' ↗</a>').join('')+'</div>';
+      if(s.page.linkNote)h+='<p class="vz-note">'+esc(s.page.linkNote)+'</p>';
+      h+='<h3>The saved page</h3><div id="vz-saved"></div>';
+    }
     return h;
+  }
+
+  const safeUrl=value=>{try{const u=new URL(value);return u.protocol==='https:'?u.href:'';}catch{return '';}};
+  const day=value=>new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'America/Denver'}).format(new Date(value));
+
+  // The same private records and saved screenshots the Page history tab reads, fetched once per sign-in.
+  function loadPages(){
+    if(pages)return Promise.resolve(pages);
+    if(!pagesLoading)pagesLoading=fetch('/api/funnel-production',{credentials:'same-origin',cache:'no-store'}).then(async response=>{
+      if(!response.ok)throw new Error(String(response.status));
+      const records=await response.json();
+      pages=new Map((records.targets||[]).map(t=>[t.id,t]));
+      return pages;
+    }).finally(()=>{pagesLoading=null;});
+    return pagesLoading;
+  }
+  function savedPage(s){
+    const box=$('vz-saved');if(!box)return;
+    box.innerHTML='<p class="vz-note" role="status">Loading the saved page…</p>';
+    loadPages().then(map=>{if(box.isConnected&&selected===s.id)drawSaved(box,s,map);}).catch(()=>{
+      if(box.isConnected)box.innerHTML='<p class="vz-note" role="alert">Page history could not load. <button type="button" class="vz-retry" id="vz-retry-page">Try again</button></p>';
+    });
+  }
+  function drawSaved(box,s,map){
+    const note=s.page.note?'<p class="vz-caption">'+esc(s.page.note)+'</p>':'';
+    const views=[['mobile','Phone'],['desktop','Computer']].filter(([v])=>map.get(s.page[v])?.currentArchiveId);
+    if(!views.length){box.innerHTML='<p class="vz-note">Page history has no saved screenshot of this step yet.</p>';return;}
+    const view=views.some(([v])=>v===shotView)?shotView:views[0][0];
+    const target=map.get(s.page[view]),archive=target.archives?.find(a=>a.id===target.currentArchiveId);
+    if(!archive){box.innerHTML='<p class="vz-note">Page history has no saved screenshot of this step yet.</p>';return;}
+    const source='/api/funnel-production?'+new URLSearchParams({targetId:target.id,archiveId:archive.id});
+    const checked=target.status==='current'&&target.lastCheckedAt?' No change found at the last check, '+day(target.lastCheckedAt)+'.':target.status==='error'?' The last check failed.':'';
+    box.innerHTML=
+      (views.length>1?'<div class="vz-views" role="group" aria-label="Page size">'+views.map(([v,label])=>'<button type="button" data-shot="'+v+'" aria-pressed="'+(v===view)+'">'+label+'</button>').join('')+'</div>':'')+
+      note+
+      '<p class="vz-note">Saved '+day(archive.createdAt)+'.'+checked+' <a href="'+esc(source)+'" target="_blank" rel="noopener">Open full size ↗</a></p>'+
+      '<img class="vz-pic" alt="'+esc(s.title+', saved '+day(archive.createdAt))+'">';
+    const image=box.querySelector('img');
+    image.onerror=()=>{image.replaceWith(Object.assign(document.createElement('p'),{className:'vz-note',textContent:'The picture could not load. Open it full size to try again.'}));};
+    if(window.FunnelArchiveImages)window.FunnelArchiveImages.attach(image,source);
+    else image.src=source;
   }
   // An answer isn't a screen, so going to one lands on the screen it leads to.
   function resolve(id){const s=byId[id];if(s&&s.kind==='answer'){const e=F.edges.find(x=>x[0]===id);return e?resolve(e[1]):null;}return s?id:null;}
@@ -141,7 +194,7 @@
     root.querySelectorAll('[data-node]').forEach(n=>{n.classList.toggle('sel',n.dataset.node===id);n.classList.toggle('near',near.has(n.dataset.node));});
     document.body.classList.toggle('vz-open',!!id);
     const side=$('vz-side');
-    if(id){side.hidden=false;side.innerHTML=panel(byId[id]);side.scrollTop=0;if(focus)$('vz-sideh').focus({preventScroll:true});}
+    if(id){side.hidden=false;side.innerHTML=panel(byId[id]);side.scrollTop=0;if(byId[id].page)savedPage(byId[id]);if(focus)$('vz-sideh').focus({preventScroll:true});}
     else side.hidden=true;
     fit();
   }
@@ -165,8 +218,15 @@
     else push({tab:null,funnel:null,step:null});
   });
   root.addEventListener('click',e=>{
-    const t=e.target.closest('[data-step],[data-go],[data-funnel],#vz-close');if(!t)return;
+    const t=e.target.closest('[data-step],[data-go],[data-funnel],[data-shot],#vz-retry-page,#vz-close');if(!t)return;
     if(t.id==='vz-close')return push({step:null});
+    if(t.id==='vz-retry-page')return savedPage(byId[selected]);
+    if(t.dataset.shot){
+      shotView=t.dataset.shot;
+      drawSaved($('vz-saved'),byId[selected],pages);
+      $('vz-saved').querySelector('[data-shot="'+shotView+'"]')?.focus({preventScroll:true});
+      return;
+    }
     if(t.dataset.funnel)return push({funnel:t.dataset.funnel,step:null});
     const id=resolve(t.dataset.step||t.dataset.go);
     if(id)push({funnel:F.id,step:id});
@@ -180,5 +240,5 @@
   addEventListener('resize',fit);
   addEventListener('scroll',placeSide,{passive:true});
   document.addEventListener('tracker:ready',()=>{signedIn=true;toggle.hidden=false;route();});
-  document.addEventListener('tracker:signed-out',()=>{signedIn=false;funnels=null;F=null;byId={};selected=null;toggle.hidden=true;root.innerHTML='';showShell(false);});
+  document.addEventListener('tracker:signed-out',()=>{signedIn=false;funnels=null;F=null;byId={};selected=null;pages=null;toggle.hidden=true;root.innerHTML='';showShell(false);});
 })();
