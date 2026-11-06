@@ -790,6 +790,16 @@ function createHandler({
       } catch { return fail(res, 503, 'review_unavailable'); }
     }
 
+    if (req.method === 'GET' && action === 'visualizer') {
+      if (identity.kind !== 'browser' || hasAuthorizationHeader(req)) return fail(res, 403, 'agent_scope_denied');
+      try {
+        const current = await store.readVisualizer();
+        return sendJson(res, 200, {funnels: current.data.funnels});
+      } catch {
+        return fail(res, 503, 'review_unavailable');
+      }
+    }
+
     if (req.method === 'GET' && action === 'map') {
       try {
         const current = await store.readMap();
