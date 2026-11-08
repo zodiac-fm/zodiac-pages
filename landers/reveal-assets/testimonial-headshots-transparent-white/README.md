@@ -63,3 +63,4 @@ Topaz from a five-model board — CodeFormer v1 rejected as fake-looking),
 cropped below the gold neckline per Michael; build documented in
 `tmp/transparent-headshots/sabrina-truscott-2026-08-04/MANIFEST.md` (workspace
 repo). Greige copy shipped as `img-images_testimonials_sabrina-truscott-d2c.png`.
+- molly-mccord.png — Molly McCord, styled transparent testimonial portrait from Michael-supplied JPG (2026-11-06).
