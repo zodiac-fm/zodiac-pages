@@ -49,6 +49,21 @@
   width:auto;
   height:40px;
 }
+/* The official badge artwork (ZFM-758), still static: funnel pages identify the app but
+   do not send prospects to the stores. Both show at 40px, 16px apart, side by side at
+   every width. Google's PNG carries 41px of clear space around a 168px badge, so it is
+   drawn larger and the negative margin takes the clear space back. */
+.shared-footer .footer-store-badge img{
+  display:block;
+  width:auto;
+  height:40px;
+  max-width:none;
+  margin:0;
+}
+.shared-footer .footer-store-badge--play img{
+  height:59.5px;
+  margin:-9.75px;
+}
 .shared-footer .footer-groups{
   display:grid;
   grid-template-columns:minmax(0,1fr) minmax(0,.7fr);
@@ -150,6 +165,12 @@
 @media(max-width:319px){
   .shared-footer .footer-store-badges{
     gap:8px;
+  }
+  .shared-footer .footer-store-badges:has(img){
+    gap:16px;
+  }
+  .shared-footer .footer-store-badge:has(img){
+    height:40px;
   }
   .shared-footer .footer-store-badge,
   .shared-footer .footer-store-badge svg{

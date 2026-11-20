@@ -22,6 +22,32 @@
   flex: 0 0 auto;
 }
 
+/* The footer's badges are the official artwork (ZFM-758), still static. Both show at
+   40px. Google's PNG carries 41px of clear space around a 168px badge, so it is drawn
+   larger and the negative margin takes the clear space back. */
+.platform-badge {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  flex: 0 0 auto;
+}
+
+/* Two classes deep, to win over the footer's own `.site-footer img`, which sizes and
+   inverts the logo. */
+.platform-badges .platform-badge img {
+  display: block;
+  width: auto;
+  height: 40px;
+  max-width: none;
+  margin: 0;
+  filter: none;
+}
+
+.platform-badges .platform-badge--play img {
+  height: 59.5px;
+  margin: -9.75px;
+}
+
 .platform-badges-mini {
   margin-top: 10px;
   gap: 10px;
