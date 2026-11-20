@@ -5,8 +5,8 @@
     { "id": "g", "label": "General Spiritual", "currentSource": "landers/general-spiritual-13.html", "controlPath": "landers/g/control.html" }
   ],
   "protected": [
-    { "path": "landers/general-spiritual-13.html", "sha256": "c0f17089dec918a8e79a0d36d0f0908f9d5bdff349c5c5c1c109b3408d361f8f" },
-    { "path": "landers/manifestation-11.html", "sha256": "0df8d6ee8890d4eee5a288e1b3df65a43671a645869baed15215a612790f3bc0" },
+    { "path": "landers/general-spiritual-13.html", "sha256": "a48b6b8b45b80ae4f27fd84ba89759e34c1ad0686999b10c401332892420aff1" },
+    { "path": "landers/manifestation-11.html", "sha256": "ce2115f236c85a35de5f224858319febedb451729e0198bdc070eea4f85f0a8d" },
     { "path": "landers/astrology-human-design-04.html", "sha256": "1af580144cf4fc68e024c7ac809241286ca91226edacb498b94df5687c6a3401" }
   ],
   "activeConcepts": [
