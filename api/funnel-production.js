@@ -132,8 +132,10 @@ function publicComparisonDetails(details, includeResources = true) {
     normalizedDomSha256: details.normalizedDomSha256,
     inlineCssSha256: details.inlineCssSha256,
     resourceSetSha256: details.resourceSetSha256,
-    resourceCount: details.resources.length,
-    ...(includeResources ? {resources: details.resources.map(resource => ({...resource}))} : {}),
+    // Archived details keep only the count (see compactArchiveDetails).
+    resourceCount: Array.isArray(details.resources) ? details.resources.length : details.resourceCount,
+    ...(includeResources && Array.isArray(details.resources)
+      ? {resources: details.resources.map(resource => ({...resource}))} : {}),
   };
 }
 
